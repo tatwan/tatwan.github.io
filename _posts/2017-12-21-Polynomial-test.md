@@ -260,27 +260,27 @@ for i in range(1,power+1):
 ```
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_0.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_0.png)
 
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_1.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_1.png)
 
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_2.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_2.png)
 
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_3.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_3.png)
 
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_4.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_4.png)
 
 
 
-![png](Polynomial_Regression_files/Polynomial_Regression_12_5.png)
+![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_5.png)
 
 
 
@@ -494,7 +494,7 @@ plt.ylabel('Salary')
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_26_1.png)
+![png](/Polynomial_Regression_files/Polynomial_Regression_26_1.png)
 
 
 
