@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Machine Learning - Simple Linear Regression
+mathjax: true
 ---
 
 # Machine Learning Simplifed
