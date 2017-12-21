@@ -9,7 +9,7 @@ title: Machine Learning - Simple Linear Regression II
 
 ### What is Linear Regression:
 Hello World
-$Y = W_0 + W_1 * X_i$
+$$Y = W_0 + W_1 * X_i$$
 
 ```python
 import numpy as np

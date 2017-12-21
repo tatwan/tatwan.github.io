@@ -9,4 +9,4 @@ title: Machine Learning - Simple Linear Regression
 
 ### What is Linear Regression:
 
-$Y = W_0 + W_1 * X_i$
+$$Y = W_0 + W_1 \times X_i$$
