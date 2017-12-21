@@ -6,8 +6,8 @@ date:   2017-10-26 23:45:13 -0400
 mathjax: true
 ---
 
-# Machine Learning Simplifed
-### Simple Linear Regression (Part 1) 
+### Machine Learning Simplifed
+Simple Linear Regression (Part 1) 
 
 
 ### What is Linear Regression:
