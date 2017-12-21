@@ -260,31 +260,31 @@ for i in range(1,power+1):
 ```
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_0.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_0.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_1.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_1.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_2.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_2.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_3.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_3.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_4.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_4.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_5.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_5.png)
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_12_6.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_12_6.png)
 
 
 <div class="alert alert-block alert-info">
@@ -433,7 +433,7 @@ plt.ylabel('Salary')
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_22_1.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_22_1.png)
 
 
 
@@ -453,7 +453,7 @@ plt.ylabel('Salary')
 
 
 
-![png](Polynomial%20Regression_files/Polynomial%20Regression_23_1.png)
+![png](Polynomial_Regression_files/Polynomial_Regression_23_1.png)
 
 
 ** Salary Prediction for Level 6.5 **
@@ -501,7 +501,6 @@ plt.ylabel('Salary')
 ```python
 test_val_poly
 ```
-
 
 
 
