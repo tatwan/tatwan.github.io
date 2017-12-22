@@ -2,12 +2,12 @@
 # Polynomial Regression
 
 
-```python
+{% highlight python %}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 %matplotlib inline
-```
+{% endhighlight %}
 
 
 ```python
@@ -260,27 +260,27 @@ for i in range(1,power+1):
 ```
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_0.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_0.png)
 
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_1.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_1.png)
 
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_2.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_2.png)
 
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_3.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_3.png)
 
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_4.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_4.png)
 
 
 
-![png](/img/Polynomial_Regression_files/Polynomial_Regression_12_5.png)
+![png](img/Polynomial_Regression_files/Polynomial_Regression_12_5.png)
 
 
 
