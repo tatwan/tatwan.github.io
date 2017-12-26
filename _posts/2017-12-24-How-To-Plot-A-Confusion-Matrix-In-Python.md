@@ -13,7 +13,7 @@ For a good introductory read on confusion matrix check out this great post:
 
 Let's go through a quick Logistic Regression example using Scikit-Learn:
 
-```python
+{% highlight text %}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -23,7 +23,7 @@ data = datasets.load_iris()
 
 df = pd.DataFrame(data.data, columns=data.feature_names)
 
-```
+{% endhighlight %}
 
 We can examing our data quickly using Pandas Correlation function to pick a suitable feature for our logistic regression.
 
