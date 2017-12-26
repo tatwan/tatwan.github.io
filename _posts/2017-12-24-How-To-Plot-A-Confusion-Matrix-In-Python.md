@@ -107,7 +107,7 @@ for i in range(2):
 plt.show()
 ```
 
-![png]({{ site.baseurl }}/images/config.png)
+![png]({{ site.baseurl }}/images/cm.png)
 
 
 Hope this helps.
