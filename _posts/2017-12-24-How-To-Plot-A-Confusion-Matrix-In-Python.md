@@ -28,14 +28,14 @@ df = pd.DataFrame(data.data, columns=data.feature_names)
 We can examing our data quickly using Pandas Correlation function to pick a suitable feature for our logistic regression.
 
 
-```python
+{% highlight python %}
 corr = df.corr()
 print(corr.Target)
-```
+{% endhighlight %}
 
 
 
-
+{% highlight text %}
     >>> output
     sepal length (cm)    0.782561
     sepal width (cm)    -0.419446
@@ -43,27 +43,30 @@ print(corr.Target)
     petal width (cm)     0.956464
     Target               1.000000
     Name: Target, dtype: float64
-
+{% endhighlight %}
 
 So, let's pick Petal Widthh (cm) as our X independent variable. For our Target/dependent variable Y we can pick Setosa. For Target we have three choices, to simplify our task and narrow it down to a binary classifier we will pick Setosa: either it is Setosa or it is Not Setosa.
 
-```python
+{% highlight python %}
 print(data.target_names)
-```
+{% endhighlight %}
 
+{% highlight text %}
     >>> output
     array(['setosa', 'versicolor', 'virginica'],
       dtype='<U10')
+{% endhighlight  %}  
 
 Let's now create X and Y:
 
-```python
+{% highlight python %}
 x = df.iloc[0: ,3].reshape(-1,1)
 y = (data.target == 0).astype(np.int)
-```
+{% endhighlight  %}
+
 Now, let's split our data into a test and train sets, then start building our Logistic Regression model.
 
-```python
+{% highlight python %}
 from sklearn.cross_validation import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.20, random_state = 0)
@@ -73,24 +76,26 @@ logit = LogisticRegression(random_state= 0)
 logit.fit(x_train, y_train)
 
 y_predicted = logit.predict(x_test)
-```
+{% endhighlight %}
 
 Now, let's examin our confusion matrix:
 
-```python
+{% highlight python %}
 from sklearn.metrics import confusion_matrix
 
 cm = confusion_matrix(y_test, y_predicted)
 print(cm)
-```
+{% endhighlight %}
 
+{% highlight text %}
     >>> output
     [[19  0]
     [ 0 11]]
+{% endhighlight %}
 
 The confusion matrix tells us we got everything classified correctly (in terms of: Setsosa, or Not Setosa). A better way to visualize this can be accomplsihed with the code below:
 
-```python
+{% highlight python %}
 plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
 classNames = ['Negative','Positive']
 plt.title('Setosa or Not Setosa Confusion Matrix - Test Data')
@@ -105,7 +110,7 @@ for i in range(2):
     for j in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
 plt.show()
-```
+{% endhighlight %}
 
 ![png]({{ site.baseurl }}/images/cm.png)
 
