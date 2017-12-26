@@ -107,6 +107,6 @@ for i in range(2):
 plt.show()
 ```
 
-![png](https://github.com/tatwan/tatwan.github.io/blob/master/_posts/img/confusion_matrix/cm.png)
+![png](img/confusion_matrix/cm.png)
 
 Hope this helps.
