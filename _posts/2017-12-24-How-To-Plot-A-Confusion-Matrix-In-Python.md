@@ -13,7 +13,7 @@ For a good introductory read on confusion matrix check out this great post:
 
 Let's go through a quick Logistic Regression example using Scikit-Learn:
 
-{% highlight text %}
+{% highlight python %}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
