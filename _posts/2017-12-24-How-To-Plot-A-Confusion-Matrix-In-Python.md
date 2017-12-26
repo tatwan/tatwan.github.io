@@ -1,4 +1,9 @@
 
+---
+layout: post
+post: How to plot a Confusion Matrix in Python
+---
+
 Here is an example on how you can plot the Confusion Matrix from Scikit Learn in a visual format that makes it easier to understand. 
 
 The documentation for **[Confusion Matrix](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html)** is pretty good, but I struggled to find a quick way to add labels and display the output into an easy to read format.
