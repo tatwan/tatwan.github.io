@@ -25,7 +25,7 @@ df = pd.DataFrame(data.data, columns=data.feature_names)
 
 ```
 
-We can examing our data quickly using Pandas Correlation function to pick a suitable feature for out logistic regression.
+We can examing our data quickly using Pandas Correlation function to pick a suitable feature for our logistic regression.
 
 
 ```python
@@ -45,7 +45,7 @@ print(corr.Target)
     Name: Target, dtype: float64
 
 
-So, let's pick Petal Widthh (cm) as our X independent variable. For our Target/dependent variable Y we can pick Setosa. Since for Target we have three choices, to simplify our task and narrow it down to a binary classifier: either it is Setosa or it is Not Setosa.
+So, let's pick Petal Widthh (cm) as our X independent variable. For our Target/dependent variable Y we can pick Setosa. For Target we have three choices, to simplify our task and narrow it down to a binary classifier we will pick Setosa: either it is Setosa or it is Not Setosa.
 
 ```python
 print(data.target_names)
@@ -61,7 +61,7 @@ Let's now create X and Y:
 x = df.iloc[0: ,3].reshape(-1,1)
 y = (data.target == 0).astype(np.int)
 ```
-Now, let's split our data and then start building our Logistic Regression model.
+Now, let's split our data into a test and train sets, then start building our Logistic Regression model.
 
 ```python
 from sklearn.cross_validation import train_test_split
