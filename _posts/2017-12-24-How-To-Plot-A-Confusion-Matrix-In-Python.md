@@ -3,6 +3,8 @@ layout: post
 post: How to plot a Confusion Matrix in Python
 ---
 
+** 12-24-2017 **
+
 Here is an example on how you can plot the Confusion Matrix from Scikit Learn in a visual format that makes it easier to understand. 
 
 The documentation for **[Confusion Matrix](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html)** is pretty good, but I struggled to find a quick way to add labels and display the output into an easy to read format.
@@ -107,6 +109,6 @@ for i in range(2):
 plt.show()
 ```
 
-![png](./img/confusion_matrix/cm.png)
+![png](https://github.com/tatwan/tatwan.github.io/blob/master/_posts/img/confusion_matrix/cm.png)
 
 Hope this helps.
