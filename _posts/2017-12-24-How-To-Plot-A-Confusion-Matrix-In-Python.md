@@ -11,7 +11,7 @@ The documentation for **[Confusion Matrix](http://scikit-learn.org/stable/module
 
 For a good introductory read on confusion matrix check out this great post:  
 
-http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+<http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology>
 
 Let's go through a quick Logistic Regression example using Scikit-Learn:
 
