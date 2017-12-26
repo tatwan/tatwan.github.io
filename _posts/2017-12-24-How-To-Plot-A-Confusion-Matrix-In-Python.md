@@ -31,7 +31,7 @@ We can examing our data quickly using Pandas Correlation function to pick a suit
 
 ```python
 corr = df.corr()
-corr.Target
+print(corr.Target)
 ```
 
 
@@ -49,7 +49,7 @@ corr.Target
 So, let's pick Petal Widthh (cm) as our X independent variable. For our Target/dependent variable Y we can pick Setosa. Since for Target we have three choices, to simplify our task and narrow it down to a binary classifier: either it is Setosa or it is Not Setosa.
 
 ```python
-data.target_names
+print(data.target_names)
 ```
 
     >>> output
@@ -105,6 +105,7 @@ s = [['TN','FP'], ['FN', 'TP']]
 for i in range(2):
     for j in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
+plt.show()
 ```
 
 ![png](./img/confusion_matrix/cm.png)
