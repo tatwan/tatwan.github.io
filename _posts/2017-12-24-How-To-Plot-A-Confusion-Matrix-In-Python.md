@@ -26,75 +26,14 @@ df['Target'] = pd.DataFrame(data.target)
 df.head()
 {% endhighlight %}
 
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
 
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>sepal length (cm)</th>
-      <th>sepal width (cm)</th>
-      <th>petal length (cm)</th>
-      <th>petal width (cm)</th>
-      <th>Target</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>5.1</td>
-      <td>3.5</td>
-      <td>1.4</td>
-      <td>0.2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>4.9</td>
-      <td>3.0</td>
-      <td>1.4</td>
-      <td>0.2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>4.7</td>
-      <td>3.2</td>
-      <td>1.3</td>
-      <td>0.2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4.6</td>
-      <td>3.1</td>
-      <td>1.5</td>
-      <td>0.2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5.0</td>
-      <td>3.6</td>
-      <td>1.4</td>
-      <td>0.2</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+| sepal length (cm) | sepal width (cm) | petal length (cm) | petal width (cm) | Target |      |
+| ---------------- | ---------------- | ----------------- | ---------------- | ------ | ---- |
+| 0                | 5.1              | 3.5               | 1.4              | 0.2    | 0    |
+| 1                | 4.9              | 3.0               | 1.4              | 0.2    | 0    |
+| 2                | 4.7              | 3.2               | 1.3              | 0.2    | 0    |
+| 3                | 4.6              | 3.1               | 1.5              | 0.2    | 0    |
+| 4                | 5.0              | 3.6               | 1.4              | 0.2    | 0 
 
 We can examine our data quickly using Pandas correlation function to pick a suitable feature for our logistic regression.
 
