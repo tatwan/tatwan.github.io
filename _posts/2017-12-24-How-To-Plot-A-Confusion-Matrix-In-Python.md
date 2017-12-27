@@ -173,7 +173,7 @@ plt.show()
 
 ![png]({{ site.baseurl }}/images/logit.png)
 
-Will from the two plots we can easily see that the classifier is not doing a good job. And before digging into why (which will be another post on how to determine if data is linearly separable or not), we can see assume that the reason is because the data is not linearly separable (for the IRIS dataset in fact only setosa class is linearly separable).
+Will from the two plots we can easily see that the classifier is not doing a good job. And before digging into why (which will be another post on how to determine if data is linearly separable or not), we can assume that it's because the data is not linearly separable (for the IRIS dataset in fact only setosa class is linearly separable).
 
 We can try another non-linear classifier, in this case we can use SVM with a Gaussian RBF Kernel:
 
