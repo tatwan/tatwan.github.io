@@ -150,11 +150,6 @@ for i in range(2):
 
 ![png]({{ site.baseurl }}/images/cm.png)
 
-* TN = True Negative
-* FN = False Negative
-* FP = False Positive
-* TP = True Positive
-
 To plot and display the decision boundary that separates the two classes (Versicolor or Not Versicolor ):
 
 {% highlight python %}
