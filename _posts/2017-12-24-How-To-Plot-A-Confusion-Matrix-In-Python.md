@@ -3,7 +3,7 @@ layout: post
 post: How to plot a Confusion Matrix in Python
 ---
 
-In this post I will demonstrate how to plot the Confusion Matrix. I will be using the confusion martrix from the Scikit-Learn library (`sklearn.metrics.confusion_matrix`) and Matplotlib for displaying the results in a more intuitive visual format. 
+In this post I will demonstrate how to plot the Confusion Matrix. I will be using the confusion martrix from the Scikit-Learn library(`sklearn.metrics` and Matplotlib for displaying the results in a more intuitive visual format. 
 
 The documentation for **[Confusion Matrix](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html)** is pretty good, but I struggled to find a quick way to add labels and visualize the output into a 2x2 table.
 
