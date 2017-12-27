@@ -133,6 +133,7 @@ Visually the above doesn't easily convey how is our classifier performing, but w
 The confusion matrix tells us we a have total of 15 (13 + 2) misclassified data out of the 30 test points (in terms of: Versicolor, or Not Versicolor). A better way to visualize this can be accomplished with the code below:
 
 {% highlight python %}
+plt.clf()
 plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
 classNames = ['Negative','Positive']
 plt.title('Versicolor or Not Versicolor Confusion Matrix - Test Data')
@@ -142,10 +143,10 @@ tick_marks = np.arange(len(classNames))
 plt.xticks(tick_marks, classNames, rotation=45)
 plt.yticks(tick_marks, classNames)
 s = [['TN','FP'], ['FN', 'TP']]
-
 for i in range(2):
     for j in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
+plt.show()
 {% endhighlight %}
 
 ![png]({{ site.baseurl }}/images/cm.png)
@@ -154,6 +155,7 @@ To plot and display the decision boundary that separates the two classes (Versic
 
 {% highlight python %}
 from matplotlib.colors import ListedColormap
+plt.clf()
 X_set, y_set = x_test, y_test
 X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
                      np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
@@ -165,8 +167,8 @@ for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green'))(i), label = j)
 plt.title('Logistic Regression (Test set)')
-plt.xlabel('Age')
-plt.ylabel('Estimated Salary')
+plt.xlabel('Petal Size')
+plt.ylabel('Versicolor')
 plt.legend()
 plt.show()
 {% endhighlight %}
@@ -179,16 +181,17 @@ We can try another non-linear classifier, in this case we can use SVM with a Gau
 
 {% highlight python %}
 from sklearn.svm import SVC
+
 svm = SVC(kernel='rbf', random_state=0)
 svm.fit(x_train, y_train)
 
 predicted = svm.predict(x_test)
 
 cm = confusion_matrix(y_test, predicted)
-
+plt.clf()
 plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
 classNames = ['Negative','Positive']
-plt.title('SVM Linear Kernel Confusion Matrix - ALL Data')
+plt.title('SVM RBF Kernel Confusion Matrix - Test Data')
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 tick_marks = np.arange(len(classNames))
@@ -199,6 +202,7 @@ s = [['TN','FP'], ['FN', 'TP']]
 for i in range(2):
     for j in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
+plt.show()
 {% endhighlight %}
 
 ![png]({{ site.baseurl }}/images/cm2.png)
@@ -208,3 +212,5 @@ Here is the plot to show the decision boundary
 ![png]({{ site.baseurl }}/images/svm.png)
 
 Hope this helps.
+
+![png]({{ site.baseurl }}/images/figure1.png)
