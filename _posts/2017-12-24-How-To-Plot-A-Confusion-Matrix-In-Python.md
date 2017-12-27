@@ -22,7 +22,7 @@ from sklearn import datasets
 data = datasets.load_iris()
 
 df = pd.DataFrame(data.data, columns=data.feature_names)
-
+df['Target'] = pd.DataFrame(data.target)
 {% endhighlight %}
 
 We can examine our data quickly using Pandas correlation function to pick a suitable feature for our logistic regression.
