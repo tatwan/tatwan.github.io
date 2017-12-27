@@ -213,4 +213,4 @@ Here is the plot to show the decision boundary
 
 Hope this helps.
 
-![png]({{ site.baseurl }}/images/figure1.png)
+![png]({{ site.baseurl }}/images/Figure_1.png)
