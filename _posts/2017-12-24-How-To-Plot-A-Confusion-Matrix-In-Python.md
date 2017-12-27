@@ -20,7 +20,9 @@ This is a mockup of the look I am trying to achieve:
 * FP = False Positive
 * TP = True Positive
 
-Let's go through a quick **Logistic Regression** example using Scikit-Learn. I will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
+Let's go through a quick **Logistic Regression** example using Scikit-Learn. For data I will use the popular Iris dataset (to read more about it reference <https://en.wikipedia.org/wiki/Iris_flower_data_set>). 
+
+We will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
 
 {% highlight python %}
 import numpy as np
