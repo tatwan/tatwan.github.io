@@ -3,15 +3,19 @@ layout: post
 post: How to plot a Confusion Matrix in Python
 ---
 
-Here is an example to show how you can plot the Confusion Matrix from Scikit-Learn to display in a more intuitive visual format. 
+In this post I will demonstrate how to plot the Confusion Matrix. I will be using the confusion martrix from the Scikit-Learn library (`sklearn.metrics.confusion_matrix`) and Matplotlib for displaying the results in a more intuitive visual format. 
 
 The documentation for **[Confusion Matrix](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html)** is pretty good, but I struggled to find a quick way to add labels and visualize the output into a 2x2 table.
 
-For a good introductory read on confusion matrix check out this great post:  
+For a good introductory read on confusion matrix check out this great post: 
 
-<http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology>
+<http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology>  
 
-Let's go through a quick Logistic Regression example using Scikit-Learn where in the end we will visualize the confusion matrix using matplotlib:
+This is a mockup of the look I am trying to achieve: 
+
+![png]({{ site.baseurl }}/images/mock.png)
+
+Let's go through a quick **Logistic Regression** example using Scikit-Learn,I will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
 
 {% highlight python %}
 import numpy as np
@@ -27,22 +31,25 @@ df.head()
 {% endhighlight %}
 
 
+{% highlight text %}
+    >>> output
+   show first 5 rows 
+{% endhighlight %}
 | sepal length (cm) | sepal width (cm) | petal length (cm) | petal width (cm) | Target |      |
 | ---------------- | ---------------- | ----------------- | ---------------- | ------ | ---- |
-| 0                | 5.1              | 3.5               | 1.4              | 0.2    | 0    |
-| 1                | 4.9              | 3.0               | 1.4              | 0.2    | 0    |
-| 2                | 4.7              | 3.2               | 1.3              | 0.2    | 0    |
-| 3                | 4.6              | 3.1               | 1.5              | 0.2    | 0    |
-| 4                | 5.0              | 3.6               | 1.4              | 0.2    | 0 
+| 5.1              | 3.5               | 1.4              | 0.2    | 0    |
+| 4.9              | 3.0               | 1.4              | 0.2    | 0    |
+| 4.7              | 3.2               | 1.3              | 0.2    | 0    |
+| 4.6              | 3.1               | 1.5              | 0.2    | 0    |
+| 5.0              | 3.6               | 1.4              | 0.2    | 0 
 
-We can examine our data quickly using Pandas correlation function to pick a suitable feature for our logistic regression.
+We can examine our data quickly using Pandas correlation function to pick a suitable feature for our logistic regression. We will use the default pearson method. 
 
 
 {% highlight python %}
 corr = df.corr()
 print(corr.Target)
 {% endhighlight %}
-
 
 
 {% highlight text %}
@@ -55,7 +62,7 @@ print(corr.Target)
     Name: Target, dtype: float64
 {% endhighlight %}
 
-So, let's pick Petal Width (cm) as our (X) independent variable. For our Target/dependent variable (Y) we can pick the Setosa class. The Target class actually has three choices, to simplify our task and narrow it down to a binary classifier we will pick Setosa (0 or 1): either it is Setosa (1) or it is Not Setosa (0).
+So, let's pick the two with highest potential: Petal Width (cm) and Petal Lengthh (cm) as our (X) independent variables. For our Target/dependent variable (Y) we can pick the Versicolor class. The Target class actually has three choices, to simplify our task and narrow it down to a binary classifier I will pick Versicolor to narrow our classification classes to (0 or 1): either it is versicolor (1) or it is Not versicolor (0).
 
 {% highlight python %}
 print(data.target_names)
@@ -67,20 +74,33 @@ print(data.target_names)
       dtype='<U10')
 {% endhighlight  %}  
 
-Let's now create X and Y:
+Let's now create our X and Y:
 
 {% highlight python %}
 x = df.iloc[0: ,3].reshape(-1,1)
-y = (data.target == 0).astype(np.int) # we are picking Setosa to be 1 and all other classes will be 0
+y = (data.target == 1).astype(np.int) # we are picking Versicolor to be 1 and all other classes will be 0
 {% endhighlight  %}
 
-We will split our data into a test and train sets, then start building our Logistic Regression model.
+We will split our data into a test and train sets, then start building our Logistic Regression model. We will use an 80/20 split.
 
 {% highlight python %}
 from sklearn.cross_validation import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.20, random_state = 0)
+{% endhighlight %}
 
+Before we create our classifier, we will need to normalize the data (feature scaling) using the utility function `StandardScalar` part of Scikit-Learn preprocessing package. 
+
+{% highlight python %}
+from sklearn.preprocessing import StandardScaler
+sc_x = StandardScaler()
+x_train = sc_x.fit_transform(x_train)
+x_test = sc_x.transform(x_test)
+{% endhighlight %}
+
+Now we are ready to build our Logistic Classifier:
+
+{% highlight python %}
 from sklearn.linear_model import LogisticRegression
 logit = LogisticRegression(random_state= 0)
 logit.fit(x_train, y_train)
@@ -88,7 +108,7 @@ logit.fit(x_train, y_train)
 y_predicted = logit.predict(x_test)
 {% endhighlight %}
 
-Now, let's examine our confusion matrix:
+Now, let's evaluate our classifier with the confusion matrix:
 
 {% highlight python %}
 from sklearn.metrics import confusion_matrix
@@ -99,16 +119,18 @@ print(cm)
 
 {% highlight text %}
     >>> output
-    [[19  0]
-    [ 0 11]]
+    [[15  2]
+    [ 13 0]]
 {% endhighlight %}
 
-The confusion matrix tells us we got everything classified correctly (in terms of: Setosa, or Not Setosa). A better way to visualize this can be accomplished with the code below:
+Visually the above doesn't easily convey how is our classifier performing, but we mainly focus on the top right and bottom left (these are the errors or misclassifications).
+
+The confusion matrix tells us we a have total of 15 (13 + 2) misclassified data out of the 30 test points (in terms of: Versicolor, or Not Versicolor. A better way to visualize this can be accomplished with the code below:
 
 {% highlight python %}
 plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
 classNames = ['Negative','Positive']
-plt.title('Setosa or Not Setosa Confusion Matrix - Test Data')
+plt.title('Versicolor or Not Versicolor Confusion Matrix - Test Data')
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 tick_marks = np.arange(len(classNames))
@@ -119,12 +141,16 @@ s = [['TN','FP'], ['FN', 'TP']]
 for i in range(2):
     for j in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
-plt.show()
 {% endhighlight %}
 
 ![png]({{ site.baseurl }}/images/cm.png)
 
-To plot and display the decision boundary that separates the two classes (Setosa or Not Setosa ):
+* TN = True Negative
+* FN = False Negative
+* FP = False Positive
+* TP = True Positive
+
+To plot and display the decision boundary that separates the two classes (Versicolor or Not Versicolor ):
 
 {% highlight python %}
 from matplotlib.colors import ListedColormap
@@ -138,7 +164,7 @@ plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green'))(i), label = j)
-plt.title('Logistic Regression (Train set)')
+plt.title('Logistic Regression (Test set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
@@ -146,5 +172,39 @@ plt.show()
 {% endhighlight %}
 
 ![png]({{ site.baseurl }}/images/logit.png)
+
+Will from the two plots we can easily see that the classifier is not doing a good job. And before digging into why (which will be another post on how to determine if data is linearly separable or not), we can see assume that the reason is because the data is not linearly separable (for the IRIS dataset in fact only setosa class is linearly separable).
+
+We can try another non-linear classifier, in this case we can use SVM with a Gaussian RBF Kernel:
+
+{% highlight python %}
+from sklearn.svm import SVC
+svm = SVC(kernel='rbf', random_state=0)
+svm.fit(x_train, y_train)
+
+predicted = svm.predict(x_test)
+
+cm = confusion_matrix(y_test, predicted)
+
+plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
+classNames = ['Negative','Positive']
+plt.title('SVM Linear Kernel Confusion Matrix - ALL Data')
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+tick_marks = np.arange(len(classNames))
+plt.xticks(tick_marks, classNames, rotation=45)
+plt.yticks(tick_marks, classNames)
+s = [['TN','FP'], ['FN', 'TP']]
+
+for i in range(2):
+    for j in range(2):
+        plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
+{% endhighlight %}
+
+![png]({{ site.baseurl }}/images/cm2.png)
+
+Here is the plot to show the decision boundary
+
+![png]({{ site.baseurl }}/images/svm.png)
 
 Hope this helps.
