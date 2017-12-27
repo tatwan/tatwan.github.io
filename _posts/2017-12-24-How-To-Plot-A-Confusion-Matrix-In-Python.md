@@ -211,6 +211,9 @@ Here is the plot to show the decision boundary
 
 ![png]({{ site.baseurl }}/images/svm.png)
 
-SVM with RBF Kernel produced a significant improvement: down from 15 misclassifications to only 1.  
+SVM with RBF Kernel produced a significant improvement: down from 15 misclassifications to only 1.
 
 Hope this helps.
+
+
+`note: code was written using Jupyter Notebook`
