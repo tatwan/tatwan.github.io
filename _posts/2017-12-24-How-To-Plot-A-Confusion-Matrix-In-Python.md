@@ -20,7 +20,7 @@ This is a mockup of the look I am trying to achieve:
 * FP = False Positive
 * TP = True Positive
 
-Let's go through a quick **Logistic Regression** example using Scikit-Learn,I will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
+Let's go through a quick **Logistic Regression** example using Scikit-Learn. I will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
 
 {% highlight python %}
 import numpy as np
@@ -211,6 +211,6 @@ Here is the plot to show the decision boundary
 
 ![png]({{ site.baseurl }}/images/svm.png)
 
-Hope this helps.
+SVM with RBF Kernel produced a significant improvement: down from 15 misclassifications to only 1.  
 
-![png]({{ site.baseurl }}/images/Figure_1.png)
+Hope this helps.
