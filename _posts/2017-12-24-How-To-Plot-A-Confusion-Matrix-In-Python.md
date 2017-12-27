@@ -130,7 +130,7 @@ print(cm)
 
 Visually the above doesn't easily convey how is our classifier performing, but we mainly focus on the top right and bottom left (these are the errors or misclassifications).
 
-The confusion matrix tells us we a have total of 15 (13 + 2) misclassified data out of the 30 test points (in terms of: Versicolor, or Not Versicolor. A better way to visualize this can be accomplished with the code below:
+The confusion matrix tells us we a have total of 15 (13 + 2) misclassified data out of the 30 test points (in terms of: Versicolor, or Not Versicolor). A better way to visualize this can be accomplished with the code below:
 
 {% highlight python %}
 plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Wistia)
