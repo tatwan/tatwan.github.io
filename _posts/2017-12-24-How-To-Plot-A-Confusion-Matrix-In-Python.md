@@ -15,6 +15,11 @@ This is a mockup of the look I am trying to achieve:
 
 ![png]({{ site.baseurl }}/images/mock.png)
 
+* TN = True Negative
+* FN = False Negative
+* FP = False Positive
+* TP = True Positive
+
 Let's go through a quick **Logistic Regression** example using Scikit-Learn,I will use the **confusion matrix** to evaluate the accuracy of the classification and plot it using matplotlib:
 
 {% highlight python %}
