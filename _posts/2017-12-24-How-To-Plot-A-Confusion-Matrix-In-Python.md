@@ -61,7 +61,7 @@ Let's now create X and Y:
 
 {% highlight python %}
 x = df.iloc[0: ,3].reshape(-1,1)
-y = (data.target == 0).astype(np.int)
+y = (data.target == 0).astype(np.int) # we are picking Setosa to be 1 and all other classes will be 0
 {% endhighlight  %}
 
 We will split our data into a test and train sets, then start building our Logistic Regression model.
