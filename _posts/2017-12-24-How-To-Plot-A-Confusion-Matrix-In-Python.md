@@ -112,7 +112,7 @@ for i in range(2):
 plt.show()
 {% endhighlight %}
 
-![png]({{ site.baseurl }}/images/cm.png =350)
+![png]({{ site.baseurl }}/images/cm.png)
 
 To plot and display the decision boundary that separates the two classes (Setosa or Not Setosa ):
 
@@ -135,6 +135,6 @@ plt.legend()
 plt.show()
 {% endhighlight %}
 
-![png]({{ site.baseurl }}/images/logit.png =350)
+![png]({{ site.baseurl }}/images/logit.png)
 
 Hope this helps.
