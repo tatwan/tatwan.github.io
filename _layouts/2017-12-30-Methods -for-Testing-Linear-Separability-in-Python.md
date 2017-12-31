@@ -35,10 +35,11 @@ Since this is a well known data set we know in advance which classes are linearl
 
 Let's get things ready first by importing the necessary libraries and loading our data.
 
-```python	
+{% highlight python %}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 from sklearn import datasets
 data = datasets.load_iris()
@@ -47,7 +48,7 @@ data = datasets.load_iris()
 df = pd.DataFrame(data.data, columns=data.feature_names)
 df['Target'] = pd.DataFrame(data.target)
 df.head()
-```
+{% endhighlight %}
 
 |      | sepal Length (cm) | sepal width (cm) | petal length (cm) | petal width (cm) | Target |
 | :--: | :---------------: | :--------------: | :---------------: | :--------------: | :----: |
@@ -301,7 +302,7 @@ for i in range(2):
         plt.text(j,i, str(s[i][j])+" = "+str(cm[i][j]))
 ```
 
-![png]({{ site.baseurl }}/images/lsp/fig6png)
+![png]({{ site.baseurl }}/images/lsp/fig6.png)
 
 Now, let's draw our decision boundary:
 
