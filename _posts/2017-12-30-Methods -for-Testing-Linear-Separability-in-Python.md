@@ -1,10 +1,11 @@
-# Methods for Testing Linear Separability in Python
-
-
+---
+layout: post
+post: Methods for Testing Linear Separability in Python
+---
 
 In Machine Learning, before running any classifier it is important to understand the data we are dealing with to determine which algorithm to pick, and which parameters we need to adjust to handle such data. This brings the topic of linear separability and understanding if our problem is liear or non-linear. 
 
-Several classification algorithms are designed to seperate the data by constructing a decision boudnary hyperplane to divide the classes and with that comes an assumption: data is linearly separable. Now, in real world scenarios things are not that easy and data in many cases is not linearly separable and thus non-linear techniques are applied. 
+Several classification algorithms are designed to separate the data by constructing a decision boundary hyperplane to divide the classes and with that comes an assumption: data is linearly separable. Now, in real world scenarios things are not that easy and data in many cases is not linearly separable and thus non-linear techniques are applied. 
 
 This post was inspired by research papers on the topic of linear separability including <u>The Linear Separability Problem: Some Testing Method</u> [^1], [^2]
 
@@ -22,11 +23,11 @@ Techniques for testing linear separability:
 
 ### Domain Knowledge/Experience
 
-It should be a no brainer that the first step should always be to seek insight from analysts and other data scientsts who are already dealing with the data and familiar with it. It is critical before embarking on any data discovery journey to alwasy start by asking questions to better understand the purpose of the task (your goal) and gain early insight into the data from the domain experts (business data users , data/business analysists or data scientists) that are closer to the data and deal with it daily. 
+It should be a no-brainer that the first step should always be to seek insight from analysts and other data scientists who are already dealing with the data and familiar with it. It is critical before embarking on any data discovery journey to always start by asking questions to better understand the purpose of the task (your goal) and gain early insight into the data from the domain experts (business data users , data/business analysts or data scientists) that are closer to the data and deal with it daily. 
 
 #### Getting our data
 
-For the other four (4) approaches listed above, we will explore these concepts using the classic [Iris dataset](https://archive.ics.uci.edu/ml/datasets/iris) and implement some of the theories behind testing for linear separabilituy using Python.
+For the other four (4) approaches listed above, we will explore these concepts using the classic [Iris data set](https://archive.ics.uci.edu/ml/datasets/iris) and implement some of the theories behind testing for linear separability using Python.
 
 Since this is a well known data set we know in advance which classes are linearly separable (domain knowledge/past experiences coming into play here).For our analysis we will use this knowledge to confirm our findings.
 
@@ -85,7 +86,7 @@ Name: Target, dtype: float64
 
 Let's pick Petal Length (cm) and Petal Width (cm) and plot the points since they both have the highest two scores.
 
-Let's create a plot to visiualize our data 
+Let's create a plot to visualize our data 
 
 ```pyt
 plt.clf()
@@ -99,7 +100,7 @@ plt.show()
 
 ![png]({{ site.baseurl }}/images/lsp/fig2.png)
 
-It's still not that helpful. Let's color each class and add a legend so we can understsand what the plot is trying to convey in terms of data distribution per class and determine if the classes can be linearly separable visually. 
+It's still not that helpful. Let's color each class and add a legend so we can understand what the plot is trying to convey in terms of data distribution per class and determine if the classes can be linearly separable visually. 
 
 Let's update our code:
 
@@ -120,7 +121,7 @@ plt.show()
 
 ![png]({{ site.baseurl }}/images/lsp/fig3.png)
 
-Much better. We just plotted the entire dataset, all 150 points. There are 50 data points per class. And Yes, at first glance we can see that the blue dots (Setosa class) can be easily sepearated by drawing a line and segregate it from the rest of the classes. But what about the other two classes? 
+Much better. We just plotted the entire data set, all 150 points. There are 50 data points per class. And Yes, at first glance we can see that the blue dots (Setosa class) can be easily separated by drawing a line and segregate it from the rest of the classes. But what about the other two classes? 
 
 Let's examine another approach to be more certain.
 
@@ -130,9 +131,9 @@ In this approach we will use a **[Convex Hull](https://en.wikipedia.org/wiki/Con
 
 The logic when using convex hulls when testing for linear separability is pretty straight forward which can be stated as:
 
-> Two classes X and Y are LS (Linearly Separable) if the intersection of the convex hulls of X and Y is empty, and NLS (Not Linearly Seperable) with a non-empty intersection.
+> Two classes X and Y are LS (Linearly Separable) if the intersection of the convex hulls of X and Y is empty, and NLS (Not Linearly Separable) with a non-empty intersection.
 
-A quick way to see how this works is to visulalize the data points with the convex hulls for each class. We will plot the hull boundaries to examine the intersections visually. We will be using the **Scipy** library to help us compute the convex hull. For more information please refer to [Scipy documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html). 
+A quick way to see how this works is to visualize the data points with the convex hulls for each class. We will plot the hull boundaries to examine the intersections visually. We will be using the **Scipy** library to help us compute the convex hull. For more information please refer to [Scipy documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html). 
 
 Let's update the previous code to include convex hulls.
 
@@ -162,7 +163,7 @@ And our output should look like this:
 
 ![png]({{ site.baseurl }}/images/lsp/fig4.png)
 
-It is more obvious now, visually at least, that Setosa is a linearly separable class form the other two. In other words, we can easily draw a straight line to sepearate Setosa from non-Setosa (Setosas vs. everything else). Both Versicolor and Virginica classes are not linearly separable because we can see there is indeed an intersection. 
+It is more obvious now, visually at least, that Setosa is a linearly separable class form the other two. In other words, we can easily draw a straight line to separate Setosa from non-Setosa (Setosas vs. everything else). Both Versicolor and Virginica classes are not linearly separable because we can see there is indeed an intersection. 
 
 ### Linear Programming
 
@@ -170,13 +171,13 @@ By definition Linear Separability is defined:
 
 Two sets $H = \{H^1, …, H^h\} \subseteq \mathbb{R}^d$ and $ M = \{M^1,…,M^m\}\subseteq \mathbb{R}^d$ are said to be linearly separable if $\exists a \in \mathbb{R}^n $, $b \in \mathbb{R} : H \subseteq \{ x \in \mathbb{R}^n : a^T x > b \}$ and $M \subseteq \{ x \in \mathbb{R}^n : a^Tx  \leq b \}$ [^3]
 
-In simple words, the expression above states that H and M are linearly seperabale if there exists a hyperplane that completely separates the elements of $H$ and elements of $M$.
+In simple words, the expression above states that H and M are linearly separable if there exists a hyperplane that completely separates the elements of $H$ and elements of $M$.
 
 $H$ and $M$ are linearly separable if the optimal value of Linear Program $(LP)$ is $0$ 
 
 Here is a great post that implements this in R which I followed as an inspiration for this section on linear programming with python: [Testing for Linear Separability with LP in R](https://www.joyofdata.de/blog/testing-linear-separability-linear-programming-r-glpk/) [^4].
 
-Below is the code in python using scipy  `linprog(method='simplex')`  to solve our linear programming problem.  If we examing the output, using LP (Linear Programming) method we can conclude that it is possible to have a hyperplane that linearly separates Setosa from the rest of the classes, which is the only linearly separable class from the rest.
+Below is the code in python using scipy  `linprog(method='simplex')`  to solve our linear programming problem.  If we examine the output, using LP (Linear Programming) method we can conclude that it is possible to have a hyperplane that linearly separates Setosa from the rest of the classes, which is the only linearly separable class from the rest.
 
 If the problem is solvable, the Scipy output will provide us with additional information:
 
@@ -243,7 +244,7 @@ In this section we will examine two classifiers for the purpose of testing for l
 
 #### Single Layer Perceptron
 
-The **perceptron** is an algorithm used for binary classification and belongs to a class of linear classfieirs. In binary classification, we are trying to separate data into two buckets: either you are in Buket A or Bucket B. This can be stated even simpler: either you are in Bucket A or not in Bucket A (assuming we have only two classes) and hence the name binary classification.
+The **perceptron** is an algorithm used for binary classification and belongs to a class of linear classifiers. In binary classification, we are trying to separate data into two buckets: either you are in Buket A or Bucket B. This can be stated even simpler: either you are in Bucket A or not in Bucket A (assuming we have only two classes) and hence the name binary classification.
 $$
 f(x) =
 \begin{cases} \displaystyle
@@ -253,7 +254,7 @@ f(x) =
 $$
 A single layer perceptron will only converge if the input vectors are linearly separable. In this state, all input vectors would be classified correctly indicating linear separability. It will not converge if they are not linearly separable. In other words, it will not classify correctly if the data set is not linearly separable. For our testing purpose, this is exactly what we need.
 
-We will apply it on the entire data instead of splitting to test/train since our intent is to test for linear separabity among the classes and not to build a model for future predictions. 
+We will apply it on the entire data instead of splitting to test/train since our intent is to test for linear separability among the classes and not to build a model for future predictions. 
 
 We will use Scikit-Learn and pick the Perceptron as our linear model selection. Before that, let's do some basic data preprocessing tasks:
 
@@ -278,7 +279,7 @@ perceptron.fit(x, y)
 predicted = perceptron.predict(x)
 ```
 
-To get a better intuition on the resuls we will plot the confusion matrix and decision boundary. 
+To get a better intuition on the results we will plot the confusion matrix and decision boundary. 
 
 ```python
 #Plotting confusion matrix
@@ -334,7 +335,7 @@ Outputs below are for Versicolor class:
 
 #### Support Vector Machines
 
-Now, let's examine another approach using **Support Vector Machines (SVM)** with a **linear kernel**. In order to test for Linear Separability we will pick a hard-margin (for maximum distance as opposed to soft-margin) SVM with a lienar kernel. Now, if the intent was to train a model our choices would be completely different. But, since we are testing for linear separability, we want a rigid test that would fail (or produce errornous results if not converging) to helo us better assess the data at hand.
+Now, let's examine another approach using **Support Vector Machines (SVM)** with a **linear kernel**. In order to test for Linear Separability we will pick a hard-margin (for maximum distance as opposed to soft-margin) SVM with a linear kernel. Now, if the intent was to train a model our choices would be completely different. But, since we are testing for linear separability, we want a rigid test that would fail (or produce erroneous results if not converging) to help us better assess the data at hand.
 
 ![png]({{ site.baseurl }}/images/lsp/svm.png)
 
