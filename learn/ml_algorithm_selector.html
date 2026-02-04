@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Algorithm Selector - Interactive Decision Tree</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+
+    @keyframes pulse-border {
+      0%, 100% { border-color: rgba(99, 102, 241, 0.5); }
+      50% { border-color: rgba(99, 102, 241, 1); }
+    }
+    .pulse-border { animation: pulse-border 2s infinite; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="bg-slate-900">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Icons
+    const ChevronRight = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
+    const ChevronLeft = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+
+    const Info = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const Home = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    );
+
+    const Book = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    );
+
+    const Code = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      </svg>
+    );
+
+    const Zap = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    );
+
+    const MLAlgorithmSelector = () => {
+      const [path, setPath] = useState([]);
+      const [currentNode, setCurrentNode] = useState('start');
+      const [showQuickRef, setShowQuickRef] = useState(false);
+      const [expandedAlgo, setExpandedAlgo] = useState(null);
+
+      const tree = {
+        start: {
+          question: "What is your primary machine learning goal?",
+          type: "decision",
+          info: "Select the category that best describes your problem",
+          options: [
+            { label: "Predict from Labeled Data", next: "supervised", desc: "Classification or Regression with known outputs", icon: "target" },
+            { label: "Discover Patterns", next: "unsupervised", desc: "Clustering, dimensionality reduction, no labels", icon: "search" },
+            { label: "Forecast Future Values", next: "timeseries", desc: "Time series analysis and forecasting", icon: "chart" },
+            { label: "Detect Anomalies", next: "anomaly", desc: "Find outliers and unusual patterns", icon: "alert" },
+            { label: "Limited Labels Available", next: "semisupervised", desc: "Semi-supervised learning techniques", icon: "partial" }
+          ]
+        },
+
+        // ============ SUPERVISED LEARNING ============
+        supervised: {
+          question: "What type of output are you predicting?",
+          type: "decision",
+          options: [
+            { label: "Discrete Classes", next: "classification", desc: "Categorical outcomes (spam/not spam, cat/dog/bird)" },
+            { label: "Continuous Values", next: "regression", desc: "Numeric outcomes (price, temperature, sales)" },
+            { label: "Ranked Items", next: "ranking", desc: "Order items by relevance or preference" }
+          ]
+        },
+
+        // ============ CLASSIFICATION ============
+        classification: {
+          question: "How many classes are you predicting?",
+          type: "decision",
+          options: [
+            { label: "Binary (2 classes)", next: "binary_priority", desc: "Yes/No, Positive/Negative, 0/1" },
+            { label: "Multi-class (3+)", next: "multiclass_priority", desc: "Multiple mutually exclusive categories" },
+            { label: "Multi-label", next: "multilabel", desc: "Multiple labels can apply to each instance" }
+          ]
+        },
+
+        binary_priority: {
+          question: "What's your priority for this classification task?",
+          type: "decision",
+          info: "Different algorithms excel at different requirements",
+          options: [
+            { label: "Interpretability", next: "class_interpretable", desc: "Need to explain predictions to stakeholders" },
+            { label: "Maximum Accuracy", next: "class_accuracy", desc: "Best possible performance, complexity OK" },
+            { label: "Speed & Scalability", next: "class_speed", desc: "Fast training/prediction, large datasets" },
+            { label: "Imbalanced Data", next: "class_imbalanced", desc: "One class is much rarer than others" }
+          ]
+        },
+
+        multiclass_priority: {
+          question: "What's your priority for multi-class classification?",
+          type: "decision",
+          options: [
+            { label: "Interpretability", next: "class_interpretable", desc: "Need to explain predictions" },
+            { label: "Maximum Accuracy", next: "class_accuracy", desc: "Best possible performance" },
+            { label: "Speed & Scalability", next: "class_speed", desc: "Fast training, large datasets" },
+            { label: "Many Classes (100+)", next: "class_many", desc: "Large number of categories" }
+          ]
+        },
+
+        class_interpretable: {
+          question: "Interpretable Classification Algorithms",
+          type: "algorithm",
+          goal: "Models where you can explain why a prediction was made",
+          algorithms: [
+            {
+              name: "Logistic Regression",
+              priority: "Best for Interpretability",
+              description: "Linear model with probability outputs. Coefficients directly show feature importance and direction.",
+              complexity: "O(np²) training",
+              bestFor: "Baseline, linear relationships, regulated industries",
+              sklearn: "LogisticRegression",
+              code: "from sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression(max_iter=1000)\nmodel.fit(X_train, y_train)",
+              pros: ["Highly interpretable", "Fast training", "Probability outputs", "No hyperparameter tuning needed"],
+              cons: ["Assumes linear decision boundary", "May underfit complex data"]
+            },
+            {
+              name: "Decision Tree",
+              priority: "Most Intuitive",
+              description: "Tree of if-then rules. Can be visualized and explained to non-technical stakeholders.",
+              complexity: "O(np·log n) training",
+              bestFor: "Rule extraction, visualization, non-technical audiences",
+              sklearn: "DecisionTreeClassifier",
+              code: "from sklearn.tree import DecisionTreeClassifier\nmodel = DecisionTreeClassifier(max_depth=5)\nmodel.fit(X_train, y_train)",
+              pros: ["Visual explanation", "Handles non-linear", "No scaling needed", "Feature importance"],
+              cons: ["Prone to overfitting", "Unstable (small data changes)", "Greedy splits"]
+            },
+            {
+              name: "Naive Bayes",
+              priority: "Fastest & Simple",
+              description: "Probabilistic classifier based on Bayes theorem with feature independence assumption.",
+              complexity: "O(np) training",
+              bestFor: "Text classification, real-time predictions, baseline",
+              sklearn: "GaussianNB / MultinomialNB",
+              code: "from sklearn.naive_bayes import GaussianNB\nmodel = GaussianNB()\nmodel.fit(X_train, y_train)",
+              pros: ["Extremely fast", "Works with small data", "Good for text", "Probability outputs"],
+              cons: ["Independence assumption rarely true", "Can be outperformed"]
+            },
+            {
+              name: "K-Nearest Neighbors",
+              priority: "Instance-Based",
+              description: "Classifies based on majority vote of K nearest training examples.",
+              complexity: "O(1) training, O(np) prediction",
+              bestFor: "Small datasets, local patterns, recommendation-like problems",
+              sklearn: "KNeighborsClassifier",
+              code: "from sklearn.neighbors import KNeighborsClassifier\nmodel = KNeighborsClassifier(n_neighbors=5)\nmodel.fit(X_train, y_train)",
+              pros: ["No training time", "Naturally handles multi-class", "Non-parametric"],
+              cons: ["Slow prediction on large data", "Sensitive to feature scaling", "Curse of dimensionality"]
+            }
+          ]
+        },
+
+        class_accuracy: {
+          question: "High-Performance Classification Algorithms",
+          type: "algorithm",
+          goal: "Maximum predictive accuracy, complexity is acceptable",
+          algorithms: [
+            {
+              name: "Random Forest",
+              priority: "Excellent Default Choice",
+              description: "Ensemble of decision trees with bagging. Robust, handles non-linearity, rarely overfits.",
+              complexity: "O(k·np·log n) training",
+              bestFor: "General purpose, tabular data, when unsure what to use",
+              sklearn: "RandomForestClassifier",
+              code: "from sklearn.ensemble import RandomForestClassifier\nmodel = RandomForestClassifier(n_estimators=100, random_state=42)\nmodel.fit(X_train, y_train)",
+              pros: ["Robust to overfitting", "Feature importance", "Handles missing values", "No scaling needed"],
+              cons: ["Less interpretable than single tree", "Can be slow for large forests", "Memory intensive"]
+            },
+            {
+              name: "XGBoost",
+              priority: "Competition Winner",
+              description: "Gradient boosting with regularization. Often wins Kaggle competitions on tabular data.",
+              complexity: "O(k·np·log n) training",
+              bestFor: "Tabular data competitions, maximum performance",
+              sklearn: "xgboost.XGBClassifier",
+              code: "from xgboost import XGBClassifier\nmodel = XGBClassifier(n_estimators=100, learning_rate=0.1)\nmodel.fit(X_train, y_train)",
+              pros: ["State-of-the-art performance", "Built-in regularization", "Handles missing values", "GPU support"],
+              cons: ["Many hyperparameters", "Can overfit small data", "Less interpretable"]
+            },
+            {
+              name: "LightGBM",
+              priority: "Fast & Scalable",
+              description: "Gradient boosting optimized for speed. Uses histogram-based algorithm and leaf-wise growth.",
+              complexity: "O(k·np) training",
+              bestFor: "Large datasets, categorical features, speed-critical",
+              sklearn: "lightgbm.LGBMClassifier",
+              code: "from lightgbm import LGBMClassifier\nmodel = LGBMClassifier(n_estimators=100, learning_rate=0.1)\nmodel.fit(X_train, y_train)",
+              pros: ["Faster than XGBoost", "Lower memory", "Native categorical support", "Excellent accuracy"],
+              cons: ["Can overfit on small data", "Sensitive to hyperparameters"]
+            },
+            {
+              name: "CatBoost",
+              priority: "Best for Categorical",
+              description: "Gradient boosting with superior handling of categorical features. Minimal preprocessing needed.",
+              complexity: "O(k·np·log n) training",
+              bestFor: "Data with many categorical features",
+              sklearn: "catboost.CatBoostClassifier",
+              code: "from catboost import CatBoostClassifier\nmodel = CatBoostClassifier(iterations=100, verbose=False)\nmodel.fit(X_train, y_train, cat_features=cat_cols)",
+              pros: ["Best categorical handling", "Robust to overfitting", "Good defaults", "GPU support"],
+              cons: ["Slower training", "Larger model size"]
+            },
+            {
+              name: "Support Vector Machine (SVM)",
+              priority: "High-Dimensional Data",
+              description: "Finds optimal hyperplane separating classes. Effective in high dimensions.",
+              complexity: "O(n²p) to O(n³) training",
+              bestFor: "Small-medium data, high dimensions, text classification",
+              sklearn: "SVC",
+              code: "from sklearn.svm import SVC\nmodel = SVC(kernel='rbf', C=1.0, gamma='scale')\nmodel.fit(X_train, y_train)",
+              pros: ["Effective in high dimensions", "Memory efficient", "Versatile kernels"],
+              cons: ["Slow on large datasets", "Sensitive to scaling", "No probability by default"]
+            }
+          ]
+        },
+
+        class_speed: {
+          question: "Fast & Scalable Classification Algorithms",
+          type: "algorithm",
+          goal: "Quick training and prediction for large-scale applications",
+          algorithms: [
+            {
+              name: "Logistic Regression",
+              priority: "Simple & Fast",
+              description: "Linear classifier that scales well to large datasets.",
+              sklearn: "LogisticRegression",
+              code: "from sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression(solver='lbfgs', max_iter=1000)\nmodel.fit(X_train, y_train)",
+              pros: ["Very fast", "Scales to millions", "Sparse data support"],
+              cons: ["Linear only"]
+            },
+            {
+              name: "SGD Classifier",
+              priority: "Online Learning",
+              description: "Stochastic Gradient Descent for linear models. Supports incremental/online learning.",
+              complexity: "O(np) per epoch",
+              bestFor: "Very large datasets, streaming data, online learning",
+              sklearn: "SGDClassifier",
+              code: "from sklearn.linear_model import SGDClassifier\nmodel = SGDClassifier(loss='log_loss', max_iter=1000)\nmodel.fit(X_train, y_train)",
+              pros: ["Scales to huge data", "Online learning (partial_fit)", "Memory efficient"],
+              cons: ["Requires feature scaling", "Sensitive to hyperparameters"]
+            },
+            {
+              name: "Linear SVM",
+              priority: "Fast for Text/Sparse",
+              description: "Linear Support Vector Machine, optimized for speed.",
+              complexity: "O(np) training",
+              bestFor: "Text classification, sparse high-dimensional data",
+              sklearn: "LinearSVC",
+              code: "from sklearn.svm import LinearSVC\nmodel = LinearSVC(max_iter=10000)\nmodel.fit(X_train, y_train)",
+              pros: ["Very fast", "Great for text/sparse", "Scales well"],
+              cons: ["Linear only", "No probability outputs"]
+            },
+            {
+              name: "Naive Bayes",
+              priority: "Instant Training",
+              description: "Probabilistic classifier with minimal computation.",
+              sklearn: "MultinomialNB / GaussianNB",
+              code: "from sklearn.naive_bayes import MultinomialNB\nmodel = MultinomialNB()\nmodel.fit(X_train, y_train)",
+              pros: ["Fastest training", "Works with small data", "Incremental learning"],
+              cons: ["Independence assumption", "Often lower accuracy"]
+            },
+            {
+              name: "LightGBM",
+              priority: "Fast Boosting",
+              description: "Fastest gradient boosting implementation.",
+              sklearn: "lightgbm.LGBMClassifier",
+              code: "from lightgbm import LGBMClassifier\nmodel = LGBMClassifier(n_estimators=100, num_leaves=31)\nmodel.fit(X_train, y_train)",
+              pros: ["Fast non-linear", "Handles large data", "Good accuracy"],
+              cons: ["More complex than linear"]
+            }
+          ]
+        },
+
+        class_imbalanced: {
+          question: "Algorithms for Imbalanced Classification",
+          type: "algorithm",
+          goal: "Handle datasets where one class is much rarer than others",
+          warning: "Standard accuracy is misleading! Use precision, recall, F1, or AUC-PR instead.",
+          algorithms: [
+            {
+              name: "Random Forest (Balanced)",
+              priority: "Robust Choice",
+              description: "Random Forest with class weight adjustment to handle imbalance.",
+              sklearn: "RandomForestClassifier",
+              code: "from sklearn.ensemble import RandomForestClassifier\nmodel = RandomForestClassifier(\n    n_estimators=100,\n    class_weight='balanced',\n    random_state=42\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Simple adjustment", "Often works well", "No separate resampling"],
+              cons: ["May not be enough for extreme imbalance"]
+            },
+            {
+              name: "XGBoost (Scale Pos Weight)",
+              priority: "For Extreme Imbalance",
+              description: "XGBoost with scale_pos_weight parameter to weight minority class.",
+              sklearn: "xgboost.XGBClassifier",
+              code: "from xgboost import XGBClassifier\n# Calculate ratio\nscale = len(y_train[y_train==0]) / len(y_train[y_train==1])\nmodel = XGBClassifier(scale_pos_weight=scale)\nmodel.fit(X_train, y_train)",
+              pros: ["Handles extreme imbalance", "High performance", "Built-in support"],
+              cons: ["Binary only for scale_pos_weight"]
+            },
+            {
+              name: "SMOTE + Classifier",
+              priority: "Resampling Approach",
+              description: "Synthetic Minority Over-sampling Technique creates synthetic minority samples.",
+              sklearn: "imblearn.over_sampling.SMOTE",
+              code: "from imblearn.over_sampling import SMOTE\nfrom imblearn.pipeline import Pipeline\nfrom sklearn.ensemble import RandomForestClassifier\n\npipeline = Pipeline([\n    ('smote', SMOTE(random_state=42)),\n    ('classifier', RandomForestClassifier())\n])\npipeline.fit(X_train, y_train)",
+              pros: ["Works with any classifier", "Creates realistic samples", "Well-established"],
+              cons: ["Can introduce noise", "Increases training data size"]
+            },
+            {
+              name: "Balanced Random Forest",
+              priority: "Purpose-Built",
+              description: "Random Forest that automatically balances each bootstrap sample.",
+              sklearn: "imblearn.ensemble.BalancedRandomForestClassifier",
+              code: "from imblearn.ensemble import BalancedRandomForestClassifier\nmodel = BalancedRandomForestClassifier(\n    n_estimators=100,\n    random_state=42\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Designed for imbalance", "No separate resampling step", "Robust"],
+              cons: ["Requires imbalanced-learn library"]
+            },
+            {
+              name: "EasyEnsemble",
+              priority: "Ensemble Undersampling",
+              description: "Creates multiple balanced subsets by undersampling majority class.",
+              sklearn: "imblearn.ensemble.EasyEnsembleClassifier",
+              code: "from imblearn.ensemble import EasyEnsembleClassifier\nmodel = EasyEnsembleClassifier(\n    n_estimators=10,\n    random_state=42\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Uses all data across ensemble", "Often excellent performance"],
+              cons: ["Slower training"]
+            }
+          ]
+        },
+
+        class_many: {
+          question: "Algorithms for Many Classes (100+)",
+          type: "algorithm",
+          goal: "Handle classification with large number of categories",
+          algorithms: [
+            {
+              name: "LightGBM",
+              priority: "Fast Multi-class",
+              description: "Handles many classes efficiently with one-vs-all or softmax.",
+              sklearn: "lightgbm.LGBMClassifier",
+              code: "from lightgbm import LGBMClassifier\nmodel = LGBMClassifier(\n    objective='multiclass',\n    num_class=num_classes,\n    n_estimators=100\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Fast even with many classes", "Good accuracy"],
+              cons: ["Memory for many classes"]
+            },
+            {
+              name: "One-vs-Rest (OvR)",
+              priority: "Flexible Wrapper",
+              description: "Trains one binary classifier per class. Works with any binary classifier.",
+              sklearn: "OneVsRestClassifier",
+              code: "from sklearn.multiclass import OneVsRestClassifier\nfrom sklearn.linear_model import LogisticRegression\nmodel = OneVsRestClassifier(\n    LogisticRegression(max_iter=1000)\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Works with any classifier", "Interpretable per-class", "Parallelizable"],
+              cons: ["N classifiers to train", "Class imbalance issues"]
+            },
+            {
+              name: "Label Binarizer + Fast Classifier",
+              priority: "Scalable Approach",
+              description: "Binarize labels and use fast linear classifier.",
+              sklearn: "LabelBinarizer + SGDClassifier",
+              code: "from sklearn.preprocessing import LabelBinarizer\nfrom sklearn.linear_model import SGDClassifier\nfrom sklearn.multiclass import OneVsRestClassifier\n\nmodel = OneVsRestClassifier(\n    SGDClassifier(loss='log_loss', max_iter=1000)\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Scales to many classes", "Online learning possible"],
+              cons: ["Linear only"]
+            }
+          ]
+        },
+
+        multilabel: {
+          question: "Multi-label Classification Algorithms",
+          type: "algorithm",
+          goal: "Each instance can have multiple labels simultaneously",
+          info: "Example: A movie can be Action AND Comedy AND Sci-Fi",
+          algorithms: [
+            {
+              name: "Binary Relevance",
+              priority: "Simple Baseline",
+              description: "Train independent binary classifier for each label. Ignores label correlations.",
+              sklearn: "MultiOutputClassifier",
+              code: "from sklearn.multioutput import MultiOutputClassifier\nfrom sklearn.ensemble import RandomForestClassifier\n\nmodel = MultiOutputClassifier(\n    RandomForestClassifier(n_estimators=100)\n)\nmodel.fit(X_train, Y_train)  # Y_train is binary matrix",
+              pros: ["Simple", "Parallelizable", "Works with any classifier"],
+              cons: ["Ignores label correlations"]
+            },
+            {
+              name: "Classifier Chains",
+              priority: "Captures Correlations",
+              description: "Chain of classifiers where each uses previous predictions as features.",
+              sklearn: "ClassifierChain",
+              code: "from sklearn.multioutput import ClassifierChain\nfrom sklearn.linear_model import LogisticRegression\n\nmodel = ClassifierChain(\n    LogisticRegression(max_iter=1000),\n    order='random',\n    random_state=42\n)\nmodel.fit(X_train, Y_train)",
+              pros: ["Models label dependencies", "Often better than BR"],
+              cons: ["Order sensitive", "Error propagation"]
+            },
+            {
+              name: "Multi-label KNN",
+              priority: "Instance-Based",
+              description: "KNN adapted for multi-label by aggregating neighbor labels.",
+              sklearn: "Custom or sklearn-contrib",
+              code: "from sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.multioutput import MultiOutputClassifier\n\nmodel = MultiOutputClassifier(\n    KNeighborsClassifier(n_neighbors=5)\n)\nmodel.fit(X_train, Y_train)",
+              pros: ["No training", "Captures local patterns"],
+              cons: ["Slow prediction"]
+            }
+          ]
+        },
+
+        // ============ REGRESSION ============
+        regression: {
+          question: "What type of relationship do you expect?",
+          type: "decision",
+          options: [
+            { label: "Linear Relationship", next: "reg_linear", desc: "Output changes proportionally with features" },
+            { label: "Non-linear / Complex", next: "reg_nonlinear", desc: "Curved relationships, interactions" },
+            { label: "High-dimensional / Sparse", next: "reg_highdim", desc: "Many features, need selection" },
+            { label: "Outliers Present", next: "reg_robust", desc: "Data has outliers that affect results" }
+          ]
+        },
+
+        reg_linear: {
+          question: "Linear Regression Algorithms",
+          type: "algorithm",
+          goal: "Model linear relationships between features and target",
+          algorithms: [
+            {
+              name: "Linear Regression (OLS)",
+              priority: "Baseline",
+              description: "Ordinary Least Squares. Minimizes sum of squared residuals.",
+              complexity: "O(np²) training",
+              bestFor: "Baseline, understanding relationships, when assumptions hold",
+              sklearn: "LinearRegression",
+              code: "from sklearn.linear_model import LinearRegression\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\nprint('Coefficients:', model.coef_)",
+              pros: ["Simple", "Interpretable coefficients", "No hyperparameters", "Fast"],
+              cons: ["Sensitive to multicollinearity", "No regularization"]
+            },
+            {
+              name: "Ridge Regression (L2)",
+              priority: "Handles Multicollinearity",
+              description: "Linear regression with L2 regularization. Shrinks coefficients toward zero.",
+              complexity: "O(np²) training",
+              bestFor: "Multicollinearity, many correlated features",
+              sklearn: "Ridge",
+              code: "from sklearn.linear_model import Ridge\nmodel = Ridge(alpha=1.0)\nmodel.fit(X_train, y_train)",
+              pros: ["Handles multicollinearity", "Stable coefficients", "Always has solution"],
+              cons: ["Doesn't do feature selection", "Need to tune alpha"]
+            },
+            {
+              name: "Lasso Regression (L1)",
+              priority: "Feature Selection",
+              description: "Linear regression with L1 regularization. Can zero out coefficients.",
+              complexity: "O(np²) training",
+              bestFor: "Feature selection, sparse solutions",
+              sklearn: "Lasso",
+              code: "from sklearn.linear_model import Lasso\nmodel = Lasso(alpha=0.1)\nmodel.fit(X_train, y_train)\nprint('Non-zero features:', sum(model.coef_ != 0))",
+              pros: ["Automatic feature selection", "Sparse solutions", "Interpretable"],
+              cons: ["Selects one from correlated features", "Can be unstable"]
+            },
+            {
+              name: "ElasticNet",
+              priority: "Best of Both",
+              description: "Combines L1 and L2 regularization. Balance between Ridge and Lasso.",
+              complexity: "O(np²) training",
+              bestFor: "Correlated features, want some selection",
+              sklearn: "ElasticNet",
+              code: "from sklearn.linear_model import ElasticNet\nmodel = ElasticNet(alpha=0.1, l1_ratio=0.5)\nmodel.fit(X_train, y_train)",
+              pros: ["Groups correlated features", "Feature selection", "Stable"],
+              cons: ["Two hyperparameters to tune"]
+            },
+            {
+              name: "Bayesian Ridge",
+              priority: "Uncertainty Estimates",
+              description: "Bayesian approach to Ridge regression. Provides uncertainty in predictions.",
+              sklearn: "BayesianRidge",
+              code: "from sklearn.linear_model import BayesianRidge\nmodel = BayesianRidge()\nmodel.fit(X_train, y_train)\ny_pred, y_std = model.predict(X_test, return_std=True)",
+              pros: ["Uncertainty estimates", "Automatic regularization", "Robust"],
+              cons: ["Slower than OLS", "Assumes prior"]
+            }
+          ]
+        },
+
+        reg_nonlinear: {
+          question: "Non-linear Regression Algorithms",
+          type: "algorithm",
+          goal: "Model complex, non-linear relationships",
+          algorithms: [
+            {
+              name: "Random Forest Regressor",
+              priority: "Robust Default",
+              description: "Ensemble of decision trees for regression. Captures non-linear patterns.",
+              complexity: "O(k·np·log n) training",
+              bestFor: "General purpose, non-linear, robust to outliers",
+              sklearn: "RandomForestRegressor",
+              code: "from sklearn.ensemble import RandomForestRegressor\nmodel = RandomForestRegressor(\n    n_estimators=100,\n    random_state=42\n)\nmodel.fit(X_train, y_train)",
+              pros: ["No scaling needed", "Feature importance", "Robust", "Captures interactions"],
+              cons: ["Can't extrapolate", "Memory intensive"]
+            },
+            {
+              name: "Gradient Boosting Regressor",
+              priority: "High Accuracy",
+              description: "Sequential ensemble that corrects previous errors.",
+              sklearn: "GradientBoostingRegressor",
+              code: "from sklearn.ensemble import GradientBoostingRegressor\nmodel = GradientBoostingRegressor(\n    n_estimators=100,\n    learning_rate=0.1,\n    max_depth=3\n)\nmodel.fit(X_train, y_train)",
+              pros: ["High accuracy", "Handles mixed feature types", "Feature importance"],
+              cons: ["Slower training", "Can overfit", "Many hyperparameters"]
+            },
+            {
+              name: "XGBoost Regressor",
+              priority: "Competition Standard",
+              description: "Optimized gradient boosting for regression.",
+              sklearn: "xgboost.XGBRegressor",
+              code: "from xgboost import XGBRegressor\nmodel = XGBRegressor(\n    n_estimators=100,\n    learning_rate=0.1,\n    max_depth=6\n)\nmodel.fit(X_train, y_train)",
+              pros: ["State-of-the-art", "Fast", "Regularization", "Missing value handling"],
+              cons: ["Hyperparameter sensitive", "Can overfit"]
+            },
+            {
+              name: "Polynomial Regression",
+              priority: "Explicit Non-linearity",
+              description: "Create polynomial features then apply linear regression.",
+              sklearn: "PolynomialFeatures + LinearRegression",
+              code: "from sklearn.preprocessing import PolynomialFeatures\nfrom sklearn.linear_model import Ridge\nfrom sklearn.pipeline import Pipeline\n\nmodel = Pipeline([\n    ('poly', PolynomialFeatures(degree=2)),\n    ('ridge', Ridge(alpha=1.0))\n])\nmodel.fit(X_train, y_train)",
+              pros: ["Interpretable", "Captures polynomial relationships"],
+              cons: ["Feature explosion", "Need to choose degree", "Overfitting risk"]
+            },
+            {
+              name: "SVR (Support Vector Regression)",
+              priority: "Small-Medium Data",
+              description: "Support Vector Machine for regression with epsilon-insensitive loss.",
+              complexity: "O(n²p) to O(n³)",
+              sklearn: "SVR",
+              code: "from sklearn.svm import SVR\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import Pipeline\n\nmodel = Pipeline([\n    ('scaler', StandardScaler()),\n    ('svr', SVR(kernel='rbf', C=1.0, epsilon=0.1))\n])\nmodel.fit(X_train, y_train)",
+              pros: ["Robust to outliers", "Kernel flexibility", "Good for small data"],
+              cons: ["Slow on large data", "Requires scaling", "Hyperparameter sensitive"]
+            },
+            {
+              name: "Gaussian Process Regressor",
+              priority: "Uncertainty Quantification",
+              description: "Non-parametric model that provides uncertainty estimates.",
+              complexity: "O(n³) training",
+              sklearn: "GaussianProcessRegressor",
+              code: "from sklearn.gaussian_process import GaussianProcessRegressor\nfrom sklearn.gaussian_process.kernels import RBF\n\nkernel = 1.0 * RBF(length_scale=1.0)\nmodel = GaussianProcessRegressor(kernel=kernel)\nmodel.fit(X_train, y_train)\ny_pred, y_std = model.predict(X_test, return_std=True)",
+              pros: ["Uncertainty estimates", "Flexible via kernels", "Good for small data"],
+              cons: ["Scales poorly (O(n³))", "Kernel choice matters"]
+            },
+            {
+              name: "KNN Regressor",
+              priority: "Local Patterns",
+              description: "Predicts based on average of K nearest neighbors.",
+              sklearn: "KNeighborsRegressor",
+              code: "from sklearn.neighbors import KNeighborsRegressor\nmodel = KNeighborsRegressor(n_neighbors=5, weights='distance')\nmodel.fit(X_train, y_train)",
+              pros: ["Simple", "Captures local patterns", "No training time"],
+              cons: ["Slow prediction", "Sensitive to scaling", "Curse of dimensionality"]
+            }
+          ]
+        },
+
+        reg_highdim: {
+          question: "High-Dimensional Regression Algorithms",
+          type: "algorithm",
+          goal: "Handle many features, need regularization and/or feature selection",
+          algorithms: [
+            {
+              name: "Lasso",
+              priority: "Sparse Solutions",
+              description: "L1 regularization zeros out irrelevant features.",
+              sklearn: "Lasso",
+              code: "from sklearn.linear_model import LassoCV\nmodel = LassoCV(cv=5)\nmodel.fit(X_train, y_train)\nprint(f'Selected {sum(model.coef_ != 0)} features')",
+              pros: ["Automatic feature selection", "Interpretable", "Sparse"],
+              cons: ["Linear only", "Picks one from correlated"]
+            },
+            {
+              name: "ElasticNet",
+              priority: "Grouped Selection",
+              description: "L1+L2 regularization. Better with correlated features.",
+              sklearn: "ElasticNetCV",
+              code: "from sklearn.linear_model import ElasticNetCV\nmodel = ElasticNetCV(cv=5, l1_ratio=[.1, .5, .7, .9, .95, 1])\nmodel.fit(X_train, y_train)",
+              pros: ["Handles correlated features", "Feature selection", "Stable"],
+              cons: ["Two hyperparameters"]
+            },
+            {
+              name: "SGD Regressor",
+              priority: "Very Large Data",
+              description: "Stochastic gradient descent for linear models. Scales to huge datasets.",
+              sklearn: "SGDRegressor",
+              code: "from sklearn.linear_model import SGDRegressor\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import Pipeline\n\nmodel = Pipeline([\n    ('scaler', StandardScaler()),\n    ('sgd', SGDRegressor(penalty='elasticnet', max_iter=1000))\n])\nmodel.fit(X_train, y_train)",
+              pros: ["Scales to millions", "Online learning", "Various penalties"],
+              cons: ["Requires scaling", "Sensitive to hyperparameters"]
+            },
+            {
+              name: "LARS / LARS-Lasso",
+              priority: "Efficient Path",
+              description: "Least Angle Regression. Efficiently computes full regularization path.",
+              sklearn: "Lars / LassoLars",
+              code: "from sklearn.linear_model import LassoLarsCV\nmodel = LassoLarsCV(cv=5)\nmodel.fit(X_train, y_train)",
+              pros: ["Fast for p > n", "Full solution path", "Automatic CV"],
+              cons: ["Sensitive to noise", "Linear only"]
+            }
+          ]
+        },
+
+        reg_robust: {
+          question: "Robust Regression Algorithms",
+          type: "algorithm",
+          goal: "Handle outliers that would bias standard methods",
+          warning: "Standard OLS is heavily influenced by outliers!",
+          algorithms: [
+            {
+              name: "Huber Regressor",
+              priority: "Balanced Robustness",
+              description: "Combines squared loss for small errors and linear loss for large errors.",
+              sklearn: "HuberRegressor",
+              code: "from sklearn.linear_model import HuberRegressor\nmodel = HuberRegressor(epsilon=1.35)\nmodel.fit(X_train, y_train)",
+              pros: ["Robust to outliers", "Still efficient for good data", "Tunable epsilon"],
+              cons: ["Linear only", "Need to set epsilon"]
+            },
+            {
+              name: "RANSAC Regressor",
+              priority: "Many Outliers",
+              description: "Random Sample Consensus. Iteratively fits to inlier subsets.",
+              sklearn: "RANSACRegressor",
+              code: "from sklearn.linear_model import RANSACRegressor\nmodel = RANSACRegressor(random_state=42)\nmodel.fit(X_train, y_train)\nprint(f'Inliers: {sum(model.inlier_mask_)}')",
+              pros: ["Very robust", "Identifies inliers/outliers", "Works with many outliers"],
+              cons: ["Requires clean subset exists", "Randomized"]
+            },
+            {
+              name: "Theil-Sen Estimator",
+              priority: "Statistically Robust",
+              description: "Median of slopes over all pairs of points. Very robust.",
+              sklearn: "TheilSenRegressor",
+              code: "from sklearn.linear_model import TheilSenRegressor\nmodel = TheilSenRegressor(random_state=42)\nmodel.fit(X_train, y_train)",
+              pros: ["Very robust (up to ~30% outliers)", "No tuning needed"],
+              cons: ["Slow for large n", "Linear only"]
+            },
+            {
+              name: "Quantile Regression",
+              priority: "Predict Quantiles",
+              description: "Predict conditional quantiles (median, percentiles) instead of mean.",
+              sklearn: "GradientBoostingRegressor(loss='quantile')",
+              code: "from sklearn.ensemble import GradientBoostingRegressor\n\n# Predict median (50th percentile)\nmodel = GradientBoostingRegressor(\n    loss='quantile',\n    alpha=0.5,  # 0.5 = median\n    n_estimators=100\n)\nmodel.fit(X_train, y_train)",
+              pros: ["Robust to outliers", "Can predict intervals", "Flexible"],
+              cons: ["Need separate model per quantile"]
+            }
+          ]
+        },
+
+        ranking: {
+          question: "Learning to Rank Algorithms",
+          type: "algorithm",
+          goal: "Order items by relevance or preference",
+          info: "Used in search engines, recommendation systems",
+          algorithms: [
+            {
+              name: "LambdaMART (XGBoost)",
+              priority: "Industry Standard",
+              description: "Gradient boosted trees optimized for ranking metrics like NDCG.",
+              sklearn: "xgboost.XGBRanker",
+              code: "from xgboost import XGBRanker\nmodel = XGBRanker(\n    objective='rank:ndcg',\n    n_estimators=100\n)\nmodel.fit(X_train, y_train, group=group_sizes)",
+              pros: ["State-of-the-art", "Optimizes ranking metrics directly"],
+              cons: ["Requires group information", "Complex setup"]
+            },
+            {
+              name: "LightGBM Ranker",
+              priority: "Fast Ranking",
+              description: "LightGBM with ranking objective.",
+              sklearn: "lightgbm.LGBMRanker",
+              code: "from lightgbm import LGBMRanker\nmodel = LGBMRanker(\n    objective='lambdarank',\n    n_estimators=100\n)\nmodel.fit(X_train, y_train, group=group_sizes)",
+              pros: ["Fast", "Handles large data", "Good performance"],
+              cons: ["Requires group sizes"]
+            },
+            {
+              name: "Pairwise Transform + Classifier",
+              priority: "Flexible Approach",
+              description: "Convert ranking to pairwise classification: predict which item is better.",
+              sklearn: "Custom + any classifier",
+              code: "# Convert to pairwise\n# For each pair (i,j) in same query:\n#   X_pair = X_i - X_j\n#   y_pair = 1 if rank_i > rank_j else 0\n# Then train classifier on pairs",
+              pros: ["Works with any classifier", "Flexible"],
+              cons: ["Quadratic pairs", "Slower"]
+            }
+          ]
+        },
+
+        // ============ UNSUPERVISED LEARNING ============
+        unsupervised: {
+          question: "What do you want to discover?",
+          type: "decision",
+          options: [
+            { label: "Group Similar Items", next: "clustering", desc: "Find natural clusters in data" },
+            { label: "Reduce Dimensions", next: "dimreduction", desc: "Compress features, visualization" },
+            { label: "Find Associations", next: "association", desc: "Discover item co-occurrence rules" }
+          ]
+        },
+
+        // ============ CLUSTERING ============
+        clustering: {
+          question: "Do you know the number of clusters?",
+          type: "decision",
+          options: [
+            { label: "Yes, K is known", next: "cluster_known_k", desc: "Business defines number of groups" },
+            { label: "No, discover K", next: "cluster_unknown_k", desc: "Find optimal number automatically" },
+            { label: "Want hierarchy", next: "cluster_hierarchical", desc: "Nested cluster structure" }
+          ]
+        },
+
+        cluster_known_k: {
+          question: "Clustering with Known K",
+          type: "algorithm",
+          goal: "Partition data into K predefined clusters",
+          algorithms: [
+            {
+              name: "K-Means",
+              priority: "Default Choice",
+              description: "Partition data into K spherical clusters. Minimizes within-cluster variance.",
+              complexity: "O(nkpi) where i=iterations",
+              bestFor: "Large data, spherical clusters, fast results",
+              sklearn: "KMeans",
+              code: "from sklearn.cluster import KMeans\nmodel = KMeans(n_clusters=5, random_state=42, n_init=10)\nmodel.fit(X)\nlabels = model.labels_\ncenters = model.cluster_centers_",
+              pros: ["Very fast", "Scales well", "Simple to understand"],
+              cons: ["Assumes spherical clusters", "Sensitive to initialization", "Must specify K"]
+            },
+            {
+              name: "Mini-Batch K-Means",
+              priority: "Very Large Data",
+              description: "K-Means using mini-batches for scalability.",
+              complexity: "O(nkp) per batch",
+              bestFor: "Millions of samples, streaming data",
+              sklearn: "MiniBatchKMeans",
+              code: "from sklearn.cluster import MiniBatchKMeans\nmodel = MiniBatchKMeans(n_clusters=5, batch_size=1000)\nmodel.fit(X)",
+              pros: ["Much faster than K-Means", "Scales to huge data", "Online learning"],
+              cons: ["Slightly worse quality", "Same assumptions as K-Means"]
+            },
+            {
+              name: "K-Medoids (PAM)",
+              priority: "Robust to Outliers",
+              description: "Like K-Means but uses actual data points as centers.",
+              sklearn: "sklearn_extra.cluster.KMedoids",
+              code: "from sklearn_extra.cluster import KMedoids\nmodel = KMedoids(n_clusters=5, random_state=42)\nmodel.fit(X)\nmedoids = model.medoid_indices_",
+              pros: ["More robust to outliers", "Works with any distance metric", "Interpretable centers"],
+              cons: ["Slower than K-Means", "Requires sklearn-extra"]
+            },
+            {
+              name: "Bisecting K-Means",
+              priority: "Hierarchical K-Means",
+              description: "Recursively bisects clusters. Creates hierarchy.",
+              sklearn: "BisectingKMeans",
+              code: "from sklearn.cluster import BisectingKMeans\nmodel = BisectingKMeans(n_clusters=5, random_state=42)\nmodel.fit(X)",
+              pros: ["Faster than standard K-Means", "Creates cluster tree", "Good for large data"],
+              cons: ["Still assumes spherical"]
+            },
+            {
+              name: "Gaussian Mixture Model",
+              priority: "Soft Clustering",
+              description: "Probabilistic clustering. Each point has probability of belonging to each cluster.",
+              sklearn: "GaussianMixture",
+              code: "from sklearn.mixture import GaussianMixture\nmodel = GaussianMixture(n_components=5, random_state=42)\nmodel.fit(X)\nlabels = model.predict(X)\nprobs = model.predict_proba(X)",
+              pros: ["Soft assignments", "Elliptical clusters", "Uncertainty in assignments"],
+              cons: ["Can overfit", "Sensitive to initialization", "Assumes Gaussian"]
+            }
+          ]
+        },
+
+        cluster_unknown_k: {
+          question: "Clustering with Automatic K Discovery",
+          type: "algorithm",
+          goal: "Automatically determine optimal number of clusters",
+          algorithms: [
+            {
+              name: "DBSCAN",
+              priority: "Density-Based Standard",
+              description: "Finds clusters as dense regions separated by sparse regions. Discovers outliers.",
+              complexity: "O(n log n) with spatial index",
+              bestFor: "Arbitrary shapes, outlier detection, unknown K",
+              sklearn: "DBSCAN",
+              code: "from sklearn.cluster import DBSCAN\nmodel = DBSCAN(eps=0.5, min_samples=5)\nmodel.fit(X)\nlabels = model.labels_  # -1 = outlier\nn_clusters = len(set(labels)) - (1 if -1 in labels else 0)",
+              pros: ["No need to specify K", "Finds arbitrary shapes", "Identifies outliers", "Robust"],
+              cons: ["Sensitive to eps/min_samples", "Struggles with varying density"]
+            },
+            {
+              name: "HDBSCAN",
+              priority: "Best Density-Based",
+              description: "Hierarchical DBSCAN. Handles varying density, more robust.",
+              sklearn: "hdbscan.HDBSCAN",
+              code: "import hdbscan\nmodel = hdbscan.HDBSCAN(min_cluster_size=10, min_samples=5)\nmodel.fit(X)\nlabels = model.labels_\nprobabilities = model.probabilities_",
+              pros: ["Handles varying density", "Minimal parameters", "Outlier detection", "Soft clustering"],
+              cons: ["Slower than DBSCAN", "Requires hdbscan library"]
+            },
+            {
+              name: "OPTICS",
+              priority: "Varying Density",
+              description: "Ordering Points To Identify Clustering Structure. Creates reachability plot.",
+              sklearn: "OPTICS",
+              code: "from sklearn.cluster import OPTICS\nmodel = OPTICS(min_samples=5, xi=0.05)\nmodel.fit(X)\nlabels = model.labels_",
+              pros: ["Handles varying density", "Produces hierarchical view", "No eps needed"],
+              cons: ["Slower", "More complex to interpret"]
+            },
+            {
+              name: "Mean Shift",
+              priority: "Mode Finding",
+              description: "Finds cluster centers as modes of density. Automatically determines K.",
+              sklearn: "MeanShift",
+              code: "from sklearn.cluster import MeanShift, estimate_bandwidth\nbw = estimate_bandwidth(X, quantile=0.2)\nmodel = MeanShift(bandwidth=bw)\nmodel.fit(X)",
+              pros: ["No K needed", "Finds arbitrary shapes", "Single parameter"],
+              cons: ["Slow for large data", "Bandwidth selection critical"]
+            },
+            {
+              name: "Affinity Propagation",
+              priority: "Exemplar-Based",
+              description: "Finds exemplars (representative points) through message passing.",
+              sklearn: "AffinityPropagation",
+              code: "from sklearn.cluster import AffinityPropagation\nmodel = AffinityPropagation(random_state=42)\nmodel.fit(X)\ncluster_centers_indices = model.cluster_centers_indices_",
+              pros: ["No K needed", "Finds exemplars automatically"],
+              cons: ["Slow O(n²)", "Preference parameter important"]
+            }
+          ]
+        },
+
+        cluster_hierarchical: {
+          question: "Hierarchical Clustering Algorithms",
+          type: "algorithm",
+          goal: "Create nested cluster hierarchy (dendrogram)",
+          algorithms: [
+            {
+              name: "Agglomerative Clustering",
+              priority: "Standard Hierarchical",
+              description: "Bottom-up approach. Starts with each point as cluster, merges up.",
+              complexity: "O(n²) to O(n³) depending on linkage",
+              sklearn: "AgglomerativeClustering",
+              code: "from sklearn.cluster import AgglomerativeClustering\nmodel = AgglomerativeClustering(\n    n_clusters=5,\n    linkage='ward'  # 'single', 'complete', 'average'\n)\nlabels = model.fit_predict(X)",
+              pros: ["Dendrogram visualization", "Various linkage methods", "No K initially needed"],
+              cons: ["Slow for large data", "Need to cut dendrogram"]
+            },
+            {
+              name: "BIRCH",
+              priority: "Large Data Hierarchical",
+              description: "Balanced Iterative Reducing and Clustering using Hierarchies. Scales well.",
+              complexity: "O(n)",
+              sklearn: "Birch",
+              code: "from sklearn.cluster import Birch\nmodel = Birch(n_clusters=5, threshold=0.5)\nmodel.fit(X)\nlabels = model.labels_",
+              pros: ["Scales to large data", "Incremental learning", "Memory efficient"],
+              cons: ["Works best with spherical", "Threshold tuning"]
+            },
+            {
+              name: "Spectral Clustering",
+              priority: "Non-Convex Shapes",
+              description: "Uses graph Laplacian eigenvectors. Good for non-convex clusters.",
+              complexity: "O(n³)",
+              sklearn: "SpectralClustering",
+              code: "from sklearn.cluster import SpectralClustering\nmodel = SpectralClustering(\n    n_clusters=5,\n    affinity='rbf',\n    random_state=42\n)\nlabels = model.fit_predict(X)",
+              pros: ["Handles complex shapes", "Graph-based", "Flexible affinity"],
+              cons: ["Slow for large data", "Must specify K", "Memory intensive"]
+            }
+          ]
+        },
+
+        // ============ DIMENSIONALITY REDUCTION ============
+        dimreduction: {
+          question: "What's your goal for dimensionality reduction?",
+          type: "decision",
+          options: [
+            { label: "Visualization (2-3D)", next: "dimred_viz", desc: "Plot high-dimensional data" },
+            { label: "Feature Extraction", next: "dimred_feature", desc: "Reduce for downstream ML" },
+            { label: "Sparse/Fast Reduction", next: "dimred_sparse", desc: "Large or sparse data" }
+          ]
+        },
+
+        dimred_viz: {
+          question: "Visualization-Focused Dimensionality Reduction",
+          type: "algorithm",
+          goal: "Reduce to 2-3 dimensions for plotting",
+          algorithms: [
+            {
+              name: "PCA",
+              priority: "Fast Linear Baseline",
+              description: "Principal Component Analysis. Linear projection maximizing variance.",
+              complexity: "O(p²n + p³)",
+              sklearn: "PCA",
+              code: "from sklearn.decomposition import PCA\nimport matplotlib.pyplot as plt\n\npca = PCA(n_components=2)\nX_2d = pca.fit_transform(X)\nplt.scatter(X_2d[:, 0], X_2d[:, 1], c=labels)\nplt.xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%})')\nplt.ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%})')",
+              pros: ["Fast", "Deterministic", "Preserves global structure", "Interpretable"],
+              cons: ["Linear only", "May not separate non-linear patterns"]
+            },
+            {
+              name: "t-SNE",
+              priority: "Local Structure",
+              description: "t-Distributed Stochastic Neighbor Embedding. Preserves local neighborhoods.",
+              complexity: "O(n²) or O(n log n) with approximation",
+              sklearn: "TSNE",
+              code: "from sklearn.manifold import TSNE\ntsne = TSNE(\n    n_components=2,\n    perplexity=30,\n    random_state=42\n)\nX_2d = tsne.fit_transform(X)",
+              pros: ["Excellent for visualization", "Reveals clusters", "Non-linear"],
+              cons: ["Slow", "Stochastic", "Can't transform new data", "Hyperparameter sensitive"]
+            },
+            {
+              name: "UMAP",
+              priority: "Best Overall",
+              description: "Uniform Manifold Approximation and Projection. Fast, preserves both local and global.",
+              sklearn: "umap.UMAP",
+              code: "import umap\nreducer = umap.UMAP(\n    n_components=2,\n    n_neighbors=15,\n    min_dist=0.1,\n    random_state=42\n)\nX_2d = reducer.fit_transform(X)",
+              pros: ["Fast", "Preserves global + local", "Can transform new data", "Scalable"],
+              cons: ["Stochastic", "Requires umap-learn package"]
+            },
+            {
+              name: "MDS",
+              priority: "Distance Preservation",
+              description: "Multidimensional Scaling. Preserves pairwise distances.",
+              sklearn: "MDS",
+              code: "from sklearn.manifold import MDS\nmds = MDS(n_components=2, random_state=42)\nX_2d = mds.fit_transform(X)",
+              pros: ["Interpretable (distances)", "Works with distance matrix"],
+              cons: ["Slow O(n³)", "Not scalable"]
+            },
+            {
+              name: "Isomap",
+              priority: "Geodesic Distances",
+              description: "Isometric Mapping. Preserves geodesic (manifold) distances.",
+              sklearn: "Isomap",
+              code: "from sklearn.manifold import Isomap\nisomap = Isomap(n_components=2, n_neighbors=10)\nX_2d = isomap.fit_transform(X)",
+              pros: ["Preserves manifold structure", "Non-linear"],
+              cons: ["Sensitive to noise", "Slow for large n"]
+            }
+          ]
+        },
+
+        dimred_feature: {
+          question: "Feature Extraction Dimensionality Reduction",
+          type: "algorithm",
+          goal: "Create meaningful features for downstream ML",
+          algorithms: [
+            {
+              name: "PCA",
+              priority: "Standard Choice",
+              description: "Linear transformation preserving maximum variance.",
+              sklearn: "PCA",
+              code: "from sklearn.decomposition import PCA\npca = PCA(n_components=0.95)  # Keep 95% variance\nX_reduced = pca.fit_transform(X)\nprint(f'Reduced from {X.shape[1]} to {X_reduced.shape[1]} dims')",
+              pros: ["Fast", "Deterministic", "Whitening option", "Inverse transform"],
+              cons: ["Linear only"]
+            },
+            {
+              name: "Kernel PCA",
+              priority: "Non-linear PCA",
+              description: "PCA in kernel-induced feature space.",
+              sklearn: "KernelPCA",
+              code: "from sklearn.decomposition import KernelPCA\nkpca = KernelPCA(n_components=50, kernel='rbf', gamma=0.01)\nX_reduced = kpca.fit_transform(X)",
+              pros: ["Captures non-linear patterns", "Flexible kernels"],
+              cons: ["Slower", "Kernel/gamma tuning", "No variance explained"]
+            },
+            {
+              name: "Incremental PCA",
+              priority: "Large Data",
+              description: "PCA using mini-batches. Memory efficient.",
+              sklearn: "IncrementalPCA",
+              code: "from sklearn.decomposition import IncrementalPCA\nipca = IncrementalPCA(n_components=50, batch_size=1000)\nfor batch in np.array_split(X, 10):\n    ipca.partial_fit(batch)\nX_reduced = ipca.transform(X)",
+              pros: ["Memory efficient", "Streaming data", "Same result as PCA"],
+              cons: ["Slightly more complex"]
+            },
+            {
+              name: "Factor Analysis",
+              priority: "Latent Factors",
+              description: "Models observed variables as linear combinations of latent factors.",
+              sklearn: "FactorAnalysis",
+              code: "from sklearn.decomposition import FactorAnalysis\nfa = FactorAnalysis(n_components=10)\nX_reduced = fa.fit_transform(X)",
+              pros: ["Interpretable factors", "Models noise separately"],
+              cons: ["Assumes Gaussian", "Local optima"]
+            },
+            {
+              name: "ICA",
+              priority: "Independent Components",
+              description: "Independent Component Analysis. Finds statistically independent components.",
+              sklearn: "FastICA",
+              code: "from sklearn.decomposition import FastICA\nica = FastICA(n_components=10, random_state=42)\nX_reduced = ica.fit_transform(X)",
+              pros: ["Finds independent signals", "Blind source separation"],
+              cons: ["Non-Gaussian assumption", "No ordering"]
+            },
+            {
+              name: "LDA",
+              priority: "Supervised Reduction",
+              description: "Linear Discriminant Analysis. Maximizes class separation.",
+              sklearn: "LinearDiscriminantAnalysis",
+              code: "from sklearn.discriminant_analysis import LinearDiscriminantAnalysis\nlda = LinearDiscriminantAnalysis(n_components=2)\nX_reduced = lda.fit_transform(X, y)  # Needs labels!",
+              pros: ["Uses label info", "Maximizes separability", "Fast"],
+              cons: ["Max n_components = n_classes - 1", "Needs labels"]
+            }
+          ]
+        },
+
+        dimred_sparse: {
+          question: "Sparse & Scalable Dimensionality Reduction",
+          type: "algorithm",
+          goal: "Handle large or sparse datasets efficiently",
+          algorithms: [
+            {
+              name: "Truncated SVD",
+              priority: "Sparse Data Standard",
+              description: "SVD that works on sparse matrices. Foundation of LSA for text.",
+              sklearn: "TruncatedSVD",
+              code: "from sklearn.decomposition import TruncatedSVD\nsvd = TruncatedSVD(n_components=100, random_state=42)\nX_reduced = svd.fit_transform(X_sparse)  # Works with sparse!",
+              pros: ["Works with sparse matrices", "Fast", "No mean centering needed"],
+              cons: ["Less interpretable than PCA"]
+            },
+            {
+              name: "Random Projection",
+              priority: "Fastest",
+              description: "Project using random matrix. Johnson-Lindenstrauss lemma guarantees preservation.",
+              sklearn: "GaussianRandomProjection / SparseRandomProjection",
+              code: "from sklearn.random_projection import GaussianRandomProjection\nrp = GaussianRandomProjection(n_components=100, random_state=42)\nX_reduced = rp.fit_transform(X)",
+              pros: ["Extremely fast", "Works for any data", "Theoretical guarantees"],
+              cons: ["Approximate", "Random (not deterministic)"]
+            },
+            {
+              name: "Sparse PCA",
+              priority: "Interpretable Sparse",
+              description: "PCA with sparsity constraint. More interpretable components.",
+              sklearn: "SparsePCA",
+              code: "from sklearn.decomposition import SparsePCA\nspca = SparsePCA(n_components=10, alpha=1.0)\nX_reduced = spca.fit_transform(X)",
+              pros: ["Interpretable components", "Feature selection effect"],
+              cons: ["Slow", "Alpha tuning needed"]
+            }
+          ]
+        },
+
+        association: {
+          question: "Association Rule Mining",
+          type: "algorithm",
+          goal: "Discover item co-occurrence patterns (market basket analysis)",
+          info: "Not in scikit-learn - use mlxtend library",
+          algorithms: [
+            {
+              name: "Apriori",
+              priority: "Classic Algorithm",
+              description: "Finds frequent itemsets, then generates association rules.",
+              sklearn: "mlxtend.frequent_patterns.apriori",
+              code: "from mlxtend.frequent_patterns import apriori, association_rules\n\n# X should be one-hot encoded transactions\nfrequent_items = apriori(X, min_support=0.01, use_colnames=True)\nrules = association_rules(frequent_items, metric='lift', min_threshold=1.0)",
+              pros: ["Well-understood", "Generates rules with metrics"],
+              cons: ["Can be slow", "Many parameters"]
+            },
+            {
+              name: "FP-Growth",
+              priority: "Faster Alternative",
+              description: "Frequent Pattern Growth. Faster than Apriori using tree structure.",
+              sklearn: "mlxtend.frequent_patterns.fpgrowth",
+              code: "from mlxtend.frequent_patterns import fpgrowth, association_rules\n\nfrequent_items = fpgrowth(X, min_support=0.01, use_colnames=True)\nrules = association_rules(frequent_items, metric='confidence', min_threshold=0.5)",
+              pros: ["Faster than Apriori", "No candidate generation"],
+              cons: ["Memory intensive"]
+            }
+          ]
+        },
+
+        // ============ TIME SERIES ============
+        timeseries: {
+          question: "How many variables are you forecasting?",
+          type: "decision",
+          options: [
+            { label: "Single Variable", next: "ts_univariate", desc: "One time series (e.g., daily sales)" },
+            { label: "Multiple Variables", next: "ts_multivariate", desc: "Several related series together" },
+            { label: "Target + External Factors", next: "ts_exogenous", desc: "Forecast with additional predictors" }
+          ]
+        },
+
+        ts_univariate: {
+          question: "Does your data have seasonality?",
+          type: "decision",
+          info: "Seasonality = repeating patterns at fixed intervals (daily, weekly, yearly)",
+          options: [
+            { label: "Yes, Seasonal", next: "ts_seasonal", desc: "Clear repeating patterns" },
+            { label: "No Seasonality", next: "ts_nonseasonal", desc: "Trend or random walk only" },
+            { label: "Not Sure / Complex", next: "ts_auto", desc: "Let algorithm decide" }
+          ]
+        },
+
+        ts_seasonal: {
+          question: "Seasonal Time Series Algorithms",
+          type: "algorithm",
+          goal: "Model and forecast data with seasonal patterns",
+          warning: "Always use temporal cross-validation - never shuffle time series data!",
+          algorithms: [
+            {
+              name: "SARIMA",
+              priority: "Statistical Standard",
+              description: "Seasonal ARIMA. Handles trend, seasonality, and autocorrelation.",
+              bestFor: "Single seasonality, well-understood patterns",
+              sklearn: "statsmodels.tsa.statespace.sarimax.SARIMAX",
+              code: "from statsmodels.tsa.statespace.sarimax import SARIMAX\n\n# SARIMA(p,d,q)(P,D,Q,s)\n# p,d,q = non-seasonal AR, differencing, MA\n# P,D,Q,s = seasonal AR, differencing, MA, period\nmodel = SARIMAX(y, order=(1,1,1), seasonal_order=(1,1,1,12))\nresult = model.fit()\nforecast = result.forecast(steps=12)",
+              pros: ["Handles trend + seasonality", "Interpretable parameters", "Prediction intervals"],
+              cons: ["Parameter selection (p,d,q,P,D,Q)", "Assumes linear", "Single seasonality"]
+            },
+            {
+              name: "Holt-Winters (ETS)",
+              priority: "Exponential Smoothing",
+              description: "Triple exponential smoothing. Models level, trend, and seasonality.",
+              sklearn: "statsmodels.tsa.holtwinters.ExponentialSmoothing",
+              code: "from statsmodels.tsa.holtwinters import ExponentialSmoothing\n\nmodel = ExponentialSmoothing(\n    y,\n    trend='add',        # or 'mul'\n    seasonal='add',     # or 'mul'\n    seasonal_periods=12\n)\nresult = model.fit()\nforecast = result.forecast(steps=12)",
+              pros: ["Intuitive parameters", "Additive or multiplicative", "Fast"],
+              cons: ["Single seasonality", "Less flexible than SARIMA"]
+            },
+            {
+              name: "Prophet",
+              priority: "Easy & Robust",
+              description: "Facebook's forecasting tool. Handles holidays, multiple seasonalities, missing data.",
+              sklearn: "prophet.Prophet",
+              code: "from prophet import Prophet\nimport pandas as pd\n\n# Prophet requires df with 'ds' (date) and 'y' (value)\ndf = pd.DataFrame({'ds': dates, 'y': values})\nmodel = Prophet(yearly_seasonality=True, weekly_seasonality=True)\nmodel.fit(df)\nfuture = model.make_future_dataframe(periods=30)\nforecast = model.predict(future)",
+              pros: ["Handles multiple seasonalities", "Holiday effects", "Robust to missing data", "Easy to use"],
+              cons: ["Can overfit", "Less customizable", "Slower"]
+            },
+            {
+              name: "TBATS",
+              priority: "Complex Seasonality",
+              description: "Trigonometric, Box-Cox, ARMA, Trend, Seasonality. Handles multiple seasonalities.",
+              sklearn: "tbats.TBATS",
+              code: "from tbats import TBATS\n\n# Can specify multiple seasonal periods\nmodel = TBATS(seasonal_periods=[7, 365.25])\nfitted = model.fit(y)\nforecast = fitted.forecast(steps=30)",
+              pros: ["Multiple seasonalities", "Automatic selection", "Non-integer periods"],
+              cons: ["Slow fitting", "Complex model"]
+            },
+            {
+              name: "STL Decomposition + Forecast",
+              priority: "Decomposition Approach",
+              description: "Decompose into trend, seasonal, residual. Forecast each component.",
+              sklearn: "statsmodels.tsa.seasonal.STL",
+              code: "from statsmodels.tsa.seasonal import STL\nfrom statsmodels.tsa.forecasting.stl import STLForecast\nfrom statsmodels.tsa.arima.model import ARIMA\n\nstlf = STLForecast(y, ARIMA, model_kwargs={'order': (1,1,0)}, period=12)\nresult = stlf.fit()\nforecast = result.forecast(12)",
+              pros: ["Flexible decomposition", "Visual interpretation", "Robust"],
+              cons: ["Need to forecast each component"]
+            }
+          ]
+        },
+
+        ts_nonseasonal: {
+          question: "Non-Seasonal Time Series Algorithms",
+          type: "algorithm",
+          goal: "Model data without seasonal patterns",
+          algorithms: [
+            {
+              name: "ARIMA",
+              priority: "Standard Choice",
+              description: "AutoRegressive Integrated Moving Average. Models trend and autocorrelation.",
+              sklearn: "statsmodels.tsa.arima.model.ARIMA",
+              code: "from statsmodels.tsa.arima.model import ARIMA\n\n# ARIMA(p, d, q)\n# p = AR order, d = differencing, q = MA order\nmodel = ARIMA(y, order=(2, 1, 2))\nresult = model.fit()\nforecast = result.forecast(steps=10)\nprint(result.summary())",
+              pros: ["Flexible", "Well-understood", "Confidence intervals"],
+              cons: ["Parameter selection", "Assumes stationarity after differencing"]
+            },
+            {
+              name: "Simple Exponential Smoothing",
+              priority: "No Trend Baseline",
+              description: "Weighted average giving more weight to recent observations.",
+              sklearn: "statsmodels.tsa.holtwinters.SimpleExpSmoothing",
+              code: "from statsmodels.tsa.holtwinters import SimpleExpSmoothing\n\nmodel = SimpleExpSmoothing(y)\nresult = model.fit(smoothing_level=0.2, optimized=True)\nforecast = result.forecast(steps=10)",
+              pros: ["Simple", "Fast", "Good baseline"],
+              cons: ["No trend or seasonality"]
+            },
+            {
+              name: "Holt's Linear Trend",
+              priority: "With Trend",
+              description: "Double exponential smoothing. Models level and trend.",
+              sklearn: "statsmodels.tsa.holtwinters.Holt",
+              code: "from statsmodels.tsa.holtwinters import Holt\n\nmodel = Holt(y, damped_trend=True)\nresult = model.fit()\nforecast = result.forecast(steps=10)",
+              pros: ["Handles trend", "Damped option prevents overforecasting"],
+              cons: ["No seasonality"]
+            },
+            {
+              name: "Theta Method",
+              priority: "Simple & Competitive",
+              description: "Decomposes into two theta lines. Simple but competitive.",
+              sklearn: "statsmodels.tsa.forecasting.theta.ThetaModel",
+              code: "from statsmodels.tsa.forecasting.theta import ThetaModel\n\nmodel = ThetaModel(y)\nresult = model.fit()\nforecast = result.forecast(steps=10)",
+              pros: ["Simple", "Often competitive", "Robust"],
+              cons: ["Limited customization"]
+            },
+            {
+              name: "Random Walk / Naive",
+              priority: "Baseline",
+              description: "Tomorrow = Today. Simple but often hard to beat baseline.",
+              sklearn: "Manual or statsmodels",
+              code: "# Naive forecast: repeat last value\nforecast = [y[-1]] * n_steps\n\n# Or random walk with drift\nimport numpy as np\ndrift = np.mean(np.diff(y))\nforecast = y[-1] + drift * np.arange(1, n_steps + 1)",
+              pros: ["Simple baseline", "Hard to beat for random walks"],
+              cons: ["Not a model"]
+            }
+          ]
+        },
+
+        ts_auto: {
+          question: "Automatic Time Series Selection",
+          type: "algorithm",
+          goal: "Let the algorithm choose the best model",
+          algorithms: [
+            {
+              name: "Auto ARIMA",
+              priority: "Automatic ARIMA",
+              description: "Automatically selects best ARIMA/SARIMA parameters using AIC/BIC.",
+              sklearn: "pmdarima.auto_arima",
+              code: "from pmdarima import auto_arima\n\nmodel = auto_arima(\n    y,\n    seasonal=True,\n    m=12,  # seasonal period\n    stepwise=True,\n    suppress_warnings=True,\n    trace=True\n)\nforecast = model.predict(n_periods=10)",
+              pros: ["Automatic parameter selection", "Handles seasonal/non-seasonal", "Well-tested"],
+              cons: ["Can be slow", "May not find global optimum"]
+            },
+            {
+              name: "ETS (Auto)",
+              priority: "Automatic Exponential Smoothing",
+              description: "Automatically selects Error, Trend, Seasonal components.",
+              sklearn: "statsmodels.tsa.exponential_smoothing.ets.ETSModel",
+              code: "from statsmodels.tsa.exponential_smoothing.ets import ETSModel\n\n# Auto selection\nmodel = ETSModel(\n    y,\n    error='add',       # 'add' or 'mul'\n    trend='add',       # 'add', 'mul', or None\n    seasonal='add',    # 'add', 'mul', or None\n    seasonal_periods=12\n)\nresult = model.fit()\nforecast = result.forecast(steps=10)",
+              pros: ["Automatic component selection", "AIC-based selection", "Fast"],
+              cons: ["May need manual override"]
+            },
+            {
+              name: "Prophet",
+              priority: "Automatic & Robust",
+              description: "Handles most decisions automatically. Good default choice.",
+              sklearn: "prophet.Prophet",
+              code: "from prophet import Prophet\n\nmodel = Prophet()  # Auto-detects seasonality\nmodel.fit(df)  # df with 'ds' and 'y' columns\nfuture = model.make_future_dataframe(periods=30)\nforecast = model.predict(future)",
+              pros: ["Minimal configuration", "Handles holidays", "Robust"],
+              cons: ["Less control", "Can overfit"]
+            }
+          ]
+        },
+
+        ts_multivariate: {
+          question: "Multivariate Time Series Algorithms",
+          type: "algorithm",
+          goal: "Forecast multiple related time series together",
+          info: "Models capture relationships between multiple series",
+          algorithms: [
+            {
+              name: "VAR (Vector Autoregression)",
+              priority: "Standard Multivariate",
+              description: "Each variable is regressed on its own lags and lags of all other variables.",
+              sklearn: "statsmodels.tsa.api.VAR",
+              code: "from statsmodels.tsa.api import VAR\n\n# y should be DataFrame with multiple columns\nmodel = VAR(y)\n# Select lag order\nresult = model.fit(maxlags=15, ic='aic')\nforecast = result.forecast(y.values[-result.k_ar:], steps=10)",
+              pros: ["Models cross-dependencies", "Granger causality tests", "Impulse response"],
+              cons: ["Requires stationarity", "Many parameters with many series"]
+            },
+            {
+              name: "VARMA / VARMAX",
+              priority: "VAR with MA/Exogenous",
+              description: "VAR extended with moving average errors and/or exogenous variables.",
+              sklearn: "statsmodels.tsa.statespace.varmax.VARMAX",
+              code: "from statsmodels.tsa.statespace.varmax import VARMAX\n\nmodel = VARMAX(y, order=(1, 1), exog=exog_vars)\nresult = model.fit(disp=False)\nforecast = result.forecast(steps=10, exog=future_exog)",
+              pros: ["Handles exogenous variables", "More flexible than VAR"],
+              cons: ["Complex estimation", "Slower"]
+            },
+            {
+              name: "VECM (Vector Error Correction)",
+              priority: "Cointegrated Series",
+              description: "For non-stationary series that are cointegrated (share long-run relationship).",
+              sklearn: "statsmodels.tsa.vector_ar.vecm.VECM",
+              code: "from statsmodels.tsa.vector_ar.vecm import VECM, coint_johansen\n\n# Test for cointegration first\nresult = coint_johansen(y, det_order=0, k_ar_diff=1)\n\nmodel = VECM(y, k_ar_diff=1, coint_rank=1)\nresult = model.fit()\nforecast = result.predict(steps=10)",
+              pros: ["Handles non-stationary cointegrated series", "Long-run + short-run dynamics"],
+              cons: ["Complex", "Need cointegration testing"]
+            },
+            {
+              name: "Dynamic Factor Model",
+              priority: "Latent Factors",
+              description: "Assumes observed series driven by small number of latent factors.",
+              sklearn: "statsmodels.tsa.statespace.dynamic_factor.DynamicFactor",
+              code: "from statsmodels.tsa.statespace.dynamic_factor import DynamicFactor\n\nmodel = DynamicFactor(y, k_factors=2, factor_order=2)\nresult = model.fit(disp=False)\nforecast = result.forecast(steps=10)",
+              pros: ["Dimension reduction", "Handles many series"],
+              cons: ["Factor interpretation", "Model selection"]
+            }
+          ]
+        },
+
+        ts_exogenous: {
+          question: "Time Series with Exogenous Variables",
+          type: "algorithm",
+          goal: "Forecast using external predictors (regressors)",
+          info: "Include additional features like holidays, promotions, weather",
+          algorithms: [
+            {
+              name: "SARIMAX",
+              priority: "SARIMA + Exogenous",
+              description: "SARIMA with exogenous regressors. Most flexible statsmodels option.",
+              sklearn: "statsmodels.tsa.statespace.sarimax.SARIMAX",
+              code: "from statsmodels.tsa.statespace.sarimax import SARIMAX\n\nmodel = SARIMAX(\n    y,\n    exog=X,  # exogenous variables\n    order=(1, 1, 1),\n    seasonal_order=(1, 1, 1, 12)\n)\nresult = model.fit(disp=False)\n# Need future exog values for forecasting\nforecast = result.forecast(steps=10, exog=X_future)",
+              pros: ["Full SARIMA + regressors", "Flexible", "Confidence intervals"],
+              cons: ["Need future exog values", "Parameter selection"]
+            },
+            {
+              name: "Prophet with Regressors",
+              priority: "Easy Regressors",
+              description: "Add custom regressors to Prophet model.",
+              sklearn: "prophet.Prophet",
+              code: "from prophet import Prophet\n\nmodel = Prophet()\nmodel.add_regressor('promotion')\nmodel.add_regressor('temperature')\nmodel.fit(df)  # df must include regressor columns\n\n# future df must also include regressor values\nforecast = model.predict(future)",
+              pros: ["Easy to add regressors", "Handles holidays built-in"],
+              cons: ["Need future regressor values"]
+            },
+            {
+              name: "ML Regression (with lags)",
+              priority: "Flexible ML Approach",
+              description: "Use any ML model with lagged features as predictors.",
+              sklearn: "Any regressor + manual lag features",
+              code: "import pandas as pd\nfrom sklearn.ensemble import RandomForestRegressor\n\n# Create lag features\ndf['lag_1'] = df['y'].shift(1)\ndf['lag_7'] = df['y'].shift(7)\ndf['rolling_mean_7'] = df['y'].rolling(7).mean()\n\nX = df[['lag_1', 'lag_7', 'rolling_mean_7', 'exog1', 'exog2']].dropna()\ny = df['y'].iloc[len(df)-len(X):]\n\nmodel = RandomForestRegressor(n_estimators=100)\nmodel.fit(X, y)",
+              pros: ["Use any ML model", "Feature engineering flexibility", "Non-linear"],
+              cons: ["Manual feature engineering", "No native time structure"]
+            }
+          ]
+        },
+
+        // ============ ANOMALY DETECTION ============
+        anomaly: {
+          question: "What type of anomaly detection?",
+          type: "decision",
+          options: [
+            { label: "Tabular/Point Data", next: "anomaly_point", desc: "Find outliers in regular data" },
+            { label: "Time Series", next: "anomaly_ts", desc: "Unusual patterns in temporal data" },
+            { label: "High-Dimensional", next: "anomaly_highdim", desc: "Anomalies in many features" }
+          ]
+        },
+
+        anomaly_point: {
+          question: "Point Anomaly Detection Algorithms",
+          type: "algorithm",
+          goal: "Identify unusual data points in tabular data",
+          algorithms: [
+            {
+              name: "Isolation Forest",
+              priority: "Best Default",
+              description: "Isolates anomalies using random trees. Anomalies require fewer splits.",
+              complexity: "O(n log n)",
+              sklearn: "IsolationForest",
+              code: "from sklearn.ensemble import IsolationForest\n\nmodel = IsolationForest(\n    n_estimators=100,\n    contamination=0.1,  # expected fraction of anomalies\n    random_state=42\n)\ny_pred = model.fit_predict(X)  # -1 = anomaly, 1 = normal\nscores = model.decision_function(X)  # lower = more anomalous",
+              pros: ["Fast", "Scales well", "Works in high dimensions", "Handles mixed features"],
+              cons: ["Contamination parameter", "Random (use random_state)"]
+            },
+            {
+              name: "Local Outlier Factor (LOF)",
+              priority: "Density-Based",
+              description: "Compares local density of point to neighbors. Lower density = anomaly.",
+              complexity: "O(n²) or O(n log n) with tree",
+              sklearn: "LocalOutlierFactor",
+              code: "from sklearn.neighbors import LocalOutlierFactor\n\nmodel = LocalOutlierFactor(\n    n_neighbors=20,\n    contamination=0.1\n)\ny_pred = model.fit_predict(X)  # -1 = anomaly\nscores = model.negative_outlier_factor_",
+              pros: ["Detects local anomalies", "No assumption on distribution"],
+              cons: ["Slow on large data", "Sensitive to n_neighbors"]
+            },
+            {
+              name: "One-Class SVM",
+              priority: "Boundary-Based",
+              description: "Learns boundary around normal data. Points outside are anomalies.",
+              sklearn: "OneClassSVM",
+              code: "from sklearn.svm import OneClassSVM\nfrom sklearn.preprocessing import StandardScaler\n\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n\nmodel = OneClassSVM(kernel='rbf', nu=0.1, gamma='scale')\ny_pred = model.fit_predict(X_scaled)",
+              pros: ["Flexible kernel", "Good with clear boundary"],
+              cons: ["Slow on large data", "Requires scaling", "nu parameter"]
+            },
+            {
+              name: "Elliptic Envelope",
+              priority: "Gaussian Assumption",
+              description: "Fits Gaussian to data. Points far from center are anomalies.",
+              sklearn: "EllipticEnvelope",
+              code: "from sklearn.covariance import EllipticEnvelope\n\nmodel = EllipticEnvelope(contamination=0.1, random_state=42)\ny_pred = model.fit_predict(X)",
+              pros: ["Fast", "Mahalanobis distance"],
+              cons: ["Assumes Gaussian/elliptical distribution"]
+            },
+            {
+              name: "DBSCAN (Noise Points)",
+              priority: "Clustering-Based",
+              description: "Points not in any cluster (label=-1) are anomalies.",
+              sklearn: "DBSCAN",
+              code: "from sklearn.cluster import DBSCAN\n\nmodel = DBSCAN(eps=0.5, min_samples=5)\nlabels = model.fit_predict(X)\nanomalies = X[labels == -1]  # Noise points",
+              pros: ["No contamination parameter", "Finds clusters too"],
+              cons: ["eps/min_samples tuning critical"]
+            }
+          ]
+        },
+
+        anomaly_ts: {
+          question: "Time Series Anomaly Detection",
+          type: "algorithm",
+          goal: "Find unusual patterns or points in temporal data",
+          algorithms: [
+            {
+              name: "Statistical Methods",
+              priority: "Simple Baseline",
+              description: "Z-score, IQR, or rolling statistics to flag unusual values.",
+              sklearn: "scipy.stats / pandas",
+              code: "import numpy as np\nimport pandas as pd\n\n# Rolling Z-score method\nrolling_mean = df['value'].rolling(window=30).mean()\nrolling_std = df['value'].rolling(window=30).std()\nz_scores = (df['value'] - rolling_mean) / rolling_std\nanomalies = np.abs(z_scores) > 3",
+              pros: ["Simple", "Interpretable", "Fast"],
+              cons: ["Sensitive to window size", "Assumes stationarity"]
+            },
+            {
+              name: "STL Residual Analysis",
+              priority: "Decomposition-Based",
+              description: "Decompose series, then flag anomalies in residuals.",
+              sklearn: "statsmodels.tsa.seasonal.STL",
+              code: "from statsmodels.tsa.seasonal import STL\nimport numpy as np\n\nstl = STL(y, seasonal=13).fit()\nresiduals = stl.resid\n\n# Flag residuals > 3 std\nthreshold = 3 * np.std(residuals)\nanomalies = np.abs(residuals) > threshold",
+              pros: ["Handles seasonality", "Interpretable components"],
+              cons: ["Seasonal period needed"]
+            },
+            {
+              name: "Isolation Forest (with features)",
+              priority: "Feature-Based",
+              description: "Create time-based features and apply Isolation Forest.",
+              sklearn: "IsolationForest",
+              code: "from sklearn.ensemble import IsolationForest\n\n# Create features: value, lag, diff, rolling stats\ndf['lag_1'] = df['value'].shift(1)\ndf['diff'] = df['value'].diff()\ndf['rolling_mean'] = df['value'].rolling(7).mean()\n\nmodel = IsolationForest(contamination=0.05)\ndf['anomaly'] = model.fit_predict(df[features].dropna())",
+              pros: ["Captures complex patterns", "Flexible features"],
+              cons: ["Feature engineering needed"]
+            },
+            {
+              name: "Prophet Anomaly Detection",
+              priority: "Forecast-Based",
+              description: "Flag points outside Prophet's prediction intervals.",
+              sklearn: "prophet.Prophet",
+              code: "from prophet import Prophet\n\nmodel = Prophet(interval_width=0.99)\nmodel.fit(df)\nforecast = model.predict(df)\n\n# Points outside uncertainty interval\nanomalies = (df['y'] < forecast['yhat_lower']) | (df['y'] > forecast['yhat_upper'])",
+              pros: ["Uses prediction intervals", "Handles seasonality/holidays"],
+              cons: ["Requires Prophet model fitting"]
+            }
+          ]
+        },
+
+        anomaly_highdim: {
+          question: "High-Dimensional Anomaly Detection",
+          type: "algorithm",
+          goal: "Find anomalies when you have many features",
+          algorithms: [
+            {
+              name: "Isolation Forest",
+              priority: "Scales Best",
+              description: "Works well in high dimensions without distance metric issues.",
+              sklearn: "IsolationForest",
+              code: "from sklearn.ensemble import IsolationForest\n\n# Works directly on high-dim data\nmodel = IsolationForest(\n    n_estimators=100,\n    max_features=1.0,  # or subset for very high dim\n    contamination=0.05\n)\nanomalies = model.fit_predict(X)",
+              pros: ["Handles high dimensions", "Fast", "No scaling needed"],
+              cons: ["May need feature selection for very high dim"]
+            },
+            {
+              name: "PCA + Distance",
+              priority: "Reconstruction-Based",
+              description: "Reduce dimensions, reconstruct, measure reconstruction error.",
+              sklearn: "PCA",
+              code: "from sklearn.decomposition import PCA\nimport numpy as np\n\npca = PCA(n_components=0.95)  # Keep 95% variance\nX_reduced = pca.fit_transform(X)\nX_reconstructed = pca.inverse_transform(X_reduced)\n\n# Reconstruction error as anomaly score\nerrors = np.sum((X - X_reconstructed) ** 2, axis=1)\nthreshold = np.percentile(errors, 95)\nanomalies = errors > threshold",
+              pros: ["Reduces dimension", "Interpretable", "Catches global anomalies"],
+              cons: ["Linear only", "Threshold selection"]
+            },
+            {
+              name: "Autoencoder",
+              priority: "Deep Learning",
+              description: "Neural network that reconstructs input. High error = anomaly.",
+              sklearn: "tensorflow/keras",
+              code: "# Requires tensorflow/keras\nimport tensorflow as tf\n\nencoder = tf.keras.Sequential([\n    tf.keras.layers.Dense(32, activation='relu'),\n    tf.keras.layers.Dense(16, activation='relu'),\n])\ndecoder = tf.keras.Sequential([\n    tf.keras.layers.Dense(32, activation='relu'),\n    tf.keras.layers.Dense(X.shape[1], activation='linear'),\n])\nautoencoder = tf.keras.Sequential([encoder, decoder])\nautoencoder.compile(optimizer='adam', loss='mse')\nautoencoder.fit(X_normal, X_normal, epochs=50)\n\n# Reconstruction error for anomaly detection\nreconstructions = autoencoder.predict(X)\nerrors = np.mean((X - reconstructions) ** 2, axis=1)",
+              pros: ["Non-linear", "Learns complex patterns", "State-of-the-art"],
+              cons: ["Requires deep learning", "Training complexity"]
+            }
+          ]
+        },
+
+        // ============ SEMI-SUPERVISED ============
+        semisupervised: {
+          question: "Semi-Supervised Learning Algorithms",
+          type: "algorithm",
+          goal: "Learn from both labeled and unlabeled data",
+          info: "Useful when labeling is expensive but unlabeled data is plentiful",
+          algorithms: [
+            {
+              name: "Self-Training",
+              priority: "Simple & Effective",
+              description: "Train on labeled data, predict unlabeled, add confident predictions, repeat.",
+              sklearn: "SelfTrainingClassifier",
+              code: "from sklearn.semi_supervised import SelfTrainingClassifier\nfrom sklearn.ensemble import RandomForestClassifier\n\n# y should have -1 for unlabeled samples\nmodel = SelfTrainingClassifier(\n    RandomForestClassifier(n_estimators=100),\n    threshold=0.9  # confidence threshold\n)\nmodel.fit(X, y)",
+              pros: ["Works with any classifier", "Simple", "Effective"],
+              cons: ["Can propagate errors", "Threshold sensitive"]
+            },
+            {
+              name: "Label Propagation",
+              priority: "Graph-Based",
+              description: "Propagates labels through similarity graph of data points.",
+              sklearn: "LabelPropagation",
+              code: "from sklearn.semi_supervised import LabelPropagation\n\n# y should have -1 for unlabeled samples\nmodel = LabelPropagation(kernel='rbf', gamma=20)\nmodel.fit(X, y)\n# All samples now have labels\nlabels = model.transduction_",
+              pros: ["Uses data structure", "Principled"],
+              cons: ["Slow on large data O(n²)", "Gamma sensitive"]
+            },
+            {
+              name: "Label Spreading",
+              priority: "Softer Propagation",
+              description: "Similar to Label Propagation but allows soft assignments and regularization.",
+              sklearn: "LabelSpreading",
+              code: "from sklearn.semi_supervised import LabelSpreading\n\nmodel = LabelSpreading(kernel='knn', n_neighbors=7, alpha=0.2)\nmodel.fit(X, y)\nlabels = model.transduction_",
+              pros: ["More robust than Label Propagation", "Soft assignments"],
+              cons: ["Still O(n²)", "Multiple hyperparameters"]
+            }
+          ]
+        }
+      };
+
+      // Quick reference data
+      const quickReference = [
+        { task: "Classification (General)", algorithms: "Random Forest, XGBoost, LightGBM", key: "Start with RF, tune boosting" },
+        { task: "Classification (Interpret.)", algorithms: "Logistic Regression, Decision Tree", key: "Explain predictions" },
+        { task: "Classification (Large)", algorithms: "SGD, LightGBM, Linear SVM", key: "Millions of samples" },
+        { task: "Regression (Linear)", algorithms: "Ridge, Lasso, ElasticNet", key: "Feature selection with Lasso" },
+        { task: "Regression (Non-linear)", algorithms: "Random Forest, XGBoost, SVR", key: "Tree ensembles dominate" },
+        { task: "Clustering (K known)", algorithms: "K-Means, GMM, K-Medoids", key: "K-Means for speed" },
+        { task: "Clustering (K unknown)", algorithms: "DBSCAN, HDBSCAN, Mean Shift", key: "Density-based methods" },
+        { task: "Dim. Reduction (Viz)", algorithms: "UMAP, t-SNE, PCA", key: "UMAP best overall" },
+        { task: "Time Series (Seasonal)", algorithms: "SARIMA, Holt-Winters, Prophet", key: "Auto ARIMA to start" },
+        { task: "Time Series (Non-seas.)", algorithms: "ARIMA, Exp. Smoothing, Theta", key: "Simple baselines first" },
+        { task: "Time Series (Multi)", algorithms: "VAR, VARMAX, VECM", key: "Check cointegration" },
+        { task: "Anomaly Detection", algorithms: "Isolation Forest, LOF, One-Class SVM", key: "Isolation Forest default" },
+      ];
+
+      const handleChoice = (nextNode, label) => {
+        setPath([...path, { node: currentNode, choice: label }]);
+        setCurrentNode(nextNode);
+        setExpandedAlgo(null);
+      };
+
+      const goBack = () => {
+        if (path.length > 0) {
+          const newPath = [...path];
+          const lastStep = newPath.pop();
+          setPath(newPath);
+          setCurrentNode(lastStep.node);
+          setExpandedAlgo(null);
+        }
+      };
+
+      const reset = () => {
+        setPath([]);
+        setCurrentNode('start');
+        setExpandedAlgo(null);
+      };
+
+      const currentData = tree[currentNode];
+
+      const PathBreadcrumb = () => (
+        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 p-4 rounded-xl mb-6">
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <button onClick={reset} className="hover:text-indigo-400 transition-colors">
+              <Home className="w-4 h-4 text-indigo-400" />
+            </button>
+            {path.map((step, idx) => (
+              <React.Fragment key={idx}>
+                <ChevronRight className="w-4 h-4 text-slate-500" />
+                <span className="text-slate-300 font-medium">{step.choice}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      );
+
+      const AlgorithmCard = ({ algo, isExpanded, onToggle }) => (
+        <div
+          className={`bg-slate-800/70 border-2 rounded-xl transition-all duration-300 cursor-pointer ${
+            isExpanded
+              ? 'border-indigo-500 shadow-lg shadow-indigo-500/20'
+              : 'border-slate-700 hover:border-slate-600'
+          }`}
+          onClick={onToggle}
+        >
+          <div className="p-5">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <h4 className="text-lg font-bold text-white">{algo.name}</h4>
+                <span className={`text-xs font-semibold px-2 py-1 rounded mt-1 inline-block ${
+                  algo.priority.includes('Best') || algo.priority.includes('Standard') || algo.priority.includes('Default')
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : algo.priority.includes('Fast') || algo.priority.includes('Scalable')
+                    ? 'bg-blue-500/20 text-blue-400'
+                    : 'bg-purple-500/20 text-purple-400'
+                }`}>
+                  {algo.priority}
+                </span>
+              </div>
+              <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+            </div>
+
+            <p className="text-slate-300 text-sm mb-3">{algo.description}</p>
+
+            {algo.sklearn && (
+              <div className="flex items-center gap-2 mb-2">
+                <Code className="w-4 h-4 text-indigo-400" />
+                <code className="text-xs text-indigo-300 bg-slate-900/50 px-2 py-1 rounded font-mono">
+                  {algo.sklearn}
+                </code>
+              </div>
+            )}
+          </div>
+
+          {isExpanded && (
+            <div className="border-t border-slate-700 p-5 animate-fade-in" onClick={e => e.stopPropagation()}>
+              {algo.bestFor && (
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-emerald-400 uppercase">Best For:</span>
+                  <p className="text-sm text-slate-300 mt-1">{algo.bestFor}</p>
+                </div>
+              )}
+
+              {algo.complexity && (
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-yellow-400 uppercase">Complexity:</span>
+                  <p className="text-sm text-slate-300 mt-1 font-mono">{algo.complexity}</p>
+                </div>
+              )}
+
+              {algo.code && (
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-blue-400 uppercase">Code Example:</span>
+                  <pre className="mt-2 p-3 bg-slate-900 rounded-lg text-xs text-slate-300 overflow-x-auto font-mono whitespace-pre-wrap">
+                    {algo.code}
+                  </pre>
+                </div>
+              )}
+
+              {algo.pros && (
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-emerald-400 uppercase">Pros:</span>
+                  <ul className="mt-1 space-y-1">
+                    {algo.pros.map((pro, idx) => (
+                      <li key={idx} className="text-sm text-slate-300 flex items-start gap-2">
+                        <span className="text-emerald-400">+</span> {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {algo.cons && (
+                <div>
+                  <span className="text-xs font-semibold text-red-400 uppercase">Cons:</span>
+                  <ul className="mt-1 space-y-1">
+                    {algo.cons.map((con, idx) => (
+                      <li key={idx} className="text-sm text-slate-300 flex items-start gap-2">
+                        <span className="text-red-400">-</span> {con}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+
+      const QuickReferenceModal = () => (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Quick Reference Guide</h2>
+              <button
+                onClick={() => setShowQuickRef(false)}
+                className="text-slate-400 hover:text-white text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-700 transition-colors"
+              >
+                x
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-indigo-600 to-purple-600">
+                      <th className="p-3 text-left font-semibold text-white">Task Type</th>
+                      <th className="p-3 text-left font-semibold text-white">Recommended Algorithms</th>
+                      <th className="p-3 text-left font-semibold text-white">Key Insight</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {quickReference.map((row, idx) => (
+                      <tr key={idx} className={idx % 2 === 0 ? "bg-slate-900/50" : "bg-slate-800/50"}>
+                        <td className="p-3 font-semibold text-slate-200">{row.task}</td>
+                        <td className="p-3 text-indigo-300 font-mono text-sm">{row.algorithms}</td>
+                        <td className="p-3 text-slate-400 text-sm">{row.key}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-6 grid md:grid-cols-2 gap-4">
+                <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+                  <h3 className="font-bold text-indigo-400 mb-3">By Data Size</h3>
+                  <ul className="text-sm text-slate-300 space-y-2">
+                    <li><span className="text-slate-500">&lt;1K:</span> KNN, SVM, Gaussian Process</li>
+                    <li><span className="text-slate-500">1K-100K:</span> Random Forest, Gradient Boosting</li>
+                    <li><span className="text-slate-500">100K-1M:</span> XGBoost, LightGBM, SGD</li>
+                    <li><span className="text-slate-500">&gt;1M:</span> LightGBM, SGD, Online methods</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+                  <h3 className="font-bold text-emerald-400 mb-3">Pro Tips</h3>
+                  <ul className="text-sm text-slate-300 space-y-2">
+                    <li>* Always start with a simple baseline</li>
+                    <li>* Tree ensembles dominate tabular data</li>
+                    <li>* Scale features for distance-based methods</li>
+                    <li>* Use cross-validation, not single split</li>
+                    <li>* Never shuffle time series data</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-2">
+                ML Algorithm Selector
+              </h1>
+              <p className="text-slate-400">Interactive guide to choosing the right machine learning algorithm</p>
+
+              <div className="flex gap-3 justify-center mt-6 flex-wrap">
+                <button
+                  onClick={reset}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition-all text-slate-300"
+                >
+                  <Home className="w-4 h-4" />
+                  Start Over
+                </button>
+                <button
+                  onClick={() => setShowQuickRef(true)}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all font-medium"
+                >
+                  <Book className="w-4 h-4" />
+                  Quick Reference
+                </button>
+              </div>
+            </div>
+
+            {/* Breadcrumb */}
+            {path.length > 0 && <PathBreadcrumb />}
+
+            {/* Main Content */}
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 md:p-8 animate-fade-in">
+              {currentData.info && (
+                <div className="mb-6 bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-xl">
+                  <div className="flex items-start gap-3">
+                    <Info className="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-indigo-200 text-sm">{currentData.info}</p>
+                  </div>
+                </div>
+              )}
+
+              {currentData.warning && (
+                <div className="mb-6 bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl">
+                  <p className="text-amber-200 font-semibold">{currentData.warning}</p>
+                </div>
+              )}
+
+              {currentData.goal && (
+                <div className="mb-6 bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-emerald-400" />
+                    <p className="text-emerald-200 font-semibold">{currentData.goal}</p>
+                  </div>
+                </div>
+              )}
+
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-6">{currentData.question}</h2>
+
+              {/* Decision Options */}
+              {currentData.type === "decision" && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {currentData.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleChoice(option.next, option.label)}
+                      className="group p-6 border-2 border-slate-700 rounded-xl hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition-all text-left bg-slate-800/50 hover:bg-slate-800"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">
+                          {option.label}
+                        </h3>
+                        <ChevronRight className="w-6 h-6 text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                      </div>
+                      <p className="text-slate-400 text-sm">{option.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Algorithm Display */}
+              {currentData.type === "algorithm" && (
+                <div className="space-y-4">
+                  {currentData.algorithms.map((algo, idx) => (
+                    <AlgorithmCard
+                      key={idx}
+                      algo={algo}
+                      isExpanded={expandedAlgo === idx}
+                      onToggle={() => setExpandedAlgo(expandedAlgo === idx ? null : idx)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Back Button */}
+              {path.length > 0 && (
+                <button
+                  onClick={goBack}
+                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl transition-all text-slate-300 font-medium"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                  Go Back
+                </button>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-8 text-slate-500 text-sm">
+              <p>ML Algorithm Selector v1.0 | Covers scikit-learn & statsmodels</p>
+              <p className="mt-2 text-xs">
+                Created for <a href="https://tatwan.github.io" className="text-indigo-400 hover:underline">tatwan.github.io</a>
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Reference Modal */}
+          {showQuickRef && <QuickReferenceModal />}
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<MLAlgorithmSelector />);
+  </script>
+</body>
+</html>
