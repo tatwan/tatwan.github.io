@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +10,28 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #1e293b; }
-    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
 
-    .flip-card { perspective: 1000px; }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    .flip-card {
+      perspective: 1000px;
+    }
+
     .flip-card-inner {
       position: relative;
       width: 100%;
@@ -22,43 +39,96 @@
       transition: transform 0.6s;
       transform-style: preserve-3d;
     }
-    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-    .flip-card-front, .flip-card-back {
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
       border-radius: 1rem;
     }
-    .flip-card-back { transform: rotateY(180deg); }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
 
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(251, 146, 60, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(251, 146, 60, 0.5); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(251, 146, 60, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 40px rgba(251, 146, 60, 0.5);
+      }
     }
-    .pulse-glow { animation: pulse-glow 2s infinite; }
+
+    .pulse-glow {
+      animation: pulse-glow 2s infinite;
+    }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      75% {
+        transform: translateX(5px);
+      }
     }
-    .shake { animation: shake 0.3s ease-in-out; }
+
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
 
     @keyframes celebrate {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
-    .celebrate { animation: celebrate 0.3s ease-in-out; }
+
+    .celebrate {
+      animation: celebrate 0.3s ease-in-out;
+    }
   </style>
 </head>
+
 <body class="bg-slate-900 min-h-screen">
   <div id="root"></div>
 
@@ -68,151 +138,233 @@
     // AWS Services Data
     const servicesData = [
       // Generative AI
-      { id: 1, name: "Amazon Bedrock", category: "Generative AI", domain: "AI/ML",
+      {
+        id: 1, name: "Amazon Bedrock", category: "Generative AI", domain: "AI/ML",
         description: "A fully managed, serverless service to access Foundation Models (FMs) from Amazon (Titan) and partners (Anthropic, Cohere) via API. Build GenAI apps without managing infrastructure.",
-        examTip: "Think 'serverless GenAI' - no infrastructure management needed" },
-      { id: 2, name: "Amazon Q", category: "Generative AI", domain: "AI/ML",
+        examTip: "Think 'serverless GenAI' - no infrastructure management needed"
+      },
+      {
+        id: 2, name: "Amazon Q", category: "Generative AI", domain: "AI/ML",
         description: "A GenAI-powered assistant for businesses (Q Business) and developers (Q Developer) to generate code, answer questions from internal data, and debug.",
-        examTip: "Two flavors: Q Business for enterprise, Q Developer for coding" },
-      { id: 3, name: "Amazon Nova", category: "Generative AI", domain: "AI/ML",
+        examTip: "Two flavors: Q Business for enterprise, Q Developer for coding"
+      },
+      {
+        id: 3, name: "Amazon Nova", category: "Generative AI", domain: "AI/ML",
         description: "A new series of foundation models developed by Amazon, referenced in the updated exam scope.",
-        examTip: "Amazon's own foundation models - part of the new exam content" },
+        examTip: "Amazon's own foundation models - part of the new exam content"
+      },
 
       // Machine Learning
-      { id: 4, name: "Amazon SageMaker AI", category: "Machine Learning", domain: "AI/ML",
+      {
+        id: 4, name: "Amazon SageMaker AI", category: "Machine Learning", domain: "AI/ML",
         description: "The comprehensive platform to build, train, and deploy custom ML models. Includes JumpStart (model hub), Canvas (no-code ML), Clarify (bias detection), and Pipelines.",
-        examTip: "The 'everything ML' platform - know its sub-components" },
+        examTip: "The 'everything ML' platform - know its sub-components"
+      },
 
       // Computer Vision
-      { id: 5, name: "Amazon Rekognition", category: "Computer Vision", domain: "AI/ML",
+      {
+        id: 5, name: "Amazon Rekognition", category: "Computer Vision", domain: "AI/ML",
         description: "Pre-trained vision service for image and video analysis, facial recognition, and content moderation.",
-        examTip: "Pre-trained vision API - no ML expertise needed" },
+        examTip: "Pre-trained vision API - no ML expertise needed"
+      },
 
       // NLP & Text
-      { id: 6, name: "Amazon Comprehend", category: "NLP & Text", domain: "AI/ML",
+      {
+        id: 6, name: "Amazon Comprehend", category: "NLP & Text", domain: "AI/ML",
         description: "Natural Language Processing (NLP) service to extract insights, sentiment, and entities from text documents.",
-        examTip: "Text analysis: sentiment, entities, key phrases" },
-      { id: 7, name: "Amazon Textract", category: "NLP & Text", domain: "AI/ML",
+        examTip: "Text analysis: sentiment, entities, key phrases"
+      },
+      {
+        id: 7, name: "Amazon Textract", category: "NLP & Text", domain: "AI/ML",
         description: "Extract text, handwriting, and data tables from scanned documents (OCR+).",
-        examTip: "OCR on steroids - tables, forms, handwriting" },
-      { id: 8, name: "Amazon Translate", category: "NLP & Text", domain: "AI/ML",
+        examTip: "OCR on steroids - tables, forms, handwriting"
+      },
+      {
+        id: 8, name: "Amazon Translate", category: "NLP & Text", domain: "AI/ML",
         description: "Fluent, neural machine translation service for real-time language translation.",
-        examTip: "Language translation - simple and straightforward" },
+        examTip: "Language translation - simple and straightforward"
+      },
 
       // Speech & Audio
-      { id: 9, name: "Amazon Transcribe", category: "Speech & Audio", domain: "AI/ML",
+      {
+        id: 9, name: "Amazon Transcribe", category: "Speech & Audio", domain: "AI/ML",
         description: "Automatic Speech Recognition (ASR) service that converts speech into text.",
-        examTip: "Speech-to-Text (STT)" },
-      { id: 10, name: "Amazon Polly", category: "Speech & Audio", domain: "AI/ML",
+        examTip: "Speech-to-Text (STT)"
+      },
+      {
+        id: 10, name: "Amazon Polly", category: "Speech & Audio", domain: "AI/ML",
         description: "Text-to-Speech (TTS) service that turns text into lifelike speech.",
-        examTip: "Text-to-Speech (TTS) - Polly speaks!" },
+        examTip: "Text-to-Speech (TTS) - Polly speaks!"
+      },
 
       // Chatbots & Search
-      { id: 11, name: "Amazon Lex", category: "Chatbots", domain: "AI/ML",
+      {
+        id: 11, name: "Amazon Lex", category: "Chatbots", domain: "AI/ML",
         description: "Service for building conversational interfaces (chatbots) using voice and text.",
-        examTip: "Powers Alexa - chatbot builder" },
-      { id: 12, name: "Amazon Kendra", category: "Search", domain: "AI/ML",
+        examTip: "Powers Alexa - chatbot builder"
+      },
+      {
+        id: 12, name: "Amazon Kendra", category: "Search", domain: "AI/ML",
         description: "Intelligent enterprise search service powered by ML to find content across data silos.",
-        examTip: "Enterprise search - finds answers in documents" },
+        examTip: "Enterprise search - finds answers in documents"
+      },
 
       // Personalization & Human Review
-      { id: 13, name: "Amazon Personalize", category: "Personalization", domain: "AI/ML",
+      {
+        id: 13, name: "Amazon Personalize", category: "Personalization", domain: "AI/ML",
         description: "Real-time personalization and recommendation engine.",
-        examTip: "Recommendations like Amazon.com" },
-      { id: 14, name: "Amazon A2I", category: "Human Review", domain: "AI/ML",
+        examTip: "Recommendations like Amazon.com"
+      },
+      {
+        id: 14, name: "Amazon A2I", category: "Human Review", domain: "AI/ML",
         description: "Augmented AI - implements human review workflows for low-confidence ML predictions.",
-        examTip: "Human-in-the-loop for uncertain predictions" },
-      { id: 15, name: "Amazon Fraud Detector", category: "Fraud", domain: "AI/ML",
+        examTip: "Human-in-the-loop for uncertain predictions"
+      },
+      {
+        id: 15, name: "Amazon Fraud Detector", category: "Fraud", domain: "AI/ML",
         description: "Detects potentially fraudulent online activities (fake accounts, payments).",
-        examTip: "Fraud detection - accounts, payments, transactions" },
+        examTip: "Fraud detection - accounts, payments, transactions"
+      },
 
       // Compute
-      { id: 16, name: "Amazon EC2", category: "Compute", domain: "Infrastructure",
+      {
+        id: 16, name: "Amazon EC2", category: "Compute", domain: "Infrastructure",
         description: "Provides underlying compute power. Know instance types: Trn1/Trn2 (Training) and Inf1/Inf2 (Inference) for deep learning.",
-        examTip: "Trn = Training, Inf = Inference instance types" },
-      { id: 17, name: "AWS Lambda", category: "Compute", domain: "Infrastructure",
+        examTip: "Trn = Training, Inf = Inference instance types"
+      },
+      {
+        id: 17, name: "AWS Lambda", category: "Compute", domain: "Infrastructure",
         description: "Serverless compute used to orchestrate AI workflows (e.g., triggering a model when a file is uploaded).",
-        examTip: "Event-driven, serverless - glue for AI pipelines" },
+        examTip: "Event-driven, serverless - glue for AI pipelines"
+      },
 
       // Storage & Databases
-      { id: 18, name: "Amazon S3", category: "Storage", domain: "Infrastructure",
+      {
+        id: 18, name: "Amazon S3", category: "Storage", domain: "Infrastructure",
         description: "The primary data lake storage for training data, model artifacts, and knowledge bases. Supports encryption and versioning.",
-        examTip: "Where all the data lives - training data, models, everything" },
-      { id: 19, name: "Amazon OpenSearch Service", category: "Database (Vector)", domain: "Infrastructure",
+        examTip: "Where all the data lives - training data, models, everything"
+      },
+      {
+        id: 19, name: "Amazon OpenSearch Service", category: "Database (Vector)", domain: "Infrastructure",
         description: "The recommended vector database for RAG (Retrieval Augmented Generation) to store embeddings for Amazon Bedrock.",
-        examTip: "Vector DB for RAG - stores embeddings" },
-      { id: 20, name: "Amazon Aurora / RDS", category: "Database (Vector)", domain: "Infrastructure",
+        examTip: "Vector DB for RAG - stores embeddings"
+      },
+      {
+        id: 20, name: "Amazon Aurora / RDS", category: "Database (Vector)", domain: "Infrastructure",
         description: "Relational databases that also support vector storage (via pgvector) for ML applications.",
-        examTip: "Traditional DB + vector support via pgvector" },
+        examTip: "Traditional DB + vector support via pgvector"
+      },
 
       // Security & Identity
-      { id: 21, name: "AWS IAM", category: "Identity", domain: "Security",
+      {
+        id: 21, name: "AWS IAM", category: "Identity", domain: "Security",
         description: "Controls access to AI services. Understand Roles (for services like SageMaker to access S3) and Policies (Least Privilege).",
-        examTip: "Roles for services, Policies for permissions" },
-      { id: 22, name: "Amazon Macie", category: "Security", domain: "Security",
+        examTip: "Roles for services, Policies for permissions"
+      },
+      {
+        id: 22, name: "Amazon Macie", category: "Security", domain: "Security",
         description: "Uses ML to discover and protect sensitive data (PII) in S3 buckets to prevent improper use in training.",
-        examTip: "Finds PII in S3 - data protection" },
-      { id: 23, name: "AWS KMS", category: "Security", domain: "Security",
+        examTip: "Finds PII in S3 - data protection"
+      },
+      {
+        id: 23, name: "AWS KMS", category: "Security", domain: "Security",
         description: "Key Management Service. Used to encrypt training data and model artifacts at rest.",
-        examTip: "Encryption keys - data at rest protection" },
-      { id: 24, name: "Amazon VPC & PrivateLink", category: "Networking", domain: "Security",
+        examTip: "Encryption keys - data at rest protection"
+      },
+      {
+        id: 24, name: "Amazon VPC & PrivateLink", category: "Networking", domain: "Security",
         description: "Secures network traffic. PrivateLink keeps traffic between your VPC and AWS AI services off the public internet.",
-        examTip: "PrivateLink = private connection to AWS services" },
+        examTip: "PrivateLink = private connection to AWS services"
+      },
 
       // Compliance & Governance
-      { id: 25, name: "AWS Audit Manager", category: "Compliance", domain: "Governance",
+      {
+        id: 25, name: "AWS Audit Manager", category: "Compliance", domain: "Governance",
         description: "Automates evidence collection for audits. Includes frameworks specifically for Generative AI best practices.",
-        examTip: "Audit automation - has GenAI frameworks" },
-      { id: 26, name: "AWS Artifact", category: "Compliance", domain: "Governance",
+        examTip: "Audit automation - has GenAI frameworks"
+      },
+      {
+        id: 26, name: "AWS Artifact", category: "Compliance", domain: "Governance",
         description: "The portal to download AWS compliance reports (ISO, SOC) to prove AWS meets regulatory standards.",
-        examTip: "Download compliance reports here" },
-      { id: 27, name: "AWS Config", category: "Governance", domain: "Governance",
+        examTip: "Download compliance reports here"
+      },
+      {
+        id: 27, name: "AWS Config", category: "Governance", domain: "Governance",
         description: "Tracks configuration changes of resources (e.g., did someone change a SageMaker endpoint configuration?).",
-        examTip: "Configuration tracking - what changed?" },
-      { id: 28, name: "Amazon CloudWatch", category: "Monitoring", domain: "Governance",
+        examTip: "Configuration tracking - what changed?"
+      },
+      {
+        id: 28, name: "Amazon CloudWatch", category: "Monitoring", domain: "Governance",
         description: "Monitors operational metrics (invocations, latency, errors) for Bedrock and SageMaker.",
-        examTip: "Metrics & monitoring - performance data" },
-      { id: 29, name: "AWS CloudTrail", category: "Logging", domain: "Governance",
+        examTip: "Metrics & monitoring - performance data"
+      },
+      {
+        id: 29, name: "AWS CloudTrail", category: "Logging", domain: "Governance",
         description: "Logs API calls (who did what). Essential for governance to see who accessed a model or changed a prompt.",
-        examTip: "API logging - who did what and when" },
+        examTip: "API logging - who did what and when"
+      },
 
       // SageMaker Components
-      { id: 30, name: "SageMaker JumpStart", category: "SageMaker", domain: "AI/ML",
+      {
+        id: 30, name: "SageMaker JumpStart", category: "SageMaker", domain: "AI/ML",
         description: "Model Hub & Fine-tuning. Access pre-trained Foundation Models and built-in algorithms. One-click deployment and fine-tuning.",
-        examTip: "Pre-trained models ready to deploy or fine-tune" },
-      { id: 31, name: "SageMaker Canvas", category: "SageMaker", domain: "AI/ML",
+        examTip: "Pre-trained models ready to deploy or fine-tune"
+      },
+      {
+        id: 31, name: "SageMaker Canvas", category: "SageMaker", domain: "AI/ML",
         description: "No-Code/Low-Code ML. Visual interface for business analysts to build models without writing code.",
-        examTip: "No-code ML - for business users" },
-      { id: 32, name: "SageMaker Autopilot", category: "SageMaker", domain: "AI/ML",
+        examTip: "No-code ML - for business users"
+      },
+      {
+        id: 32, name: "SageMaker Autopilot", category: "SageMaker", domain: "AI/ML",
         description: "Automated ML (AutoML). Automatically builds, trains, and tunes models. Handles algorithm selection and hyperparameter optimization.",
-        examTip: "AutoML - automatic model building" },
-      { id: 33, name: "SageMaker Clarify", category: "SageMaker", domain: "AI/ML",
+        examTip: "AutoML - automatic model building"
+      },
+      {
+        id: 33, name: "SageMaker Clarify", category: "SageMaker", domain: "AI/ML",
         description: "Bias & Explainability. Detects bias in training data and deployed models. Provides explainability for predictions.",
-        examTip: "Bias detection + explainability (SHAP values)" },
-      { id: 34, name: "SageMaker Model Monitor", category: "SageMaker", domain: "AI/ML",
+        examTip: "Bias detection + explainability (SHAP values)"
+      },
+      {
+        id: 34, name: "SageMaker Model Monitor", category: "SageMaker", domain: "AI/ML",
         description: "Production Monitoring. Continuously monitors deployed models for data drift, model quality degradation, and bias drift.",
-        examTip: "Drift detection - when live data differs from training" },
-      { id: 35, name: "SageMaker Data Wrangler", category: "SageMaker", domain: "AI/ML",
+        examTip: "Drift detection - when live data differs from training"
+      },
+      {
+        id: 35, name: "SageMaker Data Wrangler", category: "SageMaker", domain: "AI/ML",
         description: "Data Preparation. Low-code tool to import, visualize, clean, and transform data before training.",
-        examTip: "Visual data prep - clean and transform" },
-      { id: 36, name: "SageMaker Feature Store", category: "SageMaker", domain: "AI/ML",
+        examTip: "Visual data prep - clean and transform"
+      },
+      {
+        id: 36, name: "SageMaker Feature Store", category: "SageMaker", domain: "AI/ML",
         description: "Feature Management. Centralized repository to store, discover, and share ML features for reuse across models.",
-        examTip: "Store and share features - online/offline stores" },
-      { id: 37, name: "SageMaker Ground Truth", category: "SageMaker", domain: "AI/ML",
+        examTip: "Store and share features - online/offline stores"
+      },
+      {
+        id: 37, name: "SageMaker Ground Truth", category: "SageMaker", domain: "AI/ML",
         description: "Data Labeling. Manages labeling workflows using human workers to create labeled datasets for supervised learning.",
-        examTip: "Data labeling - human workers" },
-      { id: 38, name: "SageMaker Pipelines", category: "SageMaker", domain: "AI/ML",
+        examTip: "Data labeling - human workers"
+      },
+      {
+        id: 38, name: "SageMaker Pipelines", category: "SageMaker", domain: "AI/ML",
         description: "CI/CD & Orchestration. Workflow orchestration to automate end-to-end ML steps (data prep -> train -> deploy).",
-        examTip: "MLOps pipelines - automate ML workflows" },
-      { id: 39, name: "SageMaker Model Registry", category: "SageMaker", domain: "AI/ML",
+        examTip: "MLOps pipelines - automate ML workflows"
+      },
+      {
+        id: 39, name: "SageMaker Model Registry", category: "SageMaker", domain: "AI/ML",
         description: "Model Governance. Catalog models, manage versions, track metadata and approval status for deployment.",
-        examTip: "Model catalog - versions and approvals" },
-      { id: 40, name: "SageMaker Model Cards", category: "SageMaker", domain: "AI/ML",
+        examTip: "Model catalog - versions and approvals"
+      },
+      {
+        id: 40, name: "SageMaker Model Cards", category: "SageMaker", domain: "AI/ML",
         description: "Documentation. Creates a fact sheet documenting intended use, risk ratings, training parameters for auditing.",
-        examTip: "Model documentation - for compliance" },
-      { id: 41, name: "SageMaker ML Lineage Tracking", category: "SageMaker", domain: "AI/ML",
+        examTip: "Model documentation - for compliance"
+      },
+      {
+        id: 41, name: "SageMaker ML Lineage Tracking", category: "SageMaker", domain: "AI/ML",
         description: "Audit & Traceability. Tracks model history - which data was used, who trained it, where deployed.",
-        examTip: "Full audit trail - reproducibility" }
+        examTip: "Full audit trail - reproducibility"
+      }
     ];
 
     // Exam gotchas / quick differentiation questions
@@ -333,44 +485,40 @@
             <div className="flex justify-center gap-2 md:gap-4 mb-8 flex-wrap">
               <button
                 onClick={() => setMode('flashcards')}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${
-                  mode === 'flashcards'
+                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'flashcards'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
+                  }`}
               >
                 <Icons.Cards className="w-5 h-5" />
                 <span className="hidden sm:inline">Flashcards</span>
               </button>
               <button
                 onClick={() => setMode('quiz')}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${
-                  mode === 'quiz'
+                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'quiz'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
+                  }`}
               >
                 <Icons.Quiz className="w-5 h-5" />
                 <span className="hidden sm:inline">Quiz Mode</span>
               </button>
               <button
                 onClick={() => setMode('quickfire')}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${
-                  mode === 'quickfire'
+                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'quickfire'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
+                  }`}
               >
                 <Icons.Zap className="w-5 h-5" />
                 <span className="hidden sm:inline">Quick Fire</span>
               </button>
               <button
                 onClick={() => setMode('reference')}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${
-                  mode === 'reference'
+                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'reference'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
+                  }`}
               >
                 <Icons.Table className="w-5 h-5" />
                 <span className="hidden sm:inline">Reference</span>
@@ -405,6 +553,9 @@
             {/* Footer */}
             <div className="text-center mt-8 text-slate-500 text-sm">
               <p>AWS AI Practitioner (AIF-C01) Study Guide</p>
+              <p className="mt-2 text-xs">
+                Created by Tarek Atwan @ <a href="index.html" className="text-orange-400 hover:text-orange-300 hover:underline font-semibold">ML_LAB</a>
+              </p>
             </div>
           </div>
         </div>
@@ -996,11 +1147,10 @@
             {filteredServices.map(service => (
               <div
                 key={service.id}
-                className={`bg-slate-800 rounded-xl border transition-all cursor-pointer ${
-                  expandedId === service.id
+                className={`bg-slate-800 rounded-xl border transition-all cursor-pointer ${expandedId === service.id
                     ? 'border-orange-500 shadow-lg shadow-orange-500/20'
                     : 'border-slate-700 hover:border-slate-600'
-                }`}
+                  }`}
                 onClick={() => setExpandedId(expandedId === service.id ? null : service.id)}
               >
                 <div className="p-4">
@@ -1049,4 +1199,5 @@
     root.render(<AWSStudyGuide />);
   </script>
 </body>
+
 </html>

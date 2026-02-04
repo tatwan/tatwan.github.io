@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +11,26 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     /* Custom scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
   </style>
 </head>
+
 <body>
   <div id="root"></div>
 
@@ -1062,7 +1077,7 @@
             <div className="text-center mt-8 text-gray-500 text-sm">
               <p>Version 5 - Complete Edition | Comprehensive ML Metric Selection Guide</p>
               <p className="mt-2 text-xs">
-                Download this file to use offline - just open in any browser!
+                Created by Tarek Atwan @ <a href="index.html" className="text-blue-600 hover:text-blue-700 hover:underline font-semibold">ML_LAB</a>
               </p>
             </div>
           </div>
@@ -1077,4 +1092,5 @@
     root.render(<MLMetricDecisionTree />);
   </script>
 </body>
+
 </html>
