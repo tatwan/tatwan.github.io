@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenAI Technique Selector - Interactive Decision Tree</title>
+  <meta name="description"
+    content="Interactive decision tree to choose the right LLM optimization technique: RAG, Fine-tuning, LoRA, Quantization, Distillation, and more.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Icons as simple SVG components
+    const ChevronRight = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
+    const ChevronLeft = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+
+    const Info = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const Home = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    );
+
+    const List = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+      </svg>
+    );
+
+    const Sparkles = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+      </svg>
+    );
+
+    const GenAITechniqueSelector = () => {
+      const [path, setPath] = useState([]);
+      const [currentNode, setCurrentNode] = useState('start');
+      const [showQuickRef, setShowQuickRef] = useState(false);
+
+      // Decision tree structure
+      const tree = {
+        start: {
+          question: "What is your primary goal with your LLM?",
+          type: "decision",
+          info: "Choose the main objective you want to achieve. This will guide you to the most suitable techniques.",
+          options: [
+            { label: "Ground in External Knowledge", next: "grounding", desc: "Add up-to-date, private, or domain-specific knowledge without changing model weights" },
+            { label: "Change Model Behavior", next: "behavior", desc: "Modify how the model responds, follows instructions, or performs specific tasks" },
+            { label: "Optimize Size & Speed", next: "compression", desc: "Make the model smaller, faster, or cheaper to run" },
+            { label: "Expand General Knowledge", next: "knowledge_expansion", desc: "Teach the model new domains or update its world knowledge" }
+          ]
+        },
+
+        // ========== GROUNDING BRANCH ==========
+        grounding: {
+          question: "What type of knowledge do you need to add?",
+          type: "decision",
+          info: "Consider whether your knowledge is dynamic, sensitive, or requires citations.",
+          options: [
+            { label: "Dynamic/Changing Knowledge", next: "rag_main", desc: "Documents, APIs, databases that update frequently" },
+            { label: "Static Domain Knowledge", next: "grounding_static", desc: "Stable, well-defined knowledge that rarely changes" },
+            { label: "Need Both", next: "rag_plus_ft", desc: "Combination of dynamic retrieval and learned behavior" }
+          ]
+        },
+        rag_main: {
+          question: "Retrieval-Augmented Generation (RAG)",
+          type: "technique",
+          goal: "Ground model responses in external, verifiable knowledge",
+          techniques: [
+            {
+              name: "Basic RAG",
+              priority: "Start Here",
+              description: "Retrieve relevant documents and include them in the prompt context. Model generates response based on retrieved content.",
+              when: "Knowledge changes frequently, need citations, data is private",
+              components: ["Vector Database", "Embedding Model", "Retriever", "LLM"],
+              pros: ["No retraining needed", "Easy to update knowledge", "Provides citations", "Keeps base model unchanged"],
+              cons: ["Limited by context window", "Retrieval quality affects output", "Added latency"],
+              tools: "LangChain, LlamaIndex, Pinecone, Weaviate, ChromaDB"
+            },
+            {
+              name: "Hybrid Search RAG",
+              priority: "Improved Retrieval",
+              description: "Combines dense vector search with sparse keyword search (BM25) for better recall.",
+              when: "Need both semantic and keyword matching",
+              components: ["Dense Embeddings", "Sparse Index (BM25)", "Reranker"],
+              pros: ["Better retrieval accuracy", "Handles exact matches + semantic"],
+              cons: ["More complex pipeline", "Requires tuning"],
+              tools: "Elasticsearch, Qdrant, Cohere Rerank"
+            },
+            {
+              name: "Agentic RAG",
+              priority: "Advanced",
+              description: "LLM decides what to retrieve, when, and how to use multiple sources. Can query APIs, databases, and tools.",
+              when: "Complex queries requiring multi-step reasoning",
+              components: ["Agent Framework", "Tool Calling", "Memory"],
+              pros: ["Handles complex queries", "Multi-source integration", "Adaptive retrieval"],
+              cons: ["Higher complexity", "More expensive", "Harder to debug"],
+              tools: "LangGraph, AutoGen, CrewAI"
+            }
+          ],
+          continueOptions: [
+            { label: "RAG responses still off-tone?", next: "rag_plus_ft" },
+            { label: "Need to improve retrieval", next: "rag_optimization" }
+          ]
+        },
+        rag_optimization: {
+          question: "RAG Optimization Techniques",
+          type: "technique",
+          goal: "Improve retrieval quality and response accuracy",
+          techniques: [
+            {
+              name: "Chunk Optimization",
+              priority: "Foundation",
+              description: "Optimize how documents are split. Consider semantic chunking, overlap, and hierarchy.",
+              when: "Poor retrieval relevance, missing context",
+              tips: ["Use 256-512 token chunks", "Add 10-20% overlap", "Consider document structure"],
+              tools: "LlamaIndex, Unstructured.io"
+            },
+            {
+              name: "Reranking",
+              priority: "High Impact",
+              description: "Use a cross-encoder to rerank retrieved documents by relevance before passing to LLM.",
+              when: "Initial retrieval returns relevant docs but wrong order",
+              pros: ["Significantly improves precision", "Works with any retriever"],
+              cons: ["Adds latency", "Additional model cost"],
+              tools: "Cohere Rerank, BGE Reranker, ColBERT"
+            },
+            {
+              name: "Query Transformation",
+              priority: "Recommended",
+              description: "Rewrite, expand, or decompose user queries for better retrieval.",
+              when: "User queries are ambiguous or complex",
+              methods: ["HyDE (Hypothetical Document)", "Query Expansion", "Multi-Query"],
+              tools: "LangChain Query Transformers"
+            },
+            {
+              name: "Fine-tuned Embeddings",
+              priority: "Domain-Specific",
+              description: "Train custom embedding model on your domain data for better semantic matching.",
+              when: "Generic embeddings miss domain terminology",
+              pros: ["Better domain understanding", "Improved recall"],
+              cons: ["Requires training data", "Maintenance overhead"],
+              tools: "Sentence Transformers, OpenAI fine-tuning"
+            }
+          ]
+        },
+        grounding_static: {
+          question: "Options for Static Knowledge",
+          type: "decision",
+          info: "For stable knowledge, you can either retrieve at runtime or embed during training.",
+          options: [
+            { label: "Still prefer retrieval", next: "rag_main", desc: "Keep knowledge separate, easier updates" },
+            { label: "Embed in model weights", next: "knowledge_ft", desc: "Bake knowledge into the model via training" }
+          ]
+        },
+        knowledge_ft: {
+          question: "Knowledge Fine-tuning",
+          type: "technique",
+          goal: "Embed domain knowledge directly into model weights",
+          warning: "Consider if RAG might be simpler. Fine-tuning for knowledge can be expensive and hard to update.",
+          techniques: [
+            {
+              name: "Domain-Specific SFT",
+              priority: "Common Approach",
+              description: "Fine-tune on Q&A pairs or documents from your domain. Model learns to generate domain-accurate responses.",
+              when: "Stable domain, need faster inference than RAG",
+              dataNeeded: "1K-100K high-quality examples",
+              pros: ["No retrieval latency", "Consistent behavior"],
+              cons: ["Hard to update", "Risk of hallucination", "Expensive"],
+              tools: "HuggingFace TRL, Axolotl, OpenAI Fine-tuning"
+            },
+            {
+              name: "Continued Pre-training + SFT",
+              priority: "Deep Domain Adaptation",
+              description: "First continue pre-training on domain text, then fine-tune for tasks.",
+              when: "Need deep domain understanding (legal, medical, scientific)",
+              dataNeeded: "Large domain corpus (GB of text)",
+              pros: ["Best domain adaptation", "Learns terminology and patterns"],
+              cons: ["Most expensive", "Requires significant compute"],
+              note: "Consider this a two-phase approach: CPT then SFT"
+            }
+          ],
+          continueOptions: [
+            { label: "Learn about fine-tuning methods", next: "ft_methods" }
+          ]
+        },
+        rag_plus_ft: {
+          question: "RAG + Fine-tuning Combination",
+          type: "technique",
+          goal: "Combine retrieval with behavioral fine-tuning for best results",
+          info: "When RAG responses are correct but off-tone, or model ignores retrieved context.",
+          techniques: [
+            {
+              name: "RAG-Aware SFT",
+              priority: "Best Practice",
+              description: "Fine-tune on examples where model must read and correctly use retrieved context. Teaches model to ground responses.",
+              when: "Model ignores or misuses retrieved documents",
+              dataNeeded: "Examples with context + ideal responses",
+              pros: ["Better context utilization", "Maintains RAG benefits"],
+              cons: ["Requires curated training data"],
+              tools: "Create synthetic data with retrieved context"
+            },
+            {
+              name: "RAFT (Retrieval Augmented Fine-Tuning)",
+              priority: "Research-Backed",
+              description: "Train model to distinguish relevant from distractor documents and extract answers.",
+              when: "Need robust grounding behavior",
+              paper: "RAFT: Adapting Language Model to Domain Specific RAG (2024)",
+              pros: ["Improved retrieval robustness", "Better answer extraction"],
+              note: "Mix of oracle and distractor documents during training"
+            }
+          ],
+          continueOptions: [
+            { label: "Learn about fine-tuning methods", next: "ft_methods" }
+          ]
+        },
+
+        // ========== BEHAVIOR CHANGE BRANCH ==========
+        behavior: {
+          question: "What aspect of behavior do you want to change?",
+          type: "decision",
+          options: [
+            { label: "Quick adjustments (no training)", next: "prompting", desc: "Prompt engineering, in-context learning" },
+            { label: "Task-specific behavior", next: "task_ft", desc: "New tasks, formats, or workflows" },
+            { label: "Alignment & Safety", next: "alignment", desc: "Tone, policy compliance, helpfulness" },
+            { label: "Tool/Function Calling", next: "tool_use", desc: "Teach model to use APIs and tools" }
+          ]
+        },
+        prompting: {
+          question: "Prompting Techniques (No Training Required)",
+          type: "technique",
+          goal: "Modify behavior through prompt design - fastest and cheapest approach",
+          techniques: [
+            {
+              name: "Zero-Shot Prompting",
+              priority: "Simplest",
+              description: "Direct instruction without examples. Works well for capable models on common tasks.",
+              when: "Simple, well-defined tasks; strong base model",
+              example: "Classify this text as positive or negative: {text}",
+              pros: ["No examples needed", "Fast iteration"],
+              cons: ["Less reliable for complex tasks", "Model-dependent"]
+            },
+            {
+              name: "Few-Shot Prompting",
+              priority: "Most Common",
+              description: "Include 2-8 examples demonstrating the desired input-output pattern.",
+              when: "Need consistent format, complex reasoning, or domain-specific behavior",
+              example: "Example 1: ... Example 2: ... Now do: {input}",
+              pros: ["More reliable", "Format consistency", "No training"],
+              cons: ["Uses context window", "Example selection matters"]
+            },
+            {
+              name: "Chain-of-Thought (CoT)",
+              priority: "For Reasoning",
+              description: "Prompt model to show step-by-step reasoning before final answer.",
+              when: "Math, logic, multi-step reasoning tasks",
+              trigger: "Add 'Let's think step by step' or show reasoning examples",
+              pros: ["Better accuracy on reasoning", "Interpretable"],
+              cons: ["More tokens", "Not always needed"]
+            },
+            {
+              name: "System Prompts",
+              priority: "Persona & Rules",
+              description: "Set model personality, constraints, and behavior rules in system message.",
+              when: "Need consistent persona, safety guardrails, output format",
+              tips: ["Be specific about constraints", "Define edge cases", "Test adversarial inputs"],
+              tools: "All chat APIs support system prompts"
+            },
+            {
+              name: "Structured Output",
+              priority: "Reliable Parsing",
+              description: "Constrain model to output valid JSON, XML, or other formats.",
+              when: "Need machine-parseable output",
+              methods: ["JSON mode", "Function calling", "Grammar constraints"],
+              tools: "OpenAI JSON mode, Outlines, Guidance, LMQL"
+            }
+          ],
+          continueOptions: [
+            { label: "Prompting not enough", next: "prompt_tuning" },
+            { label: "Need persistent behavior change", next: "task_ft" }
+          ]
+        },
+        prompt_tuning: {
+          question: "Soft Prompting / Prompt Tuning",
+          type: "technique",
+          goal: "Learn optimal prompt embeddings without changing model weights",
+          info: "Middle ground between prompting and fine-tuning. Learns continuous prompt vectors.",
+          techniques: [
+            {
+              name: "Prompt Tuning",
+              priority: "Efficient",
+              description: "Learn soft prompt tokens prepended to input. Model weights stay frozen.",
+              when: "Want task adaptation without full fine-tuning",
+              params: "~20K parameters (just prompt embeddings)",
+              pros: ["Very parameter-efficient", "Multi-task via different prompts", "No catastrophic forgetting"],
+              cons: ["Less powerful than fine-tuning", "Requires training infrastructure"],
+              paper: "The Power of Scale for Parameter-Efficient Prompt Tuning (2021)"
+            },
+            {
+              name: "Prefix Tuning",
+              priority: "More Expressive",
+              description: "Learn continuous prefixes for each transformer layer, not just input.",
+              when: "Need more adaptation capacity than prompt tuning",
+              params: "~0.1% of model parameters",
+              pros: ["More expressive than prompt tuning", "Still very efficient"],
+              cons: ["Slightly more complex"],
+              paper: "Prefix-Tuning: Optimizing Continuous Prompts (2021)"
+            },
+            {
+              name: "P-Tuning v2",
+              priority: "Enhanced",
+              description: "Adds learnable prompts to every layer. Matches fine-tuning on many tasks.",
+              when: "Need fine-tuning-level performance with efficiency",
+              pros: ["Competitive with fine-tuning", "Works across model sizes"],
+              tools: "PEFT library"
+            }
+          ],
+          continueOptions: [
+            { label: "Need more adaptation power", next: "ft_methods" }
+          ]
+        },
+        task_ft: {
+          question: "What's your compute budget?",
+          type: "decision",
+          info: "This determines whether to use full fine-tuning or parameter-efficient methods.",
+          options: [
+            { label: "Limited / Large Model", next: "peft_methods", desc: "Use PEFT (LoRA, QLoRA, etc.) - most common choice" },
+            { label: "Sufficient Compute", next: "full_ft", desc: "Can afford to train all parameters" },
+            { label: "Using API-only Model", next: "api_ft", desc: "Fine-tuning through provider API" }
+          ]
+        },
+        peft_methods: {
+          question: "Parameter-Efficient Fine-Tuning (PEFT)",
+          type: "technique",
+          goal: "Adapt model behavior while training only a small fraction of parameters",
+          techniques: [
+            {
+              name: "LoRA (Low-Rank Adaptation)",
+              priority: "Most Popular",
+              description: "Add small trainable low-rank matrices to attention layers. Merge for inference.",
+              when: "Most fine-tuning scenarios, especially 7B+ models",
+              params: "0.1-1% of model parameters",
+              pros: ["Very effective", "Easy to swap adapters", "Can merge into base model", "Well-supported"],
+              cons: ["Rank selection matters", "May need tuning"],
+              settings: "Typical: rank=8-64, alpha=16-128, target query/value projections",
+              tools: "HuggingFace PEFT, Axolotl, LLaMA-Factory"
+            },
+            {
+              name: "QLoRA",
+              priority: "Memory-Efficient",
+              description: "Quantize base model to 4-bit, train LoRA adapters in full precision.",
+              when: "Limited GPU memory, fine-tuning 13B+ on consumer hardware",
+              requirements: "Single 24GB GPU can fine-tune 33B model",
+              pros: ["Dramatic memory reduction", "Enables large model fine-tuning", "Minimal quality loss"],
+              cons: ["Slower training", "Quantization artifacts possible"],
+              paper: "QLoRA: Efficient Finetuning of Quantized LLMs (2023)",
+              tools: "bitsandbytes + PEFT, Axolotl"
+            },
+            {
+              name: "DoRA (Weight-Decomposed LRA)",
+              priority: "Latest Research",
+              description: "Decomposes weights into magnitude and direction, applies LoRA to direction only.",
+              when: "Want to improve on LoRA performance",
+              pros: ["Often outperforms LoRA", "Same efficiency"],
+              cons: ["Newer, less tooling"],
+              paper: "DoRA: Weight-Decomposed Low-Rank Adaptation (2024)"
+            },
+            {
+              name: "IA3 (Infused Adapter)",
+              priority: "Ultra-Efficient",
+              description: "Learn rescaling vectors for keys, values, and FFN. Even fewer parameters than LoRA.",
+              when: "Extreme parameter efficiency needed",
+              params: "~0.01% of model parameters",
+              pros: ["Most parameter-efficient", "Fast"],
+              cons: ["Less expressive than LoRA"],
+              paper: "Few-Shot Parameter-Efficient Fine-Tuning (2022)"
+            },
+            {
+              name: "Adapter Layers",
+              priority: "Classic Approach",
+              description: "Insert small bottleneck layers between transformer blocks.",
+              when: "Multi-task scenarios, modular adaptation",
+              pros: ["Modular", "Easy to add/remove"],
+              cons: ["Adds inference latency", "Less popular now"],
+              tools: "AdapterHub"
+            }
+          ],
+          additionalInfo: {
+            title: "Choosing PEFT Method:",
+            points: [
+              "LoRA: Default choice, best balance of efficiency and performance",
+              "QLoRA: When GPU memory is limited",
+              "DoRA: When you need to squeeze more quality",
+              "IA3: Extreme efficiency, simpler tasks"
+            ]
+          },
+          continueOptions: [
+            { label: "Learn about training data", next: "training_data" }
+          ]
+        },
+        full_ft: {
+          question: "Full Fine-Tuning",
+          type: "technique",
+          goal: "Update all model parameters for maximum adaptation",
+          warning: "Requires significant compute. Consider if PEFT would suffice first.",
+          techniques: [
+            {
+              name: "Supervised Fine-Tuning (SFT)",
+              priority: "Standard Approach",
+              description: "Train on (instruction, response) pairs. Updates all weights.",
+              when: "Need maximum adaptation, have sufficient compute",
+              requirements: "Multiple high-end GPUs, distributed training",
+              pros: ["Maximum flexibility", "Best potential performance"],
+              cons: ["Expensive", "Risk of catastrophic forgetting", "Needs careful LR"],
+              tools: "HuggingFace Trainer, DeepSpeed, FSDP"
+            },
+            {
+              name: "Full Fine-Tuning + RLHF",
+              priority: "Alignment",
+              description: "SFT followed by reinforcement learning from human feedback.",
+              when: "Training instruction-following or chat models from base",
+              stages: ["SFT on demonstrations", "Reward model training", "PPO optimization"],
+              pros: ["Best alignment quality", "How ChatGPT was trained"],
+              cons: ["Complex pipeline", "Expensive", "Reward hacking risks"],
+              tools: "TRL, OpenRLHF"
+            }
+          ],
+          continueOptions: [
+            { label: "Learn about efficient training", next: "efficient_training" },
+            { label: "Learn about training data", next: "training_data" }
+          ]
+        },
+        api_ft: {
+          question: "API-Based Fine-Tuning",
+          type: "technique",
+          goal: "Fine-tune through provider APIs without managing infrastructure",
+          techniques: [
+            {
+              name: "OpenAI Fine-Tuning",
+              priority: "Easiest",
+              description: "Upload JSONL data, provider handles training. Get custom model endpoint.",
+              when: "Using OpenAI models, want simplicity",
+              models: "GPT-4o, GPT-4o-mini, GPT-3.5-Turbo",
+              pros: ["No infrastructure", "Simple API", "Auto-scaling"],
+              cons: ["Limited control", "Data goes to provider", "Ongoing costs"],
+              dataFormat: "JSONL with messages array"
+            },
+            {
+              name: "Claude Fine-Tuning",
+              priority: "Enterprise",
+              description: "Available for enterprise customers. Contact Anthropic.",
+              when: "Using Claude at scale, need customization"
+            },
+            {
+              name: "Together.ai / Anyscale",
+              priority: "Open Models",
+              description: "Fine-tune open-source models through managed APIs.",
+              when: "Want open model flexibility with managed infrastructure",
+              pros: ["More model choices", "Reasonable pricing"],
+              tools: "Together Fine-tuning, Anyscale Endpoints"
+            }
+          ]
+        },
+        alignment: {
+          question: "Alignment & Safety Fine-Tuning",
+          type: "technique",
+          goal: "Improve helpfulness, harmlessness, and policy compliance",
+          techniques: [
+            {
+              name: "RLHF (RL from Human Feedback)",
+              priority: "Gold Standard",
+              description: "Train reward model on human preferences, then optimize policy with PPO.",
+              when: "Need high-quality alignment, have resources for full pipeline",
+              stages: ["Collect comparison data", "Train reward model", "PPO training"],
+              pros: ["Best alignment quality", "Proven at scale"],
+              cons: ["Complex", "Expensive", "Reward hacking"],
+              tools: "TRL, OpenRLHF, DeepSpeed-Chat"
+            },
+            {
+              name: "DPO (Direct Preference Optimization)",
+              priority: "Recommended Alternative",
+              description: "Skip reward model. Directly optimize policy from preference pairs.",
+              when: "Want RLHF-like results with simpler pipeline",
+              dataNeeded: "(prompt, chosen, rejected) triplets",
+              pros: ["Simpler than RLHF", "No reward model needed", "Stable training"],
+              cons: ["May underperform RLHF on some tasks"],
+              paper: "Direct Preference Optimization (2023)",
+              tools: "TRL DPOTrainer, Axolotl"
+            },
+            {
+              name: "ORPO (Odds Ratio Preference Optimization)",
+              priority: "Latest",
+              description: "Combines SFT and preference alignment in one stage.",
+              when: "Want single-stage alignment training",
+              pros: ["Simpler pipeline", "Efficient"],
+              paper: "ORPO: Monolithic Preference Optimization (2024)"
+            },
+            {
+              name: "Constitutional AI (RLAIF)",
+              priority: "Scalable",
+              description: "Use AI feedback based on principles instead of human labels.",
+              when: "Need scalable alignment, can't collect enough human feedback",
+              pros: ["More scalable", "Consistent feedback"],
+              cons: ["Depends on principle quality"],
+              paper: "Constitutional AI (Anthropic, 2022)"
+            },
+            {
+              name: "Safety Fine-Tuning",
+              priority: "Guardrails",
+              description: "Train on refusal examples and safe completions for harmful prompts.",
+              when: "Need to add safety guardrails to open models",
+              dataNeeded: "Harmful prompt + safe refusal pairs",
+              note: "Combine with system prompts for layered safety"
+            }
+          ],
+          additionalInfo: {
+            title: "Alignment Method Selection:",
+            points: [
+              "Start with DPO - simpler and often sufficient",
+              "Use RLHF for maximum alignment quality at scale",
+              "ORPO for efficient single-stage training",
+              "RLAIF when human feedback is limited"
+            ]
+          }
+        },
+        tool_use: {
+          question: "Tool Use & Function Calling",
+          type: "technique",
+          goal: "Enable model to use external tools, APIs, and functions",
+          techniques: [
+            {
+              name: "Function Calling Fine-Tuning",
+              priority: "Recommended",
+              description: "Fine-tune on examples of when and how to call functions with correct arguments.",
+              when: "Need reliable tool use, custom tools",
+              dataNeeded: "Conversations with function calls and results",
+              pros: ["Reliable function calls", "Custom tool support"],
+              tools: "Glaive function calling dataset, custom data"
+            },
+            {
+              name: "Tool-Augmented Models",
+              priority: "Pre-built",
+              description: "Use models already trained for tool use (GPT-4, Claude, Llama 3).",
+              when: "Standard tools, don't want to fine-tune",
+              pros: ["Works out of box", "Well-tested"],
+              cons: ["Less customization"]
+            },
+            {
+              name: "ReAct Pattern",
+              priority: "Prompting Approach",
+              description: "Prompt model to Reason and Act in alternating steps with observations.",
+              when: "Multi-step tool use, need reasoning traces",
+              pattern: "Thought -> Action -> Observation -> Thought -> ...",
+              tools: "LangChain Agents, LlamaIndex"
+            }
+          ]
+        },
+        ft_methods: {
+          question: "Fine-Tuning Method Comparison",
+          type: "technique",
+          goal: "Choose the right fine-tuning approach for your needs",
+          techniques: [
+            {
+              name: "Full Fine-Tuning",
+              priority: "Maximum Power",
+              description: "Update all model parameters.",
+              params: "100% of parameters",
+              compute: "Very High",
+              when: "Maximum adaptation needed, sufficient resources",
+              pros: ["Best potential performance"],
+              cons: ["Expensive", "Forgetting risk"]
+            },
+            {
+              name: "LoRA / QLoRA",
+              priority: "Best Balance",
+              description: "Low-rank adapters on attention layers.",
+              params: "0.1-1% of parameters",
+              compute: "Low-Medium",
+              when: "Most fine-tuning scenarios",
+              pros: ["Efficient", "Effective", "Well-supported"]
+            },
+            {
+              name: "Prompt/Prefix Tuning",
+              priority: "Lightweight",
+              description: "Learn soft prompts only.",
+              params: "<0.1% of parameters",
+              compute: "Very Low",
+              when: "Simple task adaptation",
+              pros: ["Most efficient", "No forgetting"],
+              cons: ["Limited adaptation"]
+            },
+            {
+              name: "Adapter Layers",
+              priority: "Modular",
+              description: "Insert trainable bottleneck layers.",
+              params: "1-5% of parameters",
+              compute: "Medium",
+              when: "Multi-task, modular needs",
+              pros: ["Composable adapters"],
+              cons: ["Inference overhead"]
+            }
+          ],
+          additionalInfo: {
+            title: "General Recommendations:",
+            points: [
+              "Default to LoRA/QLoRA for most cases",
+              "Use QLoRA for memory-constrained setups",
+              "Full fine-tuning only when PEFT insufficient",
+              "Prompt tuning for simple adaptations"
+            ]
+          },
+          continueOptions: [
+            { label: "Go to PEFT methods", next: "peft_methods" },
+            { label: "Learn about training data", next: "training_data" }
+          ]
+        },
+        training_data: {
+          question: "Training Data Best Practices",
+          type: "technique",
+          goal: "Prepare high-quality data for fine-tuning",
+          techniques: [
+            {
+              name: "Data Quality > Quantity",
+              priority: "Critical",
+              description: "A few thousand high-quality examples often outperforms millions of low-quality ones.",
+              tips: ["Curate carefully", "Remove duplicates", "Verify correctness", "Diverse examples"],
+              recommendation: "Start with 1K-10K high-quality examples"
+            },
+            {
+              name: "Instruction Format",
+              priority: "Consistency",
+              description: "Use consistent format matching your inference setup.",
+              formats: ["Alpaca: instruction/input/output", "ChatML: messages array", "Llama: special tokens"],
+              tip: "Match your training format to inference format"
+            },
+            {
+              name: "Synthetic Data Generation",
+              priority: "Scalable",
+              description: "Use strong models (GPT-4, Claude) to generate training examples.",
+              when: "Need more data, want to distill capabilities",
+              methods: ["Self-Instruct", "Evol-Instruct", "WizardLM approach"],
+              warning: "Verify quality, watch for model artifacts"
+            },
+            {
+              name: "Data Mixing",
+              priority: "Retain Capabilities",
+              description: "Mix task-specific data with general instruction data to prevent forgetting.",
+              ratio: "Typically 20-50% general data",
+              tools: "Dolly, OpenAssistant datasets for mixing"
+            }
+          ]
+        },
+        efficient_training: {
+          question: "Efficient Training Techniques",
+          type: "technique",
+          goal: "Reduce compute and memory requirements for training",
+          techniques: [
+            {
+              name: "Gradient Checkpointing",
+              priority: "Memory Saver",
+              description: "Trade compute for memory by recomputing activations during backward pass.",
+              savings: "~60% memory reduction",
+              cost: "~20% slower training",
+              tools: "Built into HuggingFace Trainer"
+            },
+            {
+              name: "Mixed Precision (FP16/BF16)",
+              priority: "Standard Practice",
+              description: "Use half-precision for most operations, full precision for critical parts.",
+              savings: "~50% memory, faster training",
+              recommendation: "BF16 preferred on newer GPUs",
+              tools: "PyTorch AMP, Accelerate"
+            },
+            {
+              name: "DeepSpeed ZeRO",
+              priority: "Multi-GPU",
+              description: "Shard optimizer states, gradients, and parameters across GPUs.",
+              stages: ["ZeRO-1: Optimizer states", "ZeRO-2: + Gradients", "ZeRO-3: + Parameters"],
+              when: "Training on multiple GPUs",
+              tools: "DeepSpeed, HuggingFace integration"
+            },
+            {
+              name: "FSDP",
+              priority: "PyTorch Native",
+              description: "Fully Sharded Data Parallel - PyTorch's native model parallelism.",
+              when: "Multi-GPU, prefer native PyTorch",
+              tools: "PyTorch FSDP, Accelerate"
+            },
+            {
+              name: "Flash Attention",
+              priority: "Always Use",
+              description: "Memory-efficient attention implementation. Faster and uses less memory.",
+              savings: "5-20x memory for long sequences",
+              recommendation: "Enable by default",
+              tools: "Flash Attention 2, xFormers"
+            }
+          ]
+        },
+
+        // ========== COMPRESSION BRANCH ==========
+        compression: {
+          question: "What's your primary optimization goal?",
+          type: "decision",
+          info: "Different techniques trade off between compression ratio, quality loss, and implementation complexity.",
+          options: [
+            { label: "Reduce Memory/Latency", next: "quantization", desc: "Most common - quantize weights to lower precision" },
+            { label: "Reduce Parameters", next: "pruning", desc: "Remove unnecessary weights or structures" },
+            { label: "Smaller Model Architecture", next: "distillation", desc: "Train a smaller student model" },
+            { label: "Maximum Compression", next: "compression_pipeline", desc: "Combine multiple techniques" }
+          ]
+        },
+        quantization: {
+          question: "Quantization Techniques",
+          type: "technique",
+          goal: "Reduce precision of model weights and activations",
+          info: "Quantization offers the best compression-to-quality ratio and is usually the first step.",
+          techniques: [
+            {
+              name: "GPTQ",
+              priority: "Post-Training Standard",
+              description: "One-shot weight quantization using calibration data. Widely supported.",
+              precision: "4-bit, 8-bit",
+              pros: ["Good quality", "Fast inference", "Wide support"],
+              cons: ["Requires calibration data", "Static quantization"],
+              tools: "AutoGPTQ, ExLlama, transformers"
+            },
+            {
+              name: "AWQ (Activation-Aware)",
+              priority: "High Quality",
+              description: "Protects salient weights based on activation magnitudes.",
+              precision: "4-bit",
+              pros: ["Often better quality than GPTQ", "Fast"],
+              cons: ["Newer, less universal support"],
+              paper: "AWQ: Activation-aware Weight Quantization (2023)",
+              tools: "AutoAWQ, vLLM"
+            },
+            {
+              name: "GGUF/GGML",
+              priority: "CPU Inference",
+              description: "Format optimized for llama.cpp CPU inference. Various quantization levels.",
+              precision: "2-8 bit options (Q2_K to Q8_0)",
+              pros: ["CPU friendly", "Flexible precision", "Large ecosystem"],
+              cons: ["Primarily for llama.cpp"],
+              tools: "llama.cpp, Ollama, LM Studio"
+            },
+            {
+              name: "bitsandbytes (bnb)",
+              priority: "Training Integration",
+              description: "8-bit and 4-bit quantization with HuggingFace integration.",
+              precision: "4-bit (NF4), 8-bit (LLM.int8)",
+              pros: ["Easy HF integration", "Works with training (QLoRA)"],
+              cons: ["Primarily NVIDIA"],
+              tools: "bitsandbytes, transformers"
+            },
+            {
+              name: "FP8",
+              priority: "Next Generation",
+              description: "8-bit floating point on modern hardware (H100, RTX 4090).",
+              precision: "8-bit floating point",
+              pros: ["Good quality", "Hardware accelerated"],
+              cons: ["Requires new hardware"],
+              tools: "TensorRT-LLM, vLLM"
+            }
+          ],
+          additionalInfo: {
+            title: "Quantization Selection Guide:",
+            points: [
+              "4-bit (GPTQ/AWQ): Good balance, ~75% memory reduction",
+              "8-bit: Minimal quality loss, ~50% reduction",
+              "2-3 bit: Aggressive, noticeable quality loss",
+              "Start with AWQ or GPTQ 4-bit for most use cases"
+            ]
+          },
+          continueOptions: [
+            { label: "Need more compression", next: "pruning" },
+            { label: "Combine techniques", next: "compression_pipeline" }
+          ]
+        },
+        pruning: {
+          question: "Pruning Techniques",
+          type: "technique",
+          goal: "Remove unnecessary weights or structures from the model",
+          techniques: [
+            {
+              name: "Unstructured Pruning",
+              priority: "High Sparsity",
+              description: "Zero out individual weights based on magnitude or importance.",
+              sparsity: "Up to 50-90% sparsity possible",
+              pros: ["High compression potential"],
+              cons: ["Needs sparse hardware/software for speedup", "Quality degrades at high sparsity"],
+              tools: "SparseML, PyTorch pruning"
+            },
+            {
+              name: "Structured Pruning",
+              priority: "Practical Speedups",
+              description: "Remove entire neurons, heads, or layers. Creates smaller dense model.",
+              targets: ["Attention heads", "FFN neurons", "Layers"],
+              pros: ["Actual speedup on standard hardware", "Easier deployment"],
+              cons: ["Less compression than unstructured", "May need retraining"],
+              tools: "LLM-Pruner, Wanda"
+            },
+            {
+              name: "Wanda (Pruning by Weights and Activations)",
+              priority: "SotA for LLMs",
+              description: "Prune based on weight magnitude * input activation. No retraining needed.",
+              pros: ["One-shot pruning", "Good quality retention"],
+              sparsity: "50% sparsity with minimal degradation",
+              paper: "A Simple and Effective Pruning Approach for LLMs (2023)"
+            },
+            {
+              name: "SparseGPT",
+              priority: "One-Shot",
+              description: "One-shot pruning using approximate second-order information.",
+              pros: ["No retraining", "Works on large models"],
+              sparsity: "50-60% unstructured sparsity",
+              paper: "SparseGPT (2023)"
+            }
+          ],
+          continueOptions: [
+            { label: "Want even smaller model", next: "distillation" },
+            { label: "Combine techniques", next: "compression_pipeline" }
+          ]
+        },
+        distillation: {
+          question: "Knowledge Distillation",
+          type: "technique",
+          goal: "Train a smaller student model to mimic a larger teacher",
+          techniques: [
+            {
+              name: "Response-Based Distillation",
+              priority: "Most Common",
+              description: "Train student on teacher's output text/logits. Student learns to match teacher responses.",
+              when: "Want smaller model with similar capabilities",
+              dataNeeded: "Large dataset of (input, teacher_output) pairs",
+              pros: ["Simple to implement", "Flexible student architecture"],
+              cons: ["Requires generating teacher outputs", "May miss nuanced behavior"],
+              examples: "Alpaca (from text-davinci-003), Vicuna, Orca"
+            },
+            {
+              name: "Feature-Based Distillation",
+              priority: "Deeper Transfer",
+              description: "Match intermediate representations between teacher and student.",
+              when: "Need more faithful capability transfer",
+              pros: ["Better capability transfer"],
+              cons: ["Requires compatible architectures", "More complex"],
+              tools: "DistilBERT approach"
+            },
+            {
+              name: "On-Policy Distillation",
+              priority: "Highest Quality",
+              description: "Student generates, teacher provides feedback. Iterative improvement.",
+              when: "Maximum quality transfer needed",
+              pros: ["Addresses distribution mismatch", "Better generalization"],
+              cons: ["Expensive", "Complex pipeline"],
+              paper: "On-Policy Distillation of Language Models (2023)"
+            },
+            {
+              name: "Synthetic Data Distillation",
+              priority: "Scalable",
+              description: "Generate diverse training data using teacher, train student on it.",
+              when: "Need to scale data for distillation",
+              methods: ["Self-Instruct", "Evol-Instruct", "GLAN"],
+              examples: "WizardLM, OpenHermes"
+            }
+          ],
+          additionalInfo: {
+            title: "Distillation Strategies:",
+            points: [
+              "Start with response-based for simplicity",
+              "Use diverse prompts for teacher generation",
+              "Larger student = easier distillation",
+              "Consider combining with PEFT for efficiency"
+            ]
+          }
+        },
+        compression_pipeline: {
+          question: "Combined Compression Pipeline",
+          type: "technique",
+          goal: "Maximize compression by combining multiple techniques",
+          info: "Research suggests optimal ordering: Pruning -> Distillation -> Quantization",
+          techniques: [
+            {
+              name: "Pruning -> Quantization",
+              priority: "Common Pipeline",
+              description: "First prune to remove weights, then quantize remaining weights.",
+              order: ["1. Prune (structured or unstructured)", "2. Fine-tune to recover quality", "3. Quantize"],
+              pros: ["Good compression", "Relatively simple"],
+              note: "Fine-tuning between steps helps recovery"
+            },
+            {
+              name: "Distillation -> Quantization",
+              priority: "Smaller + Faster",
+              description: "Distill to smaller architecture, then quantize the student.",
+              order: ["1. Distill to smaller student", "2. Quantize student"],
+              pros: ["Architectural reduction + precision reduction"],
+              example: "TinyLlama -> 4-bit quantization"
+            },
+            {
+              name: "Full Pipeline (P-KD-Q)",
+              priority: "Maximum Compression",
+              description: "Pruning, Knowledge Distillation, Quantization in sequence.",
+              order: ["1. Prune teacher", "2. Distill to student", "3. Quantize student"],
+              pros: ["Highest compression ratios"],
+              cons: ["Complex pipeline", "Quality monitoring needed"],
+              paper: "LLM-Pruner (2023), various compression studies"
+            }
+          ],
+          additionalInfo: {
+            title: "Pipeline Best Practices:",
+            points: [
+              "Evaluate quality at each stage",
+              "Quantization typically last (easiest, most bang for buck)",
+              "Consider if simpler single-technique is enough",
+              "Test on your specific tasks, not just perplexity"
+            ]
+          }
+        },
+
+        // ========== KNOWLEDGE EXPANSION BRANCH ==========
+        knowledge_expansion: {
+          question: "What's driving the knowledge update?",
+          type: "decision",
+          options: [
+            { label: "New Domain", next: "domain_cpt", desc: "Legal, medical, scientific, or other specialized field" },
+            { label: "Temporal Freshness", next: "temporal_update", desc: "Model knowledge is outdated" },
+            { label: "New Language", next: "language_expansion", desc: "Extend to new languages" }
+          ]
+        },
+        domain_cpt: {
+          question: "Domain Adaptation via Continued Pre-Training",
+          type: "technique",
+          goal: "Teach model deep understanding of a new domain",
+          techniques: [
+            {
+              name: "Continued Pre-Training (CPT)",
+              priority: "Standard Approach",
+              description: "Continue training with next-token prediction on domain corpus.",
+              when: "Need broad domain knowledge at language model level",
+              dataNeeded: "Large unlabeled domain corpus (GB of text)",
+              pros: ["Deep domain understanding", "Learns terminology and patterns"],
+              cons: ["Expensive", "Need substantial domain data", "Risk of forgetting"],
+              tools: "Standard pre-training frameworks"
+            },
+            {
+              name: "CPT on Base -> Then Instruct Tune",
+              priority: "Recommended Path",
+              description: "Apply CPT to base model, then do instruction tuning.",
+              order: ["1. CPT on base model with domain text", "2. SFT with domain instructions"],
+              pros: ["Clear separation of knowledge and behavior", "Better control"],
+              cons: ["Two training phases"],
+              paper: "Various domain adaptation studies"
+            },
+            {
+              name: "CPT on Instruct Model",
+              priority: "Simpler but Riskier",
+              description: "Continue pre-training directly on already instruction-tuned model.",
+              when: "Want simpler pipeline, accept some alignment drift",
+              pros: ["Single phase", "Preserves some instruction ability"],
+              cons: ["Can distort alignment", "Quality varies"],
+              warning: "Monitor instruction following after CPT"
+            },
+            {
+              name: "DAPT (Domain-Adaptive Pre-Training)",
+              priority: "Research-Backed",
+              description: "Targeted pre-training on domain, proven effective for many domains.",
+              paper: "Don't Stop Pretraining (2020)",
+              domains: ["BioMed", "CS", "News", "Reviews shown to benefit"]
+            }
+          ],
+          additionalInfo: {
+            title: "When to use CPT vs RAG vs SFT:",
+            points: [
+              "CPT: Need deep domain understanding, have large corpus",
+              "RAG: Knowledge changes, need citations, smaller knowledge base",
+              "SFT: Specific tasks, behavior change, limited data"
+            ]
+          }
+        },
+        temporal_update: {
+          question: "Temporal Knowledge Updates",
+          type: "technique",
+          goal: "Update model's world knowledge to current time",
+          techniques: [
+            {
+              name: "Continued Pre-Training on Recent Data",
+              priority: "Comprehensive",
+              description: "Pre-train on recent news, web, papers to update world knowledge.",
+              pros: ["Comprehensive update", "Natural knowledge integration"],
+              cons: ["Expensive", "May need repeated updating"],
+              challenge: "Avoiding catastrophic forgetting of old knowledge"
+            },
+            {
+              name: "RAG with Current Sources",
+              priority: "Practical Default",
+              description: "Retrieve from up-to-date document stores, news APIs, web search.",
+              pros: ["Always current", "No retraining", "Verifiable"],
+              cons: ["Latency", "Retrieval dependent"],
+              tools: "Web search integration, news APIs"
+            },
+            {
+              name: "Knowledge Editing",
+              priority: "Targeted Updates",
+              description: "Surgically update specific facts without full retraining.",
+              when: "Need to correct specific facts",
+              methods: ["ROME", "MEMIT", "Knowledge neurons"],
+              pros: ["Targeted", "Efficient"],
+              cons: ["Limited scale", "Research stage"],
+              paper: "Locating and Editing Factual Associations (2022)"
+            },
+            {
+              name: "Temporal Tagging",
+              priority: "Awareness",
+              description: "Include time context in training, teach model about its knowledge cutoff.",
+              implementation: "Include dates in training data, system prompts about cutoff",
+              pros: ["Model aware of limitations"],
+              use: "Combine with RAG for best results"
+            }
+          ]
+        },
+        language_expansion: {
+          question: "Multilingual Expansion",
+          type: "technique",
+          goal: "Extend model capabilities to new languages",
+          techniques: [
+            {
+              name: "Multilingual CPT",
+              priority: "Standard",
+              description: "Continue pre-training with target language data.",
+              dataNeeded: "Large corpus in target language",
+              pros: ["Native language understanding"],
+              cons: ["Expensive", "May affect other languages"],
+              tip: "Mix target language with English to retain capabilities"
+            },
+            {
+              name: "Cross-Lingual Transfer (PEFT)",
+              priority: "Efficient",
+              description: "Use LoRA/adapters to add language capabilities with minimal forgetting.",
+              pros: ["Efficient", "Less forgetting", "Modular"],
+              cons: ["May be less fluent than full CPT"],
+              approach: "Train language-specific LoRA adapters"
+            },
+            {
+              name: "Translation Augmentation",
+              priority: "Quick Win",
+              description: "Translate English training data to target language, fine-tune on both.",
+              pros: ["Leverages existing data", "Quick"],
+              cons: ["Translation artifacts", "Not native quality"],
+              tools: "NLLB, Google Translate API"
+            }
+          ]
+        }
+      };
+
+      const quickReference = [
+        { goal: "Add external knowledge", technique: "RAG", notes: "Dynamic, verifiable, no retraining" },
+        { goal: "Change tone/format", technique: "Prompt Engineering", notes: "Start here, no training" },
+        { goal: "Task specialization", technique: "LoRA/QLoRA (PEFT)", notes: "Default for most fine-tuning" },
+        { goal: "Alignment/Safety", technique: "DPO or RLHF", notes: "DPO simpler, RLHF more powerful" },
+        { goal: "Reduce memory/latency", technique: "Quantization (4-bit)", notes: "First compression step" },
+        { goal: "Smaller architecture", technique: "Distillation", notes: "Train student from teacher" },
+        { goal: "New domain expertise", technique: "Continued Pre-Training", notes: "Large domain corpus needed" },
+        { goal: "API model customization", technique: "Provider Fine-Tuning", notes: "OpenAI, Together, etc." },
+        { goal: "Tool/function calling", technique: "Function Calling SFT", notes: "Or use capable base model" },
+        { goal: "Maximum compression", technique: "Prune -> Distill -> Quantize", notes: "Combined pipeline" }
+      ];
+
+      const handleChoice = (nextNode, label) => {
+        setPath([...path, { node: currentNode, choice: label }]);
+        setCurrentNode(nextNode);
+      };
+
+      const goBack = () => {
+        if (path.length > 0) {
+          const newPath = [...path];
+          const lastStep = newPath.pop();
+          setPath(newPath);
+          setCurrentNode(lastStep.node);
+        }
+      };
+
+      const reset = () => {
+        setPath([]);
+        setCurrentNode('start');
+      };
+
+      const currentData = tree[currentNode];
+
+      const PathBreadcrumb = () => (
+        <div className="bg-gradient-to-r from-violet-50 to-fuchsia-50 p-4 rounded-lg mb-6 border border-violet-200">
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <Home className="w-4 h-4 text-violet-600" />
+            {path.map((step, idx) => (
+              <React.Fragment key={idx}>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <span className="text-violet-700 font-medium">{step.choice}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      );
+
+      const TechniqueCard = ({ technique }) => (
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-5 hover:border-violet-400 hover:shadow-lg transition-all">
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <h4 className="text-lg font-bold text-gray-900">{technique.name}</h4>
+              <span className="text-xs font-semibold text-violet-600 bg-violet-50 px-2 py-1 rounded mt-1 inline-block">
+                {technique.priority}
+              </span>
+            </div>
+          </div>
+
+          <p className="text-gray-700 mb-3">{technique.description}</p>
+
+          {technique.when && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-green-700">When to use: </span>
+              <span className="text-xs text-gray-700">{technique.when}</span>
+            </div>
+          )}
+
+          {technique.params && (
+            <div className="bg-gray-50 p-2 rounded mb-2">
+              <span className="text-xs font-semibold text-gray-600">Parameters: </span>
+              <span className="text-xs text-gray-800">{technique.params}</span>
+            </div>
+          )}
+
+          {technique.compute && (
+            <div className="bg-gray-50 p-2 rounded mb-2">
+              <span className="text-xs font-semibold text-gray-600">Compute: </span>
+              <span className="text-xs text-gray-800">{technique.compute}</span>
+            </div>
+          )}
+
+          {technique.dataNeeded && (
+            <div className="bg-blue-50 p-2 rounded mb-2">
+              <span className="text-xs font-semibold text-blue-700">Data needed: </span>
+              <span className="text-xs text-blue-900">{technique.dataNeeded}</span>
+            </div>
+          )}
+
+          {technique.pros && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-green-700">Pros: </span>
+              <span className="text-xs text-gray-700">{technique.pros.join(", ")}</span>
+            </div>
+          )}
+
+          {technique.cons && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-red-700">Cons: </span>
+              <span className="text-xs text-gray-700">{technique.cons.join(", ")}</span>
+            </div>
+          )}
+
+          {technique.components && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-purple-700">Components: </span>
+              <span className="text-xs text-gray-700">{technique.components.join(" -> ")}</span>
+            </div>
+          )}
+
+          {technique.stages && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-purple-700">Stages: </span>
+              <span className="text-xs text-gray-700">{technique.stages.join(" -> ")}</span>
+            </div>
+          )}
+
+          {technique.order && (
+            <div className="bg-purple-50 p-2 rounded mb-2">
+              <span className="text-xs font-semibold text-purple-700 block mb-1">Order:</span>
+              {technique.order.map((step, i) => (
+                <div key={i} className="text-xs text-purple-900">{step}</div>
+              ))}
+            </div>
+          )}
+
+          {technique.methods && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-indigo-700">Methods: </span>
+              <span className="text-xs text-gray-700">{technique.methods.join(", ")}</span>
+            </div>
+          )}
+
+          {technique.tools && (
+            <div className="bg-indigo-50 p-2 rounded mb-2">
+              <span className="text-xs font-semibold text-indigo-700">Tools: </span>
+              <span className="text-xs text-indigo-900">{technique.tools}</span>
+            </div>
+          )}
+
+          {technique.paper && (
+            <div className="text-xs text-gray-500 italic mb-2">
+              Paper: {technique.paper}
+            </div>
+          )}
+
+          {technique.example && (
+            <div className="bg-amber-50 p-2 rounded mb-2 font-mono text-xs text-amber-900">
+              {technique.example}
+            </div>
+          )}
+
+          {technique.note && (
+            <div className="mt-2 text-xs bg-yellow-50 border-l-4 border-yellow-400 p-2 text-yellow-800">
+              {technique.note}
+            </div>
+          )}
+
+          {technique.warning && (
+            <div className="mt-2 text-xs bg-red-50 border-l-4 border-red-400 p-2 text-red-800">
+              {technique.warning}
+            </div>
+          )}
+
+          {technique.settings && (
+            <div className="mt-2 text-xs bg-gray-100 p-2 rounded font-mono">
+              {technique.settings}
+            </div>
+          )}
+        </div>
+      );
+
+      const QuickReferenceModal = () => (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Quick Reference Guide</h2>
+              <button
+                onClick={() => setShowQuickRef(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                x
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+                    <th className="p-3 text-left font-semibold">Goal</th>
+                    <th className="p-3 text-left font-semibold">Recommended Technique</th>
+                    <th className="p-3 text-left font-semibold">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quickReference.map((row, idx) => (
+                    <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                      <td className="p-3 font-semibold text-gray-900">{row.goal}</td>
+                      <td className="p-3 text-violet-700 font-mono text-sm">{row.technique}</td>
+                      <td className="p-3 text-gray-600 text-sm">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-6 bg-violet-50 border border-violet-200 rounded-lg p-4">
+              <h3 className="font-bold text-violet-900 mb-2">Decision Hierarchy:</h3>
+              <ol className="text-sm text-violet-800 space-y-1 list-decimal list-inside">
+                <li>Try prompting first - it's free and fast</li>
+                <li>If behavior issues persist, consider RAG for knowledge or PEFT for behavior</li>
+                <li>Use LoRA/QLoRA as default fine-tuning method</li>
+                <li>Full fine-tuning only when PEFT is insufficient</li>
+                <li>For deployment: quantize first, then prune/distill if needed</li>
+              </ol>
+            </div>
+
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 className="font-bold text-amber-900 mb-2">Common Patterns:</h3>
+              <ul className="text-sm text-amber-800 space-y-1 list-disc list-inside">
+                <li><strong>Chatbot:</strong> Base model + System prompt + RAG</li>
+                <li><strong>Domain Expert:</strong> CPT + SFT (or RAG if data changes)</li>
+                <li><strong>Production:</strong> LoRA fine-tune + 4-bit quantization</li>
+                <li><strong>Edge Deployment:</strong> Distillation + Quantization</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 p-4 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Sparkles className="w-8 h-8 text-violet-600" />
+                <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">
+                  GenAI Technique Selector
+                </h1>
+              </div>
+              <p className="text-gray-600">Interactive guide to choosing the right LLM optimization technique</p>
+
+              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+                <button
+                  onClick={reset}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-violet-400 hover:shadow-md transition-all text-gray-700"
+                >
+                  <Home className="w-4 h-4" />
+                  Start Over
+                </button>
+                <button
+                  onClick={() => setShowQuickRef(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-lg hover:shadow-lg transition-all"
+                >
+                  <List className="w-4 h-4" />
+                  Quick Reference
+                </button>
+              </div>
+            </div>
+
+            {/* Path Breadcrumb */}
+            {path.length > 0 && <PathBreadcrumb />}
+
+            {/* Main Content */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+              {currentData.info && (
+                <div className="mb-6 bg-violet-50 border-l-4 border-violet-500 p-4 rounded-r-lg">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-5 h-5 text-violet-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-violet-900 text-sm">{currentData.info}</p>
+                  </div>
+                </div>
+              )}
+
+              {currentData.warning && (
+                <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                  <p className="text-red-900 font-semibold">{currentData.warning}</p>
+                </div>
+              )}
+
+              {currentData.goal && (
+                <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                  <p className="text-green-900 font-semibold text-lg">{currentData.goal}</p>
+                </div>
+              )}
+
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{currentData.question}</h2>
+
+              {/* Decision Options */}
+              {currentData.type === "decision" && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {currentData.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleChoice(option.next, option.label)}
+                      className="group p-6 border-2 border-gray-300 rounded-xl hover:border-violet-500 hover:shadow-lg transition-all text-left bg-gradient-to-br from-white to-gray-50 hover:from-violet-50 hover:to-fuchsia-50"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-violet-600 transition-colors">
+                          {option.label}
+                        </h3>
+                        <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-violet-600 group-hover:translate-x-1 transition-all" />
+                      </div>
+                      <p className="text-gray-600 text-sm">{option.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Technique Display */}
+              {currentData.type === "technique" && (
+                <div>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    {currentData.techniques.map((technique, idx) => (
+                      <TechniqueCard key={idx} technique={technique} />
+                    ))}
+                  </div>
+
+                  {currentData.additionalInfo && (
+                    <div className="bg-fuchsia-50 border-2 border-fuchsia-200 rounded-lg p-5 mb-6">
+                      <h4 className="font-bold text-fuchsia-900 mb-3">{currentData.additionalInfo.title}</h4>
+                      <ul className="space-y-2">
+                        {currentData.additionalInfo.points.map((point, idx) => (
+                          <li key={idx} className="text-fuchsia-800 text-sm flex items-start gap-2">
+                            <span className="text-fuchsia-600 font-bold">*</span>
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {currentData.continueOptions && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-4">{currentData.nextQuestion || "Continue exploring:"}</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {currentData.continueOptions.map((option, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleChoice(option.next, option.label)}
+                            className="p-4 border-2 border-violet-300 rounded-lg hover:border-violet-500 hover:shadow-lg transition-all text-left bg-white hover:bg-violet-50 flex items-center justify-between group"
+                          >
+                            <span className="font-semibold text-gray-900 group-hover:text-violet-600">
+                              {option.label}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-violet-500 group-hover:translate-x-1 transition-all" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Back Button */}
+              {path.length > 0 && (
+                <button
+                  onClick={goBack}
+                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                  Go Back
+                </button>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-8 text-gray-500 text-sm">
+              <p>GenAI Technique Selector v1.0 | Based on Latest Research (2024)</p>
+              <p className="mt-2 text-xs">
+                Created by Tarek Atwan @ <a href="index.html" className="text-violet-600 hover:text-violet-700 hover:underline font-semibold">ML_LAB</a>
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Reference Modal */}
+          {showQuickRef && <QuickReferenceModal />}
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<GenAITechniqueSelector />);
+  </script>
+</body>
+
+</html>
