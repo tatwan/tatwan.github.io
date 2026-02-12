@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenAI Foundations Navigator - Beginner Guide</title>
+  <meta name="description"
+    content="Beginner-friendly interactive tree to decide between prompt engineering, RAG, fine-tuning, and model optimization for GenAI systems.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const ChevronRight = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
+    const ChevronLeft = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+
+    const Home = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    );
+
+    const Sparkles = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+      </svg>
+    );
+
+    const Info = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const GenaiFoundationsNavigator = () => {
+      const [path, setPath] = useState([]);
+      const [currentNode, setCurrentNode] = useState('start');
+
+      // A deliberately small, guided tree focused on decision order:
+      // 1) Prompting first, 2) then RAG for external knowledge, 3) then training, 4) then optimization.
+      const tree = {
+        start: {
+          type: 'decision',
+          question: 'Where are you starting from?',
+          info: 'This beginner tree assumes you are working with an existing LLM (e.g., GPT‑4, Claude, Llama 3) and want to improve it step by step.',
+          options: [
+            {
+              label: 'I have not really tried prompt engineering yet',
+              next: 'prompt_basics',
+              desc: 'Start here: system prompts, examples, and parameters often fix a lot.'
+            },
+            {
+              label: 'I already tried prompt engineering',
+              next: 'prompt_results',
+              desc: 'We will check what is still missing and where to go next.'
+            }
+          ]
+        },
+        prompt_basics: {
+          type: 'content',
+          question: 'Step 1 · Start with prompt engineering',
+          info: 'In practice, most GenAI systems get very far with careful prompting before touching RAG or training.',
+          sections: [
+            {
+              title: 'System prompt',
+              body: 'Describe who the assistant is, the rules it should follow, and what to avoid. Example: “You are a careful data analyst who always shows calculations and asks for clarification when unsure.”'
+            },
+            {
+              title: 'Few‑shot examples',
+              body: 'Show 2–5 “input → ideal output” pairs. The model then imitates the pattern. Use this before you consider fine‑tuning.'
+            },
+            {
+              title: 'Chain‑of‑Thought (CoT)',
+              body: 'For reasoning tasks, ask the model to think step by step (“Let’s reason step by step”) and then give the final answer.'
+            },
+            {
+              title: 'Key parameters',
+              body: 'Temperature controls creativity (low = consistent, high = varied). Top‑p / top‑k control how many candidate tokens are considered. Max tokens caps answer length.'
+            }
+          ],
+          nextQuestion: 'After doing this, what is still missing?',
+          continueOptions: [
+            {
+              label: 'Quality is good enough now',
+              next: 'done_prompting'
+            },
+            {
+              label: 'Still hallucinating or missing my company/domain knowledge',
+              next: 'need_rag'
+            },
+            {
+              label: 'Behavior/tone is still not quite right',
+              next: 'need_training'
+            },
+            {
+              label: 'Works well but too slow/expensive',
+              next: 'need_optimization'
+            }
+          ]
+        },
+        prompt_results: {
+          type: 'decision',
+          question: 'What is still wrong after prompt engineering?',
+          options: [
+            {
+              label: 'It makes things up or doesn’t know my data',
+              next: 'need_rag',
+              desc: 'You need grounding / external knowledge.'
+            },
+            {
+              label: 'It knows the right info but behavior is off',
+              next: 'need_training',
+              desc: 'You need more persistent behavior change.'
+            },
+            {
+              label: 'Quality is fine, but latency/cost are too high',
+              next: 'need_optimization',
+              desc: 'You need compression / deployment tricks.'
+            }
+          ]
+        },
+        done_prompting: {
+          type: 'content',
+          question: 'Great – prompt engineering is enough for now',
+          sections: [
+            {
+              title: 'You can stop here',
+              body: 'If prompts + examples + parameters give you the quality you need, you do not need RAG or fine‑tuning yet. Capture your best prompts as templates or system messages in your app.'
+            },
+            {
+              title: 'When to revisit',
+              body: 'If you later hit issues like “doesn’t know our new policy” or “keeps drifting off‑brand,” you can come back to RAG or training from this page.'
+            }
+          ],
+          continueOptions: [
+            {
+              label: 'Compare higher‑power options anyway',
+              next: 'overview_ladder'
+            }
+          ]
+        },
+        need_rag: {
+          type: 'content',
+          question: 'Step 2 · Do you need RAG?',
+          info: 'RAG is about adding external knowledge. You typically try it after prompts, not before.',
+          sections: [
+            {
+              title: 'When RAG is the right tool',
+              body: 'Use RAG when the model needs access to your documents, APIs, databases, or up‑to‑date web content. Example: company handbook, product docs, support tickets, research papers.'
+            },
+            {
+              title: 'R · Retrieval',
+              body: 'Search over your content (vector search + often keyword search) to find a few relevant chunks for each question.'
+            },
+            {
+              title: 'A · Augmented',
+              body: 'Attach those chunks to the prompt as context. The model now “reads” them alongside the user question.'
+            },
+            {
+              title: 'G · Generation',
+              body: 'The model writes an answer based on both the question and the retrieved context. You can ask it to cite which chunks it used.'
+            }
+          ],
+          continueOptions: [
+            {
+              label: 'I still need more control than RAG + prompts',
+              next: 'need_training'
+            },
+            {
+              label: 'I understand RAG and want the full menu',
+              next: 'advanced_selector_link'
+            }
+          ]
+        },
+        need_training: {
+          type: 'content',
+          question: 'Step 3 · When do you need training (fine‑tuning / continued pre‑training)?',
+          info: 'Training is for more permanent, systematic changes than you get from prompts alone.',
+          sections: [
+            {
+              title: 'Stay in “prompt + RAG” if you can',
+              body: 'Prompt engineering + RAG are cheaper, faster to iterate on, and easier to debug. Try to exhaust those knobs before you train.'
+            },
+            {
+              title: 'Lightweight fine‑tuning (e.g., LoRA)',
+              body: 'Best next step if you need the model to follow a particular style, format, or workflow consistently. You train small adapter layers, not the whole model.'
+            },
+            {
+              title: 'Full fine‑tuning',
+              body: 'You update most or all weights. This is powerful but expensive and easier to break. Usually reserved for larger teams or very specific products.'
+            },
+            {
+              title: 'Continued pre‑training',
+              body: 'Feed the model a large corpus (e.g., legal or medical text) so it “thinks” in that domain. Often followed by instruction‑style fine‑tuning.'
+            }
+          ],
+          continueOptions: [
+            {
+              label: 'See the bigger ladder of options',
+              next: 'overview_ladder'
+            }
+          ]
+        },
+        need_optimization: {
+          type: 'content',
+          question: 'Step 4 · If cost or latency are the main problem',
+          info: 'Optimization comes after you like the model’s behavior – not before.',
+          sections: [
+            {
+              title: 'Distillation',
+              body: 'Train a smaller “student” to imitate a larger “teacher” model. Goal: similar behavior on your tasks, but cheaper to run.'
+            },
+            {
+              title: 'Quantization',
+              body: 'Store model weights in lower precision (e.g., 8‑bit or 4‑bit). Big memory and speed wins; small quality loss if done carefully.'
+            },
+            {
+              title: 'Pruning and other tricks',
+              body: 'Remove less‑useful weights or neurons, or use specialized runtimes. Often combined with distillation and quantization.'
+            }
+          ],
+          continueOptions: [
+            {
+              label: 'Show me the full high‑level map',
+              next: 'overview_ladder'
+            }
+          ]
+        },
+        overview_ladder: {
+          type: 'content',
+          question: 'Putting it all together · Beginner mental model',
+          sections: [
+            {
+              title: 'Order of operations',
+              body: '1) Prompt engineering → 2) RAG for external knowledge → 3) Fine‑tuning / continued pre‑training if you need deeper control → 4) Distillation / quantization / pruning for efficiency.'
+            },
+            {
+              title: 'Simple rule of thumb',
+              body: 'If changing the words in your prompt can fix it, do that. If the model lacks facts, use RAG. If it still behaves wrong, fine‑tune. If it is too slow or expensive, compress.'
+            },
+            {
+              title: 'Ready for the advanced tree?',
+              body: 'When this mental model feels comfortable, you can move on to the GenAI Technique Selector for a much more detailed, research‑grade view.'
+            }
+          ],
+          continueOptions: [
+            {
+              label: 'Open advanced GenAI Technique Selector',
+              next: 'advanced_selector_link'
+            }
+          ]
+        },
+        advanced_selector_link: {
+          type: 'link',
+          question: 'Next stop: GenAI Technique Selector',
+          info: 'You have the beginner mental model. The advanced selector gives you a fine‑grained map of specific techniques.',
+          link: {
+            href: 'genai_techniques_selector.html',
+            label: 'Go to GenAI Technique Selector'
+          }
+        }
+      };
+
+      const currentData = tree[currentNode];
+
+      const handleChoice = (nextNode, label) => {
+        setPath(prev => [...prev, { node: currentNode, choice: label }]);
+        setCurrentNode(nextNode);
+      };
+
+      const goBack = () => {
+        if (path.length === 0) return;
+        const newPath = [...path];
+        const last = newPath.pop();
+        setPath(newPath);
+        setCurrentNode(last.node);
+      };
+
+      const reset = () => {
+        setPath([]);
+        setCurrentNode('start');
+      };
+
+      const PathBreadcrumb = () => (
+        <div className="bg-slate-900/70 border border-slate-800 rounded-lg px-4 py-3 mb-6 text-xs text-slate-400 flex items-center flex-wrap gap-2">
+          <button
+            onClick={reset}
+            className="inline-flex items-center gap-1 text-slate-300 hover:text-amber-400 transition-colors"
+          >
+            <Home className="w-4 h-4" />
+            <span className="uppercase tracking-[0.15em]">Start</span>
+          </button>
+          {path.map((step, idx) => (
+            <React.Fragment key={idx}>
+              <ChevronRight className="w-3 h-3 text-slate-600" />
+              <span className="text-slate-300">{step.choice}</span>
+            </React.Fragment>
+          ))}
+        </div>
+      );
+
+      const SectionCard = ({ section }) => (
+        <div className="bg-slate-950/70 border border-slate-800 rounded-md p-3">
+          <p className="text-xs font-semibold text-slate-100 mb-1">{section.title}</p>
+          <p className="text-[11px] text-slate-400 leading-relaxed">{section.body}</p>
+        </div>
+      );
+
+    return (
+        <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
+          <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <header className="mb-8 text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Sparkles className="w-7 h-7 text-amber-400" />
+              <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Beginner Track</p>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-3">
+              GenAI Foundations Navigator
+            </h1>
+            <p className="text-xs md:text-sm text-gray-600 max-w-2xl mx-auto">
+              A guided, click‑through tree that helps you decide when to stop at prompt engineering, when to add RAG,
+              when training is justified, and when to think about optimization.
+            </p>
+            <p className="mt-3 text-[11px] text-gray-500">
+              You can always graduate later to the{' '}
+              <a
+                href="genai_techniques_selector.html"
+                className="text-amber-400 hover:text-amber-300 underline underline-offset-2"
+              >
+                GenAI Technique Selector
+              </a>
+              {' '}for a deeper, research‑grade view.
+            </p>
+          </header>
+
+          {/* Breadcrumb */}
+          {path.length > 0 && <PathBreadcrumb />}
+
+          {/* Main panel */}
+          <section className="bg-white border border-gray-200 rounded-2xl p-5 md:p-7 shadow-sm">
+            {currentData?.info && (
+              <div className="mb-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-md p-3 flex gap-2 text-[11px] text-blue-900">
+                <Info className="w-4 h-4 text-blue-600 mt-[2px]" />
+                <p className="leading-relaxed">{currentData.info}</p>
+              </div>
+            )}
+
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+              {currentData?.question}
+            </h2>
+
+            {/* Decision node */}
+            {currentData?.type === 'decision' && (
+                <div className="grid md:grid-cols-2 gap-4">
+                {currentData.options.map((opt, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleChoice(opt.next, opt.label)}
+                      className="group text-left bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-lg p-4 hover:border-blue-400 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                        <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-600">
+                        {opt.label}
+                      </p>
+                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                      <p className="text-[11px] text-gray-600">{opt.desc}</p>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Content node */}
+            {currentData?.type === 'content' && (
+              <div className="space-y-5">
+                <div className="grid md:grid-cols-2 gap-3">
+                  {currentData.sections?.map((section, idx) => (
+                    <SectionCard key={idx} section={section} />
+                  ))}
+                </div>
+
+                {currentData.continueOptions && (
+                  <div className="mt-3">
+                    <p className="text-[11px] text-gray-500 mb-2">
+                      {currentData.nextQuestion || 'What would you like to explore next?'}
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {currentData.continueOptions.map((opt, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleChoice(opt.next, opt.label)}
+                          className="text-left bg-white border border-blue-200 rounded-md px-3 py-2 hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-between gap-2"
+                        >
+                          <span className="text-xs text-blue-800">{opt.label}</span>
+                          <ChevronRight className="w-3 h-3 text-blue-500" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Link node */}
+            {currentData?.type === 'link' && (
+              <div className="space-y-4 text-[11px] text-gray-700">
+                {currentData.info && <p>{currentData.info}</p>}
+                <a
+                  href={currentData.link.href}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-semibold hover:from-blue-500 hover:to-purple-500 transition-colors"
+                >
+                  {currentData.link.label}
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
+            )}
+
+            {/* Back button */}
+            {path.length > 0 && (
+              <button
+                onClick={goBack}
+                className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 text-[11px] text-gray-700 hover:border-gray-400 hover:bg-gray-100 transition-all"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Go back one step
+              </button>
+            )}
+          </section>
+
+          {/* Footer */}
+          <footer className="mt-8 text-center text-[11px] text-gray-500">
+            <p className="mb-1">
+              This page is a guided, beginner‑friendly overview. For a deeper, research‑grade map of options, see the{' '}
+              <a
+                href="genai_techniques_selector.html"
+                className="text-blue-600 hover:text-blue-700 underline underline-offset-2"
+              >
+                GenAI Technique Selector
+              </a>
+              .
+            </p>
+            <p>
+              Created by Tarek Atwan @{' '}
+              <a
+                href="index.html"
+                className="text-blue-600 hover:text-blue-700 underline underline-offset-2"
+              >
+                ML_LAB
+              </a>
+            </p>
+          </footer>
+          </div>
+        </main>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<GenaiFoundationsNavigator />);
+  </script>
+</body>
+
+</html>
+
