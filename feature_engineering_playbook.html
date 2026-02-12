@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature Engineering Playbook - Interactive Decision Tree</title>
+  <meta name="description"
+    content="Interactive decision tree to guide feature engineering choices: encoding, scaling, feature creation, and selection strategies for any data type.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const ChevronRight = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
+    const ChevronLeft = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+
+    const Home = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    );
+
+    const Info = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const List = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+      </svg>
+    );
+
+    /* Wrench icon — unique to Feature Engineering */
+    const Wrench = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.867 19.125h.008v.008h-.008v-.008z" />
+      </svg>
+    );
+
+    const FeatureEngineeringPlaybook = () => {
+      const [path, setPath] = useState([]);
+      const [currentNode, setCurrentNode] = useState('start');
+      const [showQuickRef, setShowQuickRef] = useState(false);
+
+      const tree = {
+        start: {
+          question: "What type of data are you working with?",
+          type: "decision",
+          info: "Feature engineering is the process of transforming raw data into features that better represent the underlying problem, improving model performance. Start by identifying your primary data type.",
+          options: [
+            { label: "Tabular / Structured", next: "tabular_start", desc: "Rows and columns: CSV, SQL tables, spreadsheets with numeric and categorical fields", level: "Beginner" },
+            { label: "Text / NLP", next: "text_start", desc: "Documents, reviews, logs, chat messages, or any unstructured text", level: "Intermediate" },
+            { label: "Time Series", next: "timeseries_start", desc: "Sensor data, stock prices, web traffic, or any sequential measurements over time", level: "Intermediate" },
+            { label: "Images / Vision", next: "image_start", desc: "Photos, medical scans, satellite imagery, or video frames", level: "Advanced" }
+          ]
+        },
+
+        // ========== TABULAR BRANCH ==========
+        tabular_start: {
+          question: "What is your immediate challenge with tabular data?",
+          type: "decision",
+          info: "Tabular data is the most common in ML. The typical pipeline is: handle missing values \u2192 encode categoricals \u2192 scale numerics \u2192 create features \u2192 select features.",
+          options: [
+            { label: "Handling Missing Values", next: "missing_values", desc: "NaNs, blanks, or incomplete records in your dataset", level: "Beginner" },
+            { label: "Encoding Categorical Features", next: "encoding", desc: "Converting text labels (colors, countries, categories) to numbers", level: "Beginner" },
+            { label: "Scaling & Transforming Numerics", next: "scaling", desc: "Normalizing, standardizing, or transforming numeric columns", level: "Beginner" },
+            { label: "Detecting & Handling Outliers", next: "outlier_detection", desc: "Statistical and model-based methods to find and treat anomalous data points", level: "Intermediate" }
+          ]
+        },
+        missing_values: {
+          question: "Missing Value Strategies",
+          type: "technique",
+          goal: "Handle incomplete data without losing signal or introducing bias",
+          techniques: [
+            {
+              name: "Drop Rows / Columns",
+              priority: "Simplest",
+              description: "Remove rows with missing values, or drop columns that are mostly empty.",
+              when: "< 5% of data is missing, or a column has > 50% missing",
+              pros: ["Simple, no assumptions"],
+              cons: ["Loses data, can introduce bias if missingness is not random"],
+              code: "df.dropna()  # rows\ndf.drop(columns=['col'])  # columns"
+            },
+            {
+              name: "Mean / Median / Mode Imputation",
+              priority: "Common Default",
+              description: "Fill missing values with the column's mean (numeric), median (skewed numeric), or mode (categorical).",
+              when: "Data is missing at random, moderate amount of missingness",
+              pros: ["Preserves dataset size", "Fast"],
+              cons: ["Reduces variance", "Ignores relationships between features"],
+              code: "from sklearn.impute import SimpleImputer\nimp = SimpleImputer(strategy='median')"
+            },
+            {
+              name: "KNN Imputation",
+              priority: "Smarter Fill",
+              description: "Use K-nearest neighbors to impute based on similar rows.",
+              when: "Features are correlated, missingness is not random",
+              pros: ["Uses feature relationships", "Often more accurate"],
+              cons: ["Slower on large datasets", "Sensitive to scaling"],
+              code: "from sklearn.impute import KNNImputer\nimp = KNNImputer(n_neighbors=5)"
+            },
+            {
+              name: "Add a Missing Indicator",
+              priority: "Preserve Signal",
+              description: "Create a binary column indicating whether the original value was missing, then impute. The missingness itself may be informative.",
+              when: "Missingness may carry information (e.g., user chose not to answer)",
+              pros: ["Captures missingness pattern", "Works with any imputation"],
+              cons: ["Adds extra columns"],
+              code: "df['col_missing'] = df['col'].isna().astype(int)"
+            }
+          ],
+          continueOptions: [
+            { label: "Now encode categoricals", next: "encoding" },
+            { label: "Now scale numerics", next: "scaling" }
+          ]
+        },
+        encoding: {
+          question: "How should you encode categorical features?",
+          type: "decision",
+          info: "The right encoding depends on the cardinality (number of unique values) and whether there is an inherent order.",
+          options: [
+            { label: "Low Cardinality (< 10 categories)", next: "encoding_low", desc: "Few unique values: color, gender, payment method", level: "Beginner" },
+            { label: "High Cardinality (10+ categories)", next: "encoding_high", desc: "Many unique values: city, product ID, ZIP code", level: "Intermediate" },
+            { label: "Ordinal (has natural order)", next: "encoding_ordinal", desc: "Ordered categories: low/medium/high, education level, star rating", level: "Beginner" }
+          ]
+        },
+        encoding_low: {
+          question: "Encoding Low-Cardinality Categoricals",
+          type: "technique",
+          goal: "Convert a small number of categories into numeric representation",
+          techniques: [
+            {
+              name: "One-Hot Encoding",
+              priority: "Default Choice",
+              description: "Create one binary column per category. Value is 1 if the row belongs to that category, 0 otherwise.",
+              when: "< 10 categories, no natural order, tree-based or linear models",
+              pros: ["No ordinal assumption", "Works with all models", "Easy to interpret"],
+              cons: ["Expands feature space", "Sparse matrix for many categories"],
+              code: "pd.get_dummies(df, columns=['col'])\n# or\nfrom sklearn.preprocessing import OneHotEncoder"
+            },
+            {
+              name: "Binary Encoding",
+              priority: "Space-Efficient",
+              description: "Encode categories as binary digits. 8 categories need only 3 columns instead of 8.",
+              when: "Moderate cardinality (5\u201320) where one-hot creates too many columns",
+              pros: ["Fewer columns than one-hot", "Preserves information"],
+              cons: ["Harder to interpret", "Introduces implicit ordering"],
+              code: "import category_encoders as ce\nce.BinaryEncoder(cols=['col'])"
+            }
+          ],
+          continueOptions: [
+            { label: "Scale my numeric features", next: "scaling" },
+            { label: "Create new features", next: "feature_creation_tabular" }
+          ]
+        },
+        encoding_high: {
+          question: "Encoding High-Cardinality Categoricals",
+          type: "technique",
+          goal: "Handle features with many unique categories without exploding dimensionality",
+          techniques: [
+            {
+              name: "Target Encoding",
+              priority: "Most Effective",
+              description: "Replace each category with the mean of the target variable for that category. Use with cross-validation to avoid leakage.",
+              when: "High cardinality, supervised task, tree-based models",
+              pros: ["Single column output", "Captures target relationship", "Works with any cardinality"],
+              cons: ["Risk of target leakage", "Needs regularization / CV folds"],
+              code: "import category_encoders as ce\nce.TargetEncoder(cols=['col'])"
+            },
+            {
+              name: "Frequency / Count Encoding",
+              priority: "Simple & Safe",
+              description: "Replace each category with its frequency or count in the dataset.",
+              when: "Popularity of a category matters (e.g., common vs. rare products)",
+              pros: ["No leakage risk", "Simple", "Single column"],
+              cons: ["Loses category identity", "Ties for same-frequency categories"],
+              code: "df['col_freq'] = df['col'].map(df['col'].value_counts())"
+            },
+            {
+              name: "Embedding (Learned)",
+              priority: "Deep Learning",
+              description: "Learn a dense vector representation for each category during model training. Standard approach in neural networks.",
+              when: "Using neural networks, very high cardinality (user IDs, product IDs)",
+              pros: ["Captures complex relationships", "Compact representation"],
+              cons: ["Needs a neural network", "Requires enough data per category"],
+              code: "# PyTorch\nnn.Embedding(num_categories, embedding_dim)"
+            },
+            {
+              name: "Hash Encoding",
+              priority: "Scalable Fallback",
+              description: "Hash categories into a fixed number of columns. Some collisions, but bounded dimensionality.",
+              when: "Extreme cardinality, online learning, or when categories change over time",
+              pros: ["Fixed output size", "Handles unseen categories"],
+              cons: ["Collisions lose information", "Not invertible"],
+              code: "import category_encoders as ce\nce.HashingEncoder(cols=['col'], n_components=8)"
+            }
+          ],
+          continueOptions: [
+            { label: "Scale my numeric features", next: "scaling" },
+            { label: "Create new features", next: "feature_creation_tabular" }
+          ]
+        },
+        encoding_ordinal: {
+          question: "Encoding Ordinal Features",
+          type: "technique",
+          goal: "Preserve the natural ordering of categories in the encoding",
+          techniques: [
+            {
+              name: "Label / Ordinal Encoding",
+              priority: "Standard",
+              description: "Map categories to integers preserving order: low=0, medium=1, high=2.",
+              when: "Categories have a clear, meaningful order",
+              pros: ["Preserves order", "Single column", "Works with tree models natively"],
+              cons: ["Implies equal spacing (may not be true)", "Linear models may misinterpret magnitude"],
+              code: "from sklearn.preprocessing import OrdinalEncoder\nOrdinalEncoder(categories=[['low','medium','high']])"
+            },
+            {
+              name: "Custom Mapping",
+              priority: "Most Control",
+              description: "Manually assign numeric values that reflect the actual distances between categories.",
+              when: "You know the real-world spacing (e.g., education years, severity scores)",
+              pros: ["Most accurate encoding", "Domain knowledge captured"],
+              cons: ["Requires manual effort"],
+              code: "mapping = {'elementary': 6, 'high_school': 12,\n           'bachelors': 16, 'masters': 18, 'phd': 22}\ndf['edu_years'] = df['education'].map(mapping)"
+            }
+          ],
+          continueOptions: [
+            { label: "Scale my numeric features", next: "scaling" },
+            { label: "Create new features", next: "feature_creation_tabular" }
+          ]
+        },
+        scaling: {
+          question: "Scaling & Transforming Numeric Features",
+          type: "technique",
+          goal: "Put numeric features on comparable scales and handle skewed distributions",
+          info: "Tree-based models (Random Forest, XGBoost) generally do not need scaling. Linear models, SVMs, KNN, and neural networks do.",
+          techniques: [
+            {
+              name: "StandardScaler (Z-score)",
+              priority: "Default",
+              description: "Subtract mean, divide by standard deviation. Result: mean=0, std=1.",
+              when: "Data is roughly Gaussian, using linear models / SVMs / neural nets",
+              pros: ["Standard approach", "Preserves outlier information"],
+              cons: ["Sensitive to outliers"],
+              code: "from sklearn.preprocessing import StandardScaler"
+            },
+            {
+              name: "MinMaxScaler",
+              priority: "Bounded Range",
+              description: "Scale to a fixed range, typically [0, 1].",
+              when: "Need bounded values (e.g., image pixels, neural network inputs)",
+              pros: ["Bounded output", "Preserves relationships"],
+              cons: ["Very sensitive to outliers"],
+              code: "from sklearn.preprocessing import MinMaxScaler"
+            },
+            {
+              name: "RobustScaler",
+              priority: "Outlier-Resistant",
+              description: "Uses median and IQR instead of mean/std. Robust to outliers.",
+              when: "Data has significant outliers you want to keep",
+              pros: ["Handles outliers well", "Median-centered"],
+              cons: ["Less common, harder to interpret"],
+              code: "from sklearn.preprocessing import RobustScaler"
+            },
+            {
+              name: "Log / Power Transform",
+              priority: "Fix Skewness",
+              description: "Apply log(1+x), Box-Cox, or Yeo-Johnson to make skewed distributions more Gaussian.",
+              when: "Right-skewed features (income, prices, counts)",
+              pros: ["Reduces skew", "Improves linear model performance"],
+              cons: ["Log requires positive values", "Box-Cox requires strictly positive"],
+              code: "from sklearn.preprocessing import PowerTransformer\nPowerTransformer(method='yeo-johnson')\n# or simply: np.log1p(df['col'])"
+            }
+          ],
+          continueOptions: [
+            { label: "Detect & handle outliers", next: "outlier_detection" },
+            { label: "Create new features", next: "feature_creation_tabular" },
+            { label: "Select the best features", next: "feature_selection" }
+          ]
+        },
+
+        // ========== OUTLIER DETECTION ==========
+        outlier_detection: {
+          question: "How do you want to detect outliers?",
+          type: "decision",
+          info: "Outliers can distort model training, inflate error metrics, and bias learned parameters. Detection should happen after basic cleaning but before scaling and feature creation. Whether to remove, clip, or flag outliers depends on your domain.",
+          options: [
+            { label: "Statistical Methods", next: "outlier_statistical", desc: "Z-score, IQR / Tukey\u2019s fences, Modified Z-score, Hampel filter \u2014 fast, interpretable, univariate", level: "Beginner" },
+            { label: "Model-Based Methods", next: "outlier_model", desc: "Isolation Forest, One-Class SVM, LOF, KNN \u2014 capture multivariate and non-linear patterns", level: "Advanced" },
+            { label: "What to do after detection", next: "outlier_treatment", desc: "Remove, clip, transform, or flag \u2014 choosing the right treatment strategy", level: "Beginner" }
+          ]
+        },
+        outlier_statistical: {
+          question: "Statistical Outlier Detection",
+          type: "technique",
+          goal: "Identify anomalous data points using distributional assumptions \u2014 fast, interpretable, and univariate",
+          techniques: [
+            {
+              name: "IQR / Tukey\u2019s Fences",
+              priority: "Robust Default",
+              description: "Compute Q1 and Q3 (25th / 75th percentiles). Any point below Q1 \u2212 1.5\u00d7IQR or above Q3 + 1.5\u00d7IQR is an outlier. Use 3\u00d7IQR for extreme outliers only.",
+              when: "Skewed or non-Gaussian data, no distributional assumption wanted",
+              pros: ["No normality assumption", "Robust to skew", "Easy to explain"],
+              cons: ["Univariate only", "Fixed multiplier may be too aggressive or lenient"],
+              code: "Q1 = df['col'].quantile(0.25)\nQ3 = df['col'].quantile(0.75)\nIQR = Q3 - Q1\nlower, upper = Q1 - 1.5 * IQR, Q3 + 1.5 * IQR\noutliers = (df['col'] < lower) | (df['col'] > upper)"
+            },
+            {
+              name: "Z-Score",
+              priority: "Classic Parametric",
+              description: "Measures how many standard deviations a point is from the mean. Typically flag |z| > 3.",
+              when: "Data is roughly Gaussian, quick screening",
+              pros: ["Simple", "Familiar", "Fast"],
+              cons: ["Assumes normality", "Mean and std are themselves affected by outliers"],
+              code: "from scipy import stats\nz = np.abs(stats.zscore(df['col']))\noutliers = z > 3"
+            },
+            {
+              name: "Modified Z-Score (MAD-based)",
+              priority: "Robust Z-Score",
+              description: "Replaces mean with median and std with MAD (Median Absolute Deviation). Much more robust than standard Z-score. Flag |modified_z| > 3.5 (Iglewicz & Hoaglin threshold).",
+              when: "Want Z-score simplicity but data has outliers that distort mean/std",
+              pros: ["Robust to existing outliers", "Better than Z-score in practice"],
+              cons: ["Univariate", "Less familiar to some teams"],
+              code: "median = df['col'].median()\nmad = np.median(np.abs(df['col'] - median))\nmodified_z = 0.6745 * (df['col'] - median) / mad\noutliers = np.abs(modified_z) > 3.5"
+            },
+            {
+              name: "Hampel Filter",
+              priority: "Time-Aware Robust",
+              description: "Sliding-window version of the MAD-based approach. For each point, compute the local median and MAD within a window. Flags points that deviate beyond a threshold from the local median.",
+              when: "Time-series or sequential data where local context matters",
+              pros: ["Adapts to local level shifts", "Robust to non-stationarity"],
+              cons: ["Window size is a hyperparameter", "Slower than global methods"],
+              code: "def hampel_filter(series, window=5, threshold=3):\n    rolling_med = series.rolling(window, center=True).median()\n    rolling_mad = (series - rolling_med).abs().rolling(window, center=True).median()\n    modified_z = 0.6745 * (series - rolling_med) / rolling_mad\n    return np.abs(modified_z) > threshold\noutliers = hampel_filter(df['col'])"
+            },
+            {
+              name: "Percentile Capping",
+              priority: "Simplest Approach",
+              description: "Flag or clip anything outside the 1st and 99th percentiles (or 5th / 95th). No statistical model needed.",
+              when: "Quick-and-dirty screening, large datasets, no strong distributional knowledge",
+              pros: ["Dead simple", "No assumptions"],
+              cons: ["Arbitrary thresholds", "Always flags the same fraction"],
+              code: "lower = df['col'].quantile(0.01)\nupper = df['col'].quantile(0.99)\noutliers = (df['col'] < lower) | (df['col'] > upper)"
+            }
+          ],
+          continueOptions: [
+            { label: "Try model-based methods", next: "outlier_model" },
+            { label: "How to treat detected outliers", next: "outlier_treatment" }
+          ]
+        },
+        outlier_model: {
+          question: "Model-Based Outlier Detection",
+          type: "technique",
+          goal: "Detect outliers using algorithms that capture multivariate structure and non-linear patterns",
+          info: "These methods work across multiple features simultaneously, catching outliers that look normal on any single feature but are unusual in combination.",
+          techniques: [
+            {
+              name: "Isolation Forest",
+              priority: "Go-To Default",
+              description: "Builds random trees that isolate points. Outliers are easier to isolate (shorter path length). No distance computation, scales well.",
+              when: "Default choice for multivariate outlier detection, medium to large datasets",
+              pros: ["Fast (O(n log n))", "Handles high dimensions", "No distance metric needed", "Works well in practice"],
+              cons: ["contamination parameter needs tuning", "Less interpretable than statistical"],
+              code: "from sklearn.ensemble import IsolationForest\niso = IsolationForest(contamination=0.05, random_state=42)\ndf['outlier'] = iso.fit_predict(df[features])  # -1 = outlier"
+            },
+            {
+              name: "Local Outlier Factor (LOF)",
+              priority: "Density-Based",
+              description: "Compares the local density of a point to its neighbors. Points in sparser regions than their neighbors are outliers.",
+              when: "Clusters of varying density, want to detect local anomalies",
+              pros: ["Captures local structure", "Detects outliers within clusters"],
+              cons: ["Sensitive to n_neighbors", "Slower than Isolation Forest on large data"],
+              code: "from sklearn.neighbors import LocalOutlierFactor\nlof = LocalOutlierFactor(n_neighbors=20, contamination=0.05)\ndf['outlier'] = lof.fit_predict(df[features])  # -1 = outlier"
+            },
+            {
+              name: "One-Class SVM (OCSVM)",
+              priority: "Boundary-Based",
+              description: "Learns a decision boundary around the \u201cnormal\u201d data in a high-dimensional kernel space. Points outside the boundary are outliers.",
+              when: "Small to medium datasets, want a clear normal/abnormal boundary",
+              pros: ["Powerful with RBF kernel", "Theoretically well-founded"],
+              cons: ["Slow on large datasets (O(n\u00b2\u2013n\u00b3))", "Sensitive to kernel and nu parameters", "Needs scaling"],
+              code: "from sklearn.svm import OneClassSVM\nocsvm = OneClassSVM(kernel='rbf', nu=0.05)\ndf['outlier'] = ocsvm.fit_predict(df[features])  # -1 = outlier"
+            },
+            {
+              name: "KNN-Based Detection",
+              priority: "Distance-Based",
+              description: "Compute the distance to the k-th nearest neighbor for each point. Points with unusually large distances are outliers.",
+              when: "Intuitive distance-based reasoning, moderate dataset size",
+              pros: ["Simple concept", "Works well in low-to-moderate dimensions"],
+              cons: ["Curse of dimensionality", "Requires scaling", "Slow for large n"],
+              code: "from sklearn.neighbors import NearestNeighbors\nnn = NearestNeighbors(n_neighbors=5)\nnn.fit(df[features])\ndistances, _ = nn.kneighbors(df[features])\ndf['knn_dist'] = distances[:, -1]  # distance to 5th neighbor\nthreshold = df['knn_dist'].quantile(0.95)\ndf['outlier'] = df['knn_dist'] > threshold"
+            },
+            {
+              name: "DBSCAN (as outlier detector)",
+              priority: "Cluster-Based",
+              description: "Density-based clustering where points not assigned to any cluster (label = -1) are treated as outliers.",
+              when: "Want clustering and outlier detection simultaneously",
+              pros: ["Finds clusters + outliers in one pass", "No contamination parameter"],
+              cons: ["Very sensitive to eps and min_samples", "Not designed primarily for outlier detection"],
+              code: "from sklearn.cluster import DBSCAN\ndb = DBSCAN(eps=0.5, min_samples=5)\ndf['cluster'] = db.fit_predict(df[features])\ndf['outlier'] = (df['cluster'] == -1).astype(int)"
+            }
+          ],
+          continueOptions: [
+            { label: "How to treat detected outliers", next: "outlier_treatment" },
+            { label: "Compare with statistical methods", next: "outlier_statistical" }
+          ]
+        },
+        outlier_treatment: {
+          question: "Outlier Treatment Strategies",
+          type: "technique",
+          goal: "Choose what to do with outliers once detected \u2014 the treatment matters as much as the detection",
+          info: "There is no single right answer. The best treatment depends on why the outlier exists: data error, rare-but-real event, or domain-specific edge case.",
+          techniques: [
+            {
+              name: "Remove (Drop Rows)",
+              priority: "When It\u2019s Noise",
+              description: "Delete outlier rows entirely. Only appropriate when outliers are errors or irrelevant to the task.",
+              when: "Data entry errors, sensor glitches, corrupted records",
+              pros: ["Clean dataset", "Simple"],
+              cons: ["Loses data", "May remove real rare events you should learn from"],
+              code: "df_clean = df[~outlier_mask]"
+            },
+            {
+              name: "Clip / Winsorize",
+              priority: "Most Common",
+              description: "Cap outlier values at a threshold (e.g., 1st/99th percentile). Keeps the row but limits extreme influence.",
+              when: "Outliers are real but you want to reduce their leverage on the model",
+              pros: ["Preserves data", "Reduces influence", "Standard approach for many competitions"],
+              cons: ["Distorts the true value", "Threshold is subjective"],
+              code: "lower = df['col'].quantile(0.01)\nupper = df['col'].quantile(0.99)\ndf['col_clipped'] = df['col'].clip(lower, upper)"
+            },
+            {
+              name: "Transform (Log, Sqrt)",
+              priority: "Reduce Impact",
+              description: "Apply a compressing transform so extreme values are pulled closer to the bulk. Doesn\u2019t remove outliers but reduces their effect.",
+              when: "Right-skewed data where outliers are real (income, prices, counts)",
+              pros: ["No data loss", "Also helps with normality for linear models"],
+              cons: ["Changes scale", "Doesn\u2019t work for negative values (log)"],
+              code: "df['col_log'] = np.log1p(df['col'])"
+            },
+            {
+              name: "Flag as Feature",
+              priority: "Preserve Signal",
+              description: "Create a binary indicator column: is_outlier = 1. Keep the original value and let the model learn whether outlier status matters.",
+              when: "Outlier status itself may be predictive (fraud, anomaly, VIP customer)",
+              pros: ["No data loss", "Model can learn from outlier status", "Works with any detection method"],
+              cons: ["Adds features", "Model must be expressive enough to use the flag"],
+              code: "df['is_outlier'] = outlier_mask.astype(int)"
+            }
+          ],
+          continueOptions: [
+            { label: "Scale my numeric features", next: "scaling" },
+            { label: "Create new features", next: "feature_creation_tabular" },
+            { label: "Select the best features", next: "feature_selection" }
+          ]
+        },
+        feature_creation_tabular: {
+          question: "What kind of new features do you want to create?",
+          type: "decision",
+          info: "Creating new features from existing ones is often the single biggest lever for improving model performance on tabular data.",
+          options: [
+            { label: "Interaction & Polynomial", next: "interaction_features", desc: "Multiply features together, add squared terms", level: "Intermediate" },
+            { label: "Binning & Discretization", next: "binning", desc: "Convert continuous values into buckets or categories", level: "Beginner" },
+            { label: "Aggregation & Group Stats", next: "aggregation", desc: "Per-group means, counts, ratios from related records", level: "Intermediate" },
+            { label: "Domain-Specific Features", next: "domain_features", desc: "Date parts, geospatial, text statistics from mixed data", level: "Intermediate" }
+          ]
+        },
+        interaction_features: {
+          question: "Interaction & Polynomial Features",
+          type: "technique",
+          goal: "Capture non-linear relationships and feature combinations",
+          techniques: [
+            {
+              name: "Pairwise Interactions",
+              priority: "High Value",
+              description: "Multiply two features together: A * B. Captures joint effects that neither feature represents alone.",
+              when: "You suspect features have combined effects (e.g., price * quantity = revenue)",
+              pros: ["Can reveal hidden patterns", "Simple to compute"],
+              cons: ["Feature explosion with many columns", "Need domain intuition"],
+              code: "df['price_x_qty'] = df['price'] * df['quantity']"
+            },
+            {
+              name: "Polynomial Features",
+              priority: "Systematic",
+              description: "Generate all polynomial combinations up to a given degree (x\u00b2, x*y, y\u00b2, etc.).",
+              when: "Linear models need to capture curves, low number of features",
+              pros: ["Automated", "Captures non-linearity for linear models"],
+              cons: ["Explosive growth (d features, degree n = huge)", "Overfitting risk"],
+              code: "from sklearn.preprocessing import PolynomialFeatures\nPolynomialFeatures(degree=2, interaction_only=False)"
+            },
+            {
+              name: "Ratios & Differences",
+              priority: "Domain-Driven",
+              description: "Create ratios (A/B) or differences (A\u2212B) that have business meaning.",
+              when: "Relative values matter more than absolutes (e.g., debt-to-income ratio)",
+              pros: ["Highly interpretable", "Often very predictive"],
+              cons: ["Division by zero handling needed"],
+              code: "df['debt_to_income'] = df['debt'] / df['income'].clip(lower=1)"
+            }
+          ],
+          continueOptions: [
+            { label: "Select the best features", next: "feature_selection" },
+            { label: "Explore binning", next: "binning" }
+          ]
+        },
+        binning: {
+          question: "Binning & Discretization",
+          type: "technique",
+          goal: "Convert continuous values into discrete buckets to reduce noise or capture non-linear effects",
+          techniques: [
+            {
+              name: "Equal-Width Binning",
+              priority: "Simplest",
+              description: "Divide the range into N equal-sized bins.",
+              when: "Quick discretization, uniform-ish distribution",
+              pros: ["Simple", "Predictable bin edges"],
+              cons: ["Unbalanced bin counts if data is skewed"],
+              code: "pd.cut(df['age'], bins=5)"
+            },
+            {
+              name: "Quantile Binning",
+              priority: "Balanced",
+              description: "Each bin contains roughly the same number of samples.",
+              when: "Skewed data, want balanced bins",
+              pros: ["Equal representation per bin", "Handles skew"],
+              cons: ["Bin edges may be unintuitive"],
+              code: "pd.qcut(df['income'], q=4, labels=['Q1','Q2','Q3','Q4'])"
+            },
+            {
+              name: "Domain-Based Binning",
+              priority: "Most Meaningful",
+              description: "Use business knowledge to define bins (e.g., age groups: 0\u201318, 19\u201335, 36\u201355, 56+).",
+              when: "Domain-specific thresholds matter",
+              pros: ["Interpretable", "Captures real-world segments"],
+              cons: ["Requires domain expertise"],
+              code: "bins = [0, 18, 35, 55, 100]\nlabels = ['youth','young_adult','middle','senior']\ndf['age_group'] = pd.cut(df['age'], bins=bins, labels=labels)"
+            }
+          ],
+          continueOptions: [
+            { label: "Select the best features", next: "feature_selection" },
+            { label: "Explore aggregation features", next: "aggregation" }
+          ]
+        },
+        aggregation: {
+          question: "Aggregation & Group Statistics",
+          type: "technique",
+          goal: "Create features by aggregating related records (e.g., per customer, per product, per time window)",
+          techniques: [
+            {
+              name: "Group-By Aggregations",
+              priority: "Most Common",
+              description: "Compute statistics (mean, sum, count, min, max, std) per group and merge back to the original table.",
+              when: "Records belong to groups (customers, stores, sessions)",
+              pros: ["Very powerful", "Captures group behavior"],
+              cons: ["Can create leakage if not careful with time"],
+              code: "agg = df.groupby('customer_id')['amount'].agg(\n    ['mean','sum','count','std']\n).add_prefix('cust_amt_')\ndf = df.merge(agg, on='customer_id')"
+            },
+            {
+              name: "Lag Features (for grouped records)",
+              priority: "Sequential Context",
+              description: "Previous value for the same entity: last purchase amount, previous visit count.",
+              when: "History per entity matters (not strictly time-series, but ordered events)",
+              pros: ["Captures trends", "Per-entity context"],
+              cons: ["Needs careful time-aware split to avoid leakage"],
+              code: "df['prev_amount'] = df.groupby('customer_id')['amount'].shift(1)"
+            },
+            {
+              name: "Ratio to Group",
+              priority: "Relative Standing",
+              description: "How does this record compare to its group? e.g., this sale / avg sale for this store.",
+              when: "Relative performance matters more than absolute values",
+              pros: ["Normalizes across groups", "Highlights anomalies"],
+              cons: ["Small groups can be noisy"],
+              code: "group_mean = df.groupby('store')['sales'].transform('mean')\ndf['sales_vs_store'] = df['sales'] / group_mean"
+            }
+          ],
+          continueOptions: [
+            { label: "Select the best features", next: "feature_selection" },
+            { label: "Explore domain-specific features", next: "domain_features" }
+          ]
+        },
+        domain_features: {
+          question: "Domain-Specific Feature Engineering",
+          type: "technique",
+          goal: "Extract features from specialized data types embedded in tabular data",
+          techniques: [
+            {
+              name: "Date/Time Features",
+              priority: "Very Common",
+              description: "Extract components: year, month, day of week, hour, is_weekend, days_since_event, is_holiday.",
+              when: "Datetime columns are present",
+              pros: ["Captures cyclical and seasonal patterns", "Easy to create"],
+              cons: ["May need cyclical encoding (sin/cos) for linear models"],
+              code: "df['dow'] = df['date'].dt.dayofweek\ndf['month'] = df['date'].dt.month\ndf['is_weekend'] = df['dow'].isin([5,6]).astype(int)"
+            },
+            {
+              name: "Geospatial Features",
+              priority: "Location Data",
+              description: "Haversine distance to a landmark, cluster assignment, density, or geohash.",
+              when: "Lat/lon coordinates are available",
+              pros: ["Captures spatial relationships"],
+              cons: ["Needs domain context for meaningful landmarks"],
+              code: "from sklearn.cluster import KMeans\ncoords = df[['lat','lon']]\ndf['geo_cluster'] = KMeans(n_clusters=10).fit_predict(coords)"
+            },
+            {
+              name: "Text Statistics (from mixed data)",
+              priority: "Quick Text Signal",
+              description: "When a tabular dataset has a text column: extract length, word count, sentiment, presence of keywords.",
+              when: "A text field exists alongside structured features (descriptions, notes, titles)",
+              pros: ["Adds signal without full NLP pipeline", "Fast"],
+              cons: ["Surface-level, misses semantics"],
+              code: "df['desc_len'] = df['description'].str.len()\ndf['desc_words'] = df['description'].str.split().str.len()\ndf['has_urgent'] = df['description'].str.contains('urgent').astype(int)"
+            }
+          ],
+          continueOptions: [
+            { label: "Select the best features", next: "feature_selection" }
+          ]
+        },
+
+        // ========== FEATURE SELECTION ==========
+        feature_selection: {
+          question: "How do you want to select the best features?",
+          type: "decision",
+          info: "After creating features, remove noisy or redundant ones to improve generalization, speed, and interpretability.",
+          options: [
+            { label: "Quick Filtering (Statistics)", next: "filter_methods", desc: "Variance threshold, correlation, mutual information \u2014 fast, model-free", level: "Beginner" },
+            { label: "Model-Based (Embedded)", next: "embedded_methods", desc: "Use model importance scores: tree importance, L1 regularization", level: "Intermediate" },
+            { label: "Wrapper Methods", next: "wrapper_methods", desc: "Train models with different subsets: RFE, forward/backward selection", level: "Advanced" }
+          ]
+        },
+        filter_methods: {
+          question: "Filter-Based Feature Selection",
+          type: "technique",
+          goal: "Remove features using statistical tests \u2014 fast, no model training needed",
+          techniques: [
+            {
+              name: "Variance Threshold",
+              priority: "First Pass",
+              description: "Remove features with near-zero variance \u2014 they carry almost no information.",
+              when: "Initial cleanup, removing constant or near-constant columns",
+              pros: ["Very fast", "No target needed (unsupervised)"],
+              cons: ["Only catches trivial cases"],
+              code: "from sklearn.feature_selection import VarianceThreshold\nVarianceThreshold(threshold=0.01)"
+            },
+            {
+              name: "Correlation Filter",
+              priority: "Remove Redundancy",
+              description: "Drop one of two features that are highly correlated (> 0.9). They carry the same signal.",
+              when: "Many numeric features, want to reduce multicollinearity",
+              pros: ["Reduces redundancy", "Improves interpretability"],
+              cons: ["Pairwise only, misses group effects"],
+              code: "corr = df.corr().abs()\nupper = corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool))\nto_drop = [c for c in upper.columns if any(upper[c] > 0.9)]"
+            },
+            {
+              name: "Mutual Information",
+              priority: "Non-Linear Signal",
+              description: "Measures how much knowing a feature reduces uncertainty about the target. Works for both linear and non-linear relationships.",
+              when: "Want a model-free measure of feature relevance that captures non-linear effects",
+              pros: ["Captures non-linear dependencies", "Works for classification and regression"],
+              cons: ["Slower than correlation", "Needs sufficient samples"],
+              code: "from sklearn.feature_selection import mutual_info_classif\nmi = mutual_info_classif(X, y)\nmi_series = pd.Series(mi, index=X.columns).sort_values(ascending=False)"
+            }
+          ],
+          continueOptions: [
+            { label: "Try model-based selection too", next: "embedded_methods" }
+          ]
+        },
+        embedded_methods: {
+          question: "Embedded / Model-Based Feature Selection",
+          type: "technique",
+          goal: "Use a trained model's internal importance to select features",
+          techniques: [
+            {
+              name: "Tree Feature Importance",
+              priority: "Most Popular",
+              description: "Random Forest or XGBoost report importance based on how much each feature reduces impurity or gain.",
+              when: "Using tree-based models (or even just for feature screening)",
+              pros: ["Handles interactions", "Captures non-linear importance", "Fast"],
+              cons: ["Biased toward high-cardinality features", "Importance can be unstable"],
+              code: "from sklearn.ensemble import RandomForestClassifier\nrf = RandomForestClassifier(n_estimators=100).fit(X, y)\nimportances = pd.Series(rf.feature_importances_, index=X.columns)"
+            },
+            {
+              name: "Permutation Importance",
+              priority: "More Reliable",
+              description: "Shuffle each feature one at a time and measure the drop in model score. Works with any model.",
+              when: "Want a model-agnostic, less biased importance measure",
+              pros: ["Model-agnostic", "Not biased by cardinality", "Reflects actual performance impact"],
+              cons: ["Slower (retests model per feature)", "Correlated features share importance"],
+              code: "from sklearn.inspection import permutation_importance\nresult = permutation_importance(model, X_val, y_val, n_repeats=10)"
+            },
+            {
+              name: "L1 (Lasso) Regularization",
+              priority: "Built-In Selection",
+              description: "L1 penalty drives unimportant feature weights to exactly zero, effectively selecting features during training.",
+              when: "Linear models, want simultaneous training and selection",
+              pros: ["Automatic", "Selects during training"],
+              cons: ["Only for linear/logistic regression", "Sensitive to feature scale"],
+              code: "from sklearn.linear_model import LassoCV\nlasso = LassoCV(cv=5).fit(X, y)\nselected = X.columns[lasso.coef_ != 0]"
+            }
+          ],
+          continueOptions: [
+            { label: "Try wrapper methods for best subset", next: "wrapper_methods" },
+            { label: "Go back to overview", next: "overview" }
+          ]
+        },
+        wrapper_methods: {
+          question: "Wrapper Feature Selection Methods",
+          type: "technique",
+          goal: "Search for the best feature subset by training models with different combinations",
+          info: "Wrappers are the most thorough but slowest selection approach. Use them when you have time and want the best subset.",
+          techniques: [
+            {
+              name: "Recursive Feature Elimination (RFE)",
+              priority: "Most Used Wrapper",
+              description: "Repeatedly train a model, remove the least important feature, repeat until desired count.",
+              when: "Have a clear feature importance signal, moderate feature count (< 100)",
+              pros: ["Systematic", "Uses model feedback"],
+              cons: ["Slow for many features", "Greedy (may miss interactions)"],
+              code: "from sklearn.feature_selection import RFECV\nfrom sklearn.ensemble import RandomForestClassifier\nrfe = RFECV(RandomForestClassifier(), step=1, cv=5)\nrfe.fit(X, y)\nselected = X.columns[rfe.support_]"
+            },
+            {
+              name: "Forward Selection",
+              priority: "Start Empty",
+              description: "Start with no features. Add the one that improves score the most. Repeat.",
+              when: "Small feature space, want minimal feature set",
+              pros: ["Finds minimal set", "Greedy but effective"],
+              cons: ["Very slow for many features", "Cannot remove once added"],
+              code: "from mlxtend.feature_selection import SequentialFeatureSelector\nsfs = SequentialFeatureSelector(model, k_features='best',\n    forward=True, scoring='accuracy', cv=5)"
+            },
+            {
+              name: "Backward Elimination",
+              priority: "Start Full",
+              description: "Start with all features. Remove the least important one. Repeat.",
+              when: "Want to prune from a full set, moderate number of features",
+              pros: ["Considers all features initially", "Can capture interactions early"],
+              cons: ["Slow", "May over-remove if features are correlated"],
+              code: "from mlxtend.feature_selection import SequentialFeatureSelector\nsfs = SequentialFeatureSelector(model, k_features='best',\n    forward=False, scoring='accuracy', cv=5)"
+            }
+          ],
+          continueOptions: [
+            { label: "See the full overview", next: "overview" }
+          ]
+        },
+
+        // ========== TEXT BRANCH ==========
+        text_start: {
+          question: "What is your NLP feature engineering goal?",
+          type: "decision",
+          info: "Text features range from simple statistics to learned embeddings. The right approach depends on your model and data volume.",
+          options: [
+            { label: "Tokenization Strategies", next: "text_tokenization", desc: "BPE, WordPiece, SentencePiece, Unigram \u2014 how text gets split into tokens for models", level: "Intermediate" },
+            { label: "Classical / Bag-of-Words", next: "text_classical", desc: "TF-IDF, count vectors, n-grams \u2014 great for traditional ML models", level: "Beginner" },
+            { label: "Embeddings / Representations", next: "text_embeddings", desc: "Word2Vec, sentence transformers, LLM embeddings \u2014 capture semantics", level: "Intermediate" },
+            { label: "Text Cleanup & Preprocessing", next: "text_preprocessing", desc: "Lowercasing, stopwords, stemming, lemmatization", level: "Beginner" }
+          ]
+        },
+        text_tokenization: {
+          question: "Tokenization Strategies",
+          type: "technique",
+          goal: "Split raw text into tokens \u2014 the atomic units your model actually sees",
+          info: "Tokenization is the very first step in any NLP pipeline. The choice of tokenizer determines your vocabulary size, handling of unknown words, and multilingual capability. Modern LLMs all use subword tokenizers.",
+          techniques: [
+            {
+              name: "BPE (Byte-Pair Encoding)",
+              priority: "Most Widely Used",
+              description: "Starts with individual characters, iteratively merges the most frequent adjacent pair into a new token. Builds a vocabulary bottom-up. Used by GPT-2, GPT-3, GPT-4, LLaMA, and many others.",
+              when: "Default for most modern LLMs and transformer models",
+              pros: ["Handles any word (no OOV)", "Balances vocabulary size and token length", "Language-agnostic"],
+              cons: ["Greedy merges may not be globally optimal", "Tokenization is deterministic (one best split)"],
+              code: "from tokenizers import Tokenizer, models, trainers\ntokenizer = Tokenizer(models.BPE())\ntrainer = trainers.BpeTrainer(vocab_size=32000, special_tokens=['[PAD]','[UNK]'])\ntokenizer.train(files=['corpus.txt'], trainer=trainer)"
+            },
+            {
+              name: "WordPiece",
+              priority: "BERT Family",
+              description: "Similar to BPE but uses a likelihood-based criterion: merges the pair that maximizes the language model likelihood of the training data. Subword tokens are prefixed with ## when they continue a word.",
+              when: "BERT, DistilBERT, Electra, and related models",
+              pros: ["Better merge decisions than greedy BPE", "Standard in BERT ecosystem"],
+              cons: ["Slightly more complex training", "Tied to BERT conventions"],
+              code: "from transformers import BertTokenizer\ntokenizer = BertTokenizer.from_pretrained('bert-base-uncased')\ntokens = tokenizer.tokenize('tokenization is important')\n# ['token', '##ization', 'is', 'important']"
+            },
+            {
+              name: "Unigram (SentencePiece)",
+              priority: "Probabilistic",
+              description: "Starts with a large vocabulary and iteratively removes tokens that least reduce the overall likelihood. Each input can have multiple valid segmentations; picks the most probable. Used by T5, ALBERT, XLNet.",
+              when: "Multilingual models, want probabilistic tokenization, SentencePiece ecosystem",
+              pros: ["Probabilistic \u2014 can sample different segmentations (regularization)", "Often better for multilingual", "Handles raw text (no pre-tokenization needed)"],
+              cons: ["More complex training algorithm", "Slightly slower"],
+              code: "import sentencepiece as spm\nspm.SentencePieceTrainer.train(\n    input='corpus.txt', model_prefix='sp',\n    vocab_size=32000, model_type='unigram'\n)\nsp = spm.SentencePieceProcessor(model_file='sp.model')\ntokens = sp.encode('Hello world', out_type=str)"
+            },
+            {
+              name: "Byte-Level BPE",
+              priority: "No Pre-Tokenization",
+              description: "Operates on raw bytes (256 base tokens) instead of Unicode characters. Guarantees any text can be tokenized without UNK tokens. Used by GPT-2, RoBERTa, GPT-4.",
+              when: "Need to handle any input (code, special characters, multilingual) without UNK",
+              pros: ["Zero UNK tokens", "Works on any language or encoding", "Compact base vocabulary"],
+              cons: ["Common words may use more tokens", "Less human-readable token splits"],
+              code: "from transformers import GPT2Tokenizer\ntokenizer = GPT2Tokenizer.from_pretrained('gpt2')\ntokens = tokenizer.tokenize('Hello world!')  # byte-level BPE"
+            },
+            {
+              name: "Word-Level Tokenization",
+              priority: "Classical NLP",
+              description: "Simple whitespace or regex-based splitting into whole words. Straightforward but creates large vocabularies and cannot handle unknown words.",
+              when: "Traditional ML pipelines (TF-IDF, Count Vectorizer), when vocabulary is controlled",
+              pros: ["Simple", "Interpretable", "Fast"],
+              cons: ["Large vocabulary", "OOV (out-of-vocabulary) problem", "Cannot handle typos or new words"],
+              code: "tokens = text.split()  # simplest\n# or with regex for punctuation:\nimport re\ntokens = re.findall(r'\\b\\w+\\b', text.lower())"
+            }
+          ],
+          additionalInfo: {
+            title: "Choosing a Tokenizer:",
+            points: [
+              "Using a pretrained model? Use its tokenizer \u2014 never mix tokenizers across models",
+              "Training from scratch? BPE (32K\u201350K vocab) is the safe default",
+              "Multilingual? SentencePiece Unigram handles scripts without spaces",
+              "Code or mixed content? Byte-level BPE avoids UNK tokens entirely",
+              "Classical ML (TF-IDF, CountVec)? Word-level is fine"
+            ]
+          },
+          continueOptions: [
+            { label: "Convert to TF-IDF / Bag-of-Words", next: "text_classical" },
+            { label: "Convert to embeddings", next: "text_embeddings" },
+            { label: "Text cleanup & preprocessing", next: "text_preprocessing" }
+          ]
+        },
+        text_classical: {
+          question: "Classical Text Representations",
+          type: "technique",
+          goal: "Convert text into numeric vectors for traditional ML models",
+          techniques: [
+            {
+              name: "TF-IDF",
+              priority: "Best Classical Default",
+              description: "Term Frequency-Inverse Document Frequency. Weights words by how important they are to a document relative to the corpus.",
+              when: "Classification, search, traditional ML models, moderate dataset",
+              pros: ["Captures word importance", "Sparse and efficient", "Interpretable"],
+              cons: ["No word order", "No semantics"],
+              code: "from sklearn.feature_extraction.text import TfidfVectorizer\ntfidf = TfidfVectorizer(max_features=10000, ngram_range=(1,2))"
+            },
+            {
+              name: "Count Vectorizer",
+              priority: "Simplest",
+              description: "Count how many times each word appears in a document.",
+              when: "Baseline, topic modeling input (LDA), simple pipelines",
+              pros: ["Simple", "Fast"],
+              cons: ["Common words dominate", "No importance weighting"],
+              code: "from sklearn.feature_extraction.text import CountVectorizer\ncv = CountVectorizer(max_features=5000)"
+            },
+            {
+              name: "N-gram Features",
+              priority: "Context Window",
+              description: "Use sequences of N consecutive words (bigrams, trigrams) in addition to single words.",
+              when: "Word order matters for meaning: 'not good' vs 'good'",
+              pros: ["Captures local word order", "Improves on bag-of-words"],
+              cons: ["Feature explosion with high N", "Sparse"],
+              code: "TfidfVectorizer(ngram_range=(1, 3))  # unigrams + bigrams + trigrams"
+            }
+          ],
+          continueOptions: [
+            { label: "Try embeddings for richer features", next: "text_embeddings" },
+            { label: "Go to feature selection", next: "feature_selection" }
+          ]
+        },
+        text_embeddings: {
+          question: "Text Embedding Approaches",
+          type: "technique",
+          goal: "Convert text into dense vectors that capture semantic meaning",
+          techniques: [
+            {
+              name: "Sentence Transformers",
+              priority: "Best General-Purpose",
+              description: "Pre-trained models that convert entire sentences into fixed-size vectors. Great for similarity, classification, clustering.",
+              when: "Need semantic understanding, moderate to large data",
+              pros: ["Captures meaning and context", "Fixed-size output", "Pre-trained"],
+              cons: ["Requires GPU for speed", "Less interpretable"],
+              code: "from sentence_transformers import SentenceTransformer\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\nembeddings = model.encode(df['text'].tolist())"
+            },
+            {
+              name: "Word2Vec / GloVe (Averaged)",
+              priority: "Lightweight Classic",
+              description: "Average pre-trained word vectors across the document. Simple but effective baseline.",
+              when: "Limited compute, need fast embeddings",
+              pros: ["Fast", "Small models", "No GPU needed"],
+              cons: ["Loses word order", "No context sensitivity"],
+              code: "import gensim.downloader as api\nw2v = api.load('word2vec-google-news-300')\ndef embed(text): return np.mean([w2v[w] for w in text.split() if w in w2v], axis=0)"
+            },
+            {
+              name: "LLM Embeddings (API)",
+              priority: "Highest Quality",
+              description: "Use OpenAI, Cohere, or similar embedding APIs for state-of-the-art text representations.",
+              when: "Best quality needed, budget for API calls",
+              pros: ["Best semantic quality", "Easy to use"],
+              cons: ["Cost per call", "Data sent externally", "Rate limits"],
+              code: "# OpenAI example\nfrom openai import OpenAI\nclient = OpenAI()\nresp = client.embeddings.create(input='text', model='text-embedding-3-small')"
+            }
+          ],
+          continueOptions: [
+            { label: "Go to feature selection", next: "feature_selection" }
+          ]
+        },
+        text_preprocessing: {
+          question: "Text Preprocessing Pipeline",
+          type: "technique",
+          goal: "Clean and normalize text before feature extraction",
+          techniques: [
+            {
+              name: "Lowercasing + Punctuation Removal",
+              priority: "Always Do This",
+              description: "Normalize case and remove noise characters.",
+              when: "Almost always (unless case carries meaning like named entities)",
+              code: "import re\ntext = re.sub(r'[^a-zA-Z\\s]', '', text.lower())"
+            },
+            {
+              name: "Stopword Removal",
+              priority: "Usually Helpful",
+              description: "Remove common words (the, is, at) that carry little meaning.",
+              when: "Bag-of-words / TF-IDF models. Less important for embeddings.",
+              pros: ["Reduces noise", "Smaller feature space"],
+              cons: ["Can remove context ('not', 'no' may be important for sentiment)"],
+              code: "from nltk.corpus import stopwords\nstops = set(stopwords.words('english'))"
+            },
+            {
+              name: "Lemmatization",
+              priority: "Better than Stemming",
+              description: "Reduce words to their dictionary form: running \u2192 run, better \u2192 good.",
+              when: "Want to group word forms, classical models",
+              pros: ["Linguistically correct", "Reduces vocabulary"],
+              cons: ["Slower than stemming", "Needs POS tagging for best results"],
+              code: "from nltk.stem import WordNetLemmatizer\nlemmatizer = WordNetLemmatizer()\nlemmatizer.lemmatize('running', pos='v')  # 'run'"
+            }
+          ],
+          continueOptions: [
+            { label: "Convert to features (TF-IDF)", next: "text_classical" },
+            { label: "Convert to embeddings", next: "text_embeddings" }
+          ]
+        },
+
+        // ========== TIME SERIES BRANCH ==========
+        timeseries_start: {
+          question: "What do you need for your time-series features?",
+          type: "decision",
+          info: "Time-series feature engineering turns raw timestamped values into features that capture trends, seasonality, and patterns. Critical: always respect time ordering to avoid leakage.",
+          options: [
+            { label: "Lag & Window Features", next: "ts_lag_window", desc: "Past values, rolling averages, expanding statistics", level: "Beginner" },
+            { label: "Seasonality & Calendar", next: "ts_seasonal", desc: "Day of week, month, holidays, cyclical encoding", level: "Beginner" },
+            { label: "Trend & Stationarity", next: "ts_trend", desc: "Differencing, detrending, change point detection", level: "Intermediate" }
+          ]
+        },
+        ts_lag_window: {
+          question: "Lag & Window Features",
+          type: "technique",
+          goal: "Capture recent history and trends for each time step",
+          techniques: [
+            {
+              name: "Lag Features",
+              priority: "Foundation",
+              description: "Use the value from N steps ago as a feature: y(t-1), y(t-7), y(t-30).",
+              when: "Almost always the first features to create in time-series problems",
+              pros: ["Simple", "Very predictive", "Captures autocorrelation"],
+              cons: ["Creates NaN at the start", "Need to choose appropriate lags"],
+              code: "for lag in [1, 7, 14, 30]:\n    df[f'value_lag_{lag}'] = df['value'].shift(lag)"
+            },
+            {
+              name: "Rolling Window Statistics",
+              priority: "Smooth Trends",
+              description: "Compute mean, std, min, max over a sliding window: rolling 7-day average, rolling 30-day std.",
+              when: "Want to capture recent trends and volatility",
+              pros: ["Smooths noise", "Captures trend direction and volatility"],
+              cons: ["Window size is a hyperparameter", "NaN at the start"],
+              code: "df['roll_7_mean'] = df['value'].rolling(7).mean()\ndf['roll_7_std'] = df['value'].rolling(7).std()\ndf['roll_30_mean'] = df['value'].rolling(30).mean()"
+            },
+            {
+              name: "Expanding (Cumulative) Statistics",
+              priority: "Running Totals",
+              description: "Cumulative mean, sum, min, max from the start up to the current point.",
+              when: "Want a running baseline or lifetime statistics",
+              pros: ["No window size needed", "Captures long-term level"],
+              cons: ["Gets dominated by early data", "Less responsive to recent changes"],
+              code: "df['cumulative_mean'] = df['value'].expanding().mean()\ndf['cumulative_max'] = df['value'].expanding().max()"
+            }
+          ],
+          continueOptions: [
+            { label: "Add calendar features", next: "ts_seasonal" },
+            { label: "Handle trend & stationarity", next: "ts_trend" },
+            { label: "Go to feature selection", next: "feature_selection" }
+          ]
+        },
+        ts_seasonal: {
+          question: "Seasonality & Calendar Features",
+          type: "technique",
+          goal: "Capture periodic patterns and calendar effects",
+          techniques: [
+            {
+              name: "Calendar Components",
+              priority: "Always Extract",
+              description: "Year, month, day, day of week, hour, minute, quarter, week of year.",
+              when: "Datetime index is available",
+              pros: ["Captures seasonality", "Simple", "Works with any model"],
+              code: "df['month'] = df['date'].dt.month\ndf['dow'] = df['date'].dt.dayofweek\ndf['hour'] = df['date'].dt.hour\ndf['quarter'] = df['date'].dt.quarter"
+            },
+            {
+              name: "Cyclical Encoding (sin/cos)",
+              priority: "For Linear Models",
+              description: "Encode periodic features as sin and cos to preserve circular continuity (month 12 is close to month 1).",
+              when: "Linear models, neural networks, features with circular nature",
+              pros: ["Preserves periodicity", "Continuous representation"],
+              cons: ["Tree models don't need this"],
+              code: "import numpy as np\ndf['month_sin'] = np.sin(2 * np.pi * df['month'] / 12)\ndf['month_cos'] = np.cos(2 * np.pi * df['month'] / 12)"
+            },
+            {
+              name: "Holiday & Event Flags",
+              priority: "Domain Boost",
+              description: "Binary flags for holidays, weekends, special events, promotional periods.",
+              when: "External events affect your target (retail, energy, transport)",
+              pros: ["Captures known external effects"],
+              cons: ["Requires holiday/event calendar"],
+              code: "import holidays\nus_holidays = holidays.US()\ndf['is_holiday'] = df['date'].isin(us_holidays).astype(int)"
+            }
+          ],
+          continueOptions: [
+            { label: "Handle trend & stationarity", next: "ts_trend" },
+            { label: "Go to feature selection", next: "feature_selection" }
+          ]
+        },
+        ts_trend: {
+          question: "Trend & Stationarity Features",
+          type: "technique",
+          goal: "Remove or capture long-term trends to make the signal more modelable",
+          techniques: [
+            {
+              name: "Differencing",
+              priority: "Standard",
+              description: "Subtract the previous value: diff(t) = y(t) - y(t-1). Removes linear trend.",
+              when: "Data has a trend or is non-stationary",
+              pros: ["Simple", "Makes data stationary", "Standard in ARIMA-type models"],
+              cons: ["Loses a data point per diff", "May need second-order for quadratic trends"],
+              code: "df['value_diff'] = df['value'].diff()\ndf['value_diff_7'] = df['value'].diff(7)  # weekly diff"
+            },
+            {
+              name: "Percent Change",
+              priority: "Scale-Invariant",
+              description: "Relative change: (y(t) - y(t-1)) / y(t-1). Useful when scale varies (stock prices).",
+              when: "Values vary in magnitude, care about relative movement",
+              pros: ["Scale-invariant", "Captures rate of change"],
+              cons: ["Division by zero if value is 0"],
+              code: "df['pct_change'] = df['value'].pct_change()\ndf['pct_change_7'] = df['value'].pct_change(periods=7)"
+            },
+            {
+              name: "Detrending (Residuals)",
+              priority: "Advanced",
+              description: "Fit a trend line (linear or moving average) and use the residuals as features.",
+              when: "Strong trend present, want to model residuals separately",
+              pros: ["Clean separation of trend and signal"],
+              cons: ["Adds complexity", "Trend model choice matters"],
+              code: "from scipy.signal import detrend\ndf['detrended'] = detrend(df['value'])"
+            }
+          ],
+          continueOptions: [
+            { label: "Go to feature selection", next: "feature_selection" }
+          ]
+        },
+
+        // ========== IMAGE BRANCH ==========
+        image_start: {
+          question: "What is your image feature engineering approach?",
+          type: "decision",
+          info: "For images, feature engineering is mostly about choosing the right representation. Deep learning has largely replaced hand-crafted features.",
+          options: [
+            { label: "Transfer Learning (Pretrained CNNs)", next: "image_transfer", desc: "Extract features from ResNet, EfficientNet, CLIP \u2014 the standard approach", level: "Intermediate" },
+            { label: "Classical / Hand-Crafted", next: "image_classical", desc: "HOG, color histograms, SIFT \u2014 for constrained environments", level: "Advanced" },
+            { label: "Augmentation (More Data)", next: "image_augmentation", desc: "Create more training samples through transforms", level: "Beginner" }
+          ]
+        },
+        image_transfer: {
+          question: "Transfer Learning Feature Extraction",
+          type: "technique",
+          goal: "Use pretrained models as feature extractors for your downstream task",
+          techniques: [
+            {
+              name: "CNN Feature Extraction",
+              priority: "Standard Approach",
+              description: "Remove the classification head from a pretrained CNN (ResNet, EfficientNet). The last hidden layer outputs a feature vector.",
+              when: "Default for most image tasks, moderate dataset size",
+              pros: ["Works with small datasets", "High-quality features", "Fast with GPU"],
+              cons: ["Requires GPU", "Features may not be domain-specific"],
+              code: "from torchvision import models, transforms\nresnet = models.resnet50(pretrained=True)\nresnet = torch.nn.Sequential(*list(resnet.children())[:-1])  # remove head\n# Output: 2048-dim vector per image"
+            },
+            {
+              name: "CLIP Embeddings",
+              priority: "Multi-Modal",
+              description: "OpenAI's CLIP encodes images and text into a shared embedding space. Great for zero-shot and cross-modal tasks.",
+              when: "Need image-text alignment, zero-shot classification, semantic search",
+              pros: ["Image + text alignment", "Zero-shot capable", "Rich features"],
+              cons: ["Larger model", "API or local GPU needed"],
+              code: "from transformers import CLIPModel, CLIPProcessor\nmodel = CLIPModel.from_pretrained('openai/clip-vit-base-patch32')"
+            },
+            {
+              name: "Fine-Tune Last Layers",
+              priority: "Best Quality",
+              description: "Freeze early layers, fine-tune later layers and a new head on your data.",
+              when: "Have enough labeled data (hundreds+), domain differs from ImageNet",
+              pros: ["Best task-specific performance", "Leverages pretrained features"],
+              cons: ["Needs more data and compute than pure extraction"],
+              code: "# Freeze early layers\nfor param in model.parameters():\n    param.requires_grad = False\n# Unfreeze last block + new head\nfor param in model.layer4.parameters():\n    param.requires_grad = True"
+            }
+          ],
+          continueOptions: [
+            { label: "Add data augmentation", next: "image_augmentation" }
+          ]
+        },
+        image_classical: {
+          question: "Classical Image Features",
+          type: "technique",
+          goal: "Extract hand-crafted features when deep learning is not feasible",
+          info: "Useful for edge devices, very small datasets, or when interpretability is critical.",
+          techniques: [
+            {
+              name: "Color Histograms",
+              priority: "Simplest",
+              description: "Distribution of pixel intensities per channel (RGB, HSV).",
+              when: "Color is discriminative (product sorting, scene classification)",
+              pros: ["Fast", "No model needed", "Interpretable"],
+              cons: ["No spatial info", "Limited discriminative power"],
+              code: "import cv2\nhist = cv2.calcHist([img], [0,1,2], None, [8,8,8], [0,256]*3)\nhist = hist.flatten() / hist.sum()"
+            },
+            {
+              name: "HOG (Histogram of Oriented Gradients)",
+              priority: "Shape Detection",
+              description: "Captures edge orientation distribution. Classic for pedestrian/object detection.",
+              when: "Shape/contour matters, limited compute",
+              pros: ["Good for shape", "Well-understood"],
+              cons: ["Not rotation invariant", "Outperformed by CNNs"],
+              code: "from skimage.feature import hog\nfeatures = hog(gray_img, orientations=9, pixels_per_cell=(8,8))"
+            },
+            {
+              name: "Texture Features (LBP)",
+              priority: "Surface Analysis",
+              description: "Local Binary Patterns describe texture by comparing each pixel to its neighbors.",
+              when: "Texture classification (materials, medical imaging surface analysis)",
+              pros: ["Rotation invariant variant exists", "Fast"],
+              cons: ["Limited to texture", "Not semantic"],
+              code: "from skimage.feature import local_binary_pattern\nlbp = local_binary_pattern(gray_img, P=8, R=1, method='uniform')"
+            }
+          ],
+          continueOptions: [
+            { label: "Consider transfer learning instead", next: "image_transfer" }
+          ]
+        },
+        image_augmentation: {
+          question: "Image Data Augmentation",
+          type: "technique",
+          goal: "Increase effective training set size by applying transforms",
+          techniques: [
+            {
+              name: "Geometric Transforms",
+              priority: "Always Use",
+              description: "Random flips, rotations, crops, and resizes.",
+              when: "Almost always during training (unless orientation matters, e.g., documents)",
+              pros: ["Free data", "Improves generalization"],
+              code: "from torchvision import transforms\naug = transforms.Compose([\n    transforms.RandomHorizontalFlip(),\n    transforms.RandomRotation(15),\n    transforms.RandomResizedCrop(224, scale=(0.8, 1.0))\n])"
+            },
+            {
+              name: "Color Augmentation",
+              priority: "Common",
+              description: "Random brightness, contrast, saturation, hue jitter.",
+              when: "Lighting varies in production, color is not critical",
+              pros: ["Robust to lighting changes"],
+              code: "transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)"
+            },
+            {
+              name: "Advanced: Mixup / CutMix",
+              priority: "Regularization",
+              description: "Blend two images (Mixup) or paste a patch from one image onto another (CutMix). Smooths decision boundaries.",
+              when: "Overfitting on small datasets, want better calibration",
+              pros: ["Strong regularization", "Better calibration"],
+              cons: ["Harder to implement", "Can confuse interpretability"],
+              code: "# torchvision has built-in Mixup/CutMix\nfrom torchvision.transforms.v2 import MixUp, CutMix"
+            }
+          ],
+          continueOptions: [
+            { label: "See the full overview", next: "overview" }
+          ]
+        },
+
+        // ========== OVERVIEW ==========
+        overview: {
+          question: "Feature Engineering \u2014 Putting It All Together",
+          type: "technique",
+          goal: "A practical mental model for the feature engineering workflow",
+          techniques: [
+            {
+              name: "1. Understand Your Data",
+              priority: "Step 1",
+              description: "EDA first: distributions, missing patterns, cardinality, correlations. Never engineer features blindly.",
+              tips: ["df.describe(), df.info(), df.isnull().sum()", "Plot distributions and target relationships"]
+            },
+            {
+              name: "2. Clean & Impute",
+              priority: "Step 2",
+              description: "Handle missing values, remove duplicates, fix data types. The foundation for everything else.",
+              tips: ["Start with simple imputation (median/mode)", "Add missing indicators if pattern is informative"]
+            },
+            {
+              name: "3. Encode & Scale",
+              priority: "Step 3",
+              description: "Encode categoricals (one-hot for low, target encoding for high cardinality). Scale numerics if using distance-based or linear models.",
+              tips: ["Tree models don't need scaling", "Always fit on train, transform on test"]
+            },
+            {
+              name: "4. Create Features",
+              priority: "Step 4",
+              description: "The creative step: interactions, ratios, aggregations, date parts, text stats, domain-specific transforms.",
+              tips: ["Domain knowledge > automated feature generation", "Start simple, add complexity based on validation performance"]
+            },
+            {
+              name: "5. Select Features",
+              priority: "Step 5",
+              description: "Remove noisy and redundant features. Start with correlation filter, then use model importance, then try RFE if needed.",
+              tips: ["Always evaluate selection on a validation set", "Fewer features = faster, more interpretable, often better generalization"]
+            },
+            {
+              name: "6. Validate Properly",
+              priority: "Critical",
+              description: "Fit all transforms on training data only. Use cross-validation. For time-series, use time-based splits.",
+              tips: ["Leakage from the validation set is the #1 feature engineering mistake", "If a feature is 'too good', it's probably leaking"]
+            }
+          ]
+        }
+      };
+
+      const quickReference = [
+        { data: "Categorical (low card.)", method: "One-Hot Encoding", notes: "< 10 categories, no order" },
+        { data: "Categorical (high card.)", method: "Target Encoding", notes: "Use CV to avoid leakage" },
+        { data: "Ordinal", method: "Label / Custom Mapping", notes: "Preserve natural order" },
+        { data: "Numeric (Gaussian)", method: "StandardScaler", notes: "Linear models, SVMs, NNs" },
+        { data: "Numeric (skewed)", method: "Log / Yeo-Johnson", notes: "Fix right-skewed distributions" },
+        { data: "Numeric (outliers)", method: "RobustScaler", notes: "Uses median & IQR" },
+        { data: "Outliers (univariate)", method: "IQR / Modified Z-Score", notes: "Robust, no normality assumed" },
+        { data: "Outliers (multivariate)", method: "Isolation Forest", notes: "Fast, handles high dimensions" },
+        { data: "Tokenization (LLMs)", method: "BPE / Byte-Level BPE", notes: "Use model's own tokenizer" },
+        { data: "Text (traditional ML)", method: "TF-IDF + n-grams", notes: "Sparse, interpretable" },
+        { data: "Text (deep learning)", method: "Sentence Transformers", notes: "Dense, semantic" },
+        { data: "Time series", method: "Lags + Rolling Stats + Calendar", notes: "Respect time ordering" },
+        { data: "Images", method: "Pretrained CNN features", notes: "ResNet, EfficientNet, CLIP" },
+        { data: "Missing values", method: "Median + Missing Indicator", notes: "Simple and effective" },
+        { data: "Feature selection", method: "Correlation \u2192 Importance \u2192 RFE", notes: "Filter \u2192 Embedded \u2192 Wrapper" }
+      ];
+
+      const currentData = tree[currentNode];
+
+      const handleChoice = (nextNode, label) => {
+        setPath([...path, { node: currentNode, choice: label }]);
+        setCurrentNode(nextNode);
+      };
+
+      const goBack = () => {
+        if (path.length > 0) {
+          const newPath = [...path];
+          const lastStep = newPath.pop();
+          setPath(newPath);
+          setCurrentNode(lastStep.node);
+        }
+      };
+
+      const reset = () => {
+        setPath([]);
+        setCurrentNode('start');
+      };
+
+      const PathBreadcrumb = () => (
+        <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-4 rounded-lg mb-6 border border-rose-200">
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <Home className="w-4 h-4 text-rose-600" />
+            {path.map((step, idx) => (
+              <React.Fragment key={idx}>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <span className="text-rose-700 font-medium">{step.choice}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      );
+
+      const TechniqueCard = ({ technique }) => (
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-5 hover:border-rose-400 hover:shadow-lg transition-all">
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <h4 className="text-lg font-bold text-gray-900">{technique.name}</h4>
+              <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-1 rounded mt-1 inline-block">
+                {technique.priority}
+              </span>
+            </div>
+          </div>
+
+          <p className="text-gray-700 mb-3">{technique.description}</p>
+
+          {technique.when && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-green-700">When to use: </span>
+              <span className="text-xs text-gray-700">{technique.when}</span>
+            </div>
+          )}
+
+          {technique.pros && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-green-700">Pros: </span>
+              <span className="text-xs text-gray-700">{technique.pros.join(", ")}</span>
+            </div>
+          )}
+
+          {technique.cons && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-red-700">Cons: </span>
+              <span className="text-xs text-gray-700">{technique.cons.join(", ")}</span>
+            </div>
+          )}
+
+          {technique.tips && (
+            <div className="mb-2">
+              <span className="text-xs font-semibold text-rose-700">Tips: </span>
+              <span className="text-xs text-gray-700">{technique.tips.join(" | ")}</span>
+            </div>
+          )}
+
+          {technique.code && (
+            <div className="bg-gray-900 text-green-400 p-3 rounded-md mt-3 text-xs font-mono overflow-x-auto whitespace-pre">
+              {technique.code}
+            </div>
+          )}
+        </div>
+      );
+
+      const QuickReferenceModal = () => (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Quick Reference Guide</h2>
+              <button
+                onClick={() => setShowQuickRef(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                x
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gradient-to-r from-rose-600 to-pink-600 text-white">
+                    <th className="p-3 text-left font-semibold">Data Type</th>
+                    <th className="p-3 text-left font-semibold">Recommended Method</th>
+                    <th className="p-3 text-left font-semibold">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quickReference.map((row, idx) => (
+                    <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                      <td className="p-3 font-semibold text-gray-900">{row.data}</td>
+                      <td className="p-3 text-rose-700 font-mono text-sm">{row.method}</td>
+                      <td className="p-3 text-gray-600 text-sm">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-6 bg-rose-50 border border-rose-200 rounded-lg p-4">
+              <h3 className="font-bold text-rose-900 mb-2">Golden Rules:</h3>
+              <ol className="text-sm text-rose-800 space-y-1 list-decimal list-inside">
+                <li>Always fit transforms on training data only</li>
+                <li>If a feature seems too good to be true, check for leakage</li>
+                <li>Start simple \u2014 add complexity only when validated</li>
+                <li>Domain knowledge beats automated methods</li>
+                <li>For time-series, never use future data as features</li>
+              </ol>
+            </div>
+
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 className="font-bold text-amber-900 mb-2">Common Pipelines:</h3>
+              <ul className="text-sm text-amber-800 space-y-1 list-disc list-inside">
+                <li><strong>Tabular + Tree model:</strong> Impute \u2192 Target encode \u2192 Create interactions \u2192 Feature importance</li>
+                <li><strong>Tabular + Linear model:</strong> Impute \u2192 One-hot encode \u2192 Scale \u2192 Polynomial \u2192 Lasso selection</li>
+                <li><strong>Text classification:</strong> Clean \u2192 TF-IDF (or embeddings) \u2192 Classify</li>
+                <li><strong>Time series:</strong> Lags \u2192 Rolling stats \u2192 Calendar \u2192 Difference \u2192 Tree model</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 p-4 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Wrench className="w-8 h-8 text-rose-600" />
+                <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">
+                  Feature Engineering Playbook
+                </h1>
+              </div>
+              <p className="text-gray-600">Interactive guide to choosing the right feature engineering strategies for your data</p>
+
+              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+                <button
+                  onClick={reset}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-rose-400 hover:shadow-md transition-all text-gray-700"
+                >
+                  <Home className="w-4 h-4" />
+                  Start Over
+                </button>
+                <button
+                  onClick={() => setShowQuickRef(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all"
+                >
+                  <List className="w-4 h-4" />
+                  Quick Reference
+                </button>
+              </div>
+            </div>
+
+            {/* Path Breadcrumb */}
+            {path.length > 0 && <PathBreadcrumb />}
+
+            {/* Main Content */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+              {currentData.info && (
+                <div className="mb-6 bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-lg">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-rose-900 text-sm">{currentData.info}</p>
+                  </div>
+                </div>
+              )}
+
+              {currentData.warning && (
+                <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                  <p className="text-red-900 font-semibold">{currentData.warning}</p>
+                </div>
+              )}
+
+              {currentData.goal && (
+                <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                  <p className="text-green-900 font-semibold text-lg">{currentData.goal}</p>
+                </div>
+              )}
+
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{currentData.question}</h2>
+
+              {/* Decision Options */}
+              {currentData.type === "decision" && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {currentData.options.map((option, idx) => {
+                    const levelColors = {
+                      Beginner: "bg-emerald-100 text-emerald-700 border-emerald-200",
+                      Intermediate: "bg-amber-100 text-amber-700 border-amber-200",
+                      Advanced: "bg-red-100 text-red-700 border-red-200"
+                    };
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleChoice(option.next, option.label)}
+                        className="group p-6 border-2 border-gray-300 rounded-xl hover:border-rose-500 hover:shadow-lg transition-all text-left bg-gradient-to-br from-white to-gray-50 hover:from-rose-50 hover:to-pink-50"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-rose-600 transition-colors">
+                              {option.label}
+                            </h3>
+                            {option.level && (
+                              <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${levelColors[option.level] || ''}`}>
+                                {option.level}
+                              </span>
+                            )}
+                          </div>
+                          <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                        </div>
+                        <p className="text-gray-600 text-sm">{option.desc}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Technique Display */}
+              {currentData.type === "technique" && (
+                <div>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    {currentData.techniques.map((technique, idx) => (
+                      <TechniqueCard key={idx} technique={technique} />
+                    ))}
+                  </div>
+
+                  {currentData.additionalInfo && (
+                    <div className="bg-pink-50 border-2 border-pink-200 rounded-lg p-5 mb-6">
+                      <h4 className="font-bold text-pink-900 mb-3">{currentData.additionalInfo.title}</h4>
+                      <ul className="space-y-2">
+                        {currentData.additionalInfo.points.map((point, idx) => (
+                          <li key={idx} className="text-pink-800 text-sm flex items-start gap-2">
+                            <span className="text-pink-600 font-bold">*</span>
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {currentData.continueOptions && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-700 mb-4">{currentData.nextQuestion || "Continue exploring:"}</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {currentData.continueOptions.map((option, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleChoice(option.next, option.label)}
+                            className="p-4 border-2 border-rose-300 rounded-lg hover:border-rose-500 hover:shadow-lg transition-all text-left bg-white hover:bg-rose-50 flex items-center justify-between group"
+                          >
+                            <span className="font-semibold text-gray-900 group-hover:text-rose-600">
+                              {option.label}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-rose-500 group-hover:translate-x-1 transition-all" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Back Button */}
+              {path.length > 0 && (
+                <button
+                  onClick={goBack}
+                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                  Go Back
+                </button>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-8 text-gray-500 text-sm">
+              <p>Feature Engineering Playbook v1.0</p>
+              <p className="mt-2 text-xs">
+                Created by Tarek Atwan @ <a href="index.html" className="text-rose-600 hover:text-rose-700 hover:underline font-semibold">ML_LAB</a>
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Reference Modal */}
+          {showQuickRef && <QuickReferenceModal />}
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<FeatureEngineeringPlaybook />);
+  </script>
+</body>
+
+</html>

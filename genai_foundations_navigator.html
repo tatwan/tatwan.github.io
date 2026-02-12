@@ -11,6 +11,26 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
 </head>
 
 <body>
@@ -37,15 +57,17 @@
       </svg>
     );
 
-    const Sparkles = ({ className }) => (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-      </svg>
-    );
-
     const Info = ({ className }) => (
       <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    /* Compass icon — unique to this beginner navigator */
+    const Compass = ({ className }) => (
+      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v2m0 16v2m10-10h-2M4 12H2m15.07-5.07l-1.42 1.42M8.35 15.65l-1.42 1.42m0-10.14l1.42 1.42m7.3 7.3l1.42 1.42" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" />
       </svg>
     );
 
@@ -59,7 +81,7 @@
         start: {
           type: 'decision',
           question: 'Where are you starting from?',
-          info: 'This beginner tree assumes you are working with an existing LLM (e.g., GPT‑4, Claude, Llama 3) and want to improve it step by step.',
+          info: 'This beginner tree assumes you are working with an existing LLM (e.g., GPT-4, Claude, Llama 3) and want to improve it step by step.',
           options: [
             {
               label: 'I have not really tried prompt engineering yet',
@@ -75,24 +97,24 @@
         },
         prompt_basics: {
           type: 'content',
-          question: 'Step 1 · Start with prompt engineering',
+          question: 'Step 1 \u00b7 Start with prompt engineering',
           info: 'In practice, most GenAI systems get very far with careful prompting before touching RAG or training.',
           sections: [
             {
               title: 'System prompt',
-              body: 'Describe who the assistant is, the rules it should follow, and what to avoid. Example: “You are a careful data analyst who always shows calculations and asks for clarification when unsure.”'
+              body: 'Describe who the assistant is, the rules it should follow, and what to avoid. Example: \u201cYou are a careful data analyst who always shows calculations and asks for clarification when unsure.\u201d'
             },
             {
-              title: 'Few‑shot examples',
-              body: 'Show 2–5 “input → ideal output” pairs. The model then imitates the pattern. Use this before you consider fine‑tuning.'
+              title: 'Few-shot examples',
+              body: 'Show 2\u20135 \u201cinput \u2192 ideal output\u201d pairs. The model then imitates the pattern. Use this before you consider fine-tuning.'
             },
             {
-              title: 'Chain‑of‑Thought (CoT)',
-              body: 'For reasoning tasks, ask the model to think step by step (“Let’s reason step by step”) and then give the final answer.'
+              title: 'Chain-of-Thought (CoT)',
+              body: 'For reasoning tasks, ask the model to think step by step (\u201cLet\u2019s reason step by step\u201d) and then give the final answer.'
             },
             {
               title: 'Key parameters',
-              body: 'Temperature controls creativity (low = consistent, high = varied). Top‑p / top‑k control how many candidate tokens are considered. Max tokens caps answer length.'
+              body: 'Temperature controls creativity (low = consistent, high = varied). Top-p / top-k control how many candidate tokens are considered. Max tokens caps answer length.'
             }
           ],
           nextQuestion: 'After doing this, what is still missing?',
@@ -120,7 +142,7 @@
           question: 'What is still wrong after prompt engineering?',
           options: [
             {
-              label: 'It makes things up or doesn’t know my data',
+              label: 'It makes things up or doesn\u2019t know my data',
               next: 'need_rag',
               desc: 'You need grounding / external knowledge.'
             },
@@ -138,43 +160,43 @@
         },
         done_prompting: {
           type: 'content',
-          question: 'Great – prompt engineering is enough for now',
+          question: 'Great \u2013 prompt engineering is enough for now',
           sections: [
             {
               title: 'You can stop here',
-              body: 'If prompts + examples + parameters give you the quality you need, you do not need RAG or fine‑tuning yet. Capture your best prompts as templates or system messages in your app.'
+              body: 'If prompts + examples + parameters give you the quality you need, you do not need RAG or fine-tuning yet. Capture your best prompts as templates or system messages in your app.'
             },
             {
               title: 'When to revisit',
-              body: 'If you later hit issues like “doesn’t know our new policy” or “keeps drifting off‑brand,” you can come back to RAG or training from this page.'
+              body: 'If you later hit issues like \u201cdoesn\u2019t know our new policy\u201d or \u201ckeeps drifting off-brand,\u201d you can come back to RAG or training from this page.'
             }
           ],
           continueOptions: [
             {
-              label: 'Compare higher‑power options anyway',
+              label: 'Compare higher-power options anyway',
               next: 'overview_ladder'
             }
           ]
         },
         need_rag: {
           type: 'content',
-          question: 'Step 2 · Do you need RAG?',
+          question: 'Step 2 \u00b7 Do you need RAG?',
           info: 'RAG is about adding external knowledge. You typically try it after prompts, not before.',
           sections: [
             {
               title: 'When RAG is the right tool',
-              body: 'Use RAG when the model needs access to your documents, APIs, databases, or up‑to‑date web content. Example: company handbook, product docs, support tickets, research papers.'
+              body: 'Use RAG when the model needs access to your documents, APIs, databases, or up-to-date web content. Example: company handbook, product docs, support tickets, research papers.'
             },
             {
-              title: 'R · Retrieval',
+              title: 'R \u00b7 Retrieval',
               body: 'Search over your content (vector search + often keyword search) to find a few relevant chunks for each question.'
             },
             {
-              title: 'A · Augmented',
-              body: 'Attach those chunks to the prompt as context. The model now “reads” them alongside the user question.'
+              title: 'A \u00b7 Augmented',
+              body: 'Attach those chunks to the prompt as context. The model now \u201creads\u201d them alongside the user question.'
             },
             {
-              title: 'G · Generation',
+              title: 'G \u00b7 Generation',
               body: 'The model writes an answer based on both the question and the retrieved context. You can ask it to cite which chunks it used.'
             }
           ],
@@ -191,24 +213,24 @@
         },
         need_training: {
           type: 'content',
-          question: 'Step 3 · When do you need training (fine‑tuning / continued pre‑training)?',
+          question: 'Step 3 \u00b7 When do you need training (fine-tuning / continued pre-training)?',
           info: 'Training is for more permanent, systematic changes than you get from prompts alone.',
           sections: [
             {
-              title: 'Stay in “prompt + RAG” if you can',
+              title: 'Stay in \u201cprompt + RAG\u201d if you can',
               body: 'Prompt engineering + RAG are cheaper, faster to iterate on, and easier to debug. Try to exhaust those knobs before you train.'
             },
             {
-              title: 'Lightweight fine‑tuning (e.g., LoRA)',
+              title: 'Lightweight fine-tuning (e.g., LoRA)',
               body: 'Best next step if you need the model to follow a particular style, format, or workflow consistently. You train small adapter layers, not the whole model.'
             },
             {
-              title: 'Full fine‑tuning',
+              title: 'Full fine-tuning',
               body: 'You update most or all weights. This is powerful but expensive and easier to break. Usually reserved for larger teams or very specific products.'
             },
             {
-              title: 'Continued pre‑training',
-              body: 'Feed the model a large corpus (e.g., legal or medical text) so it “thinks” in that domain. Often followed by instruction‑style fine‑tuning.'
+              title: 'Continued pre-training',
+              body: 'Feed the model a large corpus (typically millions of tokens \u2014 e.g., legal or medical text) so it \u201cthinks\u201d in that domain. Often followed by instruction-style fine-tuning.'
             }
           ],
           continueOptions: [
@@ -220,44 +242,44 @@
         },
         need_optimization: {
           type: 'content',
-          question: 'Step 4 · If cost or latency are the main problem',
-          info: 'Optimization comes after you like the model’s behavior – not before.',
+          question: 'Step 4 \u00b7 If cost or latency are the main problem',
+          info: 'Optimization comes after you like the model\u2019s behavior \u2013 not before.',
           sections: [
             {
               title: 'Distillation',
-              body: 'Train a smaller “student” to imitate a larger “teacher” model. Goal: similar behavior on your tasks, but cheaper to run.'
+              body: 'Train a smaller \u201cstudent\u201d to imitate a larger \u201cteacher\u201d model. Goal: similar behavior on your tasks, but cheaper to run.'
             },
             {
               title: 'Quantization',
-              body: 'Store model weights in lower precision (e.g., 8‑bit or 4‑bit). Big memory and speed wins; small quality loss if done carefully.'
+              body: 'Store model weights in lower precision (e.g., 8-bit or 4-bit). Big memory and speed wins; small quality loss if done carefully.'
             },
             {
               title: 'Pruning and other tricks',
-              body: 'Remove less‑useful weights or neurons, or use specialized runtimes. Often combined with distillation and quantization.'
+              body: 'Remove less-useful weights or neurons, or use specialized runtimes. Often combined with distillation and quantization.'
             }
           ],
           continueOptions: [
             {
-              label: 'Show me the full high‑level map',
+              label: 'Show me the full high-level map',
               next: 'overview_ladder'
             }
           ]
         },
         overview_ladder: {
           type: 'content',
-          question: 'Putting it all together · Beginner mental model',
+          question: 'Putting it all together \u00b7 Beginner mental model',
           sections: [
             {
               title: 'Order of operations',
-              body: '1) Prompt engineering → 2) RAG for external knowledge → 3) Fine‑tuning / continued pre‑training if you need deeper control → 4) Distillation / quantization / pruning for efficiency.'
+              body: '1) Prompt engineering \u2192 2) RAG for external knowledge \u2192 3) Fine-tuning / continued pre-training if you need deeper control \u2192 4) Distillation / quantization / pruning for efficiency.'
             },
             {
               title: 'Simple rule of thumb',
-              body: 'If changing the words in your prompt can fix it, do that. If the model lacks facts, use RAG. If it still behaves wrong, fine‑tune. If it is too slow or expensive, compress.'
+              body: 'If changing the words in your prompt can fix it, do that. If the model lacks facts, use RAG. If it still behaves wrong, fine-tune. If it is too slow or expensive, compress.'
             },
             {
               title: 'Ready for the advanced tree?',
-              body: 'When this mental model feels comfortable, you can move on to the GenAI Technique Selector for a much more detailed, research‑grade view.'
+              body: 'When this mental model feels comfortable, you can move on to the GenAI Technique Selector for a much more detailed, research-grade view.'
             }
           ],
           continueOptions: [
@@ -270,7 +292,7 @@
         advanced_selector_link: {
           type: 'link',
           question: 'Next stop: GenAI Technique Selector',
-          info: 'You have the beginner mental model. The advanced selector gives you a fine‑grained map of specific techniques.',
+          info: 'You have the beginner mental model. The advanced selector gives you a fine-grained map of specific techniques.',
           link: {
             href: 'genai_techniques_selector.html',
             label: 'Go to GenAI Technique Selector'
@@ -299,176 +321,182 @@
       };
 
       const PathBreadcrumb = () => (
-        <div className="bg-slate-900/70 border border-slate-800 rounded-lg px-4 py-3 mb-6 text-xs text-slate-400 flex items-center flex-wrap gap-2">
-          <button
-            onClick={reset}
-            className="inline-flex items-center gap-1 text-slate-300 hover:text-amber-400 transition-colors"
-          >
-            <Home className="w-4 h-4" />
-            <span className="uppercase tracking-[0.15em]">Start</span>
-          </button>
-          {path.map((step, idx) => (
-            <React.Fragment key={idx}>
-              <ChevronRight className="w-3 h-3 text-slate-600" />
-              <span className="text-slate-300">{step.choice}</span>
-            </React.Fragment>
-          ))}
+        <div className="bg-gradient-to-r from-sky-50 to-cyan-50 p-4 rounded-lg mb-6 border border-sky-200">
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <Home className="w-4 h-4 text-sky-600" />
+            {path.map((step, idx) => (
+              <React.Fragment key={idx}>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <span className="text-sky-700 font-medium">{step.choice}</span>
+              </React.Fragment>
+            ))}
+          </div>
         </div>
       );
 
       const SectionCard = ({ section }) => (
-        <div className="bg-slate-950/70 border border-slate-800 rounded-md p-3">
-          <p className="text-xs font-semibold text-slate-100 mb-1">{section.title}</p>
-          <p className="text-[11px] text-slate-400 leading-relaxed">{section.body}</p>
+        <div className="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-sky-400 hover:shadow-md transition-all">
+          <p className="text-sm font-bold text-gray-900 mb-2">{section.title}</p>
+          <p className="text-xs text-gray-600 leading-relaxed">{section.body}</p>
         </div>
       );
 
-    return (
-        <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50 p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <header className="mb-8 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="w-7 h-7 text-amber-400" />
-              <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Beginner Track</p>
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Compass className="w-8 h-8 text-sky-600" />
+                <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-cyan-600">
+                  GenAI Foundations Navigator
+                </h1>
+              </div>
+              <p className="text-gray-600">
+                A guided, click-through tree that helps you decide when to stop at prompt engineering, when to add RAG,
+                when training is justified, and when to think about optimization.
+              </p>
+              <p className="mt-2 text-xs text-gray-500">
+                Beginner Track &mdash; Graduate later to the{' '}
+                <a
+                  href="genai_techniques_selector.html"
+                  className="text-sky-600 hover:text-sky-700 underline underline-offset-2 font-semibold"
+                >
+                  GenAI Technique Selector
+                </a>
+                {' '}for a deeper, research-grade view.
+              </p>
+
+              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+                <button
+                  onClick={reset}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-sky-400 hover:shadow-md transition-all text-gray-700"
+                >
+                  <Home className="w-4 h-4" />
+                  Start Over
+                </button>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-3">
-              GenAI Foundations Navigator
-            </h1>
-            <p className="text-xs md:text-sm text-gray-600 max-w-2xl mx-auto">
-              A guided, click‑through tree that helps you decide when to stop at prompt engineering, when to add RAG,
-              when training is justified, and when to think about optimization.
-            </p>
-            <p className="mt-3 text-[11px] text-gray-500">
-              You can always graduate later to the{' '}
-              <a
-                href="genai_techniques_selector.html"
-                className="text-amber-400 hover:text-amber-300 underline underline-offset-2"
-              >
-                GenAI Technique Selector
-              </a>
-              {' '}for a deeper, research‑grade view.
-            </p>
-          </header>
 
-          {/* Breadcrumb */}
-          {path.length > 0 && <PathBreadcrumb />}
+            {/* Breadcrumb */}
+            {path.length > 0 && <PathBreadcrumb />}
 
-          {/* Main panel */}
-          <section className="bg-white border border-gray-200 rounded-2xl p-5 md:p-7 shadow-sm">
-            {currentData?.info && (
-              <div className="mb-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-md p-3 flex gap-2 text-[11px] text-blue-900">
-                <Info className="w-4 h-4 text-blue-600 mt-[2px]" />
-                <p className="leading-relaxed">{currentData.info}</p>
-              </div>
-            )}
+            {/* Main panel */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+              {currentData?.info && (
+                <div className="mb-6 bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-5 h-5 text-sky-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-sky-900 text-sm leading-relaxed">{currentData.info}</p>
+                  </div>
+                </div>
+              )}
 
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
-              {currentData?.question}
-            </h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+                {currentData?.question}
+              </h2>
 
-            {/* Decision node */}
-            {currentData?.type === 'decision' && (
+              {/* Decision node */}
+              {currentData?.type === 'decision' && (
                 <div className="grid md:grid-cols-2 gap-4">
-                {currentData.options.map((opt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleChoice(opt.next, opt.label)}
-                      className="group text-left bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-lg p-4 hover:border-blue-400 hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-600">
-                        {opt.label}
-                      </p>
-                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
-                    </div>
-                      <p className="text-[11px] text-gray-600">{opt.desc}</p>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Content node */}
-            {currentData?.type === 'content' && (
-              <div className="space-y-5">
-                <div className="grid md:grid-cols-2 gap-3">
-                  {currentData.sections?.map((section, idx) => (
-                    <SectionCard key={idx} section={section} />
+                  {currentData.options.map((opt, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleChoice(opt.next, opt.label)}
+                      className="group p-6 border-2 border-gray-300 rounded-xl hover:border-sky-500 hover:shadow-lg transition-all text-left bg-gradient-to-br from-white to-gray-50 hover:from-sky-50 hover:to-cyan-50"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-lg font-bold text-gray-900 group-hover:text-sky-600 transition-colors">
+                          {opt.label}
+                        </p>
+                        <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-sky-600 group-hover:translate-x-1 transition-all" />
+                      </div>
+                      <p className="text-sm text-gray-600">{opt.desc}</p>
+                    </button>
                   ))}
                 </div>
+              )}
 
-                {currentData.continueOptions && (
-                  <div className="mt-3">
-                    <p className="text-[11px] text-gray-500 mb-2">
-                      {currentData.nextQuestion || 'What would you like to explore next?'}
-                    </p>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      {currentData.continueOptions.map((opt, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleChoice(opt.next, opt.label)}
-                          className="text-left bg-white border border-blue-200 rounded-md px-3 py-2 hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-between gap-2"
-                        >
-                          <span className="text-xs text-blue-800">{opt.label}</span>
-                          <ChevronRight className="w-3 h-3 text-blue-500" />
-                        </button>
-                      ))}
-                    </div>
+              {/* Content node */}
+              {currentData?.type === 'content' && (
+                <div>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    {currentData.sections?.map((section, idx) => (
+                      <SectionCard key={idx} section={section} />
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
 
-            {/* Link node */}
-            {currentData?.type === 'link' && (
-              <div className="space-y-4 text-[11px] text-gray-700">
-                {currentData.info && <p>{currentData.info}</p>}
-                <a
-                  href={currentData.link.href}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-semibold hover:from-blue-500 hover:to-purple-500 transition-colors"
+                  {currentData.continueOptions && (
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-500 mb-3">
+                        {currentData.nextQuestion || 'What would you like to explore next?'}
+                      </h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {currentData.continueOptions.map((opt, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleChoice(opt.next, opt.label)}
+                            className="p-4 border-2 border-sky-300 rounded-lg hover:border-sky-500 hover:shadow-lg transition-all text-left bg-white hover:bg-sky-50 flex items-center justify-between group"
+                          >
+                            <span className="font-semibold text-gray-900 group-hover:text-sky-600 text-sm">{opt.label}</span>
+                            <ChevronRight className="w-5 h-5 text-sky-500 group-hover:translate-x-1 transition-all" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Link node */}
+              {currentData?.type === 'link' && (
+                <div className="space-y-4 text-sm text-gray-700">
+                  {currentData.info && <p>{currentData.info}</p>}
+                  <a
+                    href={currentData.link.href}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-gradient-to-r from-sky-600 to-cyan-600 text-white text-sm font-semibold hover:from-sky-500 hover:to-cyan-500 hover:shadow-lg transition-all"
+                  >
+                    {currentData.link.label}
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+                </div>
+              )}
+
+              {/* Back button */}
+              {path.length > 0 && (
+                <button
+                  onClick={goBack}
+                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
                 >
-                  {currentData.link.label}
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronLeft className="w-5 h-5" />
+                  Go Back
+                </button>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-8 text-gray-500 text-sm">
+              <p>
+                This page is a guided, beginner-friendly overview. For a deeper, research-grade map of options, see the{' '}
+                <a
+                  href="genai_techniques_selector.html"
+                  className="text-sky-600 hover:text-sky-700 underline underline-offset-2 font-semibold"
+                >
+                  GenAI Technique Selector
+                </a>.
+              </p>
+              <p className="mt-2 text-xs">
+                Created by Tarek Atwan @{' '}
+                <a
+                  href="index.html"
+                  className="text-sky-600 hover:text-sky-700 underline underline-offset-2 font-semibold"
+                >
+                  ML_LAB
                 </a>
-              </div>
-            )}
-
-            {/* Back button */}
-            {path.length > 0 && (
-              <button
-                onClick={goBack}
-                className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-md border border-gray-300 text-[11px] text-gray-700 hover:border-gray-400 hover:bg-gray-100 transition-all"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Go back one step
-              </button>
-            )}
-          </section>
-
-          {/* Footer */}
-          <footer className="mt-8 text-center text-[11px] text-gray-500">
-            <p className="mb-1">
-              This page is a guided, beginner‑friendly overview. For a deeper, research‑grade map of options, see the{' '}
-              <a
-                href="genai_techniques_selector.html"
-                className="text-blue-600 hover:text-blue-700 underline underline-offset-2"
-              >
-                GenAI Technique Selector
-              </a>
-              .
-            </p>
-            <p>
-              Created by Tarek Atwan @{' '}
-              <a
-                href="index.html"
-                className="text-blue-600 hover:text-blue-700 underline underline-offset-2"
-              >
-                ML_LAB
-              </a>
-            </p>
-          </footer>
+              </p>
+            </div>
           </div>
-        </main>
+        </div>
       );
     };
 
@@ -478,4 +506,3 @@
 </body>
 
 </html>
-
