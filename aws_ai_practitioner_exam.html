@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS AI Practitioner Practice Exam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'JetBrains Mono', monospace; margin: 0; }
+    h1, h2, h3 { font-family: 'Instrument Serif', serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    @keyframes slideRight { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(251,146,60,0.4); } 70% { box-shadow: 0 0 0 10px rgba(251,146,60,0); } 100% { box-shadow: 0 0 0 0 rgba(251,146,60,0); } }
+    @keyframes correct-flash { 0%{background:rgba(34,197,94,0.0)} 50%{background:rgba(34,197,94,0.1)} 100%{background:rgba(34,197,94,0.0)} }
+    @keyframes wrong-flash { 0%{background:rgba(239,68,68,0.0)} 50%{background:rgba(239,68,68,0.1)} 100%{background:rgba(239,68,68,0.0)} }
+    .fade-up { animation: fadeUp 0.4s ease-out both; }
+    .scale-in { animation: scaleIn 0.3s ease-out both; }
+    .slide-right { animation: slideRight 0.3s ease-out both; }
+    .pulse-ring { animation: pulse-ring 2s infinite; }
+    .correct-flash { animation: correct-flash 0.6s ease-out; }
+    .wrong-flash { animation: wrong-flash 0.6s ease-out; }
+
+    .option-btn { transition: all 0.2s ease; }
+    .option-btn:not(:disabled):hover { transform: translateX(4px); }
+
+    .progress-segment { transition: background 0.3s ease; }
+
+    .grain-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+
+<body class="bg-slate-950 min-h-screen text-slate-200">
+  <div class="grain-overlay"></div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useCallback, useRef } = React;
+
+    // ── Domain config ──
+    const DOMAINS = {
+      1: { name: "Fundamentals of AI and ML", short: "AI/ML Fundamentals", weight: 0.20, color: "#f59e0b" },
+      2: { name: "Fundamentals of Generative AI", short: "Generative AI", weight: 0.24, color: "#f97316" },
+      3: { name: "Applications of Foundation Models", short: "Foundation Models", weight: 0.28, color: "#ef4444" },
+      4: { name: "Guidelines for Responsible AI", short: "Responsible AI", weight: 0.14, color: "#8b5cf6" },
+      5: { name: "Security, Compliance, and Governance", short: "Security & Gov", weight: 0.14, color: "#06b6d4" }
+    };
+
+    // Distribution per exam size
+    const DISTRIBUTION = {
+      10: { 1:2, 2:2, 3:3, 4:2, 5:1 },
+      15: { 1:3, 2:4, 3:4, 4:2, 5:2 },
+      20: { 1:4, 2:5, 3:6, 4:3, 5:2 },
+      30: { 1:6, 2:7, 3:9, 4:4, 5:4 }
+    };
+
+    // ── Question Bank ──
+    const QUESTIONS = [
+      // ═══════════════════════════════════════
+      // DOMAIN 1: Fundamentals of AI and ML
+      // ═══════════════════════════════════════
+      {
+        id: 1, domain: 1,
+        question: "A company wants to build an ML model by using Amazon SageMaker. The company needs to share and manage variables for model development across multiple teams. Which SageMaker feature meets these requirements?",
+        options: ["Amazon SageMaker Feature Store", "Amazon SageMaker Data Wrangler", "Amazon SageMaker Clarify", "Amazon SageMaker Model Cards"],
+        correct: 0,
+        explanation: "SageMaker Feature Store is a centralized repository to store, discover, and share ML features for reuse across models and teams."
+      },
+      {
+        id: 2, domain: 1,
+        question: "A company has petabytes of unlabeled customer data to use for an advertisement campaign. The company wants to classify its customers into tiers. Which methodology should the company use?",
+        options: ["Supervised learning", "Unsupervised learning", "Reinforcement learning", "Reinforcement learning from human feedback (RLHF)"],
+        correct: 1,
+        explanation: "Unsupervised learning is used when you have unlabeled data and want to discover patterns or groupings (clustering) within the data."
+      },
+      {
+        id: 3, domain: 1,
+        question: "A data scientist is building an AI model to predict sales volumes from a market dataset. After ingesting the data, the data scientist wants to determine which market parameters would most affect sales volume. Which ML lifecycle step does this describe?",
+        options: ["Data collection", "Feature selection", "Model validation", "Model monitoring"],
+        correct: 1,
+        explanation: "Feature selection involves selecting data attributes or variables during the development of a predictive model. This is where you determine which parameters to incorporate into the model."
+      },
+      {
+        id: 4, domain: 1,
+        question: "A company wants to develop an educational game where users answer probability questions such as marble-drawing scenarios. Which solution meets these requirements with the LEAST operational overhead?",
+        options: ["Use supervised learning to create a regression model", "Use reinforcement learning to train a model", "Use code that calculates probability using simple rules and computations", "Use unsupervised learning to estimate probability density"],
+        correct: 2,
+        explanation: "Simple probability calculations don't need ML. Using straightforward code with rules and computations is the most efficient approach for deterministic math problems."
+      },
+      {
+        id: 5, domain: 1,
+        question: "A company has built an image classification model to predict plant diseases from photos. The company wants to evaluate how many images the model classified correctly. Which evaluation metric should be used?",
+        options: ["R-squared score", "Accuracy", "Root mean squared error (RMSE)", "Learning rate"],
+        correct: 1,
+        explanation: "Accuracy measures the proportion of correct predictions out of total predictions. It is the appropriate metric for classification tasks."
+      },
+      {
+        id: 6, domain: 1,
+        question: "A utility company is building an AI model to predict electricity demand using a large labeled dataset of historical demand data including weather conditions. Which type of learning method should the company use?",
+        options: ["Supervised learning", "Unsupervised learning", "Semi-supervised learning", "Reinforcement learning"],
+        correct: 0,
+        explanation: "Supervised learning trains on labeled data where both inputs and outputs are known. Since the company has labeled historical demand data, supervised learning is appropriate."
+      },
+      {
+        id: 7, domain: 1,
+        question: "Which concept describes developing algorithms and statistical models that computer systems use to perform complex tasks without explicit instructions?",
+        options: ["Object-oriented programming (OOP)", "SageMaker built-in algorithms", "Inference", "Machine learning (ML)"],
+        correct: 3,
+        explanation: "ML is the science of developing algorithms and statistical models that computer systems use to perform complex tasks without explicit instructions."
+      },
+      {
+        id: 8, domain: 1,
+        question: "A company recently started developing ML solutions using Amazon SageMaker. The company does not have a skilled workforce to write scripts for data cleansing. Which SageMaker feature can be used with MINIMAL scripting requirements?",
+        options: ["SageMaker Data Wrangler", "SageMaker Feature Store", "SageMaker Clarify", "SageMaker Pipelines"],
+        correct: 0,
+        explanation: "SageMaker Data Wrangler has a graphical UI and is a low-code/no-code (LCNC) solution for data cleansing and preparation."
+      },
+      {
+        id: 9, domain: 1,
+        question: "A data scientist is building an ML model to predict the annual sales volume of a specific product. Which model evaluation metrics are appropriate? (Select TWO.)",
+        options: ["Accuracy", "Precision", "MAPE (Mean Absolute Percentage Error)", "MAE (Mean Absolute Error)"],
+        correct: [2, 3],
+        explanation: "MAPE and MAE are regression metrics suitable for numeric predictions. Accuracy and Precision are classification metrics, not suitable for predicting continuous values like sales volume.",
+        multiSelect: true
+      },
+      {
+        id: 10, domain: 1,
+        question: "An AI specialist is training a regression ML model. Which bias and variance pattern will result in model overfitting?",
+        options: ["Low bias, low variance", "Low bias, high variance", "High bias, low variance", "High bias, high variance"],
+        correct: 1,
+        explanation: "Low bias means the model fits training data well. High variance means it's sensitive to noise in training data and overfits. This combination (low bias, high variance) indicates overfitting."
+      },
+      {
+        id: 11, domain: 1,
+        question: "A company uses Amazon SageMaker for its ML pipeline with large input data sizes up to 1 GB and processing times up to 1 hour. The company needs near real-time latency. Which SageMaker inference option meets these requirements?",
+        options: ["Real-time inference", "Serverless inference", "Asynchronous inference", "Batch transform"],
+        correct: 2,
+        explanation: "Asynchronous inference handles large payloads (up to 1 GB) with longer processing times while providing near real-time results. Real-time inference has payload limits, and batch transform doesn't provide near real-time latency."
+      },
+      {
+        id: 12, domain: 1,
+        question: "A company is using domain-specific models and wants to adapt pre-trained models to create models for new, related tasks without creating new models from scratch. Which ML strategy meets these requirements?",
+        options: ["Increase the number of epochs", "Use transfer learning", "Decrease the number of epochs", "Use unsupervised learning"],
+        correct: 1,
+        explanation: "Transfer learning adapts a pre-trained model to a new but related task. This avoids building models from scratch while leveraging existing knowledge."
+      },
+      {
+        id: 13, domain: 1,
+        question: "Which metric measures the runtime efficiency of operating AI models?",
+        options: ["Customer satisfaction score (CSAT)", "Training time for each epoch", "Average response time", "Number of training instances"],
+        correct: 2,
+        explanation: "Average response time measures the runtime efficiency of AI model operations, indicating how quickly the model can process requests and return results."
+      },
+      {
+        id: 14, domain: 1,
+        question: "A company wants to classify human genes into 20 categories based on gene characteristics. The company needs an ML algorithm that can document how the inner mechanism of the model affects the output. Which ML algorithm meets these requirements?",
+        options: ["Decision trees", "Linear regression", "Logistic regression", "Neural networks"],
+        correct: 0,
+        explanation: "Decision trees are inherently interpretable - you can trace exactly how each decision is made through the tree structure, making the inner mechanism transparent."
+      },
+      {
+        id: 15, domain: 1,
+        question: "A company collects a large tabular dataset weekly for an ML workflow. The workflow can tolerate delays of up to 7 days between inferences, and processing can take up to a few hours. The company wants to avoid paying for endpoints when not in use. Which type of inference will meet these requirements?",
+        options: ["Real-time inference", "Serverless inference", "Asynchronous inference", "Batch Transform"],
+        correct: 3,
+        explanation: "Batch Transform runs inferencing on entire datasets without maintaining a persistent endpoint. You only pay during processing, and it's ideal for periodic batch workloads."
+      },
+      {
+        id: 16, domain: 1,
+        question: "Which statements describe ML? (Select TWO.)",
+        options: ["ML uses algorithms to discover trends and patterns in data", "ML requires explicit programming for every decision", "ML is a specific branch of AI", "ML cannot learn from historical data"],
+        correct: [0, 2],
+        explanation: "ML uses algorithms to discover trends and patterns in data, and it is indeed a specific branch of AI. ML does NOT require explicit programming for every decision - that's the opposite of ML.",
+        multiSelect: true
+      },
+      {
+        id: 17, domain: 1,
+        question: "A real estate company wants to build an ML model to predict sales prices of residential properties based on location, size, number of bedrooms, and amenities. Which ML technique will meet this requirement?",
+        options: ["Classification", "Clustering", "Regression", "Anomaly detection"],
+        correct: 2,
+        explanation: "Regression predicts continuous numerical values. Predicting sales prices is a regression task because the output is a continuous number (price)."
+      },
+      {
+        id: 18, domain: 1,
+        question: "A data scientist is building an ML pipeline to train a text classification model. The data has already been collected. Which component of the ML lifecycle must be completed FIRST?",
+        options: ["Model training", "Feature engineering", "Model deployment", "Model evaluation"],
+        correct: 1,
+        explanation: "After data collection, feature engineering is the next step. You must select and transform variables to create features before you can train a model."
+      },
+      {
+        id: 19, domain: 1,
+        question: "Which ML type involves training a model to maximize cumulative reward based on feedback received from the environment?",
+        options: ["Supervised learning", "Unsupervised learning", "Reinforcement learning", "Semi-supervised learning"],
+        correct: 2,
+        explanation: "Reinforcement learning involves an agent learning behavior by trying to maximize a long-term reward through interaction with an environment."
+      },
+      {
+        id: 20, domain: 1,
+        question: "A company deployed a computer vision model and wants to continuously track the model's performance and detect drift or degradation over time. Which AWS service or feature will meet these requirements?",
+        options: ["Amazon SageMaker Clarify", "Amazon SageMaker Model Monitor", "Amazon Rekognition", "Amazon SageMaker Autopilot"],
+        correct: 1,
+        explanation: "SageMaker Model Monitor continuously monitors deployed models for data drift, model quality degradation, and bias drift in production."
+      },
+      // ═══════════════════════════════════════
+      // DOMAIN 2: Fundamentals of Generative AI
+      // ═══════════════════════════════════════
+      {
+        id: 21, domain: 2,
+        question: "A retail company wants to start testing Amazon Bedrock foundation models (FMs) for text generation. How will the company be charged for using on-demand Amazon Bedrock models?",
+        options: ["By the number of API calls", "By the number of input tokens that are processed", "By a monthly subscription fee", "By the number of input tokens received and the number of output tokens generated"],
+        correct: 3,
+        explanation: "On-demand Amazon Bedrock models for text generation are charged by the number of input tokens received and output tokens generated. You pay for what you use with no long-term contracts."
+      },
+      {
+        id: 22, domain: 2,
+        question: "A company wants to use an LLM to improve business productivity. Order the LLM customization approaches from LEAST to MOST operational overhead.",
+        options: ["Select and use a specific LLM → Prompt engineering → Fine-tuning → Pre-training a new LLM", "Prompt engineering → Select an LLM → Fine-tuning → Pre-training a new LLM", "Pre-training → Fine-tuning → Prompt engineering → Select an LLM", "Fine-tuning → Prompt engineering → Select an LLM → Pre-training a new LLM"],
+        correct: 0,
+        explanation: "From least to most overhead: 1) Select an existing LLM (no customization), 2) Prompt engineering (design prompts, no model changes), 3) Fine-tuning (train on new data), 4) Pre-training a new LLM (most resource-intensive)."
+      },
+      {
+        id: 23, domain: 2,
+        question: "Which AWS service can build conversational interfaces into an application by using voice and text?",
+        options: ["Amazon Polly", "Amazon Lex", "Amazon Transcribe", "Amazon Comprehend"],
+        correct: 1,
+        explanation: "Amazon Lex is the service for building conversational interfaces (chatbots) using both voice and text. It powers Alexa."
+      },
+      {
+        id: 24, domain: 2,
+        question: "A company created an AI chatbot using an LLM. Some employees report that generated responses do not make sense based on the questions asked. Which concept does this describe?",
+        options: ["Overfitting", "Hallucination", "Underfitting", "Bias"],
+        correct: 1,
+        explanation: "Hallucination occurs when an LLM generates false or nonsensical information that appears plausible. The responses seem reasonable but don't actually make sense in context."
+      },
+      {
+        id: 25, domain: 2,
+        question: "A company needs to identify generative AI models that can interpret contents from an image. Which type of model will meet these requirements?",
+        options: ["Text-only model", "Multimodal model", "Audio generation model", "Text embedding model"],
+        correct: 1,
+        explanation: "Multimodal models can process and understand multiple types of input, including text and images. They can interpret image contents and generate text-based responses."
+      },
+      {
+        id: 26, domain: 2,
+        question: "What are disadvantages or limitations of working with generative AI? (Select TWO.)",
+        options: ["Hallucination of false information", "Zero-shot prompting", "Cross-validation limitations", "Knowledge has a data limitation (training data cutoff)"],
+        correct: [0, 3],
+        explanation: "Hallucination (generating false information) and knowledge data limitations (static training data cutoff) are key limitations of generative AI.",
+        multiSelect: true
+      },
+      {
+        id: 27, domain: 2,
+        question: "A company wants to use AI to improve business operations and explore foundation models (FMs) that fit its specific use case. Which solution will meet these requirements with the LEAST operational effort?",
+        options: ["Train a custom model using SageMaker", "Select an FM by using Amazon Bedrock", "Build a model using SageMaker Canvas", "Deploy models from SageMaker JumpStart"],
+        correct: 1,
+        explanation: "Amazon Bedrock provides serverless access to foundation models via API with no infrastructure management. This requires the least operational effort."
+      },
+      {
+        id: 28, domain: 2,
+        question: "A data scientist wants an AI coding companion that can be used with Amazon SageMaker Studio to provide code suggestions. Which AWS service or application will meet this requirement?",
+        options: ["Amazon Q Business", "Amazon Q Developer", "Amazon Bedrock", "SageMaker Autopilot"],
+        correct: 1,
+        explanation: "Amazon Q Developer is the AI coding companion that integrates with IDEs like SageMaker Studio to provide code suggestions and improve developer productivity."
+      },
+      {
+        id: 29, domain: 2,
+        question: "A company wants to add audio-generation capabilities to its book-summary application. Which AWS service will meet this requirement with the LEAST operational effort?",
+        options: ["Amazon Transcribe", "Amazon Polly", "Amazon Bedrock", "Amazon Lex"],
+        correct: 1,
+        explanation: "Amazon Polly is a text-to-speech (TTS) service that converts text into lifelike speech. It's the simplest solution for audio generation from text."
+      },
+      {
+        id: 30, domain: 2,
+        question: "A company wants to provide employees with a chatbot that can answer questions about company-internal, confidential information across hundreds of documents. Which AWS managed service should the company use with the LEAST operational overhead?",
+        options: ["Amazon Kendra", "Amazon Bedrock with RAG", "Amazon Q Business", "Amazon Lex"],
+        correct: 2,
+        explanation: "Amazon Q Business is a fully managed generative AI assistant that can answer questions based on internal company documents with minimal operational overhead."
+      },
+      {
+        id: 31, domain: 2,
+        question: "Which inference parameters affect the responses of a prompt? (Select TWO.)",
+        options: ["Temperature", "Embeddings", "Image_uri", "Top_p"],
+        correct: [0, 3],
+        explanation: "Temperature controls randomness/creativity of responses. Top_p controls the sample size of most likely candidates for the next token. Both directly affect model output.",
+        multiSelect: true
+      },
+      {
+        id: 32, domain: 2,
+        question: "A financial company pre-trained its own large language model (LLM) on proprietary data. Which AWS service can the company use to deploy the LLM?",
+        options: ["Amazon Bedrock", "Amazon SageMaker AI", "Amazon Lex", "Amazon Comprehend"],
+        correct: 1,
+        explanation: "Amazon SageMaker AI is the comprehensive platform to build, train, and deploy custom ML models. It supports deploying your own pre-trained models."
+      },
+      {
+        id: 33, domain: 2,
+        question: "A company wants to deploy, fine-tune, and evaluate a pre-trained foundation model (FM) using a popular model hub such as Hugging Face. Which solution will meet this requirement with the LEAST operational overhead?",
+        options: ["Amazon Bedrock", "Amazon SageMaker JumpStart", "Amazon EC2 with GPU instances", "AWS Lambda"],
+        correct: 1,
+        explanation: "SageMaker JumpStart is a model hub that provides access to hundreds of pre-trained models including those from Hugging Face, with one-click deployment and fine-tuning."
+      },
+      {
+        id: 34, domain: 2,
+        question: "What is a limitation of generative AI when applied to business problem solving?",
+        options: ["Inability to process natural language", "Generation of biased output", "Inability to generate text content", "Requirement for labeled data only"],
+        correct: 1,
+        explanation: "A key limitation of generative AI is the potential generation of biased output, which can reflect biases present in training data."
+      },
+      {
+        id: 35, domain: 2,
+        question: "Which factors can impact the latency of invoking a large language model (LLM)? (Select TWO.)",
+        options: ["The number of tokens in the input prompt", "The configuration of the Top K parameter", "The configuration of the temperature parameter", "The number of tokens in the response"],
+        correct: [0, 3],
+        explanation: "Input prompt length affects processing time before the first output token. Response length (output tokens) affects total latency since LLMs generate one token at a time. Top K and temperature affect output distribution but not latency.",
+        multiSelect: true
+      },
+      {
+        id: 36, domain: 2,
+        question: "A company wants to use natural language queries to simplify the creation of BI reports without coding. Which AWS service or feature will meet these requirements?",
+        options: ["Amazon Athena", "Amazon Q in QuickSight", "Amazon Comprehend", "Amazon SageMaker Canvas"],
+        correct: 1,
+        explanation: "Amazon Q integrates with QuickSight to provide the ability to query data sources in natural language and produce charts or plots without coding."
+      },
+      // ═══════════════════════════════════════
+      // DOMAIN 3: Applications of Foundation Models
+      // ═══════════════════════════════════════
+      {
+        id: 37, domain: 3,
+        question: "An ML engineer wants to implement RAG for a foundation model. The engineer must select a database service that supports similarity search and can store vector embeddings. Which AWS services will meet these requirements? (Select TWO.)",
+        options: ["Amazon OpenSearch Service", "Amazon DynamoDB", "Amazon Redshift", "Amazon RDS for PostgreSQL"],
+        correct: [0, 3],
+        explanation: "OpenSearch Service has built-in KNN and semantic search for embeddings. RDS for PostgreSQL supports the pgvector extension for vector similarity search. DynamoDB and Redshift don't support vector similarity search.",
+        multiSelect: true
+      },
+      {
+        id: 38, domain: 3,
+        question: "An online education company is developing an AI teaching assistant using an FM. The company wants the assistant to understand and follow directions and provide guided responses. Which technique should be used?",
+        options: ["Pre-training", "Instruction tuning", "Domain adaptation", "Continuous pre-training"],
+        correct: 1,
+        explanation: "Instruction tuning provides specific labeled examples to train a model on following tasks and responding to prompts in a specific way, improving direction-following capability."
+      },
+      {
+        id: 39, domain: 3,
+        question: "A company wants to build an internal chatbot that answers employee questions based on internal documents with minimal development cost. Which solution will meet these requirements with the LEAST operational overhead?",
+        options: ["Fine-tune a model on internal documents", "Pre-train a new LLM on company data", "Implement a RAG application with a knowledge base", "Use in-context learning with prompt engineering"],
+        correct: 2,
+        explanation: "RAG retrieves information from a knowledge base to generate grounded responses. It requires the least overhead - no labeling, preprocessing, or model training needed."
+      },
+      {
+        id: 40, domain: 3,
+        question: "A company provided the following prompt to its LLM:\n\n'The acting in the movie was really bad. // Negative Sentiment\nThis movie had lot of good action. // Positive Sentiment\nThis movie was ok. // Neutral Sentiment\nWhat a terrible play! //'\n\nWhich prompting technique does this describe?",
+        options: ["Zero-shot learning", "Single-shot learning", "Few-shot learning", "Chain-of-thought prompting"],
+        correct: 2,
+        explanation: "Few-shot learning provides multiple examples of the desired task before asking the model to complete a new one. Here, three sentiment examples are given before the model is asked to classify a fourth."
+      },
+      {
+        id: 41, domain: 3,
+        question: "A company wants to evaluate the quality of machine-generated summarization text against reference texts. Which metric will meet these requirements?",
+        options: ["Accuracy", "F1 Score", "ROUGE", "Perplexity"],
+        correct: 2,
+        explanation: "ROUGE (Recall-Oriented Understudy for Gisting Evaluation) assesses the quality of machine-generated text by comparing n-gram overlaps between generated and reference texts."
+      },
+      {
+        id: 42, domain: 3,
+        question: "A manufacturing company wants a virtual assistant that answers technical questions based solely on proprietary engineering documentation, minimizing hallucinations. Which solution will meet these requirements with the LEAST operational overhead?",
+        options: ["Fine-tune an FM on the documentation", "Use a general-purpose FM directly", "Implement a RAG solution", "Use in-context learning alone"],
+        correct: 2,
+        explanation: "RAG searches proprietary documents and retrieves relevant context for text generation, grounding responses to company-specific information. This reduces hallucinations with less overhead than fine-tuning."
+      },
+      {
+        id: 43, domain: 3,
+        question: "An ML engineer deployed an FM and noticed the response format needs improvement. Which technique will meet these requirements MOST cost-effectively?",
+        options: ["Retrieval Augmented Generation (RAG)", "Prompt engineering", "Feature engineering", "Fine-tuning"],
+        correct: 1,
+        explanation: "Prompt engineering crafts prompts to improve response format without additional resources or infrastructure. It's the most cost-effective first step."
+      },
+      {
+        id: 44, domain: 3,
+        question: "A company wants to develop an internal solution that summarizes several emails and long meeting notes using FMs on Amazon Bedrock. Which model property should be considered FIRST when choosing a model?",
+        options: ["Temperature", "Top P", "Stop sequences", "Context window"],
+        correct: 3,
+        explanation: "For summarizing large amounts of text, the context window (number of tokens the model can accept) must be considered first to ensure the model can process the full input."
+      },
+      {
+        id: 45, domain: 3,
+        question: "A data scientist is using a diffusion model to generate images from text prompts. The generated images are often blurry and contain unwanted noise. Which prompting technique can remove unwanted noise?",
+        options: ["Few-shot prompting", "Negative prompting", "Single-shot prompting with context", "Chain-of-thought prompting"],
+        correct: 1,
+        explanation: "Negative prompting explicitly instructs an image generation model to avoid certain elements, effectively removing unwanted noise and artifacts from generated images."
+      },
+      {
+        id: 46, domain: 3,
+        question: "A company wants an LLM to break down complex tasks into a series of steps and show intermediate reasoning. Which prompt engineering technique will meet these requirements?",
+        options: ["Zero-shot prompting", "Few-shot prompting", "Chain-of-thought prompting", "Prompt templates"],
+        correct: 2,
+        explanation: "Chain-of-thought prompting asks the model to show step-by-step reasoning, improving performance on complex tasks and providing transparency into the decision-making process."
+      },
+      {
+        id: 47, domain: 3,
+        question: "A school wants to build an application to assist students in solving math problems by providing step-by-step explanations. Which technique will MOST reliably improve the FM's performance?",
+        options: ["Single-shot prompt engineering", "Few-shot prompt engineering", "RAG", "Chain-of-thought prompt engineering"],
+        correct: 3,
+        explanation: "Chain of thought breaks down complex questions into smaller parts. It's the recommended technique for arithmetic and logical tasks requiring reasoning and step-by-step explanation."
+      },
+      {
+        id: 48, domain: 3,
+        question: "An insurance company is building an application for document classification using an LLM with a dataset of 10,000 documents. The model must learn from the entire dataset. Which solution will meet these requirements with the SMALLEST prompt size?",
+        options: ["Few-shot prompting", "Single-shot prompting", "Instruction-based fine-tuning", "Continued pre-training"],
+        correct: 2,
+        explanation: "Instruction-based fine-tuning trains the model with the full dataset, so you don't need to add examples in each prompt. This reduces prompt size compared to few-shot prompting while incorporating all data."
+      },
+      {
+        id: 49, domain: 3,
+        question: "A company wants to use a large language model (LLM) to learn language specific to the company's domain. The company has a large amount of unlabeled data. Which solution will meet these requirements with the LEAST operational overhead?",
+        options: ["Fine-tuning with labeled data", "Continued pre-training", "Training a new LLM", "Providing data as context in prompts"],
+        correct: 1,
+        explanation: "Continued pre-training uses unlabeled data to adapt a model with domain-specific knowledge. It's less overhead than training from scratch and doesn't require labeled data like fine-tuning."
+      },
+      {
+        id: 50, domain: 3,
+        question: "A generative AI specialist provides a prompt on a desired output without any examples. Which technique does this describe?",
+        options: ["Zero-shot learning", "Single-shot learning", "Few-shot learning", "Chain-of-thought"],
+        correct: 0,
+        explanation: "Zero-shot learning provides a prompt without any examples, relying on the model's pre-trained knowledge to generate the desired output."
+      },
+      {
+        id: 51, domain: 3,
+        question: "Which metric can assess foundation model (FM) performance in the context of text summarization?",
+        options: ["Recall", "F1 score", "Classification accuracy", "ROUGE-N"],
+        correct: 3,
+        explanation: "ROUGE-N evaluates text summary quality by comparing n-gram overlaps between generated and reference summaries. Recall, F1, and accuracy are classification metrics."
+      },
+      {
+        id: 52, domain: 3,
+        question: "A legal company is building a generative AI application to review contracts. What is the most likely outcome of fine-tuning the LLM on legal contracts?",
+        options: ["Enhanced vocabulary and understanding of legal terms", "Increased model processing speed", "Decreased understanding of legal terminology", "Decreased model processing speed"],
+        correct: 0,
+        explanation: "Fine-tuning on legal contracts enhances the model's vocabulary and understanding of legal terms, improving relevance for contract review."
+      },
+      {
+        id: 53, domain: 3,
+        question: "A company wants to improve FM performance on Amazon Bedrock for the medical domain using unlabeled clinical diagnosis data (no PII). Which solution will meet these requirements?",
+        options: ["Fine-tune the FM on the clinical data", "Perform continued pre-training on the unlabeled data", "Use prompt engineering only", "Train a new FM from scratch"],
+        correct: 1,
+        explanation: "Continued pre-training uses unlabeled data to adapt the model to domain-specific knowledge. Fine-tuning requires labeled data, which the company doesn't have."
+      },
+      {
+        id: 54, domain: 3,
+        question: "A law firm uses a Bedrock knowledge base as a RAG solution with years of regulatory requirements. Documents lack dates. The firm needs to research requirements effective during specific time periods. Which solution requires the LEAST operational overhead?",
+        options: ["Re-ingest all documents with dates added to content", "Build a custom search application", "Ingest metadata into the knowledge base and filter by date tags", "Use prompt engineering to filter by date"],
+        correct: 2,
+        explanation: "Amazon Bedrock knowledge bases support metadata filtering during context retrieval. Ingesting metadata with date tags enables filtering without modifying document content."
+      },
+      {
+        id: 55, domain: 3,
+        question: "A company wants to create a reusable prompt structure that can be adapted for different tasks and domains. Which prompt engineering technique will meet these requirements?",
+        options: ["Chain-of-thought prompting", "Few-shot prompting", "Prompt templates", "Negative prompting"],
+        correct: 2,
+        explanation: "Prompt templates are structured prompts that can be adapted for different tasks and domains by filling in specific placeholders or slots, providing efficient and consistent prompt engineering."
+      },
+      {
+        id: 56, domain: 3,
+        question: "A marketing company uses an LLM and wants to evaluate how the quality of responses in question answering tasks changes with small adjustments in the input. Which metric should be used?",
+        options: ["BERTScore", "Semantic robustness", "ROUGE", "Perplexity"],
+        correct: 1,
+        explanation: "Semantic robustness measures how much LLM output quality changes with small, semantic-preserving adjustments in the input. It's designed for evaluating sensitivity to input variations."
+      },
+      {
+        id: 57, domain: 3,
+        question: "An AI practitioner wants to use an FM to design a search application that handles queries with text and images. Which type of FM should be used?",
+        options: ["Multi-modal embedding model", "Text embedding model", "Multi-modal generation model", "Image generation model"],
+        correct: 0,
+        explanation: "A multi-modal embedding model can create embeddings from both text and images, enabling search across multiple modalities."
+      },
+      {
+        id: 58, domain: 3,
+        question: "A data scientist invoked an embeddings model using the phrase 'the movie was really great'. What is the output from the model?",
+        options: ["A word indicating the sentiment", "A value rating the plausibility", "An image depicting the phrase", "An array of numerical values"],
+        correct: 3,
+        explanation: "An embeddings model generates a numerical representation of text. The output is an array of numerical values (a vector) that captures semantic meaning."
+      },
+      {
+        id: 59, domain: 3,
+        question: "A sales representative stores customer contracts in PDF format in S3. They need to summarize documents and answer questions without coding experience. Which AWS service will meet these requirements?",
+        options: ["Amazon QuickSight", "Amazon Textract", "Amazon Q Business", "Amazon Kendra"],
+        correct: 2,
+        explanation: "Amazon Q Business is a fully managed generative AI assistant that can analyze PDFs in S3, summarize content, and answer questions through a natural language interface requiring no coding."
+      },
+      // ═══════════════════════════════════════
+      // DOMAIN 4: Guidelines for Responsible AI
+      // ═══════════════════════════════════════
+      {
+        id: 60, domain: 4,
+        question: "A company has a foundation model (FM) in Amazon Bedrock that provides answers to employee questions. The company wants to prevent inappropriate user input and model output. Which feature of Amazon Bedrock can be used?",
+        options: ["Foundation Models (FMs)", "Guardrails", "Knowledge bases", "Agents"],
+        correct: 1,
+        explanation: "Amazon Bedrock Guardrails can prevent or filter inappropriate content from both user input and model output. You can customize guardrails with policies for responsible AI."
+      },
+      {
+        id: 61, domain: 4,
+        question: "A company must ensure that it has a mechanism to observe the inner mechanics of a model and understand exactly how it generates a prediction. Which concept matches this description?",
+        options: ["Interpretability", "Explainability", "Guardrails", "Model evaluation"],
+        correct: 0,
+        explanation: "Interpretability is about understanding the inner mechanics of how a model generates predictions. Explainability focuses on explaining behavior in human terms, which is different."
+      },
+      {
+        id: 62, domain: 4,
+        question: "A financial services company deployed ML models for predictions. Because of sensitive predictions and regulatory compliance, the company wants to evaluate models and explain predictions. Which SageMaker AI feature will meet these requirements?",
+        options: ["SageMaker Model Monitor", "SageMaker Clarify", "SageMaker Studio", "SageMaker Ground Truth"],
+        correct: 1,
+        explanation: "SageMaker Clarify provides insights into bias and feature importance. It can evaluate and explain model predictions, supporting regulatory compliance requirements."
+      },
+      {
+        id: 63, domain: 4,
+        question: "Which strategies help mitigate hallucinations in responses generated by a large language model (LLM)? (Select TWO.)",
+        options: ["Adjusting temperature higher", "Retrieval Augmented Generation (RAG)", "Selecting a model with fewer parameters", "Clear and assertive prompt instructions"],
+        correct: [1, 3],
+        explanation: "RAG enriches prompts with context from trusted sources, reducing hallucinations. Clear instructions guide the model's behavior when facing uncertainty. Higher temperature actually increases randomness and hallucination risk.",
+        multiSelect: true
+      },
+      {
+        id: 64, domain: 4,
+        question: "What is a legal risk related to biased or discriminatory outputs from a generative AI system?",
+        options: ["Increased compute costs", "Breach of consumer protection laws", "Slower model inference", "Reduced training data quality"],
+        correct: 1,
+        explanation: "An AI system producing biased or discriminatory outputs can violate consumer protection laws that prohibit unfair or deceptive practices."
+      },
+      {
+        id: 65, domain: 4,
+        question: "Which methods support balancing bias and variance? (Select TWO.)",
+        options: ["Apply regularization during training", "Increase model complexity", "Analyze historical data to assess potential inequalities in feature distribution", "Remove all validation data"],
+        correct: [0, 2],
+        explanation: "Regularization helps control model complexity, reducing variance and preventing overfitting. Analyzing historical data for inequalities helps identify and reduce bias in predictions.",
+        multiSelect: true
+      },
+      {
+        id: 66, domain: 4,
+        question: "A company is using a text generation FM on Amazon Bedrock for a customer-facing chatbot. The company wants to prevent the FM from answering questions about sensitive topics. Which solution requires the LEAST operational overhead?",
+        options: ["Fine-tune the model to avoid sensitive topics", "Define a denied topic on Amazon Bedrock Guardrails", "Implement custom input filtering logic", "Retrain the model on filtered data"],
+        correct: 1,
+        explanation: "Amazon Bedrock Guardrails allows you to define denied topics to filter content with minimal overhead. You can configure guardrails to deny topics through examples."
+      },
+      {
+        id: 67, domain: 4,
+        question: "A company is building a neural network model to classify text documents. The company wants to ensure predictions can be explained to stakeholders. Which method requires the LEAST operational overhead?",
+        options: ["Use a simple decision tree instead", "Use model-agnostic explainability methods like SHAP", "Manually review each prediction", "Build a custom explanation system"],
+        correct: 1,
+        explanation: "Model-agnostic methods like SHAP can explain complex models like neural networks without requiring full interpretability or custom systems."
+      },
+      {
+        id: 68, domain: 4,
+        question: "A data scientist needs to understand real-time unfair predictions of a model based on attributes such as race, gender, and age. The model is deployed on SageMaker AI. Which AWS service or feature will meet this requirement?",
+        options: ["SageMaker Model Monitor", "SageMaker Clarify", "Amazon Macie", "AWS Audit Manager"],
+        correct: 1,
+        explanation: "SageMaker Clarify can create reports based on bias, detecting unfair predictions related to protected attributes. It includes features for model explainability."
+      },
+      {
+        id: 69, domain: 4,
+        question: "A developer is incorporating a chatbot using generative AI. The developer encounters offensive words in the chat history. Which AWS service can moderate content to prevent offensive words?",
+        options: ["Amazon Comprehend", "SageMaker Clarify", "Amazon Macie", "AWS Config"],
+        correct: 0,
+        explanation: "Amazon Comprehend uses NLP to detect and extract insights from text, including identifying key phrases and sentiment. It can moderate content and detect offensive words or phrases."
+      },
+      {
+        id: 70, domain: 4,
+        question: "Which AWS service or feature can send low-confidence ML predictions to a human for review?",
+        options: ["SageMaker Ground Truth", "Amazon Augmented AI (Amazon A2I)", "SageMaker Clarify", "SageMaker Model Monitor"],
+        correct: 1,
+        explanation: "Amazon A2I implements human review workflows for low-confidence ML predictions, enabling human-in-the-loop review when the model is uncertain."
+      },
+      {
+        id: 71, domain: 4,
+        question: "A company wants to improve its loan approval process by ensuring ML predictions are accurate using human review. Which AWS service builds the workflows necessary for human review of ML predictions?",
+        options: ["SageMaker Ground Truth", "Amazon Augmented AI (Amazon A2I)", "SageMaker Clarify", "Amazon Comprehend"],
+        correct: 1,
+        explanation: "Amazon A2I builds workflows for human review of ML predictions. It's designed to incorporate human judgment where model confidence is low."
+      },
+      {
+        id: 72, domain: 4,
+        question: "A data scientist is experimenting with an LLM for text generation using SageMaker AI. The data scientist wants to evaluate if the model is encoding biases by gender, age, or ethnicity. Which assessment type will meet these requirements?",
+        options: ["Toxicity assessment", "Prompt stereotyping", "Semantic robustness", "Accuracy assessment"],
+        correct: 1,
+        explanation: "Prompt stereotyping measures the probability that an FM is encoding biases in its responses. You can use the FMEval library on SageMaker AI to test for stereotyping."
+      },
+      {
+        id: 73, domain: 4,
+        question: "A company operating in a highly regulated industry wants to deploy an LLM for content generation. What is a challenge for an LLM with a human-centered design?",
+        options: ["High processing precision requirements", "GPU memory limitations", "Model transparency and explainability", "Network bandwidth constraints"],
+        correct: 2,
+        explanation: "AI models based on deep learning can have billions of parameters. Lack of transparency or explainability makes adoption difficult, especially in regulated industries."
+      },
+      {
+        id: 74, domain: 4,
+        question: "A global communications company is building an AI tool to scale customer chat. All responses must be positive, friendly, and unbiased. Which evaluation approach will identify suitable FMs at scale?",
+        options: ["Use SageMaker Clarify with the FMEval library", "Use SageMaker Clarify to detect bias in historical data", "Review AWS AI Service Cards", "Use Amazon A2I for human review"],
+        correct: 0,
+        explanation: "SageMaker Clarify includes the FMEval library to compare FM quality and responsibility metrics including bias and toxicity scores, using built-in or custom test datasets."
+      },
+      {
+        id: 75, domain: 4,
+        question: "A financial services company launched a loan campaign using restricted ML models. Which combination provides transparency, mitigates bias, and provides tighter control? (Select TWO.)",
+        options: ["ML Governance from Amazon SageMaker AI", "Amazon SageMaker Clarify", "Amazon Macie", "AWS CloudTrail"],
+        correct: [0, 1],
+        explanation: "ML Governance from SageMaker AI provides transparent access controls for ML role permissions. SageMaker Clarify generates bias and explainability reports to address potential issues.",
+        multiSelect: true
+      },
+      // ═══════════════════════════════════════
+      // DOMAIN 5: Security, Compliance, Governance
+      // ═══════════════════════════════════════
+      {
+        id: 76, domain: 5,
+        question: "A company uses Amazon SageMaker to deploy ML models. The company must document important details about models in one place for reporting and governance throughout the model lifecycle. Which SageMaker feature will meet these requirements?",
+        options: ["SageMaker Model Cards", "SageMaker FMEval", "SageMaker Data Wrangler", "SageMaker Ground Truth"],
+        correct: 0,
+        explanation: "SageMaker Model Cards document important details about ML models in a single location including intended use, risk ratings, and training parameters for auditing and compliance."
+      },
+      {
+        id: 77, domain: 5,
+        question: "A company plans to use AWS generative AI services to build an enterprise chatbot. The company must provide documentation demonstrating AWS compliance with regulatory standards. Which AWS service provides access to compliance reports?",
+        options: ["AWS Trusted Advisor", "AWS Audit Manager", "Amazon Inspector", "AWS Artifact"],
+        correct: 3,
+        explanation: "AWS Artifact provides a centralized portal to download AWS compliance reports (ISO, SOC) demonstrating that AWS meets regulatory standards."
+      },
+      {
+        id: 78, domain: 5,
+        question: "A company designed a public chatbot using an LLM. The company wants to prevent different types of prompt injection attacks MOST securely. Which strategy should be used?",
+        options: ["Use content filters", "Use salted sequence tags to wrap instructions", "Use word filters as guardrails", "Implement rate limiting"],
+        correct: 1,
+        explanation: "Salted sequence tags prevent tag spoofing by assigning a session-specific sequence to each XML tag. This securely prevents prompt injection by uniquely identifying and protecting instructions."
+      },
+      {
+        id: 79, domain: 5,
+        question: "A company stores customer data in Amazon S3. The compliance policy states no PII or PHI data can be used for ML model training. Which AWS service can discover and monitor sensitive data?",
+        options: ["Amazon Comprehend", "Amazon Macie", "AWS Config", "Amazon Inspector"],
+        correct: 1,
+        explanation: "Amazon Macie uses ML to discover and monitor sensitive data including PII and PHI stored in S3 buckets."
+      },
+      {
+        id: 80, domain: 5,
+        question: "A company wants to track the number of API invocations made to its Amazon Bedrock model. Which AWS service will meet this requirement?",
+        options: ["AWS CloudTrail", "Amazon CloudWatch", "AWS Config", "AWS Audit Manager"],
+        correct: 1,
+        explanation: "CloudWatch tracks operational metrics of AWS resources, including the number of invocations, latency, and errors for Amazon Bedrock."
+      },
+      {
+        id: 81, domain: 5,
+        question: "A financial institution is using Amazon Bedrock in a VPC. To meet regulatory compliance, the VPC cannot access any internet traffic. Which AWS service or feature will meet these requirements?",
+        options: ["AWS PrivateLink", "Amazon Macie", "Amazon CloudFront", "Internet gateway"],
+        correct: 0,
+        explanation: "AWS PrivateLink enables private connectivity between a VPC and AWS services, keeping all network traffic within the AWS network without requiring internet access."
+      },
+      {
+        id: 82, domain: 5,
+        question: "An AWS administrator needs to set up permissions for Amazon S3 and Amazon SageMaker on user, group, and federated role levels. Which AWS service or feature should be used?",
+        options: ["AWS Secrets Manager", "AWS KMS", "S3 bucket policies", "AWS IAM"],
+        correct: 3,
+        explanation: "IAM centrally manages permissions controlling which resources users, groups, or federated roles can access and what actions they can take."
+      },
+      {
+        id: 83, domain: 5,
+        question: "A company is training a model on confidential data stored in Amazon S3. The company must prevent training data from reaching the internet. Which solution will meet these requirements?",
+        options: ["AWS KMS encryption", "AWS PrivateLink", "S3 bucket policies", "AWS WAF"],
+        correct: 1,
+        explanation: "PrivateLink privately connects a VPC to AWS services, keeping network traffic within the AWS network boundary and preventing confidential data from reaching the internet."
+      },
+      {
+        id: 84, domain: 5,
+        question: "Which type of prompt injection attack involves asking an LLM not to follow its structured instructions and to provide output on a prohibited topic?",
+        options: ["Changing the input format", "Exploiting friendliness", "Ignoring the prompt template", "Prompting persona switches"],
+        correct: 2,
+        explanation: "The 'ignoring the prompt template' attack asks the model to ignore its instructions, enabling a user to obtain output on prohibited or harmful topics."
+      },
+      {
+        id: 85, domain: 5,
+        question: "A company that develops AI applications wants guidance about global standards and frameworks to ensure AI applications align with global standards. Which organization can the company reference?",
+        options: ["AWS Well-Architected Framework", "ISO (ISO 42001)", "Amazon Bedrock documentation", "AWS Shared Responsibility Model"],
+        correct: 1,
+        explanation: "ISO establishes global guidelines for managing AI systems. ISO 42001 is an international standard that provides guidance for managing AI systems."
+      },
+      {
+        id: 86, domain: 5,
+        question: "A company's governance team wants to track the risk rating for each LLM without product customization. The company uses SageMaker AI. Which SageMaker AI feature will meet these requirements?",
+        options: ["SageMaker Model Monitor", "SageMaker Model Cards", "SageMaker Clarify", "SageMaker Model Registry"],
+        correct: 1,
+        explanation: "SageMaker Model Cards offer risk rating as a built-in metric that you can track and view, documenting critical details about ML models in a single location."
+      },
+      {
+        id: 87, domain: 5,
+        question: "A healthcare company is developing its own ML algorithm and undergoes compliance audits requiring transparency into model training and performance. Which AWS services or features will meet these requirements? (Select TWO.)",
+        options: ["SageMaker Ground Truth", "SageMaker Clarify", "AWS AI Service Cards", "SageMaker Model Cards"],
+        correct: [1, 3],
+        explanation: "SageMaker Clarify provides bias and feature importance insights for audit support. SageMaker Model Cards document model lifecycle details including training information and evaluation metrics for compliance.",
+        multiSelect: true
+      },
+      {
+        id: 88, domain: 5,
+        question: "Which control will improve security of AI and ML workloads?",
+        options: ["Data encryption and the principle of least privilege", "Using public S3 buckets for training data", "Granting full administrator access to all ML engineers", "Storing credentials in plaintext in code"],
+        correct: 0,
+        explanation: "Data encryption and the principle of least privilege block unauthorized data access and are critical forms of defense for AI and ML workload security."
+      },
+      {
+        id: 89, domain: 5,
+        question: "A company wants to apply a single layer of object-level server-side encryption on data in S3. Data scientists want control over encryption key rotation. Which solution requires the LEAST operational overhead?",
+        options: ["Client-side encryption with S3 Encryption Client", "SSE-KMS (AWS KMS managed keys)", "SSE-C (customer-provided keys)", "DSSE-KMS (dual-layer encryption)"],
+        correct: 1,
+        explanation: "SSE-KMS provides server-side encryption using keys stored in AWS KMS. You can centrally create, view, edit, monitor, enable, disable, rotate, and schedule keys for deletion."
+      },
+      {
+        id: 90, domain: 5,
+        question: "A company is implementing a generative AI solution and needs to identify relevant security protocols and frameworks to assess risks, governance, and controls of generative AI applications. Which service or framework will meet these requirements?",
+        options: ["AWS Well-Architected Framework", "Generative AI Security Scoping Matrix", "AWS Shared Responsibility Model", "NIST Cybersecurity Framework"],
+        correct: 1,
+        explanation: "The Generative AI Security Scoping Matrix complements existing security practices, focusing on unique risks and additional security considerations for generative AI workloads."
+      },
+      {
+        id: 91, domain: 5,
+        question: "A company wants to ensure responsible AI approaches for a globally expanding AI chat application. Which approaches align with responsible AI principles? (Select TWO.)",
+        options: ["Train on raw historical data without bias mitigation", "Limit model selection to open source models only", "Redact PII through removal or obfuscation", "Continuously monitor for bias drift in model predictions"],
+        correct: [2, 3],
+        explanation: "Redacting PII protects data privacy. Monitoring for bias drift ensures fairness over time. Training on raw data without mitigation introduces bias, and limiting to open source doesn't address all requirements.",
+        multiSelect: true
+      },
+      {
+        id: 92, domain: 5,
+        question: "A company hosts ML models on AWS and needs documents about security and compliance on AWS. Which AWS service will meet these requirements?",
+        options: ["Amazon CloudWatch", "AWS CloudTrail", "AWS Artifact", "AWS Trusted Advisor"],
+        correct: 2,
+        explanation: "AWS Artifact provides on-demand access to security and compliance documentation for the AWS Cloud, including ISO and SOC reports."
+      },
+      {
+        id: 93, domain: 5,
+        question: "A company wants to use a human-centered design for its AI application using RLHF. The company wants to create a trusted training dataset incorporating human feedback. Which solution will meet these requirements?",
+        options: ["SageMaker built-in algorithms", "SageMaker Ground Truth", "SageMaker Autopilot", "SageMaker Pipelines"],
+        correct: 1,
+        explanation: "SageMaker Ground Truth uses human feedback to create labeled datasets. By incorporating human-verified labels, it helps align AI decision-making with real-world contexts."
+      }
+    ];
+
+    // ── Utility ──
+    const shuffle = (arr) => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    };
+
+    const pickQuestions = (count) => {
+      const dist = DISTRIBUTION[count];
+      let picked = [];
+      for (const [domain, num] of Object.entries(dist)) {
+        const pool = shuffle(QUESTIONS.filter(q => q.domain === parseInt(domain)));
+        picked.push(...pool.slice(0, num));
+      }
+      return shuffle(picked);
+    };
+
+    // ── Icons ──
+    const Icon = {
+      Check: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>,
+      X: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>,
+      Arrow: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>,
+      Back: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12"/></svg>,
+      Flag: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>,
+      Trophy: ({c="w-8 h-8"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.003 6.003 0 01-3.77 1.522m0 0a6.003 6.003 0 01-3.77-1.522"/></svg>,
+      Clock: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>,
+      Home: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>,
+    };
+
+    // ── Setup Screen ──
+    const SetupScreen = ({ onStart }) => {
+      const [count, setCount] = useState(20);
+      const sizes = [10, 15, 20, 30];
+
+      const domainCounts = DISTRIBUTION[count];
+      const totalQ = Object.values(DOMAINS).reduce((acc, d) => {
+        const domainNum = Object.entries(DOMAINS).find(([, v]) => v === d)[0];
+        return acc;
+      }, 0);
+
+      return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-2xl w-full">
+            <div className="text-center mb-12 fade-up">
+              <div className="inline-block mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto shadow-lg shadow-orange-500/20">
+                  <span className="text-2xl font-bold text-white" style={{fontFamily:'Instrument Serif'}}>AI</span>
+                </div>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-3" style={{fontFamily:'Instrument Serif'}}>
+                Practice Exam
+              </h1>
+              <p className="text-slate-400 text-sm tracking-wide uppercase">
+                AWS Certified AI Practitioner &middot; AIF-C01
+              </p>
+            </div>
+
+            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 md:p-8 fade-up" style={{animationDelay:'0.1s'}}>
+              <h2 className="text-lg font-semibold text-white mb-1" style={{fontFamily:'Instrument Serif'}}>
+                Select Exam Length
+              </h2>
+              <p className="text-slate-500 text-xs mb-6">Questions are distributed by domain weight, matching the real exam</p>
+
+              <div className="grid grid-cols-4 gap-3 mb-8">
+                {sizes.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setCount(s)}
+                    className={`relative py-4 rounded-xl font-semibold text-lg transition-all ${
+                      count === s
+                        ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 scale-105'
+                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
+                    }`}
+                  >
+                    {s}
+                    <span className="block text-[10px] uppercase tracking-wider opacity-70 mt-0.5">
+                      {s === 30 ? 'Full' : s === 20 ? 'Standard' : s === 15 ? 'Quick' : 'Mini'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-2 mb-8">
+                <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-3">Domain Distribution</p>
+                {Object.entries(DOMAINS).map(([num, d]) => {
+                  const qCount = domainCounts[num];
+                  return (
+                    <div key={num} className="flex items-center gap-3 text-sm">
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{background: d.color}}/>
+                      <span className="text-slate-400 flex-1 truncate">{d.short}</span>
+                      <span className="text-slate-500 text-xs">{Math.round(d.weight*100)}%</span>
+                      <span className="text-white font-semibold w-6 text-right">{qCount}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => onStart(count)}
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg hover:shadow-lg hover:shadow-orange-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                Start Exam
+                <Icon.Arrow c="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="text-center mt-6 fade-up" style={{animationDelay:'0.2s'}}>
+              <p className="text-slate-600 text-xs">
+                {QUESTIONS.length} questions in bank &middot; Randomized each attempt
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ── Question Screen ──
+    const QuestionScreen = ({ questions, onFinish }) => {
+      const [idx, setIdx] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [selected, setSelected] = useState(null);
+      const [confirmed, setConfirmed] = useState(false);
+      const [flagged, setFlagged] = useState(new Set());
+      const [showNav, setShowNav] = useState(false);
+      const [elapsed, setElapsed] = useState(0);
+      const timerRef = useRef(null);
+
+      useEffect(() => {
+        timerRef.current = setInterval(() => setElapsed(e => e + 1), 1000);
+        return () => clearInterval(timerRef.current);
+      }, []);
+
+      const q = questions[idx];
+      const isMulti = q.multiSelect;
+
+      const handleSelect = (optIdx) => {
+        if (confirmed) return;
+        if (isMulti) {
+          setSelected(prev => {
+            const s = new Set(prev || []);
+            if (s.has(optIdx)) s.delete(optIdx); else s.add(optIdx);
+            return s;
+          });
+        } else {
+          setSelected(optIdx);
+        }
+      };
+
+      const handleConfirm = () => {
+        if (selected === null || (isMulti && (!selected || selected.size === 0))) return;
+        setConfirmed(true);
+        const answer = isMulti ? [...selected] : selected;
+        setAnswers(prev => ({...prev, [q.id]: answer}));
+      };
+
+      const handleNext = () => {
+        if (idx < questions.length - 1) {
+          const nextIdx = idx + 1;
+          setIdx(nextIdx);
+          const nextQ = questions[nextIdx];
+          const existing = answers[nextQ.id];
+          if (existing !== undefined) {
+            setSelected(Array.isArray(nextQ.correct) ? new Set(existing) : existing);
+            setConfirmed(true);
+          } else {
+            setSelected(null);
+            setConfirmed(false);
+          }
+        }
+      };
+
+      const handlePrev = () => {
+        if (idx > 0) {
+          const prevIdx = idx - 1;
+          setIdx(prevIdx);
+          const prevQ = questions[prevIdx];
+          const existing = answers[prevQ.id];
+          if (existing !== undefined) {
+            setSelected(Array.isArray(prevQ.correct) ? new Set(existing) : existing);
+            setConfirmed(true);
+          } else {
+            setSelected(null);
+            setConfirmed(false);
+          }
+        }
+      };
+
+      const jumpTo = (i) => {
+        setIdx(i);
+        const jq = questions[i];
+        const existing = answers[jq.id];
+        if (existing !== undefined) {
+          setSelected(Array.isArray(jq.correct) ? new Set(existing) : existing);
+          setConfirmed(true);
+        } else {
+          setSelected(null);
+          setConfirmed(false);
+        }
+        setShowNav(false);
+      };
+
+      const toggleFlag = () => {
+        setFlagged(prev => {
+          const s = new Set(prev);
+          if (s.has(idx)) s.delete(idx); else s.add(idx);
+          return s;
+        });
+      };
+
+      const isCorrect = (optIdx) => {
+        if (Array.isArray(q.correct)) return q.correct.includes(optIdx);
+        return q.correct === optIdx;
+      };
+
+      const isSelected = (optIdx) => {
+        if (isMulti && selected instanceof Set) return selected.has(optIdx);
+        return selected === optIdx;
+      };
+
+      const userGotCorrect = () => {
+        if (!confirmed) return null;
+        if (isMulti) {
+          const sel = selected instanceof Set ? [...selected] : (Array.isArray(selected) ? selected : []);
+          const corr = q.correct;
+          return sel.length === corr.length && corr.every(c => sel.includes(c));
+        }
+        return selected === q.correct;
+      };
+
+      const answeredCount = Object.keys(answers).length;
+      const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const ss = String(elapsed % 60).padStart(2, '0');
+      const domain = DOMAINS[q.domain];
+
+      return (
+        <div className="min-h-screen flex flex-col">
+          {/* Top bar */}
+          <div className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/50">
+            <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-white font-bold text-sm">{idx + 1}<span className="text-slate-500">/{questions.length}</span></span>
+                <div className="hidden sm:flex items-center gap-1">
+                  {questions.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-1.5 h-1.5 rounded-full progress-segment ${
+                        i === idx ? 'bg-amber-400 w-3' :
+                        answers[questions[i].id] !== undefined ? 'bg-emerald-500' :
+                        'bg-slate-700'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-slate-400 text-xs font-mono flex items-center gap-1">
+                  <Icon.Clock c="w-3.5 h-3.5" />
+                  {mm}:{ss}
+                </span>
+                <button onClick={() => setShowNav(!showNav)} className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 transition-all sm:hidden">
+                  Nav
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile nav drawer */}
+          {showNav && (
+            <div className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm sm:hidden" onClick={() => setShowNav(false)}>
+              <div className="absolute right-0 top-0 bottom-0 w-72 bg-slate-900 border-l border-slate-800 p-4 overflow-y-auto" onClick={e => e.stopPropagation()}>
+                <p className="text-sm font-semibold text-white mb-3">Question Navigator</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {questions.map((qq, i) => (
+                    <button
+                      key={i}
+                      onClick={() => jumpTo(i)}
+                      className={`w-10 h-10 rounded-lg text-xs font-semibold transition-all ${
+                        i === idx ? 'bg-amber-500 text-white' :
+                        answers[qq.id] !== undefined ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                        'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      } ${flagged.has(i) ? 'ring-2 ring-red-400' : ''}`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Main content */}
+          <div className="flex-1 max-w-3xl mx-auto w-full px-4 py-6 md:py-8">
+            <div className="fade-up" key={idx}>
+              {/* Domain badge */}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{background: domain.color + '15', color: domain.color}}>
+                  Domain {q.domain}: {domain.short}
+                </span>
+                <button
+                  onClick={toggleFlag}
+                  className={`p-1.5 rounded-lg transition-all ${flagged.has(idx) ? 'text-red-400 bg-red-400/10' : 'text-slate-600 hover:text-slate-400'}`}
+                  title="Flag for review"
+                >
+                  <Icon.Flag c="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Question */}
+              <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 md:p-6 mb-6">
+                <p className="text-white text-base md:text-lg leading-relaxed whitespace-pre-line">
+                  {q.question}
+                </p>
+                {isMulti && (
+                  <p className="mt-3 text-amber-400/80 text-xs font-semibold tracking-wide">SELECT {q.correct.length} ANSWERS</p>
+                )}
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3 mb-6">
+                {q.options.map((opt, oi) => {
+                  let cls = "option-btn w-full text-left p-4 rounded-xl border-2 transition-all flex items-start gap-3 ";
+                  const letter = String.fromCharCode(65 + oi);
+
+                  if (!confirmed) {
+                    if (isSelected(oi)) {
+                      cls += "border-amber-500 bg-amber-500/10 text-white";
+                    } else {
+                      cls += "border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-600 hover:bg-slate-800/60";
+                    }
+                  } else {
+                    if (isCorrect(oi)) {
+                      cls += "border-emerald-500 bg-emerald-500/10 text-emerald-300";
+                    } else if (isSelected(oi) && !isCorrect(oi)) {
+                      cls += "border-red-500 bg-red-500/10 text-red-300";
+                    } else {
+                      cls += "border-slate-800/50 bg-slate-900/20 text-slate-600";
+                    }
+                  }
+
+                  return (
+                    <button key={oi} onClick={() => handleSelect(oi)} disabled={confirmed} className={cls}>
+                      <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                        confirmed && isCorrect(oi) ? 'bg-emerald-500 text-white' :
+                        confirmed && isSelected(oi) && !isCorrect(oi) ? 'bg-red-500 text-white' :
+                        isSelected(oi) ? 'bg-amber-500 text-white' :
+                        'bg-slate-800 text-slate-400'
+                      }`}>
+                        {confirmed && isCorrect(oi) ? <Icon.Check c="w-3.5 h-3.5" /> :
+                         confirmed && isSelected(oi) && !isCorrect(oi) ? <Icon.X c="w-3.5 h-3.5" /> :
+                         letter}
+                      </span>
+                      <span className="text-sm leading-relaxed pt-0.5">{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Explanation */}
+              {confirmed && (
+                <div className={`rounded-xl p-5 mb-6 border ${userGotCorrect() ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
+                  <p className={`text-sm font-bold mb-2 ${userGotCorrect() ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {userGotCorrect() ? 'Correct!' : 'Incorrect'}
+                  </p>
+                  <p className="text-slate-300 text-sm leading-relaxed">{q.explanation}</p>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex items-center gap-3">
+                {idx > 0 && (
+                  <button onClick={handlePrev} className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-2 text-sm">
+                    <Icon.Back c="w-4 h-4" /> Back
+                  </button>
+                )}
+                <div className="flex-1" />
+                {!confirmed ? (
+                  <button
+                    onClick={handleConfirm}
+                    disabled={selected === null || (isMulti && (!selected || selected.size === 0))}
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold transition-all hover:shadow-lg hover:shadow-orange-500/25 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none text-sm flex items-center gap-2"
+                  >
+                    Confirm Answer
+                  </button>
+                ) : idx < questions.length - 1 ? (
+                  <button
+                    onClick={handleNext}
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold transition-all hover:shadow-lg hover:shadow-orange-500/25 text-sm flex items-center gap-2"
+                  >
+                    Next <Icon.Arrow c="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { clearInterval(timerRef.current); onFinish(answers, elapsed); }}
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold transition-all hover:shadow-lg hover:shadow-emerald-500/25 text-sm flex items-center gap-2"
+                  >
+                    Submit Exam <Icon.Flag c="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Progress footer */}
+              <div className="mt-8 pt-4 border-t border-slate-800/50 flex justify-between text-xs text-slate-600">
+                <span>{answeredCount} of {questions.length} answered</span>
+                {flagged.size > 0 && <span className="text-red-400/60">{flagged.size} flagged</span>}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ── Results Screen ──
+    const ResultsScreen = ({ questions, answers, elapsed, onRestart, onHome }) => {
+      const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const ss = String(elapsed % 60).padStart(2, '0');
+
+      const results = useMemo(() => {
+        let correct = 0;
+        let domainStats = {};
+        Object.entries(DOMAINS).forEach(([num]) => {
+          domainStats[num] = { total: 0, correct: 0 };
+        });
+
+        questions.forEach(q => {
+          domainStats[q.domain].total++;
+          const ans = answers[q.id];
+          if (ans === undefined) return;
+
+          let isRight = false;
+          if (q.multiSelect) {
+            const sel = Array.isArray(ans) ? ans : [];
+            isRight = sel.length === q.correct.length && q.correct.every(c => sel.includes(c));
+          } else {
+            isRight = ans === q.correct;
+          }
+
+          if (isRight) {
+            correct++;
+            domainStats[q.domain].correct++;
+          }
+        });
+
+        const pct = Math.round((correct / questions.length) * 100);
+        const passed = pct >= 70;
+        return { correct, pct, passed, domainStats };
+      }, [questions, answers]);
+
+      const getGrade = (pct) => {
+        if (pct >= 90) return { label: 'Excellent', color: 'text-emerald-400' };
+        if (pct >= 80) return { label: 'Great', color: 'text-emerald-400' };
+        if (pct >= 70) return { label: 'Pass', color: 'text-amber-400' };
+        if (pct >= 60) return { label: 'Almost', color: 'text-orange-400' };
+        return { label: 'Needs Study', color: 'text-red-400' };
+      };
+      const grade = getGrade(results.pct);
+
+      return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-2xl w-full">
+            {/* Score card */}
+            <div className="text-center mb-8 fade-up">
+              <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${results.passed ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                <Icon.Trophy c="w-10 h-10" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2" style={{fontFamily:'Instrument Serif'}}>
+                {results.pct}%
+              </h1>
+              <p className={`text-lg font-semibold ${grade.color}`}>{grade.label}</p>
+              <p className="text-slate-500 text-sm mt-2">
+                {results.correct} of {questions.length} correct &middot; {mm}:{ss}
+              </p>
+              <div className={`inline-block mt-3 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                results.passed ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
+              }`}>
+                {results.passed ? 'Passing Score (70%)' : 'Below Passing (70%)'}
+              </div>
+            </div>
+
+            {/* Domain breakdown */}
+            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-6 fade-up" style={{animationDelay:'0.1s'}}>
+              <h2 className="text-lg font-semibold text-white mb-5" style={{fontFamily:'Instrument Serif'}}>
+                Domain Breakdown
+              </h2>
+              <div className="space-y-4">
+                {Object.entries(DOMAINS).map(([num, d]) => {
+                  const stat = results.domainStats[num];
+                  if (stat.total === 0) return null;
+                  const dpct = Math.round((stat.correct / stat.total) * 100);
+                  const barColor = dpct >= 70 ? 'bg-emerald-500' : dpct >= 50 ? 'bg-amber-500' : 'bg-red-500';
+
+                  return (
+                    <div key={num} className="slide-right" style={{animationDelay: `${num * 0.08}s`}}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{background: d.color}} />
+                          <span className="text-sm text-slate-300">{d.short}</span>
+                        </div>
+                        <span className="text-sm font-semibold text-white">{stat.correct}/{stat.total} <span className="text-slate-500">({dpct}%)</span></span>
+                      </div>
+                      <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div className={`h-full ${barColor} rounded-full transition-all duration-700`} style={{width: `${dpct}%`}} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Question review */}
+            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-6 fade-up" style={{animationDelay:'0.2s'}}>
+              <h2 className="text-lg font-semibold text-white mb-4" style={{fontFamily:'Instrument Serif'}}>
+                Question Review
+              </h2>
+              <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
+                {questions.map((q, i) => {
+                  const ans = answers[q.id];
+                  let gotRight = false;
+                  if (ans !== undefined) {
+                    if (q.multiSelect) {
+                      const sel = Array.isArray(ans) ? ans : [];
+                      gotRight = sel.length === q.correct.length && q.correct.every(c => sel.includes(c));
+                    } else {
+                      gotRight = ans === q.correct;
+                    }
+                  }
+                  const domain = DOMAINS[q.domain];
+                  return (
+                    <div key={q.id} className="flex items-start gap-3 text-sm">
+                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold ${
+                        ans === undefined ? 'bg-slate-800 text-slate-500' :
+                        gotRight ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {ans === undefined ? '-' : gotRight ? <Icon.Check c="w-3 h-3" /> : <Icon.X c="w-3 h-3" />}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-slate-300 truncate">{q.question.slice(0, 80)}...</p>
+                        <span className="text-xs text-slate-600">D{q.domain}: {domain.short}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 fade-up" style={{animationDelay:'0.3s'}}>
+              <button
+                onClick={onHome}
+                className="flex-1 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition-all flex items-center justify-center gap-2 text-sm"
+              >
+                <Icon.Home c="w-4 h-4" /> Home
+              </button>
+              <button
+                onClick={onRestart}
+                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:shadow-lg hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2 text-sm"
+              >
+                New Exam <Icon.Arrow c="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-8 text-slate-600 text-xs">
+              <p>AWS AI Practitioner (AIF-C01) Practice Exam</p>
+              <p className="mt-1">
+                Created by Tarek Atwan @ <a href="index.html" className="text-orange-400 hover:text-orange-300 hover:underline font-semibold">ML_LAB</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ── App ──
+    const App = () => {
+      const [screen, setScreen] = useState('setup');
+      const [questions, setQuestions] = useState([]);
+      const [answers, setAnswers] = useState({});
+      const [elapsed, setElapsed] = useState(0);
+
+      const handleStart = (count) => {
+        setQuestions(pickQuestions(count));
+        setScreen('exam');
+      };
+
+      const handleFinish = (ans, time) => {
+        setAnswers(ans);
+        setElapsed(time);
+        setScreen('results');
+      };
+
+      const handleRestart = () => {
+        setScreen('setup');
+        setQuestions([]);
+        setAnswers({});
+        setElapsed(0);
+      };
+
+      if (screen === 'setup') return <SetupScreen onStart={handleStart} />;
+      if (screen === 'exam') return <QuestionScreen questions={questions} onFinish={handleFinish} />;
+      if (screen === 'results') return <ResultsScreen questions={questions} answers={answers} elapsed={elapsed} onRestart={handleRestart} onHome={handleRestart} />;
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
