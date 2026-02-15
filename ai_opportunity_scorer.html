@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Opportunity Scorer - Business Value Decision Engine</title>
+  <meta name="description"
+    content="Score AI opportunities from a business-problem-first perspective. Evaluate across 6 value dimensions and get a strategic Build, Buy, Experiment, or Kill recommendation.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #0a0c14; color: #c8cdd8; margin: 0; min-height: 100vh; }
+    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2f45; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3f55; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.92); } to { opacity:1; transform:scale(1); } }
+    @keyframes slideRight { from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes pulseGlow { 0%,100% { filter:brightness(1); } 50% { filter:brightness(1.3); } }
+    @keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+    @keyframes drawLine { from { stroke-dashoffset:100; } to { stroke-dashoffset:0; } }
+    .anim-fade-up { animation: fadeUp 0.45s ease-out both; }
+    .anim-fade-in { animation: fadeIn 0.35s ease-out both; }
+    .anim-scale-in { animation: scaleIn 0.4s cubic-bezier(0.175,0.885,0.32,1.1) both; }
+    .anim-slide-right { animation: slideRight 0.35s ease-out both; }
+    .anim-pulse { animation: pulseGlow 2.5s ease-in-out infinite; }
+    .anim-float { animation: float 3s ease-in-out infinite; }
+    .bg-grid { background-image: linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px); background-size: 48px 48px; }
+    .bg-radial-glow { background: radial-gradient(ellipse 60% 50% at 50% 0%,rgba(245,158,11,0.08) 0%,transparent 70%); }
+    .gradient-text { background: linear-gradient(135deg,#f59e0b,#d97706,#b45309); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gradient-text-cool { background: linear-gradient(135deg,#818cf8,#a78bfa,#c084fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .card-surface { background: linear-gradient(135deg,rgba(20,24,41,0.95),rgba(15,18,32,0.98)); border: 1px solid rgba(245,158,11,0.08); backdrop-filter: blur(8px); }
+    .option-card { background: linear-gradient(135deg,rgba(20,24,41,0.8),rgba(15,18,32,0.9)); border: 1px solid rgba(245,158,11,0.1); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .option-card:hover { border-color: rgba(245,158,11,0.35); background: linear-gradient(135deg,rgba(30,34,56,0.9),rgba(20,24,41,0.95)); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.1); }
+    .option-card.selected { border-color: rgba(245,158,11,0.6); background: linear-gradient(135deg,rgba(245,158,11,0.12),rgba(217,119,6,0.08)); box-shadow: 0 0 24px rgba(245,158,11,0.15), inset 0 0 24px rgba(245,158,11,0.05); }
+    .node-line { stroke-dasharray:100; stroke-dashoffset:100; animation: drawLine 0.6s ease-out forwards; }
+    .jargon-tooltip { position:relative; border-bottom: 1px dashed rgba(245,158,11,0.4); cursor:help; }
+    .jargon-tooltip::after { content:attr(data-tip); position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:#1a1e33; color:#c8cdd8; border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:8px 12px; font-size:12px; line-height:1.5; white-space:normal; width:max-content; max-width:260px; pointer-events:none; opacity:0; transition:opacity 0.2s ease; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.4); }
+    .jargon-tooltip:hover::after { opacity:1; }
+    .scenario-card { background: linear-gradient(135deg,rgba(20,24,41,0.8),rgba(15,18,32,0.9)); border: 1px solid rgba(245,158,11,0.12); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+    .scenario-card:hover { border-color: rgba(245,158,11,0.4); background: linear-gradient(135deg,rgba(30,34,56,0.9),rgba(20,24,41,0.95)); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.1); }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+    // ─── PM Glossary ───
+    const GLOSSARY = {
+      'TAM': 'Total Addressable Market — the full revenue opportunity for a product or service',
+      'ROI': 'Return on Investment — the ratio of net profit to cost of investment',
+      'MVP': 'Minimum Viable Product — the simplest version that delivers core value',
+      'TCO': 'Total Cost of Ownership — all direct and indirect costs over a product\'s lifetime',
+      'KPI': 'Key Performance Indicator — a measurable metric tied to business objectives',
+      'Churn': 'The rate at which customers stop using a product or service',
+      'NPS': 'Net Promoter Score — measures customer loyalty and satisfaction',
+      'LTV': 'Lifetime Value — the total revenue a customer generates over their relationship',
+      'SLA': 'Service Level Agreement — a commitment on service performance and availability',
+      'GDPR': 'General Data Protection Regulation — EU data privacy law',
+      'Hallucination': 'When an AI confidently generates incorrect or fabricated information',
+      'RAG': 'Retrieval-Augmented Generation — connecting an AI to your own data sources',
+      'Fine-tuning': 'Adapting a pre-trained AI model using your own domain-specific data',
+      'Foundation Model': 'Large pre-trained AI models (like GPT, Claude) that serve as a starting point',
+      'MLOps': 'Machine Learning Operations — practices for deploying and maintaining ML in production',
+      'Data Moat': 'A competitive advantage created by proprietary data that is hard to replicate'
+    };
+
+    const Tooltip = ({ term, children }) => {
+      const tip = GLOSSARY[term];
+      if (!tip) return <span>{children || term}</span>;
+      return <span className="jargon-tooltip" data-tip={tip}>{children || term}</span>;
+    };
+
+    const renderWithTooltips = (text) => {
+      if (!text) return text;
+      let result = [text];
+      Object.keys(GLOSSARY).forEach(term => {
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escapedTerm})\\b`, 'gi');
+        result = result.flatMap(part => {
+          if (typeof part !== 'string') return [part];
+          const splits = part.split(regex);
+          return splits.map((split, i) => {
+            if (split.toLowerCase() === term.toLowerCase()) {
+              return <Tooltip key={`${term}-${i}`} term={term}>{split}</Tooltip>;
+            }
+            return split;
+          });
+        });
+      });
+      return result;
+    };
+
+    // ─── Decision Outcomes ───
+    const DECISIONS = {
+      build: { id: 'build', label: 'BUILD', tagline: 'Strong advantage — invest in building', color: '#10b981', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.3)', icon: '🏗️',
+        description: 'Your opportunity scores high across value dimensions. You have a unique data or domain advantage that makes building in-house the optimal strategy.',
+        actions: ['Assemble a cross-functional squad (PM + Engineering + Data)', 'Define the MVP scope with measurable KPIs within 4-6 weeks', 'Start with a pilot cohort of users and iterate based on feedback'],
+        risks: ['Scope creep — ruthlessly prioritize the MVP', 'Data quality issues surfacing during build', 'Timeline underestimation — plan for 1.5x buffer'] },
+      buy: { id: 'buy', label: 'BUY / PARTNER', tagline: 'Viable but better with a vendor or partner', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.3)', icon: '🤝',
+        description: 'The opportunity is real but you lack the unique data moat or in-house capability to justify building. A vendor solution or strategic partnership offers faster time-to-value.',
+        actions: ['Shortlist 3-5 vendors and run a structured evaluation (RFP)', 'Define integration requirements and SLA expectations', 'Negotiate a pilot period (60-90 days) before full commitment'],
+        risks: ['Vendor lock-in — ensure data portability clauses', 'Customization limits may not fit edge cases', 'Ongoing costs can exceed build costs over 2+ years'] },
+      experiment: { id: 'experiment', label: 'EXPERIMENT', tagline: 'Promising but needs validation first', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)', icon: '🧪',
+        description: 'The opportunity shows potential but key assumptions remain unvalidated. Run a time-boxed experiment to de-risk before committing significant resources.',
+        actions: ['Design a 2-4 week proof-of-concept with a clear success metric', 'Use no-code/low-code tools or APIs to build the fastest possible prototype', 'Test with 10-20 real users and measure against your baseline KPI'],
+        risks: ['Experiment scope expanding into a stealth project', 'Confirmation bias — define kill criteria before starting', 'Taking too long to decide — set a hard deadline for Go/No-Go'] },
+      kill: { id: 'kill', label: 'KILL', tagline: 'Not viable now — redirect resources', color: '#ef4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)', icon: '⛔',
+        description: 'The opportunity does not justify AI investment at this time. The problem may be better solved with non-AI approaches, or the organizational readiness isn\'t there yet.',
+        actions: ['Document why this was killed — revisit in 6 months', 'Explore non-AI solutions (automation, process redesign, better analytics)', 'Redirect the team\'s energy to higher-scoring opportunities'],
+        risks: ['Competitor moves ahead while you wait — monitor the space', 'Stakeholder pushback — share the scoring rationale transparently', 'Missing a timing window — set a calendar reminder to reassess'] }
+    };
+
+    // ─── Dimension Definitions ───
+    const DIMENSIONS = [
+      { id: 'problemClarity', label: 'Problem Clarity & Impact', weight: 0.20, color: '#f59e0b', description: 'How well-defined is the problem and what is the business impact?' },
+      { id: 'dataReadiness', label: 'Data Readiness', weight: 0.20, color: '#10b981', description: 'Do you have the data needed, and is it a proprietary advantage?' },
+      { id: 'riskEthics', label: 'Risk & Ethics', weight: 0.15, color: '#ef4444', description: 'What are the consequences of AI failure, and the regulatory exposure?' },
+      { id: 'techFeasibility', label: 'Technical Feasibility', weight: 0.15, color: '#3b82f6', description: 'Is the required AI capability mature and integration-ready?' },
+      { id: 'economics', label: 'Economic Viability', weight: 0.15, color: '#a855f7', description: 'Will the return justify the investment? What is the payback period?' },
+      { id: 'executionFit', label: 'Execution Fit', weight: 0.15, color: '#ec4899', description: 'Do you have the team, budget, timeline, and executive sponsorship?' }
+    ];
+
+    // ─── Steps (PM-First Flow) ───
+    const STEPS = [
+      {
+        id: 'businessGoal', title: 'Business Goal', question: 'What strategic objective does this AI opportunity serve?',
+        subtitle: 'Start with the big picture — anchor your AI initiative in company strategy.',
+        options: [
+          { id: 'revenue', label: 'Revenue Growth', desc: 'Increase sales, upsell, acquisition, or monetize new products', icon: '📈' },
+          { id: 'cost', label: 'Cost Reduction', desc: 'Improve efficiency, automate manual processes, reduce waste', icon: '💰' },
+          { id: 'risk', label: 'Risk Mitigation', desc: 'Reduce fraud, ensure compliance, improve safety, prevent failures', icon: '🛡️' },
+          { id: 'experience', label: 'Customer Experience', desc: 'Improve satisfaction, personalization, reduce friction, boost NPS', icon: '⭐' },
+          { id: 'innovation', label: 'Innovation & Differentiation', desc: 'Create something new — a competitive moat or market-first offering', icon: '🚀' }
+        ]
+      },
+      {
+        id: 'problemCategory', title: 'Problem Category', question: 'What type of pain point or opportunity is this?',
+        subtitle: 'Categorize the problem space to focus the evaluation.',
+        options: [
+          { id: 'repetitive', label: 'High-Volume Repetitive Tasks', desc: 'Manual work done repeatedly that follows patterns (e.g., ticket triage, data entry)', icon: '🔄' },
+          { id: 'dataOverload', label: 'Data Overload & Insights', desc: 'Too much information to process — need to extract signals from noise', icon: '📊' },
+          { id: 'decisions', label: 'Decision Bottlenecks', desc: 'Decisions are slow, inconsistent, or rely on scarce expert judgment', icon: '⚖️' },
+          { id: 'creative', label: 'Creative & Content Needs', desc: 'Scaling content creation, personalization, or design work', icon: '🎨' },
+          { id: 'prediction', label: 'Prediction & Forecasting', desc: 'Need to anticipate future outcomes based on patterns (churn, demand, risk)', icon: '🔮' },
+          { id: 'process', label: 'Process Orchestration', desc: 'Complex multi-step workflows spanning teams or systems', icon: '⚙️' }
+        ]
+      },
+      {
+        id: 'impactLevel', title: 'Impact & Urgency', question: 'How severe is this problem for your business?',
+        subtitle: 'This directly scores Problem Clarity & Impact — the most critical dimension.',
+        options: [
+          { id: 'critical', label: 'Critical — Measurable KPI Impact', desc: 'Clear metric (e.g., "reduce churn by 15%"), affects >1000 users, costs >$500K/year', icon: '🔴' },
+          { id: 'high', label: 'High — Significant Friction', desc: 'Well-understood pain point with moderate business impact, affects many users', icon: '🟠' },
+          { id: 'medium', label: 'Medium — Nice to Have', desc: 'Would improve operations but not a burning problem today', icon: '🟡' },
+          { id: 'low', label: 'Low — Exploratory / Speculative', desc: 'Interesting idea but unclear impact, no validated user demand yet', icon: '🟢' }
+        ]
+      },
+      {
+        id: 'dataReality', title: 'Data Reality Check', question: 'What is your data situation for this opportunity?',
+        subtitle: 'Honest data assessment — this is where vision meets reality.',
+        options: [
+          { id: 'rich', label: 'Rich & Proprietary', desc: 'We collect relevant data today, it is high quality, and competitors don\'t have it', icon: '💎' },
+          { id: 'available', label: 'Available but Generic', desc: 'Relevant data exists (ours or public) but it is not a unique advantage', icon: '📁' },
+          { id: 'partial', label: 'Partial — Gaps Exist', desc: 'Some relevant data exists but it needs cleanup, enrichment, or augmentation', icon: '🧩' },
+          { id: 'none', label: 'No Relevant Data Today', desc: 'Would need to build data collection from scratch or rely entirely on pre-trained models', icon: '🚫' }
+        ]
+      },
+      {
+        id: 'riskLevel', title: 'Risk & Ethics', question: 'What is the cost of AI being wrong?',
+        subtitle: 'Higher-stakes decisions need more guardrails and may limit AI approach choices.',
+        options: [
+          { id: 'low', label: 'Low Stakes', desc: 'Errors are easily corrected, no regulatory exposure, internal-facing only', icon: '✅' },
+          { id: 'medium', label: 'Medium Stakes', desc: 'Errors cause customer frustration or inefficiency, but are recoverable', icon: '⚠️' },
+          { id: 'high', label: 'High Stakes', desc: 'Errors have financial, legal, or reputational consequences (finance, healthcare, safety)', icon: '🚨' },
+          { id: 'regulated', label: 'Highly Regulated', desc: 'Subject to GDPR, EU AI Act, FDA, HIPAA, or industry-specific compliance mandates', icon: '⚖️' }
+        ]
+      },
+      {
+        id: 'techMaturity', title: 'Technical Maturity', question: 'How mature is the AI capability you need?',
+        subtitle: 'Proven technology reduces execution risk; cutting-edge increases it.',
+        options: [
+          { id: 'proven', label: 'Proven & Commoditized', desc: 'This AI capability is well-established with multiple vendors and open-source options', icon: '🏛️' },
+          { id: 'maturing', label: 'Maturing — Mainstream Adoption', desc: 'Rapidly improving, many case studies, but still requires expertise to implement well', icon: '📈' },
+          { id: 'emerging', label: 'Emerging — Early Adopters', desc: 'Promising results but limited production deployments, evolving rapidly', icon: '🌱' },
+          { id: 'experimental', label: 'Experimental / Research', desc: 'Cutting-edge or academic — high uncertainty, few real-world success stories', icon: '🔬' }
+        ]
+      },
+      {
+        id: 'economicOutlook', title: 'Economics', question: 'What is the expected return profile?',
+        subtitle: 'Be honest about the economics — AI is not free, even with APIs.',
+        options: [
+          { id: 'highRoi', label: 'High ROI — Clear Savings or Revenue', desc: 'Estimated ROI >200%, payback within 6 months, quantifiable business case', icon: '🏆' },
+          { id: 'moderateRoi', label: 'Moderate ROI — Reasonable Return', desc: 'Estimated ROI 50-200%, payback within 12 months, solid business case', icon: '📊' },
+          { id: 'uncertain', label: 'Uncertain — Hard to Quantify', desc: 'Benefits are real but difficult to measure (brand lift, user delight, strategic)', icon: '🤔' },
+          { id: 'heavyInvestment', label: 'Heavy Investment — Long Payback', desc: 'Requires significant upfront investment with 18+ month payback period', icon: '🏗️' }
+        ]
+      },
+      {
+        id: 'executionReady', title: 'Execution Readiness', question: 'How ready is your organization to execute?',
+        subtitle: 'The best AI strategy fails without the right team, budget, and sponsorship.',
+        options: [
+          { id: 'ready', label: 'Fully Ready', desc: 'In-house ML/AI talent, allocated budget, executive sponsor, and clear timeline', icon: '🟢' },
+          { id: 'partiallyReady', label: 'Partially Ready', desc: 'Some capabilities in-house, budget needs approval, sponsor identified', icon: '🟡' },
+          { id: 'needsHelp', label: 'Needs External Help', desc: 'Limited in-house capability, would rely on vendors or consultants for execution', icon: '🟠' },
+          { id: 'notReady', label: 'Not Ready', desc: 'No dedicated team, no budget allocated, no clear ownership or sponsorship', icon: '🔴' }
+        ]
+      }
+    ];
+
+    // ─── Scoring Engine ───
+    const DIMENSION_SCORING = {
+      // problemClarity scoring
+      problemClarity: {
+        impactLevel: { critical: 10, high: 7, medium: 4, low: 2 },
+        problemCategory: { repetitive: 8, dataOverload: 7, decisions: 7, prediction: 8, creative: 5, process: 6 },
+        businessGoal: { revenue: 7, cost: 8, risk: 8, experience: 6, innovation: 5 }
+      },
+      // dataReadiness scoring
+      dataReadiness: {
+        dataReality: { rich: 10, available: 6, partial: 4, none: 1 },
+        problemCategory: { repetitive: 7, dataOverload: 8, decisions: 5, prediction: 9, creative: 3, process: 4 }
+      },
+      // riskEthics scoring (inverted — lower risk = higher score)
+      riskEthics: {
+        riskLevel: { low: 10, medium: 7, high: 4, regulated: 2 },
+        businessGoal: { revenue: 7, cost: 8, risk: 4, experience: 7, innovation: 8 }
+      },
+      // techFeasibility scoring
+      techFeasibility: {
+        techMaturity: { proven: 10, maturing: 7, emerging: 4, experimental: 2 },
+        problemCategory: { repetitive: 9, dataOverload: 7, decisions: 6, prediction: 8, creative: 6, process: 5 }
+      },
+      // economics scoring
+      economics: {
+        economicOutlook: { highRoi: 10, moderateRoi: 7, uncertain: 4, heavyInvestment: 2 },
+        businessGoal: { revenue: 8, cost: 9, risk: 6, experience: 5, innovation: 4 }
+      },
+      // executionFit scoring
+      executionFit: {
+        executionReady: { ready: 10, partiallyReady: 7, needsHelp: 4, notReady: 1 },
+        techMaturity: { proven: 8, maturing: 6, emerging: 3, experimental: 1 }
+      }
+    };
+
+    function computeDimensionScores(answers) {
+      const scores = {};
+      DIMENSIONS.forEach(dim => {
+        const rules = DIMENSION_SCORING[dim.id];
+        let total = 0, count = 0;
+        Object.entries(rules).forEach(([stepId, mapping]) => {
+          const answer = answers[stepId];
+          if (answer && mapping[answer] !== undefined) {
+            total += mapping[answer];
+            count++;
+          }
+        });
+        scores[dim.id] = count > 0 ? Math.round(total / count) : 0;
+      });
+      return scores;
+    }
+
+    function computeWeightedTotal(dimScores) {
+      let total = 0;
+      DIMENSIONS.forEach(dim => {
+        total += (dimScores[dim.id] || 0) * dim.weight;
+      });
+      return Math.round(total * 10) / 10;
+    }
+
+    function getDecision(weightedTotal) {
+      if (weightedTotal >= 7) return DECISIONS.build;
+      if (weightedTotal >= 5) return DECISIONS.buy;
+      if (weightedTotal >= 3) return DECISIONS.experiment;
+      return DECISIONS.kill;
+    }
+
+    function getWhyExplanation(answers, dimScores) {
+      const parts = [];
+      if (answers.impactLevel === 'critical') parts.push('Your problem has clear, measurable KPI impact — this is the strongest signal for AI investment.');
+      else if (answers.impactLevel === 'low') parts.push('The problem lacks validated user demand. Consider running user interviews before investing in AI.');
+      if (answers.dataReality === 'rich') parts.push('Your proprietary data is a competitive moat — this is exactly the scenario where building in-house creates lasting advantage.');
+      else if (answers.dataReality === 'none') parts.push('Without relevant data today, consider API-based or pre-trained solutions that don\'t require custom training data.');
+      if (answers.riskLevel === 'regulated') parts.push('The regulatory environment adds significant compliance overhead — factor in legal review, audit trails, and explainability requirements.');
+      if (answers.techMaturity === 'proven') parts.push('The AI capability you need is mature and commoditized — multiple proven options exist, reducing technical risk.');
+      else if (answers.techMaturity === 'experimental') parts.push('This technology is still in research phase — expect higher failure rates and longer timelines. Consider a time-boxed experiment first.');
+      if (answers.economicOutlook === 'highRoi') parts.push('The ROI case is strong and quantifiable — this makes it easier to secure executive buy-in and budget.');
+      if (answers.executionReady === 'notReady') parts.push('Your organization isn\'t ready to execute yet. Before pursuing AI, invest in team capability or find an implementation partner.');
+      else if (answers.executionReady === 'ready') parts.push('Your team has the talent, budget, and sponsorship to execute — organizational readiness is a key success factor.');
+      if (parts.length === 0) parts.push('Your opportunity shows a balanced profile across all value dimensions. Review each dimension score to identify areas for strengthening.');
+      return parts;
+    }
+
+    // ─── Example Scenarios ───
+    const EXAMPLE_SCENARIOS = [
+      { name: 'Automating Support Tickets', description: 'A SaaS company wants to auto-triage and route 5,000+ daily support tickets to reduce response time by 40%.', icon: '🎧', color: '#10b981',
+        answers: { businessGoal: 'cost', problemCategory: 'repetitive', impactLevel: 'critical', dataReality: 'rich', riskLevel: 'low', techMaturity: 'proven', economicOutlook: 'highRoi', executionReady: 'ready' } },
+      { name: 'AI Marketing Content', description: 'A retail brand wants to generate personalized product descriptions and social media content at scale.', icon: '🎨', color: '#3b82f6',
+        answers: { businessGoal: 'revenue', problemCategory: 'creative', impactLevel: 'medium', dataReality: 'available', riskLevel: 'low', techMaturity: 'maturing', economicOutlook: 'moderateRoi', executionReady: 'needsHelp' } },
+      { name: 'Predictive Maintenance', description: 'A manufacturing firm wants to predict equipment failures using sensor data to prevent costly downtime.', icon: '🏭', color: '#f59e0b',
+        answers: { businessGoal: 'cost', problemCategory: 'prediction', impactLevel: 'high', dataReality: 'partial', riskLevel: 'medium', techMaturity: 'maturing', economicOutlook: 'uncertain', executionReady: 'partiallyReady' } }
+    ];
+
+    // ─── Radar Chart ───
+    const RadarChart = ({ scores, size = 280 }) => {
+      const cx = size / 2, cy = size / 2, maxR = size * 0.38;
+      const n = DIMENSIONS.length;
+      const angleStep = (2 * Math.PI) / n;
+      const getPoint = (index, value) => {
+        const angle = angleStep * index - Math.PI / 2;
+        const r = (value / 10) * maxR;
+        return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+      };
+      const gridLevels = [2,4,6,8,10];
+      const dataPoints = DIMENSIONS.map((d, i) => getPoint(i, scores[d.id] || 0));
+      const pathD = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
+      return (
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto">
+          {gridLevels.map(level => {
+            const pts = DIMENSIONS.map((_, i) => getPoint(i, level));
+            const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
+            return <path key={level} d={d} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
+          })}
+          {DIMENSIONS.map((dim, i) => {
+            const p = getPoint(i, 10);
+            const lp = getPoint(i, 11.5);
+            return (
+              <g key={dim.id}>
+                <line x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                <text x={lp.x} y={lp.y} textAnchor="middle" dominantBaseline="central" fill={dim.color} fontSize="9" fontWeight="600" fontFamily="'DM Sans',sans-serif">
+                  {dim.label.split(' ')[0]}
+                </text>
+              </g>
+            );
+          })}
+          <path d={pathD} fill="rgba(245,158,11,0.15)" stroke="#f59e0b" strokeWidth="2" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 8px rgba(245,158,11,0.3))' }} />
+          {dataPoints.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r="4" fill={DIMENSIONS[i].color} stroke="#0a0c14" strokeWidth="2" />
+          ))}
+        </svg>
+      );
+    };
+
+    // ─── Score Gauge ───
+    const ScoreGauge = ({ score, decision }) => {
+      const pct = Math.min(score / 10, 1);
+      const r = 60, circ = Math.PI * r;
+      const offset = circ - pct * circ;
+      return (
+        <div className="relative inline-flex flex-col items-center">
+          <svg width="140" height="80" viewBox="0 0 140 80">
+            <path d="M 10 70 A 60 60 0 0 1 130 70" fill="none" stroke="#1e2235" strokeWidth="8" strokeLinecap="round" />
+            <path d="M 10 70 A 60 60 0 0 1 130 70" fill="none" stroke={decision.color} strokeWidth="8" strokeLinecap="round"
+              strokeDasharray={circ} strokeDashoffset={offset}
+              style={{ transition: 'stroke-dashoffset 1s ease-out', filter: `drop-shadow(0 0 6px ${decision.color}50)` }} />
+          </svg>
+          <div className="absolute top-6 text-center">
+            <div className="text-3xl font-display font-bold" style={{ color: decision.color }}>{score}</div>
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider">/ 10</div>
+          </div>
+        </div>
+      );
+    };
+
+    // ─── Progress Bar ───
+    const ProgressBar = ({ current, total }) => {
+      const pct = (current / total) * 100;
+      return (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-slate-400 tracking-wider uppercase font-display">Step {current + 1} of {total}</span>
+            <span className="text-sm text-slate-500">{Math.round(pct)}% complete</span>
+          </div>
+          <div className="h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${pct}%`, background: 'linear-gradient(90deg,#f59e0b,#d97706,#b45309)' }} />
+          </div>
+        </div>
+      );
+    };
+
+    // ─── Path Visualization ───
+    const PathVisualization = ({ answers, currentStep, steps }) => {
+      const nodeW = 200, nodeH = 56, gapY = 80, svgW = 280, startY = 30, cx = svgW / 2;
+      const colors = ['#f59e0b','#d97706','#b45309','#92400e','#78350f','#f97316','#ea580c','#c2410c'];
+      const getY = (i) => startY + i * gapY;
+      return (
+        <svg width="100%" height={startY + steps.length * gapY + 60} viewBox={`0 0 ${svgW} ${startY + steps.length * gapY + 60}`} className="w-full">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+          </defs>
+          {steps.map((s, i) => {
+            if (i === 0) return null;
+            const done = i <= currentStep;
+            return <line key={`l-${i}`} x1={cx} y1={getY(i-1)+nodeH} x2={cx} y2={getY(i)} stroke={done ? colors[i-1] : '#1e2235'} strokeWidth={done ? 2 : 1} opacity={done ? 0.7 : 0.4} className={done ? 'node-line' : ''} style={{ animationDelay: `${i*0.1}s` }} />;
+          })}
+          {steps.map((s, i) => {
+            const y = getY(i), isDone = answers[s.id] !== undefined, isCur = i === currentStep, isFut = i > currentStep;
+            const c = colors[i], opt = isDone ? s.options.find(o => o.id === answers[s.id]) : null;
+            return (
+              <g key={s.id} style={{ animation: `fadeIn 0.3s ease-out ${i*0.05}s both` }}>
+                <rect x={cx-nodeW/2} y={y} width={nodeW} height={nodeH} rx={10} fill={isCur ? 'rgba(245,158,11,0.12)' : isDone ? 'rgba(245,158,11,0.06)' : 'rgba(15,18,32,0.6)'} stroke={isCur ? c : isDone ? c : '#1e2235'} strokeWidth={isCur ? 1.5 : 1} opacity={isFut ? 0.35 : 1} filter={isCur ? 'url(#glow)' : 'none'} />
+                <circle cx={cx-nodeW/2+22} cy={y+nodeH/2} r={12} fill={isDone ? c : isCur ? c : '#1a1e33'} opacity={isDone||isCur ? 1 : 0.4} />
+                {isDone ? <path d={`M${cx-nodeW/2+17} ${y+nodeH/2} l4 4 l7 -7`} stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /> :
+                  <text x={cx-nodeW/2+22} y={y+nodeH/2+5} textAnchor="middle" fill={isCur ? '#fff' : '#6b7280'} fontSize="12" fontWeight="600" fontFamily="'DM Sans',sans-serif">{i+1}</text>}
+                <text x={cx-nodeW/2+42} y={y+(isDone ? 22 : nodeH/2+5)} fill={isFut ? '#4b5563' : isDone ? '#d1d5db' : '#f3f4f6'} fontSize="13" fontWeight="600" fontFamily="'Bricolage Grotesque',sans-serif">{s.title}</text>
+                {isDone && opt && <text x={cx-nodeW/2+42} y={y+42} fill={c} fontSize="11" fontWeight="500" fontFamily="'DM Sans',sans-serif">{opt.label.length > 22 ? opt.label.substring(0,22)+'…' : opt.label}</text>}
+                {isCur && <circle cx={cx+nodeW/2-16} cy={y+nodeH/2} r={5} fill={c} className="anim-pulse" />}
+              </g>
+            );
+          })}
+          {Object.keys(answers).length === steps.length && (
+            <g style={{ animation: 'fadeIn 0.5s ease-out 0.3s both' }}>
+              <line x1={cx} y1={getY(steps.length-1)+nodeH} x2={cx} y2={getY(steps.length)-4} stroke="#f59e0b" strokeWidth={2} opacity={0.7} className="node-line" />
+              <rect x={cx-nodeW/2} y={getY(steps.length)} width={nodeW} height={46} rx={10} fill="rgba(245,158,11,0.12)" stroke="#f59e0b" strokeWidth={1.5} filter="url(#glow)" />
+              <text x={cx} y={getY(steps.length)+28} textAnchor="middle" fill="#fbbf24" fontSize="13" fontWeight="700" fontFamily="'Bricolage Grotesque',sans-serif">Score & Decision</text>
+            </g>
+          )}
+        </svg>
+      );
+    };
+
+    // ─── Main App ───
+    const AIOpportunityScorer = () => {
+      const [currentStep, setCurrentStep] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [showResult, setShowResult] = useState(false);
+      const [whyExpanded, setWhyExpanded] = useState(false);
+      const contentRef = useRef(null);
+
+      const step = STEPS[currentStep];
+      const isComplete = showResult;
+      const dimScores = useMemo(() => isComplete ? computeDimensionScores(answers) : {}, [answers, isComplete]);
+      const weightedTotal = useMemo(() => isComplete ? computeWeightedTotal(dimScores) : 0, [dimScores, isComplete]);
+      const decision = useMemo(() => isComplete ? getDecision(weightedTotal) : null, [weightedTotal, isComplete]);
+      const whyParts = useMemo(() => isComplete ? getWhyExplanation(answers, dimScores) : [], [answers, dimScores, isComplete]);
+
+      const loadScenario = useCallback((scenario) => {
+        setAnswers(scenario.answers);
+        setCurrentStep(0);
+        setShowResult(true);
+        setWhyExpanded(false);
+      }, []);
+
+      const selectOption = useCallback((optionId) => {
+        const newAnswers = { ...answers, [step.id]: optionId };
+        STEPS.forEach((s, i) => { if (i > currentStep) delete newAnswers[s.id]; });
+        setAnswers(newAnswers);
+        setTimeout(() => {
+          if (currentStep < STEPS.length - 1) {
+            setCurrentStep(currentStep + 1);
+          } else {
+            setShowResult(true);
+          }
+          if (contentRef.current) contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 250);
+      }, [answers, currentStep, step]);
+
+      const goBack = useCallback(() => {
+        if (showResult) { setShowResult(false); setCurrentStep(STEPS.length - 1); return; }
+        if (currentStep > 0) setCurrentStep(currentStep - 1);
+      }, [currentStep, showResult]);
+
+      const restart = useCallback(() => {
+        setAnswers({}); setCurrentStep(0); setShowResult(false); setWhyExpanded(false);
+      }, []);
+
+      return (
+        <div className="min-h-screen bg-grid">
+          <div className="bg-radial-glow min-h-screen">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {/* Header */}
+              <div className="text-center mb-10 anim-fade-up">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/8 border border-amber-500/15 text-amber-400 text-xs font-medium mb-4 tracking-wider uppercase">
+                  <span>Product Manager Lens</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white mb-3 leading-tight">
+                  AI Opportunity <span className="gradient-text">Scorer</span>
+                </h1>
+                <p className="text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  Evaluate AI opportunities from a <strong className="text-white">business-problem-first</strong> perspective. Score across 6 value dimensions and get a strategic <strong className="text-amber-400">Build, Buy, Experiment, or Kill</strong> recommendation.
+                </p>
+              </div>
+
+              <div className="flex flex-col lg:flex-row gap-8">
+                {/* Left sidebar - Path */}
+                <div className="hidden lg:block w-72 flex-shrink-0">
+                  <div className="sticky top-8 card-surface rounded-2xl p-5">
+                    <h3 className="text-sm font-display font-semibold text-slate-300 mb-4 uppercase tracking-wider">Evaluation Path</h3>
+                    <PathVisualization answers={answers} currentStep={showResult ? STEPS.length : currentStep} steps={STEPS} />
+                  </div>
+                </div>
+
+                {/* Main content */}
+                <div className="flex-1 min-w-0" ref={contentRef}>
+                  {!showResult ? (
+                    <div className="anim-fade-up" key={step.id}>
+                      <ProgressBar current={currentStep} total={STEPS.length} />
+                      <div className="card-surface rounded-2xl p-6 sm:p-8">
+                        <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">{step.question}</h2>
+                        <p className="text-sm text-slate-400 mb-8 leading-relaxed">{renderWithTooltips(step.subtitle)}</p>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {step.options.map(opt => (
+                            <button key={opt.id} onClick={() => selectOption(opt.id)}
+                              className={`option-card rounded-xl p-5 text-left w-full ${answers[step.id] === opt.id ? 'selected' : ''}`}>
+                              <div className="flex items-start gap-3">
+                                <span className="text-2xl flex-shrink-0 mt-0.5">{opt.icon}</span>
+                                <div>
+                                  <h3 className="text-sm font-display font-semibold text-white mb-1">{opt.label}</h3>
+                                  <p className="text-xs text-slate-400 leading-relaxed">{renderWithTooltips(opt.desc)}</p>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                        {currentStep > 0 && (
+                          <div className="mt-6 flex justify-start">
+                            <button onClick={goBack} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
+                              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                              Previous step
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {/* Example Scenarios on step 0 */}
+                      {currentStep === 0 && (
+                        <div className="mt-10 anim-fade-in">
+                          <h3 className="text-sm font-display font-semibold text-slate-500 uppercase tracking-wider mb-4">Try an example scenario</h3>
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            {EXAMPLE_SCENARIOS.map(s => (
+                              <div key={s.name} className="scenario-card rounded-xl p-4" onClick={() => loadScenario(s)}>
+                                <div className="flex items-center gap-2.5 mb-2">
+                                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style={{ background: `${s.color}18` }}>{s.icon}</div>
+                                  <h4 className="text-sm font-display font-semibold text-white">{s.name}</h4>
+                                </div>
+                                <p className="text-xs text-slate-400 leading-relaxed">{s.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : decision ? (
+                    <div className="space-y-6 anim-scale-in">
+                      {/* Decision Card */}
+                      <div className="card-surface rounded-2xl overflow-hidden">
+                        <div className="p-6 sm:p-8 text-center" style={{ borderBottom: `2px solid ${decision.border}` }}>
+                          <div className="text-5xl mb-3">{decision.icon}</div>
+                          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-lg font-display font-bold"
+                            style={{ color: decision.color, background: decision.bg, border: `1px solid ${decision.border}` }}>
+                            {decision.label}
+                          </div>
+                          <p className="text-sm text-slate-400 max-w-xl mx-auto">{decision.tagline}</p>
+                          <div className="mt-6"><ScoreGauge score={weightedTotal} decision={decision} /></div>
+                        </div>
+                      </div>
+
+                      {/* Radar Chart */}
+                      <div className="card-surface rounded-2xl p-6">
+                        <h3 className="text-lg font-display font-bold text-white mb-4">6 Dimensions of Value</h3>
+                        <RadarChart scores={dimScores} />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+                          {DIMENSIONS.map(dim => (
+                            <div key={dim.id} className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/30">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium text-slate-400">{dim.label.split('&')[0].trim()}</span>
+                                <span className="text-sm font-bold font-display" style={{ color: dim.color }}>{dimScores[dim.id]}/10</span>
+                              </div>
+                              <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(dimScores[dim.id]/10)*100}%`, background: dim.color }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Why this decision */}
+                      <div className="card-surface rounded-2xl overflow-hidden">
+                        <button onClick={() => setWhyExpanded(!whyExpanded)}
+                          className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-800/20 transition-colors">
+                          <span className="text-sm font-display font-semibold text-amber-400">💡 Why this recommendation?</span>
+                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                            className={`text-slate-400 transition-transform ${whyExpanded ? 'rotate-180' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {whyExpanded && (
+                          <div className="px-6 pb-5 anim-fade-in">
+                            <div className="border-t border-slate-800/60 pt-4 space-y-2">
+                              {whyParts.map((part, i) => (
+                                <div key={i} className="flex items-start gap-2 text-sm text-slate-300 leading-relaxed">
+                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                                  <span>{renderWithTooltips(part)}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <p className="text-xs text-slate-400 mt-4 leading-relaxed">{decision.description}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Plan */}
+                      <div className="card-surface rounded-2xl p-6">
+                        <h3 className="text-lg font-display font-bold text-white mb-4">📋 Recommended Next Steps</h3>
+                        <div className="space-y-3">
+                          {decision.actions.map((action, i) => (
+                            <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/20">
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold font-display"
+                                style={{ color: decision.color, background: decision.bg, border: `1px solid ${decision.border}` }}>
+                                {i + 1}
+                              </div>
+                              <p className="text-sm text-slate-300 leading-relaxed">{renderWithTooltips(action)}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-4 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
+                          <h4 className="text-xs font-display font-semibold text-red-400 mb-2 uppercase tracking-wider">⚠ Risks to Watch</h4>
+                          <ul className="space-y-1">
+                            {decision.risks.map((risk, i) => (
+                              <li key={i} className="flex items-start gap-2 text-xs text-slate-400 leading-relaxed">
+                                <span className="mt-1 w-1 h-1 rounded-full bg-red-400 flex-shrink-0"></span>
+                                {risk}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Bridge to Solution Navigator */}
+                      <div className="card-surface rounded-2xl p-6 text-center" style={{ borderColor: 'rgba(129,140,248,0.15)' }}>
+                        <h3 className="text-sm font-display font-semibold text-indigo-300 mb-2">Ready to explore technical solutions?</h3>
+                        <p className="text-xs text-slate-400 mb-4 max-w-md mx-auto">Use the companion AI Solution Navigator to map your opportunity to the right AI architecture — from Classical ML to Agentic AI.</p>
+                        <a href="ai_solution_navigator.html" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl text-indigo-300 bg-indigo-500/8 border border-indigo-500/20 hover:bg-indigo-500/15 hover:border-indigo-500/30 transition-all">
+                          Open AI Solution Navigator →
+                        </a>
+                      </div>
+
+                      {/* Restart & Footer */}
+                      <div className="text-center py-4">
+                        <button onClick={restart} className="px-6 py-2.5 text-sm font-medium text-amber-300 bg-amber-500/8 border border-amber-500/20 rounded-xl hover:bg-amber-500/15 hover:border-amber-500/30 transition-all">
+                          Score a different opportunity
+                        </button>
+                      </div>
+                      <div className="text-center pt-2 pb-6">
+                        <a href="index.html" className="text-xs text-slate-600 hover:text-amber-400 transition-colors">Created by Tarek Atwan @ ML_LAB</a>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<AIOpportunityScorer />);
+  </script>
+</body>
+
+</html>
