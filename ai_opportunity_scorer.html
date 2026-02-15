@@ -17,41 +17,260 @@
     href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
     rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #0a0c14; color: #c8cdd8; margin: 0; min-height: 100vh; }
-    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Bricolage Grotesque', sans-serif; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2a2f45; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3a3f55; }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    @keyframes scaleIn { from { opacity:0; transform:scale(0.92); } to { opacity:1; transform:scale(1); } }
-    @keyframes slideRight { from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
-    @keyframes pulseGlow { 0%,100% { filter:brightness(1); } 50% { filter:brightness(1.3); } }
-    @keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
-    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
-    @keyframes drawLine { from { stroke-dashoffset:100; } to { stroke-dashoffset:0; } }
-    .anim-fade-up { animation: fadeUp 0.45s ease-out both; }
-    .anim-fade-in { animation: fadeIn 0.35s ease-out both; }
-    .anim-scale-in { animation: scaleIn 0.4s cubic-bezier(0.175,0.885,0.32,1.1) both; }
-    .anim-slide-right { animation: slideRight 0.35s ease-out both; }
-    .anim-pulse { animation: pulseGlow 2.5s ease-in-out infinite; }
-    .anim-float { animation: float 3s ease-in-out infinite; }
-    .bg-grid { background-image: linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px); background-size: 48px 48px; }
-    .bg-radial-glow { background: radial-gradient(ellipse 60% 50% at 50% 0%,rgba(245,158,11,0.08) 0%,transparent 70%); }
-    .gradient-text { background: linear-gradient(135deg,#f59e0b,#d97706,#b45309); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .gradient-text-cool { background: linear-gradient(135deg,#818cf8,#a78bfa,#c084fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .card-surface { background: linear-gradient(135deg,rgba(20,24,41,0.95),rgba(15,18,32,0.98)); border: 1px solid rgba(245,158,11,0.08); backdrop-filter: blur(8px); }
-    .option-card { background: linear-gradient(135deg,rgba(20,24,41,0.8),rgba(15,18,32,0.9)); border: 1px solid rgba(245,158,11,0.1); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
-    .option-card:hover { border-color: rgba(245,158,11,0.35); background: linear-gradient(135deg,rgba(30,34,56,0.9),rgba(20,24,41,0.95)); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.1); }
-    .option-card.selected { border-color: rgba(245,158,11,0.6); background: linear-gradient(135deg,rgba(245,158,11,0.12),rgba(217,119,6,0.08)); box-shadow: 0 0 24px rgba(245,158,11,0.15), inset 0 0 24px rgba(245,158,11,0.05); }
-    .node-line { stroke-dasharray:100; stroke-dashoffset:100; animation: drawLine 0.6s ease-out forwards; }
-    .jargon-tooltip { position:relative; border-bottom: 1px dashed rgba(245,158,11,0.4); cursor:help; }
-    .jargon-tooltip::after { content:attr(data-tip); position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:#1a1e33; color:#c8cdd8; border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:8px 12px; font-size:12px; line-height:1.5; white-space:normal; width:max-content; max-width:260px; pointer-events:none; opacity:0; transition:opacity 0.2s ease; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.4); }
-    .jargon-tooltip:hover::after { opacity:1; }
-    .scenario-card { background: linear-gradient(135deg,rgba(20,24,41,0.8),rgba(15,18,32,0.9)); border: 1px solid rgba(245,158,11,0.12); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
-    .scenario-card:hover { border-color: rgba(245,158,11,0.4); background: linear-gradient(135deg,rgba(30,34,56,0.9),rgba(20,24,41,0.95)); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.1); }
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0a0c14;
+      color: #c8cdd8;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-display {
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a2f45;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3f55;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        filter: brightness(1);
+      }
+
+      50% {
+        filter: brightness(1.3);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes drawLine {
+      from {
+        stroke-dashoffset: 100;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .anim-fade-up {
+      animation: fadeUp 0.45s ease-out both;
+    }
+
+    .anim-fade-in {
+      animation: fadeIn 0.35s ease-out both;
+    }
+
+    .anim-scale-in {
+      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) both;
+    }
+
+    .anim-slide-right {
+      animation: slideRight 0.35s ease-out both;
+    }
+
+    .anim-pulse {
+      animation: pulseGlow 2.5s ease-in-out infinite;
+    }
+
+    .anim-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .bg-grid {
+      background-image: linear-gradient(rgba(245, 158, 11, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 158, 11, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .bg-radial-glow {
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-text-cool {
+      background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-surface {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.95), rgba(15, 18, 32, 0.98));
+      border: 1px solid rgba(245, 158, 11, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .option-card {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.8), rgba(15, 18, 32, 0.9));
+      border: 1px solid rgba(245, 158, 11, 0.1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .option-card:hover {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: linear-gradient(135deg, rgba(30, 34, 56, 0.9), rgba(20, 24, 41, 0.95));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1);
+    }
+
+    .option-card.selected {
+      border-color: rgba(245, 158, 11, 0.6);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.08));
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.15), inset 0 0 24px rgba(245, 158, 11, 0.05);
+    }
+
+    .node-line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawLine 0.6s ease-out forwards;
+    }
+
+    .jargon-tooltip {
+      position: relative;
+      border-bottom: 1px dashed rgba(245, 158, 11, 0.4);
+      cursor: help;
+    }
+
+    .jargon-tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1e33;
+      color: #c8cdd8;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: normal;
+      width: max-content;
+      max-width: 260px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .jargon-tooltip:hover::after {
+      opacity: 1;
+    }
+
+    .scenario-card {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.8), rgba(15, 18, 32, 0.9));
+      border: 1px solid rgba(245, 158, 11, 0.12);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .scenario-card:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: linear-gradient(135deg, rgba(30, 34, 56, 0.9), rgba(20, 24, 41, 0.95));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1);
+    }
   </style>
 </head>
 
@@ -107,24 +326,220 @@
       return result;
     };
 
+    // ─── SVG Icon Components ───
+    const Icon = ({ name, size = 20, color = 'currentColor', className = '' }) => {
+      const icons = {
+        revenue: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M3 3v18h18" /><path d="M7 16l4-8 4 5 5-9" />
+          </svg>
+        ),
+        cost: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+          </svg>
+        ),
+        shield: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        ),
+        star: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" />
+          </svg>
+        ),
+        rocket: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" />
+            <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z" />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </svg>
+        ),
+        refresh: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+          </svg>
+        ),
+        barChart: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" />
+          </svg>
+        ),
+        scale: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M16 3h5v5" /><path d="M8 3H3v5" /><path d="M12 22V8" /><path d="M3 3l5 5" /><path d="M21 3l-5 5" />
+          </svg>
+        ),
+        palette: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="13.5" cy="6.5" r="0.5" fill={color} /><circle cx="17.5" cy="10.5" r="0.5" fill={color} /><circle cx="8.5" cy="7.5" r="0.5" fill={color} /><circle cx="6.5" cy="12.5" r="0.5" fill={color} />
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+          </svg>
+        ),
+        crystal: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+          </svg>
+        ),
+        gear: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+          </svg>
+        ),
+        circleFilled: (color2) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+            <circle cx="12" cy="12" r="9" fill={color2} opacity="0.2" /><circle cx="12" cy="12" r="5" fill={color2} />
+          </svg>
+        ),
+        diamond: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M6 3h12l4 6-10 13L2 9z" /><path d="M11 3l1 10" /><path d="M2 9h20" />
+          </svg>
+        ),
+        folder: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+          </svg>
+        ),
+        puzzle: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.315 8.685a.98.98 0 01.837-.276c.47.07.802.48.968.925a2.501 2.501 0 103.214-3.214c-.446-.166-.855-.497-.925-.968a.979.979 0 01.276-.837l1.61-1.61a2.404 2.404 0 011.705-.707c.618 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.969a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z" />
+          </svg>
+        ),
+        ban: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+          </svg>
+        ),
+        checkCircle: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        ),
+        alertTriangle: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        ),
+        alertOctagon: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        ),
+        fileText: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+        ),
+        building: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="4" y="2" width="16" height="20" rx="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01" />
+          </svg>
+        ),
+        seedling: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M7 20h10" /><path d="M10 20c5.5-2.5.8-6.4 3-10" />
+            <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z" />
+            <path d="M14.1 6a7 7 0 00-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z" />
+          </svg>
+        ),
+        microscope: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M6 18h8" /><path d="M3 22h18" /><path d="M14 22a7 7 0 100-14h-1" /><path d="M9 14h2" /><path d="M9 12a2 2 0 01-2-2V6h6v4a2 2 0 01-2 2z" /><path d="M12 6V3a1 1 0 00-1-1H9a1 1 0 00-1 1v3" />
+          </svg>
+        ),
+        trophy: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 1012 0V2z" />
+          </svg>
+        ),
+        helpCircle: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        ),
+        hardHat: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M2 18a1 1 0 001 1h18a1 1 0 001-1v-2a1 1 0 00-1-1H3a1 1 0 00-1 1v2z" /><path d="M10 15V6.5a3.5 3.5 0 117 0V15" /><path d="M4 15v-5a8 8 0 0116 0v5" />
+          </svg>
+        ),
+        build: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="2" y="6" width="20" height="8" rx="1" /><path d="M17 14v7" /><path d="M7 14v7" /><path d="M17 3v3" /><path d="M7 3v3" /><path d="M10 14L2.3 6.3" /><path d="M14 6l7.7 7.7" />
+          </svg>
+        ),
+        handshake: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M20.42 4.58a5.4 5.4 0 00-7.65 0l-.77.78-.77-.78a5.4 5.4 0 00-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" />
+          </svg>
+        ),
+        flask: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 15.5m14.8-.2l.2 1.7a2.25 2.25 0 01-2.212 2.5H6.212A2.25 2.25 0 014 17l.2-1.7m14.6 0a24.11 24.11 0 00-14.6 0" />
+          </svg>
+        ),
+        xOctagon: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+        ),
+        headphones: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M3 18v-6a9 9 0 0118 0v6" /><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+          </svg>
+        ),
+        factory: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M2 20a2 2 0 002 2h16a2 2 0 002-2V8l-7 5V8l-7 5V4a2 2 0 00-2-2H4a2 2 0 00-2 2z" /><path d="M17 18h1" /><path d="M12 18h1" /><path d="M7 18h1" />
+          </svg>
+        ),
+        lightbulb: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <line x1="9" y1="18" x2="15" y2="18" /><line x1="10" y1="22" x2="14" y2="22" />
+            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14" />
+          </svg>
+        ),
+        clipboard: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+            <rect x="9" y="3" width="6" height="4" rx="1" /><path d="M9 12h6M9 16h6" />
+          </svg>
+        ),
+      };
+      const icon = icons[name];
+      if (!icon) return null;
+      return typeof icon === 'function' ? icon(color) : icon;
+    };
+
     // ─── Decision Outcomes ───
     const DECISIONS = {
-      build: { id: 'build', label: 'BUILD', tagline: 'Strong advantage — invest in building', color: '#10b981', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.3)', icon: '🏗️',
+      build: {
+        id: 'build', label: 'BUILD', tagline: 'Strong advantage — invest in building', color: '#10b981', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.3)', icon: 'build',
         description: 'Your opportunity scores high across value dimensions. You have a unique data or domain advantage that makes building in-house the optimal strategy.',
         actions: ['Assemble a cross-functional squad (PM + Engineering + Data)', 'Define the MVP scope with measurable KPIs within 4-6 weeks', 'Start with a pilot cohort of users and iterate based on feedback'],
-        risks: ['Scope creep — ruthlessly prioritize the MVP', 'Data quality issues surfacing during build', 'Timeline underestimation — plan for 1.5x buffer'] },
-      buy: { id: 'buy', label: 'BUY / PARTNER', tagline: 'Viable but better with a vendor or partner', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.3)', icon: '🤝',
+        risks: ['Scope creep — ruthlessly prioritize the MVP', 'Data quality issues surfacing during build', 'Timeline underestimation — plan for 1.5x buffer']
+      },
+      buy: {
+        id: 'buy', label: 'BUY / PARTNER', tagline: 'Viable but better with a vendor or partner', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.3)', icon: 'handshake',
         description: 'The opportunity is real but you lack the unique data moat or in-house capability to justify building. A vendor solution or strategic partnership offers faster time-to-value.',
         actions: ['Shortlist 3-5 vendors and run a structured evaluation (RFP)', 'Define integration requirements and SLA expectations', 'Negotiate a pilot period (60-90 days) before full commitment'],
-        risks: ['Vendor lock-in — ensure data portability clauses', 'Customization limits may not fit edge cases', 'Ongoing costs can exceed build costs over 2+ years'] },
-      experiment: { id: 'experiment', label: 'EXPERIMENT', tagline: 'Promising but needs validation first', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)', icon: '🧪',
+        risks: ['Vendor lock-in — ensure data portability clauses', 'Customization limits may not fit edge cases', 'Ongoing costs can exceed build costs over 2+ years']
+      },
+      experiment: {
+        id: 'experiment', label: 'EXPERIMENT', tagline: 'Promising but needs validation first', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)', icon: 'flask',
         description: 'The opportunity shows potential but key assumptions remain unvalidated. Run a time-boxed experiment to de-risk before committing significant resources.',
         actions: ['Design a 2-4 week proof-of-concept with a clear success metric', 'Use no-code/low-code tools or APIs to build the fastest possible prototype', 'Test with 10-20 real users and measure against your baseline KPI'],
-        risks: ['Experiment scope expanding into a stealth project', 'Confirmation bias — define kill criteria before starting', 'Taking too long to decide — set a hard deadline for Go/No-Go'] },
-      kill: { id: 'kill', label: 'KILL', tagline: 'Not viable now — redirect resources', color: '#ef4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)', icon: '⛔',
+        risks: ['Experiment scope expanding into a stealth project', 'Confirmation bias — define kill criteria before starting', 'Taking too long to decide — set a hard deadline for Go/No-Go']
+      },
+      kill: {
+        id: 'kill', label: 'KILL', tagline: 'Not viable now — redirect resources', color: '#ef4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)', icon: 'xOctagon',
         description: 'The opportunity does not justify AI investment at this time. The problem may be better solved with non-AI approaches, or the organizational readiness isn\'t there yet.',
         actions: ['Document why this was killed — revisit in 6 months', 'Explore non-AI solutions (automation, process redesign, better analytics)', 'Redirect the team\'s energy to higher-scoring opportunities'],
-        risks: ['Competitor moves ahead while you wait — monitor the space', 'Stakeholder pushback — share the scoring rationale transparently', 'Missing a timing window — set a calendar reminder to reassess'] }
+        risks: ['Competitor moves ahead while you wait — monitor the space', 'Stakeholder pushback — share the scoring rationale transparently', 'Missing a timing window — set a calendar reminder to reassess']
+      }
     };
 
     // ─── Dimension Definitions ───
@@ -143,83 +558,83 @@
         id: 'businessGoal', title: 'Business Goal', question: 'What strategic objective does this AI opportunity serve?',
         subtitle: 'Start with the big picture — anchor your AI initiative in company strategy.',
         options: [
-          { id: 'revenue', label: 'Revenue Growth', desc: 'Increase sales, upsell, acquisition, or monetize new products', icon: '📈' },
-          { id: 'cost', label: 'Cost Reduction', desc: 'Improve efficiency, automate manual processes, reduce waste', icon: '💰' },
-          { id: 'risk', label: 'Risk Mitigation', desc: 'Reduce fraud, ensure compliance, improve safety, prevent failures', icon: '🛡️' },
-          { id: 'experience', label: 'Customer Experience', desc: 'Improve satisfaction, personalization, reduce friction, boost NPS', icon: '⭐' },
-          { id: 'innovation', label: 'Innovation & Differentiation', desc: 'Create something new — a competitive moat or market-first offering', icon: '🚀' }
+          { id: 'revenue', label: 'Revenue Growth', desc: 'Increase sales, upsell, acquisition, or monetize new products', icon: 'revenue' },
+          { id: 'cost', label: 'Cost Reduction', desc: 'Improve efficiency, automate manual processes, reduce waste', icon: 'cost' },
+          { id: 'risk', label: 'Risk Mitigation', desc: 'Reduce fraud, ensure compliance, improve safety, prevent failures', icon: 'shield' },
+          { id: 'experience', label: 'Customer Experience', desc: 'Improve satisfaction, personalization, reduce friction, boost NPS', icon: 'star' },
+          { id: 'innovation', label: 'Innovation & Differentiation', desc: 'Create something new — a competitive moat or market-first offering', icon: 'rocket' }
         ]
       },
       {
         id: 'problemCategory', title: 'Problem Category', question: 'What type of pain point or opportunity is this?',
         subtitle: 'Categorize the problem space to focus the evaluation.',
         options: [
-          { id: 'repetitive', label: 'High-Volume Repetitive Tasks', desc: 'Manual work done repeatedly that follows patterns (e.g., ticket triage, data entry)', icon: '🔄' },
-          { id: 'dataOverload', label: 'Data Overload & Insights', desc: 'Too much information to process — need to extract signals from noise', icon: '📊' },
-          { id: 'decisions', label: 'Decision Bottlenecks', desc: 'Decisions are slow, inconsistent, or rely on scarce expert judgment', icon: '⚖️' },
-          { id: 'creative', label: 'Creative & Content Needs', desc: 'Scaling content creation, personalization, or design work', icon: '🎨' },
-          { id: 'prediction', label: 'Prediction & Forecasting', desc: 'Need to anticipate future outcomes based on patterns (churn, demand, risk)', icon: '🔮' },
-          { id: 'process', label: 'Process Orchestration', desc: 'Complex multi-step workflows spanning teams or systems', icon: '⚙️' }
+          { id: 'repetitive', label: 'High-Volume Repetitive Tasks', desc: 'Manual work done repeatedly that follows patterns (e.g., ticket triage, data entry)', icon: 'refresh' },
+          { id: 'dataOverload', label: 'Data Overload & Insights', desc: 'Too much information to process — need to extract signals from noise', icon: 'barChart' },
+          { id: 'decisions', label: 'Decision Bottlenecks', desc: 'Decisions are slow, inconsistent, or rely on scarce expert judgment', icon: 'scale' },
+          { id: 'creative', label: 'Creative & Content Needs', desc: 'Scaling content creation, personalization, or design work', icon: 'palette' },
+          { id: 'prediction', label: 'Prediction & Forecasting', desc: 'Need to anticipate future outcomes based on patterns (churn, demand, risk)', icon: 'crystal' },
+          { id: 'process', label: 'Process Orchestration', desc: 'Complex multi-step workflows spanning teams or systems', icon: 'gear' }
         ]
       },
       {
         id: 'impactLevel', title: 'Impact & Urgency', question: 'How severe is this problem for your business?',
         subtitle: 'This directly scores Problem Clarity & Impact — the most critical dimension.',
         options: [
-          { id: 'critical', label: 'Critical — Measurable KPI Impact', desc: 'Clear metric (e.g., "reduce churn by 15%"), affects >1000 users, costs >$500K/year', icon: '🔴' },
-          { id: 'high', label: 'High — Significant Friction', desc: 'Well-understood pain point with moderate business impact, affects many users', icon: '🟠' },
-          { id: 'medium', label: 'Medium — Nice to Have', desc: 'Would improve operations but not a burning problem today', icon: '🟡' },
-          { id: 'low', label: 'Low — Exploratory / Speculative', desc: 'Interesting idea but unclear impact, no validated user demand yet', icon: '🟢' }
+          { id: 'critical', label: 'Critical — Measurable KPI Impact', desc: 'Clear metric (e.g., "reduce churn by 15%"), affects >1000 users, costs >$500K/year', icon: 'alertOctagon', iconColor: '#ef4444' },
+          { id: 'high', label: 'High — Significant Friction', desc: 'Well-understood pain point with moderate business impact, affects many users', icon: 'alertTriangle', iconColor: '#f97316' },
+          { id: 'medium', label: 'Medium — Nice to Have', desc: 'Would improve operations but not a burning problem today', icon: 'helpCircle', iconColor: '#eab308' },
+          { id: 'low', label: 'Low — Exploratory / Speculative', desc: 'Interesting idea but unclear impact, no validated user demand yet', icon: 'seedling', iconColor: '#22c55e' }
         ]
       },
       {
         id: 'dataReality', title: 'Data Reality Check', question: 'What is your data situation for this opportunity?',
         subtitle: 'Honest data assessment — this is where vision meets reality.',
         options: [
-          { id: 'rich', label: 'Rich & Proprietary', desc: 'We collect relevant data today, it is high quality, and competitors don\'t have it', icon: '💎' },
-          { id: 'available', label: 'Available but Generic', desc: 'Relevant data exists (ours or public) but it is not a unique advantage', icon: '📁' },
-          { id: 'partial', label: 'Partial — Gaps Exist', desc: 'Some relevant data exists but it needs cleanup, enrichment, or augmentation', icon: '🧩' },
-          { id: 'none', label: 'No Relevant Data Today', desc: 'Would need to build data collection from scratch or rely entirely on pre-trained models', icon: '🚫' }
+          { id: 'rich', label: 'Rich & Proprietary', desc: 'We collect relevant data today, it is high quality, and competitors don\'t have it', icon: 'diamond' },
+          { id: 'available', label: 'Available but Generic', desc: 'Relevant data exists (ours or public) but it is not a unique advantage', icon: 'folder' },
+          { id: 'partial', label: 'Partial — Gaps Exist', desc: 'Some relevant data exists but it needs cleanup, enrichment, or augmentation', icon: 'puzzle' },
+          { id: 'none', label: 'No Relevant Data Today', desc: 'Would need to build data collection from scratch or rely entirely on pre-trained models', icon: 'ban' }
         ]
       },
       {
         id: 'riskLevel', title: 'Risk & Ethics', question: 'What is the cost of AI being wrong?',
         subtitle: 'Higher-stakes decisions need more guardrails and may limit AI approach choices.',
         options: [
-          { id: 'low', label: 'Low Stakes', desc: 'Errors are easily corrected, no regulatory exposure, internal-facing only', icon: '✅' },
-          { id: 'medium', label: 'Medium Stakes', desc: 'Errors cause customer frustration or inefficiency, but are recoverable', icon: '⚠️' },
-          { id: 'high', label: 'High Stakes', desc: 'Errors have financial, legal, or reputational consequences (finance, healthcare, safety)', icon: '🚨' },
-          { id: 'regulated', label: 'Highly Regulated', desc: 'Subject to GDPR, EU AI Act, FDA, HIPAA, or industry-specific compliance mandates', icon: '⚖️' }
+          { id: 'low', label: 'Low Stakes', desc: 'Errors are easily corrected, no regulatory exposure, internal-facing only', icon: 'checkCircle', iconColor: '#22c55e' },
+          { id: 'medium', label: 'Medium Stakes', desc: 'Errors cause customer frustration or inefficiency, but are recoverable', icon: 'alertTriangle', iconColor: '#eab308' },
+          { id: 'high', label: 'High Stakes', desc: 'Errors have financial, legal, or reputational consequences (finance, healthcare, safety)', icon: 'alertOctagon', iconColor: '#ef4444' },
+          { id: 'regulated', label: 'Highly Regulated', desc: 'Subject to GDPR, EU AI Act, FDA, HIPAA, or industry-specific compliance mandates', icon: 'fileText', iconColor: '#a855f7' }
         ]
       },
       {
         id: 'techMaturity', title: 'Technical Maturity', question: 'How mature is the AI capability you need?',
         subtitle: 'Proven technology reduces execution risk; cutting-edge increases it.',
         options: [
-          { id: 'proven', label: 'Proven & Commoditized', desc: 'This AI capability is well-established with multiple vendors and open-source options', icon: '🏛️' },
-          { id: 'maturing', label: 'Maturing — Mainstream Adoption', desc: 'Rapidly improving, many case studies, but still requires expertise to implement well', icon: '📈' },
-          { id: 'emerging', label: 'Emerging — Early Adopters', desc: 'Promising results but limited production deployments, evolving rapidly', icon: '🌱' },
-          { id: 'experimental', label: 'Experimental / Research', desc: 'Cutting-edge or academic — high uncertainty, few real-world success stories', icon: '🔬' }
+          { id: 'proven', label: 'Proven & Commoditized', desc: 'This AI capability is well-established with multiple vendors and open-source options', icon: 'building' },
+          { id: 'maturing', label: 'Maturing — Mainstream Adoption', desc: 'Rapidly improving, many case studies, but still requires expertise to implement well', icon: 'revenue' },
+          { id: 'emerging', label: 'Emerging — Early Adopters', desc: 'Promising results but limited production deployments, evolving rapidly', icon: 'seedling' },
+          { id: 'experimental', label: 'Experimental / Research', desc: 'Cutting-edge or academic — high uncertainty, few real-world success stories', icon: 'microscope' }
         ]
       },
       {
         id: 'economicOutlook', title: 'Economics', question: 'What is the expected return profile?',
         subtitle: 'Be honest about the economics — AI is not free, even with APIs.',
         options: [
-          { id: 'highRoi', label: 'High ROI — Clear Savings or Revenue', desc: 'Estimated ROI >200%, payback within 6 months, quantifiable business case', icon: '🏆' },
-          { id: 'moderateRoi', label: 'Moderate ROI — Reasonable Return', desc: 'Estimated ROI 50-200%, payback within 12 months, solid business case', icon: '📊' },
-          { id: 'uncertain', label: 'Uncertain — Hard to Quantify', desc: 'Benefits are real but difficult to measure (brand lift, user delight, strategic)', icon: '🤔' },
-          { id: 'heavyInvestment', label: 'Heavy Investment — Long Payback', desc: 'Requires significant upfront investment with 18+ month payback period', icon: '🏗️' }
+          { id: 'highRoi', label: 'High ROI — Clear Savings or Revenue', desc: 'Estimated ROI >200%, payback within 6 months, quantifiable business case', icon: 'trophy' },
+          { id: 'moderateRoi', label: 'Moderate ROI — Reasonable Return', desc: 'Estimated ROI 50-200%, payback within 12 months, solid business case', icon: 'barChart' },
+          { id: 'uncertain', label: 'Uncertain — Hard to Quantify', desc: 'Benefits are real but difficult to measure (brand lift, user delight, strategic)', icon: 'helpCircle' },
+          { id: 'heavyInvestment', label: 'Heavy Investment — Long Payback', desc: 'Requires significant upfront investment with 18+ month payback period', icon: 'hardHat' }
         ]
       },
       {
         id: 'executionReady', title: 'Execution Readiness', question: 'How ready is your organization to execute?',
         subtitle: 'The best AI strategy fails without the right team, budget, and sponsorship.',
         options: [
-          { id: 'ready', label: 'Fully Ready', desc: 'In-house ML/AI talent, allocated budget, executive sponsor, and clear timeline', icon: '🟢' },
-          { id: 'partiallyReady', label: 'Partially Ready', desc: 'Some capabilities in-house, budget needs approval, sponsor identified', icon: '🟡' },
-          { id: 'needsHelp', label: 'Needs External Help', desc: 'Limited in-house capability, would rely on vendors or consultants for execution', icon: '🟠' },
-          { id: 'notReady', label: 'Not Ready', desc: 'No dedicated team, no budget allocated, no clear ownership or sponsorship', icon: '🔴' }
+          { id: 'ready', label: 'Fully Ready', desc: 'In-house ML/AI talent, allocated budget, executive sponsor, and clear timeline', icon: 'checkCircle', iconColor: '#22c55e' },
+          { id: 'partiallyReady', label: 'Partially Ready', desc: 'Some capabilities in-house, budget needs approval, sponsor identified', icon: 'alertTriangle', iconColor: '#eab308' },
+          { id: 'needsHelp', label: 'Needs External Help', desc: 'Limited in-house capability, would rely on vendors or consultants for execution', icon: 'alertTriangle', iconColor: '#f97316' },
+          { id: 'notReady', label: 'Not Ready', desc: 'No dedicated team, no budget allocated, no clear ownership or sponsorship', icon: 'xOctagon', iconColor: '#ef4444' }
         ]
       }
     ];
@@ -309,12 +724,18 @@
 
     // ─── Example Scenarios ───
     const EXAMPLE_SCENARIOS = [
-      { name: 'Automating Support Tickets', description: 'A SaaS company wants to auto-triage and route 5,000+ daily support tickets to reduce response time by 40%.', icon: '🎧', color: '#10b981',
-        answers: { businessGoal: 'cost', problemCategory: 'repetitive', impactLevel: 'critical', dataReality: 'rich', riskLevel: 'low', techMaturity: 'proven', economicOutlook: 'highRoi', executionReady: 'ready' } },
-      { name: 'AI Marketing Content', description: 'A retail brand wants to generate personalized product descriptions and social media content at scale.', icon: '🎨', color: '#3b82f6',
-        answers: { businessGoal: 'revenue', problemCategory: 'creative', impactLevel: 'medium', dataReality: 'available', riskLevel: 'low', techMaturity: 'maturing', economicOutlook: 'moderateRoi', executionReady: 'needsHelp' } },
-      { name: 'Predictive Maintenance', description: 'A manufacturing firm wants to predict equipment failures using sensor data to prevent costly downtime.', icon: '🏭', color: '#f59e0b',
-        answers: { businessGoal: 'cost', problemCategory: 'prediction', impactLevel: 'high', dataReality: 'partial', riskLevel: 'medium', techMaturity: 'maturing', economicOutlook: 'uncertain', executionReady: 'partiallyReady' } }
+      {
+        name: 'Automating Support Tickets', description: 'A SaaS company wants to auto-triage and route 5,000+ daily support tickets to reduce response time by 40%.', icon: 'headphones', color: '#10b981',
+        answers: { businessGoal: 'cost', problemCategory: 'repetitive', impactLevel: 'critical', dataReality: 'rich', riskLevel: 'low', techMaturity: 'proven', economicOutlook: 'highRoi', executionReady: 'ready' }
+      },
+      {
+        name: 'AI Marketing Content', description: 'A retail brand wants to generate personalized product descriptions and social media content at scale.', icon: 'palette', color: '#3b82f6',
+        answers: { businessGoal: 'revenue', problemCategory: 'creative', impactLevel: 'medium', dataReality: 'available', riskLevel: 'low', techMaturity: 'maturing', economicOutlook: 'moderateRoi', executionReady: 'needsHelp' }
+      },
+      {
+        name: 'Predictive Maintenance', description: 'A manufacturing firm wants to predict equipment failures using sensor data to prevent costly downtime.', icon: 'factory', color: '#f59e0b',
+        answers: { businessGoal: 'cost', problemCategory: 'prediction', impactLevel: 'high', dataReality: 'partial', riskLevel: 'medium', techMaturity: 'maturing', economicOutlook: 'uncertain', executionReady: 'partiallyReady' }
+      }
     ];
 
     // ─── Radar Chart ───
@@ -327,7 +748,7 @@
         const r = (value / 10) * maxR;
         return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
       };
-      const gridLevels = [2,4,6,8,10];
+      const gridLevels = [2, 4, 6, 8, 10];
       const dataPoints = DIMENSIONS.map((d, i) => getPoint(i, scores[d.id] || 0));
       const pathD = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
       return (
@@ -397,7 +818,7 @@
     // ─── Path Visualization ───
     const PathVisualization = ({ answers, currentStep, steps }) => {
       const nodeW = 200, nodeH = 56, gapY = 80, svgW = 280, startY = 30, cx = svgW / 2;
-      const colors = ['#f59e0b','#d97706','#b45309','#92400e','#78350f','#f97316','#ea580c','#c2410c'];
+      const colors = ['#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f', '#f97316', '#ea580c', '#c2410c'];
       const getY = (i) => startY + i * gapY;
       return (
         <svg width="100%" height={startY + steps.length * gapY + 60} viewBox={`0 0 ${svgW} ${startY + steps.length * gapY + 60}`} className="w-full">
@@ -407,28 +828,28 @@
           {steps.map((s, i) => {
             if (i === 0) return null;
             const done = i <= currentStep;
-            return <line key={`l-${i}`} x1={cx} y1={getY(i-1)+nodeH} x2={cx} y2={getY(i)} stroke={done ? colors[i-1] : '#1e2235'} strokeWidth={done ? 2 : 1} opacity={done ? 0.7 : 0.4} className={done ? 'node-line' : ''} style={{ animationDelay: `${i*0.1}s` }} />;
+            return <line key={`l-${i}`} x1={cx} y1={getY(i - 1) + nodeH} x2={cx} y2={getY(i)} stroke={done ? colors[i - 1] : '#1e2235'} strokeWidth={done ? 2 : 1} opacity={done ? 0.7 : 0.4} className={done ? 'node-line' : ''} style={{ animationDelay: `${i * 0.1}s` }} />;
           })}
           {steps.map((s, i) => {
             const y = getY(i), isDone = answers[s.id] !== undefined, isCur = i === currentStep, isFut = i > currentStep;
             const c = colors[i], opt = isDone ? s.options.find(o => o.id === answers[s.id]) : null;
             return (
-              <g key={s.id} style={{ animation: `fadeIn 0.3s ease-out ${i*0.05}s both` }}>
-                <rect x={cx-nodeW/2} y={y} width={nodeW} height={nodeH} rx={10} fill={isCur ? 'rgba(245,158,11,0.12)' : isDone ? 'rgba(245,158,11,0.06)' : 'rgba(15,18,32,0.6)'} stroke={isCur ? c : isDone ? c : '#1e2235'} strokeWidth={isCur ? 1.5 : 1} opacity={isFut ? 0.35 : 1} filter={isCur ? 'url(#glow)' : 'none'} />
-                <circle cx={cx-nodeW/2+22} cy={y+nodeH/2} r={12} fill={isDone ? c : isCur ? c : '#1a1e33'} opacity={isDone||isCur ? 1 : 0.4} />
-                {isDone ? <path d={`M${cx-nodeW/2+17} ${y+nodeH/2} l4 4 l7 -7`} stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /> :
-                  <text x={cx-nodeW/2+22} y={y+nodeH/2+5} textAnchor="middle" fill={isCur ? '#fff' : '#6b7280'} fontSize="12" fontWeight="600" fontFamily="'DM Sans',sans-serif">{i+1}</text>}
-                <text x={cx-nodeW/2+42} y={y+(isDone ? 22 : nodeH/2+5)} fill={isFut ? '#4b5563' : isDone ? '#d1d5db' : '#f3f4f6'} fontSize="13" fontWeight="600" fontFamily="'Bricolage Grotesque',sans-serif">{s.title}</text>
-                {isDone && opt && <text x={cx-nodeW/2+42} y={y+42} fill={c} fontSize="11" fontWeight="500" fontFamily="'DM Sans',sans-serif">{opt.label.length > 22 ? opt.label.substring(0,22)+'…' : opt.label}</text>}
-                {isCur && <circle cx={cx+nodeW/2-16} cy={y+nodeH/2} r={5} fill={c} className="anim-pulse" />}
+              <g key={s.id} style={{ animation: `fadeIn 0.3s ease-out ${i * 0.05}s both` }}>
+                <rect x={cx - nodeW / 2} y={y} width={nodeW} height={nodeH} rx={10} fill={isCur ? 'rgba(245,158,11,0.12)' : isDone ? 'rgba(245,158,11,0.06)' : 'rgba(15,18,32,0.6)'} stroke={isCur ? c : isDone ? c : '#1e2235'} strokeWidth={isCur ? 1.5 : 1} opacity={isFut ? 0.35 : 1} filter={isCur ? 'url(#glow)' : 'none'} />
+                <circle cx={cx - nodeW / 2 + 22} cy={y + nodeH / 2} r={12} fill={isDone ? c : isCur ? c : '#1a1e33'} opacity={isDone || isCur ? 1 : 0.4} />
+                {isDone ? <path d={`M${cx - nodeW / 2 + 17} ${y + nodeH / 2} l4 4 l7 -7`} stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /> :
+                  <text x={cx - nodeW / 2 + 22} y={y + nodeH / 2 + 5} textAnchor="middle" fill={isCur ? '#fff' : '#6b7280'} fontSize="12" fontWeight="600" fontFamily="'DM Sans',sans-serif">{i + 1}</text>}
+                <text x={cx - nodeW / 2 + 42} y={y + (isDone ? 22 : nodeH / 2 + 5)} fill={isFut ? '#4b5563' : isDone ? '#d1d5db' : '#f3f4f6'} fontSize="13" fontWeight="600" fontFamily="'Bricolage Grotesque',sans-serif">{s.title}</text>
+                {isDone && opt && <text x={cx - nodeW / 2 + 42} y={y + 42} fill={c} fontSize="11" fontWeight="500" fontFamily="'DM Sans',sans-serif">{opt.label.length > 22 ? opt.label.substring(0, 22) + '…' : opt.label}</text>}
+                {isCur && <circle cx={cx + nodeW / 2 - 16} cy={y + nodeH / 2} r={5} fill={c} className="anim-pulse" />}
               </g>
             );
           })}
           {Object.keys(answers).length === steps.length && (
             <g style={{ animation: 'fadeIn 0.5s ease-out 0.3s both' }}>
-              <line x1={cx} y1={getY(steps.length-1)+nodeH} x2={cx} y2={getY(steps.length)-4} stroke="#f59e0b" strokeWidth={2} opacity={0.7} className="node-line" />
-              <rect x={cx-nodeW/2} y={getY(steps.length)} width={nodeW} height={46} rx={10} fill="rgba(245,158,11,0.12)" stroke="#f59e0b" strokeWidth={1.5} filter="url(#glow)" />
-              <text x={cx} y={getY(steps.length)+28} textAnchor="middle" fill="#fbbf24" fontSize="13" fontWeight="700" fontFamily="'Bricolage Grotesque',sans-serif">Score & Decision</text>
+              <line x1={cx} y1={getY(steps.length - 1) + nodeH} x2={cx} y2={getY(steps.length) - 4} stroke="#f59e0b" strokeWidth={2} opacity={0.7} className="node-line" />
+              <rect x={cx - nodeW / 2} y={getY(steps.length)} width={nodeW} height={46} rx={10} fill="rgba(245,158,11,0.12)" stroke="#f59e0b" strokeWidth={1.5} filter="url(#glow)" />
+              <text x={cx} y={getY(steps.length) + 28} textAnchor="middle" fill="#fbbf24" fontSize="13" fontWeight="700" fontFamily="'Bricolage Grotesque',sans-serif">Score & Decision</text>
             </g>
           )}
         </svg>
@@ -519,7 +940,7 @@
                             <button key={opt.id} onClick={() => selectOption(opt.id)}
                               className={`option-card rounded-xl p-5 text-left w-full ${answers[step.id] === opt.id ? 'selected' : ''}`}>
                               <div className="flex items-start gap-3">
-                                <span className="text-2xl flex-shrink-0 mt-0.5">{opt.icon}</span>
+                                <div className="w-6 h-6 flex-shrink-0 mt-0.5" style={{ color: opt.iconColor || '#f59e0b' }}><Icon name={opt.icon} size={24} color={opt.iconColor || '#f59e0b'} /></div>
                                 <div>
                                   <h3 className="text-sm font-display font-semibold text-white mb-1">{opt.label}</h3>
                                   <p className="text-xs text-slate-400 leading-relaxed">{renderWithTooltips(opt.desc)}</p>
@@ -545,7 +966,7 @@
                             {EXAMPLE_SCENARIOS.map(s => (
                               <div key={s.name} className="scenario-card rounded-xl p-4" onClick={() => loadScenario(s)}>
                                 <div className="flex items-center gap-2.5 mb-2">
-                                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style={{ background: `${s.color}18` }}>{s.icon}</div>
+                                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${s.color}18` }}><Icon name={s.icon} size={20} color={s.color} /></div>
                                   <h4 className="text-sm font-display font-semibold text-white">{s.name}</h4>
                                 </div>
                                 <p className="text-xs text-slate-400 leading-relaxed">{s.description}</p>
@@ -560,7 +981,7 @@
                       {/* Decision Card */}
                       <div className="card-surface rounded-2xl overflow-hidden">
                         <div className="p-6 sm:p-8 text-center" style={{ borderBottom: `2px solid ${decision.border}` }}>
-                          <div className="text-5xl mb-3">{decision.icon}</div>
+                          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: decision.bg, border: `1px solid ${decision.border}` }}><Icon name={decision.icon} size={32} color={decision.color} /></div>
                           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-lg font-display font-bold"
                             style={{ color: decision.color, background: decision.bg, border: `1px solid ${decision.border}` }}>
                             {decision.label}
@@ -582,7 +1003,7 @@
                                 <span className="text-sm font-bold font-display" style={{ color: dim.color }}>{dimScores[dim.id]}/10</span>
                               </div>
                               <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(dimScores[dim.id]/10)*100}%`, background: dim.color }} />
+                                <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(dimScores[dim.id] / 10) * 100}%`, background: dim.color }} />
                               </div>
                             </div>
                           ))}
@@ -593,7 +1014,7 @@
                       <div className="card-surface rounded-2xl overflow-hidden">
                         <button onClick={() => setWhyExpanded(!whyExpanded)}
                           className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-800/20 transition-colors">
-                          <span className="text-sm font-display font-semibold text-amber-400">💡 Why this recommendation?</span>
+                          <span className="text-sm font-display font-semibold text-amber-400 flex items-center gap-2"><Icon name="lightbulb" size={16} color="#f59e0b" /> Why this recommendation?</span>
                           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
                             className={`text-slate-400 transition-transform ${whyExpanded ? 'rotate-180' : ''}`}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -616,7 +1037,7 @@
 
                       {/* Action Plan */}
                       <div className="card-surface rounded-2xl p-6">
-                        <h3 className="text-lg font-display font-bold text-white mb-4">📋 Recommended Next Steps</h3>
+                        <h3 className="text-lg font-display font-bold text-white mb-4 flex items-center gap-2"><Icon name="clipboard" size={20} color="#f59e0b" /> Recommended Next Steps</h3>
                         <div className="space-y-3">
                           {decision.actions.map((action, i) => (
                             <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/20">
@@ -629,7 +1050,7 @@
                           ))}
                         </div>
                         <div className="mt-4 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
-                          <h4 className="text-xs font-display font-semibold text-red-400 mb-2 uppercase tracking-wider">⚠ Risks to Watch</h4>
+                          <h4 className="text-xs font-display font-semibold text-red-400 mb-2 uppercase tracking-wider flex items-center gap-1.5"><Icon name="alertTriangle" size={14} color="#f87171" /> Risks to Watch</h4>
                           <ul className="space-y-1">
                             {decision.risks.map((risk, i) => (
                               <li key={i} className="flex items-start gap-2 text-xs text-slate-400 leading-relaxed">
@@ -656,8 +1077,11 @@
                           Score a different opportunity
                         </button>
                       </div>
-                      <div className="text-center pt-2 pb-6">
-                        <a href="index.html" className="text-xs text-slate-600 hover:text-amber-400 transition-colors">Created by Tarek Atwan @ ML_LAB</a>
+                      <div className="text-center mt-8 text-gray-500 text-sm">
+                        <p>AI Opportunity Scorer v1.0</p>
+                        <p className="mt-2 text-xs">
+                          Created by Tarek Atwan @ <a href="index.html" className="text-amber-600 hover:text-amber-700 hover:underline font-semibold">ML_LAB</a>
+                        </p>
                       </div>
                     </div>
                   ) : null}
