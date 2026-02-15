@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Solution Navigator - Interactive Decision Engine</title>
+  <meta name="description"
+    content="Interactive decision tree that guides you from problem description to the right AI solution. Covers the full AI landscape: Rule-Based, Classical ML, Deep Learning, Generative AI, AI Agents, Agentic AI, and Operations Research.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #06080f;
+      color: #c8cdd8;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-display {
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a2f45;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3f55;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        filter: brightness(1);
+      }
+
+      50% {
+        filter: brightness(1.3);
+      }
+    }
+
+    @keyframes drawLine {
+      from {
+        stroke-dashoffset: 100;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    .anim-fade-up {
+      animation: fadeUp 0.45s ease-out both;
+    }
+
+    .anim-fade-in {
+      animation: fadeIn 0.35s ease-out both;
+    }
+
+    .anim-scale-in {
+      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) both;
+    }
+
+    .anim-slide-right {
+      animation: slideRight 0.35s ease-out both;
+    }
+
+    .anim-pulse {
+      animation: pulseGlow 2.5s ease-in-out infinite;
+    }
+
+    .anim-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .bg-radial-glow {
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-text-warm {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-surface {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.95), rgba(15, 18, 32, 0.98));
+      border: 1px solid rgba(99, 102, 241, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .option-card {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.8), rgba(15, 18, 32, 0.9));
+      border: 1px solid rgba(99, 102, 241, 0.1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .option-card:hover {
+      border-color: rgba(99, 102, 241, 0.35);
+      background: linear-gradient(135deg, rgba(30, 34, 56, 0.9), rgba(20, 24, 41, 0.95));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+    }
+
+    .option-card.selected {
+      border-color: rgba(99, 102, 241, 0.6);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
+      box-shadow: 0 0 24px rgba(99, 102, 241, 0.15), inset 0 0 24px rgba(99, 102, 241, 0.05);
+    }
+
+    .node-line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawLine 0.6s ease-out forwards;
+    }
+
+    .complexity-bar {
+      background: linear-gradient(90deg, #10b981, #eab308, #f97316, #ef4444);
+    }
+
+    .shimmer-bg {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+
+    /* Tooltip styles */
+    .jargon-tooltip {
+      position: relative;
+      border-bottom: 1px dashed rgba(129, 140, 248, 0.4);
+      cursor: help;
+    }
+
+    .jargon-tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1e33;
+      color: #c8cdd8;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: normal;
+      width: max-content;
+      max-width: 260px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .jargon-tooltip:hover::after {
+      opacity: 1;
+    }
+
+    /* Example scenario card */
+    .scenario-card {
+      background: linear-gradient(135deg, rgba(20, 24, 41, 0.8), rgba(15, 18, 32, 0.9));
+      border: 1px solid rgba(99, 102, 241, 0.12);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .scenario-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      background: linear-gradient(135deg, rgba(30, 34, 56, 0.9), rgba(20, 24, 41, 0.95));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+    // ─── SVG Icon Components ───
+    const Icon = ({ name, size = 20, color = 'currentColor', className = '' }) => {
+      const icons = {
+        // Solution category icons
+        ruleBased: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+            <rect x="9" y="3" width="6" height="4" rx="1" />
+            <path d="M9 12h6M9 16h6" />
+          </svg>
+        ),
+        classicalML: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M3 3v18h18" />
+            <path d="M7 16l4-8 4 5 5-9" />
+          </svg>
+        ),
+        deepLearning: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="6" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="12" cy="9" r="2" /><circle cx="12" cy="15" r="2" /><circle cx="18" cy="12" r="2" />
+            <path d="M8 6h2.5M8 18h2.5M14 9.5l2.5 1.5M14 14.5l2.5-1.5" />
+          </svg>
+        ),
+        generativeAI: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" />
+          </svg>
+        ),
+        aiAgents: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="2" y="6" width="6" height="12" rx="1" /><rect x="16" y="6" width="6" height="12" rx="1" />
+            <path d="M8 12h8M12 8v8" />
+          </svg>
+        ),
+        agenticAI: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="3" /><circle cx="5" cy="6" r="2" /><circle cx="19" cy="6" r="2" /><circle cx="5" cy="18" r="2" /><circle cx="19" cy="18" r="2" />
+            <path d="M9.5 10L6.5 7.5M14.5 10l3-2.5M9.5 14l-3 2.5M14.5 14l3 2.5" />
+          </svg>
+        ),
+        operationsResearch: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M4 20L20 4" /><path d="M4 4l6 0 0 6" /><path d="M20 20l-6 0 0-6" />
+            <circle cx="8" cy="16" r="2" /><circle cx="16" cy="8" r="2" />
+          </svg>
+        ),
+        // Step option icons
+        labeled: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" />
+            <circle cx="7" cy="7" r="1" fill={color} />
+          </svg>
+        ),
+        unlabeled: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+          </svg>
+        ),
+        mixed: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="16 3 21 3 21 8" /><line x1="4" y1="20" x2="21" y2="3" />
+            <polyline points="21 16 21 21 16 21" /><line x1="15" y1="15" x2="21" y2="21" />
+            <line x1="4" y1="4" x2="9" y2="9" />
+          </svg>
+        ),
+        none: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="12" y1="18" x2="12" y2="12" /><line x1="9" y1="15" x2="15" y2="15" />
+          </svg>
+        ),
+        selfSupervised: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+          </svg>
+        ),
+        small: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+          </svg>
+        ),
+        medium: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+            <line x1="12" y1="11" x2="12" y2="17" /><line x1="9" y1="14" x2="15" y2="14" />
+          </svg>
+        ),
+        large: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+          </svg>
+        ),
+        veryLarge: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+            <path d="M21 5v14c0 1.66-4 3-9 3s-9-1.34 9-3V5" />
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+          </svg>
+        ),
+        noDataset: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+        ),
+        structured: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        ),
+        unstructuredData: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        ),
+        timeseries: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+        ),
+        multimodal: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+          </svg>
+        ),
+        classification: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 000 20M2 12h20" />
+          </svg>
+        ),
+        regression: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="16" />
+          </svg>
+        ),
+        clustering: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="7" cy="7" r="3" /><circle cx="17" cy="7" r="3" /><circle cx="12" cy="17" r="3" />
+          </svg>
+        ),
+        timeseriesForecast: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+          </svg>
+        ),
+        generation: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M12 19l7-7 3 3-7 7-3-3z" /><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+            <path d="M2 2l7.586 7.586" /><circle cx="11" cy="11" r="2" />
+          </svg>
+        ),
+        automation: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        ),
+        optimization: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94" />
+          </svg>
+        ),
+        anomaly: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        ),
+        recommendation: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <line x1="9" y1="18" x2="15" y2="18" /><line x1="10" y1="22" x2="14" y2="22" />
+            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14" />
+          </svg>
+        ),
+        prediction: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="4" y="4" width="16" height="16" rx="2" /><path d="M9 9h6v6H9z" />
+            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" />
+          </svg>
+        ),
+        toolAssisted: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+          </svg>
+        ),
+        multiAgent: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+        ),
+        highInterp: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+          </svg>
+        ),
+        mediumInterp: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+            <circle cx="12" cy="12" r="3" /><line x1="1" y1="1" x2="23" y2="23" />
+          </svg>
+        ),
+        lowInterp: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="13 17 18 12 13 7" /><polyline points="6 17 11 12 6 7" />
+          </svg>
+        ),
+        // Data quality icons
+        highQuality: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        ),
+        mediumQuality: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        ),
+        lowQuality: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+        ),
+        unknownQuality: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        ),
+        warning: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        ),
+        // Latency & Deployment icons
+        realtime: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        ),
+        nearRealtime: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+        ),
+        batch: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" /><line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+        ),
+        // Budget & Team icons
+        solo: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+          </svg>
+        ),
+        smallTeam: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+        ),
+        enterprise: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M6 7V5a2 2 0 012-2h8a2 2 0 012 2v2" />
+            <line x1="12" y1="11" x2="12" y2="17" /><line x1="9" y1="14" x2="15" y2="14" />
+          </svg>
+        ),
+        // Example scenario icons
+        churn: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M3 3v18h18" /><path d="M7 16l4-8 4 5 5-9" />
+          </svg>
+        ),
+        support: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+        ),
+        forecast: (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+        )
+      };
+      return icons[name] || null;
+    };
+
+    // ─── Solution Categories ───
+    const SOLUTIONS = {
+      ruleBased: {
+        id: 'ruleBased',
+        name: 'Rule-Based Systems',
+        tagline: 'Deterministic Logic & Expert Systems',
+        color: '#f59e0b',
+        colorLight: 'rgba(245,158,11,0.12)',
+        borderColor: 'rgba(245,158,11,0.3)',
+        iconName: 'ruleBased',
+        description: 'Explicitly programmed logic using IF-THEN rules, decision tables, and knowledge graphs. Provides 100% deterministic, auditable decisions without requiring training data.',
+        algorithms: ['Expert Systems', 'Decision Tables', 'Knowledge Graphs', 'Constraint Programming'],
+        frameworks: ['Drools', 'CLIPS', 'Custom Rule Engines'],
+        useCases: [
+          'Regulatory compliance checks (tax, finance, healthcare)',
+          'Medical diagnosis with codified clinical pathways',
+          'Credit scoring with transparent decision logic',
+          'Industrial safety interlocks and quality gates'
+        ],
+        complexity: 1,
+        complexityLabel: 'Low',
+        costLevel: '$',
+        teamRequirement: 'Domain Expert / Analyst',
+        strengths: ['Full explainability and audit trail', 'No training data required', 'Deterministic outputs', 'Low computational cost'],
+        limitations: ['Cannot handle ambiguity or novel situations', 'Requires manual knowledge engineering', 'Brittle in dynamic environments']
+      },
+      classicalML: {
+        id: 'classicalML',
+        name: 'Classical Machine Learning',
+        tagline: 'Statistical Learning from Structured Data',
+        color: '#10b981',
+        colorLight: 'rgba(16,185,129,0.12)',
+        borderColor: 'rgba(16,185,129,0.3)',
+        iconName: 'classicalML',
+        description: 'Statistical algorithms that learn patterns from structured, labeled data. Offers excellent interpretability, fast training, and strong performance on tabular data without heavy compute.',
+        algorithms: ['Random Forest', 'XGBoost', 'LightGBM', 'SVM', 'Logistic Regression', 'K-Means', 'DBSCAN'],
+        frameworks: ['scikit-learn', 'XGBoost lib', 'LightGBM lib'],
+        useCases: [
+          'Customer churn prediction with explainable features',
+          'Fraud detection on transactional data',
+          'Demand forecasting for retail inventory',
+          'Customer segmentation for targeted marketing'
+        ],
+        complexity: 2,
+        complexityLabel: 'Medium',
+        costLevel: '$',
+        teamRequirement: 'Data Scientist',
+        strengths: ['High interpretability for stakeholders', 'Fast training on modest hardware', 'Excellent for structured/tabular data', 'Mature ecosystem (scikit-learn)'],
+        limitations: ['Requires manual feature engineering', 'Struggles with unstructured data', 'Limited by linear/tree-based assumptions']
+      },
+      deepLearning: {
+        id: 'deepLearning',
+        name: 'Deep Learning',
+        tagline: 'Neural Networks for Complex Patterns',
+        color: '#3b82f6',
+        colorLight: 'rgba(59,130,246,0.12)',
+        borderColor: 'rgba(59,130,246,0.3)',
+        iconName: 'deepLearning',
+        description: 'Multi-layer neural networks that automatically learn hierarchical features from raw data. Excels at processing unstructured data like images, text, and audio at scale.',
+        algorithms: ['CNNs', 'RNNs/LSTMs', 'Transformers', 'Vision Transformers', 'Autoencoders'],
+        frameworks: ['TensorFlow', 'PyTorch', 'Keras', 'JAX'],
+        useCases: [
+          'Medical image analysis and diagnostic imaging',
+          'Real-time object detection in manufacturing QA',
+          'Natural language understanding for document processing',
+          'Speech recognition and voice interface systems'
+        ],
+        complexity: 3,
+        complexityLabel: 'High',
+        costLevel: '$$$',
+        teamRequirement: 'ML Engineer + GPU Infra',
+        strengths: ['Automatic feature extraction from raw data', 'State-of-the-art on unstructured data', 'Scales with data volume', 'Transfer learning reduces data needs'],
+        limitations: ['Requires large datasets and GPU compute', 'Black-box predictions hard to explain', 'Expensive training and inference', 'Risk of overfitting on small data']
+      },
+      generativeAI: {
+        id: 'generativeAI',
+        name: 'Generative AI',
+        tagline: 'Foundation Models & Content Synthesis',
+        color: '#a855f7',
+        colorLight: 'rgba(168,85,247,0.12)',
+        borderColor: 'rgba(168,85,247,0.3)',
+        iconName: 'generativeAI',
+        description: 'Foundation models (LLMs, diffusion models) that create new content—text, images, code, audio—by learning patterns from vast training corpora. Transformative for creative and knowledge work.',
+        algorithms: ['Large Language Models', 'Diffusion Models', 'VAEs', 'GPT', 'Claude', 'Llama'],
+        frameworks: ['OpenAI API', 'Anthropic API', 'Hugging Face', 'Stable Diffusion'],
+        useCases: [
+          'Automated content creation for marketing campaigns',
+          'Code generation and developer productivity tools',
+          'Conversational AI assistants and chatbots',
+          'Document summarization and report generation'
+        ],
+        complexity: 2.5,
+        complexityLabel: 'Medium-High',
+        costLevel: '$$',
+        teamRequirement: 'Software Engineer + Prompt Engineer',
+        strengths: ['Versatile content creation across modalities', 'Pre-trained—minimal custom data needed', 'Rapidly improving capabilities', 'API-based—low infrastructure overhead'],
+        limitations: ['Hallucination risk—factual accuracy not guaranteed', 'High API costs at scale', 'Data privacy concerns with third-party APIs', 'Limited reasoning on structured data']
+      },
+      aiAgents: {
+        id: 'aiAgents',
+        name: 'AI Agents',
+        tagline: 'Single Agent — Tool Use & Bounded Automation',
+        color: '#f97316',
+        colorLight: 'rgba(249,115,22,0.12)',
+        borderColor: 'rgba(249,115,22,0.3)',
+        iconName: 'aiAgents',
+        description: 'A single LLM-powered agent that can reason, plan, and use tools (APIs, databases, calculators) to accomplish bounded tasks within a defined domain. Operates with human oversight and a fixed set of tools.',
+        keyDifferentiator: 'Single agent, single domain, bounded tool use with human oversight',
+        algorithms: ['ReAct', 'RAG', 'Function Calling', 'Tool Use', 'Chain-of-Thought'],
+        frameworks: ['LangChain', 'LlamaIndex', 'AutoGPT', 'Semantic Kernel'],
+        useCases: [
+          'Research assistants that search and synthesize information',
+          'Customer support with access to CRM and knowledge bases',
+          'Data analysis agents that query databases and visualize results',
+          'Automated email triage, scheduling, and response drafting'
+        ],
+        complexity: 2.5,
+        complexityLabel: 'Medium-High',
+        costLevel: '$$',
+        teamRequirement: 'Software Engineer + ML Engineer',
+        strengths: ['Can use external tools and APIs', 'Goal-directed multi-step reasoning', 'Grounded in real-time data via RAG', 'Bounded autonomy within defined scope'],
+        limitations: ['Reliability challenges with complex chains', 'Prompt injection security risks', 'Latency from sequential tool calls', 'Debugging multi-step failures is difficult']
+      },
+      agenticAI: {
+        id: 'agenticAI',
+        name: 'Agentic AI',
+        tagline: 'Multi-Agent Orchestration — Autonomous Cross-Domain Collaboration',
+        color: '#ec4899',
+        colorLight: 'rgba(236,72,153,0.12)',
+        borderColor: 'rgba(236,72,153,0.3)',
+        iconName: 'agenticAI',
+        description: 'Multiple specialized AI agents that autonomously decompose complex goals, collaborate through shared memory and communication protocols, and orchestrate workflows across domains — without step-by-step human supervision.',
+        keyDifferentiator: 'Multiple agents, cross-domain, autonomous planning and delegation',
+        algorithms: ['Multi-Agent RL', 'Task Decomposition', 'Semantic Communication', 'Shared Memory Protocols'],
+        frameworks: ['CrewAI', 'LangGraph', 'Microsoft AutoGen', 'MetaGPT'],
+        useCases: [
+          'End-to-end research automation across multiple sources',
+          'Complex software development with planning, coding, and testing agents',
+          'Supply chain orchestration across procurement, logistics, and inventory',
+          'Business process automation spanning multiple departments'
+        ],
+        complexity: 4,
+        complexityLabel: 'Very High',
+        costLevel: '$$$$',
+        teamRequirement: 'ML + DevOps + Platform Team',
+        strengths: ['Handles complex multi-domain problems', 'Specialized agents for each sub-task', 'Dynamic task decomposition', 'Scales complexity through collaboration'],
+        limitations: ['Extremely complex to design and debug', 'High latency and compute costs', 'Emergent behavior can be unpredictable', 'Security and coordination overhead']
+      },
+      operationsResearch: {
+        id: 'operationsResearch',
+        name: 'Operations Research',
+        tagline: 'Mathematical Optimization Under Constraints',
+        color: '#14b8a6',
+        colorLight: 'rgba(20,184,166,0.12)',
+        borderColor: 'rgba(20,184,166,0.3)',
+        iconName: 'operationsResearch',
+        description: 'Mathematical programming techniques that find provably optimal solutions under defined constraints. The gold standard for resource allocation, logistics, scheduling, and any problem with a clear objective function.',
+        algorithms: ['Linear Programming', 'Mixed Integer Programming', 'Constraint Programming', 'Dynamic Programming'],
+        frameworks: ['Gurobi', 'CPLEX', 'PuLP', 'OR-Tools', 'SCIP'],
+        useCases: [
+          'Supply chain network design and logistics routing',
+          'Workforce scheduling and shift optimization',
+          'Production planning and resource allocation',
+          'Portfolio optimization and risk management'
+        ],
+        complexity: 2.5,
+        complexityLabel: 'Medium-High',
+        costLevel: '$$',
+        teamRequirement: 'OR Specialist / Data Scientist',
+        strengths: ['Provably optimal solutions', 'Handles complex constraints precisely', 'Fast solvers for industrial scale', 'Clear mathematical guarantees'],
+        limitations: ['Requires well-defined mathematical formulation', 'Static environments only (no learning)', 'NP-hard problems need approximations', 'Needs OR expertise for modeling']
+      }
+    };
+
+    // ─── Glossary for Tooltips ───
+    const GLOSSARY = {
+      'Labeled Data': 'Data where each example has a known answer (e.g., emails tagged as spam/not spam)',
+      'Unlabeled Data': 'Raw data without predefined categories or outcomes',
+      'Unstructured': 'Data without a fixed schema — text, images, audio, video',
+      'Self-supervised': 'A training approach where the model generates its own labels from patterns in data',
+      'Pre-trained': 'A model already trained on massive datasets, ready to be fine-tuned for your task',
+      'Foundation Models': 'Large pre-trained AI models (like GPT, Claude) that serve as a starting point',
+      'Transfer Learning': 'Reusing a pre-trained model\'s knowledge for a new, related task',
+      'RAG': 'Retrieval-Augmented Generation — connecting an LLM to your own data sources',
+      'Heuristics': 'Simple rules of thumb that provide approximate solutions',
+      'Feature Engineering': 'Manually creating input variables from raw data to improve ML models',
+      'Overfitting': 'When a model memorizes training data and fails on new data',
+      'LLM': 'Large Language Model — AI trained on vast text to understand and generate language',
+      'Hallucination': 'When an AI confidently generates incorrect or fabricated information',
+      'Embeddings': 'Numerical representations of data (text, images) that capture meaning'
+    };
+
+    // ─── Tooltip Component ───
+    const Tooltip = ({ term, children }) => {
+      const tip = GLOSSARY[term];
+      if (!tip) return <span>{children || term}</span>;
+      return <span className="jargon-tooltip" data-tip={tip}>{children || term}</span>;
+    };
+
+    // ─── Tooltip Parser ───
+    const renderWithTooltips = (text) => {
+      if (!text) return text;
+      let result = [text];
+
+      Object.keys(GLOSSARY).forEach(term => {
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escapedTerm})\\b`, 'gi');
+
+        result = result.flatMap(part => {
+          if (typeof part !== 'string') return [part];
+          const splits = part.split(regex);
+          return splits.map((split, i) => {
+            if (split.toLowerCase() === term.toLowerCase()) {
+              return <Tooltip key={`${term}-${i}`} term={term}>{split}</Tooltip>;
+            }
+            return split;
+          });
+        });
+      });
+      return result;
+    };
+
+    // ─── Example Scenarios ───
+    const EXAMPLE_SCENARIOS = [
+      {
+        name: 'Predicting Customer Churn',
+        description: 'A telecom company wants to identify customers likely to cancel their subscription using historical account data.',
+        iconName: 'churn',
+        color: '#10b981',
+        answers: { dataType: 'labeled', dataVolume: 'medium', dataStructure: 'structured', problemType: 'classification', latency: 'batch', autonomy: 'prediction', interpretability: 'high', teamBudget: 'smallTeam', dataQuality: 'high' }
+      },
+      {
+        name: 'Automated Customer Support',
+        description: 'Build an AI assistant that handles Tier-1 support tickets by searching knowledge bases and drafting responses.',
+        iconName: 'support',
+        color: '#f97316',
+        answers: { dataType: 'none', dataStructure: 'unstructured', problemType: 'automation', latency: 'nearRealtime', autonomy: 'toolAssisted', interpretability: 'medium', teamBudget: 'smallTeam' }
+      },
+      {
+        name: 'Time-Series Forecasting',
+        description: 'Forecast weekly product demand for retail inventory planning using 3 years of daily sales data.',
+        iconName: 'forecast',
+        color: '#3b82f6',
+        answers: { dataType: 'labeled', dataVolume: 'large', dataStructure: 'timeseries', problemType: 'timeseries', latency: 'batch', autonomy: 'prediction', interpretability: 'medium', teamBudget: 'smallTeam', dataQuality: 'high' }
+      }
+    ];
+
+    // ─── Decision Steps ───
+    const STEPS = [
+      {
+        id: 'dataType',
+        title: 'Data Situation',
+        question: 'What best describes your current data landscape?',
+        subtitle: 'Your data availability is the most critical factor in choosing the right AI approach.',
+        options: [
+          { id: 'labeled', label: 'Labeled Data', desc: 'Structured data with known outcomes for training (e.g., historical sales with actual results)', iconName: 'labeled' },
+          { id: 'unlabeled', label: 'Unlabeled Data', desc: 'Data exists but without predefined categories or outcomes to learn from', iconName: 'unlabeled' },
+          { id: 'mixed', label: 'Mixed / Partial Labels', desc: 'Some data is labeled, most is not — a common real-world scenario', iconName: 'mixed' },
+          { id: 'none', label: 'No Pre-existing Data', desc: 'Starting from scratch — relying on rules, knowledge, or generative models', iconName: 'none' },
+          { id: 'selfSupervised', label: 'Self-supervised / Pre-trained', desc: 'Leveraging pre-trained models or learning representations without explicit labels', iconName: 'selfSupervised' }
+        ]
+      },
+      {
+        id: 'dataVolume',
+        title: 'Data Scale',
+        question: 'How much data do you have available?',
+        subtitle: 'Data volume directly impacts which methods are viable and cost-effective.',
+        skipWhen: (answers) => answers.dataType === 'none',
+        options: [
+          { id: 'small', label: 'Small', desc: 'Under 10K samples — simple models, spreadsheets, or rules may suffice', iconName: 'small' },
+          { id: 'medium', label: 'Medium', desc: '10K–100K samples — classical ML methods often outperform deep learning here', iconName: 'medium' },
+          { id: 'large', label: 'Large', desc: '100K–10M samples — enough to train deep models and find complex patterns', iconName: 'large' },
+          { id: 'veryLarge', label: 'Very Large', desc: 'Over 10M samples — industrial scale requiring distributed training and big data tooling', iconName: 'veryLarge' },
+          { id: 'unstructured', label: 'No Structured Dataset', desc: 'Working with text prompts, knowledge bases, documents, or API-driven data', iconName: 'noDataset' }
+        ]
+      },
+      {
+        id: 'dataStructure',
+        title: 'Data Structure',
+        question: 'What form does your data take?',
+        subtitle: 'The structure of your data determines which model architectures are appropriate.',
+        options: [
+          { id: 'structured', label: 'Structured / Tabular', desc: 'Rows and columns — spreadsheets, databases, numerical features', iconName: 'structured' },
+          { id: 'unstructured', label: 'Unstructured', desc: 'Text, images, audio, video — requires feature extraction or neural networks', iconName: 'unstructuredData' },
+          { id: 'timeseries', label: 'Time Series / Sequential', desc: 'Ordered data with temporal dependencies — timestamps, sequences, streams', iconName: 'timeseries' },
+          { id: 'multimodal', label: 'Mixed / Multimodal', desc: 'Combination of structured and unstructured data types', iconName: 'multimodal' }
+        ]
+      },
+      {
+        id: 'problemType',
+        title: 'Problem Type',
+        question: 'What are you trying to accomplish?',
+        subtitle: 'Define your core objective — this maps directly to solution architectures.',
+        options: [
+          { id: 'classification', label: 'Classification', desc: 'Categorize inputs into discrete classes (spam/not spam, diagnosis, sentiment)', iconName: 'classification' },
+          { id: 'regression', label: 'Regression', desc: 'Predict continuous numerical values (price, demand, risk score)', iconName: 'regression' },
+          { id: 'clustering', label: 'Clustering', desc: 'Discover natural groupings without predefined categories', iconName: 'clustering' },
+          { id: 'timeseries', label: 'Time Series Forecasting', desc: 'Predict future values based on temporal patterns and trends', iconName: 'timeseriesForecast' },
+          { id: 'generation', label: 'Content Generation', desc: 'Create text, images, code, or other content from prompts', iconName: 'generation' },
+          { id: 'automation', label: 'Task Automation', desc: 'Automate multi-step workflows with tool use and decision-making', iconName: 'automation' },
+          { id: 'optimization', label: 'Optimization', desc: 'Find the best solution under constraints (routing, scheduling, allocation)', iconName: 'optimization' },
+          { id: 'anomaly', label: 'Anomaly Detection', desc: 'Identify outliers, unusual patterns, or rare events in data', iconName: 'anomaly' },
+          { id: 'recommendation', label: 'Recommendation', desc: 'Suggest items or actions based on user preferences and behavior', iconName: 'recommendation' }
+        ]
+      },
+      {
+        id: 'latency',
+        title: 'Latency & Deployment',
+        question: 'What are your latency and deployment requirements?',
+        subtitle: 'Deployment constraints affect which solutions are architecturally viable.',
+        options: [
+          { id: 'realtime', label: 'Real-time / Edge', desc: 'Under 100ms on constrained hardware — mobile devices, IoT, embedded systems', iconName: 'realtime' },
+          { id: 'nearRealtime', label: 'Near Real-time / API', desc: 'Seconds-scale responses via cloud — web APIs, chat interfaces, dashboards', iconName: 'nearRealtime' },
+          { id: 'batch', label: 'Batch / Offline', desc: 'Minutes to hours — scheduled reports, nightly processing, data pipelines', iconName: 'batch' }
+        ]
+      },
+      {
+        id: 'autonomy',
+        title: 'Autonomy Level',
+        question: 'How much independence should the AI system have?',
+        subtitle: 'From simple model inference to fully autonomous multi-agent orchestration.',
+        options: [
+          { id: 'prediction', label: 'Simple Prediction', desc: 'Model receives input, returns output — human reviews and acts on results', iconName: 'prediction' },
+          { id: 'toolAssisted', label: 'Tool-Assisted Execution', desc: 'AI can call APIs, query databases, and take bounded actions with oversight', iconName: 'toolAssisted' },
+          { id: 'multiAgent', label: 'Multi-Agent Coordination', desc: 'Autonomous agents collaborate, plan, and execute complex workflows', iconName: 'multiAgent' }
+        ]
+      },
+      {
+        id: 'interpretability',
+        title: 'Interpretability',
+        question: 'How important is it to explain AI decisions?',
+        subtitle: 'Regulated industries and high-stakes decisions often require full transparency.',
+        options: [
+          { id: 'high', label: 'High — Fully Transparent', desc: 'Must explain every decision (finance, healthcare, legal compliance)', iconName: 'highInterp' },
+          { id: 'medium', label: 'Medium — Some Insight', desc: 'Stakeholders want general understanding but not full audit trails', iconName: 'mediumInterp' },
+          { id: 'low', label: 'Low — Performance First', desc: 'Accuracy and capability matter most; black-box models are acceptable', iconName: 'lowInterp' }
+        ]
+      },
+      {
+        id: 'teamBudget',
+        title: 'Budget & Team',
+        question: 'What are your team resources and budget constraints?',
+        subtitle: 'Your team composition and budget directly impact which solutions are practical.',
+        options: [
+          { id: 'solo', label: 'Solo / No Budget', desc: 'Individual contributor with free or open-source tools only', iconName: 'solo' },
+          { id: 'smallTeam', label: 'Small Team / APIs', desc: '2–5 people, moderate cloud budget, can use paid APIs and managed services', iconName: 'smallTeam' },
+          { id: 'enterprise', label: 'Enterprise / MLOps Team', desc: 'Dedicated platform team, full budget for infrastructure, training, and tooling', iconName: 'enterprise' }
+        ]
+      },
+      {
+        id: 'dataQuality',
+        title: 'Data Quality',
+        question: 'How would you rate the quality of your available data?',
+        subtitle: 'Even the best algorithm fails with poor data. Quality impacts every downstream decision.',
+        skipWhen: (answers) => answers.dataType === 'none',
+        options: [
+          { id: 'high', label: 'High — Clean & Validated', desc: 'Well-structured, few missing values, validated sources, consistent formatting', iconName: 'highQuality' },
+          { id: 'medium', label: 'Medium — Some Issues', desc: 'Generally usable but has noise, some missing values, or inconsistencies to address', iconName: 'mediumQuality' },
+          { id: 'low', label: 'Low — Messy & Unvalidated', desc: 'Significant gaps, duplicates, errors, or unverified sources requiring heavy cleanup', iconName: 'lowQuality' },
+          { id: 'unknown', label: 'Unknown / Not Applicable', desc: 'Haven\'t assessed data quality yet, or working with pre-trained models and APIs', iconName: 'unknownQuality' }
+        ]
+      }
+    ];
+
+    // ─── Get Active Steps (Conditional Routing) ───
+    function getActiveSteps(answers) {
+      return STEPS.filter(step => {
+        if (step.skipWhen && step.skipWhen(answers)) return false;
+        return true;
+      });
+    }
+
+    // ─── Scoring Engine ───
+    const SCORING = {
+      dataType: {
+        labeled: { ruleBased: 0, classicalML: 4, deepLearning: 3, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        unlabeled: { ruleBased: 1, classicalML: 3, deepLearning: 2, generativeAI: 1, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        mixed: { ruleBased: 0, classicalML: 2, deepLearning: 3, generativeAI: 1, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        none: { ruleBased: 4, classicalML: 0, deepLearning: 0, generativeAI: 3, aiAgents: 2, agenticAI: 1, operationsResearch: 2 },
+        selfSupervised: { ruleBased: 0, classicalML: 0, deepLearning: 4, generativeAI: 3, aiAgents: 1, agenticAI: 1, operationsResearch: 0 }
+      },
+      dataVolume: {
+        small: { ruleBased: 3, classicalML: 3, deepLearning: 0, generativeAI: 1, aiAgents: 1, agenticAI: 0, operationsResearch: 2 },
+        medium: { ruleBased: 1, classicalML: 4, deepLearning: 1, generativeAI: 1, aiAgents: 1, agenticAI: 0, operationsResearch: 2 },
+        large: { ruleBased: 0, classicalML: 2, deepLearning: 4, generativeAI: 1, aiAgents: 0, agenticAI: 0, operationsResearch: 1 },
+        veryLarge: { ruleBased: 0, classicalML: 1, deepLearning: 5, generativeAI: 1, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        unstructured: { ruleBased: 2, classicalML: 0, deepLearning: 1, generativeAI: 4, aiAgents: 3, agenticAI: 2, operationsResearch: 1 }
+      },
+      dataStructure: {
+        structured: { ruleBased: 2, classicalML: 4, deepLearning: 1, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 3 },
+        unstructured: { ruleBased: 0, classicalML: 0, deepLearning: 4, generativeAI: 3, aiAgents: 1, agenticAI: 1, operationsResearch: 0 },
+        timeseries: { ruleBased: 0, classicalML: 3, deepLearning: 3, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 1 },
+        multimodal: { ruleBased: 0, classicalML: 1, deepLearning: 3, generativeAI: 3, aiAgents: 2, agenticAI: 2, operationsResearch: 0 }
+      },
+      problemType: {
+        classification: { ruleBased: 1, classicalML: 4, deepLearning: 3, generativeAI: 1, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        regression: { ruleBased: 1, classicalML: 4, deepLearning: 2, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 1 },
+        clustering: { ruleBased: 0, classicalML: 4, deepLearning: 2, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        timeseries: { ruleBased: 0, classicalML: 3, deepLearning: 3, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        generation: { ruleBased: 0, classicalML: 0, deepLearning: 1, generativeAI: 5, aiAgents: 2, agenticAI: 1, operationsResearch: 0 },
+        automation: { ruleBased: 1, classicalML: 0, deepLearning: 0, generativeAI: 1, aiAgents: 4, agenticAI: 4, operationsResearch: 0 },
+        optimization: { ruleBased: 1, classicalML: 1, deepLearning: 0, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 5 },
+        anomaly: { ruleBased: 1, classicalML: 3, deepLearning: 3, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 0 },
+        recommendation: { ruleBased: 0, classicalML: 3, deepLearning: 3, generativeAI: 1, aiAgents: 1, agenticAI: 0, operationsResearch: 0 }
+      },
+      latency: {
+        realtime: { ruleBased: 3, classicalML: 3, deepLearning: 1, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 2 },
+        nearRealtime: { ruleBased: 1, classicalML: 2, deepLearning: 2, generativeAI: 2, aiAgents: 2, agenticAI: 1, operationsResearch: 1 },
+        batch: { ruleBased: 1, classicalML: 2, deepLearning: 3, generativeAI: 1, aiAgents: 1, agenticAI: 2, operationsResearch: 2 }
+      },
+      autonomy: {
+        prediction: { ruleBased: 3, classicalML: 3, deepLearning: 3, generativeAI: 2, aiAgents: 0, agenticAI: 0, operationsResearch: 3 },
+        toolAssisted: { ruleBased: 0, classicalML: 0, deepLearning: 0, generativeAI: 2, aiAgents: 5, agenticAI: 1, operationsResearch: 0 },
+        multiAgent: { ruleBased: 0, classicalML: 0, deepLearning: 0, generativeAI: 1, aiAgents: 1, agenticAI: 5, operationsResearch: 0 }
+      },
+      interpretability: {
+        high: { ruleBased: 4, classicalML: 3, deepLearning: 0, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 2 },
+        medium: { ruleBased: 2, classicalML: 2, deepLearning: 2, generativeAI: 2, aiAgents: 2, agenticAI: 1, operationsResearch: 2 },
+        low: { ruleBased: 0, classicalML: 1, deepLearning: 3, generativeAI: 3, aiAgents: 2, agenticAI: 3, operationsResearch: 1 }
+      },
+      teamBudget: {
+        solo: { ruleBased: 3, classicalML: 2, deepLearning: 0, generativeAI: 2, aiAgents: 0, agenticAI: 0, operationsResearch: 1 },
+        smallTeam: { ruleBased: 1, classicalML: 2, deepLearning: 1, generativeAI: 3, aiAgents: 2, agenticAI: 0, operationsResearch: 2 },
+        enterprise: { ruleBased: 0, classicalML: 1, deepLearning: 3, generativeAI: 1, aiAgents: 2, agenticAI: 3, operationsResearch: 2 }
+      },
+      dataQuality: {
+        high: { ruleBased: 1, classicalML: 3, deepLearning: 3, generativeAI: 1, aiAgents: 1, agenticAI: 1, operationsResearch: 2 },
+        medium: { ruleBased: 2, classicalML: 2, deepLearning: 1, generativeAI: 2, aiAgents: 2, agenticAI: 1, operationsResearch: 1 },
+        low: { ruleBased: 3, classicalML: 0, deepLearning: 0, generativeAI: 3, aiAgents: 2, agenticAI: 1, operationsResearch: 0 },
+        unknown: { ruleBased: 1, classicalML: 1, deepLearning: 1, generativeAI: 2, aiAgents: 2, agenticAI: 1, operationsResearch: 1 }
+      }
+    };
+
+    // ─── Compute Recommendation ───
+    function computeScores(answers) {
+      const scores = { ruleBased: 0, classicalML: 0, deepLearning: 0, generativeAI: 0, aiAgents: 0, agenticAI: 0, operationsResearch: 0 };
+      for (const [step, choice] of Object.entries(answers)) {
+        const stepScoring = SCORING[step];
+        if (stepScoring && stepScoring[choice]) {
+          for (const [sol, pts] of Object.entries(stepScoring[choice])) {
+            scores[sol] += pts;
+          }
+        }
+      }
+      // Transfer Learning bonus: small data + unstructured + self-supervised/mixed → deep learning viable
+      if (answers.dataVolume === 'small' && answers.dataStructure === 'unstructured'
+        && (answers.dataType === 'selfSupervised' || answers.dataType === 'mixed')) {
+        scores.deepLearning += 3;
+      }
+      return scores;
+    }
+
+    function getScoreBreakdown(answers, solutionId) {
+      const breakdown = [];
+      const activeSteps = getActiveSteps(answers);
+      for (const step of activeSteps) {
+        const choice = answers[step.id];
+        if (choice && SCORING[step.id] && SCORING[step.id][choice]) {
+          const pts = SCORING[step.id][choice][solutionId] || 0;
+          const maxPts = Math.max(...Object.values(SCORING[step.id][choice]));
+          const opt = step.options.find(o => o.id === choice);
+          breakdown.push({ step: step.title, choice: opt?.label || choice, points: pts, maxPoints: maxPts });
+        }
+      }
+      // Add transfer learning bonus line if applicable
+      if (solutionId === 'deepLearning' && answers.dataVolume === 'small'
+        && answers.dataStructure === 'unstructured'
+        && (answers.dataType === 'selfSupervised' || answers.dataType === 'mixed')) {
+        breakdown.push({ step: 'Transfer Learning', choice: 'Bonus', points: 3, maxPoints: 3 });
+      }
+      return breakdown;
+    }
+
+    function getRankedSolutions(answers) {
+      const scores = computeScores(answers);
+      const maxScore = Math.max(...Object.values(scores));
+      return Object.entries(scores)
+        .map(([id, score]) => ({ ...SOLUTIONS[id], score, confidence: maxScore > 0 ? Math.round((score / maxScore) * 100) : 0 }))
+        .sort((a, b) => b.score - a.score);
+    }
+
+    function getSimplerAlternative(answers) {
+      const a = answers;
+      // Check if the problem might not need AI at all
+      if (a.dataType === 'labeled' && a.dataVolume === 'small' && a.dataStructure === 'structured'
+        && (a.problemType === 'classification' || a.problemType === 'regression')
+        && a.autonomy === 'prediction' && a.interpretability === 'high') {
+        return {
+          title: 'Consider starting without AI',
+          message: 'Your scenario — small structured data, simple prediction, full transparency — may be well-served by traditional analytics before investing in ML.',
+          alternatives: [
+            'SQL queries and pivot tables for pattern discovery',
+            'Spreadsheet formulas or business rules for classification',
+            'Statistical tests (t-test, chi-squared) for hypothesis validation',
+            'Simple logistic regression in a spreadsheet (no ML framework needed)'
+          ]
+        };
+      }
+      if (a.dataType === 'none' && a.problemType === 'classification' && a.autonomy === 'prediction') {
+        return {
+          title: 'A lookup table or flowchart may suffice',
+          message: 'Without data and needing only simple classification, a well-designed decision tree document or lookup table could solve this faster and cheaper than any AI system.',
+          alternatives: [
+            'Decision tree flowcharts built with domain experts',
+            'Lookup tables or scoring rubrics in a spreadsheet',
+            'Simple IF-THEN logic in any programming language'
+          ]
+        };
+      }
+      if (a.dataVolume === 'small' && a.dataStructure === 'structured' && a.problemType === 'clustering') {
+        return {
+          title: 'Try basic analytics first',
+          message: 'For small structured datasets with grouping needs, exploratory data analysis with pivot tables or simple SQL GROUP BY queries might reveal the segments you need without ML.',
+          alternatives: [
+            'Pivot tables and cross-tabulations in Excel',
+            'SQL GROUP BY with aggregate functions',
+            'Basic data visualization (scatter plots, histograms)'
+          ]
+        };
+      }
+      return null;
+    }
+
+    function getHybridSuggestion(ranked) {
+      if (ranked.length < 2) return null;
+      const top = ranked[0], second = ranked[1];
+      if (top.score === 0) return null;
+      const gap = ((top.score - second.score) / top.score) * 100;
+      if (gap > 15) return null; // Too far apart
+
+      const HYBRID_COMBOS = {
+        'classicalML+deepLearning': { name: 'ML Pipeline with Deep Features', description: 'Use deep learning for feature extraction (embeddings) and classical ML for the final prediction layer. Combines the interpretability of tree-based models with the power of neural feature extraction.', example: 'Extract image features with a pre-trained CNN, then classify using XGBoost for explainable predictions.' },
+        'generativeAI+aiAgents': { name: 'Agent-Powered Generative Workflow', description: 'Use an AI agent to orchestrate generative AI calls with tool access — grounding LLM outputs in real data via RAG, APIs, and validation steps.', example: 'A research agent that generates reports by querying databases, calling APIs, and synthesizing findings with an LLM.' },
+        'classicalML+operationsResearch': { name: 'Predictive Optimization', description: 'Use ML to forecast demand/parameters, then feed predictions into an optimization model for decision-making under constraints.', example: 'Forecast product demand with XGBoost, then optimize inventory allocation with linear programming.' },
+        'deepLearning+generativeAI': { name: 'Foundation Model Fine-Tuning', description: 'Fine-tune a pre-trained foundation model on your domain data to combine generative capabilities with specialized accuracy.', example: 'Fine-tune an LLM on your company\'s documentation for domain-specific content generation and Q&A.' },
+        'aiAgents+agenticAI': { name: 'Graduated Agent Architecture', description: 'Start with single-agent automation for well-defined tasks, then scale to multi-agent orchestration for complex cross-domain workflows as needs grow.', example: 'Deploy a customer support agent first, then expand to a multi-agent system coordinating support, billing, and escalation.' },
+        'ruleBased+classicalML': { name: 'ML with Business Rule Guardrails', description: 'Use ML for predictions but wrap outputs in business rules that enforce constraints, compliance requirements, and edge case handling.', example: 'ML model predicts credit risk scores, business rules enforce regulatory limits and override edge cases.' },
+      };
+
+      const key1 = `${top.id}+${second.id}`;
+      const key2 = `${second.id}+${top.id}`;
+      const combo = HYBRID_COMBOS[key1] || HYBRID_COMBOS[key2];
+
+      if (combo) {
+        return { ...combo, solutions: [top, second], gap: Math.round(gap) };
+      }
+
+      // Generic hybrid fallback
+      return {
+        name: `${top.name} + ${second.name} Hybrid`,
+        description: `Your answers suggest a close match between ${top.name} and ${second.name}. Consider a phased approach: start with ${top.name} for quick wins, then integrate ${second.name} capabilities as your system matures.`,
+        example: `Begin with ${top.name} for core functionality, then layer in ${second.name} for enhanced capabilities.`,
+        solutions: [top, second],
+        gap: Math.round(gap)
+      };
+    }
+
+    function getWhyExplanation(answers, solution) {
+      const parts = [];
+      const a = answers;
+      const s = solution.id;
+
+      if (a.dataType === 'none' && s === 'ruleBased') parts.push('Since you have no pre-existing data, rule-based systems are ideal — they rely on domain expertise and codified logic rather than historical data.');
+      else if (a.dataType === 'labeled' && s === 'classicalML') parts.push('Your labeled dataset is the foundation of supervised learning. Classical ML algorithms like Random Forest and XGBoost are specifically designed to learn from labeled examples.');
+      else if (a.dataType === 'labeled' && s === 'deepLearning') parts.push('Labeled data combined with your other requirements makes deep learning a strong fit — neural networks excel when training data is abundant.');
+      else if (a.dataType === 'none' && s === 'generativeAI') parts.push('Without pre-existing data, generative AI models (pre-trained on vast corpora) can still deliver value through prompting and in-context learning.');
+      else if (a.dataType === 'selfSupervised') parts.push('Self-supervised and pre-trained approaches align perfectly with foundation models that learn representations without explicit labels.');
+      else if (a.dataType === 'unlabeled' && s === 'classicalML') parts.push('Unsupervised methods like K-Means, DBSCAN, and PCA within classical ML are designed to discover patterns in unlabeled data.');
+      else if (a.dataType === 'mixed') parts.push('Semi-supervised techniques can leverage both your labeled and unlabeled data, maximizing learning from the full dataset.');
+
+      if (a.dataVolume === 'small' && (s === 'classicalML' || s === 'ruleBased')) parts.push('With under 10K samples, simpler methods shine — classical approaches and rule-based systems are less prone to overfitting and require minimal compute.');
+      else if (a.dataVolume === 'medium' && s === 'classicalML') parts.push('Your medium dataset (10K–100K samples) is the sweet spot for classical ML — enough data for robust patterns without the overhead of deep learning.');
+      else if ((a.dataVolume === 'large' || a.dataVolume === 'veryLarge') && s === 'deepLearning') parts.push('Your large dataset is where deep learning shines — neural networks improve logarithmically with data scale, unlocking complex pattern recognition.');
+      else if (a.dataVolume === 'veryLarge' && s === 'deepLearning') parts.push('At 10M+ samples, deep learning reaches its full potential — distributed training on massive datasets yields the most accurate and generalizable models.');
+      else if (a.dataVolume === 'unstructured' && (s === 'generativeAI' || s === 'aiAgents')) parts.push('Working with unstructured knowledge sources is where pre-trained foundation models and agent architectures excel — no structured training set needed.');
+
+      // Transfer Learning nuance
+      if (a.dataVolume === 'small' && a.dataStructure === 'unstructured'
+        && (a.dataType === 'selfSupervised' || a.dataType === 'mixed') && s === 'deepLearning') {
+        parts.push('Even with small data, transfer learning from pre-trained models makes deep learning viable for unstructured data — fine-tuning a foundation model requires far fewer samples than training from scratch.');
+      }
+
+      if (a.dataStructure === 'structured' && s === 'classicalML') parts.push('Tabular data is classical ML\'s home turf. Gradient boosting methods (XGBoost, LightGBM) remain state-of-the-art for structured data, even outperforming neural networks.');
+      else if (a.dataStructure === 'unstructured' && s === 'deepLearning') parts.push('Unstructured data (text, images, audio) requires automatic feature extraction — exactly what neural networks were designed for.');
+      else if (a.dataStructure === 'structured' && s === 'operationsResearch') parts.push('Structured data with well-defined variables maps naturally to mathematical programming formulations.');
+      else if (a.dataStructure === 'timeseries') parts.push('Sequential data with temporal dependencies benefits from specialized architectures designed to capture time-based patterns.');
+
+      if (a.problemType === 'optimization' && s === 'operationsResearch') parts.push('Optimization under constraints is the defining strength of Operations Research. Mathematical programming provides provably optimal solutions that ML cannot guarantee.');
+      else if (a.problemType === 'generation' && s === 'generativeAI') parts.push('Content generation is the core capability of generative AI — LLMs and diffusion models are specifically architected for creative synthesis.');
+      else if (a.problemType === 'automation' && s === 'aiAgents') parts.push('Task automation requiring tool integration and multi-step reasoning is where AI agents excel — combining LLM reasoning with real-world actions.');
+      else if (a.problemType === 'automation' && s === 'agenticAI') parts.push('Complex workflow automation across multiple domains requires the collaborative intelligence of multi-agent systems.');
+      else if ((a.problemType === 'classification' || a.problemType === 'regression') && s === 'classicalML') parts.push('Supervised prediction tasks (classification/regression) are the bread and butter of classical ML with decades of proven methodology.');
+      else if (a.problemType === 'anomaly') parts.push('Anomaly detection can be addressed with unsupervised ML methods (Isolation Forest, DBSCAN) or deep autoencoders depending on data complexity.');
+
+      if (a.autonomy === 'multiAgent' && s === 'agenticAI') parts.push('Multi-agent coordination is the defining characteristic of agentic AI — specialized agents collaborating through shared protocols.');
+      else if (a.autonomy === 'toolAssisted' && s === 'aiAgents') parts.push('Tool-assisted execution requires an agent architecture that combines LLM reasoning with external tool invocation (APIs, databases, calculations).');
+      else if (a.autonomy === 'prediction') parts.push('Simple prediction workflows are well-served by traditional model inference — deploy a model, receive predictions, human reviews results.');
+
+      if (a.interpretability === 'high' && (s === 'ruleBased' || s === 'classicalML')) parts.push('Your high interpretability requirement favors transparent models. Rule-based systems offer full audit trails, while tree-based ML models provide feature importance and decision paths.');
+      else if (a.interpretability === 'high' && s === 'operationsResearch') parts.push('OR solutions are inherently interpretable — the mathematical formulation documents exactly why each decision was made.');
+      else if (a.interpretability === 'low' && (s === 'deepLearning' || s === 'agenticAI')) parts.push('With flexibility on interpretability, you can leverage the full power of deep neural networks and complex agent systems without explainability constraints.');
+
+      if (a.dataQuality === 'low' && (s === 'generativeAI' || s === 'ruleBased')) parts.push('With low data quality, approaches that don\'t rely on clean training data — like pre-trained generative models or hand-coded rules — avoid the garbage-in-garbage-out problem.');
+      else if (a.dataQuality === 'high' && (s === 'classicalML' || s === 'deepLearning')) parts.push('Your high-quality data is a significant asset. Clean, validated data maximizes the performance of data-driven approaches like ML and deep learning.');
+      else if (a.dataQuality === 'medium') parts.push('With medium data quality, plan for a data cleaning and validation phase. Most ML approaches can tolerate some noise, but preprocessing will improve results.');
+
+      // Latency Explanations
+      if (a.latency === 'realtime' && (s === 'ruleBased' || s === 'classicalML')) parts.push('Real-time edge deployment strictly limits model size and compute, making lightweight models or rules the most viable path.');
+      else if (a.latency === 'batch' && (s === 'deepLearning' || s === 'agenticAI')) parts.push('Because you are doing batch processing, you can afford the higher inference latency and compute times required by this architecture.');
+      else if (a.latency === 'nearRealtime' && (s === 'generativeAI' || s === 'aiAgents')) parts.push('API-based models typically fall right into the near real-time window, making them perfect for your latency needs.');
+
+      // Budget Explanations
+      if (a.teamBudget === 'solo' && (s === 'generativeAI' || s === 'aiAgents')) parts.push('As a solo developer or small team, leveraging API-based foundation models allows you to build powerful capabilities without needing a massive infrastructure budget.');
+      else if (a.teamBudget === 'solo' && (s === 'ruleBased' || s === 'classicalML')) parts.push('With limited resources, open-source libraries (like scikit-learn) and simple rule engines provide the highest ROI without cloud compute costs.');
+      else if (a.teamBudget === 'enterprise' && (s === 'agenticAI' || s === 'deepLearning')) parts.push('Your enterprise resources provide the necessary MLOps infrastructure, GPU budget, and specialized talent to support the high complexity of this system.');
+
+      if (parts.length === 0) parts.push('This recommendation balances your requirements across data availability, scale, problem type, autonomy needs, and interpretability preferences.');
+      return parts;
+    }
+
+    // ─── SVG Path Visualization ───
+    const PathVisualization = ({ answers, currentStep, steps }) => {
+      const nodeWidth = 200;
+      const nodeHeight = 56;
+      const gapY = 80;
+      const svgWidth = 280;
+      const startY = 30;
+      const centerX = svgWidth / 2;
+
+      const stepColors = ['#818cf8', '#a78bfa', '#c084fc', '#e879f9', '#f472b6', '#fb7185'];
+      const getNodeY = (i) => startY + i * gapY;
+
+      return (
+        <svg width="100%" height={startY + steps.length * gapY + 60} viewBox={`0 0 ${svgWidth} ${startY + steps.length * gapY + 60}`} className="w-full">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#818cf8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#f472b6" stopOpacity="0.6" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="glowStrong">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
+
+          {/* Connection lines */}
+          {steps.map((step, i) => {
+            if (i === 0) return null;
+            const completed = i <= currentStep;
+            const y1 = getNodeY(i - 1) + nodeHeight;
+            const y2 = getNodeY(i);
+            return (
+              <line key={`line-${i}`} x1={centerX} y1={y1} x2={centerX} y2={y2}
+                stroke={completed ? stepColors[i - 1] : '#1e2235'}
+                strokeWidth={completed ? 2 : 1}
+                opacity={completed ? 0.7 : 0.4}
+                className={completed ? 'node-line' : ''}
+                style={{ animationDelay: `${i * 0.1}s` }}
+              />
+            );
+          })}
+
+          {/* Nodes */}
+          {steps.map((step, i) => {
+            const y = getNodeY(i);
+            const isCompleted = answers[step.id] !== undefined;
+            const isCurrent = i === currentStep;
+            const isFuture = i > currentStep;
+            const color = stepColors[i];
+            const selectedOption = isCompleted ? step.options.find(o => o.id === answers[step.id]) : null;
+
+            return (
+              <g key={step.id} style={{ animation: `fadeIn 0.3s ease-out ${i * 0.05}s both` }}>
+                {/* Node background */}
+                <rect x={centerX - nodeWidth / 2} y={y} width={nodeWidth} height={nodeHeight} rx={10}
+                  fill={isCurrent ? 'rgba(99,102,241,0.12)' : isCompleted ? 'rgba(99,102,241,0.06)' : 'rgba(15,18,32,0.6)'}
+                  stroke={isCurrent ? color : isCompleted ? color : '#1e2235'}
+                  strokeWidth={isCurrent ? 1.5 : 1}
+                  opacity={isFuture ? 0.35 : 1}
+                  filter={isCurrent ? 'url(#glow)' : 'none'}
+                />
+
+                {/* Step number circle */}
+                <circle cx={centerX - nodeWidth / 2 + 22} cy={y + nodeHeight / 2} r={12}
+                  fill={isCompleted ? color : isCurrent ? color : '#1a1e33'}
+                  opacity={isCompleted || isCurrent ? 1 : 0.4}
+                />
+                {isCompleted ? (
+                  <path d={`M${centerX - nodeWidth / 2 + 17} ${y + nodeHeight / 2} l4 4 l7 -7`}
+                    stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                ) : (
+                  <text x={centerX - nodeWidth / 2 + 22} y={y + nodeHeight / 2 + 5} textAnchor="middle"
+                    fill={isCurrent ? '#fff' : '#6b7280'} fontSize="12" fontWeight="600"
+                    fontFamily="'DM Sans', sans-serif">{i + 1}</text>
+                )}
+
+                {/* Step title */}
+                <text x={centerX - nodeWidth / 2 + 42} y={y + (isCompleted ? 22 : nodeHeight / 2 + 5)}
+                  fill={isFuture ? '#4b5563' : isCompleted ? '#d1d5db' : '#f3f4f6'}
+                  fontSize="13" fontWeight="600" fontFamily="'Bricolage Grotesque', sans-serif">
+                  {step.title}
+                </text>
+
+                {/* Selected answer (if completed) */}
+                {isCompleted && selectedOption && (
+                  <text x={centerX - nodeWidth / 2 + 42} y={y + 42}
+                    fill={color} fontSize="11" fontWeight="500" fontFamily="'DM Sans', sans-serif">
+                    {selectedOption.label.length > 22 ? selectedOption.label.substring(0, 22) + '…' : selectedOption.label}
+                  </text>
+                )}
+
+                {/* Current step pulse indicator */}
+                {isCurrent && (
+                  <circle cx={centerX + nodeWidth / 2 - 16} cy={y + nodeHeight / 2} r={5}
+                    fill={color} className="anim-pulse" />
+                )}
+              </g>
+            );
+          })}
+
+          {/* Result node */}
+          {Object.keys(answers).length === steps.length && (
+            <g style={{ animation: 'fadeIn 0.5s ease-out 0.3s both' }}>
+              <line x1={centerX} y1={getNodeY(steps.length - 1) + nodeHeight} x2={centerX} y2={getNodeY(steps.length) - 4}
+                stroke="#f472b6" strokeWidth={2} opacity={0.7} className="node-line" />
+              <rect x={centerX - nodeWidth / 2} y={getNodeY(steps.length)} width={nodeWidth} height={46} rx={10}
+                fill="rgba(236,72,153,0.12)" stroke="#ec4899" strokeWidth={1.5} filter="url(#glow)" />
+              <text x={centerX} y={getNodeY(steps.length) + 28} textAnchor="middle"
+                fill="#f9a8d4" fontSize="13" fontWeight="700" fontFamily="'Bricolage Grotesque', sans-serif">
+                Recommendation
+              </text>
+            </g>
+          )}
+        </svg>
+      );
+    };
+
+    // ─── Progress Bar ───
+    const ProgressBar = ({ current, total }) => {
+      const pct = ((current) / total) * 100;
+      return (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-slate-400 tracking-wider uppercase font-display">
+              Step {current + 1} of {total}
+            </span>
+            <span className="text-sm text-slate-500">{Math.round(pct)}% complete</span>
+          </div>
+          <div className="h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${pct}%`,
+                background: 'linear-gradient(90deg, #818cf8, #c084fc, #f472b6)'
+              }} />
+          </div>
+        </div>
+      );
+    };
+
+    // ─── Complexity Meter ───
+    const ComplexityMeter = ({ level, label }) => {
+      const segments = 4;
+      return (
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1">
+            {Array.from({ length: segments }).map((_, i) => (
+              <div key={i} className="h-2.5 rounded-full transition-all duration-300"
+                style={{
+                  width: '20px',
+                  background: i < level
+                    ? level <= 1 ? '#10b981' : level <= 2 ? '#eab308' : level <= 3 ? '#f97316' : '#ef4444'
+                    : '#1e2235'
+                }} />
+            ))}
+          </div>
+          <span className="text-xs font-medium" style={{
+            color: level <= 1 ? '#10b981' : level <= 2 ? '#eab308' : level <= 3 ? '#f97316' : '#ef4444'
+          }}>{label}</span>
+        </div>
+      );
+    };
+
+    // ─── Confidence Ring ───
+    const ConfidenceRing = ({ value, color }) => {
+      const r = 28;
+      const circ = 2 * Math.PI * r;
+      const offset = circ - (value / 100) * circ;
+      return (
+        <div className="relative inline-flex items-center justify-center">
+          <svg width="68" height="68" className="-rotate-90">
+            <circle cx="34" cy="34" r={r} fill="none" stroke="#1e2235" strokeWidth="4" />
+            <circle cx="34" cy="34" r={r} fill="none" stroke={color} strokeWidth="4"
+              strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+              style={{ transition: 'stroke-dashoffset 0.8s ease-out' }} />
+          </svg>
+          <span className="absolute text-sm font-bold font-display" style={{ color }}>{value}%</span>
+        </div>
+      );
+    };
+
+    // ─── Quick Reference Sidebar ───
+    const QuickReference = ({ isOpen, onClose }) => {
+      if (!isOpen) return null;
+      const landscape = [
+        { era: 'Rule-Based / Expert Systems', chars: 'IF-THEN rules, symbolic reasoning', autonomy: 'None — fully deterministic', uses: 'Compliance, credit scoring, diagnosis', iconName: 'ruleBased' },
+        { era: 'Classical Machine Learning', chars: 'Statistical learning, feature engineering', autonomy: 'Low — human training pipeline', uses: 'Fraud detection, churn prediction', iconName: 'classicalML' },
+        { era: 'Deep Learning', chars: 'Neural networks, auto feature extraction', autonomy: 'Low-Medium — self-optimizing', uses: 'Computer vision, NLP, speech', iconName: 'deepLearning' },
+        { era: 'Generative AI', chars: 'Content creation, pattern synthesis', autonomy: 'Low — reactive to prompts', uses: 'Text/image generation, code', iconName: 'generativeAI' },
+        { era: 'AI Agents', chars: 'Tool-augmented LLMs, goal-directed', autonomy: 'Medium — bounded tasks', uses: 'Research assistants, scheduling', iconName: 'aiAgents' },
+        { era: 'Agentic AI', chars: 'Multi-agent coordination, persistent memory', autonomy: 'High — collaborative autonomy', uses: 'Research automation, orchestration', iconName: 'agenticAI' },
+        { era: 'Operations Research', chars: 'Mathematical optimization, constraints', autonomy: 'None — deterministic solvers', uses: 'Routing, scheduling, allocation', iconName: 'operationsResearch' }
+      ];
+
+      const solutionColors = ['#f59e0b', '#10b981', '#3b82f6', '#a855f7', '#f97316', '#ec4899', '#14b8a6'];
+
+      return (
+        <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-2xl bg-[#0a0e1a] border-l border-indigo-500/10 overflow-y-auto anim-slide-right"
+            onClick={e => e.stopPropagation()}>
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-xl font-display font-bold gradient-text">AI Landscape Reference</h2>
+                <button onClick={onClose} className="p-2 rounded-lg hover:bg-slate-800/60 text-slate-400 hover:text-white transition-colors">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <p className="text-sm text-slate-400 mb-6 leading-relaxed">The AI landscape follows an evolution from simple deterministic systems to complex autonomous orchestration. Each paradigm builds upon the previous, unlocking new capability frontiers.</p>
+
+              <div className="space-y-3">
+                {landscape.map((row, i) => (
+                  <div key={i} className="card-surface rounded-xl p-4" style={{ animationDelay: `${i * 0.05}s` }}>
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 flex-shrink-0" style={{ color: solutionColors[i] }}>
+                        <Icon name={row.iconName} size={20} color={solutionColors[i]} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-display font-semibold text-white mb-1">{row.era}</h4>
+                        <p className="text-xs text-slate-400 leading-relaxed mb-2">{row.chars}</p>
+                        <div className="flex flex-wrap gap-2 text-xs">
+                          <span className="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/15">{row.autonomy}</span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2">{row.uses}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10">
+                <h4 className="text-sm font-display font-semibold text-indigo-300 mb-2">Key Decision Heuristics</h4>
+                <ul className="text-xs text-slate-400 space-y-1.5 leading-relaxed">
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Structured data + interpretability</strong> — Classical ML</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Unstructured + large scale</strong> — Deep Learning</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Content creation</strong> — Generative AI</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Tool integration + single domain</strong> — AI Agents</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Multi-step coordination</strong> — Agentic AI</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">Constraints + optimal decisions</strong> — Operations Research</span></li>
+                  <li className="flex items-start gap-2"><span className="mt-1 w-1 h-1 rounded-full bg-indigo-400 flex-shrink-0"></span><span><strong className="text-slate-300">No data + clear rules</strong> — Rule-Based Systems</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ─── Main App ───
+    const AINavigator = () => {
+      const [currentStep, setCurrentStep] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [showResult, setShowResult] = useState(false);
+      const [showQuickRef, setShowQuickRef] = useState(false);
+      const [whyExpanded, setWhyExpanded] = useState(false);
+      const [showAlternatives, setShowAlternatives] = useState(false);
+      const [hoveredOption, setHoveredOption] = useState(null);
+      const contentRef = useRef(null);
+
+      const activeSteps = useMemo(() => getActiveSteps(answers), [answers]);
+      const step = activeSteps[currentStep];
+      const isComplete = showResult;
+      const ranked = useMemo(() => isComplete ? getRankedSolutions(answers) : [], [answers, isComplete]);
+      const primary = ranked[0];
+      const alternatives = ranked.slice(1, 4);
+      const simplerAlt = useMemo(() => isComplete ? getSimplerAlternative(answers) : null, [answers, isComplete]);
+      const hybridSuggestion = useMemo(() => isComplete ? getHybridSuggestion(ranked) : null, [ranked, isComplete]);
+
+      const loadScenario = useCallback((scenario) => {
+        setAnswers(scenario.answers);
+        setCurrentStep(0);
+        setShowResult(true);
+        setWhyExpanded(false);
+        setShowAlternatives(false);
+      }, []);
+
+      const selectOption = useCallback((optionId) => {
+        const newAnswers = { ...answers, [step.id]: optionId };
+        // Clear answers for subsequent steps
+        const stepIndex = activeSteps.findIndex(s => s.id === step.id);
+        activeSteps.forEach((s, i) => {
+          if (i > stepIndex) delete newAnswers[s.id];
+        });
+        setAnswers(newAnswers);
+        setShowResult(false);
+        setWhyExpanded(false);
+        setShowAlternatives(false);
+
+        // Recalculate active steps with new answers to handle skip logic
+        const nextActiveSteps = getActiveSteps(newAnswers);
+        const nextStepIdx = stepIndex + 1;
+        if (nextStepIdx < nextActiveSteps.length) {
+          setTimeout(() => {
+            setCurrentStep(nextStepIdx);
+            if (contentRef.current) contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 250);
+        } else {
+          setTimeout(() => setShowResult(true), 350);
+        }
+      }, [answers, currentStep, step, activeSteps]);
+
+      const goBack = () => {
+        if (showResult) { setShowResult(false); return; }
+        if (currentStep > 0) setCurrentStep(currentStep - 1);
+      };
+
+      const restart = () => {
+        setCurrentStep(0);
+        setAnswers({});
+        setShowResult(false);
+        setWhyExpanded(false);
+        setShowAlternatives(false);
+      };
+
+      return (
+        <div className="min-h-screen bg-grid">
+          <div className="bg-radial-glow min-h-screen">
+            {/* Header */}
+            <header className="border-b border-slate-800/60">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 className="text-base font-display font-bold text-white leading-tight">AI Solution Navigator</h1>
+                    <p className="text-xs text-slate-500 hidden sm:block">Interactive AI architecture decision engine</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setShowQuickRef(true)}
+                    className="px-3 py-1.5 text-xs font-medium text-indigo-300 bg-indigo-500/8 border border-indigo-500/15 rounded-lg hover:bg-indigo-500/15 hover:border-indigo-500/25 transition-all">
+                    AI Landscape
+                  </button>
+                  {(currentStep > 0 || showResult) && (
+                    <button onClick={restart}
+                      className="px-3 py-1.5 text-xs font-medium text-slate-400 bg-slate-800/40 border border-slate-700/40 rounded-lg hover:bg-slate-800/70 hover:text-white transition-all">
+                      Start Over
+                    </button>
+                  )}
+                </div>
+              </div>
+            </header>
+
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+              <div className="flex gap-6">
+                {/* Left: Path Visualization */}
+                <div className="hidden lg:block w-[290px] flex-shrink-0">
+                  <div className="sticky top-6 card-surface rounded-2xl p-5">
+                    <h3 className="text-sm font-display font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Decision Path</h3>
+                    <PathVisualization answers={answers} currentStep={showResult ? activeSteps.length : currentStep} steps={activeSteps} />
+                  </div>
+                </div>
+
+                {/* Right: Wizard / Results */}
+                <div className="flex-1 min-w-0" ref={contentRef}>
+                  {!showResult ? (
+                    /* ─── Wizard Step ─── */
+                    <div className="anim-fade-up" key={step ? step.id : 'complete'}>
+                      <ProgressBar current={currentStep} total={activeSteps.length} />
+
+                      {/* Back button */}
+                      {currentStep > 0 && (
+                        <button onClick={goBack}
+                          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-indigo-300 mb-5 transition-colors group">
+                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                            className="group-hover:-translate-x-0.5 transition-transform">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                          </svg>
+                          Back
+                        </button>
+                      )}
+
+                      {/* Question */}
+                      <div className="mb-10">
+                        <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-3 leading-snug">
+                          {step.question}
+                        </h2>
+                        <p className="text-base text-slate-400 leading-relaxed max-w-2xl">{step.subtitle}</p>
+                      </div>
+
+                      {/* Options Grid */}
+                      <div className={`grid gap-3 ${step.options.length > 5 ? 'sm:grid-cols-2 lg:grid-cols-3' : step.options.length > 3 ? 'sm:grid-cols-2' : 'sm:grid-cols-1 max-w-2xl'}`}>
+                        {step.options.map((opt, i) => {
+                          const isSelected = answers[step.id] === opt.id;
+                          return (
+                            <button key={opt.id} onClick={() => selectOption(opt.id)}
+                              onMouseEnter={() => setHoveredOption(opt.id)}
+                              onMouseLeave={() => setHoveredOption(null)}
+                              className={`option-card rounded-xl p-5 text-left transition-all group ${isSelected ? 'selected' : ''}`}
+                              style={{ animationDelay: `${i * 0.04}s` }}>
+                              <div className="flex items-start gap-3.5">
+                                <div className="mt-0.5 flex-shrink-0 text-indigo-400 group-hover:text-indigo-300 transition-colors">
+                                  <Icon name={opt.iconName} size={22} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <h3 className="text-base font-display font-semibold text-white group-hover:text-indigo-200 transition-colors">
+                                      {opt.label}
+                                    </h3>
+                                    {isSelected && (
+                                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" className="text-indigo-400 flex-shrink-0">
+                                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                      </svg>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-slate-400 mt-1.5 leading-relaxed">{renderWithTooltips(opt.desc)}</p>
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Mobile path summary */}
+                      <div className="lg:hidden mt-8">
+                        {Object.keys(answers).length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {STEPS.map((s, i) => {
+                              if (!answers[s.id]) return null;
+                              const opt = s.options.find(o => o.id === answers[s.id]);
+                              return (
+                                <span key={s.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-indigo-500/8 text-indigo-300 border border-indigo-500/15">
+                                  {opt?.label}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : primary ? (
+                    /* ─── Results ─── */
+                    <div className="anim-fade-up">
+                      <button onClick={goBack}
+                        className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-indigo-300 mb-6 transition-colors group">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                          className="group-hover:-translate-x-0.5 transition-transform">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Adjust last answer
+                      </button>
+
+                      {/* Simpler Alternative Warning */}
+                      {simplerAlt && (
+                        <div className="mb-6 p-5 rounded-2xl border border-amber-500/20 bg-amber-500/5 anim-fade-up">
+                          <div className="flex items-start gap-3">
+                            <div className="mt-0.5 flex-shrink-0">
+                              <Icon name="warning" size={20} color="#f59e0b" />
+                            </div>
+                            <div>
+                              <h3 className="text-base font-display font-semibold text-amber-300 mb-1">{simplerAlt.title}</h3>
+                              <p className="text-sm text-slate-300 leading-relaxed mb-3">{simplerAlt.message}</p>
+                              <ul className="space-y-1.5">
+                                {simplerAlt.alternatives.map((alt, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-sm text-slate-400">
+                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500/50 flex-shrink-0" />
+                                    {alt}
+                                  </li>
+                                ))}
+                              </ul>
+                              <p className="text-xs text-slate-500 mt-3">If these simpler approaches don't meet your needs, the AI recommendation below is still your best bet.</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Primary Recommendation */}
+                      <div className="mb-3">
+                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider font-display">Recommended Solution</span>
+                      </div>
+
+                      <div className="card-surface rounded-2xl overflow-hidden mb-6 anim-scale-in"
+                        style={{ borderColor: primary.borderColor, borderWidth: '1px' }}>
+                        {/* Shimmer top bar */}
+                        <div className="h-1 shimmer-bg" style={{ background: `linear-gradient(90deg, transparent, ${primary.color}30, transparent)`, backgroundSize: '200% 100%' }} />
+
+                        <div className="p-6 sm:p-8">
+                          <div className="flex flex-col sm:flex-row sm:items-start gap-6">
+                            {/* Left: Icon + Confidence */}
+                            <div className="flex sm:flex-col items-center gap-4 sm:gap-3">
+                              <div className="w-16 h-16 rounded-2xl flex items-center justify-center anim-float"
+                                style={{ background: primary.colorLight, border: `1px solid ${primary.borderColor}` }}>
+                                <Icon name={primary.iconName} size={28} color={primary.color} />
+                              </div>
+                              <ConfidenceRing value={primary.confidence} color={primary.color} />
+                              <span className="text-xs text-slate-500 hidden sm:block">Match</span>
+                            </div>
+
+                            {/* Right: Details */}
+                            <div className="flex-1 min-w-0">
+                              <h2 className="text-2xl font-display font-bold text-white mb-1">{primary.name}</h2>
+                              <p className="text-sm font-medium mb-4" style={{ color: primary.color }}>{primary.tagline}</p>
+                              <p className="text-sm text-slate-300 leading-relaxed mb-5">{primary.description}</p>
+
+                              {/* Algorithms */}
+                              <div className="mb-4">
+                                <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-2">Algorithms & Methods</h4>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {primary.algorithms.map(a => (
+                                    <span key={a} className="px-2.5 py-1 rounded-md text-xs font-medium border"
+                                      style={{ color: primary.color, background: primary.colorLight, borderColor: primary.borderColor }}>
+                                      {a}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Frameworks */}
+                              <div className="mb-5">
+                                <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-2">Frameworks & Tools</h4>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {primary.frameworks.map(f => (
+                                    <span key={f} className="px-2.5 py-1 rounded-md text-xs font-medium border border-slate-600/40 text-slate-300 bg-slate-800/40">
+                                      {f}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Use Cases */}
+                              <div className="mb-5">
+                                <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-2">Example Use Cases</h4>
+                                <ul className="space-y-1.5">
+                                  {primary.useCases.map((uc, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: primary.color }} />
+                                      {uc}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* Key Differentiator (AI Agents vs Agentic AI) */}
+                              {primary.keyDifferentiator && (
+                                <div className="mb-5 p-3 rounded-lg border border-indigo-500/15 bg-indigo-500/5">
+                                  <h4 className="text-xs font-display font-semibold text-indigo-300 uppercase tracking-wider mb-1">Key Differentiator</h4>
+                                  <p className="text-sm text-slate-300">{primary.keyDifferentiator}</p>
+                                </div>
+                              )}
+
+                              {/* Complexity + Cost + Team + Strengths */}
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                <div className="space-y-3">
+                                  <div>
+                                    <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-2">Implementation Complexity</h4>
+                                    <ComplexityMeter level={primary.complexity} label={primary.complexityLabel} />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Estimated Cost</h4>
+                                    <span className="text-sm font-bold text-emerald-400">{primary.costLevel}</span>
+                                    <span className="text-xs text-slate-500 ml-2">relative investment</span>
+                                  </div>
+                                  <div>
+                                    <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Team Required</h4>
+                                    <span className="text-sm text-slate-300">{primary.teamRequirement}</span>
+                                  </div>
+                                </div>
+                                <div>
+                                  <h4 className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider mb-2">Key Strengths</h4>
+                                  <ul className="space-y-1">
+                                    {primary.strengths.slice(0, 3).map((s, i) => (
+                                      <li key={i} className="text-xs text-emerald-300/80 flex items-center gap-1.5">
+                                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {s}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Hybrid Solution Suggestion */}
+                      {hybridSuggestion && (
+                        <div className="card-surface rounded-2xl overflow-hidden mb-6 anim-fade-up" style={{ animationDelay: '0.15s', borderColor: 'rgba(168,85,247,0.2)', borderWidth: '1px' }}>
+                          <div className="h-1" style={{ background: `linear-gradient(90deg, ${hybridSuggestion.solutions[0].color}, ${hybridSuggestion.solutions[1].color})` }} />
+                          <div className="p-6">
+                            <div className="flex items-center gap-2.5 mb-3">
+                              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#a78bfa" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                              </svg>
+                              <h3 className="text-sm font-display font-semibold text-purple-300">Hybrid Approach Available</h3>
+                              <span className="text-xs text-slate-500 ml-auto">Top 2 within {hybridSuggestion.gap}% of each other</span>
+                            </div>
+                            <h4 className="text-base font-display font-bold text-white mb-2">{hybridSuggestion.name}</h4>
+                            <p className="text-sm text-slate-300 leading-relaxed mb-3">{hybridSuggestion.description}</p>
+                            <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30">
+                              <span className="text-xs font-display font-semibold text-slate-400 uppercase tracking-wider">Example</span>
+                              <p className="text-sm text-slate-300 mt-1">{hybridSuggestion.example}</p>
+                            </div>
+                            <div className="flex items-center gap-3 mt-3">
+                              <div className="flex items-center gap-1.5">
+                                <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: hybridSuggestion.solutions[0].colorLight }}>
+                                  <Icon name={hybridSuggestion.solutions[0].iconName} size={14} color={hybridSuggestion.solutions[0].color} />
+                                </div>
+                                <span className="text-xs font-medium" style={{ color: hybridSuggestion.solutions[0].color }}>{hybridSuggestion.solutions[0].name}</span>
+                              </div>
+                              <span className="text-slate-600 text-xs">+</span>
+                              <div className="flex items-center gap-1.5">
+                                <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: hybridSuggestion.solutions[1].colorLight }}>
+                                  <Icon name={hybridSuggestion.solutions[1].iconName} size={14} color={hybridSuggestion.solutions[1].color} />
+                                </div>
+                                <span className="text-xs font-medium" style={{ color: hybridSuggestion.solutions[1].color }}>{hybridSuggestion.solutions[1].name}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Why This Recommendation */}
+                      <div className="card-surface rounded-2xl overflow-hidden mb-4">
+                        <button onClick={() => setWhyExpanded(!whyExpanded)}
+                          className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-800/20 transition-colors">
+                          <div className="flex items-center gap-2.5">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#818cf8" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            <span className="text-sm font-display font-semibold text-white">Why this recommendation?</span>
+                          </div>
+                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                            className={`text-slate-500 transition-transform duration-200 ${whyExpanded ? 'rotate-180' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {whyExpanded && (
+                          <div className="px-6 pb-5 anim-fade-in">
+                            <div className="border-t border-slate-800/60 pt-4">
+                              <p className="text-xs text-slate-500 mb-3">Based on your specific answers, here's why {primary.name} is the best fit:</p>
+                              <div className="space-y-3">
+                                {getWhyExplanation(answers, primary).map((reason, i) => (
+                                  <div key={i} className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
+                                    <span className="mt-1 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold font-display"
+                                      style={{ background: primary.colorLight, color: primary.color, border: `1px solid ${primary.borderColor}` }}>
+                                      {i + 1}
+                                    </span>
+                                    {reason}
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Decision summary */}
+                              <div className="mt-5 p-4 rounded-xl bg-slate-800/30 border border-slate-700/30">
+                                <h5 className="text-xs font-display font-semibold text-slate-400 mb-3">Your Decision Profile</h5>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                  {STEPS.map(s => {
+                                    const opt = s.options.find(o => o.id === answers[s.id]);
+                                    return opt ? (
+                                      <div key={s.id} className="text-xs">
+                                        <span className="text-slate-500 block">{s.title}</span>
+                                        <span className="text-slate-200 font-medium">{opt.label}</span>
+                                      </div>
+                                    ) : null;
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* Score Breakdown */}
+                              <div className="mt-5 p-4 rounded-xl bg-slate-800/30 border border-slate-700/30">
+                                <h5 className="text-xs font-display font-semibold text-slate-400 mb-3">Score Breakdown</h5>
+                                <div className="space-y-2.5">
+                                  {getScoreBreakdown(answers, primary.id).map((row, i) => (
+                                    <div key={i}>
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="text-xs text-slate-400">{row.step}: <span className="text-slate-300">{row.choice}</span></span>
+                                        <span className="text-xs font-medium" style={{ color: row.points === row.maxPoints ? primary.color : row.points > 0 ? '#94a3b8' : '#475569' }}>
+                                          {row.points}/{row.maxPoints} pts
+                                        </span>
+                                      </div>
+                                      <div className="h-1.5 bg-slate-700/50 rounded-full overflow-hidden">
+                                        <div className="h-full rounded-full transition-all duration-500"
+                                          style={{
+                                            width: row.maxPoints > 0 ? `${(row.points / row.maxPoints) * 100}%` : '0%',
+                                            background: row.points === row.maxPoints ? primary.color : row.points > 0 ? '#64748b' : '#334155'
+                                          }} />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="mt-3 pt-3 border-t border-slate-700/30 flex items-center justify-between">
+                                  <span className="text-xs text-slate-400">Total Score</span>
+                                  <span className="text-sm font-display font-bold" style={{ color: primary.color }}>
+                                    {getScoreBreakdown(answers, primary.id).reduce((sum, r) => sum + r.points, 0)} points
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Limitations */}
+                              <div className="mt-4">
+                                <h5 className="text-xs font-display font-semibold text-amber-400/70 mb-2">Considerations & Limitations</h5>
+                                <ul className="space-y-1">
+                                  {primary.limitations.map((l, i) => (
+                                    <li key={i} className="text-xs text-slate-400 flex items-start gap-2">
+                                      <span className="mt-0.5 flex-shrink-0 text-amber-500/60">
+                                        <Icon name="warning" size={14} color="#f59e0b" />
+                                      </span>
+                                      {l}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Explore Alternatives */}
+                      <div className="card-surface rounded-2xl overflow-hidden mb-6">
+                        <button onClick={() => setShowAlternatives(!showAlternatives)}
+                          className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-800/20 transition-colors">
+                          <div className="flex items-center gap-2.5">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#a78bfa" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
+                            <span className="text-sm font-display font-semibold text-white">Explore alternatives</span>
+                            <span className="text-xs text-slate-500 ml-1">({alternatives.length} options)</span>
+                          </div>
+                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                            className={`text-slate-500 transition-transform duration-200 ${showAlternatives ? 'rotate-180' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {showAlternatives && (
+                          <div className="px-6 pb-5 anim-fade-in">
+                            <div className="border-t border-slate-800/60 pt-4 space-y-3">
+                              {alternatives.map((alt, i) => (
+                                <div key={alt.id} className="flex items-start gap-4 p-4 rounded-xl transition-colors hover:bg-slate-800/20"
+                                  style={{ borderLeft: `3px solid ${alt.color}30` }}>
+                                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                                    style={{ background: alt.colorLight }}>
+                                    <Icon name={alt.iconName} size={20} color={alt.color} />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-3 mb-1">
+                                      <h4 className="text-sm font-display font-semibold text-white">{alt.name}</h4>
+                                      <ConfidenceRing value={alt.confidence} color={alt.color} />
+                                    </div>
+                                    <p className="text-xs text-slate-400 leading-relaxed mb-2">{alt.tagline}</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {alt.algorithms.slice(0, 3).map(a => (
+                                        <span key={a} className="px-2 py-0.5 rounded text-[10px] font-medium"
+                                          style={{ color: alt.color, background: alt.colorLight, border: `1px solid ${alt.borderColor}` }}>
+                                          {a}
+                                        </span>
+                                      ))}
+                                      {alt.frameworks.slice(0, 2).map(f => (
+                                        <span key={f} className="px-2 py-0.5 rounded text-[10px] font-medium border border-slate-600/30 text-slate-400 bg-slate-800/30">
+                                          {f}
+                                        </span>
+                                      ))}
+                                    </div>
+                                    <ComplexityMeter level={alt.complexity} label={alt.complexityLabel} />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Restart */}
+                      <div className="text-center py-4">
+                        <button onClick={restart}
+                          className="px-6 py-2.5 text-sm font-medium text-indigo-300 bg-indigo-500/8 border border-indigo-500/20 rounded-xl hover:bg-indigo-500/15 hover:border-indigo-500/30 transition-all">
+                          Navigate a different problem
+                        </button>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="text-center pt-2 pb-6">
+                        <a href="index.html" className="text-xs text-slate-600 hover:text-indigo-400 transition-colors">
+                          Created by Tarek Atwan @ ML_LAB
+                        </a>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Example Scenarios - shown on first step */}
+                  {!showResult && currentStep === 0 && (
+                    <div className="mt-10 anim-fade-in">
+                      <h3 className="text-sm font-display font-semibold text-slate-500 uppercase tracking-wider mb-4">Try an example scenario</h3>
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        {EXAMPLE_SCENARIOS.map((scenario) => (
+                          <div key={scenario.name} className="scenario-card rounded-xl p-4" onClick={() => loadScenario(scenario)}>
+                            <div className="flex items-center gap-2.5 mb-2">
+                              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${scenario.color}18` }}>
+                                <Icon name={scenario.iconName} size={18} color={scenario.color} />
+                              </div>
+                              <h4 className="text-sm font-display font-semibold text-white">{scenario.name}</h4>
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed">{scenario.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Reference Sidebar */}
+            <QuickReference isOpen={showQuickRef} onClose={() => setShowQuickRef(false)} />
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<AINavigator />);
+  </script>
+</body>
+
+</html>
