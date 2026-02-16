@@ -735,6 +735,10 @@
       {
         name: 'Predictive Maintenance', description: 'A manufacturing firm wants to predict equipment failures using sensor data to prevent costly downtime.', icon: 'factory', color: '#f59e0b',
         answers: { businessGoal: 'cost', problemCategory: 'prediction', impactLevel: 'high', dataReality: 'partial', riskLevel: 'medium', techMaturity: 'maturing', economicOutlook: 'uncertain', executionReady: 'partiallyReady' }
+      },
+      {
+        name: 'AI-Powered Legal Review', description: 'A small startup wants to build an autonomous AI system to review and approve regulated contracts — with no legal data, no AI team, and no budget.', icon: 'fileText', color: '#ef4444',
+        answers: { businessGoal: 'innovation', problemCategory: 'decisions', impactLevel: 'low', dataReality: 'none', riskLevel: 'regulated', techMaturity: 'experimental', economicOutlook: 'heavyInvestment', executionReady: 'notReady' }
       }
     ];
 
@@ -916,6 +920,9 @@
                 <p className="text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
                   Evaluate AI opportunities from a <strong className="text-white">business-problem-first</strong> perspective. Score across 6 value dimensions and get a strategic <strong className="text-amber-400">Build, Buy, Experiment, or Kill</strong> recommendation.
                 </p>
+                <p className="text-xs text-slate-500 max-w-xl mx-auto mt-3 leading-relaxed">
+                  <strong className="text-slate-400">Pre-work:</strong> Complete this scorer first to evaluate the business case for an AI opportunity. Then use the <a href="ai_solution_navigator.html" className="text-amber-400 hover:text-amber-300 hover:underline">AI Solution Navigator</a> to explore which technical approach fits best.
+                </p>
               </div>
 
               <div className="flex flex-col lg:flex-row gap-8">
@@ -962,7 +969,7 @@
                       {currentStep === 0 && (
                         <div className="mt-10 anim-fade-in">
                           <h3 className="text-sm font-display font-semibold text-slate-500 uppercase tracking-wider mb-4">Try an example scenario</h3>
-                          <div className="grid gap-3 sm:grid-cols-3">
+                          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                             {EXAMPLE_SCENARIOS.map(s => (
                               <div key={s.name} className="scenario-card rounded-xl p-4" onClick={() => loadScenario(s)}>
                                 <div className="flex items-center gap-2.5 mb-2">

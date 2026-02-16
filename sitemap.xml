@@ -31,6 +31,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tatwan.github.io/aws_visual_references.html</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://tatwan.github.io/blog/</loc>
     <lastmod>2025-02-04</lastmod>
     <changefreq>weekly</changefreq>

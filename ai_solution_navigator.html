@@ -839,12 +839,41 @@
     ];
 
     // ─── Decision Steps ───
+    // Order: Problem-first (what & why), then data reality (what you have), then constraints (how)
     const STEPS = [
+      {
+        id: 'problemType',
+        title: 'Problem Type',
+        question: 'What are you trying to accomplish?',
+        subtitle: 'Start with the problem, not the technology. Define your core objective first.',
+        options: [
+          { id: 'classification', label: 'Classification', desc: 'Categorize inputs into discrete classes (spam/not spam, diagnosis, sentiment)', iconName: 'classification' },
+          { id: 'regression', label: 'Regression', desc: 'Predict continuous numerical values (price, demand, risk score)', iconName: 'regression' },
+          { id: 'clustering', label: 'Clustering', desc: 'Discover natural groupings without predefined categories', iconName: 'clustering' },
+          { id: 'timeseries', label: 'Time Series Forecasting', desc: 'Predict future values based on temporal patterns and trends', iconName: 'timeseriesForecast' },
+          { id: 'generation', label: 'Content Generation', desc: 'Create text, images, code, or other content from prompts', iconName: 'generation' },
+          { id: 'automation', label: 'Task Automation', desc: 'Automate multi-step workflows with tool use and decision-making', iconName: 'automation' },
+          { id: 'optimization', label: 'Optimization', desc: 'Find the best solution under constraints (routing, scheduling, allocation)', iconName: 'optimization' },
+          { id: 'anomaly', label: 'Anomaly Detection', desc: 'Identify outliers, unusual patterns, or rare events in data', iconName: 'anomaly' },
+          { id: 'recommendation', label: 'Recommendation', desc: 'Suggest items or actions based on user preferences and behavior', iconName: 'recommendation' }
+        ]
+      },
+      {
+        id: 'autonomy',
+        title: 'Autonomy Level',
+        question: 'How much independence should the AI system have?',
+        subtitle: 'From simple model inference to fully autonomous multi-agent orchestration.',
+        options: [
+          { id: 'prediction', label: 'Simple Prediction', desc: 'Model receives input, returns output — human reviews and acts on results', iconName: 'prediction' },
+          { id: 'toolAssisted', label: 'Tool-Assisted Execution', desc: 'AI can call APIs, query databases, and take bounded actions with oversight', iconName: 'toolAssisted' },
+          { id: 'multiAgent', label: 'Multi-Agent Coordination', desc: 'Autonomous agents collaborate, plan, and execute complex workflows', iconName: 'multiAgent' }
+        ]
+      },
       {
         id: 'dataType',
         title: 'Data Situation',
         question: 'What best describes your current data landscape?',
-        subtitle: 'Your data availability is the most critical factor in choosing the right AI approach.',
+        subtitle: 'Now that the problem is clear — what data do you actually have to work with?',
         options: [
           { id: 'labeled', label: 'Labeled Data', desc: 'Structured data with known outcomes for training (e.g., historical sales with actual results)', iconName: 'labeled' },
           { id: 'unlabeled', label: 'Unlabeled Data', desc: 'Data exists but without predefined categories or outcomes to learn from', iconName: 'unlabeled' },
@@ -880,42 +909,16 @@
         ]
       },
       {
-        id: 'problemType',
-        title: 'Problem Type',
-        question: 'What are you trying to accomplish?',
-        subtitle: 'Define your core objective — this maps directly to solution architectures.',
+        id: 'dataQuality',
+        title: 'Data Quality',
+        question: 'How would you rate the quality of your available data?',
+        subtitle: 'Even the best algorithm fails with poor data. Quality impacts every downstream decision.',
+        skipWhen: (answers) => answers.dataType === 'none',
         options: [
-          { id: 'classification', label: 'Classification', desc: 'Categorize inputs into discrete classes (spam/not spam, diagnosis, sentiment)', iconName: 'classification' },
-          { id: 'regression', label: 'Regression', desc: 'Predict continuous numerical values (price, demand, risk score)', iconName: 'regression' },
-          { id: 'clustering', label: 'Clustering', desc: 'Discover natural groupings without predefined categories', iconName: 'clustering' },
-          { id: 'timeseries', label: 'Time Series Forecasting', desc: 'Predict future values based on temporal patterns and trends', iconName: 'timeseriesForecast' },
-          { id: 'generation', label: 'Content Generation', desc: 'Create text, images, code, or other content from prompts', iconName: 'generation' },
-          { id: 'automation', label: 'Task Automation', desc: 'Automate multi-step workflows with tool use and decision-making', iconName: 'automation' },
-          { id: 'optimization', label: 'Optimization', desc: 'Find the best solution under constraints (routing, scheduling, allocation)', iconName: 'optimization' },
-          { id: 'anomaly', label: 'Anomaly Detection', desc: 'Identify outliers, unusual patterns, or rare events in data', iconName: 'anomaly' },
-          { id: 'recommendation', label: 'Recommendation', desc: 'Suggest items or actions based on user preferences and behavior', iconName: 'recommendation' }
-        ]
-      },
-      {
-        id: 'latency',
-        title: 'Latency & Deployment',
-        question: 'What are your latency and deployment requirements?',
-        subtitle: 'Deployment constraints affect which solutions are architecturally viable.',
-        options: [
-          { id: 'realtime', label: 'Real-time / Edge', desc: 'Under 100ms on constrained hardware — mobile devices, IoT, embedded systems', iconName: 'realtime' },
-          { id: 'nearRealtime', label: 'Near Real-time / API', desc: 'Seconds-scale responses via cloud — web APIs, chat interfaces, dashboards', iconName: 'nearRealtime' },
-          { id: 'batch', label: 'Batch / Offline', desc: 'Minutes to hours — scheduled reports, nightly processing, data pipelines', iconName: 'batch' }
-        ]
-      },
-      {
-        id: 'autonomy',
-        title: 'Autonomy Level',
-        question: 'How much independence should the AI system have?',
-        subtitle: 'From simple model inference to fully autonomous multi-agent orchestration.',
-        options: [
-          { id: 'prediction', label: 'Simple Prediction', desc: 'Model receives input, returns output — human reviews and acts on results', iconName: 'prediction' },
-          { id: 'toolAssisted', label: 'Tool-Assisted Execution', desc: 'AI can call APIs, query databases, and take bounded actions with oversight', iconName: 'toolAssisted' },
-          { id: 'multiAgent', label: 'Multi-Agent Coordination', desc: 'Autonomous agents collaborate, plan, and execute complex workflows', iconName: 'multiAgent' }
+          { id: 'high', label: 'High — Clean & Validated', desc: 'Well-structured, few missing values, validated sources, consistent formatting', iconName: 'highQuality' },
+          { id: 'medium', label: 'Medium — Some Issues', desc: 'Generally usable but has noise, some missing values, or inconsistencies to address', iconName: 'mediumQuality' },
+          { id: 'low', label: 'Low — Messy & Unvalidated', desc: 'Significant gaps, duplicates, errors, or unverified sources requiring heavy cleanup', iconName: 'lowQuality' },
+          { id: 'unknown', label: 'Unknown / Not Applicable', desc: 'Haven\'t assessed data quality yet, or working with pre-trained models and APIs', iconName: 'unknownQuality' }
         ]
       },
       {
@@ -930,6 +933,17 @@
         ]
       },
       {
+        id: 'latency',
+        title: 'Latency & Deployment',
+        question: 'What are your latency and deployment requirements?',
+        subtitle: 'Deployment constraints affect which solutions are architecturally viable.',
+        options: [
+          { id: 'realtime', label: 'Real-time / Edge', desc: 'Under 100ms on constrained hardware — mobile devices, IoT, embedded systems', iconName: 'realtime' },
+          { id: 'nearRealtime', label: 'Near Real-time / API', desc: 'Seconds-scale responses via cloud — web APIs, chat interfaces, dashboards', iconName: 'nearRealtime' },
+          { id: 'batch', label: 'Batch / Offline', desc: 'Minutes to hours — scheduled reports, nightly processing, data pipelines', iconName: 'batch' }
+        ]
+      },
+      {
         id: 'teamBudget',
         title: 'Budget & Team',
         question: 'What are your team resources and budget constraints?',
@@ -938,19 +952,6 @@
           { id: 'solo', label: 'Solo / No Budget', desc: 'Individual contributor with free or open-source tools only', iconName: 'solo' },
           { id: 'smallTeam', label: 'Small Team / APIs', desc: '2–5 people, moderate cloud budget, can use paid APIs and managed services', iconName: 'smallTeam' },
           { id: 'enterprise', label: 'Enterprise / MLOps Team', desc: 'Dedicated platform team, full budget for infrastructure, training, and tooling', iconName: 'enterprise' }
-        ]
-      },
-      {
-        id: 'dataQuality',
-        title: 'Data Quality',
-        question: 'How would you rate the quality of your available data?',
-        subtitle: 'Even the best algorithm fails with poor data. Quality impacts every downstream decision.',
-        skipWhen: (answers) => answers.dataType === 'none',
-        options: [
-          { id: 'high', label: 'High — Clean & Validated', desc: 'Well-structured, few missing values, validated sources, consistent formatting', iconName: 'highQuality' },
-          { id: 'medium', label: 'Medium — Some Issues', desc: 'Generally usable but has noise, some missing values, or inconsistencies to address', iconName: 'mediumQuality' },
-          { id: 'low', label: 'Low — Messy & Unvalidated', desc: 'Significant gaps, duplicates, errors, or unverified sources requiring heavy cleanup', iconName: 'lowQuality' },
-          { id: 'unknown', label: 'Unknown / Not Applicable', desc: 'Haven\'t assessed data quality yet, or working with pre-trained models and APIs', iconName: 'unknownQuality' }
         ]
       }
     ];
@@ -1519,7 +1520,12 @@
       }, [answers, currentStep, step, activeSteps]);
 
       const goBack = () => {
-        if (showResult) { setShowResult(false); return; }
+        if (showResult) {
+          const lastActiveIdx = getActiveSteps(answers).length - 1;
+          setCurrentStep(lastActiveIdx);
+          setShowResult(false);
+          return;
+        }
         if (currentStep > 0) setCurrentStep(currentStep - 1);
       };
 
@@ -1566,6 +1572,13 @@
 
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+              {currentStep === 0 && !showResult && Object.keys(answers).length === 0 && (
+                <div className="mb-6 px-4 py-3 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-center anim-fade-in">
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    <strong className="text-indigo-300">Pre-work:</strong> This navigator helps you explore which AI technical approach fits your problem. Start with the <a href="ai_opportunity_scorer.html" className="text-amber-400 hover:text-amber-300 hover:underline">AI Opportunity Scorer</a> first to evaluate the business case, then come here to explore solutions.
+                  </p>
+                </div>
+              )}
               <div className="flex gap-6">
                 {/* Left: Path Visualization */}
                 <div className="hidden lg:block w-[290px] flex-shrink-0">
@@ -1983,6 +1996,15 @@
                             </div>
                           </div>
                         )}
+                      </div>
+
+                      {/* Bridge to Opportunity Scorer */}
+                      <div className="card-surface rounded-2xl p-6 text-center" style={{ borderColor: 'rgba(245,158,11,0.15)' }}>
+                        <h3 className="text-sm font-display font-semibold text-amber-300 mb-2">Haven't evaluated the business case yet?</h3>
+                        <p className="text-xs text-slate-400 mb-4 max-w-md mx-auto">Use the AI Opportunity Scorer to evaluate whether this AI initiative is worth pursuing — score across 6 value dimensions and get a Build, Buy, Experiment, or Kill recommendation.</p>
+                        <a href="ai_opportunity_scorer.html" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl text-amber-300 bg-amber-500/8 border border-amber-500/20 hover:bg-amber-500/15 hover:border-amber-500/30 transition-all">
+                          Open AI Opportunity Scorer →
+                        </a>
                       </div>
 
                       {/* Restart */}
