@@ -747,6 +747,161 @@
         options: ["SageMaker built-in algorithms", "SageMaker Ground Truth", "SageMaker Autopilot", "SageMaker Pipelines"],
         correct: 1,
         explanation: "SageMaker Ground Truth uses human feedback to create labeled datasets. By incorporating human-verified labels, it helps align AI decision-making with real-world contexts."
+      },
+      // ═══════════════════════════════════════
+      // ADDITIONAL QUESTIONS: Service Coverage & Customization Differentiation
+      // ═══════════════════════════════════════
+      // Domain 1 additions
+      {
+        id: 94, domain: 1,
+        question: "A retail company wants to automatically generate product recommendations for customers based on their browsing and purchase history. Which AWS service will meet these requirements with the LEAST operational overhead?",
+        options: ["Amazon Comprehend", "Amazon Personalize", "Amazon SageMaker Autopilot", "Amazon Bedrock"],
+        correct: 1,
+        explanation: "Amazon Personalize is a fully managed service that uses ML to generate real-time personalized recommendations based on user behavior data, similar to Amazon.com's recommendation engine."
+      },
+      {
+        id: 95, domain: 1,
+        question: "A media company needs to automatically detect and blur inappropriate content in user-uploaded images before publishing. Which AWS service will meet these requirements?",
+        options: ["Amazon Textract", "Amazon Rekognition", "Amazon Comprehend", "Amazon Macie"],
+        correct: 1,
+        explanation: "Amazon Rekognition provides pre-trained computer vision capabilities including content moderation to detect inappropriate or offensive content in images and videos."
+      },
+      {
+        id: 96, domain: 1,
+        question: "A company wants to automate the end-to-end ML workflow from data preparation to model deployment with repeatable steps. Which SageMaker feature provides CI/CD capabilities for ML?",
+        options: ["SageMaker Canvas", "SageMaker JumpStart", "SageMaker Pipelines", "SageMaker Feature Store"],
+        correct: 2,
+        explanation: "SageMaker Pipelines provides CI/CD capabilities for ML by orchestrating automated, repeatable workflows for data preparation, training, evaluation, and deployment."
+      },
+      {
+        id: 97, domain: 1,
+        question: "A data science team wants to automatically build, train, and tune ML models without writing extensive code. The team wants the system to select the best algorithm automatically. Which SageMaker feature will meet these requirements?",
+        options: ["SageMaker JumpStart", "SageMaker Autopilot", "SageMaker Canvas", "SageMaker Data Wrangler"],
+        correct: 1,
+        explanation: "SageMaker Autopilot is an AutoML feature that automatically explores different algorithms, trains multiple models, and tunes hyperparameters to find the best model for your data."
+      },
+      {
+        id: 98, domain: 1,
+        question: "A company wants to detect potentially fraudulent transactions in its online payment system using ML. Which AWS service is purpose-built for this use case?",
+        options: ["Amazon Macie", "Amazon GuardDuty", "Amazon Fraud Detector", "Amazon Comprehend"],
+        correct: 2,
+        explanation: "Amazon Fraud Detector is purpose-built to identify potentially fraudulent online activities such as fake accounts, payment fraud, and fraudulent transactions."
+      },
+      {
+        id: 99, domain: 1,
+        question: "A company needs to translate customer support documents from English into multiple languages in real time. Which AWS service will meet this requirement?",
+        options: ["Amazon Comprehend", "Amazon Transcribe", "Amazon Translate", "Amazon Polly"],
+        correct: 2,
+        explanation: "Amazon Translate provides fluent, neural machine translation for real-time language translation between supported languages."
+      },
+      // Domain 2 additions
+      {
+        id: 100, domain: 2,
+        question: "A student wants to learn about generative AI by quickly building and sharing GenAI applications without writing any code. Which AWS tool is designed for this purpose?",
+        options: ["Amazon SageMaker Canvas", "Amazon Bedrock Console", "PartyRock", "Amazon Q Developer"],
+        correct: 2,
+        explanation: "PartyRock is an Amazon Bedrock playground designed for learning and experimentation, allowing users to build and share GenAI applications without writing code."
+      },
+      {
+        id: 101, domain: 2,
+        question: "A company is evaluating foundation models on Amazon Bedrock. The company wants to use Amazon's own family of foundation models. Which model family should the company select?",
+        options: ["Anthropic Claude", "Cohere Command", "Amazon Nova", "Meta Llama"],
+        correct: 2,
+        explanation: "Amazon Nova is Amazon's own family of foundation models available through Amazon Bedrock, developed by Amazon for various generative AI tasks."
+      },
+      // Domain 3 additions
+      {
+        id: 102, domain: 3,
+        question: "A company wants its foundation model on Amazon Bedrock to answer questions using the latest internal company documents stored in Amazon S3. Which Amazon Bedrock feature should the company use?",
+        options: ["Bedrock Agents", "Bedrock Guardrails", "Bedrock Knowledge Bases", "Bedrock Model Evaluation"],
+        correct: 2,
+        explanation: "Bedrock Knowledge Bases implements RAG by connecting foundation models to company data sources like S3, automatically chunking, embedding, and indexing documents for contextual answers."
+      },
+      {
+        id: 103, domain: 3,
+        question: "A company wants its foundation model to autonomously look up customer order status by calling the company's REST API and then compose a personalized response. Which Amazon Bedrock feature enables this?",
+        options: ["Bedrock Knowledge Bases", "Bedrock Agents", "Bedrock Guardrails", "Amazon Q Business"],
+        correct: 1,
+        explanation: "Bedrock Agents enable foundation models to execute multi-step tasks by calling APIs, querying databases, and orchestrating workflows to complete complex tasks autonomously."
+      },
+      {
+        id: 104, domain: 3,
+        question: "A company has a large corpus of unlabeled industry-specific text data and wants an LLM to understand industry terminology and jargon. The company does NOT have labeled question-answer pairs. Which customization approach should the company use?",
+        options: ["Prompt engineering", "Instruction-based fine-tuning", "Continued pre-training", "RAG with a knowledge base"],
+        correct: 2,
+        explanation: "Continued pre-training uses unlabeled domain-specific data to teach the model new vocabulary and domain knowledge. Fine-tuning requires labeled data, and RAG retrieves information but doesn't teach the model new terminology."
+      },
+      {
+        id: 105, domain: 3,
+        question: "A company wants an LLM to respond in a specific JSON format with certain fields for API integration. The company has 500 labeled examples of correct input-output pairs. Which customization approach is MOST appropriate?",
+        options: ["Continued pre-training", "Instruction-based fine-tuning", "RAG with a knowledge base", "Zero-shot prompt engineering"],
+        correct: 1,
+        explanation: "Instruction-based fine-tuning with labeled input-output pairs is ideal for teaching a model to follow specific response formats and task-specific behaviors."
+      },
+      {
+        id: 106, domain: 3,
+        question: "A customer service team wants an LLM to answer questions using the latest product information that changes weekly. The team does NOT want to retrain or fine-tune the model. Which approach will meet these requirements?",
+        options: ["Continued pre-training on updated data", "Fine-tuning with new product data", "Retrieval Augmented Generation (RAG)", "Increasing the temperature parameter"],
+        correct: 2,
+        explanation: "RAG retrieves the latest information from external data sources at inference time without retraining. This is ideal for frequently changing information that would be impractical to retrain on."
+      },
+      {
+        id: 107, domain: 3,
+        question: "An ML engineer wants to improve an LLM's output format without any additional data, training, or infrastructure changes. Which approach should the engineer try FIRST?",
+        options: ["Fine-tuning", "Continued pre-training", "Prompt engineering", "RAG"],
+        correct: 2,
+        explanation: "Prompt engineering is the simplest and most cost-effective first step. It requires no data, training, or infrastructure changes — just crafting better prompts to guide the model's output."
+      },
+      {
+        id: 108, domain: 3,
+        question: "A company wants to build a customer support chatbot that can access a product FAQ database AND process returns by calling an order management API. Which combination of Amazon Bedrock features should the company use?",
+        options: ["Knowledge Bases and Guardrails", "Agents and Knowledge Bases", "Guardrails and Model Evaluation", "Agents and Guardrails"],
+        correct: 1,
+        explanation: "Bedrock Knowledge Bases provides RAG for answering FAQ questions from documents, while Bedrock Agents enables the model to call external APIs like the order management system. Together they handle both retrieval and action."
+      },
+      // Domain 4 addition
+      {
+        id: 109, domain: 4,
+        question: "A company wants to compare multiple foundation models on Amazon Bedrock to select the best one for its use case. The company needs to evaluate models for accuracy, toxicity, and robustness. Which Bedrock feature will meet these requirements?",
+        options: ["Bedrock Guardrails", "Bedrock Knowledge Bases", "Bedrock Model Evaluation", "SageMaker Clarify"],
+        correct: 2,
+        explanation: "Bedrock Model Evaluation provides tools to evaluate and compare foundation models using automated metrics (accuracy, robustness, toxicity) or human-based evaluation workflows."
+      },
+      // Domain 5 additions
+      {
+        id: 110, domain: 5,
+        question: "A security team needs to continuously monitor for malicious activity and unauthorized access attempts across their AWS accounts that host ML workloads. Which AWS service uses ML-based threat detection?",
+        options: ["Amazon Macie", "Amazon Inspector", "Amazon GuardDuty", "AWS Config"],
+        correct: 2,
+        explanation: "Amazon GuardDuty is a threat detection service that uses ML to continuously monitor for malicious activity and unauthorized behavior across AWS accounts."
+      },
+      {
+        id: 111, domain: 5,
+        question: "A company wants to scan its EC2 instances and container images for software vulnerabilities that could impact its ML inference endpoints. Which AWS service provides automated vulnerability scanning?",
+        options: ["Amazon GuardDuty", "Amazon Macie", "Amazon Inspector", "AWS Trusted Advisor"],
+        correct: 2,
+        explanation: "Amazon Inspector automatically scans workloads for software vulnerabilities and unintended network exposure, providing findings that help remediate security issues."
+      },
+      {
+        id: 112, domain: 5,
+        question: "A company wants to track all configuration changes to its SageMaker endpoints and training jobs for compliance. Which AWS service records resource configuration changes?",
+        options: ["AWS CloudTrail", "Amazon CloudWatch", "AWS Config", "AWS Audit Manager"],
+        correct: 2,
+        explanation: "AWS Config continuously records and evaluates resource configurations, tracking changes to resources like SageMaker endpoints for compliance auditing."
+      },
+      {
+        id: 113, domain: 5,
+        question: "A company needs to catalog trained ML models with version tracking and approval workflows before deploying to production. Which SageMaker feature will meet these requirements?",
+        options: ["SageMaker Model Cards", "SageMaker Model Registry", "SageMaker Model Monitor", "SageMaker Experiments"],
+        correct: 1,
+        explanation: "SageMaker Model Registry catalogs models, manages versions, and tracks approval status. It enables governance workflows where models must be approved before production deployment."
+      },
+      {
+        id: 114, domain: 5,
+        question: "A compliance team needs to trace which training data was used, which algorithm was selected, and where a specific model is deployed. Which SageMaker feature provides this end-to-end traceability?",
+        options: ["SageMaker Model Cards", "SageMaker Experiments", "SageMaker ML Lineage Tracking", "SageMaker Model Monitor"],
+        correct: 2,
+        explanation: "SageMaker ML Lineage Tracking records the full history of ML artifacts — which data was used, who trained the model, which parameters were set, and where it was deployed — providing complete audit traceability."
       }
     ];
 

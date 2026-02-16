@@ -364,6 +364,74 @@
         id: 41, name: "SageMaker ML Lineage Tracking", category: "SageMaker", domain: "AI/ML",
         description: "Audit & Traceability. Tracks model history - which data was used, who trained it, where deployed.",
         examTip: "Full audit trail - reproducibility"
+      },
+
+      // Bedrock Components
+      {
+        id: 42, name: "Bedrock Knowledge Bases", category: "Generative AI", domain: "AI/ML",
+        description: "Implements Retrieval Augmented Generation (RAG) by connecting Foundation Models to your data sources. Automatically chunks, embeds, and indexes documents for contextual responses.",
+        examTip: "RAG implementation in Bedrock - grounds FM answers in your data"
+      },
+      {
+        id: 43, name: "Bedrock Agents", category: "Generative AI", domain: "AI/ML",
+        description: "Enables Foundation Models to execute multi-step tasks by calling APIs, querying databases, and orchestrating workflows autonomously.",
+        examTip: "Multi-step task execution - FM can take actions, not just answer"
+      },
+      {
+        id: 44, name: "Bedrock Guardrails", category: "Generative AI", domain: "AI/ML",
+        description: "Configurable safeguards to filter harmful content, block denied topics, redact PII, and enforce responsible AI policies on FM inputs and outputs.",
+        examTip: "Content filtering + PII redaction - Responsible AI in Bedrock"
+      },
+      {
+        id: 45, name: "Bedrock Model Evaluation", category: "Generative AI", domain: "AI/ML",
+        description: "Tools to evaluate and compare Foundation Model performance using automated metrics (accuracy, robustness, toxicity) or human-based evaluation workflows.",
+        examTip: "Compare FMs - automated or human evaluation"
+      },
+      {
+        id: 46, name: "PartyRock", category: "Generative AI", domain: "AI/ML",
+        description: "An Amazon Bedrock playground for building and sharing GenAI apps without writing code. Designed for learning, experimentation, and rapid prototyping.",
+        examTip: "No-code GenAI playground - learning and experimentation"
+      },
+      {
+        id: 47, name: "Amazon Q in QuickSight", category: "Generative AI", domain: "AI/ML",
+        description: "A GenAI-powered capability in Amazon QuickSight that lets users generate BI dashboards, summaries, and data insights using natural language questions.",
+        examTip: "Natural language BI - ask questions, get dashboards"
+      },
+
+      // SageMaker Addition
+      {
+        id: 48, name: "SageMaker Experiments", category: "SageMaker", domain: "AI/ML",
+        description: "Manages, tracks, and compares iterations of ML training runs including parameters, metrics, and artifacts for reproducibility.",
+        examTip: "Track training iterations - compare experiments"
+      },
+
+      // Additional Vector/Graph Databases
+      {
+        id: 49, name: "Amazon Neptune", category: "Database (Graph)", domain: "Infrastructure",
+        description: "A graph database service that supports ML workloads and RAG by modeling complex relationships between data entities.",
+        examTip: "Graph DB - relationships between entities for ML/RAG"
+      },
+      {
+        id: 50, name: "Amazon MemoryDB / DocumentDB", category: "Database (Vector)", domain: "Infrastructure",
+        description: "In-memory and document databases that support vector search capabilities for low-latency RAG and similarity search.",
+        examTip: "Fast vector search - low-latency RAG alternatives"
+      },
+
+      // Additional Security Services
+      {
+        id: 51, name: "Amazon Inspector", category: "Security", domain: "Security",
+        description: "Automated security assessment service that continuously scans workloads for software vulnerabilities and network exposure.",
+        examTip: "Vulnerability scanning - automated security assessments"
+      },
+      {
+        id: 52, name: "Amazon GuardDuty", category: "Security", domain: "Security",
+        description: "Intelligent threat detection service that uses ML to continuously monitor for malicious activity and unauthorized behavior in AWS accounts.",
+        examTip: "ML-powered threat detection - monitors for attacks"
+      },
+      {
+        id: 53, name: "AWS Trusted Advisor", category: "Governance", domain: "Governance",
+        description: "Provides real-time best practice recommendations across five categories: cost optimization, performance, security, fault tolerance, and service limits.",
+        examTip: "Best practices checker - cost, security, performance"
       }
     ];
 
@@ -388,7 +456,18 @@
       { question: "EC2 instance type for ML Inference?", answer: "Inf1/Inf2", wrongAnswers: ["Trn1/Trn2", "P4d", "M5"] },
       { question: "Serverless GenAI with Foundation Models?", answer: "Amazon Bedrock", wrongAnswers: ["Amazon SageMaker", "Amazon Q", "Amazon Nova"] },
       { question: "Extract tables from scanned documents?", answer: "Amazon Textract", wrongAnswers: ["Amazon Comprehend", "Amazon Rekognition", "Amazon Kendra"] },
-      { question: "Detect sentiment in text?", answer: "Amazon Comprehend", wrongAnswers: ["Amazon Textract", "Amazon Translate", "Amazon Lex"] }
+      { question: "Detect sentiment in text?", answer: "Amazon Comprehend", wrongAnswers: ["Amazon Textract", "Amazon Translate", "Amazon Lex"] },
+      { question: "Ground FM responses using your own documents (RAG)?", answer: "Bedrock Knowledge Bases", wrongAnswers: ["Amazon Kendra", "Bedrock Agents", "Amazon OpenSearch"] },
+      { question: "FM needs to call APIs and execute multi-step tasks?", answer: "Bedrock Agents", wrongAnswers: ["Bedrock Knowledge Bases", "AWS Lambda", "Amazon Q"] },
+      { question: "Filter harmful content and redact PII from FM responses?", answer: "Bedrock Guardrails", wrongAnswers: ["Amazon Macie", "SageMaker Clarify", "Amazon Comprehend"] },
+      { question: "Compare Foundation Model performance with metrics?", answer: "Bedrock Model Evaluation", wrongAnswers: ["SageMaker Clarify", "SageMaker Experiments", "SageMaker Model Monitor"] },
+      { question: "Build GenAI apps without code for learning?", answer: "PartyRock", wrongAnswers: ["SageMaker Canvas", "Amazon Q", "Amazon Bedrock"] },
+      { question: "Generate BI dashboards using natural language?", answer: "Amazon Q in QuickSight", wrongAnswers: ["Amazon Q Business", "Amazon Kendra", "Amazon Personalize"] },
+      { question: "Track and compare ML training runs?", answer: "SageMaker Experiments", wrongAnswers: ["SageMaker Pipelines", "SageMaker Model Registry", "SageMaker ML Lineage Tracking"] },
+      { question: "Graph database for modeling entity relationships in ML?", answer: "Amazon Neptune", wrongAnswers: ["Amazon OpenSearch", "Amazon Aurora", "Amazon DocumentDB"] },
+      { question: "ML-powered threat detection for AWS accounts?", answer: "Amazon GuardDuty", wrongAnswers: ["Amazon Inspector", "Amazon Macie", "AWS Config"] },
+      { question: "Automated vulnerability scanning for workloads?", answer: "Amazon Inspector", wrongAnswers: ["Amazon GuardDuty", "AWS Trusted Advisor", "Amazon Macie"] },
+      { question: "Best practice recommendations for cost and security?", answer: "AWS Trusted Advisor", wrongAnswers: ["AWS Config", "AWS Audit Manager", "Amazon Inspector"] }
     ];
 
     // Icons
