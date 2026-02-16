@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS AI Practitioner — Visual References | ML Learning Lab</title>
+  <meta name="description"
+    content="Polished diagrams covering key concepts from the AWS Certified AI Practitioner (AIF-C01) curriculum — confusion matrices, RAG pipelines, and the complete LLM lifecycle.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace'],
+            serif: ['Instrument Serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            slate: {
+              925: '#0a0f1a',
+              950: '#060912',
+            },
+            amber: {
+              400: '#f5a623',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #060912;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; }
+    .delay-8 { animation-delay: 0.8s; }
+    .delay-9 { animation-delay: 0.9s; }
+    .delay-10 { animation-delay: 1.0s; }
+
+    .diagram-frame {
+      position: relative;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      background: rgba(15, 23, 42, 0.5);
+      transition: border-color 0.3s ease;
+    }
+
+    .diagram-frame:hover {
+      border-color: rgba(245, 166, 35, 0.25);
+    }
+
+    .diagram-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .section-number {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 4rem;
+      line-height: 1;
+      color: rgba(245, 166, 35, 0.12);
+      position: absolute;
+      top: -0.25rem;
+      left: -0.25rem;
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+  <main class="flex-1 px-6 py-12 md:py-20">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-16">
+        <a href="index.html"
+          class="inline-block text-xs tracking-widest uppercase text-amber-400 hover:text-amber-300 transition-colors mb-8 fade-up delay-1">
+          &larr; ML_LAB
+        </a>
+
+        <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-slate-100 mb-4 fade-up delay-2">
+          Visual References
+        </h1>
+
+        <p class="text-sm text-slate-400 leading-relaxed max-w-2xl fade-up delay-3">
+          Polished diagrams covering key concepts from the AWS Certified AI Practitioner (AIF-C01) curriculum.
+          Each diagram is paired with a brief explanation of the underlying concept.
+        </p>
+
+        <div class="flex items-center gap-3 mt-6 fade-up delay-4">
+          <span
+            class="text-[10px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-sky-500/30 text-sky-400 bg-sky-500/10">
+            Certification Prep
+          </span>
+          <span class="text-[10px] text-slate-600">03 diagrams</span>
+        </div>
+      </div>
+
+      <!-- Diagram 1: Confusion Matrix -->
+      <section class="mb-20 relative">
+        <span class="section-number fade-up delay-4">01</span>
+        <div class="relative pl-0 md:pl-4">
+          <h2 class="font-serif text-2xl md:text-3xl text-slate-100 mb-4 fade-up delay-5">
+            Confusion Matrix &amp; Classification Metrics
+          </h2>
+          <p class="text-sm text-slate-400 leading-relaxed mb-8 max-w-2xl fade-up delay-6">
+            A confusion matrix organizes a classifier's predictions against actual outcomes into four quadrants:
+            True Positives, False Positives, True Negatives, and False Negatives. From these counts, we derive
+            key metrics — accuracy measures overall correctness, precision captures how many predicted positives
+            are truly positive, and recall captures how many actual positives were found. The diagram below uses
+            a COVID-19 testing scenario to make these abstractions concrete: out of seven people tested, you can
+            trace exactly how each metric is calculated.
+          </p>
+          <div class="diagram-frame fade-up delay-7">
+            <img src="images/confusion_matrix.png"
+              alt="Confusion matrix diagram showing COVID-19 testing example with TP, FP, TN, FN quadrants and derived accuracy, precision, and recall metrics"
+              loading="lazy">
+          </div>
+        </div>
+      </section>
+
+      <!-- Diagram 2: Simple RAG -->
+      <section class="mb-20 relative">
+        <span class="section-number fade-up delay-5">02</span>
+        <div class="relative pl-0 md:pl-4">
+          <h2 class="font-serif text-2xl md:text-3xl text-slate-100 mb-4 fade-up delay-6">
+            Simple RAG Pipeline
+          </h2>
+          <p class="text-sm text-slate-400 leading-relaxed mb-8 max-w-2xl fade-up delay-7">
+            Retrieval-Augmented Generation (RAG) grounds an LLM's responses in your own data. This diagram
+            traces the end-to-end workflow on AWS: documents in S3 are chunked and embedded using Amazon Titan,
+            then stored as vectors in OpenSearch. At query time, the user's question is embedded and a similarity
+            search retrieves the most relevant chunks. These are injected into the prompt context alongside the
+            original question, and an LLM (such as Amazon Nova) generates a grounded response. The pipeline
+            closes with Bedrock Evaluation checking faithfulness, answer relevance, and ROUGE scores.
+          </p>
+          <div class="diagram-frame fade-up delay-8">
+            <img src="images/simple_rag.png"
+              alt="End-to-end RAG pipeline diagram showing data ingestion from S3, embedding with Titan, vector storage in OpenSearch, similarity search, prompt augmentation, LLM generation, and Bedrock evaluation"
+              loading="lazy">
+          </div>
+        </div>
+      </section>
+
+      <!-- Diagram 3: LLM Lifecycle -->
+      <section class="mb-12 relative">
+        <span class="section-number fade-up delay-6">03</span>
+        <div class="relative pl-0 md:pl-4">
+          <h2 class="font-serif text-2xl md:text-3xl text-slate-100 mb-4 fade-up delay-7">
+            Complete Lifecycle of Large Language Models
+          </h2>
+          <p class="text-sm text-slate-400 leading-relaxed mb-8 max-w-2xl fade-up delay-8">
+            This diagram maps the full LLM lifecycle. It starts with pre-training on massive unstructured data
+            (web crawls, books, articles) to produce a foundation model. From there, a key decision: use the
+            model as-is, fine-tune it with labeled domain data for specialized tasks, or augment it with RAG
+            to ground outputs in enterprise knowledge. Prompt engineering techniques — zero-shot, chain-of-thought —
+            and parameters like temperature and top-k further shape model behavior. The cycle closes with
+            evaluation: traditional metrics (ROUGE, BLEU, BERTScore) for measurable tasks and LLM-as-a-judge
+            for subjective qualities like faithfulness and relevance.
+          </p>
+          <div class="diagram-frame fade-up delay-9">
+            <img src="images/LLM_cycle.png"
+              alt="Complete LLM lifecycle diagram showing pre-training, fine-tuning, RAG, prompt engineering, and evaluation with traditional metrics and LLM-as-a-judge"
+              loading="lazy">
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/50 py-8 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+      <div class="flex items-center gap-2">
+        <span class="text-slate-500">&copy;</span>
+        <span>2026 ML Learning Lab</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-4 md:gap-6 justify-center md:justify-end">
+        <a href="/blog/"
+          class="text-slate-600 hover:text-amber-400 hover:underline underline-offset-2 transition-colors">
+          Archive
+        </a>
+        <div class="flex items-center gap-3">
+          <a href="https://twitter.com/tarekatwan" target="_blank" rel="noopener"
+            class="text-slate-600 hover:text-amber-400 hover:underline underline-offset-2 transition-colors">
+            Twitter
+          </a>
+          <a href="https://www.linkedin.com/in/tarekatwan" target="_blank" rel="noopener"
+            class="text-slate-600 hover:text-amber-400 hover:underline underline-offset-2 transition-colors">
+            LinkedIn
+          </a>
+          <a href="https://github.com/tatwan" target="_blank" rel="noopener"
+            class="text-slate-600 hover:text-amber-400 hover:underline underline-offset-2 transition-colors">
+            GitHub
+          </a>
+        </div>
+        <span class="text-slate-700 text-[11px]">Built for practitioners, by practitioners</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
