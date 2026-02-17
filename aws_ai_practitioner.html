@@ -144,9 +144,14 @@
         examTip: "Think 'serverless GenAI' - no infrastructure management needed"
       },
       {
-        id: 2, name: "Amazon Q", category: "Generative AI", domain: "AI/ML",
-        description: "A GenAI-powered assistant for businesses (Q Business) and developers (Q Developer) to generate code, answer questions from internal data, and debug.",
-        examTip: "Two flavors: Q Business for enterprise, Q Developer for coding"
+        id: 2, name: "Amazon Q Business", category: "Generative AI", domain: "AI/ML",
+        description: "A GenAI-powered assistant for employees to query enterprise data sources (wikis, SharePoint, S3, internal docs) using natural language and get answers grounded in company knowledge.",
+        examTip: "Enterprise assistant - employees ask questions about internal data"
+      },
+      {
+        id: 2.1, name: "Amazon Q Developer", category: "Generative AI", domain: "AI/ML",
+        description: "A GenAI-powered assistant for developers to generate code, troubleshoot AWS errors, debug, and build applications directly in the IDE or AWS Console.",
+        examTip: "Developer assistant - code generation, debugging, IDE integration"
       },
       {
         id: 3, name: "Amazon Nova", category: "Generative AI", domain: "AI/ML",
@@ -201,7 +206,7 @@
       {
         id: 11, name: "Amazon Lex", category: "Chatbots", domain: "AI/ML",
         description: "Service for building conversational interfaces (chatbots) using voice and text.",
-        examTip: "Powers Alexa - chatbot builder"
+        examTip: "Powered by the same deep learning technologies as Amazon Alexa"
       },
       {
         id: 12, name: "Amazon Kendra", category: "Search", domain: "AI/ML",
@@ -424,14 +429,55 @@
         examTip: "Vulnerability scanning - automated security assessments"
       },
       {
-        id: 52, name: "Amazon GuardDuty", category: "Security", domain: "Security",
-        description: "Intelligent threat detection service that uses ML to continuously monitor for malicious activity and unauthorized behavior in AWS accounts.",
-        examTip: "ML-powered threat detection - monitors for attacks"
-      },
-      {
         id: 53, name: "AWS Trusted Advisor", category: "Governance", domain: "Governance",
         description: "Provides real-time best practice recommendations across five categories: cost optimization, performance, security, fault tolerance, and service limits.",
         examTip: "Best practices checker - cost, security, performance"
+      },
+
+      // Data Engineering & Analytics
+      {
+        id: 54, name: "AWS Glue & DataBrew", category: "Analytics", domain: "Data Foundation",
+        description: "Serverless data integration service used to discover, prepare, and combine data for ML. DataBrew provides a visual, no-code interface for cleaning data.",
+        examTip: "ETL and visual data preparation for ML pipelines"
+      },
+      {
+        id: 55, name: "Amazon EMR", category: "Analytics", domain: "Data Foundation",
+        description: "Cloud big data platform for processing vast amounts of data using open-source tools like Apache Spark. Essential for large-scale ML data processing.",
+        examTip: "Big data processing with Apache Spark/Hadoop"
+      },
+      {
+        id: 56, name: "AWS Data Exchange", category: "Analytics", domain: "Data Foundation",
+        description: "Service to easily find, subscribe to, and use third-party data sets and pre-trained ML models in the AWS Cloud.",
+        examTip: "Buy/sell 3rd party datasets and ML models"
+      },
+      {
+        id: 57, name: "Amazon Redshift", category: "Analytics", domain: "Data Foundation",
+        description: "A fully managed, petabyte-scale cloud data warehouse that allows you to run complex analytical queries and use Redshift ML to create models using SQL.",
+        examTip: "Cloud data warehouse + ML via SQL"
+      },
+
+      // Cloud Financial Management
+      {
+        id: 58, name: "AWS Cost Explorer & Budgets", category: "Cost Management", domain: "Governance",
+        description: "Tools to visualize, understand, and manage AWS costs over time, and set custom alerts when ML resource costs (like Bedrock or EC2) exceed thresholds.",
+        examTip: "Monitor and control expensive ML compute/inference costs"
+      },
+
+      // Additional Security & Infrastructure
+      {
+        id: 59, name: "AWS Secrets Manager", category: "Security", domain: "Security",
+        description: "Protects secrets needed to access applications and IT resources, such as securely storing external API keys required to connect to third-party Foundation Models.",
+        examTip: "Securely store API keys (e.g., Anthropic, OpenAI)"
+      },
+      {
+        id: 60, name: "AWS Well-Architected Tool", category: "Governance", domain: "Governance",
+        description: "Helps you review the state of your workloads and compares them to the latest AWS architectural best practices, including a specific AI/ML Lens.",
+        examTip: "Architecture review tool with a dedicated AI/ML Lens"
+      },
+      {
+        id: 61, name: "Amazon DynamoDB", category: "Database", domain: "Infrastructure",
+        description: "Fast, flexible NoSQL database service for single-digit millisecond performance. Often used to serve real-time ML feature data or store model inferences.",
+        examTip: "NoSQL DB for fast, real-time inference retrieval"
       }
     ];
 
@@ -465,9 +511,18 @@
       { question: "Generate BI dashboards using natural language?", answer: "Amazon Q in QuickSight", wrongAnswers: ["Amazon Q Business", "Amazon Kendra", "Amazon Personalize"] },
       { question: "Track and compare ML training runs?", answer: "SageMaker Experiments", wrongAnswers: ["SageMaker Pipelines", "SageMaker Model Registry", "SageMaker ML Lineage Tracking"] },
       { question: "Graph database for modeling entity relationships in ML?", answer: "Amazon Neptune", wrongAnswers: ["Amazon OpenSearch", "Amazon Aurora", "Amazon DocumentDB"] },
-      { question: "ML-powered threat detection for AWS accounts?", answer: "Amazon GuardDuty", wrongAnswers: ["Amazon Inspector", "Amazon Macie", "AWS Config"] },
-      { question: "Automated vulnerability scanning for workloads?", answer: "Amazon Inspector", wrongAnswers: ["Amazon GuardDuty", "AWS Trusted Advisor", "Amazon Macie"] },
-      { question: "Best practice recommendations for cost and security?", answer: "AWS Trusted Advisor", wrongAnswers: ["AWS Config", "AWS Audit Manager", "Amazon Inspector"] }
+      { question: "Automated vulnerability scanning for workloads?", answer: "Amazon Inspector", wrongAnswers: ["Amazon Macie", "AWS Trusted Advisor", "AWS Config"] },
+      { question: "Best practice recommendations for cost and security?", answer: "AWS Trusted Advisor", wrongAnswers: ["AWS Config", "AWS Audit Manager", "Amazon Inspector"] },
+      { question: "Serverless ETL and data preparation for ML?", answer: "AWS Glue & DataBrew", wrongAnswers: ["Amazon EMR", "Amazon Redshift", "SageMaker Data Wrangler"] },
+      { question: "Big data processing with Apache Spark for ML?", answer: "Amazon EMR", wrongAnswers: ["AWS Glue", "Amazon Redshift", "Amazon Athena"] },
+      { question: "Cloud data warehouse with ML via SQL?", answer: "Amazon Redshift", wrongAnswers: ["Amazon Aurora", "Amazon DynamoDB", "Amazon EMR"] },
+      { question: "Find and subscribe to third-party datasets?", answer: "AWS Data Exchange", wrongAnswers: ["AWS Glue", "Amazon S3", "Amazon Redshift"] },
+      { question: "Monitor and set alerts for ML compute costs?", answer: "AWS Cost Explorer & Budgets", wrongAnswers: ["AWS Trusted Advisor", "Amazon CloudWatch", "AWS Config"] },
+      { question: "Securely store API keys for external FM providers?", answer: "AWS Secrets Manager", wrongAnswers: ["AWS KMS", "AWS IAM", "Amazon Macie"] },
+      { question: "Architecture review with an AI/ML best practices lens?", answer: "AWS Well-Architected Tool", wrongAnswers: ["AWS Trusted Advisor", "AWS Audit Manager", "AWS Config"] },
+      { question: "Fast NoSQL database for real-time ML feature serving?", answer: "Amazon DynamoDB", wrongAnswers: ["Amazon Aurora", "Amazon OpenSearch", "Amazon ElastiCache"] },
+      { question: "Enterprise assistant for querying internal company data?", answer: "Amazon Q Business", wrongAnswers: ["Amazon Q Developer", "Amazon Kendra", "Amazon Bedrock"] },
+      { question: "AI coding assistant for generating code in your IDE?", answer: "Amazon Q Developer", wrongAnswers: ["Amazon Q Business", "Amazon Bedrock", "SageMaker Canvas"] }
     ];
 
     // Icons

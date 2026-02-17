@@ -67,6 +67,7 @@
       15: { 1:3, 2:4, 3:4, 4:2, 5:2 },
       20: { 1:4, 2:5, 3:6, 4:3, 5:2 },
       30: { 1:6, 2:7, 3:9, 4:4, 5:4 },
+      50: { 1:10, 2:12, 3:14, 4:7, 5:7 },
       65: { 1:13, 2:16, 3:18, 4:9, 5:9 }
     };
 
@@ -871,10 +872,10 @@
       // Domain 5 additions
       {
         id: 110, domain: 5,
-        question: "A security team needs to continuously monitor for malicious activity and unauthorized access attempts across their AWS accounts that host ML workloads. Which AWS service uses ML-based threat detection?",
-        options: ["Amazon Macie", "Amazon Inspector", "Amazon GuardDuty", "AWS Config"],
-        correct: 2,
-        explanation: "Amazon GuardDuty is a threat detection service that uses ML to continuously monitor for malicious activity and unauthorized behavior across AWS accounts."
+        question: "A company needs to scan their Amazon EC2 instances and container images for software vulnerabilities that could affect their ML inference workloads. Which AWS service provides automated vulnerability assessments?",
+        options: ["Amazon Macie", "Amazon Inspector", "AWS Config", "AWS Trusted Advisor"],
+        correct: 1,
+        explanation: "Amazon Inspector is an automated vulnerability management service that continuously scans EC2 instances, container images, and Lambda functions for software vulnerabilities and unintended network exposure."
       },
       {
         id: 111, domain: 5,
@@ -903,6 +904,372 @@
         options: ["SageMaker Model Cards", "SageMaker Experiments", "SageMaker ML Lineage Tracking", "SageMaker Model Monitor"],
         correct: 2,
         explanation: "SageMaker ML Lineage Tracking records the full history of ML artifacts — which data was used, who trained the model, which parameters were set, and where it was deployed — providing complete audit traceability."
+      },
+
+      // ═══════════════════════════════════════
+      // NEW QUESTIONS 115-164 (Gap Coverage)
+      // ═══════════════════════════════════════
+
+      // ── DOMAIN 1: Additional AI/ML Fundamentals ──
+      {
+        id: 115, domain: 1,
+        question: "Which statement correctly describes the relationship between AI, ML, deep learning, and generative AI?",
+        options: ["ML is a subset of deep learning, which is a subset of AI", "Deep learning is a subset of ML, which is a subset of AI, and generative AI is a subset of deep learning", "AI is a subset of ML, and generative AI is separate from deep learning", "Generative AI contains ML, which contains deep learning"],
+        correct: 1,
+        explanation: "The correct hierarchy is: AI (broadest) → ML (subset of AI) → Deep Learning (subset of ML) → Generative AI (subset of DL). Each layer builds on the capabilities of the one above it."
+      },
+      {
+        id: 116, domain: 1,
+        question: "What distinguishes deep learning from traditional machine learning?",
+        options: ["Deep learning uses labeled data while ML does not", "Deep learning uses multi-layered artificial neural networks to automatically learn features from data", "Deep learning only works with structured data", "Deep learning requires less computational power than traditional ML"],
+        correct: 1,
+        explanation: "Deep learning uses multi-layered (deep) artificial neural networks that can automatically learn hierarchical feature representations from raw data, unlike traditional ML which often requires manual feature engineering."
+      },
+      {
+        id: 117, domain: 1,
+        question: "A company stores customer data in CSV files with rows and columns, JSON log files from web servers, and free-form customer support emails. How should these data types be classified?",
+        options: ["All three are structured data", "CSV is structured, JSON is semi-structured, and emails are unstructured", "CSV and JSON are structured, and emails are semi-structured", "All three are unstructured data"],
+        correct: 1,
+        explanation: "CSV files with defined rows and columns are structured data. JSON has a schema but flexible nesting, making it semi-structured. Free-form text like emails has no predefined schema, making it unstructured."
+      },
+      {
+        id: 118, domain: 1,
+        question: "A retail company needs to predict future product demand based on historical weekly sales data. Which AWS service is purpose-built for this use case?",
+        options: ["Amazon Personalize", "Amazon Comprehend", "Amazon Forecast", "Amazon Rekognition"],
+        correct: 2,
+        explanation: "Amazon Forecast is a fully managed service that uses ML to generate highly accurate time-series forecasts, ideal for demand planning, inventory management, and resource allocation based on historical data."
+      },
+      {
+        id: 119, domain: 1,
+        question: "A company wants to add intelligent search to its internal knowledge base so employees can ask natural language questions and get precise answers from company documents. Which AWS service should they use?",
+        options: ["Amazon OpenSearch Service", "Amazon Kendra", "Amazon Comprehend", "Amazon Athena"],
+        correct: 1,
+        explanation: "Amazon Kendra is an ML-powered enterprise search service that provides natural language search capabilities, returning precise answers extracted from documents rather than just keyword-matched links."
+      },
+      {
+        id: 120, domain: 1,
+        question: "Which two fields are considered subfields of artificial intelligence? (Select TWO.)",
+        options: ["Database management", "Computer vision", "Natural language processing", "Data warehousing"],
+        correct: [1, 2],
+        explanation: "Computer vision (enabling machines to interpret images and video) and natural language processing (enabling machines to understand and generate human language) are both well-established subfields of AI.",
+        multiSelect: true
+      },
+      {
+        id: 121, domain: 1,
+        question: "After training an ML model on historical data, a data scientist deploys it to make predictions on new, unseen customer data. What is this deployment phase called?",
+        options: ["Training", "Feature engineering", "Inference", "Data augmentation"],
+        correct: 2,
+        explanation: "Inference is the phase where a trained ML model is used to make predictions or decisions on new, unseen data. This is distinct from training, where the model learns patterns from historical data."
+      },
+      {
+        id: 122, domain: 1,
+        question: "A network security team wants to automatically detect unusual traffic patterns that may indicate a cyberattack. Which type of ML approach is most appropriate?",
+        options: ["Regression", "Classification", "Anomaly detection", "Dimensionality reduction"],
+        correct: 2,
+        explanation: "Anomaly detection identifies data points that deviate significantly from normal patterns. Amazon SageMaker provides the Random Cut Forest (RCF) algorithm specifically designed for unsupervised anomaly detection in streaming or batch data."
+      },
+      {
+        id: 123, domain: 1,
+        question: "A data scientist is evaluating a regression model that predicts house prices. Which metric measures the average magnitude of prediction errors in the same units as the target variable?",
+        options: ["Accuracy", "F1-score", "RMSE (Root Mean Squared Error)", "AUC-ROC"],
+        correct: 2,
+        explanation: "RMSE measures the square root of the average squared differences between predicted and actual values. It is expressed in the same units as the target variable, making it interpretable for regression tasks like price prediction."
+      },
+      {
+        id: 124, domain: 1,
+        question: "In a fraud detection system, the model incorrectly flags a legitimate transaction as fraudulent. What type of error is this?",
+        options: ["True positive", "True negative", "False positive", "False negative"],
+        correct: 2,
+        explanation: "A false positive occurs when the model incorrectly predicts the positive class (fraud) for a negative case (legitimate transaction). In a confusion matrix, false positives appear where actual negatives are predicted as positives."
+      },
+      {
+        id: 125, domain: 1,
+        question: "A medical screening model must minimize missed diagnoses of a serious disease, even if it means more false alarms. Which metric should the team prioritize?",
+        options: ["Precision", "Recall", "Accuracy", "Specificity"],
+        correct: 1,
+        explanation: "Recall (sensitivity) measures the proportion of actual positives correctly identified. When false negatives are costly (missing a disease diagnosis), maximizing recall ensures the model catches as many positive cases as possible."
+      },
+      {
+        id: 126, domain: 1,
+        question: "A model performs poorly on both the training data and the test data. What is this problem called, and what is its likely cause?",
+        options: ["Overfitting — the model is too complex", "Underfitting — the model is too simple to capture underlying patterns", "Data leakage — test data leaked into training", "Concept drift — the data distribution changed"],
+        correct: 1,
+        explanation: "Underfitting occurs when a model is too simple (high bias) to capture the underlying patterns in the data, resulting in poor performance on both training and test sets. Solutions include using a more complex model or adding more features."
+      },
+      {
+        id: 127, domain: 1,
+        question: "A dataset has 500 features but only 1,000 samples, causing the model to perform poorly. Which unsupervised technique can help by reducing the number of features while preserving important information?",
+        options: ["Classification", "Clustering", "Dimensionality reduction", "Regression"],
+        correct: 2,
+        explanation: "Dimensionality reduction techniques (such as PCA) reduce the number of features while retaining as much important information as possible. This helps combat the curse of dimensionality when features far outnumber samples."
+      },
+      {
+        id: 128, domain: 1,
+        question: "In a supervised learning dataset for email classification, what role do the 'spam' and 'not spam' tags serve?",
+        options: ["They are features used for prediction", "They are labels that the model learns to predict", "They are hyperparameters for model tuning", "They are embeddings of the email content"],
+        correct: 1,
+        explanation: "In supervised learning, labels are the known output values (ground truth) that the model learns to predict. The model uses input features (email content) to learn patterns that map to these labels (spam/not spam)."
+      },
+
+      // ── DOMAIN 2: Additional Generative AI Fundamentals ──
+      {
+        id: 129, domain: 2,
+        question: "Which neural network architecture, introduced in 2017, uses a self-attention mechanism to process input sequences in parallel and serves as the foundation for most modern large language models?",
+        options: ["Recurrent Neural Network (RNN)", "Convolutional Neural Network (CNN)", "Transformer", "Generative Adversarial Network (GAN)"],
+        correct: 2,
+        explanation: "The Transformer architecture, introduced in the 'Attention Is All You Need' paper (2017), uses self-attention mechanisms to process all positions in a sequence simultaneously (in parallel), enabling much faster training and better performance than sequential RNNs."
+      },
+      {
+        id: 130, domain: 2,
+        question: "Which type of generative model creates images by learning to reverse a gradual noise-addition process, starting from pure noise and progressively refining it into a coherent image?",
+        options: ["Generative Adversarial Network (GAN)", "Variational Autoencoder (VAE)", "Diffusion model", "Recurrent Neural Network (RNN)"],
+        correct: 2,
+        explanation: "Diffusion models generate images by learning to reverse a process that gradually adds noise to data. During generation, they start from random noise and iteratively denoise it to produce high-quality images. Amazon Titan Image Generator uses this approach."
+      },
+      {
+        id: 131, domain: 2,
+        question: "What distinguishes a foundation model from a traditional ML model?",
+        options: ["Foundation models can only process text data", "Foundation models are pre-trained on vast, diverse datasets and can be adapted to many downstream tasks", "Foundation models do not require any computational resources", "Foundation models are always smaller than traditional ML models"],
+        correct: 1,
+        explanation: "Foundation models are pre-trained on massive, diverse datasets (text, images, code) using self-supervised learning, giving them broad capabilities that can be adapted to many downstream tasks through fine-tuning or prompt engineering — unlike traditional ML models trained for a single specific task."
+      },
+      {
+        id: 132, domain: 2,
+        question: "How do large language models (LLMs) process text input?",
+        options: ["They read entire sentences as single units", "They break text into tokens (words, subwords, or characters) and process these token sequences", "They convert text directly into images before processing", "They only process one character at a time sequentially"],
+        correct: 1,
+        explanation: "LLMs tokenize input text into tokens — which can be words, subwords, or characters depending on the tokenizer. These tokens are converted to numerical representations (embeddings) that the model processes. Token count directly affects cost and processing time."
+      },
+      {
+        id: 133, domain: 2,
+        question: "A developer provides a single example of the desired input-output format in a prompt and asks the model to follow that pattern for a new input. What is this technique called?",
+        options: ["Zero-shot learning", "Single-shot (one-shot) learning", "Few-shot learning", "Fine-tuning"],
+        correct: 1,
+        explanation: "Single-shot (one-shot) learning provides exactly one example of the desired behavior in the prompt. Zero-shot provides no examples, and few-shot provides multiple examples. All three are prompt engineering techniques that do not modify model weights."
+      },
+      {
+        id: 134, domain: 2,
+        question: "When selecting a foundation model on Amazon Bedrock for summarizing lengthy legal documents (100+ pages), which model characteristic should be evaluated first?",
+        options: ["The model's training data size", "The model's context window size", "The model's number of parameters", "The model's release date"],
+        correct: 1,
+        explanation: "The context window determines the maximum number of tokens a model can process in a single request. For long-document summarization, the model must have a context window large enough to ingest the entire document, making this the first criterion to evaluate."
+      },
+      {
+        id: 135, domain: 2,
+        question: "Which factors directly impact the latency of an LLM inference request? (Select TWO.)",
+        options: ["The temperature parameter setting", "The number of input tokens", "The number of output tokens generated", "The Top K parameter setting"],
+        correct: [1, 2],
+        explanation: "Input token count affects the time to process the prompt, and output token count affects generation time since tokens are produced sequentially. Temperature and Top K/Top P are sampling parameters that control randomness but do not significantly impact latency.",
+        multiSelect: true
+      },
+      {
+        id: 136, domain: 2,
+        question: "A company uses Amazon Bedrock and wants to understand its pricing. Which pricing model does Bedrock use for on-demand inference?",
+        options: ["Fixed monthly subscription per model", "Pay per API call regardless of size", "Pay per token for input and output tokens processed", "Free tier with unlimited usage"],
+        correct: 2,
+        explanation: "Amazon Bedrock on-demand pricing charges per token processed — separately for input tokens (prompt) and output tokens (response). This pay-per-use model means costs scale directly with the volume and length of requests."
+      },
+      {
+        id: 137, domain: 2,
+        question: "A company needs to deploy a generative AI model on IoT edge devices with limited memory and compute. Which approach is most suitable?",
+        options: ["Deploy a full large language model with 70B+ parameters", "Use Amazon Bedrock API calls from each device", "Deploy a Small Language Model (SLM) optimized for edge inference", "Use Amazon SageMaker real-time endpoints"],
+        correct: 2,
+        explanation: "Small Language Models (SLMs) are compact models optimized for edge deployment, providing low-latency inference on devices with limited compute and memory. They trade some capability for efficiency, making them ideal for IoT and mobile scenarios."
+      },
+      {
+        id: 138, domain: 2,
+        question: "A team wants to customize a foundation model's behavior. Rank the following approaches from LEAST to MOST expensive and complex.",
+        options: ["Fine-tuning → RAG → Prompt engineering → Pre-training from scratch", "Prompt engineering → RAG → Fine-tuning → Pre-training from scratch", "RAG → Prompt engineering → Pre-training from scratch → Fine-tuning", "Pre-training from scratch → Fine-tuning → RAG → Prompt engineering"],
+        correct: 1,
+        explanation: "The cost and complexity order is: Prompt engineering (cheapest, no training) → RAG (adds retrieval infrastructure) → Fine-tuning (requires labeled data and compute) → Pre-training from scratch (most expensive, requires massive data and compute)."
+      },
+
+      // ── DOMAIN 3: Additional Foundation Model Applications ──
+      {
+        id: 139, domain: 3,
+        question: "Which evaluation metric measures the semantic similarity between generated text and reference text using contextual embeddings, rather than simple word overlap?",
+        options: ["ROUGE", "BLEU", "BERTScore", "Perplexity"],
+        correct: 2,
+        explanation: "BERTScore uses contextual embeddings from BERT to compute similarity between generated and reference text at the token level. Unlike ROUGE (n-gram overlap), BERTScore captures semantic meaning, giving credit for paraphrases and synonyms."
+      },
+      {
+        id: 140, domain: 3,
+        question: "A data scientist is evaluating how well a language model predicts the next token in a sequence. Which metric directly measures this capability, where a lower score indicates better performance?",
+        options: ["ROUGE-L", "BERTScore", "Perplexity", "F1-score"],
+        correct: 2,
+        explanation: "Perplexity measures how well a language model predicts the next token. A lower perplexity score indicates the model is more confident and accurate in its predictions. It is commonly used to compare language models during development."
+      },
+      {
+        id: 141, domain: 3,
+        question: "A company needs to store and query millions of vector embeddings for a RAG application. They already use Amazon DocumentDB for their operational database. What should they do?",
+        options: ["Migrate to Amazon OpenSearch Service", "Use DocumentDB's native vector search capability", "Set up a separate vector database", "Store vectors as JSON documents without indexing"],
+        correct: 1,
+        explanation: "Amazon DocumentDB supports native vector search, allowing companies to store, index, and query vector embeddings alongside their operational data. This avoids the need for a separate vector database when DocumentDB is already in use."
+      },
+      {
+        id: 142, domain: 3,
+        question: "Which technique uses human feedback to iteratively improve a foundation model's outputs by training a reward model that scores responses based on human preferences?",
+        options: ["Continued pre-training", "Instruction-based fine-tuning", "Reinforcement Learning from Human Feedback (RLHF)", "Prompt engineering"],
+        correct: 2,
+        explanation: "RLHF trains a reward model based on human preference rankings of model outputs, then uses reinforcement learning to optimize the FM to produce outputs that score highly on the reward model. This is how models like ChatGPT were aligned with human preferences."
+      },
+      {
+        id: 143, domain: 3,
+        question: "What is the difference between domain adaptation fine-tuning and instruction-based fine-tuning?",
+        options: ["Domain adaptation uses labeled data; instruction-based uses unlabeled data", "Domain adaptation teaches industry-specific terminology and knowledge; instruction-based teaches the model to follow specific output formats and instructions", "They are the same technique with different names", "Instruction-based fine-tuning is more expensive than domain adaptation"],
+        correct: 1,
+        explanation: "Domain adaptation fine-tuning exposes the model to domain-specific terminology and knowledge (e.g., medical or legal language). Instruction-based fine-tuning teaches the model to follow specific instructions and produce outputs in desired formats using prompt-completion pairs."
+      },
+      {
+        id: 144, domain: 3,
+        question: "In a prompt sent to a foundation model, what is the purpose of a system prompt?",
+        options: ["To provide the user's specific question or request", "To set the model's persona, behavior guidelines, and constraints before the user interaction", "To store the model's previous conversation history", "To define the model's token limit"],
+        correct: 1,
+        explanation: "A system prompt establishes the model's role, behavior guidelines, tone, and constraints. It acts as persistent instructions that shape how the model responds to all subsequent user messages in the conversation."
+      },
+      {
+        id: 145, domain: 3,
+        question: "A customer service chatbot must provide consistent, factual answers. Which inference parameter setting should the team use?",
+        options: ["High temperature (close to 1.0) for creative responses", "Low temperature (close to 0) for more deterministic and focused responses", "Maximum Top P value for diverse vocabulary", "Minimum token limit for shorter responses"],
+        correct: 1,
+        explanation: "A low temperature value (close to 0) makes the model's output more deterministic and focused by concentrating probability on the most likely tokens. This is ideal for factual, consistent responses where creativity and variation are not desired."
+      },
+      {
+        id: 146, domain: 3,
+        question: "A company has thousands of recorded customer service call transcripts and wants to generate concise summaries. Which AWS service should they use?",
+        options: ["Amazon Comprehend", "Amazon Transcribe", "Amazon Bedrock", "Amazon Translate"],
+        correct: 2,
+        explanation: "Amazon Bedrock provides access to foundation models capable of text summarization. The company can use a Bedrock FM to generate concise summaries of call transcripts, leveraging the model's natural language understanding and generation capabilities."
+      },
+      {
+        id: 147, domain: 3,
+        question: "A company has a large archive of scanned documents containing both text and images. They want to build a system that can search these documents by visual content (e.g., 'find documents with pie charts'). Which combination of AWS services should they use?",
+        options: ["Amazon Comprehend and Amazon Translate", "Amazon Textract and Amazon Rekognition", "Amazon Polly and Amazon Lex", "Amazon Personalize and Amazon Forecast"],
+        correct: 1,
+        explanation: "Amazon Textract extracts text and structured data from scanned documents, while Amazon Rekognition analyzes images and can identify objects, scenes, and visual elements. Together, they enable both text-based and visual content search across document archives."
+      },
+      {
+        id: 148, domain: 3,
+        question: "A company wants to quickly deploy an internal virtual assistant that answers employee questions using information stored in Amazon S3 documents, with no custom code or model training required. Which AWS service is the best fit?",
+        options: ["Amazon Bedrock Knowledge Bases", "Amazon Lex", "Amazon Q Business", "Amazon SageMaker"],
+        correct: 2,
+        explanation: "Amazon Q Business is designed for exactly this use case — it provides a no-configuration RAG solution that connects to enterprise data sources (including S3) and allows employees to ask natural language questions. It requires no custom code, model selection, or training."
+      },
+
+      // ── DOMAIN 4: Additional Responsible AI ──
+      {
+        id: 149, domain: 4,
+        question: "A data scientist wants to visualize how individual features affect a model's predictions across their entire range of values. Which explainability technique should they use?",
+        options: ["SHAP values", "Partial Dependence Plots (PDPs)", "Confusion matrix", "ROC curve"],
+        correct: 1,
+        explanation: "Partial Dependence Plots (PDPs) show the marginal effect of one or two features on the predicted outcome of a model, averaged over all other features. They help stakeholders understand how a feature's values influence predictions across its entire range."
+      },
+      {
+        id: 150, domain: 4,
+        question: "A company publishes AI-generated marketing content. According to responsible AI best practices, what should they do to maintain veracity?",
+        options: ["Keep the AI generation process confidential", "Disclose that the content is AI-generated and consider adding watermarks", "Only publish content that sounds human-written", "Use multiple models to generate the same content"],
+        correct: 1,
+        explanation: "Veracity in responsible AI requires transparency about AI-generated content. Best practices include disclosing AI involvement and using watermarking techniques to help distinguish AI-generated content from human-created content, maintaining trust with audiences."
+      },
+      {
+        id: 151, domain: 4,
+        question: "Which dimension of responsible AI focuses on ensuring a model performs reliably even when faced with unexpected inputs, adversarial attacks, or noisy data?",
+        options: ["Fairness", "Explainability", "Robustness", "Privacy"],
+        correct: 2,
+        explanation: "Robustness refers to a model's ability to maintain reliable, consistent performance when encountering unexpected inputs, edge cases, adversarial perturbations, or noisy data. A robust model degrades gracefully rather than producing wildly incorrect outputs."
+      },
+      {
+        id: 152, domain: 4,
+        question: "Where can a company find documentation about the intended use cases, limitations, and performance benchmarks for AWS AI services like Amazon Rekognition and Amazon Textract?",
+        options: ["SageMaker Model Cards", "AWS AI Service Cards", "AWS Artifact", "Amazon CloudWatch dashboards"],
+        correct: 1,
+        explanation: "AWS AI Service Cards provide transparency documentation for AWS AI services, including intended use cases, design choices, limitations, best practices, and performance benchmarks. They are distinct from SageMaker Model Cards, which document custom models."
+      },
+      {
+        id: 153, domain: 4,
+        question: "A model has low bias but high variance. What problem does this indicate, and what is the recommended solution?",
+        options: ["Underfitting — use a more complex model", "Overfitting — apply regularization, gather more data, or simplify the model", "Data leakage — separate training and test data", "Concept drift — retrain the model on recent data"],
+        correct: 1,
+        explanation: "Low bias + high variance indicates overfitting: the model fits the training data very well but fails to generalize. Solutions include regularization (L1/L2), cross-validation, getting more training data, or reducing model complexity."
+      },
+      {
+        id: 154, domain: 4,
+        question: "A hiring company wants to ensure its ML screening model treats applicants equitably across demographic groups. Which responsible AI principle are they addressing, and which AWS tool can help?",
+        options: ["Explainability — use Amazon CloudWatch", "Fairness — use Amazon SageMaker Clarify", "Robustness — use Amazon GuardDuty", "Privacy — use Amazon Macie"],
+        correct: 1,
+        explanation: "Fairness ensures ML models do not discriminate against protected groups. SageMaker Clarify detects bias in training data and model predictions using metrics like demographic parity and equalized odds, and provides actionable reports."
+      },
+      {
+        id: 155, domain: 4,
+        question: "A company is deploying an FM-based chatbot for healthcare advice. They need to detect and filter toxic, harmful, or inappropriate content in model outputs. Which approach should they use?",
+        options: ["Increase the model's temperature setting", "Use Amazon Bedrock Guardrails with content filters for toxicity categories", "Deploy the model on a larger instance", "Add more examples to the prompt"],
+        correct: 1,
+        explanation: "Amazon Bedrock Guardrails provides configurable content filters that can detect and block toxic, harmful, or inappropriate content across categories like hate speech, insults, sexual content, and violence — with adjustable sensitivity thresholds."
+      },
+      {
+        id: 156, domain: 4,
+        question: "What is a key challenge of implementing human-centered AI design in real-world applications?",
+        options: ["AI models always produce correct results", "Balancing automation efficiency with meaningful human oversight and control", "Humans cannot interact with AI systems", "AI systems do not require any human involvement"],
+        correct: 1,
+        explanation: "Human-centered AI design faces the challenge of balancing the efficiency gains of automation with maintaining meaningful human oversight, control, and intervention capabilities — ensuring humans remain in the loop for critical decisions while not creating bottlenecks."
+      },
+
+      // ── DOMAIN 5: Additional Security, Compliance & Governance ──
+      {
+        id: 157, domain: 5,
+        question: "A company wants to ensure that data transferred between Amazon S3 and Amazon SageMaker stays within the AWS network and does not traverse the public internet. Which networking feature should they use?",
+        options: ["AWS PrivateLink", "VPC Gateway Endpoint for S3", "Internet Gateway", "AWS Direct Connect"],
+        correct: 1,
+        explanation: "A VPC Gateway Endpoint for S3 allows traffic between a VPC and S3 to remain within the AWS network without traversing the public internet. This is distinct from AWS PrivateLink (Interface Endpoints), which is used for other AWS services like Bedrock."
+      },
+      {
+        id: 158, domain: 2,
+        question: "Which type of prompt injection attack involves an adversary encoding malicious instructions in a non-standard format (such as Base64) to bypass content filters?",
+        options: ["Persona switching attack", "Ignoring prompt template attack", "Input format manipulation attack", "Social engineering friendliness exploit"],
+        correct: 2,
+        explanation: "Input format manipulation attacks encode malicious prompts in formats like Base64 or other encodings that may bypass text-based content filters. Other prompt injection types include persona switching, ignoring the prompt template, and exploiting the model's helpfulness."
+      },
+      {
+        id: 159, domain: 5,
+        question: "A company needs a managed service to create high-quality training labels for their ML project, with access to a specialized workforce for complex labeling tasks. Which service should they use?",
+        options: ["Amazon SageMaker Ground Truth", "Amazon SageMaker Ground Truth Plus", "Amazon Mechanical Turk", "Amazon A2I"],
+        correct: 1,
+        explanation: "SageMaker Ground Truth Plus is a fully managed data labeling service that provides access to expert labelers managed by AWS. Unlike standard Ground Truth (which requires you to manage labeling workflows), Ground Truth Plus handles workforce management, quality assurance, and tooling."
+      },
+      {
+        id: 160, domain: 5,
+        question: "A security team needs to audit all API calls made to Amazon Bedrock to track which users invoked which models and when. Which AWS service provides this capability?",
+        options: ["Amazon CloudWatch", "AWS CloudTrail", "AWS Config", "Amazon GuardDuty"],
+        correct: 1,
+        explanation: "AWS CloudTrail records API calls made to AWS services including Amazon Bedrock, capturing who made the call, when, from which IP address, and with what parameters. This is essential for security auditing, compliance, and forensic analysis."
+      },
+      {
+        id: 161, domain: 5,
+        question: "A company in a regulated industry needs to continuously assess whether their AI workloads comply with industry standards and regulations. Which AWS service automates compliance assessment?",
+        options: ["AWS Config", "AWS Audit Manager", "Amazon Inspector", "AWS Artifact"],
+        correct: 1,
+        explanation: "AWS Audit Manager automates evidence collection and assessment for audits, helping organizations continuously evaluate whether their AWS usage complies with regulations and industry standards. It provides prebuilt frameworks for common compliance requirements."
+      },
+      {
+        id: 162, domain: 5,
+        question: "A data engineering team needs to centrally manage data access permissions, enforce column-level security, and track data lineage for their ML data lake. Which AWS service should they use?",
+        options: ["AWS IAM", "AWS Lake Formation", "Amazon Macie", "AWS Glue"],
+        correct: 1,
+        explanation: "AWS Lake Formation provides centralized data governance for data lakes, including fine-grained access control (column-level, row-level, cell-level), data cataloging, and data sharing capabilities — making it ideal for governing ML training data."
+      },
+      {
+        id: 163, domain: 5,
+        question: "A company expects high and consistent traffic to their Bedrock-hosted FM and wants guaranteed throughput with predictable pricing. Which Bedrock pricing option should they choose?",
+        options: ["On-demand pricing", "Provisioned Throughput", "Spot instances", "Reserved instances"],
+        correct: 1,
+        explanation: "Bedrock Provisioned Throughput provides dedicated model capacity with guaranteed throughput for a fixed hourly cost. This is ideal for production workloads with predictable, high-volume traffic where consistent performance and predictable costs are required."
+      },
+      {
+        id: 164, domain: 5,
+        question: "Under the AWS Shared Responsibility Model for Amazon Bedrock, which of the following is the CUSTOMER's responsibility?",
+        options: ["Maintaining the physical security of data centers", "Patching the underlying Bedrock infrastructure", "Managing IAM permissions, encrypting data, and configuring Guardrails for their application", "Updating the foundation models hosted on Bedrock"],
+        correct: 2,
+        explanation: "Under the Shared Responsibility Model, AWS manages the infrastructure, hardware, and FM hosting. The customer is responsible for securing their own data, managing IAM access controls, configuring content safeguards (Guardrails), encrypting sensitive data, and ensuring their application meets compliance requirements."
       }
     ];
 
@@ -938,7 +1305,7 @@
     // ── Setup Screen ──
     const SetupScreen = ({ onStart }) => {
       const [count, setCount] = useState(20);
-      const sizes = [10, 15, 20, 30, 65];
+      const sizes = [10, 15, 20, 30, 50, 65];
 
       const domainCounts = DISTRIBUTION[count];
       const totalQ = Object.values(DOMAINS).reduce((acc, d) => {
@@ -982,7 +1349,7 @@
                   >
                     {s}
                     <span className="block text-[10px] uppercase tracking-wider opacity-70 mt-0.5">
-                      {s === 65 ? 'Full' : s === 30 ? 'Half' : s === 20 ? 'Standard' : s === 15 ? 'Quick' : 'Mini'}
+                      {s === 65 ? 'Full' : s === 50 ? 'Extended' : s === 30 ? 'Half' : s === 20 ? 'Standard' : s === 15 ? 'Quick' : 'Mini'}
                     </span>
                   </button>
                 ))}
