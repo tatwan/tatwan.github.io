@@ -542,10 +542,10 @@
       },
       {
         id: 65, domain: 4,
-        question: "Which methods support balancing bias and variance? (Select TWO.)",
-        options: ["Apply regularization during training", "Increase model complexity", "Analyze historical data to assess potential inequalities in feature distribution", "Remove all validation data"],
+        question: "A company wants to ensure its ML model does not produce biased outcomes against specific demographic groups. Which strategies align with responsible AI principles to mitigate this risk? (Select TWO.)",
+        options: ["Use Amazon SageMaker Clarify to detect bias in the training data", "Remove all demographic data from the training set", "Ensure the training dataset is diverse and representative", "Apply mathematical regularization to the model weights"],
         correct: [0, 2],
-        explanation: "Regularization helps control model complexity, reducing variance and preventing overfitting. Analyzing historical data for inequalities helps identify and reduce bias in predictions.",
+        explanation: "Amazon SageMaker Clarify helps identify potential bias in data and models. Ensuring a diverse, representative dataset is a foundational principle of responsible AI. Simply removing demographic data (known as 'fairness through unawareness') often fails due to proxy variables, and regularization is a model optimization technique, not a fairness tool.",
         multiSelect: true
       },
       {
@@ -557,10 +557,10 @@
       },
       {
         id: 67, domain: 4,
-        question: "A company is building a neural network model to classify text documents. The company wants to ensure predictions can be explained to stakeholders. Which method requires the LEAST operational overhead?",
-        options: ["Use a simple decision tree instead", "Use model-agnostic explainability methods like SHAP", "Manually review each prediction", "Build a custom explanation system"],
+        question: "A company is building an ML model to classify text documents. The company wants to ensure predictions can be explained to stakeholders with the LEAST operational overhead. Which approach should they use?",
+        options: ["Use a simple decision tree instead", "Use Amazon SageMaker Clarify", "Manually review each prediction", "Build a custom explanation system"],
         correct: 1,
-        explanation: "Model-agnostic methods like SHAP can explain complex models like neural networks without requiring full interpretability or custom systems."
+        explanation: "Amazon SageMaker Clarify provides built-in model explainability features, including SHAP-based feature importance analysis, with minimal operational overhead. It integrates directly with SageMaker training and endpoints, avoiding the need to build custom explanation systems."
       },
       {
         id: 68, domain: 4,
@@ -998,10 +998,10 @@
       },
       {
         id: 127, domain: 1,
-        question: "A dataset has 500 features but only 1,000 samples, causing the model to perform poorly. Which unsupervised technique can help by reducing the number of features while preserving important information?",
-        options: ["Classification", "Clustering", "Dimensionality reduction", "Regression"],
-        correct: 2,
-        explanation: "Dimensionality reduction techniques (such as PCA) reduce the number of features while retaining as much important information as possible. This helps combat the curse of dimensionality when features far outnumber samples."
+        question: "A data scientist needs to prepare a large, messy dataset for machine learning by handling missing values and combining attributes. Which AWS service provides a visual interface to accomplish this data preparation with minimal coding?",
+        options: ["Amazon SageMaker Data Wrangler", "Amazon SageMaker Feature Store", "Amazon SageMaker Clarify", "Amazon SageMaker Model Monitor"],
+        correct: 0,
+        explanation: "Amazon SageMaker Data Wrangler provides a visual, low-code interface to clean, normalize, and transform data (feature engineering) before training. This is ideal for practitioners who want to prepare data efficiently without writing extensive preprocessing scripts."
       },
       {
         id: 128, domain: 1,
@@ -1159,10 +1159,10 @@
       // ── DOMAIN 4: Additional Responsible AI ──
       {
         id: 149, domain: 4,
-        question: "A data scientist wants to visualize how individual features affect a model's predictions across their entire range of values. Which explainability technique should they use?",
-        options: ["SHAP values", "Partial Dependence Plots (PDPs)", "Confusion matrix", "ROC curve"],
+        question: "A financial institution needs to explain to regulators how its loan approval model makes decisions and which specific features most heavily influence those outcomes. Which AWS service should the institution use to gain this transparency?",
+        options: ["Amazon SageMaker Model Monitor", "Amazon SageMaker Clarify", "AWS Audit Manager", "Amazon Macie"],
         correct: 1,
-        explanation: "Partial Dependence Plots (PDPs) show the marginal effect of one or two features on the predicted outcome of a model, averaged over all other features. They help stakeholders understand how a feature's values influence predictions across its entire range."
+        explanation: "Amazon SageMaker Clarify provides model explainability features that help determine which inputs contribute most to a model's overall predictions. This provides the transparency needed to meet regulatory and responsible AI requirements."
       },
       {
         id: 150, domain: 4,
@@ -1187,10 +1187,10 @@
       },
       {
         id: 153, domain: 4,
-        question: "A model has low bias but high variance. What problem does this indicate, and what is the recommended solution?",
-        options: ["Underfitting — use a more complex model", "Overfitting — apply regularization, gather more data, or simplify the model", "Data leakage — separate training and test data", "Concept drift — retrain the model on recent data"],
+        question: "An ML model performs exceptionally well when evaluated against its training data, but it performs poorly and generates inaccurate predictions when processing new, unseen data in production. Which concept does this describe?",
+        options: ["Underfitting", "Overfitting", "Data drift", "Hallucination"],
         correct: 1,
-        explanation: "Low bias + high variance indicates overfitting: the model fits the training data very well but fails to generalize. Solutions include regularization (L1/L2), cross-validation, getting more training data, or reducing model complexity."
+        explanation: "Overfitting occurs when a model learns the training data too well — including its noise and outliers — resulting in a failure to generalize to new, unseen data. Underfitting is when a model is too simple and performs poorly on both training and new data."
       },
       {
         id: 154, domain: 4,
