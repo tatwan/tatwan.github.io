@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AWS AI Practitioner Study Guide - Interactive Learning</title>
+  <title>AWS AI Practitioner - Master the Services (AIF-C01)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -555,9 +555,9 @@
             {/* Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 mb-2">
-                AWS AI Practitioner Study Guide
+                AWS AI Practitioner — Master the Services
               </h1>
-              <p className="text-slate-400">Interactive learning for the AIF-C01 exam</p>
+              <p className="text-slate-400">Learn, memorize, and quiz yourself on every AWS service you need for the AIF-C01 exam</p>
             </div>
 
             {/* Mode Selector */}
@@ -565,8 +565,8 @@
               <button
                 onClick={() => setMode('flashcards')}
                 className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'flashcards'
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
               >
                 <Icons.Cards className="w-5 h-5" />
@@ -575,8 +575,8 @@
               <button
                 onClick={() => setMode('quiz')}
                 className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'quiz'
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
               >
                 <Icons.Quiz className="w-5 h-5" />
@@ -585,8 +585,8 @@
               <button
                 onClick={() => setMode('quickfire')}
                 className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'quickfire'
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
               >
                 <Icons.Zap className="w-5 h-5" />
@@ -595,8 +595,8 @@
               <button
                 onClick={() => setMode('reference')}
                 className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${mode === 'reference'
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
               >
                 <Icons.Table className="w-5 h-5" />
@@ -661,12 +661,14 @@
       }, [filteredServices]);
 
       const handleShuffle = () => {
+        if (filteredServices.length === 0) return;
         setCards(shuffleArray(filteredServices));
         setCurrentIndex(0);
         setIsFlipped(false);
       };
 
       const handleNext = () => {
+        if (cards.length === 0) return;
         setIsFlipped(false);
         setTimeout(() => {
           setCurrentIndex((prev) => (prev + 1) % cards.length);
@@ -674,6 +676,7 @@
       };
 
       const handlePrev = () => {
+        if (cards.length === 0) return;
         setIsFlipped(false);
         setTimeout(() => {
           setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
@@ -711,71 +714,83 @@
             </button>
           </div>
 
-          {/* Progress */}
-          <div className="text-center text-slate-400 mb-4">
-            Card {currentIndex + 1} of {cards.length}
-          </div>
-
-          {/* Flashcard */}
-          {currentCard && (
-            <div className="flex justify-center mb-6">
-              <div
-                className={`flip-card w-full max-w-2xl h-80 cursor-pointer ${isFlipped ? 'flipped' : ''}`}
-                onClick={() => setIsFlipped(!isFlipped)}
-              >
-                <div className="flip-card-inner">
-                  {/* Front - Description */}
-                  <div className="flip-card-front bg-gradient-to-br from-slate-700 to-slate-800 p-8 flex flex-col justify-center items-center text-center border-2 border-slate-600 hover:border-orange-500/50 transition-all">
-                    <div className="text-orange-400 text-sm font-semibold mb-4 uppercase tracking-wide">
-                      {currentCard.category}
-                    </div>
-                    <p className="text-white text-lg md:text-xl leading-relaxed">
-                      {currentCard.description}
-                    </p>
-                    <div className="mt-6 text-slate-500 text-sm">
-                      Click to reveal the service
-                    </div>
-                  </div>
-
-                  {/* Back - Service Name */}
-                  <div className="flip-card-back bg-gradient-to-br from-orange-500 to-amber-500 p-8 flex flex-col justify-center items-center text-center">
-                    <div className="text-white/80 text-sm font-semibold mb-4 uppercase tracking-wide">
-                      {currentCard.category}
-                    </div>
-                    <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
-                      {currentCard.name}
-                    </h2>
-                    {currentCard.examTip && (
-                      <div className="mt-4 bg-white/20 rounded-lg p-3 max-w-md">
-                        <div className="flex items-center gap-2 text-white/90 text-sm">
-                          <Icons.Lightbulb className="w-4 h-4 flex-shrink-0" />
-                          <span>{currentCard.examTip}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+          {cards.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="bg-slate-800 rounded-2xl p-8 max-w-lg mx-auto border border-slate-700">
+                <Icons.Search className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No cards found</h3>
+                <p className="text-slate-400">No services match the selected domain and category combination. Try changing one of the filters.</p>
               </div>
             </div>
-          )}
+          ) : (
+            <>
+              {/* Progress */}
+              <div className="text-center text-slate-400 mb-4">
+                Card {currentIndex + 1} of {cards.length}
+              </div>
 
-          {/* Navigation */}
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={handlePrev}
-              className="flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-all"
-            >
-              <Icons.ChevronLeft className="w-5 h-5" />
-              Previous
-            </button>
-            <button
-              onClick={handleNext}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl transition-all"
-            >
-              Next
-              <Icons.ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+              {/* Flashcard */}
+              {currentCard && (
+                <div className="flex justify-center mb-6">
+                  <div
+                    className={`flip-card w-full max-w-2xl h-80 cursor-pointer ${isFlipped ? 'flipped' : ''}`}
+                    onClick={() => setIsFlipped(!isFlipped)}
+                  >
+                    <div className="flip-card-inner">
+                      {/* Front - Description */}
+                      <div className="flip-card-front bg-gradient-to-br from-slate-700 to-slate-800 p-8 flex flex-col justify-center items-center text-center border-2 border-slate-600 hover:border-orange-500/50 transition-all">
+                        <div className="text-orange-400 text-sm font-semibold mb-4 uppercase tracking-wide">
+                          {currentCard.category}
+                        </div>
+                        <p className="text-white text-lg md:text-xl leading-relaxed">
+                          {currentCard.description}
+                        </p>
+                        <div className="mt-6 text-slate-500 text-sm">
+                          Click to reveal the service
+                        </div>
+                      </div>
+
+                      {/* Back - Service Name */}
+                      <div className="flip-card-back bg-gradient-to-br from-orange-500 to-amber-500 p-8 flex flex-col justify-center items-center text-center">
+                        <div className="text-white/80 text-sm font-semibold mb-4 uppercase tracking-wide">
+                          {currentCard.category}
+                        </div>
+                        <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                          {currentCard.name}
+                        </h2>
+                        {currentCard.examTip && (
+                          <div className="mt-4 bg-white/20 rounded-lg p-3 max-w-md">
+                            <div className="flex items-center gap-2 text-white/90 text-sm">
+                              <Icons.Lightbulb className="w-4 h-4 flex-shrink-0" />
+                              <span>{currentCard.examTip}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={handlePrev}
+                  className="flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-all"
+                >
+                  <Icons.ChevronLeft className="w-5 h-5" />
+                  Previous
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl transition-all"
+                >
+                  Next
+                  <Icons.ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       );
     };
@@ -1227,8 +1242,8 @@
               <div
                 key={service.id}
                 className={`bg-slate-800 rounded-xl border transition-all cursor-pointer ${expandedId === service.id
-                    ? 'border-orange-500 shadow-lg shadow-orange-500/20'
-                    : 'border-slate-700 hover:border-slate-600'
+                  ? 'border-orange-500 shadow-lg shadow-orange-500/20'
+                  : 'border-slate-700 hover:border-slate-600'
                   }`}
                 onClick={() => setExpandedId(expandedId === service.id ? null : service.id)}
               >
