@@ -1271,6 +1271,304 @@
         correct: 2,
         explanation: "Under the Shared Responsibility Model, AWS manages the infrastructure, hardware, and FM hosting. The customer is responsible for securing their own data, managing IAM access controls, configuring content safeguards (Guardrails), encrypting sensitive data, and ensuring their application meets compliance requirements."
       }
+      ,
+
+      // ═══════════════════════════════════════
+      // REAL EXAM GAP COVERAGE (165–187)
+      // Inspired by first-hand AIF-C01 exam experience
+      // 2 variants per topic for frequency boost
+      // ═══════════════════════════════════════
+
+      // ── Evaluation Metrics ──
+
+      {
+        id: 165, domain: 3,
+        question: "A data science team needs to evaluate a large language model that generates summaries of customer support tickets. Which metric is specifically designed to assess the quality of machine-generated text by comparing it to human reference summaries?",
+        options: ["BLEU", "ROUGE", "F1 Score", "Perplexity"],
+        correct: 1,
+        explanation: "ROUGE (Recall-Oriented Understudy for Gisting Evaluation) was specifically designed for evaluating text summarization. It measures the overlap of n-grams between generated summaries and human reference summaries. BLEU is for translation, F1 Score is for classification, and Perplexity measures language model confidence—none are designed for summarization evaluation."
+      },
+      {
+        id: 166, domain: 3,
+        question: "A company evaluates an LLM that generates news article summaries. The team wants a metric that measures both how much of the original key content the summary captures and how precise the summary is. Which metric best captures both dimensions for summarization quality?",
+        options: ["Accuracy", "BLEU", "ROUGE-L", "Perplexity"],
+        correct: 2,
+        explanation: "ROUGE-L uses the Longest Common Subsequence (LCS) to evaluate summarization quality. It naturally captures both recall (how much of the reference is covered) and precision (how much of the generated text is relevant). Accuracy is a classification metric, BLEU is for translation, and Perplexity measures prediction confidence rather than summary quality."
+      },
+      {
+        id: 167, domain: 1,
+        question: "A machine learning team is evaluating a binary classification model for detecting fraudulent transactions. The dataset is imbalanced—99% of transactions are legitimate. They need a single metric that balances both catching fraud (recall) and avoiding false alarms (precision). Which metric should they prioritize?",
+        options: ["BLEU score", "Perplexity", "F1 Score", "Accuracy"],
+        correct: 2,
+        explanation: "F1 Score is the harmonic mean of Precision and Recall: 2×(P×R)/(P+R). For imbalanced classification problems like fraud detection, accuracy is misleading (a model predicting 'not fraud' always would score 99%). F1 Score balances both the ability to find fraud (recall) and minimize false alarms (precision). BLEU and Perplexity are NLP metrics with no relevance to classification."
+      },
+      {
+        id: 168, domain: 3,
+        question: "A company is building two different AI systems: one translates product descriptions from French to English, and another generates executive summaries of financial reports. A data scientist wants to evaluate both using appropriate automated metrics. Which pair of metrics should be used respectively?",
+        options: [
+          "ROUGE for translation; BLEU for summarization",
+          "BLEU for translation; ROUGE for summarization",
+          "Perplexity for both translation and summarization",
+          "Accuracy for translation; F1 Score for summarization"
+        ],
+        correct: 1,
+        explanation: "BLEU (Bilingual Evaluation Understudy) was designed for machine translation—it measures n-gram precision of generated translations against human references. ROUGE was designed for summarization—it measures n-gram recall against reference summaries. Swapping them produces misleading scores. Perplexity, Accuracy, and F1 are not appropriate for these NLP generation tasks."
+      },
+      {
+        id: 169, domain: 1,
+        question: "A data scientist reviews a binary classification model's confusion matrix: 200 True Positives, 700 True Negatives, 50 False Positives, 50 False Negatives. A manager asks: 'What fraction of ALL predictions did the model get right?' Which metric directly answers this question, and what is its value?",
+        options: [
+          "Precision — 80%",
+          "Recall — 80%",
+          "Accuracy — 90%",
+          "F1 Score — 90%"
+        ],
+        correct: 2,
+        explanation: "Accuracy = (TP + TN) / (TP + TN + FP + FN) = (200 + 700) / (200 + 700 + 50 + 50) = 900 / 1000 = 90%. It is the only standard metric that uses all four confusion matrix values and directly measures 'fraction of all predictions that were correct.' Precision = TP/(TP+FP) = 200/250 = 80%; Recall = TP/(TP+FN) = 200/250 = 80%; F1 balances precision and recall but does not equal 90%."
+      },
+
+      // ── RLHF ──
+
+      {
+        id: 170, domain: 3,
+        question: "A company wants to deploy a foundation model for customer service interactions. The model must align with the company's ethical guidelines and brand voice, robustly refuse harmful requests even for novel edge cases, and improve its behavior over time as human reviewers rate model outputs. Which customization technique best meets ALL of these requirements?",
+        options: [
+          "Retrieval Augmented Generation (RAG)",
+          "Continued pre-training on company documents",
+          "Reinforcement Learning from Human Feedback (RLHF)",
+          "Prompt engineering with a detailed system prompt"
+        ],
+        correct: 2,
+        explanation: "RLHF trains a reward model on human preference rankings of FM outputs, then uses reinforcement learning to align the FM's behavior with those preferences over time. This is the only technique that (a) fundamentally changes model behavior for edge cases, (b) improves continuously as humans rate more outputs, and (c) addresses robustness to novel harmful inputs. RAG grounds answers in documents but does not change model behavior. Continued pre-training adds domain knowledge. Prompt engineering provides per-request instructions but does not robustly handle novel edge cases."
+      },
+      {
+        id: 171, domain: 3,
+        question: "A company wants its foundation model to comply with content policies and be robust against future policy changes. The team proposes four options: continued pre-training on policy documents, fine-tuning with policy examples, Reinforcement Learning from Human Feedback (RLHF), and RAG with a policy knowledge base. Which approach BEST ensures robust, future-proof compliance with evolving content policies?",
+        options: [
+          "Continued pre-training on policy documents",
+          "Fine-tuning with labeled policy examples",
+          "Reinforcement Learning from Human Feedback (RLHF)",
+          "RAG with a policy knowledge base"
+        ],
+        correct: 2,
+        explanation: "RLHF is the most robust approach for policy compliance because it uses human feedback to continuously train the model's reward signal, making the model internalize desired behaviors rather than just memorizing examples. RAG retrieves documents at inference but does not change model behavior. Fine-tuning on examples may not generalize to novel policy edge cases. Continued pre-training adds knowledge but does not specifically align behavior."
+      },
+      {
+        id: 172, domain: 3,
+        question: "A team of human annotators evaluates multiple responses generated by a foundation model, ranking them from most to least preferred based on helpfulness and safety. These rankings are used to train a separate model that scores FM responses. The FM is then trained using reinforcement learning to maximize that score. What is this alignment process called?",
+        options: [
+          "Instruction-based fine-tuning",
+          "Continued pre-training",
+          "Reinforcement Learning from Human Feedback (RLHF)",
+          "Direct Preference Optimization (DPO)"
+        ],
+        correct: 2,
+        explanation: "RLHF is precisely this three-step process: (1) collect human preference rankings of model outputs, (2) train a reward model on those rankings, (3) fine-tune the FM using RL to maximize the reward model's score. This technique was fundamental in aligning models like GPT and Claude with human values. Instruction fine-tuning uses labeled prompt-completion pairs without a reward model or RL loop."
+      },
+
+      // ── RAG Pipeline ──
+
+      {
+        id: 173, domain: 3,
+        question: "A solutions architect is configuring an Amazon Bedrock Knowledge Base to ingest company documents from S3 so an FM can answer employee questions. What is the correct sequence of steps that Bedrock performs during document ingestion for RAG?",
+        options: [
+          "Chunk the documents, then Parse the text, then Generate embeddings, then Store in vector database",
+          "Parse the documents, then Chunk the text, then Generate embeddings, then Store in vector database",
+          "Generate embeddings, then Parse the documents, then Chunk the text, then Store in vector database",
+          "Store in vector database, then Parse the documents, then Chunk the text, then Generate embeddings"
+        ],
+        correct: 1,
+        explanation: "The RAG ingestion pipeline always follows this order: (1) Parse — extract raw text from source documents (PDF, Word, etc.); (2) Chunk — split text into smaller, overlapping segments that fit within context limits; (3) Embed — convert each chunk into a vector embedding using an embedding model; (4) Store — index embeddings in a vector store for similarity retrieval. Amazon Bedrock Knowledge Bases automates all four steps."
+      },
+      {
+        id: 174, domain: 3,
+        question: "When building a RAG pipeline, a developer notices that the foundation model sometimes misses relevant information because the text segments fed to the embedding model are too large. What step in the RAG pipeline should be adjusted, and what does this step accomplish?",
+        options: [
+          "Parsing — extracts raw text from source files",
+          "Chunking — splits documents into smaller segments to improve retrieval precision",
+          "Embedding — converts text to vectors for similarity search",
+          "Indexing — stores vectors in the vector database"
+        ],
+        correct: 1,
+        explanation: "Chunking is the step that splits parsed text into smaller, manageable segments. Proper chunk size is critical: too large reduces retrieval precision (irrelevant content mixed in), too small loses context. Adjusting chunk size and overlap directly impacts retrieval quality. Parsing extracts text, embedding converts to vectors, and indexing stores them—none address the segmentation problem."
+      },
+
+      // ── SageMaker Clarify ──
+
+      {
+        id: 175, domain: 4,
+        question: "A financial institution uses an ML model to approve or deny loan applications. Regulators require the company to demonstrate that the model does not discriminate against applicants based on gender or ethnicity, and to explain which features most influence each decision. Which AWS service addresses BOTH requirements?",
+        options: [
+          "Amazon SageMaker Model Monitor",
+          "Amazon SageMaker Clarify",
+          "Amazon Macie",
+          "AWS Audit Manager"
+        ],
+        correct: 1,
+        explanation: "Amazon SageMaker Clarify serves dual purposes: (1) Bias detection — measures statistical bias metrics (like demographic parity) to identify whether protected attributes such as gender or ethnicity unfairly influence predictions; (2) Explainability — uses SHAP values to quantify each feature's contribution to individual predictions. Model Monitor tracks drift but not bias or explainability. Macie discovers PII in S3. Audit Manager automates compliance evidence collection."
+      },
+      {
+        id: 176, domain: 4,
+        question: "A company wants to evaluate multiple foundation models on Amazon Bedrock to compare their quality, measure bias in outputs, and assess toxicity at scale before selecting one for production. Which tool is best suited to systematically evaluate FMs across these dimensions?",
+        options: [
+          "Amazon SageMaker Model Monitor",
+          "Amazon SageMaker Clarify with the FMEval library",
+          "Amazon Bedrock Guardrails",
+          "SageMaker Ground Truth"
+        ],
+        correct: 1,
+        explanation: "SageMaker Clarify includes the FMEval library specifically designed for foundation model evaluation. It can measure FM quality metrics (accuracy, semantic similarity), responsible AI metrics (bias, toxicity, stereotyping), and robustness metrics across large test sets. Model Monitor tracks production data drift. Guardrails filters content at inference time. Ground Truth creates labeled training data."
+      },
+
+      // ── Interpretable / Simple Models ──
+
+      {
+        id: 177, domain: 1,
+        question: "A healthcare company needs a model to classify patients into high-risk and low-risk categories. Clinicians must be able to understand exactly how every prediction is made and explain it to patients and regulators. Which model type is MOST interpretable for this classification task?",
+        options: [
+          "Deep neural network with 5 hidden layers",
+          "Logistic regression",
+          "Random forest with 500 trees",
+          "Gradient boosted ensemble (XGBoost)"
+        ],
+        correct: 1,
+        explanation: "Logistic regression is the most interpretable classification model: each feature has a coefficient that directly shows its direction and magnitude of effect on the predicted probability, expressed as an odds ratio. Clinicians can see exactly 'age increased the risk score by X' for every prediction. Neural networks, random forests, and gradient boosting are powerful but opaque — their internal decision processes cannot be easily explained to patients or auditors."
+      },
+      {
+        id: 178, domain: 1,
+        question: "A data scientist is asked to select the most explainable model from the following options for predicting a patient's hospital readmission risk score (a continuous value). Which model allows stakeholders to see the exact mathematical contribution of each input variable?",
+        options: [
+          "Random forest regressor",
+          "Deep neural network",
+          "Linear regression",
+          "Support vector machine (SVM)"
+        ],
+        correct: 2,
+        explanation: "Linear regression is the most interpretable regression model: the output is a simple weighted sum of inputs (y = b0 + b1x1 + b2x2 + ...), where each coefficient directly quantifies that variable's contribution. Stakeholders can verify the exact math. Random forests aggregate hundreds of trees (opaque). Neural networks have millions of non-linear interactions. SVMs use kernel transformations that are not directly interpretable."
+      },
+
+      // ── Confusion Matrix / Accuracy ──
+
+      {
+        id: 179, domain: 1,
+        question: "A data scientist has four evaluation metrics available: Precision, Recall, Accuracy, and Specificity. Which metric incorporates ALL four values from a confusion matrix — True Positives (TP), True Negatives (TN), False Positives (FP), and False Negatives (FN)?",
+        options: [
+          "Precision — TP / (TP + FP)",
+          "Recall — TP / (TP + FN)",
+          "Accuracy — (TP + TN) / (TP + TN + FP + FN)",
+          "Specificity — TN / (TN + FP)"
+        ],
+        correct: 2,
+        explanation: "Accuracy = (TP + TN) / (TP + TN + FP + FN) is the only metric that uses all four confusion matrix cells. Precision uses only TP and FP. Recall (Sensitivity) uses only TP and FN. Specificity uses only TN and FP. This is why Accuracy is considered a holistic metric — it counts all correct predictions (both positive and negative) against the total population."
+      },
+      {
+        id: 180, domain: 1,
+        question: "A model correctly identifies 90 spam emails (TP) and correctly ignores 850 legitimate emails (TN). It incorrectly flags 50 legitimate emails as spam (FP) and misses 10 spam emails (FN). A product manager asks: 'Overall, what percentage of emails did the model handle correctly?' Which metric answers this, and what is the result?",
+        options: [
+          "Precision: 64.3%",
+          "Recall: 90%",
+          "Accuracy: 94%",
+          "F1 Score: 75.6%"
+        ],
+        correct: 2,
+        explanation: "The manager is asking about the overall correct prediction rate across ALL emails — this is Accuracy. Accuracy = (TP + TN) / (TP + TN + FP + FN) = (90 + 850) / (90 + 850 + 50 + 10) = 940 / 1000 = 94%. Precision = 90/140 = 64.3% (of flagged emails, how many were actually spam). Recall = 90/100 = 90% (of actual spam, how many were caught). F1 balances precision and recall."
+      },
+
+      // ── Bedrock Batch Inference ──
+
+      {
+        id: 181, domain: 3,
+        question: "A company uses Amazon Bedrock to generate product description text for an e-commerce catalog. New products are added in batches of 5,000 items every Sunday night. Descriptions do not need to be live until Monday morning. Which Amazon Bedrock inference approach is MOST cost-effective for this weekly batch workload?",
+        options: [
+          "Real-time inference with on-demand pricing, one API call per product",
+          "Provisioned Throughput with dedicated capacity",
+          "Batch inference using the Amazon Bedrock Batch API",
+          "Deploy the FM to an Amazon SageMaker real-time endpoint"
+        ],
+        correct: 2,
+        explanation: "Amazon Bedrock Batch inference is designed for large-scale, asynchronous workloads where results do not need to be immediate. It processes entire input datasets in batch jobs at a lower per-token cost than on-demand real-time inference, making it ideal for periodic large-batch jobs with an overnight window. Provisioned Throughput is for consistent high-volume real-time traffic. SageMaker endpoints add operational overhead."
+      },
+      {
+        id: 182, domain: 3,
+        question: "A media company needs to generate automated content summaries for thousands of archived articles. Processing urgency is low — summaries can be ready within 24 hours. The data volume is large (tens of thousands of articles). Which combination best describes the appropriate Amazon Bedrock approach and its key advantage?",
+        options: [
+          "Real-time inference — lowest latency per request",
+          "Batch inference — processes large datasets asynchronously at lower cost",
+          "Provisioned Throughput — guarantees consistent throughput",
+          "Serverless inference — scales automatically with demand"
+        ],
+        correct: 1,
+        explanation: "Batch inference in Amazon Bedrock is specifically designed for large-volume, non-urgent workloads. Key advantages: (1) asynchronous processing — submit the job and retrieve results later; (2) lower cost — batch pricing is less expensive than on-demand real-time pricing; (3) scale — handles large datasets efficiently. Real-time optimizes for latency. Provisioned Throughput ensures consistent real-time capacity. Serverless is for variable, spiky real-time traffic."
+      },
+
+      // ── Business KPIs / Impact ──
+
+      {
+        id: 183, domain: 1,
+        question: "A retail company deploys an AI-powered customer service chatbot. The business goal is to improve customer loyalty. After deployment, the product team wants to measure whether the AI solution actually achieved the business goal. Which metric BEST measures the business impact on customer loyalty?",
+        options: [
+          "Average chatbot response latency",
+          "Number of chatbot conversations per week",
+          "Customer retention rate, measured before and after deployment",
+          "Model inference cost per conversation"
+        ],
+        correct: 2,
+        explanation: "Customer retention rate directly measures whether customers continue doing business with the company — the core definition of loyalty. Comparing pre- and post-deployment retention rates shows the chatbot's actual business impact. Response latency and inference cost are operational metrics. Conversation volume measures usage but not whether the business goal (loyalty improvement) was achieved."
+      },
+      {
+        id: 184, domain: 1,
+        question: "A company implements a generative AI solution to improve customer satisfaction in their support center. The business team asks: 'How do we know this AI investment is working?' Which approach correctly measures the business value of this AI solution?",
+        options: [
+          "Monitor GPU utilization and token throughput metrics",
+          "Count the number of support tickets deflected per month",
+          "Measure customer satisfaction scores (CSAT) and first-contact resolution rates before and after AI deployment",
+          "Track the number of AI model versions deployed"
+        ],
+        correct: 2,
+        explanation: "Business value of AI solutions should be measured through business outcome metrics, not technical metrics. CSAT scores and first-contact resolution rates directly reflect whether customers are getting better, faster support — the actual business goal. Ticket deflection count measures volume efficiency but not quality. GPU utilization and model versions are purely operational metrics with no direct business meaning."
+      },
+
+      // ── CloudTrail + S3 Intelligent-Tiering (Audit Logs) ──
+
+      {
+        id: 185, domain: 5,
+        question: "A company must retain all API activity logs for their Amazon Bedrock and Amazon SageMaker workloads for 7 years to meet regulatory compliance. Logs are frequently reviewed during the first 30 days after an incident but are rarely accessed afterward. Which combination of AWS services provides the MOST cost-effective compliant solution?",
+        options: [
+          "Amazon CloudWatch Logs with a 7-year retention policy",
+          "AWS CloudTrail with logs delivered to Amazon S3 using Intelligent-Tiering storage class",
+          "AWS CloudTrail with logs delivered to Amazon S3 Standard storage class",
+          "Amazon CloudWatch Logs exported to S3 Glacier Instant Retrieval"
+        ],
+        correct: 1,
+        explanation: "AWS CloudTrail captures all API calls to AWS services including Bedrock and SageMaker. S3 Intelligent-Tiering automatically moves objects to lower-cost storage tiers based on changing access patterns — keeping recent logs in Standard (frequent access) and automatically transitioning older logs to Infrequent Access and Archive tiers without manual lifecycle rules. This is more cost-effective than S3 Standard (no auto-tiering) and more automated than manually managing Glacier exports."
+      },
+      {
+        id: 186, domain: 5,
+        question: "A security team needs to audit all API calls made to Amazon Bedrock to track which IAM users invoked which foundation models, when, and with what parameters. Audit records must be immutable and stored for compliance purposes. Which AWS service captures this information?",
+        options: [
+          "Amazon CloudWatch Metrics",
+          "AWS CloudTrail",
+          "Amazon Inspector",
+          "AWS Config"
+        ],
+        correct: 1,
+        explanation: "AWS CloudTrail records all API calls made to AWS services, including Amazon Bedrock. Each log entry captures the caller identity (IAM user/role), the specific API action (e.g., InvokeModel), the model ID, the timestamp, source IP, and request parameters. CloudTrail logs can be stored immutably in S3 with integrity validation. CloudWatch Metrics tracks operational performance (latency, errors) but not who made API calls. Inspector scans for vulnerabilities. Config tracks resource configuration changes."
+      },
+
+      // ── Ground Truth for Unlabeled Data ──
+
+      {
+        id: 187, domain: 1,
+        question: "A company wants to build an ML model to detect fraudulent transactions. They have a large dataset of historical transactions, but the data is unlabeled — they do not know which transactions were actually fraudulent. The data does not contain sensitive PII. To train a supervised model, what should the company do FIRST?",
+        options: [
+          "Train a model directly using unsupervised learning algorithms",
+          "Use Amazon SageMaker Ground Truth to label the dataset with human reviewers",
+          "Deploy Amazon Fraud Detector with the unlabeled data",
+          "Use Amazon Macie to classify the transactions"
+        ],
+        correct: 1,
+        explanation: "To train a supervised fraud detection model, the company first needs labeled data (transactions marked as fraud or legitimate). Amazon SageMaker Ground Truth provides managed data labeling workflows where human reviewers label each transaction. Once labeled, the data can be used for supervised ML training. Unsupervised learning does not require labels but produces clusters, not fraud labels. Fraud Detector requires training data. Macie discovers PII — it does not label transactional data."
+      }
     ];
 
     // ── Utility ──
