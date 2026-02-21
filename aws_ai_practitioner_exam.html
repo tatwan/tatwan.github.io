@@ -1316,15 +1316,15 @@
       },
       {
         id: 169, domain: 1,
-        question: "A data scientist reviews a binary classification model's confusion matrix: 200 True Positives, 700 True Negatives, 50 False Positives, 50 False Negatives. A manager asks: 'What fraction of ALL predictions did the model get right?' Which metric directly answers this question, and what is its value?",
+        question: "A company deploys a binary classification model to categorize incoming support tickets as 'urgent' or 'non-urgent'. The operations team wants a single metric that captures the model's overall correctness across BOTH ticket types combined. Which metric should they use?",
         options: [
-          "Precision — 80%",
-          "Recall — 80%",
-          "Accuracy — 90%",
-          "F1 Score — 90%"
+          "Precision",
+          "Recall",
+          "Accuracy",
+          "ROUGE"
         ],
         correct: 2,
-        explanation: "Accuracy = (TP + TN) / (TP + TN + FP + FN) = (200 + 700) / (200 + 700 + 50 + 50) = 900 / 1000 = 90%. It is the only standard metric that uses all four confusion matrix values and directly measures 'fraction of all predictions that were correct.' Precision = TP/(TP+FP) = 200/250 = 80%; Recall = TP/(TP+FN) = 200/250 = 80%; F1 balances precision and recall but does not equal 90%."
+        explanation: "Accuracy measures (TP + TN) / (TP + TN + FP + FN) — the proportion of ALL predictions across both classes that were correct. It is the standard go-to metric for overall classification correctness. Precision measures how many predicted-urgent tickets were actually urgent. Recall measures how many actually-urgent tickets were caught. ROUGE is a GenAI text summarization metric — it has no relevance to classification tasks."
       },
 
       // ── RLHF ──
@@ -1463,15 +1463,15 @@
       },
       {
         id: 180, domain: 1,
-        question: "A model correctly identifies 90 spam emails (TP) and correctly ignores 850 legitimate emails (TN). It incorrectly flags 50 legitimate emails as spam (FP) and misses 10 spam emails (FN). A product manager asks: 'Overall, what percentage of emails did the model handle correctly?' Which metric answers this, and what is the result?",
+        question: "A data scientist works on two separate projects: (1) a classifier that identifies defective products on a manufacturing line, and (2) a generative AI model that writes product descriptions. Which row correctly maps each project to an appropriate evaluation metric?",
         options: [
-          "Precision: 64.3%",
-          "Recall: 90%",
-          "Accuracy: 94%",
-          "F1 Score: 75.6%"
+          "Defect classifier → ROUGE; Description generator → Accuracy",
+          "Defect classifier → Accuracy or F1 Score; Description generator → ROUGE or BLEU",
+          "Defect classifier → Perplexity; Description generator → RMSE",
+          "Defect classifier → BLEU; Description generator → F1 Score"
         ],
-        correct: 2,
-        explanation: "The manager is asking about the overall correct prediction rate across ALL emails — this is Accuracy. Accuracy = (TP + TN) / (TP + TN + FP + FN) = (90 + 850) / (90 + 850 + 50 + 10) = 940 / 1000 = 94%. Precision = 90/140 = 64.3% (of flagged emails, how many were actually spam). Recall = 90/100 = 90% (of actual spam, how many were caught). F1 balances precision and recall."
+        correct: 1,
+        explanation: "ML classification models (like a defect detector) use classification metrics: Accuracy (overall correctness) or F1 Score (balancing precision and recall). Generative AI models use generation quality metrics: ROUGE for summarization tasks and BLEU for translation tasks. These two families of metrics are not interchangeable — using a GenAI metric like ROUGE to evaluate a classifier, or Accuracy to evaluate text generation, produces meaningless results."
       },
 
       // ── Bedrock Batch Inference ──
