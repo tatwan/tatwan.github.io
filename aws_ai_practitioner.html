@@ -478,6 +478,11 @@
         id: 61, name: "Amazon DynamoDB", category: "Database", domain: "Infrastructure",
         description: "Fast, flexible NoSQL database service for single-digit millisecond performance. Often used to serve real-time ML feature data or store model inferences.",
         examTip: "NoSQL DB for fast, real-time inference retrieval"
+      },
+      {
+        id: 62, name: "GenAI Security Scoping Matrix", category: "Security", domain: "Security",
+        description: "An AWS mental model that classifies GenAI solutions into 5 scopes based on the organization's level of security ownership. Scope 1: Public consumer app (e.g., PartyRock) — AWS owns almost everything. Scope 2: Third-party SaaS with embedded GenAI. Scope 3: Calling a pre-trained FM via API (e.g., Bedrock API). Scope 4: Fine-tuned model on your own data — organization owns training data security and bias risk. Scope 5: Self-trained model from scratch (e.g., SageMaker) — organization owns everything.",
+        examTip: "Higher scope number = more organizational security ownership. Scope 5 (self-trained) = max ownership. Scope 1 (public app) = min ownership."
       }
     ];
 
@@ -522,7 +527,9 @@
       { question: "Architecture review with an AI/ML best practices lens?", answer: "AWS Well-Architected Tool", wrongAnswers: ["AWS Trusted Advisor", "AWS Audit Manager", "AWS Config"] },
       { question: "Fast NoSQL database for real-time ML feature serving?", answer: "Amazon DynamoDB", wrongAnswers: ["Amazon Aurora", "Amazon OpenSearch", "Amazon ElastiCache"] },
       { question: "Enterprise assistant for querying internal company data?", answer: "Amazon Q Business", wrongAnswers: ["Amazon Q Developer", "Amazon Kendra", "Amazon Bedrock"] },
-      { question: "AI coding assistant for generating code in your IDE?", answer: "Amazon Q Developer", wrongAnswers: ["Amazon Q Business", "Amazon Bedrock", "SageMaker Canvas"] }
+      { question: "AI coding assistant for generating code in your IDE?", answer: "Amazon Q Developer", wrongAnswers: ["Amazon Q Business", "Amazon Bedrock", "SageMaker Canvas"] },
+      { question: "Framework that classifies GenAI solutions by security ownership level?", answer: "GenAI Security Scoping Matrix", wrongAnswers: ["AWS Well-Architected Tool", "Bedrock Guardrails", "AWS Audit Manager"] },
+      { question: "Which GenAI scope gives the MOST organizational security ownership?", answer: "Scope 5 — Self-trained model", wrongAnswers: ["Scope 3 — Calling FM via API", "Scope 2 — Third-party SaaS", "Scope 1 — Public consumer app"] }
     ];
 
     // Icons
