@@ -1568,6 +1568,33 @@
         ],
         correct: 1,
         explanation: "To train a supervised fraud detection model, the company first needs labeled data (transactions marked as fraud or legitimate). Amazon SageMaker Ground Truth provides managed data labeling workflows where human reviewers label each transaction. Once labeled, the data can be used for supervised ML training. Unsupervised learning does not require labels but produces clusters, not fraud labels. Fraud Detector requires training data. Macie discovers PII — it does not label transactional data."
+      },
+
+      // ── Generative AI Security Scoping Matrix ──
+
+      {
+        id: 188, domain: 5,
+        question: "A company is using the Generative AI Security Scoping Matrix to assess security responsibilities for its AI solutions. Which solution scope gives the company the MOST ownership of security responsibilities?",
+        options: [
+          "Using a third-party SaaS application with embedded GenAI features",
+          "Using a public GenAI consumer application such as AWS PartyRock",
+          "Calling a pre-trained foundation model via the Amazon Bedrock API",
+          "Building and training a generative AI model from scratch using Amazon SageMaker"
+        ],
+        correct: 3,
+        explanation: "The Generative AI Security Scoping Matrix defines five scopes from least to most organizational ownership. Scope 5 — self-trained model — gives the organization the highest security ownership because it controls the infrastructure, training data, model weights, and deployment environment. Scope 1 (public consumer app) has the least ownership. Scope 3 (calling a pre-trained FM via API) is in the middle. Building and training from scratch means the organization is responsible for data security, model integrity, access controls, and compliance end-to-end."
+      },
+      {
+        id: 189, domain: 5,
+        question: "A healthcare organization fine-tunes a pre-trained medical language model using its own patient records. According to the Generative AI Security Scoping Matrix, which security concern is MOST critical for this scope?",
+        options: [
+          "Reviewing the third-party provider's acceptable use policy",
+          "Preventing data leakage and bias amplification from sensitive training data",
+          "Implementing retry and exponential backoff logic for API availability",
+          "Educating employees on safe and responsible GenAI usage"
+        ],
+        correct: 1,
+        explanation: "Fine-tuning a model on private patient records falls under Scope 4 of the Generative AI Security Scoping Matrix. At this scope, the organization controls the fine-tuning process and training data, making data leakage and bias amplification the primary security concerns — patient data embedded in model weights could be extracted, and biased records could amplify disparities in model outputs. Reviewing a provider's AUP applies to lower scopes (Scope 1–2). Retry logic is an operational concern, not a security one. Employee education is always relevant but is not the most critical concern specific to fine-tuning on sensitive data."
       }
     ];
 
