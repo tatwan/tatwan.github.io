@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE 8803 – Applied NLP Study Guide</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --accent: #7c3aed;
+    --green: #059669;
+    --orange: #d97706;
+    --red: #dc2626;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent) 100%);
+    color: white; padding: 48px 32px 40px; text-align: center;
+  }
+  header .badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+  header h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; margin-bottom: 12px; }
+  header p { font-size: 18px; opacity: 0.85; max-width: 600px; margin: 0 auto 24px; }
+  .header-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .header-meta span { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 16px; font-size: 14px; }
+
+  .progress-bar-wrap { background: rgba(255,255,255,0.15); border-radius: 99px; height: 8px; max-width: 400px; margin: 20px auto 0; }
+  .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 37.5%; transition: width 1s ease; }
+  .progress-label { font-size: 13px; opacity: 0.8; margin-top: 6px; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .section-title::after { content: ''; flex: 1; height: 2px; background: var(--border); }
+
+  .weeks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-bottom: 56px; }
+
+  .week-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; text-decoration: none; color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s; display: block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .week-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+  .week-card-header { padding: 20px 24px 16px; }
+  .week-card-header .week-num { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .week-card-header h2 { font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+  .week-card-header .dates { font-size: 13px; color: var(--muted); }
+  .week-card-body { padding: 0 24px 20px; }
+  .topic-list { list-style: none; }
+  .topic-list li { font-size: 14px; color: var(--muted); padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; }
+  .topic-list li::before { content: '→'; color: var(--primary); font-weight: bold; flex-shrink: 0; margin-top: 1px; }
+  .week-card-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .week-card-footer .hw-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .week-card-footer .open-btn { font-size: 13px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap-4px; }
+
+  /* Color themes per week */
+  .w1 .week-card-header { background: linear-gradient(120deg, #eff6ff, #dbeafe); }
+  .w1 .week-num { color: #2563eb; }
+  .w2 .week-card-header { background: linear-gradient(120deg, #f0fdf4, #dcfce7); }
+  .w2 .week-num { color: #059669; }
+  .w3 .week-card-header { background: linear-gradient(120deg, #fff7ed, #fed7aa); }
+  .w3 .week-num { color: #d97706; }
+  .w4 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #f3e8ff); }
+  .w4 .week-num { color: #7c3aed; }
+  .w5 .week-card-header { background: linear-gradient(120deg, #fff1f2, #ffe4e6); }
+  .w5 .week-num { color: #e11d48; }
+  .w6 .week-card-header { background: linear-gradient(120deg, #f0f9ff, #e0f2fe); }
+  .w6 .week-num { color: #0284c7; }
+  .w7 .week-card-header { background: linear-gradient(120deg, #eef2ff, #e0e7ff); }
+  .w7 .week-num { color: #4f46e5; }
+
+  .hw-badge.hw1 { background: #dbeafe; color: #1d4ed8; }
+  .hw-badge.hw2 { background: #dcfce7; color: #15803d; }
+  .hw-badge.hw3 { background: #fce7f3; color: #be185d; }
+  .hw-badge.none { background: #f1f5f9; color: #64748b; }
+
+  /* Roadmap */
+  .roadmap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+  .roadmap-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+  .roadmap-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .roadmap-node { background: var(--bg); border: 2px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 600; text-align: center; min-width: 120px; }
+  .roadmap-node.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+  .roadmap-arrow { color: var(--muted); font-size: 20px; }
+
+  /* Tips */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tip-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .tip-icon { font-size: 28px; margin-bottom: 10px; }
+  .tip-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .tip-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  footer { text-align: center; padding: 32px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CSE 8803 · Spring 2026</div>
+  <h1>Applied NLP Study Guide</h1>
+  <p>Your interactive learning companion for Weeks 1–7. Built around <strong>What, Why, How</strong> — with visuals, demos, and quiz prep.</p>
+  <div class="header-meta">
+    <span>📅 Current: Week 7 (Feb 23–Mar 1)</span>
+    <span>📚 7 Weeks Covered</span>
+    <span>🎯 Quiz Upcoming</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill"></div>
+  </div>
+  <div class="progress-label">Week 6 of 16 — 37.5% through the course</div>
+</header>
+
+<main>
+
+  <div class="section-title">📖 Weekly Study Guides</div>
+
+  <div class="weeks-grid">
+
+    <a href="week1.html" class="week-card w1">
+      <div class="week-card-header">
+        <div class="week-num">Week 1 · Jan 12–16</div>
+        <h2>Text Preprocessing &amp; Text Representations</h2>
+        <div class="dates">Modules 1 &amp; 2 — Foundational NLP</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Tokenization, Stemming, Lemmatization</li>
+          <li>Stop words, N-grams, Noise removal</li>
+          <li>One-Hot Encoding (sparse vectors)</li>
+          <li>Bag of Words (frequency counts)</li>
+          <li>TF-IDF (importance weighting)</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw1">HW1 starts here</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week2.html" class="week-card w2">
+      <div class="week-card-header">
+        <div class="week-num">Week 2 · Jan 19–23</div>
+        <h2>Naive Bayes &amp; Classification Evaluation</h2>
+        <div class="dates">Module 3 — First Classifier</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Bayes' Rule: Prior, Likelihood, Posterior</li>
+          <li>Generative vs Discriminative models</li>
+          <li>Multinomial Naive Bayes for NLP</li>
+          <li>Confusion Matrix, Accuracy, Precision, Recall</li>
+          <li>ROC Curve &amp; AUC</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw1">HW1 covers this</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week3.html" class="week-card w3">
+      <div class="week-card-header">
+        <div class="week-num">Week 3 · Jan 26–30</div>
+        <h2>Logistic Regression, SVM &amp; Perceptron</h2>
+        <div class="dates">Module 4 — Linear Classifiers</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Sigmoid function &amp; soft classification</li>
+          <li>Gradient descent &amp; MLE</li>
+          <li>Support Vector Machines &amp; margin</li>
+          <li>Kernel trick (non-linear SVM)</li>
+          <li>Perceptron algorithm &amp; convergence</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw2">HW2 starts here</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week4.html" class="week-card w4">
+      <div class="week-card-header">
+        <div class="week-num">Week 4 · Feb 2–6</div>
+        <h2>SVD, Co-occurrence &amp; GloVe</h2>
+        <div class="dates">Module 5 — Word Embeddings I</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Why dimensionality reduction?</li>
+          <li>Co-occurrence matrix construction</li>
+          <li>Singular Value Decomposition (SVD)</li>
+          <li>Dense word embeddings from SVD</li>
+          <li>GloVe: global co-occurrence + semantics</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw2">HW2 covers this</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week5.html" class="week-card w5">
+      <div class="week-card-header">
+        <div class="week-num">Week 5 · Feb 9–13</div>
+        <h2>Neural Networks &amp; Word2Vec</h2>
+        <div class="dates">Module 6 — Deep Learning Intro</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Activation functions: ReLU, Sigmoid, Tanh</li>
+          <li>Forward pass &amp; Backpropagation</li>
+          <li>Stochastic &amp; Batch Gradient Descent</li>
+          <li>Word2Vec: CBoW model</li>
+          <li>Word2Vec: Skip-Gram model</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw3">HW3 starts here</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week6.html" class="week-card w6">
+      <div class="week-card-header">
+        <div class="week-num">Week 6 · Feb 16–20</div>
+        <h2>Convolutional &amp; Recurrent Neural Networks</h2>
+        <div class="dates">Module 7 — Sequence &amp; Structure</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>CNN: filters, convolution, feature maps</li>
+          <li>Max pooling &amp; parameter sharing</li>
+          <li>CNN for text classification</li>
+          <li>RNN: sequential memory &amp; hidden state</li>
+          <li>Vanishing gradient &amp; exploding gradient</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw3">HW3 covers this</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week7.html" class="week-card w7">
+      <div class="week-card-header">
+        <div class="week-num">Week 7 · Feb 23–Mar 1 ← YOU ARE HERE</div>
+        <h2>LSTM, GRU &amp; Attention</h2>
+        <div class="dates">Module 8 — Long-Term Memory &amp; Focus</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>LSTM: cell state, forget / input / output gates</li>
+          <li>Cell state update: C_t = f_t⊙C_{t-1} + i_t⊙C̃_t</li>
+          <li>GRU: 2-gate simplified LSTM</li>
+          <li>Encoder-Decoder architecture</li>
+          <li>Additive Attention (Bahdanau): α weights + C_t</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw3">HW3 covers this</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Roadmap -->
+  <div class="section-title">🗺️ Course Learning Roadmap</div>
+  <div class="roadmap">
+    <div class="roadmap-title">From raw text → intelligent models</div>
+    <div class="roadmap-flow">
+      <div class="roadmap-node active">Raw Text</div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node active">Preprocessing<br><small style="font-weight:400;color:#64748b">W1</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node active">Representations<br><small style="font-weight:400;color:#64748b">W1</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node active">Classifiers<br><small style="font-weight:400;color:#64748b">W2–W3</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node active">Embeddings<br><small style="font-weight:400;color:#64748b">W4–W5</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node active">Deep Models<br><small style="font-weight:400;color:#64748b">W5–W6</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node">Transformers<br><small style="font-weight:400;color:#64748b">W9</small></div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-node">LLMs / Agents<br><small style="font-weight:400;color:#64748b">W13–W14</small></div>
+    </div>
+  </div>
+
+  <!-- Study Tips -->
+  <div class="section-title">💡 How to Use These Notes</div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-icon">🧠</div>
+      <h4>What → Why → How</h4>
+      <p>Every concept is explained in three layers: what it is, why we need it, and how it works mechanically. Read all three before moving on.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🎮</div>
+      <h4>Use the Interactive Demos</h4>
+      <p>Each week has live calculators and visual sliders. Change the inputs and watch outputs update — this is the fastest way to build intuition.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">📝</div>
+      <h4>Quiz Yourself</h4>
+      <p>Each week ends with quiz-style questions modeled after actual Quiz 1–4. Cover the answer, try it yourself, then reveal. Repeat weak spots.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🔗</div>
+      <h4>Follow the Thread</h4>
+      <p>Each week builds on the last. If something is confusing in Week 5, go back to Week 3. The roadmap above shows exactly how concepts connect.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>CSE 8803 Applied NLP · Spring 2026 · Tarek's Personal Study Guide · Week 6 of 16</footer>
+
+</body>
+</html>

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 – LSTM, GRU & Attention | CSE 8803</title>
+<style>
+  :root {
+    --primary: #4f46e5; --primary-light: #eef2ff; --primary-dark: #3730a3;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626; --cyan: #0284c7;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #3730a3; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #fbbf24; color: #92400e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #312e81 0%, #4f46e5 60%, #818cf8 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #92400e; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.indigo { background: #e0e7ff; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.purple { background: #f3e8ff; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why  { color: #059669; }
+  .explainer-label.how  { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #94a3b8; }
+  .formula-box .highlight { color: #a5b4fc; font-weight: bold; }
+  .formula-box .eq        { color: #86efac; }
+  .formula-box .gate-f    { color: #fb923c; }
+  .formula-box .gate-i    { color: #4ade80; }
+  .formula-box .gate-c    { color: #f9a8d4; }
+  .formula-box .gate-o    { color: #60a5fa; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #3730a3; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip     { border-color: var(--green);  background: #d1fae5; }
+  .callout.danger  { border-color: var(--red);    background: #fee2e2; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  input[type=range] { accent-color: var(--primary); }
+  canvas { border-radius: 8px; }
+
+  /* LSTM Gate display */
+  .gate-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+  .gate-card { flex: 1; min-width: 150px; border-radius: 12px; padding: 14px; text-align: center; border: 2px solid; }
+  .gate-card .gate-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .gate-card .gate-symbol { font-size: 22px; font-weight: 800; font-family: 'Courier New', monospace; margin-bottom: 6px; }
+  .gate-card .gate-role { font-size: 12px; line-height: 1.4; }
+  .gate-card.forget { border-color: #f97316; background: #fff7ed; }
+  .gate-card.forget .gate-name { color: #c2410c; }
+  .gate-card.input  { border-color: #22c55e; background: #f0fdf4; }
+  .gate-card.input  .gate-name { color: #15803d; }
+  .gate-card.cell   { border-color: #ec4899; background: #fdf2f8; }
+  .gate-card.cell   .gate-name { color: #be185d; }
+  .gate-card.output { border-color: #3b82f6; background: #eff6ff; }
+  .gate-card.output .gate-name { color: #1d4ed8; }
+
+  /* LSTM bar vis */
+  .bar-vis { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+  .bar-vis .bar-label { font-size: 12px; font-weight: 600; width: 60px; text-align: right; flex-shrink: 0; }
+  .bar-vis .bar-track { flex: 1; height: 18px; background: #e2e8f0; border-radius: 9px; overflow: hidden; }
+  .bar-vis .bar-fill  { height: 100%; border-radius: 9px; transition: width 0.3s; }
+  .bar-vis .bar-val   { font-size: 12px; font-family: 'Courier New', monospace; width: 40px; }
+
+  /* Attention visualizer */
+  .attn-grid { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; justify-content: center; }
+  .attn-word { text-align: center; }
+  .attn-word .word-label { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .attn-word .attn-box { width: 64px; height: 64px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; transition: all 0.4s; border: 2px solid transparent; }
+
+  /* Encoder-Decoder diagram */
+  .enc-dec { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 20px 0; }
+  .enc-unit { background: #e0e7ff; border: 2px solid #4f46e5; border-radius: 10px; padding: 10px 14px; text-align: center; min-width: 70px; }
+  .enc-unit .lbl { font-size: 10px; color: #6366f1; font-weight: 700; }
+  .enc-unit .h   { font-size: 13px; font-weight: 700; color: #312e81; }
+  .dec-unit { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: center; min-width: 70px; }
+  .dec-unit .lbl { font-size: 10px; color: #b45309; font-weight: 700; }
+  .dec-unit .h   { font-size: 13px; font-weight: 700; color: #78350f; }
+  .arr { font-size: 22px; color: var(--muted); padding: 0 4px; }
+  .context-arrow { font-size: 28px; color: #4f46e5; font-weight: bold; padding: 0 12px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week6.html">← Week 6</a>
+    <a href="week7.html" class="you-are-here">📍 Week 7</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 7 · Module 8</div>
+  <h1>LSTM, GRU & Attention</h1>
+  <p>Solving the vanishing gradient problem with gated memory, then teaching the model to focus on what matters most.</p>
+  <div class="header-chips">
+    <span class="chip">🔒 Forget Gate</span>
+    <span class="chip">📥 Input Gate</span>
+    <span class="chip">📤 Output Gate</span>
+    <span class="chip">⚡ GRU</span>
+    <span class="chip">🎯 Attention</span>
+    <span class="chip">🔁 Encoder-Decoder</span>
+    <span class="chip alert">🎯 Quiz 6 Material</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════
+       PART 0: WHY LSTM?
+  ════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon indigo">🧠</div>
+      <div><h2>Why LSTM? The RNN Problem</h2><div class="sub">From short-term memory to long-term memory</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>😤 RNN's Fatal Flaw: Short-Term Memory</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What's the problem</div>
+          <p>RNNs pass information forward through a hidden state h_t. Over long sequences, the gradient shrinks exponentially during backpropagation — so the model effectively <em>forgets</em> words from the beginning of a sentence.</p>
+        </div>
+        <div class="callout danger">
+          <strong>🔴 Classic Example (from lecture):</strong>
+          "I was born in <strong>Japan</strong> and lived there for 10 years and then moved to the US. My native language is ___."<br><br>
+          The word "Japan" is far from the blank. An RNN's gradient for that early word shrinks to near-zero by the time backprop reaches it — so the model ignores it and fails to predict "Japanese."
+        </div>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>🔴 RNN Behavior</h4>
+            <ul class="bullet">
+              <li>Hidden state h_t carries memory</li>
+              <li>h_t = tanh(x_t·Θ¹ + h_{t-1}·Θ³)</li>
+              <li>Gradient multiplied at EVERY step</li>
+              <li>tanh derivative ≤ 1 → product → 0</li>
+              <li><strong>Result: only remembers last ~5–10 tokens</strong></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>🟢 LSTM Solution</h4>
+            <ul class="bullet">
+              <li>Adds a <strong>Cell State C_t</strong> (long-term memory)</li>
+              <li>Gates selectively keep or discard info</li>
+              <li>Gradient path through C_t avoids repeated multiplication</li>
+              <li><strong>Result: can remember 100s of tokens</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>💡 Key Analogy:</strong>
+          Think of the RNN hidden state like RAM (fast but small). The LSTM cell state is like a hard drive — slower to update, but can hold far more information over time.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PART 1: LSTM GATES
+  ════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon indigo">🔒</div>
+      <div><h2>Part 1: The Four LSTM Gates</h2><div class="sub">How LSTM controls what to remember and forget</div></div>
+    </div>
+
+    <!-- Gate overview cards -->
+    <div class="gate-row">
+      <div class="gate-card forget">
+        <div class="gate-name">Forget Gate</div>
+        <div class="gate-symbol">f_t</div>
+        <div class="gate-role">What old info to <strong>erase</strong> from cell state?</div>
+      </div>
+      <div class="gate-card input">
+        <div class="gate-name">Input Gate</div>
+        <div class="gate-symbol">i_t</div>
+        <div class="gate-role">What new info to <strong>write</strong> to cell state?</div>
+      </div>
+      <div class="gate-card cell">
+        <div class="gate-name">Cell Update</div>
+        <div class="gate-symbol">C_t</div>
+        <div class="gate-role">The long-term <strong>memory</strong> updated by forget + input</div>
+      </div>
+      <div class="gate-card output">
+        <div class="gate-name">Output Gate</div>
+        <div class="gate-symbol">o_t → h_t</div>
+        <div class="gate-role">What to <strong>expose</strong> from cell state as hidden state?</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🟠 Forget Gate — "What do I erase?"</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The forget gate looks at the previous hidden state h_{t-1} and current input x_t, and outputs a number between 0 and 1 for <em>each element</em> of the cell state. 0 = erase completely. 1 = keep completely.</p>
+        </div>
+        <div class="formula-box"><span class="gate-f">f_t</span> = σ(W_f · [h_{t-1}, x_t] + b_f)
+
+<span class="comment"># [h_{t-1}, x_t]  = concatenation of previous hidden state and current input</span>
+<span class="comment"># W_f, b_f        = learned weight matrix and bias for forget gate</span>
+<span class="comment"># σ               = sigmoid → output in (0, 1) for every cell state element</span>
+<span class="comment"># f_t ≈ 0         → forget this info from cell state</span>
+<span class="comment"># f_t ≈ 1         → keep this info in cell state</span>
+
+<span class="comment"># Example: When we see "." (end of sentence), the forget gate learns</span>
+<span class="comment"># to clear the subject so the next sentence starts fresh.</span></div>
+        <div class="callout warning">
+          <strong>⚠️ Lecture Quote:</strong>
+          "Forget gate will help us determine what information we are going to remove or throw away from the cell state."
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🟢 Input Gate + Candidate — "What do I write?"</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Two computations work together: the input gate decides <em>which positions</em> to update (0–1 importance scores), while the candidate vector creates the <em>actual new values</em> to potentially write (scaled -1 to 1).</p>
+        </div>
+        <div class="formula-box"><span class="comment"># Step 1: Input gate — which positions are important to update?</span>
+<span class="gate-i">i_t</span> = σ(W_i · [h_{t-1}, x_t] + b_i)
+<span class="comment"># 0 = not important, 1 = important to update</span>
+
+<span class="comment"># Step 2: Candidate cell state — what new values could we write?</span>
+<span class="gate-c">C̃_t</span> = tanh(W_c · [h_{t-1}, x_t] + b_c)
+<span class="comment"># tanh → values in (-1, +1) to regulate the network</span>
+
+<span class="comment"># Step 3: Combine — only write where input gate says it's important</span>
+<span class="comment"># (used in the cell state update below)</span>
+<span class="gate-i">i_t</span> ⊙ <span class="gate-c">C̃_t</span>  ← point-wise multiplication</div>
+        <div class="callout tip">
+          <strong>💡 Analogy:</strong>
+          i_t is the highlighter — it marks which information is worth remembering. C̃_t is the raw text — the content itself. Together they decide what actually gets stored.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🩷 Cell State Update — "Updating long-term memory"</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label how">How</div>
+          <p>The new cell state combines: (1) the old cell state filtered by the forget gate, and (2) the new candidate values filtered by the input gate. This is the core of LSTM's long-term memory.</p>
+        </div>
+        <div class="formula-box"><span class="gate-c">C_t</span> = <span class="gate-f">f_t</span> ⊙ C_{t-1}  +  <span class="gate-i">i_t</span> ⊙ <span class="gate-c">C̃_t</span>
+
+<span class="comment"># f_t ⊙ C_{t-1}  → how much of the OLD memory to keep</span>
+<span class="comment"># i_t ⊙ C̃_t     → how much NEW information to add</span>
+<span class="comment"># ⊙              → element-wise (Hadamard) multiplication</span>
+
+<span class="comment"># Why does this solve vanishing gradients?</span>
+<span class="comment"># The gradient through C_t flows via ADDITION (+), not multiplication!</span>
+<span class="comment"># Addition doesn't shrink gradients → long-range learning is possible.</span></div>
+        <div class="callout">
+          <strong>🔑 The Key Insight — Why LSTM Works:</strong>
+          In a plain RNN, gradients flow through repeated <code>tanh</code> multiplications (each ≤ 1) — they vanish. In LSTM, gradients can flow through the cell state update path where the dominant operation is <strong>addition</strong>. Addition preserves gradient magnitude, enabling learning from hundreds of time steps back.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔵 Output Gate — "What do I expose as hidden state?"</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The output gate decides which parts of the cell state to actually output as the hidden state h_t. Not everything in long-term memory is relevant at every step.</p>
+        </div>
+        <div class="formula-box"><span class="gate-o">o_t</span> = σ(W_o · [h_{t-1}, x_t] + b_o)
+<span class="comment"># Decides which parts of cell state to expose</span>
+
+<span class="gate-o">h_t</span> = <span class="gate-o">o_t</span> ⊙ tanh(<span class="gate-c">C_t</span>)
+<span class="comment"># tanh(C_t) squashes cell state to (-1, +1)</span>
+<span class="comment"># o_t masks which dimensions to include in h_t</span>
+<span class="comment"># h_t is used for predictions and passed to the next time step</span></div>
+        <div class="callout tip">
+          <strong>✅ Summary — LSTM's two outputs per step:</strong>
+          <code>C_t</code> = updated long-term memory (carried forward mostly intact)<br>
+          <code>h_t</code> = short-term working memory / current output (filtered view of C_t)
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: LSTM GATE EXPLORER -->
+    <div class="interactive-box">
+      <h4>🎮 LSTM Gate Explorer</h4>
+      <div class="desc">Simulate how each gate responds to different input values. Adjust the sliders to see how forget/input/output gate activations change.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Input signal x_t: <span id="xtVal">0.5</span></label>
+          <input type="range" min="-2" max="2" step="0.1" value="0.5" id="xtSlider" oninput="updateGates()" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Prev hidden h_{t-1}: <span id="htVal">0.3</span></label>
+          <input type="range" min="-2" max="2" step="0.1" value="0.3" id="htSlider" oninput="updateGates()" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Prev cell C_{t-1}: <span id="ctVal">0.6</span></label>
+          <input type="range" min="-1" max="1" step="0.05" value="0.6" id="ctSlider" oninput="updateGates()" style="width:100%;">
+        </div>
+      </div>
+
+      <div id="gateVis">
+        <div class="bar-vis"><span class="bar-label" style="color:#c2410c">f_t</span><div class="bar-track"><div class="bar-fill" id="barF" style="background:#f97316;"></div></div><span class="bar-val" id="valF"></span></div>
+        <div class="bar-vis"><span class="bar-label" style="color:#15803d">i_t</span><div class="bar-track"><div class="bar-fill" id="barI" style="background:#22c55e;"></div></div><span class="bar-val" id="valI"></span></div>
+        <div class="bar-vis"><span class="bar-label" style="color:#be185d">C̃_t</span><div class="bar-track"><div class="bar-fill" id="barC" style="background:#ec4899;"></div></div><span class="bar-val" id="valC"></span></div>
+        <div class="bar-vis"><span class="bar-label" style="color:#1d4ed8">o_t</span><div class="bar-track"><div class="bar-fill" id="barO" style="background:#3b82f6;"></div></div><span class="bar-val" id="valO"></span></div>
+        <div class="bar-vis"><span class="bar-label" style="color:#312e81">C_t</span><div class="bar-track"><div class="bar-fill" id="barCnew" style="background:#4f46e5;"></div></div><span class="bar-val" id="valCnew"></span></div>
+        <div class="bar-vis"><span class="bar-label" style="color:#374151">h_t</span><div class="bar-track"><div class="bar-fill" id="barH" style="background:#64748b;"></div></div><span class="bar-val" id="valH"></span></div>
+      </div>
+      <div class="output-box" id="gateOutput">Adjust the sliders to see LSTM gate values...</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PART 2: GRU
+  ════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">⚡</div>
+      <div><h2>Part 2: GRU — Gated Recurrent Unit</h2><div class="sub">A simpler, faster alternative to LSTM</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⚡ GRU: LSTM's Streamlined Sibling</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>GRU is an updated version of LSTM that uses only <strong>two gates</strong> (Update + Reset) instead of four, and merges the cell state and hidden state into one. Fewer parameters → faster training with comparable performance.</p>
+        </div>
+        <div class="formula-box"><span class="comment"># GRU has 2 gates (vs LSTM's 4 operations):</span>
+
+<span class="highlight">Update Gate (z_t)</span>: similar to LSTM's forget + input gates combined
+z_t = σ(W_z · [h_{t-1}, x_t])
+<span class="comment"># Decides how much of past to keep vs. new input to use</span>
+<span class="comment"># z_t ≈ 1 → keep past (like forget gate saying "remember")</span>
+<span class="comment"># z_t ≈ 0 → use new info (like input gate saying "update")</span>
+
+<span class="highlight">Reset Gate (r_t)</span>: decides how much past to forget when computing new candidate
+r_t = σ(W_r · [h_{t-1}, x_t])
+<span class="comment"># Controls how much past hidden state influences the new candidate</span>
+
+<span class="highlight">New hidden state:</span>
+h̃_t = tanh(W · [r_t ⊙ h_{t-1}, x_t])
+h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>✅ GRU Advantages</h4>
+            <ul class="bullet">
+              <li>Fewer tensor operations → faster to train</li>
+              <li>Fewer parameters → less risk of overfitting on small data</li>
+              <li>Single hidden state (simpler)</li>
+              <li>Often matches LSTM performance in practice</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>🔵 When to Choose LSTM vs GRU</h4>
+            <ul class="bullet">
+              <li><strong>LSTM:</strong> very long sequences, large datasets, complex tasks</li>
+              <li><strong>GRU:</strong> faster prototyping, smaller datasets, real-time systems</li>
+              <li>In practice: try both and validate</li>
+            </ul>
+          </div>
+        </div>
+        <table class="compare-table" style="margin-top:16px;">
+          <tr><th>Feature</th><th>LSTM</th><th>GRU</th></tr>
+          <tr><td>Gates</td><td>4 (forget, input, candidate, output)</td><td>2 (update, reset)</td></tr>
+          <tr><td>Memory vectors</td><td>2 (C_t and h_t)</td><td>1 (h_t only)</td></tr>
+          <tr><td>Parameters</td><td>More</td><td class="good">Fewer (~25% less)</td></tr>
+          <tr><td>Training speed</td><td>Slower</td><td class="good">Faster</td></tr>
+          <tr><td>Long sequences</td><td class="good">Excellent</td><td>Good</td></tr>
+          <tr><td>Interpretability</td><td>Cell state separable</td><td>Simpler</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PART 3: ENCODER-DECODER + ATTENTION
+  ════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">🎯</div>
+      <div><h2>Part 3: Encoder-Decoder + Attention</h2><div class="sub">Teaching the model to focus on what matters</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔁 Encoder-Decoder Architecture</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Used for sequence-to-sequence tasks like machine translation. The <strong>encoder</strong> reads the input and produces a context vector C. The <strong>decoder</strong> reads C and generates the output one token at a time.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Many NLP tasks require variable-length input AND variable-length output (translation, summarization). A single RNN can't handle this — we need a two-stage architecture.</p>
+        </div>
+        <p style="font-size:14px;font-weight:600;margin:12px 0 8px;">Example: "How are you?" → "Jak się masz?" (Polish)</p>
+        <div class="enc-dec">
+          <div class="enc-unit"><div class="lbl">ENCODER</div><div class="h">h₁</div><div style="font-size:11px;color:#6366f1">How</div></div>
+          <span class="arr">→</span>
+          <div class="enc-unit"><div class="lbl">ENCODER</div><div class="h">h₂</div><div style="font-size:11px;color:#6366f1">are</div></div>
+          <span class="arr">→</span>
+          <div class="enc-unit"><div class="lbl">ENCODER</div><div class="h">h₃</div><div style="font-size:11px;color:#6366f1">you</div></div>
+          <span class="context-arrow">→C→</span>
+          <div class="dec-unit"><div class="lbl">DECODER</div><div class="h">s₁</div><div style="font-size:11px;color:#b45309">Jak</div></div>
+          <span class="arr">→</span>
+          <div class="dec-unit"><div class="lbl">DECODER</div><div class="h">s₂</div><div style="font-size:11px;color:#b45309">się</div></div>
+          <span class="arr">→</span>
+          <div class="dec-unit"><div class="lbl">DECODER</div><div class="h">s₃</div><div style="font-size:11px;color:#b45309">masz</div></div>
+        </div>
+        <div class="callout danger">
+          <strong>🔴 The Big Problem:</strong>
+          The entire input "How are you?" must be compressed into a SINGLE context vector C (the final encoder hidden state). For long sentences, this bottleneck loses information — the decoder can't recover what was compressed away.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🎯 Attention Mechanism — "Look at everything, focus on what matters"</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Instead of using only the final encoder state, <strong>attention</strong> gives the decoder access to ALL encoder hidden states at every decoding step. It learns a weighted combination — paying more attention to relevant words.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why it works</div>
+          <p>When translating word 3 of the output, the decoder doesn't need word 1 of the input — it needs the most relevant encoder states. Attention learns these relevance scores automatically.</p>
+        </div>
+        <div class="formula-box"><span class="comment"># Step 1: Compute raw alignment score for each encoder state h_j</span>
+<span class="comment">#         using a small feedforward neural network:</span>
+<span class="highlight">e_{t,j}</span> = FFN(h_j, s_{t-1})
+         = tanh( [h_j ; s_{t-1}] · W_a + b_a ) · v_a
+<span class="comment"># h_j    = encoder hidden state at position j</span>
+<span class="comment"># s_{t-1} = previous decoder hidden state</span>
+<span class="comment"># FFN    = single hidden layer + linear output (tanh activation)</span>
+
+<span class="comment"># Step 2: Normalize raw scores into attention weights via softmax</span>
+<span class="highlight">α_{t,j}</span> = softmax( e_{t,j} )  over all j
+<span class="comment"># α values sum to 1 across all encoder positions</span>
+<span class="comment"># High α_{t,j} → decoder should pay a lot of attention to h_j now</span>
+
+<span class="comment"># Step 3: Compute context vector as weighted sum of encoder states</span>
+<span class="highlight">C_t</span> = Σ_j  α_{t,j} · h_j
+<span class="comment"># Each decoder step gets its OWN context vector C_t</span>
+<span class="comment"># (vs. simple encoder-decoder: single C for all decoder steps)</span>
+
+<span class="comment"># Step 4: Use C_t to compute decoder output normally</span>
+s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
+        <div class="callout">
+          <strong>💡 This type is called Additive (Bahdanau) Attention.</strong>
+          It was the first attention mechanism for NLP (2015). The "additive" refers to how h_j and s_{t-1} are <em>added/concatenated</em> before being fed into the FFN. Later, transformers use <strong>scaled dot-product attention</strong> (faster) and <strong>self-attention</strong> — covered in Week 8!
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: ATTENTION VISUALIZER -->
+    <div class="interactive-box">
+      <h4>🎮 Attention Weight Visualizer</h4>
+      <div class="desc">See how attention distributes focus across encoder words when generating each output token. Select a decoder output word to see which input words it "attends to" most.</div>
+
+      <p style="font-size:13px;margin-bottom:10px;"><strong>Translating:</strong> "The cat sat on mat" → "Le chat s'assit sur le tapis"</p>
+
+      <div style="margin-bottom:12px;">
+        <span style="font-size:13px;font-weight:600;">Generating output word: </span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;" id="decoderBtns">
+          <button class="btn btn-sm" onclick="showAttn(0)">Le</button>
+          <button class="btn btn-sm" onclick="showAttn(1)">chat</button>
+          <button class="btn btn-sm" onclick="showAttn(2)">s'assit</button>
+          <button class="btn btn-sm" onclick="showAttn(3)">sur</button>
+          <button class="btn btn-sm" onclick="showAttn(4)">tapis</button>
+        </div>
+      </div>
+
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Attention α over encoder words (darker = more attention):</p>
+      <div class="attn-grid" id="attnGrid">
+        <!-- filled by JS -->
+      </div>
+      <div class="output-box" id="attnExplain">Click a decoder word above to see its attention weights.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PART 4: COMPLETE PICTURE
+  ════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🗺️</div>
+      <div><h2>Complete Picture: RNN → LSTM → GRU → Attention</h2><div class="sub">How each step solves the previous one's limitations</div></div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📊 Full Architecture Comparison</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Property</th><th>RNN</th><th>LSTM</th><th>GRU</th><th>LSTM + Attention</th></tr>
+          <tr>
+            <td>Long-range memory</td>
+            <td class="bad">❌ Vanishes</td>
+            <td class="good">✅ Cell state</td>
+            <td class="good">✅ Update gate</td>
+            <td class="good">✅ All encoder states</td>
+          </tr>
+          <tr>
+            <td>Mechanism</td>
+            <td>h_t only</td>
+            <td>C_t + h_t + 4 gates</td>
+            <td>h_t + 2 gates</td>
+            <td>LSTM + weighted context C_t</td>
+          </tr>
+          <tr>
+            <td>Parameters</td>
+            <td>Few</td>
+            <td>Many</td>
+            <td class="good">Moderate</td>
+            <td>Many + FFN for α</td>
+          </tr>
+          <tr>
+            <td>Handles very long seqs?</td>
+            <td class="bad">No</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td class="good">Best</td>
+          </tr>
+          <tr>
+            <td>Typical NLP tasks</td>
+            <td>Short text class.</td>
+            <td>NER, POS, LM</td>
+            <td>Same as LSTM</td>
+            <td>Translation, summarization</td>
+          </tr>
+          <tr>
+            <td>Context vector</td>
+            <td>h_t (single)</td>
+            <td>h_t (single)</td>
+            <td>h_t (single)</td>
+            <td class="good">C_t per step (rich)</td>
+          </tr>
+          <tr>
+            <td>Superseded by</td>
+            <td>LSTM/GRU</td>
+            <td>Transformers (partial)</td>
+            <td>Transformers (partial)</td>
+            <td>Self-Attention / Transformers</td>
+          </tr>
+        </table>
+        <div class="callout">
+          <strong>🔑 The Progression of Ideas:</strong>
+          RNN → add gates to control memory (LSTM) → simplify the gates (GRU) → add a mechanism to look back at all inputs dynamically (Attention) → replace recurrence entirely with attention (Transformers, Week 8).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       QUIZ PREP
+  ════════════════════════════════════════════════ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz 6 Practice — LSTM & Attention</h3>
+
+    <div class="quiz-q" id="q1">
+      <p>Q1. What is the primary reason LSTM outperforms RNN on long sequences?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q1',this,false)">LSTM uses more hidden layers than RNN</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1',this,true)">LSTM's cell state allows gradients to flow without repeated multiplication, avoiding vanishing gradients</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1',this,false)">LSTM processes sequences faster because it runs in parallel</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1',this,false)">LSTM uses larger embedding vectors than RNN</button>
+      </div>
+      <div class="quiz-feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q2">
+      <p>Q2. In an LSTM, the forget gate outputs values close to 0. What does this mean?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q2',this,false)">New information will be written to the cell state</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2',this,false)">The hidden state will be reset to zero</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2',this,true)">That information will be erased from the cell state (forgotten)</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2',this,false)">The output gate will be activated</button>
+      </div>
+      <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q3">
+      <p>Q3. Which of the following correctly describes the LSTM cell state update equation?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q3',this,false)">C_t = σ(W_c · [h_{t-1}, x_t])</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3',this,true)">C_t = f_t ⊙ C_{t-1} + i_t ⊙ C̃_t</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3',this,false)">C_t = tanh(h_{t-1} + x_t)</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3',this,false)">C_t = o_t ⊙ tanh(h_{t-1})</button>
+      </div>
+      <div class="quiz-feedback" id="q3-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q4">
+      <p>Q4. How does GRU differ from LSTM?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q4',this,false)">GRU cannot handle sequential data</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4',this,false)">GRU uses more gates and is therefore more powerful</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4',this,true)">GRU uses fewer gates (2 vs 4), fewer parameters, and is faster to train with comparable performance</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4',this,false)">GRU replaces the cell state with a transformer attention mechanism</button>
+      </div>
+      <div class="quiz-feedback" id="q4-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q5">
+      <p>Q5. In an attention-based encoder-decoder, what does the context vector C_t represent?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q5',this,false)">The final hidden state of the encoder only</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5',this,false)">A fixed vector shared across all decoder steps</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5',this,true)">A weighted sum of ALL encoder hidden states, with weights (α) learned per decoder step</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5',this,false)">The concatenation of all encoder hidden states</button>
+      </div>
+      <div class="quiz-feedback" id="q5-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q6">
+      <p>Q6. True or False: In a simple encoder-decoder (no attention), the decoder has access to all encoder hidden states at each decoding step.</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q6',this,false)">True</button>
+        <button class="quiz-opt" onclick="answerQuiz('q6',this,true)">False — the decoder only sees the single final context vector C; all encoder hidden states are compressed into it</button>
+      </div>
+      <div class="quiz-feedback" id="q6-fb"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="page-nav">
+    <a href="week6.html">← Week 6: CNN & RNN</a>
+    <a href="index.html">🏠 All Weeks</a>
+    <span style="color:var(--muted);font-size:14px;">Week 8: Transformers →</span>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── Toggle expand/collapse ───
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const ch   = header.querySelector('.chevron');
+  const open = body.classList.toggle('open');
+  ch.classList.toggle('open', open);
+}
+
+// ─── Quiz logic ───
+const explanations = {
+  q1: "✅ Correct! LSTM's cell state update uses addition (C_t = f_t⊙C_{t-1} + i_t⊙C̃_t). Gradients flowing through addition don't vanish, unlike the repeated tanh multiplications in a plain RNN.",
+  q2: "✅ Correct! The forget gate uses sigmoid → (0,1). Values near 0 mean 'erase this from cell state'. Values near 1 mean 'keep this'. This is how LSTM selectively removes irrelevant information.",
+  q3: "✅ Correct! C_t = f_t⊙C_{t-1} + i_t⊙C̃_t. The forget gate (f_t) controls how much of the old cell state survives, and the input gate (i_t) controls how much new candidate info (C̃_t) is added.",
+  q4: "✅ Correct! GRU uses only 2 gates (update + reset) vs LSTM's 4, and combines cell state and hidden state into one. Fewer tensor operations means faster training. Performance is often comparable to LSTM.",
+  q5: "✅ Correct! In attention, C_t = Σ α_{t,j}·h_j — a weighted sum where each weight α_{t,j} is learned specifically for the current decoder step t. Different decoder steps attend to different encoder positions.",
+  q6: "✅ Correct — False! Simple encoder-decoder compresses the ENTIRE input into one vector C (the final encoder state). This is the information bottleneck that attention solves by giving the decoder dynamic access to all h_j."
+};
+const wrongMsg = {
+  q1: "❌ Not quite. The key advantage is the cell state gradient path — addition preserves gradients, unlike the repeated tanh multiplications in RNN which cause vanishing.",
+  q2: "❌ Not quite. Forget gate values near 0 mean 'erase/forget' from the cell state. sigmoid output of 0 = do not let any information through.",
+  q3: "❌ Not quite. The cell state update is C_t = f_t⊙C_{t-1} + i_t⊙C̃_t — combining filtered old memory with filtered new candidate info.",
+  q4: "❌ Not quite. GRU is SIMPLER than LSTM — fewer gates (2), fewer parameters, faster training. It does NOT use transformers.",
+  q5: "❌ Not quite. The whole point of attention is that C_t is NOT fixed and NOT only the final encoder state. It's a learned weighted sum of ALL encoder states, different at every decoder step.",
+  q6: "❌ Not quite. In simple encoder-decoder, the decoder ONLY sees the single context vector C (last encoder state). Attention was invented specifically to fix this bottleneck."
+};
+function answerQuiz(qid, btn, correct) {
+  const container = document.getElementById(qid);
+  const fb = document.getElementById(qid + '-fb');
+  container.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    b.style.cursor = 'default';
+  });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  fb.textContent = correct ? explanations[qid] : wrongMsg[qid];
+  fb.className = 'quiz-feedback show ' + (correct ? 'correct' : 'wrong');
+}
+
+// ─── LSTM Gate Explorer ───
+const sigmoid = z => 1 / (1 + Math.exp(-z));
+const tanhFn  = z => Math.tanh(z);
+
+// Simple fixed weights for demonstration
+const Wf = [0.8, 0.6], Wi = [0.5, 0.9], Wc = [0.7, -0.4], Wo = [0.6, 0.7];
+
+function updateGates() {
+  const xt = parseFloat(document.getElementById('xtSlider').value);
+  const ht = parseFloat(document.getElementById('htSlider').value);
+  const ct = parseFloat(document.getElementById('ctSlider').value);
+  document.getElementById('xtVal').textContent = xt.toFixed(1);
+  document.getElementById('htVal').textContent = ht.toFixed(1);
+  document.getElementById('ctVal').textContent = ct.toFixed(1);
+
+  const ft    = sigmoid(Wf[0]*xt + Wf[1]*ht);
+  const it    = sigmoid(Wi[0]*xt + Wi[1]*ht);
+  const ctNew_cand = tanhFn(Wc[0]*xt + Wc[1]*ht);
+  const ot    = sigmoid(Wo[0]*xt + Wo[1]*ht);
+  const Ct    = ft * ct + it * ctNew_cand;
+  const ht_new = ot * tanhFn(Ct);
+
+  const setBar = (id, valId, val, pct) => {
+    document.getElementById(id).style.width = (pct * 100).toFixed(1) + '%';
+    document.getElementById(valId).textContent = val.toFixed(2);
+  };
+  setBar('barF', 'valF', ft, ft);
+  setBar('barI', 'valI', it, it);
+  setBar('barC', 'valC', ctNew_cand, (ctNew_cand + 1) / 2);
+  setBar('barO', 'valO', ot, ot);
+  const CtNorm = Math.min(Math.max((Ct + 2) / 4, 0), 1);
+  setBar('barCnew', 'valCnew', Ct, CtNorm);
+  const htNorm = (ht_new + 1) / 2;
+  setBar('barH', 'valH', ht_new, htNorm);
+
+  document.getElementById('gateOutput').textContent =
+    `Forget gate  f_t = ${ft.toFixed(3)}  →  keeps ${(ft*100).toFixed(0)}% of old cell state\n` +
+    `Input gate   i_t = ${it.toFixed(3)}  →  writes ${(it*100).toFixed(0)}% of new candidate\n` +
+    `Candidate   C̃_t = ${ctNew_cand.toFixed(3)}  (new info to potentially store)\n` +
+    `Output gate  o_t = ${ot.toFixed(3)}  →  exposes ${(ot*100).toFixed(0)}% of cell state as h_t\n` +
+    `New cell   C_t  = ${ft.toFixed(2)}×${ct.toFixed(2)} + ${it.toFixed(2)}×${ctNew_cand.toFixed(2)} = ${Ct.toFixed(3)}\n` +
+    `New hidden  h_t = ${ot.toFixed(2)} × tanh(${Ct.toFixed(2)}) = ${ht_new.toFixed(3)}`;
+}
+updateGates();
+
+// ─── Attention Visualizer ───
+const encWords = ['The', 'cat', 'sat', 'on', 'mat'];
+const decWords = ['Le', 'chat', "s'assit", 'sur', 'tapis'];
+// Pre-defined attention matrices (rows=decoder, cols=encoder)
+const attnWeights = [
+  [0.70, 0.10, 0.05, 0.05, 0.10],  // Le → mostly The
+  [0.05, 0.80, 0.08, 0.02, 0.05],  // chat → mostly cat
+  [0.05, 0.10, 0.72, 0.08, 0.05],  // s'assit → mostly sat
+  [0.05, 0.05, 0.10, 0.75, 0.05],  // sur → mostly on
+  [0.08, 0.05, 0.05, 0.05, 0.77],  // tapis → mostly mat
+];
+
+function buildAttnGrid() {
+  const grid = document.getElementById('attnGrid');
+  grid.innerHTML = encWords.map((w, j) => `
+    <div class="attn-word">
+      <div class="word-label">${w}</div>
+      <div class="attn-box" id="attn-${j}" style="background:#e2e8f0;color:#64748b;">?</div>
+    </div>`).join('');
+}
+buildAttnGrid();
+
+function showAttn(decIdx) {
+  const weights = attnWeights[decIdx];
+  encWords.forEach((_, j) => {
+    const box = document.getElementById(`attn-${j}`);
+    const alpha = weights[j];
+    const intensity = Math.round(alpha * 255);
+    const r = 79; const g = 70; const b = 229;
+    box.style.background = `rgba(${r},${g},${b},${alpha.toFixed(2) * 1.0 + 0.1})`;
+    box.style.color = alpha > 0.4 ? 'white' : '#312e81';
+    box.style.border = alpha > 0.5 ? '2px solid #312e81' : '2px solid transparent';
+    box.textContent = (alpha * 100).toFixed(0) + '%';
+  });
+  document.getElementById('attnExplain').textContent =
+    `Generating "${decWords[decIdx]}" (decoder step ${decIdx+1}):\n` +
+    encWords.map((w, j) => `  α[${w.padEnd(5)}] = ${(weights[j]*100).toFixed(0).padStart(3)}%  ${'█'.repeat(Math.round(weights[j]*20))}`).join('\n') + '\n\n' +
+    `Context C_t = ${encWords.map((w,j) => `${(weights[j]).toFixed(2)}·h(${w})`).join(' + ')}\n` +
+    `Most attention on: "${encWords[weights.indexOf(Math.max(...weights))]}"`;
+}
+</script>
+</body>
+</html>

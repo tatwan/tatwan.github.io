@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 – Logistic Regression, SVM & Perceptron | CSE 8803</title>
+<style>
+  :root {
+    --primary: #d97706; --primary-light: #fef3c7; --primary-dark: #92400e;
+    --blue: #2563eb; --green: #059669; --red: #dc2626; --purple: #7c3aed;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #92400e; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #92400e 0%, #d97706 60%, #fbbf24 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.red { background: #fee2e2; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #92400e; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--red); background: #fee2e2; }
+  .callout.tip { border-color: var(--green); background: #d1fae5; }
+  .callout.info { border-color: var(--blue); background: #dbeafe; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  input[type=range] { accent-color: var(--primary); }
+  canvas { border: 1px solid var(--border); border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 3 — Logistic Regression, SVM & Perceptron</span>
+  <div class="nav-links">
+    <a href="week2.html">← Week 2</a>
+    <a href="week4.html">Week 4 →</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 3 · Jan 26–30</div>
+  <h1>Logistic Regression, SVM &amp; Perceptron</h1>
+  <p>Three powerful linear classifiers, each with a different philosophy. Master these and you understand the DNA of modern ML.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Module 4</span>
+    <span class="chip">📝 Quiz 3 Material</span>
+    <span class="chip">💻 HW2: regression.py, svm.py, perceptron.py</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">🗺️</div>
+      <div><h2>The Big Picture</h2><div class="sub">Three linear classifiers, same input — different approaches</div></div>
+    </div>
+    <div class="callout info">
+      <strong>Key Shift This Week: Generative → Discriminative</strong>
+      Naive Bayes (Week 2) models HOW data is generated (generative). This week's models skip that — they directly learn a decision boundary to separate classes (discriminative). Simpler assumption, often better performance.
+    </div>
+    <table class="compare-table">
+      <tr><th>Algorithm</th><th>Core Idea</th><th>Output</th><th>Type</th></tr>
+      <tr><td><strong>Perceptron</strong></td><td>Find ANY line that separates classes</td><td>Hard label (±1)</td><td>Hard classification</td></tr>
+      <tr><td><strong>Logistic Regression</strong></td><td>Find a line + convert to probability</td><td>Probability [0,1]</td><td>Soft classification</td></tr>
+      <tr><td><strong>SVM</strong></td><td>Find the line with MAXIMUM margin</td><td>Hard label (±1)</td><td>Hard classification (max-margin)</td></tr>
+    </table>
+  </div>
+
+  <!-- PART 1: LOGISTIC REGRESSION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">📉</div>
+      <div><h2>Part 1: Logistic Regression</h2><div class="sub">The backbone of neural networks</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔗 The Sigmoid Function — Converting Scores to Probabilities</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The sigmoid (logistic) function squishes any real number into the range [0, 1], making it interpretable as a probability.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Linear combination of features (θᵀX) can be any number from -∞ to +∞. For classification, we need a probability between 0 and 1. The sigmoid provides exactly this transformation while being mathematically derived from the log-odds ratio.</p>
+        </div>
+        <div class="formula-box">
+<span class="highlight">σ(s)</span> = eˢ / (1 + eˢ)  =  1 / (1 + e⁻ˢ)
+
+Where  s = θᵀX  (linear combination of features)
+
+<span class="comment"># s → -∞  →  σ(s) → 0   (definitely class 0)</span>
+<span class="comment"># s = 0   →  σ(s) = 0.5 (totally uncertain)</span>
+<span class="comment"># s → +∞  →  σ(s) → 1   (definitely class 1)</span>
+
+<span class="comment"># Classification rule:</span>
+ŷ = 1  if σ(θᵀX) ≥ threshold (e.g. 0.5)
+ŷ = 0  otherwise
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Sigmoid Function Explorer</h4>
+          <div class="desc">Move the slider to change the linear score s = θᵀX and see how the sigmoid converts it to a probability.</div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Linear score s: <span id="sigS">0.0</span></label>
+          <input type="range" min="-6" max="6" value="0" step="0.1" id="sigSlider" oninput="updateSigmoid()" style="width:100%;margin-bottom:12px;">
+          <canvas id="sigCanvas" width="500" height="180"></canvas>
+          <div class="output-box" id="sigOutput">Move the slider to explore...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⬇️ Training: Gradient Descent + MLE</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label how">How LR is Trained</div>
+          <p>Unlike Naive Bayes (just counting), Logistic Regression must be <em>optimized</em> iteratively. We find θ that maximizes the log-likelihood of our training data.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Objective: maximize log-likelihood (or minimize negative log-likelihood)</span>
+L(θ) = Σᵢ [ yᵢ·log σ(θᵀXᵢ) + (1-yᵢ)·log(1 - σ(θᵀXᵢ)) ]
+
+<span class="comment"># Gradient Descent update rule:</span>
+θ ← θ + η · ∇L(θ)     <span class="comment">(gradient ASCENT to maximize L)</span>
+  OR
+θ ← θ - η · ∇(-L(θ))  <span class="comment">(gradient DESCENT to minimize -L)</span>
+
+<span class="comment"># η = learning rate (how big a step we take each iteration)</span>
+<span class="comment"># Repeat until convergence (parameters stop changing much)</span>
+        </div>
+        <div class="callout tip">
+          <strong>💡 Why no closed-form solution?</strong>
+          Linear Regression has an analytical solution (matrix inversion). Logistic Regression's sigmoid makes the objective non-linear, so we must use iterative gradient descent. But the good news: the function is <strong>convex</strong> → guaranteed to find the global optimum!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: SVM -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">📏</div>
+      <div><h2>Part 2: Support Vector Machine (SVM)</h2><div class="sub">The maximum-margin classifier</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>↔️ The Margin — Why SVM is Different</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The <strong>margin</strong> is the distance between the decision boundary and the nearest data points of each class (the "support vectors"). SVM finds the hyperplane that <em>maximizes</em> this margin.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why maximize margin?</div>
+          <p>The Perceptron finds any separating line — but there are infinitely many. Which is most reliable for new data? The one with the <strong>largest gap</strong> between classes, because it's most robust to noise and new examples near the boundary.</p>
+        </div>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin:16px 0;">
+          <svg width="260" height="200" viewBox="0 0 260 200">
+            <text x="130" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">SVM: Maximum Margin</text>
+            <!-- Decision boundary -->
+            <line x1="130" y1="25" x2="130" y2="185" stroke="#d97706" stroke-width="2.5"/>
+            <!-- Margin lines -->
+            <line x1="100" y1="25" x2="100" y2="185" stroke="#d97706" stroke-width="1" stroke-dasharray="4"/>
+            <line x1="160" y1="25" x2="160" y2="185" stroke="#d97706" stroke-width="1" stroke-dasharray="4"/>
+            <!-- Margin label -->
+            <line x1="100" y1="100" x2="160" y2="100" stroke="#d97706" stroke-width="1" marker-end="url(#arrow)"/>
+            <text x="130" y="118" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">margin = 2/‖θ‖</text>
+            <!-- Class 1 points (blue circles) -->
+            <circle cx="60" cy="60" r="8" fill="#2563eb" opacity="0.8"/>
+            <circle cx="50" cy="100" r="8" fill="#2563eb" opacity="0.8"/>
+            <circle cx="70" cy="140" r="8" fill="#2563eb" opacity="0.8"/>
+            <circle cx="45" cy="75" r="8" fill="#2563eb" opacity="0.8"/>
+            <!-- Class -1 points (red triangles) -->
+            <polygon points="190,55 182,70 198,70" fill="#dc2626" opacity="0.8"/>
+            <polygon points="200,100 192,115 208,115" fill="#dc2626" opacity="0.8"/>
+            <polygon points="185,140 177,155 193,155" fill="#dc2626" opacity="0.8"/>
+            <polygon points="210,75 202,90 218,90" fill="#dc2626" opacity="0.8"/>
+            <!-- Support vectors (highlighted) -->
+            <circle cx="70" cy="100" r="8" fill="none" stroke="#d97706" stroke-width="2"/>
+            <circle cx="70" cy="100" r="8" fill="#2563eb" opacity="0.8"/>
+            <polygon points="185,100 177,115 193,115" fill="none" stroke="#d97706" stroke-width="2"/>
+            <polygon points="185,100 177,115 193,115" fill="#dc2626" opacity="0.8"/>
+            <text x="10" y="195" font-size="9" fill="#64748b">⭕ = support vectors</text>
+          </svg>
+        </div>
+
+        <div class="formula-box">
+<span class="comment"># Decision rule (same as Perceptron):</span>
+f(x) = xᵀθ + b
+
+<span class="comment"># Classification:</span>
+ŷ = +1  if f(x) ≥ 0
+ŷ = -1  if f(x) < 0
+
+<span class="comment"># SVM constraint (support vectors sit at ±1):</span>
+yᵢ(xᵢᵀθ + b) ≥ 1  for all training points
+
+<span class="comment"># Objective: maximize margin = 2/‖θ‖</span>
+<span class="comment"># Equivalently: minimize ½‖θ‖²  (convex quadratic problem)</span>
+
+<span class="highlight">Margin</span> = 2 / ‖θ‖
+<span class="comment"># Larger ‖θ‖ = smaller margin (bad)</span>
+<span class="comment"># Smaller ‖θ‖ = larger margin (good!)</span>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 3 Tested This!</strong>
+          "The separating hyperplane produced by the SVM and perceptron are both unique" → <strong>FALSE</strong>. SVM gives a unique maximum-margin solution; Perceptron gives a non-unique arbitrary solution.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🌀 The Kernel Trick — Non-Linear SVM</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Sometimes data is not linearly separable. The kernel trick implicitly maps data to a higher-dimensional space where it IS separable — without ever computing the high-dimensional vectors.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Computing dot products in a huge feature space is expensive. The kernel function computes the inner product in the transformed space <em>directly from the original space</em> — efficient and powerful.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Common kernels:</span>
+Linear kernel:       K(xᵢ, xⱼ) = xᵢᵀxⱼ
+Polynomial kernel:   K(xᵢ, xⱼ) = (xᵢᵀxⱼ + c)ᵈ
+RBF (Gaussian):      K(xᵢ, xⱼ) = exp(-γ‖xᵢ - xⱼ‖²)
+
+<span class="comment"># The dual form replaces dot products with kernel evaluations:</span>
+f(x) = Σᵢ αᵢ yᵢ K(xᵢ, x) + b
+<span class="comment"># αᵢ are dual variables (non-zero only for support vectors!)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3: PERCEPTRON -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">⚡</div>
+      <div><h2>Part 3: Perceptron</h2><div class="sub">The simplest learnable classifier — the OG neural unit</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔌 How the Perceptron Works</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The Perceptron is a binary classifier that makes hard predictions (±1) and updates its weights whenever it makes a mistake, until all points are correctly classified.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why it matters</div>
+          <p>The Perceptron is literally the building block of neural networks. Each "neuron" in a neural network IS a perceptron with a different activation function. Understanding it deeply means understanding deep learning.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Perceptron model:</span>
+f(x) = θᵀx + θ₀   (linear combination of features)
+ŷ = sign(f(x))    (+1 or -1)
+
+<span class="comment"># Training algorithm:</span>
+Initialize θ = 0
+
+FOR each data point (xᵢ, yᵢ):
+    ŷᵢ = sign(θᵀxᵢ)
+    IF yᵢ × ŷᵢ ≤ 0:   <span class="comment"># misclassified!</span>
+        θ ← θ + η × yᵢ × xᵢ  <span class="comment"># update toward correct class</span>
+
+Repeat until no mistakes (convergence)
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Perceptron Update Visualizer</h4>
+          <div class="desc">See how the perceptron updates its weights when it makes a mistake.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">θ₁: <span id="pt1">0.5</span></label>
+              <input type="range" min="-2" max="2" value="0.5" step="0.1" id="pSlider1" oninput="updatePerceptron()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">θ₂: <span id="pt2">-0.3</span></label>
+              <input type="range" min="-2" max="2" value="-0.3" step="0.1" id="pSlider2" oninput="updatePerceptron()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">η (learning rate): <span id="pEta">0.1</span></label>
+              <input type="range" min="0.01" max="1" value="0.1" step="0.01" id="pEtaSlider" oninput="updatePerceptron()" style="width:100%">
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Test point: x = [2, 1], true label y = +1</p>
+          <div class="output-box" id="percOutput">Adjust sliders to see update...</div>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Perceptron Convergence Theorem</strong>
+          The perceptron is <strong>guaranteed to converge</strong> IF the data is <strong>linearly separable</strong>. If not linearly separable → it will never converge!
+        </div>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h4 style="color:#2563eb;">✅ Advantages</h4>
+            <ul class="bullet">
+              <li>Extremely simple and fast</li>
+              <li>Online learning (updates one point at a time)</li>
+              <li>Foundation of neural networks</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4 style="color:#dc2626;">❌ Disadvantages</h4>
+            <ul class="bullet">
+              <li>Only works for linearly separable data</li>
+              <li>No unique solution — depends on initialization</li>
+              <li>No probability output (hard classification only)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon red">⚖️</div>
+      <div><h2>Side-by-Side Comparison</h2><div class="sub">All three linear classifiers at a glance</div></div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Property</th><th>Perceptron</th><th>Logistic Regression</th><th>SVM</th></tr>
+      <tr><td>Output type</td><td>Hard (sign)</td><td>Soft (probability)</td><td>Hard (sign)</td></tr>
+      <tr><td>Unique solution?</td><td class="bad">No — any separating line</td><td class="good">Yes (global optimum)</td><td class="good">Yes — max-margin line</td></tr>
+      <tr><td>Handles non-separable?</td><td class="bad">No (won't converge)</td><td class="good">Yes</td><td class="good">Yes (soft-margin SVM)</td></tr>
+      <tr><td>Objective</td><td>Classify all points correctly</td><td>Maximize likelihood</td><td>Maximize margin</td></tr>
+      <tr><td>Optimization</td><td>Simple update rule</td><td>Gradient descent (iterative)</td><td>Quadratic programming (convex)</td></tr>
+      <tr><td>Type</td><td>Discriminative</td><td>Discriminative</td><td>Discriminative</td></tr>
+      <tr><td>Probabilistic?</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td></tr>
+    </table>
+    <div class="callout">
+      <strong>🔑 Key Insight: Generative vs. Discriminative</strong>
+      Naive Bayes = Generative (models P(X|Y) and P(Y)). All three this week = Discriminative (compute P(Y|X) or decision boundary directly). Discriminative models often outperform generative when enough data is available.
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 3 Questions</h3>
+
+    <div class="quiz-q">
+      <p>Q1. Which of the following is NOT a discriminative model?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Naive Bayes is generative — it explicitly models the likelihood P(X|Y) and prior P(Y) to compute the posterior. Discriminative models skip this.')">Naive Bayes ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Perceptron IS discriminative — it directly learns a decision boundary without modeling data generation.')">Perceptron Learning Algorithm</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','LR IS discriminative — it computes P(Y|X) directly via the sigmoid, no P(X|Y) needed.')">Logistic Regression</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','SVM IS discriminative — it learns a max-margin boundary directly.')">Support Vector Machine</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. What is the best way to select a threshold for Logistic Regression's sigmoid output?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The ROC curve shows how TPR vs FPR changes across all thresholds. Pick the threshold that best trades off catching positives vs. false alarms for your specific problem.')">Observe the ROC curve to find the best trade-off between TPR and FPR ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','0.5 is a starting point, but it\'s often not optimal — especially for imbalanced datasets or asymmetric costs.')">Always set threshold to 0.5</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Random selection would give inconsistent results.')">Set threshold uniformly from [0.1, 0.9]</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','There is a principled way — use the ROC curve.')">None of the choices</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. The separating hyperplane produced by SVM and Perceptron are both unique — True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is false! The Perceptron produces a non-unique solution depending on initialization and order of examples. Only SVM is unique.')">True — both are unique</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! SVM produces a unique maximum-margin hyperplane. The Perceptron finds any hyperplane that correctly classifies the data — which is not unique.')">False — only SVM is unique ✓</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. For the Perceptron, it is typical to iterate through data one point at a time — True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The Perceptron is an online algorithm — it updates weights after seeing each single data point. This is called Stochastic Gradient Descent when generalized.')">True ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False — the Perceptron processes one point at a time (online learning), not mini-batches or all data at once.')">False — it processes all data at once</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week2.html">← Week 2: Naive Bayes</a>
+    <a href="week4.html">Week 4: SVD & GloVe →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// Sigmoid explorer
+function sigmoid(s) { return 1 / (1 + Math.exp(-s)); }
+function updateSigmoid() {
+  const s = parseFloat(document.getElementById('sigSlider').value);
+  document.getElementById('sigS').textContent = s.toFixed(1);
+  const prob = sigmoid(s);
+  const label = prob >= 0.5 ? 'Class 1 (Positive)' : 'Class 0 (Negative)';
+  document.getElementById('sigOutput').textContent =
+    `s = ${s.toFixed(1)}\nσ(s) = ${prob.toFixed(4)}\n\n→ Prediction: ${label} (${(prob*100).toFixed(1)}% confidence)\n\nThreshold = 0.5: ${prob >= 0.5 ? 'POSITIVE' : 'NEGATIVE'}`;
+  drawSigmoid(s, prob);
+}
+function drawSigmoid(sVal, probVal) {
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  // Axes
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(40, 10); ctx.lineTo(40, H-20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(40, H/2); ctx.lineTo(W-10, H/2); ctx.stroke();
+  // Sigmoid curve
+  ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let px = 40; px <= W-10; px++) {
+    const s = ((px - 40) / (W - 50)) * 12 - 6;
+    const p = sigmoid(s);
+    const py = H - 20 - p * (H - 30);
+    px === 40 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  // Current point
+  const curX = 40 + ((sVal + 6) / 12) * (W - 50);
+  const curY = H - 20 - probVal * (H - 30);
+  ctx.fillStyle = '#d97706'; ctx.beginPath(); ctx.arc(curX, curY, 6, 0, Math.PI*2); ctx.fill();
+  // Threshold line
+  ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+  const thY = H - 20 - 0.5 * (H - 30);
+  ctx.beginPath(); ctx.moveTo(40, thY); ctx.lineTo(W-10, thY); ctx.stroke();
+  ctx.setLineDash([]);
+  // Labels
+  ctx.fillStyle = '#64748b'; ctx.font = '11px sans-serif';
+  ctx.fillText('σ(s)', 44, 22); ctx.fillText('s', W-14, H/2-4);
+  ctx.fillText('1.0', 10, H-20 - (H-30) + 12); ctx.fillText('0.5', 10, thY+4); ctx.fillText('0.0', 10, H-20);
+  ctx.fillStyle = '#dc2626'; ctx.fillText('threshold=0.5', W-110, thY-4);
+}
+updateSigmoid();
+
+// Perceptron update demo
+function updatePerceptron() {
+  const t1 = parseFloat(document.getElementById('pSlider1').value);
+  const t2 = parseFloat(document.getElementById('pSlider2').value);
+  const eta = parseFloat(document.getElementById('pEtaSlider').value);
+  document.getElementById('pt1').textContent = t1.toFixed(2);
+  document.getElementById('pt2').textContent = t2.toFixed(2);
+  document.getElementById('pEta').textContent = eta.toFixed(2);
+  const x = [2, 1]; const y = 1;
+  const s = t1 * x[0] + t2 * x[1];
+  const pred = s >= 0 ? 1 : -1;
+  const correct = pred === y;
+  let out = `θ = [${t1.toFixed(2)}, ${t2.toFixed(2)}]\nx = [${x[0]}, ${x[1]}],  y (true) = ${y}\n\nf(x) = θᵀx = ${t1.toFixed(2)}×${x[0]} + ${t2.toFixed(2)}×${x[1]} = ${s.toFixed(3)}\nŷ = sign(${s.toFixed(3)}) = ${pred}\n\nCorrect? ${correct ? '✅ YES — no update needed' : '❌ NO — updating weights!'}`;
+  if (!correct) {
+    const newT1 = t1 + eta * y * x[0];
+    const newT2 = t2 + eta * y * x[1];
+    out += `\n\nUpdate: θ ← θ + η×y×x\nθ₁ ← ${t1.toFixed(2)} + ${eta.toFixed(2)}×${y}×${x[0]} = ${newT1.toFixed(3)}\nθ₂ ← ${t2.toFixed(2)} + ${eta.toFixed(2)}×${y}×${x[1]} = ${newT2.toFixed(3)}`;
+  }
+  document.getElementById('percOutput').textContent = out;
+}
+updatePerceptron();
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fb = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

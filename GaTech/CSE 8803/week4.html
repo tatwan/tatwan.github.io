@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4 – SVD, Co-occurrence & GloVe | CSE 8803</title>
+<style>
+  :root {
+    --primary: #7c3aed; --primary-light: #ede9fe; --primary-dark: #5b21b6;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #5b21b6; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 60%, #a78bfa 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.green { background: #d1fae5; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #5b21b6; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip { border-color: var(--green); background: #d1fae5; }
+  .callout.info { border-color: var(--blue); background: #dbeafe; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  input[type=range] { accent-color: var(--primary); }
+
+  /* Co-occurrence matrix style */
+  .co-matrix { border-collapse: collapse; font-size: 13px; margin: 16px auto; }
+  .co-matrix th { background: #ede9fe; color: #5b21b6; padding: 8px 12px; font-weight: 700; border: 1px solid #c4b5fd; }
+  .co-matrix td { border: 1px solid #c4b5fd; padding: 8px 12px; text-align: center; }
+  .co-matrix td.high { background: #7c3aed; color: white; font-weight: 700; }
+  .co-matrix td.med { background: #c4b5fd; font-weight: 600; }
+  .co-matrix td.low { background: #f5f3ff; color: #64748b; }
+
+  /* SVD visual */
+  .svd-flow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
+  .matrix-box { border-radius: 8px; padding: 10px 14px; text-align: center; font-size: 13px; font-weight: 700; border: 2px solid var(--border); }
+  .matrix-box .mat-label { font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 4px; }
+  .svd-op { font-size: 20px; color: var(--muted); font-weight: 700; }
+
+  /* Word analogy */
+  .analogy-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .word-vec { background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 700; color: #5b21b6; }
+  .vec-arrow { font-size: 18px; color: var(--muted); }
+  .result-vec { background: #059669; color: white; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 4 — SVD, Co-occurrence & GloVe</span>
+  <div class="nav-links">
+    <a href="week3.html">← Week 3</a>
+    <a href="week5.html">Week 5 →</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 4 · Feb 2–6</div>
+  <h1>SVD, Co-occurrence Matrices &amp; GloVe</h1>
+  <p>The leap from sparse, meaningless word vectors to dense embeddings that actually capture word meaning. This is where NLP gets powerful.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Module 5</span>
+    <span class="chip">📝 Quiz 4 Material</span>
+    <span class="chip">💻 HW2: svd.py &amp; glove.py</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🗺️</div>
+      <div><h2>The Big Picture — The Problem with Sparse Vectors</h2></div>
+    </div>
+    <div class="callout info">
+      <strong>The Core Problem (from Weeks 1-2)</strong>
+      One-hot, BoW, and TF-IDF all produce vectors of size = vocabulary size (could be 100,000+). They're sparse (mostly zeros) and have no notion of meaning. "cat" and "kitten" are as different as "cat" and "airplane". This week we fix that.
+    </div>
+    <table class="compare-table">
+      <tr><th>Representation</th><th>Vector Size</th><th>Captures Meaning?</th><th>Dense?</th></tr>
+      <tr><td>One-Hot / BoW / TF-IDF</td><td class="bad">d (vocab size, huge)</td><td class="bad">No — all words equidistant</td><td class="bad">No — mostly zeros</td></tr>
+      <tr><td>SVD on Co-occurrence</td><td class="good">k (50-500, chosen)</td><td class="good">Partially — context-based</td><td class="good">Yes — all values filled</td></tr>
+      <tr><td>GloVe</td><td class="good">k (50-300, chosen)</td><td class="good">Yes — semantic + linear structure</td><td class="good">Yes</td></tr>
+    </table>
+  </div>
+
+  <!-- PART 1: CO-OCCURRENCE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🔢</div>
+      <div><h2>Part 1: Co-occurrence Matrix</h2><div class="sub">Capturing meaning through context</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🧠 The Distributional Hypothesis — Why Context = Meaning</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>"You shall know a word by the company it keeps." — Words that appear in similar contexts have similar meanings.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>You've never seen the word "glarg" — but if you saw "I ate the glarg", you'd guess it's edible. Context gives meaning. Co-occurrence matrices capture this: words that often appear near each other get high co-occurrence counts.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — Building the Matrix</div>
+          <p>For each word in the corpus, count how many times every other word appears within a sliding window of size k around it. This creates a d×d matrix where d = vocabulary size.</p>
+        </div>
+
+        <div class="formula-box">
+Corpus: "it was the best of times, it was the worst of times"
+Window size: 2
+
+<span class="comment"># How many times does "was" appear near "it"?</span>
+"it was the best..." → "was" is within 2 of "it" ✓
+"it was the worst..." → "was" is within 2 of "it" ✓
+Co-occurrence(it, was) = <span class="eq">2</span>
+
+<span class="comment"># Co-occurrence matrix shape: d × d (d = vocab size)</span>
+<span class="comment"># Symmetric: co-occurrence(i,j) = co-occurrence(j,i)</span>
+        </div>
+
+        <p style="font-size:13px;font-weight:600;margin:16px 0 8px;">Example Co-occurrence Matrix (window=2, corpus above)</p>
+        <div style="overflow-x:auto;">
+          <table class="co-matrix">
+            <tr><th></th><th>it</th><th>was</th><th>the</th><th>best</th><th>worst</th><th>of</th><th>times</th></tr>
+            <tr><td><strong>it</strong></td><td class="low">0</td><td class="high">2</td><td class="med">2</td><td class="low">1</td><td class="low">0</td><td class="low">0</td><td class="low">0</td></tr>
+            <tr><td><strong>was</strong></td><td class="high">2</td><td class="low">0</td><td class="high">2</td><td class="med">1</td><td class="med">1</td><td class="low">0</td><td class="low">0</td></tr>
+            <tr><td><strong>the</strong></td><td class="med">2</td><td class="high">2</td><td class="low">0</td><td class="med">1</td><td class="med">1</td><td class="low">0</td><td class="low">0</td></tr>
+            <tr><td><strong>best</strong></td><td class="low">1</td><td class="med">1</td><td class="med">1</td><td class="low">0</td><td class="low">0</td><td class="med">1</td><td class="low">0</td></tr>
+            <tr><td><strong>worst</strong></td><td class="low">0</td><td class="med">1</td><td class="med">1</td><td class="low">0</td><td class="low">0</td><td class="med">1</td><td class="low">0</td></tr>
+            <tr><td><strong>of</strong></td><td class="low">0</td><td class="low">0</td><td class="low">0</td><td class="med">1</td><td class="med">1</td><td class="low">0</td><td class="high">2</td></tr>
+            <tr><td><strong>times</strong></td><td class="low">0</td><td class="low">0</td><td class="low">0</td><td class="low">0</td><td class="low">0</td><td class="high">2</td><td class="low">0</td></tr>
+          </table>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Purple = high co-occurrence. Notice "best" and "worst" have similar rows → they appear in similar contexts!</p>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 4 Tested This!</strong>
+          "The size of the co-occurrence matrix is proportional to the number of words in the corpus" → <strong>FALSE</strong>. It's d×d where d = vocabulary size (unique words), not total corpus size.
+        </div>
+        <div class="callout warning">
+          <strong>⚠️ Quiz 4: Another Trap!</strong>
+          "For a corpus with n documents and d distinct words, the co-occurrence matrix has size n×n" → <strong>FALSE</strong>. It's d×d.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: SVD -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">📐</div>
+      <div><h2>Part 2: Singular Value Decomposition (SVD)</h2><div class="sub">Compressing the co-occurrence matrix into dense embeddings</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🗜️ SVD: From d×d Sparse → k-dimensional Dense</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>SVD decomposes any matrix X into three matrices: U, Σ, Vᵀ, such that X = U × Σ × Vᵀ. The key insight: we only keep the TOP K singular values (the most important dimensions), giving us compact, dense word vectors.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>The co-occurrence matrix is d×d and very sparse. It's too large and noisy. SVD finds the directions of greatest variance (the directions that best explain the data) — like PCA. By keeping only k dimensions, we get a compressed representation that captures the essential structure.</p>
+        </div>
+
+        <div class="svd-flow">
+          <div class="matrix-box" style="background:#ede9fe;border-color:#c4b5fd;">
+            X<br><div class="mat-label">d × d<br>co-occurrence</div>
+          </div>
+          <div class="svd-op">=</div>
+          <div class="matrix-box" style="background:#dbeafe;border-color:#93c5fd;">
+            U<br><div class="mat-label">d × d<br>left singular vectors</div>
+          </div>
+          <div class="svd-op">×</div>
+          <div class="matrix-box" style="background:#d1fae5;border-color:#6ee7b7;">
+            Σ<br><div class="mat-label">d × d<br>singular values (diagonal)</div>
+          </div>
+          <div class="svd-op">×</div>
+          <div class="matrix-box" style="background:#fef3c7;border-color:#fcd34d;">
+            Vᵀ<br><div class="mat-label">d × d<br>right singular vectors</div>
+          </div>
+        </div>
+
+        <p style="text-align:center;font-size:13px;color:var(--muted);margin:8px 0;">↓ Keep only top K singular values (Truncated SVD)</p>
+
+        <div class="svd-flow">
+          <div class="matrix-box" style="background:#ede9fe;border-color:#c4b5fd;">
+            X ≈<br><div class="mat-label">d × d approx</div>
+          </div>
+          <div class="svd-op">=</div>
+          <div class="matrix-box" style="background:#7c3aed;color:white;border-color:#5b21b6;">
+            U_k<br><div class="mat-label" style="color:#e9d5ff;">d × k<br>WORD EMBEDDINGS ✓</div>
+          </div>
+          <div class="svd-op">×</div>
+          <div class="matrix-box" style="background:#d1fae5;border-color:#6ee7b7;">
+            Σ_k<br><div class="mat-label">k × k</div>
+          </div>
+          <div class="svd-op">×</div>
+          <div class="matrix-box" style="background:#fef3c7;border-color:#fcd34d;">
+            Vᵀ_k<br><div class="mat-label">k × d</div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+<span class="comment"># The top-k rows of U give us k-dimensional word embeddings</span>
+<span class="comment"># Each row = one word's embedding vector</span>
+
+k = number of dimensions to keep (hyperparameter, typically 50-500)
+<span class="comment"># 1 ≤ k ≤ d  (can't keep more than vocab size dimensions)</span>
+
+<span class="highlight">Word embedding</span> for word w = row w of U_k
+  → a vector of size k (dense, all values filled)
+  → similar words will have similar vectors
+
+<span class="comment"># We lose some information (truncation), but gain:</span>
+  ✓ Denoising (noise averaged out)
+  ✓ Generalization (similar words cluster together)
+  ✓ Efficient computation (k << d)
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 SVD Dimensionality Explorer</h4>
+          <div class="desc">Adjust k to see the trade-off between compression and information retention.</div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Vocab size d: <span id="svdD">1000</span></label>
+          <input type="range" min="100" max="5000" value="1000" step="100" id="svdDSlider" oninput="updateSVD()" style="width:100%;margin-bottom:10px;">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Embedding size k: <span id="svdK">100</span></label>
+          <input type="range" min="10" max="500" value="100" step="10" id="svdKSlider" oninput="updateSVD()" style="width:100%;margin-bottom:10px;">
+          <div class="output-box" id="svdOutput">Adjust sliders...</div>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 4: Range of k</strong>
+          "What is the valid range of k for truncated SVD on a d×d co-occurrence matrix?" → <strong>[1, d]</strong>. You can keep anywhere from 1 to all d dimensions. You cannot have k > d.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3: GLOVE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🧲</div>
+      <div><h2>Part 3: GloVe (Global Vectors for Word Representation)</h2><div class="sub">Better word vectors through co-occurrence probabilities</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🌐 GloVe: Beyond Raw Counts</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>GloVe (Global Vectors) trains word vectors so that the <strong>dot product of two word vectors equals the log of their co-occurrence probability</strong>. It combines the strengths of both global matrix factorization and local window methods.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why GloVe over SVD?</div>
+          <p>SVD just factorizes counts (noisy). GloVe uses co-occurrence <em>probabilities</em> and trains with a weighted objective that down-weights very rare and very frequent co-occurrences. This gives cleaner, more meaningful vectors.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — The Objective</div>
+          <p></p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># GloVe's key insight:</span>
+wᵢᵀwⱼ + bᵢ + bⱼ ≈ log(X_{ij})
+
+Where:
+  wᵢ, wⱼ = word vectors for words i and j
+  bᵢ, bⱼ = bias terms
+  X_{ij}  = co-occurrence count of words i and j
+
+<span class="comment"># Weighted least-squares cost function:</span>
+J = Σᵢⱼ f(X_{ij}) × (wᵢᵀwⱼ + bᵢ + bⱼ - log X_{ij})²
+
+f(X) = (X/x_max)^α  if X < x_max
+f(X) = 1            if X ≥ x_max
+<span class="comment"># α = 3/4 worked best in original paper</span>
+<span class="comment"># f(X) down-weights rare co-occurrences (noisy) and caps very frequent ones</span>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 4: Key GloVe Facts</strong>
+          "GloVe probabilities have nothing to do with the co-occurrence matrix" → <strong>FALSE</strong>. GloVe is entirely based on co-occurrence statistics.<br><br>
+          "GloVe word vectors capture linear structure and semantic meaning" → <strong>TRUE</strong>.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔮 Word Analogy: The Magic of Dense Embeddings</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What GloVe Captures</div>
+          <p>GloVe vectors encode linear relationships between words. Vector arithmetic captures meaning:</p>
+        </div>
+
+        <div class="analogy-row">
+          <div class="word-vec">king</div>
+          <div class="vec-arrow">−</div>
+          <div class="word-vec">man</div>
+          <div class="vec-arrow">+</div>
+          <div class="word-vec">woman</div>
+          <div class="vec-arrow">≈</div>
+          <div class="result-vec">queen ✓</div>
+        </div>
+        <div class="analogy-row">
+          <div class="word-vec">England</div>
+          <div class="vec-arrow">−</div>
+          <div class="word-vec">English</div>
+          <div class="vec-arrow">+</div>
+          <div class="word-vec">Italian</div>
+          <div class="vec-arrow">≈</div>
+          <div class="result-vec">Italy ✓</div>
+        </div>
+        <div class="analogy-row">
+          <div class="word-vec">summer</div>
+          <div class="vec-arrow">→ nearest neighbors:</div>
+          <div class="result-vec">winter, spring, autumn ✓</div>
+        </div>
+
+        <div class="callout tip">
+          <strong>💡 Why this works</strong>
+          The semantic concept "gender" lives in the subspace captured by king−man = queen−woman. The model has learned not just word associations but underlying semantic dimensions. This is what sparse vectors (OHE, BoW) can <em>never</em> do.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 4 Questions</h3>
+
+    <div class="quiz-q">
+      <p>Q1. The size of the co-occurrence matrix is directly proportional to the number of words in the corpus — True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is FALSE — the matrix size is d×d where d is the VOCABULARY size (unique words), not the total corpus length.')">True</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The co-occurrence matrix is d×d where d = number of UNIQUE words (vocabulary size). Total corpus length doesn\'t determine matrix size.')">False ✓</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. For a corpus with n documents and d distinct words, what is the shape of the co-occurrence matrix?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','n×d is the shape of a BoW document-term matrix, not the co-occurrence matrix.')">n × d (documents × vocabulary)</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','n×n would be a document-document similarity matrix.')">n × n (documents × documents)</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Co-occurrence is word vs. word — both axes are the vocabulary. Shape = d × d (vocabulary × vocabulary).')">d × d (vocabulary × vocabulary) ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is the shape of the SVD result U_k after truncation, not the raw co-occurrence matrix.')">d × k (vocabulary × embedding size)</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. After performing truncated SVD on a d×d co-occurrence matrix keeping top k values, what is the valid range of k?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','[1,n] would tie k to document count — but SVD on co-occurrence has nothing to do with n.')">[ 1, n ]</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','k must be at least 1, not starting at d.')">[ d, n ]</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! k can range from 1 (maximum compression) to d (keeping all dimensions = no compression). In practice, k is 50-500.')">[ 1, d ] ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','k cannot exceed d — you cannot create more dimensions than you started with.')">[ 1, ∞ ]</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. GloVe uses co-occurrence probabilities — not raw counts — as its primary source of information. True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! GloVe computes P(j|i) = X_ij / X_i (probability of word j in context of i) and trains vectors so that wᵢᵀwⱼ ≈ log(X_ij). Probabilities, not just counts.')">True ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','GloVe absolutely uses co-occurrence statistics — that\'s the G in GloVe (Global co-occurrence statistics).')">False — GloVe ignores co-occurrence</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week3.html">← Week 3: Linear Classifiers</a>
+    <a href="week5.html">Week 5: Neural Networks →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+function updateSVD() {
+  const d = parseInt(document.getElementById('svdDSlider').value);
+  const k = parseInt(document.getElementById('svdKSlider').value);
+  document.getElementById('svdD').textContent = d;
+  document.getElementById('svdK').textContent = k;
+  const originalSize = d * d;
+  const embeddingSize = d * k;
+  const ratio = (embeddingSize / originalSize * 100).toFixed(1);
+  const compression = (100 - parseFloat(ratio)).toFixed(1);
+  const kValid = k <= d;
+  document.getElementById('svdOutput').textContent =
+    `Co-occurrence matrix: ${d} × ${d} = ${originalSize.toLocaleString()} values\nEmbedding matrix (U_k): ${d} × ${k} = ${embeddingSize.toLocaleString()} values\n\nCompression: ${compression}% smaller\nStorage reduction: ${(originalSize/embeddingSize).toFixed(1)}× fewer values\n\nValid k? ${kValid ? '✅ Yes (k ≤ d)' : '❌ No! k cannot exceed d=' + d}\n\nTypical practice: k = 50–500\nEach word gets a dense ${k}-dimensional vector`;
+}
+updateSVD();
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fb = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

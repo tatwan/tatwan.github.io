@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 – CNN & RNN | CSE 8803</title>
+<style>
+  :root {
+    --primary: #0284c7; --primary-light: #e0f2fe; --primary-dark: #075985;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626; --purple: #7c3aed;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #075985; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #fbbf24; color: #92400e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #075985 0%, #0284c7 60%, #38bdf8 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #92400e; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.blue { background: #dbeafe; } .section-icon.cyan { background: #e0f2fe; }
+  .section-icon.green { background: #d1fae5; } .section-icon.orange { background: #fef3c7; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #075985; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip { border-color: var(--green); background: #d1fae5; }
+  .callout.danger { border-color: var(--red); background: #fee2e2; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  input[type=range] { accent-color: var(--primary); }
+  canvas { border-radius: 8px; }
+
+  /* CNN visual */
+  .cnn-pipeline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; justify-content: center; }
+  .cnn-block { border-radius: 8px; padding: 10px 14px; text-align: center; font-size: 12px; font-weight: 700; border: 2px solid; min-width: 90px; }
+  .cnn-arrow { font-size: 18px; color: var(--muted); }
+
+  /* RNN visual */
+  .rnn-chain { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 16px 0; justify-content: center; }
+  .rnn-unit { background: #e0f2fe; border: 2px solid #0284c7; border-radius: 10px; padding: 10px 12px; text-align: center; min-width: 80px; }
+  .rnn-unit .word { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .rnn-unit .h { font-size: 13px; font-weight: 700; color: #075985; }
+  .rnn-unit .out { font-size: 10px; color: #059669; margin-top: 4px; }
+  .rnn-arrow { font-size: 20px; color: #0284c7; font-weight: bold; }
+
+  /* Upcoming preview */
+  .upcoming-card { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 1px solid #c4b5fd; border-radius: 14px; padding: 24px; margin-top: 32px; }
+  .upcoming-card h3 { font-size: 18px; font-weight: 700; color: #5b21b6; margin-bottom: 12px; }
+  .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .upcoming-item { background: white; border-radius: 10px; padding: 14px; border: 1px solid #c4b5fd; }
+  .upcoming-item .wk { font-size: 11px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .upcoming-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .upcoming-item p { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 6 — CNN &amp; RNN <span class="you-are-here">← YOU ARE HERE</span></span>
+  <div class="nav-links">
+    <a href="week5.html">← Week 5</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 6 · Feb 16–20 · Current Week</div>
+  <h1>Convolutional &amp; Recurrent Neural Networks</h1>
+  <p>CNNs extract local patterns from text. RNNs process sequences with memory. Together, they unlock understanding of structure and order in language.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Module 7</span>
+    <span class="chip alert">🔔 Quiz 5 due TODAY (Feb 20)</span>
+    <span class="chip">💻 HW2 due TODAY · HW3 out today</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon cyan">🗺️</div>
+      <div><h2>The Big Picture</h2><div class="sub">Why do we need CNN and RNN after regular Neural Networks?</div></div>
+    </div>
+    <div class="callout">
+      <strong>The Limitation of Fully-Connected Networks</strong>
+      Regular (FC) Neural Networks treat every feature independently and in fixed positions. For text and images, <em>position and order matter</em>. "Dog bites man" ≠ "Man bites dog". CNNs capture local patterns; RNNs capture sequential dependencies.
+    </div>
+    <table class="compare-table">
+      <tr><th>Network Type</th><th>What it captures</th><th>Position-aware?</th><th>Memory?</th></tr>
+      <tr><td>FC Neural Network</td><td>Global patterns (all features at once)</td><td class="bad">No</td><td class="bad">No</td></tr>
+      <tr><td><strong>CNN</strong></td><td>Local patterns (n-gram-like features)</td><td class="good">Yes (local regions)</td><td class="bad">No</td></tr>
+      <tr><td><strong>RNN</strong></td><td>Sequential patterns (order-aware)</td><td class="good">Yes (sequence order)</td><td class="good">Yes (hidden state)</td></tr>
+    </table>
+  </div>
+
+  <!-- PART 1: CNN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🔍</div>
+      <div><h2>Part 1: Convolutional Neural Networks (CNN)</h2><div class="sub">Local pattern detectors for text</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔬 Filters and Convolution — The Core Idea</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>A CNN uses small learnable <strong>filters</strong> (also called kernels) that slide across the input, performing a dot product at each position. Each filter detects a specific local pattern (e.g., "I love" or a specific visual edge).</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Instead of connecting every input feature to every hidden neuron (too many parameters!), each hidden neuron connects only to a small local region. This drastically reduces parameters and forces the network to look for local structure.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — Text CNN Step by Step</div>
+          <p></p>
+        </div>
+
+        <div class="formula-box">
+<span class="comment"># Step 1: Convert each word to a vector (one-hot or Word2Vec)</span>
+Document → Matrix of shape (n_words × embedding_dim)
+"great movie love it" → [4 × 12] matrix  (e.g., 12-dim one-hot)
+
+<span class="comment"># Step 2: Zero-pad all documents to same length</span>
+If max_len = 6, pad shorter docs: [4×12] → [6×12] (add zero rows)
+
+<span class="comment"># Step 3: Apply filters (convolution)</span>
+Filter size: (k × embedding_dim)  where k = n-gram window size
+Filter slides down the rows with stride 1
+Dot product at each position → scalar output
+n_words - k + 1 scalars → feature map of size (n-k+1)
+
+<span class="comment"># Step 4: Max Pooling</span>
+Take MAX value from each feature map
+→ one scalar per filter (captures strongest activation)
+
+<span class="comment"># Step 5: Flatten → FC layer → prediction</span>
+n_filters scalars → concatenate → classify
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 CNN Convolution Visualizer</h4>
+          <div class="desc">See how a filter slides over a document matrix and computes the feature map.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Document length (n): <span id="cnnN">6</span></label>
+              <input type="range" min="4" max="10" value="6" id="cnnNSlider" oninput="updateCNN()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Filter size (k): <span id="cnnK">3</span></label>
+              <input type="range" min="2" max="5" value="3" id="cnnKSlider" oninput="updateCNN()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Embedding dim (d): <span id="cnnD">8</span></label>
+              <input type="range" min="4" max="20" value="8" id="cnnDSlider" oninput="updateCNN()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Number of filters: <span id="cnnF">4</span></label>
+              <input type="range" min="1" max="10" value="4" id="cnnFSlider" oninput="updateCNN()" style="width:100%">
+            </div>
+          </div>
+          <div class="output-box" id="cnnOutput">Adjust sliders to see computation...</div>
+        </div>
+
+        <p style="font-size:13px;font-weight:600;margin:16px 0 8px;">CNN for Text — Pipeline</p>
+        <div class="cnn-pipeline">
+          <div class="cnn-block" style="background:#dbeafe;border-color:#93c5fd;">Input Matrix<br><small>n × d</small></div>
+          <div class="cnn-arrow">→</div>
+          <div class="cnn-block" style="background:#ede9fe;border-color:#c4b5fd;">Conv Layer<br><small>filters: k × d</small></div>
+          <div class="cnn-arrow">→</div>
+          <div class="cnn-block" style="background:#d1fae5;border-color:#6ee7b7;">Feature Maps<br><small>(n-k+1) per filter</small></div>
+          <div class="cnn-arrow">→</div>
+          <div class="cnn-block" style="background:#fef3c7;border-color:#fcd34d;">Max Pooling<br><small>1 value per filter</small></div>
+          <div class="cnn-arrow">→</div>
+          <div class="cnn-block" style="background:#fee2e2;border-color:#fca5a5;">FC + Softmax<br><small>classification</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🏊 Max Pooling — Selecting the Strongest Signal</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>After convolution, each filter produces a feature map (a vector of scores). Max pooling selects the <strong>maximum value</strong> from this map — capturing "was this pattern detected anywhere in the document?"</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>We don't care WHERE in the document a positive pattern appears — only WHETHER it appears. Max pooling achieves this position-invariance and further reduces dimensionality, preventing overfitting.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Example: filter produces feature map [0.3, -0.1, 0.8, 0.2, 0.5]</span>
+Max pool → <span class="eq">0.8</span>  ← "yes, this n-gram pattern appeared!"
+
+<span class="comment"># For images (2×2 max pool over 4×4 → 2×2):</span>
+[[3, 1, 2, 4],      [[3, 4],
+ [2, 4, 1, 0],  →    [4, 5]]
+ [1, 0, 3, 5],
+ [2, 4, 1, 2]]
+<span class="comment"># Each 2×2 block → its maximum value</span>
+        </div>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h4 style="color:#0284c7;">CNN Parameter Sharing</h4>
+            <p>The same filter weights are used at every position. This means the network learns to detect a pattern (e.g., "not good") anywhere in the text, using far fewer parameters than a fully-connected layer.</p>
+          </div>
+          <div class="mini-card">
+            <h4 style="color:#0284c7;">3 Ways CNN Reduces Parameters</h4>
+            <ul class="bullet">
+              <li><strong>Local connectivity</strong>: each neuron sees only k words</li>
+              <li><strong>Weight sharing</strong>: same filter reused at every position</li>
+              <li><strong>Max pooling</strong>: subsamples the feature maps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: RNN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🔁</div>
+      <div><h2>Part 2: Recurrent Neural Networks (RNN)</h2><div class="sub">Sequential memory for language</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>💾 The Hidden State — RNN's Memory</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>An RNN processes the input <strong>one word at a time</strong>, maintaining a hidden state hₜ that serves as memory — it carries information from all previous words into the current step.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>For NER (Named Entity Recognition): "Mahdi" vs "Mahdi teaches" → the word after Mahdi helps confirm it's a person. CNNs see only a fixed window; RNNs see the entire history. Word order matters for understanding meaning.</p>
+        </div>
+
+        <div class="formula-box">
+<span class="comment"># At each timestep t, processing word xₜ:</span>
+<span class="highlight">hₜ</span> = tanh( xₜ × Θ¹ + hₜ₋₁ × Θ³ + b )
+  <span class="comment">← combines current word AND previous memory</span>
+
+<span class="highlight">ŷₜ</span> = softmax( hₜ × Θ² )
+  <span class="comment">← predict output at this step (if needed)</span>
+
+<span class="comment"># Parameter sharing (KEY property of RNNs):</span>
+Θ¹, Θ², Θ³ are SHARED across ALL timesteps
+Total params = d×m + m×y + m×m  (regardless of sequence length!)
+
+<span class="comment"># Sizes:</span>
+xₜ: d-dimensional word vector
+hₜ: m-dimensional hidden state (hyperparameter)
+Θ¹: d × m  (input → hidden)
+Θ³: m × m  (prev hidden → hidden)
+Θ²: m × y  (hidden → output)
+        </div>
+
+        <p style="font-size:13px;font-weight:600;margin:16px 0 8px;">RNN Unrolled — "Mahdi and Wafa teach NLP"</p>
+        <div class="rnn-chain">
+          <div class="rnn-unit">
+            <div class="word">x₁: "Mahdi"</div>
+            <div class="h">h₁</div>
+            <div class="out">ŷ₁=PERSON</div>
+          </div>
+          <div class="rnn-arrow">→</div>
+          <div class="rnn-unit">
+            <div class="word">x₂: "and"</div>
+            <div class="h">h₂</div>
+            <div class="out">ŷ₂=OTHER</div>
+          </div>
+          <div class="rnn-arrow">→</div>
+          <div class="rnn-unit">
+            <div class="word">x₃: "Wafa"</div>
+            <div class="h">h₃</div>
+            <div class="out">ŷ₃=PERSON</div>
+          </div>
+          <div class="rnn-arrow">→</div>
+          <div class="rnn-unit">
+            <div class="word">x₄: "teach"</div>
+            <div class="h">h₄</div>
+            <div class="out">ŷ₄=OTHER</div>
+          </div>
+          <div class="rnn-arrow">→</div>
+          <div class="rnn-unit">
+            <div class="word">x₅: "NLP"</div>
+            <div class="h">h₅</div>
+            <div class="out">ŷ₅=OTHER</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Each hₜ carries memory of all words before it. Θ¹, Θ², Θ³ are shared at every step — same weights for all words.</p>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🏗️ RNN Architectures — Many-to-Many, Many-to-One, One-to-Many</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Architecture</th><th>Input → Output</th><th>NLP Example</th></tr>
+          <tr><td><strong>Many-to-Many</strong></td><td>Sequence → Sequence (same length)</td><td>NER: label each word in a sentence</td></tr>
+          <tr><td><strong>Many-to-One</strong></td><td>Sequence → Single output</td><td>Sentiment analysis: entire doc → positive/negative</td></tr>
+          <tr><td><strong>One-to-Many</strong></td><td>Single input → Sequence</td><td>Image captioning: one image → generated description</td></tr>
+          <tr><td><strong>Many-to-Many</strong> (encoder-decoder)</td><td>Sequence → Sequence (different length)</td><td>Machine translation: English → French</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⚠️ Vanishing &amp; Exploding Gradients</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>During backpropagation through time (BPTT), gradients are multiplied through many timesteps. This causes gradients to either shrink to near-zero (vanishing) or grow uncontrollably (exploding).</p>
+        </div>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h4 style="color:#dc2626;">💥 Exploding Gradients</h4>
+            <p><strong>Problem:</strong> Gradient grows exponentially → weights update wildly, training diverges.</p>
+            <p><strong>Solution:</strong> Gradient clipping — if ‖gradient‖ > threshold, scale it down.</p>
+          </div>
+          <div class="mini-card">
+            <h4 style="color:#d97706;">🌫️ Vanishing Gradients</h4>
+            <p><strong>Problem:</strong> Gradient shrinks to near zero → early timesteps get no learning signal → can't learn long-range dependencies.</p>
+            <p><strong>Solutions:</strong> ReLU activation, LSTM/GRU (Week 7), better weight initialization.</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Why Simple RNNs Struggle with Long Sequences</strong>
+          If the relevant context is 50 words ago, gradients get multiplied 50 times — and they typically vanish. This is why LSTM (Week 7) was invented: it uses gating mechanisms to selectively remember and forget.
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Vanishing Gradient Visualizer</h4>
+          <div class="desc">See how gradient magnitude changes as it propagates back through timesteps.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Gradient per step (g): <span id="vgG">0.7</span></label>
+              <input type="range" min="0.1" max="1.5" value="0.7" step="0.05" id="vgGSlider" oninput="updateVG()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Sequence length: <span id="vgT">10</span></label>
+              <input type="range" min="3" max="20" value="10" id="vgTSlider" oninput="updateVG()" style="width:100%">
+            </div>
+          </div>
+          <canvas id="vgCanvas" width="500" height="150"></canvas>
+          <div class="output-box" id="vgOutput">Adjust sliders...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CNN vs RNN comparison -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">⚖️</div>
+      <div><h2>CNN vs RNN for NLP — When to Use Which</h2></div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Property</th><th>CNN for Text</th><th>RNN for Text</th></tr>
+      <tr><td>Captures</td><td>Local n-gram patterns (fixed window)</td><td>Sequential dependencies (full history)</td></tr>
+      <tr><td>Position-aware</td><td>Partially (local window only)</td><td class="good">Yes (full sequence order)</td></tr>
+      <tr><td>Training speed</td><td class="good">Fast (parallelizable)</td><td>Slower (sequential processing)</td></tr>
+      <tr><td>Long-range dependencies</td><td class="bad">Poor (limited window size)</td><td>Better (but vanishing gradient)</td></tr>
+      <tr><td>Best for</td><td>Text classification, sentiment analysis</td><td>NER, machine translation, language modeling</td></tr>
+      <tr><td>Zero-padding</td><td class="good">Required (all docs same length)</td><td class="good">Used (or bucketing for efficiency)</td></tr>
+    </table>
+  </div>
+
+  <!-- Coming Up Next -->
+  <div class="upcoming-card">
+    <h3>🔭 What's Coming Next (Week 7+)</h3>
+    <p style="font-size:14px;color:#374151;margin-bottom:16px;">You've now built all the foundations. Here's how Week 6 connects to the rest of the course:</p>
+    <div class="upcoming-grid">
+      <div class="upcoming-item">
+        <div class="wk">Week 7</div>
+        <h4>LSTM &amp; GRU</h4>
+        <p>Fixes RNN's vanishing gradient with gates. Builds directly on Week 6 RNN.</p>
+      </div>
+      <div class="upcoming-item">
+        <div class="wk">Week 7</div>
+        <h4>Attention Mechanism</h4>
+        <p>LSTM + Attention = model can focus on the most relevant parts of the input.</p>
+      </div>
+      <div class="upcoming-item">
+        <div class="wk">Week 9</div>
+        <h4>Transformers</h4>
+        <p>Replaces RNN entirely with self-attention. More parallelizable, better at long-range.</p>
+      </div>
+      <div class="upcoming-item">
+        <div class="wk">Week 9</div>
+        <h4>BERT &amp; GPT</h4>
+        <p>Transformers trained on massive data. Context-dependent embeddings (finally!).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 6 / Quiz 6 Preview</h3>
+
+    <div class="quiz-q">
+      <p>Q1. What is the primary advantage of using CNN over a fully-connected neural network for text classification?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CNNs don\'t automatically handle missing data.')">Handles missing data better</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CNN uses local connectivity (each neuron sees k words) and weight sharing (same filter reused everywhere), drastically reducing parameters and overfitting risk.')">Reduces the number of parameters through local connectivity and weight sharing ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CNNs need zero-padding to ensure all documents have the same size.')">Does not require fixed-size inputs</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','RNNs capture sequential order better. CNNs have limited window sizes.')">Captures sequential order of words better than RNN</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. In a CNN for text, if the document matrix has shape (6 × 12) and we apply a filter of shape (3 × 12) with stride 1, what is the feature map size?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','4 is correct! Formula: n - k + 1 = 6 - 3 + 1 = 4, not 3.')">3</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Feature map size = n - k + 1 = 6 - 3 + 1 = 4. The filter can be placed at row 1, 2, 3, or 4.')">4 ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Same as input (6) would mean stride 0 — not standard convolution.')">6</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','12 is the embedding dimension, not the feature map size.')">12</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. What does the hidden state hₜ in an RNN represent?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The output ŷₜ represents the prediction. hₜ is the internal memory state.')">The final classification label for word t</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The embedding is xₜ (the input word vector). hₜ is computed from xₜ AND the previous state.')">The word embedding of xₜ</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! hₜ encodes information from ALL previous words x₁...xₜ. It\'s computed as tanh(xₜΘ¹ + hₜ₋₁Θ³) — combining current input with previous memory.')">A summary/memory of all words processed up to step t ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Parameter matrices Θ are the weights, not the hidden state.')">The weight matrix of the network</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. What is the vanishing gradient problem in RNNs and what is a common solution?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Exploding gradients are the opposite problem (gradients get too large). Clipping is the solution for that.')">Gradients become too large; solved by gradient clipping</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Gradients shrink as they backpropagate through many timesteps, preventing early words from being learned. LSTM/GRU solve this with gating mechanisms that control information flow.')">Gradients shrink to near-zero over many timesteps; solved by LSTM/GRU ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This describes overfitting, not the vanishing gradient problem.')">Model memorizes training data; solved by dropout</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Max pooling reduces dimensions in CNNs, not RNNs.')">Max pooling values become zero; solved by average pooling</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week5.html">← Week 5: Neural Networks & Word2Vec</a>
+    <a href="index.html">Back to All Weeks →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// CNN Calculator
+function updateCNN() {
+  const n = parseInt(document.getElementById('cnnNSlider').value);
+  const k = parseInt(document.getElementById('cnnKSlider').value);
+  const d = parseInt(document.getElementById('cnnDSlider').value);
+  const f = parseInt(document.getElementById('cnnFSlider').value);
+  document.getElementById('cnnN').textContent = n;
+  document.getElementById('cnnK').textContent = k;
+  document.getElementById('cnnD').textContent = d;
+  document.getElementById('cnnF').textContent = f;
+  const featMapSize = n - k + 1;
+  if (featMapSize <= 0) { document.getElementById('cnnOutput').textContent = '⚠️ Filter size k must be ≤ document length n'; return; }
+  const filterParams = k * d;
+  const totalFilterParams = filterParams * f;
+  const fcParams = totalFilterParams; // after global max pool
+  const fcCompare = n * d; // FC would need this per first hidden neuron (if all connected to all)
+  const paramReduction = fcCompare > 0 ? ((1 - filterParams/fcCompare) * 100).toFixed(0) : 0;
+  document.getElementById('cnnOutput').textContent =
+    `Document matrix: ${n} × ${d} = ${n*d} values\n\n` +
+    `--- Convolution ---\nFilter shape: ${k} × ${d} = ${filterParams} parameters each\n` +
+    `Feature map size: ${n} - ${k} + 1 = ${featMapSize} positions\n` +
+    `With ${f} filters: ${f} feature maps of size ${featMapSize}\n\n` +
+    `--- Max Pooling ---\nAfter max pool: ${f} values (one per filter)\n\n` +
+    `--- Parameters ---\nFilter parameters: ${f} × ${filterParams} = ${totalFilterParams}\n` +
+    `vs. FC layer (all connected): ${fcCompare} per neuron\n` +
+    `Parameter reduction: ~${paramReduction}% fewer params per neuron\n\n` +
+    `✓ Weight sharing: same ${filterParams} filter params reused at all ${featMapSize} positions`;
+}
+updateCNN();
+
+// Vanishing gradient visualizer
+function updateVG() {
+  const g = parseFloat(document.getElementById('vgGSlider').value);
+  const T = parseInt(document.getElementById('vgTSlider').value);
+  document.getElementById('vgG').textContent = g.toFixed(2);
+  document.getElementById('vgT').textContent = T;
+
+  const canvas = document.getElementById('vgCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const values = [];
+  for (let t = 0; t < T; t++) { values.push(Math.pow(g, T - 1 - t)); }
+  const maxV = Math.max(...values, 0.001);
+  // Draw bars
+  const barW = (W - 60) / T;
+  values.forEach((v, i) => {
+    const barH = (v / maxV) * (H - 40);
+    const x = 40 + i * barW;
+    const y = H - 20 - barH;
+    const color = g > 1 ? '#dc2626' : g < 0.8 ? `rgba(2,132,199,${Math.min(1, v/maxV + 0.1)})` : '#059669';
+    ctx.fillStyle = color;
+    ctx.fillRect(x + 2, y, barW - 4, barH);
+    if (T <= 10) {
+      ctx.fillStyle = '#374151'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(`t${i+1}`, x + barW/2, H - 5);
+    }
+  });
+  ctx.fillStyle = '#374151'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Gradient', 2, 15);
+  ctx.fillText('magnitude', 2, 27);
+
+  const status = g > 1.2 ? '💥 EXPLODING: gradient growing uncontrollably!' :
+    g > 1.0 ? '⚠️ Growing: slight explosion risk' :
+    g > 0.8 ? '✅ Stable gradient flow' :
+    g > 0.5 ? '🟡 Mild vanishing: long sequences may struggle' :
+    '🌫️ VANISHING: early words get near-zero gradient!';
+  const earlyGrad = values[0].toExponential(3);
+  document.getElementById('vgOutput').textContent =
+    `Per-step gradient: ${g.toFixed(2)}\nGradient at earliest timestep (t=1): ${earlyGrad}\n\n${status}`;
+}
+updateVG();
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fb = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 – Text Preprocessing & Representations | CSE 8803</title>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #eff6ff; --primary-dark: #1e40af;
+    --green: #059669; --orange: #d97706; --red: #dc2626; --purple: #7c3aed;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* NAV */
+  .topnav { background: var(--primary-dark); color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+
+  /* HEADER */
+  .page-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* SECTION */
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.green { background: #d1fae5; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+
+  /* CONCEPT CARDS */
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* WHY/WHAT/HOW pills */
+  .pillbox { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pill { border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill.what { background: #dbeafe; color: #1d4ed8; }
+  .pill.why { background: #d1fae5; color: #065f46; }
+  .pill.how { background: #fef3c7; color: #92400e; }
+  .pill.key { background: #ede9fe; color: #5b21b6; }
+
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+
+  /* FORMULA BOX */
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+
+  /* COMPARISON TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: var(--primary-dark); color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: var(--green); font-weight: 600; }
+  .compare-table .bad { color: var(--red); }
+
+  /* INTERACTIVE SECTION */
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; margin-bottom: 8px; }
+  textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn.secondary { background: var(--bg); color: var(--primary); border: 1px solid var(--primary); }
+  .btn.secondary:hover { background: var(--primary-light); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+
+  /* VISUAL: One-hot grid */
+  .ohe-grid { display: grid; gap: 4px; margin: 16px 0; }
+  .ohe-row { display: flex; gap: 4px; align-items: center; }
+  .ohe-label { width: 90px; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; padding-right: 8px; flex-shrink: 0; }
+  .ohe-cell { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .ohe-cell.zero { background: #f1f5f9; color: #94a3b8; border: 1px solid #e2e8f0; }
+  .ohe-cell.one { background: #2563eb; color: white; border: 1px solid #1d4ed8; }
+  .ohe-header-row { display: flex; gap: 4px; margin-left: 98px; }
+  .ohe-header-cell { width: 36px; font-size: 10px; color: var(--muted); text-align: center; font-weight: 600; }
+
+  /* TF-IDF Visual */
+  .tfidf-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .tfidf-bar-label { width: 80px; font-size: 12px; font-weight: 600; text-align: right; color: var(--text); }
+  .tfidf-bar-wrap { flex: 1; background: #f1f5f9; border-radius: 4px; height: 20px; overflow: hidden; }
+  .tfidf-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 600; color: white; transition: width 0.5s ease; }
+  .tfidf-bar-val { font-size: 12px; color: var(--muted); width: 50px; }
+
+  /* QUIZ */
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+
+  /* PAGE NAV */
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  .page-nav a:hover { color: var(--primary-dark); }
+
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip { border-color: var(--green); background: #d1fae5; }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 1 — Text Preprocessing & Representations</span>
+  <div class="nav-links">
+    <a href="week2.html">Week 2 →</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 1 · Jan 12–16</div>
+  <h1>Text Preprocessing &amp; Text Representations</h1>
+  <p>How do we turn messy, raw text into numbers a machine can learn from? This week lays the entire foundation.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Modules 1 &amp; 2</span>
+    <span class="chip">📝 Quiz 1 Material</span>
+    <span class="chip">💻 HW1: preprocess.py &amp; encode.py</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🗺️</div>
+      <div><h2>The Big Picture</h2><div class="sub">Why this week matters</div></div>
+    </div>
+    <div class="callout">
+      <strong>Core Challenge of NLP</strong>
+      Computers only understand numbers — but language is text. Before we can use any ML model, we must answer: <em>"How do I convert a document into a meaningful number?"</em> That's exactly what this week solves.
+    </div>
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>Raw Text (what we have)</h4>
+        <p>"He is a Programmer! Check out https://abc.com 😊"</p>
+      </div>
+      <div class="mini-card">
+        <h4>Processed Vector (what we need)</h4>
+        <p>[0, 1, 0, 2, 0, 1, 0, 0, 0, 1 …] ← a row in our matrix</p>
+      </div>
+    </div>
+    <p style="font-size:14px;color:#374151;margin-top:12px;">The pipeline: <strong>Raw Text → Preprocessing → Encoding → Numeric Matrix → ML Model</strong></p>
+  </div>
+
+  <!-- PART 1: PREPROCESSING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🧹</div>
+      <div><h2>Part 1: Text Preprocessing</h2><div class="sub">Cleaning and normalizing text before encoding</div></div>
+    </div>
+
+    <!-- Tokenization -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📌 NLP Terminology You Must Know</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <table class="compare-table">
+          <tr><th>Term</th><th>Definition</th><th>Example</th></tr>
+          <tr><td><strong>Corpus</strong></td><td>A collection of text documents</td><td>All Yelp reviews, Wikipedia, emails</td></tr>
+          <tr><td><strong>Token</strong></td><td>A single unit of text (usually a word)</td><td>"hello" in "hello world"</td></tr>
+          <tr><td><strong>Vocabulary (V)</strong></td><td>Set of all unique words in the corpus</td><td>{"cat", "dog", "fish"} → d=3</td></tr>
+          <tr><td><strong>Tokenization</strong></td><td>Splitting text into tokens</td><td>"I am here" → ["I","am","here"]</td></tr>
+          <tr><td><strong>Stop Words</strong></td><td>Common words with little meaning</td><td>"a", "the", "is", "and"</td></tr>
+          <tr><td><strong>N-gram</strong></td><td>Sequence of N consecutive tokens</td><td>Bigram of "NLP is fun": ("NLP","is"),("is","fun")</td></tr>
+          <tr><td><strong>Syntax</strong></td><td>Grammatical structure of language</td><td>Subject → Verb → Object</td></tr>
+          <tr><td><strong>Semantics</strong></td><td>Meaning carried by words/text</td><td>"bank" → financial institution or river bank?</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Stemming vs Lemmatization -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>✂️ Stemming vs. Lemmatization</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Both techniques reduce a word to its <strong>base/root form</strong> to group together inflected versions of the same word (e.g., "running", "runs", "ran" → all mean "run").</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Without normalization, "program", "programming", and "programmer" are treated as <em>3 different features</em>. They all carry the same root meaning. Reducing them helps the model generalize better and reduces the vocabulary size.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — The Difference</div>
+          <p></p>
+        </div>
+        <table class="compare-table">
+          <tr><th>Technique</th><th>Method</th><th>Input</th><th>Output</th><th>Notes</th></tr>
+          <tr><td><strong>Stemming</strong></td><td>Chops off prefixes/suffixes (rule-based)</td><td>programmer</td><td class="good">programm</td><td>Fast but may not be a real word</td></tr>
+          <tr><td><strong>Lemmatization</strong></td><td>Uses a dictionary to find the true root</td><td>programmer</td><td class="good">program</td><td>Slower but linguistically correct</td></tr>
+        </table>
+        <div class="formula-box">
+<span class="comment"># Python: Stemming with Porter Stemmer (NLTK)</span>
+from nltk.stem import PorterStemmer
+ps = PorterStemmer()
+ps.stem("programmer")  <span class="eq">→ "programm"</span>
+ps.stem("running")     <span class="eq">→ "run"</span>
+
+<span class="comment"># Python: Lemmatization with WordNetLemmatizer (NLTK)</span>
+from nltk.stem import WordNetLemmatizer
+wl = WordNetLemmatizer()
+wl.lemmatize("programmer")  <span class="eq">→ "programmer"</span>
+wl.lemmatize("running", pos='v')  <span class="eq">→ "run"</span>
+        </div>
+        <div class="callout warning">
+          <strong>⚠️ Quiz 1 Tested This!</strong>
+          "What is the output if stemming is applied to <em>programmer</em>?" → Answer: <strong>"programm"</strong> (not a real word — that's the nature of stemming).
+        </div>
+      </div>
+    </div>
+
+    <!-- Noise Removal -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔇 Noise Removal</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Removing irrelevant characters: punctuation, special characters, numbers, extra whitespace, HTML tags, URLs, emojis.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>These characters add noise to your feature space — they inflate vocabulary size and don't carry semantic meaning in most tasks.</p>
+        </div>
+        <div class="formula-box">
+import re
+text = "Check out https://abc.com! Score: 100% 😊"
+clean = re.sub(r'[^a-zA-Z\s]', '', text)
+<span class="eq">→ "Check out  Score  "</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Preprocessor -->
+    <div class="interactive-box">
+      <h4>🎮 Interactive Preprocessor</h4>
+      <div class="desc">Type any sentence below and see how each preprocessing step transforms it.</div>
+      <textarea id="preprocInput" placeholder="e.g. The programmers are running! Check out https://abc.com 123">The programmers are running fast!</textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="btn" onclick="runPreproc()">Process Text</button>
+        <button class="btn secondary" onclick="document.getElementById('preprocInput').value='The programmers are running fast!'">Reset Example</button>
+      </div>
+      <div class="output-box" id="preprocOutput">Click "Process Text" to see the transformation steps...</div>
+    </div>
+  </div>
+
+  <!-- PART 2: REPRESENTATIONS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">📐</div>
+      <div><h2>Part 2: Text Representations</h2><div class="sub">Turning cleaned text into numbers</div></div>
+    </div>
+
+    <!-- One-Hot Encoding -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>1️⃣ One-Hot Encoding (OHE)</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Each word in the vocabulary gets its own dimension (column). A word's vector is all <strong>0s</strong> except a single <strong>1</strong> at the position corresponding to that word in the vocabulary.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>It's the simplest way to represent a word as a number that a computer can store and calculate with. It's the starting point for understanding all other encodings.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — The Math</div>
+          <p>For a corpus with vocabulary size <strong>d</strong>: each word → vector of size d, with a 1 at index i (its position in the vocab). A document with n words → matrix of size <strong>n × d</strong>.</p>
+        </div>
+
+        <p style="font-size:13px;color:var(--muted);margin:12px 0 6px;">Corpus: <strong>"This is a simple sentence"</strong> → 5 unique words → d = 5</p>
+        <div id="oheViz"></div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 1 Tested This!</strong>
+          "In a n×d OHE matrix, how many 1s are there total?" → Answer: <strong>n</strong> (exactly one 1 per row/word).
+        </div>
+
+        <div class="two-col" style="margin-top:16px;">
+          <div class="mini-card">
+            <h4>✅ Advantages</h4>
+            <ul class="bullet">
+              <li>Simple and easy to implement</li>
+              <li>Works with any vocabulary</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>❌ Disadvantages</h4>
+            <ul class="bullet">
+              <li>Vectors are huge (size = vocab size)</li>
+              <li>Very sparse (mostly zeros)</li>
+              <li><strong>No notion of similarity</strong> — dot(good, great) = dot(good, bad) = 0</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bag of Words -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🛍️ Bag of Words (BoW)</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Each document is represented as a vector of <strong>word counts</strong>. Instead of one 1 per word, we count how many times each vocabulary word appears in the document.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>We want to capture that a document about "machine learning" probably uses the word "model" many times. BoW gives frequency information that OHE misses.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — The Math</div>
+          <p>For N documents and vocabulary of size d → document-term matrix of shape <strong>N × d</strong>. Each cell (i, j) = count of word j in document i.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Example</span>
+Vocab: [this, was, the, best, worst, of, times]
+Doc 1: "this was the best of times"
+  → [1, 1, 1, 1, 0, 1, 1]
+Doc 2: "this was the worst of times"
+  → [1, 1, 1, 0, 1, 1, 1]
+<span class="comment"># Note: 'this','was','the','of','times' are SAME → can't distinguish docs!</span>
+        </div>
+        <div class="callout warning">
+          <strong>⚠️ Quiz 1: Key Limitation</strong>
+          BoW (and OHE) both <strong>ignore word order and context</strong>. "Dog bites man" and "Man bites dog" produce the same BoW vector!
+        </div>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>✅ Advantages</h4>
+            <ul class="bullet">
+              <li>Captures word frequency (better than OHE)</li>
+              <li>Simple to implement (CountVectorizer)</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>❌ Disadvantages</h4>
+            <ul class="bullet">
+              <li>Still huge and sparse</li>
+              <li>All words equally "important"</li>
+              <li>Ignores word order and context</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TF-IDF -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📊 TF-IDF (Term Frequency – Inverse Document Frequency)</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>TF-IDF weights each word by how <strong>important it is to a specific document</strong> relative to the whole corpus. Common words like "the" get low scores; rare but meaningful words get high scores.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>BoW gives the word "the" the same weight as the word "neural" — but "the" appears everywhere and is useless for differentiating documents. TF-IDF fixes this by penalizing words that appear in many documents.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How — The Formula (Step by Step)</div>
+          <p></p>
+        </div>
+        <div class="formula-box">
+<span class="highlight">TF</span>(t, d) = count(t in d) / total_words_in_d
+  <span class="comment">→ How often does this word appear in THIS document?</span>
+
+<span class="highlight">IDF</span>(t) = log( N / df(t) )
+  <span class="comment">→ N = total documents, df(t) = # docs containing word t</span>
+  <span class="comment">→ If t appears in ALL docs: IDF = log(1) = 0  ← common = useless</span>
+  <span class="comment">→ If t appears in FEW docs: IDF is HIGH  ← rare = distinctive</span>
+
+<span class="highlight">TF-IDF</span>(t, d) = TF(t, d) × IDF(t)
+        </div>
+
+        <div class="interactive-box" style="margin-top:16px;">
+          <h4>🎮 TF-IDF Live Calculator</h4>
+          <div class="desc">See how TF-IDF scores change as word frequency and document frequency change.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Word count in this doc: <span id="tfVal">2</span></label>
+              <input type="range" min="1" max="10" value="2" id="tfSlider" oninput="updateTFIDF()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Total words in doc: <span id="totalVal">10</span></label>
+              <input type="range" min="5" max="50" value="10" id="totalSlider" oninput="updateTFIDF()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Docs containing word: <span id="dfVal">2</span></label>
+              <input type="range" min="1" max="20" value="2" id="dfSlider" oninput="updateTFIDF()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Total documents (N): <span id="nVal">20</span></label>
+              <input type="range" min="5" max="100" value="20" id="nSlider" oninput="updateTFIDF()" style="width:100%">
+            </div>
+          </div>
+          <div class="output-box" id="tfidfOutput">Adjust the sliders above...</div>
+        </div>
+
+        <p style="font-size:13px;font-weight:600;margin:16px 0 8px;">Example: 2 documents, 6-word vocabulary</p>
+        <div id="tfidfBarViz"></div>
+
+        <div class="callout tip">
+          <strong>✅ When to use TF-IDF</strong>
+          Use TF-IDF for document search, finding similar documents, document clustering, and classification tasks where rare distinctive words matter most.
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 1: Key Fact</strong>
+          "TF-IDF can be used to find similar documents" → <strong>TRUE</strong>. "TF-IDF captures context" → <strong>FALSE</strong> (it still has no word order).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">⚖️</div>
+      <div><h2>Comparison: OHE vs BoW vs TF-IDF</h2><div class="sub">When to use which?</div></div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>One-Hot Encoding</th><th>Bag of Words</th><th>TF-IDF</th></tr>
+      <tr><td>Captures frequency?</td><td class="bad">No (just 0/1)</td><td class="good">Yes</td><td class="good">Yes (weighted)</td></tr>
+      <tr><td>Penalizes common words?</td><td class="bad">No</td><td class="bad">No</td><td class="good">Yes ← key advantage</td></tr>
+      <tr><td>Captures word order?</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td></tr>
+      <tr><td>Word similarity?</td><td class="bad">No (orthogonal)</td><td class="bad">No</td><td class="bad">No</td></tr>
+      <tr><td>Best for?</td><td>Simple baselines, categorical inputs</td><td>Text classification</td><td>Search, document similarity, clustering</td></tr>
+      <tr><td>Matrix shape</td><td>N×d (one-hot per word) or d×d</td><td>N×d</td><td>N×d</td></tr>
+    </table>
+    <div class="callout">
+      <strong>🔑 Key Insight for All Three</strong>
+      All three representations create <strong>sparse, high-dimensional vectors</strong> (size = vocab size d). This is why Week 4 introduces word embeddings — to replace these with small, dense vectors that actually capture meaning.
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 1 Questions</h3>
+
+    <div class="quiz-q">
+      <p>Q1. What is a potential limitation of the Bag of Words approach?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW actually works fine with large datasets.')">It cannot handle large datasets</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW gives equal weight to all words — it actually over-weights common words.')">It focuses too much on rare words</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! BoW treats each word independently — \"dog bites man\" and \"man bites dog\" produce the same vector.')">It ignores word order and context ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW is used for text (written language), not spoken.')">It is only applicable to spoken language</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. Which statement about stemming vs lemmatization is TRUE?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Lemmatization uses a dictionary; stemming uses rules.')">Both use dictionary lookups to find root words</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Porter Stemmer chops off the suffix: programmer → programm (not a real word, but faster).')">Stemming may produce non-real words, lemmatization produces valid words ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Lemmatization is slower but more accurate.')">Stemming is always more accurate than lemmatization</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Both reduce words to base forms — they have the same goal.')">They serve completely different purposes</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. In One-Hot Encoding, a document has n words and vocabulary size d. How many 1s are in the n×d matrix?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Only one word could have a 1 if we used the matrix differently, but in OHE each word gets its own row.')">1</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','d would be the size of the vocabulary, not the number of 1s.')">d</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Each of the n rows has exactly one 1 (one word = one position), so there are exactly n ones total.')">n ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','It is deterministic: exactly one 1 per word.')">Cannot be determined</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. Which representation can be used to find similar documents?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','OHE has no similarity notion — all vectors are orthogonal.')">One-Hot Encoding only</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW gives some frequency info but TF-IDF is much better for similarity.')">Bag of Words only</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! TF-IDF produces weighted vectors that emphasize distinctive words, making cosine similarity meaningful for document retrieval.')">TF-IDF ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','None of them are great at this, but TF-IDF is the best of the three.')">None of the above</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="index.html">← Back to All Weeks</a>
+    <a href="week2.html">Week 2: Naive Bayes →</a>
+  </div>
+
+</div>
+
+<script>
+// Toggle concept cards
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// OHE Visualization
+(function buildOHE() {
+  const vocab = ['this','is','a','simple','sentence'];
+  const words = ['this','is','a','simple','sentence'];
+  const container = document.getElementById('oheViz');
+  let html = '<div class="ohe-header-row">';
+  vocab.forEach(w => { html += `<div class="ohe-header-cell">${w}</div>`; });
+  html += '</div><div class="ohe-grid">';
+  words.forEach(word => {
+    html += '<div class="ohe-row">';
+    html += `<div class="ohe-label">${word}</div>`;
+    vocab.forEach(v => {
+      html += `<div class="ohe-cell ${v===word?'one':'zero'}">${v===word?'1':'0'}</div>`;
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+})();
+
+// TF-IDF Live Calculator
+function updateTFIDF() {
+  const tf_count = parseInt(document.getElementById('tfSlider').value);
+  const total = parseInt(document.getElementById('totalSlider').value);
+  const df = parseInt(document.getElementById('dfSlider').value);
+  const N = parseInt(document.getElementById('nSlider').value);
+  document.getElementById('tfVal').textContent = tf_count;
+  document.getElementById('totalVal').textContent = total;
+  document.getElementById('dfVal').textContent = df;
+  document.getElementById('nVal').textContent = N;
+  const tf = tf_count / total;
+  const idf = Math.log(N / df);
+  const tfidf = tf * idf;
+  const interpretation = tfidf < 0 ? '⚠️ Negative/zero: word appears in too many documents to be useful' :
+    tfidf < 0.1 ? '🟡 Low: common word, not very distinctive' :
+    tfidf < 0.5 ? '🟢 Medium: moderately distinctive' : '🔵 High: very distinctive word!';
+  document.getElementById('tfidfOutput').textContent =
+    `TF = ${tf_count} / ${total} = ${tf.toFixed(4)}\nIDF = log(${N} / ${df}) = ${idf.toFixed(4)}\n\nTF-IDF = ${tf.toFixed(4)} × ${idf.toFixed(4)} = ${tfidf.toFixed(4)}\n\n${interpretation}`;
+}
+updateTFIDF();
+
+// TF-IDF Bar Viz
+(function buildTFIDFBars() {
+  const words = [
+    { word: 'this', tf: 0.2, idf: 0, score: 0 },
+    { word: 'is', tf: 0.2, idf: 0, score: 0 },
+    { word: 'a', tf: 0.4, idf: 0, score: 0 },
+    { word: 'sample', tf: 0.2, idf: 0.69, score: 0.138 },
+    { word: 'another', tf: 0, idf: 0.69, score: 0 },
+    { word: 'example', tf: 0.2, idf: 0, score: 0 },
+  ];
+  const maxScore = 0.2;
+  let html = '<p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Document 1: "this is a sample" — TF-IDF scores</p>';
+  words.forEach(w => {
+    const pct = maxScore > 0 ? (w.score / maxScore) * 100 : 0;
+    const color = w.score > 0.1 ? '#2563eb' : w.score > 0 ? '#93c5fd' : '#cbd5e1';
+    html += `<div class="tfidf-bar-row">
+      <div class="tfidf-bar-label">${w.word}</div>
+      <div class="tfidf-bar-wrap">
+        <div class="tfidf-bar-fill" style="width:${Math.max(pct,2)}%;background:${color};">${w.score > 0 ? w.score.toFixed(3) : ''}</div>
+      </div>
+      <div class="tfidf-bar-val">${w.score.toFixed(3)}</div>
+    </div>`;
+  });
+  html += '<p style="font-size:12px;color:var(--muted);margin-top:8px;">Notice: "this","is","a","example" appear in both docs → IDF=0 → TF-IDF=0. Only "sample" is distinctive!</p>';
+  document.getElementById('tfidfBarViz').innerHTML = html;
+})();
+
+// Preprocessor
+function runPreproc() {
+  const raw = document.getElementById('preprocInput').value;
+  let step1 = raw.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ').trim();
+  const stopwords = new Set(['the','a','an','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','shall','can','of','in','on','at','to','for','with','by','from','as','i','he','she','it','we','they','you']);
+  let tokens = step1.toLowerCase().split(' ');
+  let step2 = tokens.join(' ');
+  let step3 = tokens.filter(t => !stopwords.has(t)).join(' ');
+  // simple stemmer (suffix removal)
+  let step4 = tokens.filter(t => !stopwords.has(t)).map(t => {
+    if (t.endsWith('ing')) return t.slice(0,-3) || t;
+    if (t.endsWith('ers')) return t.slice(0,-3) || t;
+    if (t.endsWith('er')) return t.slice(0,-2) || t;
+    if (t.endsWith('s') && t.length > 3) return t.slice(0,-1);
+    return t;
+  }).join(' ');
+  document.getElementById('preprocOutput').textContent =
+    `Step 1 - Noise Removal:\n  "${step1}"\n\nStep 2 - Lowercase + Tokenize:\n  ${tokens.map(t=>`"${t}"`).join(', ')}\n\nStep 3 - Stop Words Removed:\n  ${step3}\n\nStep 4 - Stemmed:\n  ${step4}`;
+}
+
+// Quiz
+let qfeedback = {};
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fbId = parent.querySelector('.quiz-feedback').id;
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  const fb = document.getElementById(fbId);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

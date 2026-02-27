@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 – Neural Networks & Word2Vec | CSE 8803</title>
+<style>
+  :root {
+    --primary: #e11d48; --primary-light: #ffe4e6; --primary-dark: #9f1239;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --purple: #7c3aed;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #9f1239; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #9f1239 0%, #e11d48 60%, #fb7185 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.red { background: #ffe4e6; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.green { background: #d1fae5; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #9f1239; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip { border-color: var(--green); background: #d1fae5; }
+  .callout.info { border-color: var(--blue); background: #dbeafe; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  input[type=range] { accent-color: var(--primary); }
+  canvas { border-radius: 8px; }
+
+  /* Activation function cards */
+  .activation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+  .act-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.15s; }
+  .act-card:hover { border-color: var(--primary); background: var(--primary-light); }
+  .act-card.selected { border-color: var(--primary); background: var(--primary-light); }
+  .act-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .act-card .range { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .act-card .use { font-size: 11px; color: #374151; }
+
+  /* NN diagram */
+  .nn-layer { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .nn-node { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+
+  /* Word2vec diagram */
+  .w2v-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .w2v-box { border-radius: 8px; padding: 8px 14px; text-align: center; font-size: 12px; font-weight: 700; border: 2px solid; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 5 — Neural Networks & Word2Vec</span>
+  <div class="nav-links">
+    <a href="week4.html">← Week 4</a>
+    <a href="week6.html">Week 6 →</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 5 · Feb 9–13</div>
+  <h1>Neural Networks &amp; Word2Vec</h1>
+  <p>The foundation of deep learning. Connect many Logistic Regression "blocks" together, train with backpropagation, and get remarkably powerful models.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Module 6</span>
+    <span class="chip">📝 Quiz 5 Material (due today!)</span>
+    <span class="chip">💻 HW3 starts here</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon red">🗺️</div>
+      <div><h2>The Big Picture</h2><div class="sub">How it all connects</div></div>
+    </div>
+    <div class="callout info">
+      <strong>The Learning Thread: From Perceptron to Neural Networks</strong>
+      Week 3 gave us a Perceptron (one linear unit + sign activation). Week 5 stacks many such units in layers with non-linear activations → a Neural Network. This enables learning non-linear, complex patterns that single linear classifiers cannot.
+    </div>
+    <table class="compare-table">
+      <tr><th>Model</th><th>Architecture</th><th>Captures?</th></tr>
+      <tr><td>Perceptron</td><td>1 unit, sign activation</td><td>Linear patterns only</td></tr>
+      <tr><td>Logistic Regression</td><td>1 unit, sigmoid activation</td><td>Linear, soft boundary</td></tr>
+      <tr><td>Neural Network</td><td>Many units, multiple layers, non-linear activations</td><td class="good">Non-linear, complex patterns</td></tr>
+    </table>
+  </div>
+
+  <!-- PART 1: NEURAL NETWORKS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon red">🧠</div>
+      <div><h2>Part 1: Neural Networks (Fully Connected)</h2><div class="sub">Stacking learning blocks to capture complexity</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⚡ Activation Functions — The Non-Linearity Secret</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>An activation function transforms the linear combination of inputs (s = θᵀX) into the output of a neuron. Without non-linear activations, a stack of layers would just be equivalent to one linear layer — useless for complex patterns.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why non-linearity is essential</div>
+          <p>Linear(Linear(X)) = Linear(X) — composing linear transformations gives another linear transformation. Non-linear activations break this, allowing the network to learn arbitrary complex functions.</p>
+        </div>
+
+        <div class="activation-grid" id="actGrid">
+          <div class="act-card selected" onclick="selectAct(this,'linear')">
+            <h4>Linear</h4>
+            <div class="range">(-∞, +∞)</div>
+            <div class="use">→ Regression</div>
+          </div>
+          <div class="act-card" onclick="selectAct(this,'sign')">
+            <h4>Sign / Step</h4>
+            <div class="range">{-1, 0, +1}</div>
+            <div class="use">→ Hard classification (Perceptron)</div>
+          </div>
+          <div class="act-card" onclick="selectAct(this,'sigmoid')">
+            <h4>Sigmoid σ</h4>
+            <div class="range">(0, 1)</div>
+            <div class="use">→ Soft classification (LR)</div>
+          </div>
+          <div class="act-card" onclick="selectAct(this,'relu')">
+            <h4>ReLU</h4>
+            <div class="range">[0, +∞)</div>
+            <div class="use">→ Deep learning ⭐</div>
+          </div>
+          <div class="act-card" onclick="selectAct(this,'tanh')">
+            <h4>Tanh</h4>
+            <div class="range">(-1, 1)</div>
+            <div class="use">→ RNN hidden states</div>
+          </div>
+        </div>
+        <canvas id="actCanvas" width="500" height="160" style="border:1px solid var(--border);border-radius:8px;margin-top:8px;"></canvas>
+        <div class="output-box" id="actOutput">Click an activation function above to explore it.</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⏩ Forward Pass — Computing the Network's Output</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label how">How a Forward Pass Works (Layer by Layer)</div>
+          <p>Input flows forward through each layer: linear combination → activation → output to next layer.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># For each layer l, neuron j:</span>
+u_j^l  =  Σᵢ θᵢⱼ^l × O_i^(l-1)   <span class="comment">← linear combination</span>
+O_j^l  =  activation(u_j^l)        <span class="comment">← apply activation function</span>
+
+<span class="comment"># In matrix form for one layer:</span>
+U^l  =  (O^(l-1)) × Θ^l            <span class="comment">← all neurons at once</span>
+O^l  =  activation(U^l)
+
+<span class="comment"># For NLP (e.g. sentiment analysis):</span>
+Input:  document matrix X (N × d, from BoW/TF-IDF)
+Layer 1: h = ReLU(X × W₁ + b₁)    shape: N × hidden_size
+Layer 2: y = sigmoid(h × W₂ + b₂)  shape: N × 1 (binary classification)
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Neural Network Forward Pass Calculator</h4>
+          <div class="desc">Trace a 1-hidden-layer network with 2 inputs and 2 hidden neurons, step by step.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Input x₁: <span id="nnX1">1.0</span></label>
+              <input type="range" min="-3" max="3" value="1" step="0.1" id="nnX1s" oninput="updateNN()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Input x₂: <span id="nnX2">0.5</span></label>
+              <input type="range" min="-3" max="3" value="0.5" step="0.1" id="nnX2s" oninput="updateNN()" style="width:100%">
+            </div>
+          </div>
+          <div class="output-box" id="nnOutput">Adjust inputs...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⏪ Backpropagation — How the Network Learns</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Backpropagation computes the gradient of the loss with respect to every weight in the network, using the chain rule. Weights are then updated with gradient descent.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>We need to know "how much did each weight contribute to the error?" so we know which direction to adjust it. For deep networks with millions of weights, backprop is the only feasible way to compute all these gradients efficiently.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Chain rule — the key insight:</span>
+∂L/∂θᵢ = ∂L/∂output × ∂output/∂hidden × ∂hidden/∂θᵢ
+
+<span class="comment"># Algorithm:</span>
+1. Forward pass: compute all outputs (save intermediate values)
+2. Compute loss L (e.g., cross-entropy for classification)
+3. Backward pass: propagate gradient from output → input
+4. Update: θ ← θ - η × ∂L/∂θ
+
+<span class="comment"># Training modes:</span>
+<span class="highlight">Stochastic GD (SGD)</span>:  1 sample per iteration → noisy but memory-efficient
+<span class="highlight">Mini-Batch GD</span>:         batch_size samples → balance of speed + stability ⭐
+<span class="highlight">Batch GD</span>:              all samples per iteration → stable but slow/memory-heavy
+
+Epoch = one complete pass through all training data
+Iteration = one weight update step
+        </div>
+
+        <div class="callout tip">
+          <strong>💡 SGD vs Batch GD: Quick Rule</strong>
+          For 1000 documents with batch_size=50 → 20 iterations per epoch. With SGD (batch=1) → 1000 iterations per epoch. Mini-batch is almost always used in practice.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: WORD2VEC -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🔤</div>
+      <div><h2>Part 2: Word2Vec (CBoW &amp; Skip-Gram)</h2><div class="sub">Self-supervised word embeddings via prediction tasks</div></div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>💡 The Word2Vec Big Idea — Self-Supervised Learning</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Word2Vec trains a shallow neural network to perform a prediction task on raw text. The <em>labels are generated from the text itself</em> — no human annotation needed. The embedding matrix (weights) is the real output we care about.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>GloVe/SVD need the full co-occurrence matrix (d×d, huge). Word2Vec trains on local windows using gradient descent — more scalable to very large corpora (billions of words). It also produces dense, meaningful vectors with linear semantic structure.</p>
+        </div>
+
+        <div class="callout info">
+          <strong>🔑 Why Word2Vec over One-Hot?</strong>
+          One-hot: size = vocab (100k+), no similarity. Word2Vec: size = embedding_dim (100-300), cat≈kitten. Fixed size regardless of corpus.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📦 CBoW (Continuous Bag of Words)</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>CBoW predicts the <strong>center word</strong> from its surrounding context words. Given the context window, what word is in the middle?</p>
+        </div>
+
+        <div class="formula-box">
+Task: "apple [___] are fruit" → predict "and" (center word)
+Context (inputs): ["apple", "are"]   (window size = 1)
+
+<span class="comment"># Architecture:</span>
+Input:  average of context word one-hot vectors × W (d × E)
+Hidden: h = mean(Σ context_word_vectors × W)  [size E]
+Output: softmax(h × W')  → probability over all vocab words
+Loss:   cross-entropy(predicted, actual_center_word)
+
+<span class="comment"># After training:</span>
+W (input weight matrix) = word embeddings  ← we extract this!
+        </div>
+
+        <div class="explainer">
+          <div class="explainer-label why">CBoW strengths</div>
+          <p>Faster to train (averages context). Better for frequent words. Better at capturing <strong>syntactic</strong> relationships (grammar patterns).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⏭️ Skip-Gram</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Skip-Gram predicts the <strong>surrounding context words</strong> from a center word. Given the middle word, what are its neighbors?</p>
+        </div>
+
+        <div class="formula-box">
+Task: given "orange", predict ["apple", "are"] in "apple orange are fruit"
+
+<span class="comment"># Architecture:</span>
+Input:  center word one-hot × W  → hidden vector h (size E)
+Output: for EACH context position, softmax(h × W')
+        → one probability distribution per context word
+Loss:   sum of cross-entropy losses for each context word
+
+<span class="comment"># Skip-gram trains on MORE examples than CBoW:</span>
+window=2, 100 words → 400 training pairs (each word with 4 neighbors)
+        </div>
+
+        <div class="explainer">
+          <div class="explainer-label why">Skip-Gram strengths</div>
+          <p>Works better with small datasets and rare words. Better at capturing <strong>semantic</strong> relationships (meaning). The preferred method for learning high-quality embeddings.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>⚖️ CBoW vs. Skip-Gram — Side by Side</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Property</th><th>CBoW</th><th>Skip-Gram</th></tr>
+          <tr><td>Task</td><td>Context → Center word</td><td>Center word → Context</td></tr>
+          <tr><td>Training speed</td><td class="good">Faster (averages context)</td><td>Slower (multiple outputs)</td></tr>
+          <tr><td>Rare words</td><td>Poor</td><td class="good">Better</td></tr>
+          <tr><td>Captures</td><td>Syntactic (grammar) patterns</td><td class="good">Semantic (meaning) relationships</td></tr>
+          <tr><td>Dataset size</td><td>Better for large datasets</td><td class="good">Works well even with small datasets</td></tr>
+          <tr><td>Context dependency</td><td>Position-independent (averages all context)</td><td>Position-independent (predicts each)</td></tr>
+        </table>
+        <div class="callout warning">
+          <strong>⚠️ Both Word2Vec and GloVe are Context-Independent</strong>
+          "bank" always gets the same vector whether you mean river bank or financial bank. This is a key limitation fixed by later models (BERT, Week 9).
+        </div>
+      </div>
+    </div>
+
+    <div class="interactive-box">
+      <h4>🎮 Word2Vec Window Explorer</h4>
+      <div class="desc">See what training examples Word2Vec generates from a sentence.</div>
+      <div style="margin-bottom:10px;">
+        <input type="text" id="w2vInput" placeholder="Enter a sentence..." value="the cat sat on the mat" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;margin-bottom:8px;">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <label style="font-size:13px;font-weight:600;">Window size: <span id="w2vWin">2</span></label>
+          <input type="range" min="1" max="3" value="2" id="w2vWinSlider" oninput="updateW2V()" style="width:120px">
+          <button class="btn" onclick="updateW2V()">Generate Examples</button>
+        </div>
+      </div>
+      <div class="output-box" id="w2vOutput">Click "Generate Examples" to see training pairs...</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 5 / Quiz 5 Questions</h3>
+
+    <div class="quiz-q">
+      <p>Q1. Which activation function is most commonly used in deep learning due to its optimization-friendly properties?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Sigmoid suffers from vanishing gradients in deep networks — its derivatives become near-zero for large |s|.')">Sigmoid</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Tanh also suffers from vanishing gradients, though less severely than sigmoid.')">Tanh</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! ReLU = max(0,s). Its gradient is 0 or 1 — no vanishing gradient problem for positive inputs. Computationally cheap. The default for hidden layers in deep networks.')">ReLU ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Sign/Step is not differentiable — cannot be used in backpropagation.')">Sign / Step</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. In CBoW, the model predicts:</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CBoW = Continuous Bag of Words. It takes the context words (neighbors) as input and predicts the center/target word in the middle.')">The center word from surrounding context words ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','That is Skip-Gram, not CBoW. CBoW is the reverse — context as input, center as output.')">The surrounding words from a center word</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Neither algorithm classifies sentiment — they are self-supervised word embedding methods.')">The sentiment of a sentence</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. 1000 training documents, batch size = 50. How many iterations per epoch?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','1000 would be the number of iterations for SGD (batch=1), not mini-batch.')">1000 iterations</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Iterations per epoch = total samples / batch size = 1000 / 50 = 20. One epoch = one full pass through all data.')">20 iterations ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','1 iteration per epoch = batch gradient descent (all data at once). 50 ≠ batch_size here, it\'s the answer we\'re computing.')">50 iterations</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Epochs and iterations are different. This question asks about iterations.')">1 epoch = 1 iteration always</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. Both Word2Vec and GloVe produce context-dependent embeddings (different vectors for the same word in different contexts) — True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is FALSE. Both Word2Vec and GloVe produce ONE fixed vector per word. \"bank\" gets the same vector whether financial or river context.')">True — they are context-dependent</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Both are context-INdependent — one fixed embedding per word. Context-dependent embeddings come later with ELMo, BERT (Week 9).')">False — they are context-independent ✓</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week4.html">← Week 4: SVD & GloVe</a>
+    <a href="week6.html">Week 6: CNN & RNN →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// Activation functions
+const activations = {
+  linear: { fn: s => s, label: 'f(s) = s', range: '(-∞, +∞)', desc: 'No transformation. Output = input. Used for regression.' },
+  sign:   { fn: s => s > 0 ? 1 : s < 0 ? -1 : 0, label: 'f(s) = sign(s)', range: '{-1, 0, +1}', desc: 'Hard threshold. Used in Perceptron. Not differentiable at 0.' },
+  sigmoid:{ fn: s => 1/(1+Math.exp(-s)), label: 'f(s) = 1/(1+e⁻ˢ)', range: '(0, 1)', desc: 'Squishes to [0,1]. Used in Logistic Regression. Vanishing gradient issue in deep networks.' },
+  relu:   { fn: s => Math.max(0, s), label: 'f(s) = max(0, s)', range: '[0, +∞)', desc: 'Most popular in deep learning. Fast, no vanishing gradient for positive inputs.' },
+  tanh:   { fn: s => Math.tanh(s), label: 'f(s) = tanh(s)', range: '(-1, 1)', desc: 'Like sigmoid but centered at 0. Used in RNNs.' }
+};
+let selectedAct = 'linear';
+
+function selectAct(card, name) {
+  document.querySelectorAll('.act-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedAct = name;
+  drawActivation(name);
+}
+
+function drawActivation(name) {
+  const a = activations[name];
+  const canvas = document.getElementById('actCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  // Axes
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W/2, 10); ctx.lineTo(W/2, H-10); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(10, H/2); ctx.lineTo(W-10, H/2); ctx.stroke();
+  // Function
+  ctx.strokeStyle = '#e11d48'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  let first = true;
+  for (let px = 10; px <= W-10; px++) {
+    const s = ((px - W/2) / (W/2 - 10)) * 5;
+    let y = a.fn(s);
+    // normalize to canvas
+    const py = H/2 - (y / 2) * (H/2 - 10);
+    if (first) { ctx.moveTo(px, Math.max(10, Math.min(H-10, py))); first = false; }
+    else ctx.lineTo(px, Math.max(10, Math.min(H-10, py)));
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#64748b'; ctx.font = '11px sans-serif';
+  ctx.fillText(a.label, 10, 20);
+  document.getElementById('actOutput').textContent = `${a.label}\nRange: ${a.range}\n\n${a.desc}`;
+}
+drawActivation('linear');
+
+// Neural Network Forward Pass
+function sigmoid(s) { return 1/(1+Math.exp(-s)); }
+function relu(s) { return Math.max(0, s); }
+
+// Fixed small network: 2 inputs, 2 hidden (ReLU), 1 output (sigmoid)
+const W1 = [[0.5, -0.4], [0.3, 0.8]]; // 2x2
+const b1 = [0.1, -0.2];
+const W2 = [[0.7], [-0.6]]; // 2x1
+const b2 = [0.0];
+
+function updateNN() {
+  const x1 = parseFloat(document.getElementById('nnX1s').value);
+  const x2 = parseFloat(document.getElementById('nnX2s').value);
+  document.getElementById('nnX1').textContent = x1.toFixed(1);
+  document.getElementById('nnX2').textContent = x2.toFixed(1);
+  const x = [x1, x2];
+  // Layer 1
+  const u1 = [W1[0][0]*x[0]+W1[1][0]*x[1]+b1[0], W1[0][1]*x[0]+W1[1][1]*x[1]+b1[1]];
+  const h = u1.map(relu);
+  // Layer 2
+  const u2 = W2[0][0]*h[0]+W2[1][0]*h[1]+b2[0];
+  const out = sigmoid(u2);
+  const pred = out >= 0.5 ? 'Class 1 (Positive)' : 'Class 0 (Negative)';
+  document.getElementById('nnOutput').textContent =
+    `Input: x = [${x1.toFixed(1)}, ${x2.toFixed(1)}]\n\n` +
+    `--- Layer 1 (ReLU) ---\n` +
+    `u₁ = W1ᵀx + b1 = [${u1[0].toFixed(3)}, ${u1[1].toFixed(3)}]\n` +
+    `h  = ReLU(u₁)   = [${h[0].toFixed(3)}, ${h[1].toFixed(3)}]\n\n` +
+    `--- Layer 2 (Sigmoid) ---\n` +
+    `u₂ = W2ᵀh + b2 = ${u2.toFixed(3)}\n` +
+    `ŷ  = σ(u₂)     = ${out.toFixed(4)}\n\n` +
+    `Prediction: ${pred} (${(out*100).toFixed(1)}% probability)`;
+}
+updateNN();
+
+// Word2Vec window explorer
+function updateW2V() {
+  const text = document.getElementById('w2vInput').value;
+  const winSize = parseInt(document.getElementById('w2vWinSlider').value);
+  document.getElementById('w2vWin').textContent = winSize;
+  const tokens = text.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).filter(t=>t.length>0);
+  if (tokens.length < 2) { document.getElementById('w2vOutput').textContent = 'Enter a longer sentence.'; return; }
+  let cbowPairs = [], sgPairs = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const center = tokens[i];
+    const ctx = [];
+    for (let j = Math.max(0,i-winSize); j <= Math.min(tokens.length-1,i+winSize); j++) {
+      if (j !== i) ctx.push(tokens[j]);
+    }
+    if (ctx.length > 0) {
+      cbowPairs.push(`CBoW: [${ctx.join(', ')}] → "${center}"`);
+      ctx.forEach(c => sgPairs.push(`Skip-Gram: "${center}" → "${c}"`));
+    }
+  }
+  const out = `Tokens: [${tokens.join(', ')}]\nWindow size: ${winSize}\n\n` +
+    `=== CBoW Training Pairs (${cbowPairs.length}) ===\n${cbowPairs.join('\n')}\n\n` +
+    `=== Skip-Gram Training Pairs (${sgPairs.length}) ===\n${sgPairs.slice(0,12).join('\n')}${sgPairs.length>12?'\n... ('+sgPairs.length+' total)':''}`;
+  document.getElementById('w2vOutput').textContent = out;
+}
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fb = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 – Naive Bayes & Classification Evaluation | CSE 8803</title>
+<style>
+  :root {
+    --primary: #059669; --primary-light: #d1fae5; --primary-dark: #065f46;
+    --blue: #2563eb; --orange: #d97706; --red: #dc2626; --purple: #7c3aed;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #065f46; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #065f46 0%, #059669 60%, #34d399 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.green { background: #d1fae5; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment { color: #94a3b8; }
+  .formula-box .highlight { color: #7dd3fc; font-weight: bold; }
+  .formula-box .eq { color: #86efac; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #065f46; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: var(--primary); font-weight: 600; }
+  .compare-table .bad { color: var(--red); }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn.secondary { background: var(--bg); color: var(--primary); border: 1px solid var(--primary); }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip { border-color: var(--blue); background: #dbeafe; }
+  .callout strong { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* Confusion Matrix */
+  .cm-wrap { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
+  .cm-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  .cm-table { border-collapse: collapse; }
+  .cm-table td, .cm-table th { width: 90px; height: 70px; text-align: center; border: 2px solid var(--border); font-size: 13px; vertical-align: middle; padding: 6px; }
+  .cm-table .axis-label { background: #f8fafc; font-weight: 700; font-size: 12px; color: var(--muted); width: 80px; }
+  .cm-table .tp { background: #d1fae5; font-weight: 700; color: #065f46; font-size: 18px; }
+  .cm-table .tn { background: #dbeafe; font-weight: 700; color: #1d4ed8; font-size: 18px; }
+  .cm-table .fp { background: #fee2e2; font-weight: 700; color: #991b1b; font-size: 18px; }
+  .cm-table .fn { background: #fef3c7; font-weight: 700; color: #92400e; font-size: 18px; }
+
+  /* Bayes visual */
+  .bayes-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .bayes-node { background: #f8fafc; border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 110px; }
+  .bayes-node .label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .bayes-node .value { font-size: 14px; font-weight: 700; }
+  .bayes-node.posterior { border-color: var(--primary); background: var(--primary-light); }
+  .bayes-node.posterior .value { color: var(--primary-dark); }
+  .bayes-arrow { font-size: 20px; color: var(--muted); }
+
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+
+  /* ROC Curve SVG */
+  .roc-wrap { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; margin: 16px 0; }
+  .roc-desc { flex: 1; min-width: 220px; }
+  .roc-desc p { font-size: 14px; color: #374151; margin-bottom: 10px; line-height: 1.6; }
+
+  /* slider style */
+  input[type=range] { accent-color: var(--primary); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← All Weeks</a>
+  <span class="week-title">Week 2 — Naive Bayes & Classification Evaluation</span>
+  <div class="nav-links">
+    <a href="week1.html">← Week 1</a>
+    <a href="week3.html">Week 3 →</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="week-badge">Week 2 · Jan 19–23</div>
+  <h1>Naive Bayes &amp; Classification Evaluation</h1>
+  <p>Our first real classifier — and the tools to know whether it's actually working. Both are critical foundations for the rest of the course.</p>
+  <div class="header-chips">
+    <span class="chip">📦 Module 3</span>
+    <span class="chip">📝 Quiz 2 Material</span>
+    <span class="chip">💻 HW1: classify.py &amp; metrics.py</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BIG PICTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🗺️</div>
+      <div><h2>The Big Picture</h2><div class="sub">Week 2 connects Week 1 representations to predictions</div></div>
+    </div>
+    <div class="callout">
+      <strong>The Journey So Far</strong>
+      Week 1: Raw text → Numeric matrix (X). Now in Week 2: Given X and labels (y), can we predict the correct label for a new document? And how do we know if we're doing a good job?
+    </div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:16px;font-size:14px;">
+      <strong>The Two Questions This Week Answers:</strong>
+      <ol style="padding-left:20px;margin-top:8px;">
+        <li style="margin-bottom:8px;"><strong>Naive Bayes:</strong> "Given this document (X), what is the probability it belongs to class Y?" → This is prediction.</li>
+        <li><strong>Evaluation Metrics:</strong> "How accurate is our classifier? Is it biased? When does it fail?" → This is measurement.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- PART 1: NAIVE BAYES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🧮</div>
+      <div><h2>Part 1: Naive Bayes</h2><div class="sub">A probabilistic text classifier built on Bayes' Rule</div></div>
+    </div>
+
+    <!-- Bayes Rule -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📐 Bayes' Rule — The Foundation</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Bayes' Rule tells us how to compute the probability of a hypothesis (like "this email is spam") given some observed evidence (the words in the email).</p>
+        </div>
+        <div class="formula-box">
+<span class="highlight">P(Y | X)</span>  =  P(X | Y) × P(Y)  /  P(X)
+
+  <span class="highlight">Posterior</span>     Likelihood × Prior / Normalization
+
+Where:
+  <span class="eq">P(Y | X)</span>  = Posterior  → P(spam | these words) — what we WANT
+  <span class="eq">P(X | Y)</span>  = Likelihood → P(these words | spam) — how likely these words appear in spam
+  <span class="eq">P(Y)</span>     = Prior      → P(spam) — how common is spam in our dataset?
+  <span class="eq">P(X)</span>     = Evidence   → same for all classes, so we IGNORE IT
+        </div>
+
+        <div class="bayes-flow">
+          <div class="bayes-node"><div class="label">Prior</div><div class="value">P(Y)</div></div>
+          <div class="bayes-arrow">×</div>
+          <div class="bayes-node"><div class="label">Likelihood</div><div class="value">P(X|Y)</div></div>
+          <div class="bayes-arrow">÷</div>
+          <div class="bayes-node"><div class="label">Evidence</div><div class="value">P(X)</div></div>
+          <div class="bayes-arrow">=</div>
+          <div class="bayes-node posterior"><div class="label">Posterior</div><div class="value">P(Y|X) ✓</div></div>
+        </div>
+
+        <div class="callout tip">
+          <strong>💡 Why we ignore P(X) during prediction</strong>
+          We compare P(spam|X) vs P(not-spam|X). Since P(X) is the same for both, it cancels out! We only need to compare <strong>Likelihood × Prior</strong> for each class.
+        </div>
+      </div>
+    </div>
+
+    <!-- Naive Assumption -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🤔 Why "Naive"? The Independence Assumption</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The "naive" part means we assume all features (words) are <strong>conditionally independent</strong> given the class. In reality, word co-occurrences aren't independent ("machine" often appears with "learning"), but this assumption makes the math tractable.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why it matters</div>
+          <p>Without this assumption, computing P(X|Y) = P(word1, word2, ..., wordN | Y) requires calculating a joint probability over thousands of words — computationally impossible. With independence, it becomes a simple product.</p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Without independence (intractable):</span>
+P(X | Y) = P(w₁, w₂, ..., wₙ | Y)  ← joint probability, huge
+
+<span class="comment"># With naive independence assumption (tractable!):</span>
+P(X | Y) = P(w₁|Y) × P(w₂|Y) × ... × P(wₙ|Y)
+         = ∏ P(wᵢ | Y)    ← just a product of individual word probs
+        </div>
+        <div class="callout warning">
+          <strong>⚠️ Quiz 2 Tested This!</strong>
+          "The position of words in the document is important for Naive Bayes" → <strong>FALSE</strong>. NB uses BoW — order doesn't matter.
+        </div>
+      </div>
+    </div>
+
+    <!-- How to calculate -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔢 How to Calculate — Multinomial NB for NLP</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label how">How — Step by Step</div>
+          <p></p>
+        </div>
+        <div class="formula-box">
+<span class="comment"># Step 1: Calculate Prior P(Y=c) for each class c</span>
+P(Y=spam)     = count(spam docs) / total_docs
+P(Y=not-spam) = count(not-spam docs) / total_docs
+
+<span class="comment"># Step 2: Calculate Likelihood P(word | Y=c) for each word</span>
+<span class="comment"># Using Multinomial distribution:</span>
+P(word_w | Y=c) = count(word_w in class c docs)
+                  ─────────────────────────────
+                  count(ALL words in class c docs)
+
+<span class="comment"># Step 3: Classify new document — pick highest posterior</span>
+ŷ = argmax_c [ P(Y=c) × ∏ P(wᵢ | Y=c) ]
+<span class="comment"># In log space (avoids underflow with many tiny probabilities):</span>
+ŷ = argmax_c [ log P(Y=c) + Σ log P(wᵢ | Y=c) ]
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Naive Bayes Spam Classifier Demo</h4>
+          <div class="desc">Enter a sentence and see how the NB classifier scores it as spam vs. not-spam using a small trained vocabulary.</div>
+          <div style="margin-bottom:12px;">
+            <input type="text" id="nbInput" placeholder="e.g. free money win prize" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;" value="free money win prize now">
+          </div>
+          <button class="btn" onclick="runNB()">Classify</button>
+          <div class="output-box" id="nbOutput">Click "Classify" to run Naive Bayes...</div>
+        </div>
+
+        <div class="two-col" style="margin-top:16px;">
+          <div class="mini-card">
+            <h4>✅ Advantages of Naive Bayes</h4>
+            <ul class="bullet">
+              <li>Very simple, fast to train (just counting!)</li>
+              <li><strong>No optimization loop needed</strong> — just compute counts</li>
+              <li>Works well in practice despite "naive" assumption</li>
+              <li>Good baseline for text classification</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>❌ Disadvantages</h4>
+            <ul class="bullet">
+              <li>Word position and order ignored</li>
+              <li>Independence assumption is unrealistic</li>
+              <li>Zero-probability problem (use Laplace smoothing)</li>
+              <li>Can't capture complex patterns</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>🔑 Generative vs. Discriminative</strong>
+          Naive Bayes is <strong>generative</strong> — it models both P(X|Y) and P(Y) to reconstruct how data was generated.
+          Logistic Regression, SVM, Neural Nets are <strong>discriminative</strong> — they compute P(Y|X) directly without modeling P(X|Y).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: EVALUATION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">📏</div>
+      <div><h2>Part 2: Classification Evaluation</h2><div class="sub">How do we know if our model is actually good?</div></div>
+    </div>
+
+    <!-- Confusion Matrix -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>🔲 The Confusion Matrix</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>A table that compares what the model <em>predicted</em> against what the labels <em>actually are</em>. Each cell shows how many times the model got it right or wrong — and how.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Accuracy alone can be misleading. If 99% of emails are not-spam, a model that always predicts "not-spam" gets 99% accuracy but is completely useless! The confusion matrix exposes this.</p>
+        </div>
+
+        <div class="cm-wrap">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
+            <div>
+              <div class="cm-title">Binary Confusion Matrix</div>
+              <table class="cm-table">
+                <tr>
+                  <td class="axis-label"></td>
+                  <td class="axis-label">Predicted: Positive</td>
+                  <td class="axis-label">Predicted: Negative</td>
+                </tr>
+                <tr>
+                  <td class="axis-label">Actual: Positive</td>
+                  <td class="tp">TP ✓<br><small>True Positive</small></td>
+                  <td class="fn">FN ✗<br><small>False Negative</small></td>
+                </tr>
+                <tr>
+                  <td class="axis-label">Actual: Negative</td>
+                  <td class="fp">FP ✗<br><small>False Positive</small></td>
+                  <td class="tn">TN ✓<br><small>True Negative</small></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+<span class="highlight">Accuracy</span>   = (TP + TN) / (TP + TN + FP + FN)
+               <span class="comment">→ What fraction of ALL predictions were correct?</span>
+
+<span class="highlight">Precision</span>  = TP / (TP + FP)
+               <span class="comment">→ Of things I called "positive", how many were actually positive?</span>
+               <span class="comment">→ Spam detector: "When I say spam, am I right?"</span>
+
+<span class="highlight">Recall</span>     = TP / (TP + FN)   <span class="comment">(= Sensitivity = True Positive Rate)</span>
+               <span class="comment">→ Of all actual positives, how many did I catch?</span>
+               <span class="comment">→ Cancer detector: "Did I catch all the cancer cases?"</span>
+
+<span class="highlight">F1 Score</span>   = 2 × (Precision × Recall) / (Precision + Recall)
+               <span class="comment">→ Harmonic mean — balances both precision and recall</span>
+        </div>
+
+        <div class="interactive-box">
+          <h4>🎮 Interactive Confusion Matrix Calculator</h4>
+          <div class="desc">Adjust TP, FP, FN, TN to see how metrics change. Watch what happens when data is imbalanced!</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">✅ True Positives (TP): <span id="tpVal">45</span></label>
+              <input type="range" min="0" max="100" value="45" id="tpSlider" oninput="updateCM()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">❌ False Positives (FP): <span id="fpVal">10</span></label>
+              <input type="range" min="0" max="100" value="10" id="fpSlider" oninput="updateCM()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">❌ False Negatives (FN): <span id="fnVal">5</span></label>
+              <input type="range" min="0" max="100" value="5" id="fnSlider" oninput="updateCM()" style="width:100%">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">✅ True Negatives (TN): <span id="tnVal">40</span></label>
+              <input type="range" min="0" max="100" value="40" id="tnSlider" oninput="updateCM()" style="width:100%">
+            </div>
+          </div>
+          <div class="output-box" id="cmOutput">Adjust sliders above...</div>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Quiz 2 Tested This!</strong>
+          "Confusion matrix can only be used for binary classification" → <strong>FALSE</strong>. It works for multi-class too (e.g., sports/news/politics).
+        </div>
+      </div>
+    </div>
+
+    <!-- ROC & AUC -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleConcept(this)">
+        <h3>📈 ROC Curve &amp; AUC</h3>
+        <span class="chevron open">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>The ROC (Receiver Operating Characteristic) curve plots <strong>True Positive Rate (Recall)</strong> vs. <strong>False Positive Rate</strong> as you vary the classification threshold. AUC = Area Under the Curve.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Classifiers like Logistic Regression output a probability (e.g., 0.73 = 73% spam). We need a threshold (e.g., 0.5) to convert to a label. The ROC curve shows which threshold gives the best trade-off.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How to read it</div>
+          <p></p>
+        </div>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;margin:16px 0;">
+          <svg width="220" height="220" viewBox="0 0 220 220" style="flex-shrink:0;">
+            <!-- Axes -->
+            <line x1="30" y1="10" x2="30" y2="190" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="30" y1="190" x2="210" y2="190" stroke="#cbd5e1" stroke-width="1.5"/>
+            <!-- Random line -->
+            <line x1="30" y1="190" x2="210" y2="10" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
+            <!-- Good ROC curve -->
+            <path d="M30,190 Q40,80 80,50 Q120,25 210,10" fill="none" stroke="#059669" stroke-width="3"/>
+            <!-- Fill -->
+            <path d="M30,190 Q40,80 80,50 Q120,25 210,10 L210,190 Z" fill="rgba(5,150,105,0.1)"/>
+            <!-- Labels -->
+            <text x="110" y="212" text-anchor="middle" font-size="11" fill="#64748b">False Positive Rate →</text>
+            <text x="12" y="105" text-anchor="middle" font-size="11" fill="#64748b" transform="rotate(-90,12,105)">True Positive Rate →</text>
+            <text x="170" y="120" font-size="10" fill="#059669" font-weight="bold">AUC ≈ 0.9</text>
+            <text x="150" y="160" font-size="9" fill="#94a3b8">Random = 0.5</text>
+            <text x="35" y="25" font-size="9" fill="#374151">Perfect = (0,1)</text>
+            <circle cx="30" cy="10" r="3" fill="#1d4ed8"/>
+          </svg>
+          <div style="flex:1;min-width:200px;">
+            <ul class="bullet">
+              <li><strong>AUC = 1.0</strong>: Perfect classifier</li>
+              <li><strong>AUC = 0.5</strong>: Random guessing (the diagonal line)</li>
+              <li><strong>AUC = 0.9</strong>: Excellent model</li>
+              <li><strong>AUC &lt; 0.5</strong>: Worse than random (reversed predictions!)</li>
+            </ul>
+            <div style="margin-top:12px;font-size:14px;color:#374151;">
+              <strong>False Positive Rate</strong> = FP / (FP + TN)<br>
+              <strong>True Positive Rate</strong> = TP / (TP + FN) = Recall
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Warning: AUC alone isn't everything!</strong>
+          Two models can have the same AUC but very different behavior. One might have TPR=0 for low thresholds — terrible for medical diagnosis. Always inspect the full curve, not just the summary number.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <h3>🧪 Quiz Prep — Week 2 Questions</h3>
+
+    <div class="quiz-q">
+      <p>Q1. In text classification with Naive Bayes, what is P(class | document) called?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! P(Y|X) is the posterior — the probability of the class GIVEN we already observed the document.')">Posterior probability ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Likelihood is P(X|Y) — the probability of observing these words given the class.')">Likelihood</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Prior is P(Y) — the baseline probability of each class before seeing any evidence.')">Prior probability</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Evidence is P(X), which is constant across classes and ignored in NB prediction.')">Evidence</button>
+      </div>
+      <div class="quiz-feedback" id="qf0"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q2. Which statement does NOT hold true for Naive Bayes?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! NB assumes word independence — position doesn\'t matter. It\'s bag-of-words based.')">The position of words in the document is important ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','NB IS a generative model — it models P(X|Y) and P(Y).')">It is a generative model</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This IS true — NB assumes P(w₁,w₂,...|Y) = ∏P(wᵢ|Y).')">Features are assumed to be independent given a label</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This IS true — NB just counts occurrences, no gradient descent needed.')">No actual training is needed in Naïve Bayes</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q3. Accuracy may not be informative when evaluating highly imbalanced data — True or False?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! If 99% of data is class A, always predicting A gives 99% accuracy but zero usefulness. Use Precision/Recall/F1/AUC instead.')">True — accuracy is misleading for imbalanced data ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False — accuracy alone IS problematic for imbalanced datasets.')">False — accuracy always works fine</button>
+      </div>
+      <div class="quiz-feedback" id="qf2"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p>Q4. Which of these statements about the confusion matrix is CORRECT?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Confusion matrices absolutely work for multi-class — you just get a larger matrix.')">Confusion matrix can only be used for binary classification</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! A True Negative means the model predicted negative AND the actual label is negative — both agree on the negative.')">True Negative: actual class is negative, prediction is negative ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False Positive is when actual=negative but predicted=positive. You described True Negative.')">False Positive: actual=negative, predicted=negative</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Confusion matrices are specifically for classification, not regression.')">Confusion matrix can be used to evaluate regression models</button>
+      </div>
+      <div class="quiz-feedback" id="qf3"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week1.html">← Week 1: Preprocessing</a>
+    <a href="week3.html">Week 3: Logistic Regression →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleConcept(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// Naive Bayes demo
+const spamWords = { free:0.15, money:0.12, win:0.14, prize:0.13, click:0.10, now:0.08, offer:0.11, buy:0.07, urgent:0.09, congratulations:0.10 };
+const hamWords  = { free:0.02, money:0.03, win:0.02, prize:0.01, click:0.03, now:0.05, offer:0.02, buy:0.04, urgent:0.01, congratulations:0.02,
+                    class:0.08, project:0.07, meeting:0.09, thanks:0.08, hello:0.07, please:0.06, report:0.07, attached:0.06 };
+const pSpam = 0.4, pHam = 0.6;
+
+function runNB() {
+  const text = document.getElementById('nbInput').value.toLowerCase().replace(/[^a-z\s]/g,'');
+  const tokens = text.split(/\s+/).filter(t => t.length > 0);
+  let logSpam = Math.log(pSpam), logHam = Math.log(pHam);
+  let breakdown = '';
+  tokens.forEach(w => {
+    const ps = spamWords[w] || 0.001;
+    const ph = hamWords[w] || 0.001;
+    logSpam += Math.log(ps);
+    logHam  += Math.log(ph);
+    breakdown += `  "${w}": P(spam)=${ps.toFixed(3)}, P(ham)=${ph.toFixed(3)}\n`;
+  });
+  const winner = logSpam > logHam ? '🚨 SPAM' : '✅ NOT SPAM';
+  const conf = Math.abs(logSpam - logHam).toFixed(2);
+  document.getElementById('nbOutput').textContent =
+    `Prior: P(spam)=${pSpam}, P(ham)=${pHam}\n\nWord-by-word likelihoods:\n${breakdown}\nlog P(spam|doc) = ${logSpam.toFixed(3)}\nlog P(ham|doc)  = ${logHam.toFixed(3)}\n\nResult: ${winner}  (margin = ${conf})`;
+}
+
+// Confusion Matrix Calculator
+function updateCM() {
+  const tp = parseInt(document.getElementById('tpSlider').value);
+  const fp = parseInt(document.getElementById('fpSlider').value);
+  const fn = parseInt(document.getElementById('fnSlider').value);
+  const tn = parseInt(document.getElementById('tnSlider').value);
+  document.getElementById('tpVal').textContent = tp;
+  document.getElementById('fpVal').textContent = fp;
+  document.getElementById('fnVal').textContent = fn;
+  document.getElementById('tnVal').textContent = tn;
+  const total = tp + fp + fn + tn;
+  const accuracy = total > 0 ? ((tp + tn) / total * 100).toFixed(1) : 0;
+  const precision = (tp + fp) > 0 ? (tp / (tp + fp) * 100).toFixed(1) : 'N/A';
+  const recall = (tp + fn) > 0 ? (tp / (tp + fn) * 100).toFixed(1) : 'N/A';
+  const f1 = (precision !== 'N/A' && recall !== 'N/A')
+    ? (2 * (tp/(tp+fp)) * (tp/(tp+fn)) / ((tp/(tp+fp)) + (tp/(tp+fn))) * 100).toFixed(1) : 'N/A';
+  const fpr = (fp + tn) > 0 ? (fp / (fp + tn) * 100).toFixed(1) : 'N/A';
+  const warning = parseFloat(accuracy) > 90 && parseFloat(recall) < 50
+    ? '\n⚠️ WARNING: High accuracy but low recall — possible imbalanced data issue!' : '';
+  document.getElementById('cmOutput').textContent =
+    `Total samples: ${total}\n\nAccuracy  = (${tp}+${tn})/${total} = ${accuracy}%\nPrecision = ${tp}/(${tp}+${fp}) = ${precision}%\nRecall    = ${tp}/(${tp}+${fn}) = ${recall}%\nF1 Score  = ${f1}%\nFalse Positive Rate = ${fpr}%${warning}`;
+}
+updateCM();
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const fb = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  fb.textContent = explanation;
+  fb.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>
