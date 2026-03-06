@@ -32,7 +32,7 @@
   .header-meta span { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 16px; font-size: 14px; }
 
   .progress-bar-wrap { background: rgba(255,255,255,0.15); border-radius: 99px; height: 8px; max-width: 400px; margin: 20px auto 0; }
-  .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 37.5%; transition: width 1s ease; }
+  .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 56.25%; transition: width 1s ease; }
   .progress-label { font-size: 13px; opacity: 0.8; margin-top: 6px; }
 
   main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
@@ -76,10 +76,13 @@
   .w6 .week-num { color: #0284c7; }
   .w7 .week-card-header { background: linear-gradient(120deg, #eef2ff, #e0e7ff); }
   .w7 .week-num { color: #4f46e5; }
+  .w9 .week-card-header { background: linear-gradient(120deg, #f0fdfa, #ccfbf1); }
+  .w9 .week-num { color: #0d9488; }
 
   .hw-badge.hw1 { background: #dbeafe; color: #1d4ed8; }
   .hw-badge.hw2 { background: #dcfce7; color: #15803d; }
   .hw-badge.hw3 { background: #fce7f3; color: #be185d; }
+  .hw-badge.hw4 { background: #fef3c7; color: #b45309; }
   .hw-badge.none { background: #f1f5f9; color: #64748b; }
 
   /* Roadmap */
@@ -105,16 +108,16 @@
 <header>
   <div class="badge">CSE 8803 · Spring 2026</div>
   <h1>Applied NLP Study Guide</h1>
-  <p>Your interactive learning companion for Weeks 1–7. Built around <strong>What, Why, How</strong> — with visuals, demos, and quiz prep.</p>
+  <p>Your interactive learning companion for Weeks 1–9. Built around <strong>What, Why, How</strong> — with visuals, demos, and quiz prep.</p>
   <div class="header-meta">
-    <span>📅 Current: Week 7 (Feb 23–Mar 1)</span>
-    <span>📚 7 Weeks Covered</span>
+    <span>📅 Current: Week 9 (Mar 9–13)</span>
+    <span>📚 9 Weeks Covered</span>
     <span>🎯 Quiz Upcoming</span>
   </div>
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill"></div>
   </div>
-  <div class="progress-label">Week 6 of 16 — 37.5% through the course</div>
+  <div class="progress-label">Week 9 of 16 — 56.25% through the course</div>
 </header>
 
 <main>
@@ -244,14 +247,14 @@
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw3">HW3 covers this</span>
+        <span class="hw-badge hw3">HW3 covers this ✓</span>
         <span class="open-btn">Open →</span>
       </div>
     </a>
 
     <a href="week7.html" class="week-card w7">
       <div class="week-card-header">
-        <div class="week-num">Week 7 · Feb 23–Mar 1 ← YOU ARE HERE</div>
+        <div class="week-num">Week 7 · Feb 23–Mar 1</div>
         <h2>LSTM, GRU &amp; Attention</h2>
         <div class="dates">Module 8 — Long-Term Memory &amp; Focus</div>
       </div>
@@ -265,7 +268,28 @@
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw3">HW3 covers this</span>
+        <span class="hw-badge hw4">HW4 covers this</span>
+        <span class="open-btn">Open →</span>
+      </div>
+    </a>
+
+    <a href="week9.html" class="week-card w9">
+      <div class="week-card-header">
+        <div class="week-num">Week 9 · Mar 9–13 ← YOU ARE HERE</div>
+        <h2>Transformers, BERT &amp; GPT</h2>
+        <div class="dates">Module 9 — The Architecture That Changed NLP</div>
+      </div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Why Transformers? LSTM limitations &amp; pre-training benefits</li>
+          <li>Encoder vs. Decoder: BERT, GPT, T5/BART families</li>
+          <li>Self-Attention: Q, K, V — Attention(Q,K,V) = softmax(QKᵀ/√d_k)·V</li>
+          <li>Positional Encoding: sine (even) / cosine (odd) indices</li>
+          <li>BERT: MLM + NSP pre-training; GPT: autoregressive generation</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw4">HW4 covers this</span>
         <span class="open-btn">Open →</span>
       </div>
     </a>
@@ -322,7 +346,7 @@
 
 </main>
 
-<footer>CSE 8803 Applied NLP · Spring 2026 · Tarek's Personal Study Guide · Week 6 of 16</footer>
+<footer>CSE 8803 Applied NLP · Spring 2026 · Tarek's Personal Study Guide · Week 9 of 16</footer>
 
 </body>
 </html>

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 9 – Transformers, BERT & GPT | CSE 8803</title>
+<style>
+  :root {
+    --primary: #0d9488; --primary-light: #f0fdfa; --primary-dark: #0f766e;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626; --cyan: #0284c7;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #0f766e; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #fbbf24; color: #92400e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #0f766e 0%, #0d9488 60%, #2dd4bf 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #92400e; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.teal   { background: #ccfbf1; }
+  .section-icon.blue   { background: #dbeafe; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.purple { background: #f3e8ff; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why  { color: #059669; }
+  .explainer-label.how  { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #94a3b8; }
+  .formula-box .highlight { color: #5eead4; font-weight: bold; }
+  .formula-box .eq        { color: #86efac; }
+  .formula-box .key       { color: #f9a8d4; }
+  .formula-box .query     { color: #93c5fd; }
+  .formula-box .val       { color: #fcd34d; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #0f766e; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 4px; }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-outline.active { background: var(--primary); color: white; }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip     { border-color: var(--green);  background: #d1fae5; }
+  .callout.danger  { border-color: var(--red);    background: #fee2e2; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .model-card { border-radius: 12px; padding: 18px; margin-bottom: 12px; border: 2px solid; }
+  .model-card.encoder { border-color: #3b82f6; background: #eff6ff; }
+  .model-card.decoder { border-color: #f97316; background: #fff7ed; }
+  .model-card.seq2seq { border-color: #8b5cf6; background: #f5f3ff; }
+  .model-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .model-card.encoder h4 { color: #1d4ed8; }
+  .model-card.decoder h4 { color: #c2410c; }
+  .model-card.seq2seq h4 { color: #6d28d9; }
+  .model-card .badge { display: inline-block; border-radius: 6px; padding: 2px 10px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .badge-enc { background: #dbeafe; color: #1d4ed8; }
+  .badge-dec { background: #fed7aa; color: #c2410c; }
+  .badge-s2s { background: #e9d5ff; color: #6d28d9; }
+  .arch-diagram { display: flex; align-items: stretch; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+  .arch-block { border-radius: 10px; padding: 12px 16px; text-align: center; font-size: 13px; font-weight: 600; min-width: 100px; }
+  .arch-input { background: #e2e8f0; color: #475569; }
+  .arch-embed { background: #dbeafe; color: #1e40af; border: 2px solid #3b82f6; }
+  .arch-pos   { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
+  .arch-attn  { background: #ccfbf1; color: #0f766e; border: 2px solid #14b8a6; }
+  .arch-norm  { background: #f3e8ff; color: #6d28d9; border: 2px solid #8b5cf6; }
+  .arch-ff    { background: #fee2e2; color: #991b1b; border: 2px solid #ef4444; }
+  .arch-out   { background: #d1fae5; color: #065f46; border: 2px solid #10b981; }
+  .arch-arrow { display: flex; align-items: center; font-size: 20px; color: var(--muted); }
+  .kqv-demo { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; justify-content: center; }
+  .kqv-box { flex: 1; min-width: 130px; border-radius: 10px; padding: 12px; text-align: center; }
+  .kqv-box.k { background: #fdf2f8; border: 2px solid #ec4899; }
+  .kqv-box.q { background: #eff6ff; border: 2px solid #3b82f6; }
+  .kqv-box.v { background: #fefce8; border: 2px solid #eab308; }
+  .kqv-box h5 { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .kqv-box.k h5 { color: #be185d; }
+  .kqv-box.q h5 { color: #1d4ed8; }
+  .kqv-box.v h5 { color: #a16207; }
+  .kqv-box p { font-size: 12px; color: #374151; line-height: 1.5; }
+  .attn-grid-wrap { margin: 16px 0; }
+  .attn-sentence { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+  .attn-word-btn { border-radius: 8px; padding: 6px 12px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; }
+  .attn-heat-row { display: flex; align-items: center; gap: 6px; margin: 6px 0; flex-wrap: wrap; }
+  .attn-heat-row .word-label { font-size: 13px; font-weight: 600; width: 80px; text-align: right; flex-shrink: 0; }
+  .attn-cell { height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex: 1; min-width: 50px; transition: all 0.4s; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 4px; bottom: 4px; width: 2px; background: #e2e8f0; }
+  .timeline-item { position: relative; margin-bottom: 18px; }
+  .timeline-item::before { content: ''; position: absolute; left: -24px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); border: 2px solid white; box-shadow: 0 0 0 2px var(--primary); }
+  .timeline-item .date { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .timeline-item .event { font-size: 14px; font-weight: 600; color: var(--text); }
+  .timeline-item p { font-size: 13px; color: #374151; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week7.html">← Week 7</a>
+    <span class="you-are-here">Week 9 ← HERE</span>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 9 · Mar 9–13</div>
+  <h1>Transformers, BERT &amp; GPT</h1>
+  <p>The architecture that changed NLP forever — self-attention, positional encoding, and the pre-trained model revolution.</p>
+  <div class="header-chips">
+    <span class="chip">Module 9 · 4 Lectures</span>
+    <span class="chip">Self-Attention</span>
+    <span class="chip">BERT &amp; GPT</span>
+    <span class="chip">Transfer Learning</span>
+    <span class="chip alert">⚠️ Quiz 8 Upcoming</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: WHY TRANSFORMERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon teal">🚀</div>
+      <div>
+        <h2>Why Transformers?</h2>
+        <div class="sub">History &amp; motivation for moving beyond LSTMs</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Problems with LSTMs that Transformers Solve</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>LSTMs had three key bottlenecks that made them hard to scale to the level needed for modern NLP.</p>
+        </div>
+        <div class="compare-table" style="margin:0">
+          <table class="compare-table">
+            <tr><th>Problem</th><th>Detail</th><th>Transformer Fix</th></tr>
+            <tr><td><strong>Sequential (Slow)</strong></td><td class="bad">Items are fed one at a time — needs h_{t-1} before computing h_t, so can't parallelize</td><td class="good">Self-attention sees all tokens at once — fully parallelizable</td></tr>
+            <tr><td><strong>Large Memory</strong></td><td class="bad">Must store all hidden states and gradients through time</td><td class="good">Attention over fixed-length key/value stores</td></tr>
+            <tr><td><strong>No Transfer Learning</strong></td><td class="bad">Must retrain from scratch on every new labeled dataset — costly &amp; slow</td><td class="good">Pre-train once on massive corpus; fine-tune cheaply on any task</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Timeline: From Transformers to Modern LLMs</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="date">2017</div>
+            <div class="event">"Attention Is All You Need" — Vaswani et al.</div>
+            <p>Original Transformer architecture introduced; designed for machine translation.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="date">June 2018</div>
+            <div class="event">GPT-1 (OpenAI)</div>
+            <p>First major pre-trained Transformer; Generative Pre-Training using decoder stack.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="date">October 2018</div>
+            <div class="event">BERT (Google)</div>
+            <p>Bidirectional Encoder Representations from Transformers; excels at understanding tasks.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="date">2019</div>
+            <div class="event">DistilBERT</div>
+            <p><strong>60% faster</strong>, <strong>40% lighter</strong> than BERT while maintaining comparable accuracy.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="date">2020</div>
+            <div class="event">GPT-3 (OpenAI)</div>
+            <p>175 billion parameters; autoregressive model for generating human-like text.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Why Pre-Train Instead of Training from Scratch?</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <strong>🎯 The Core Idea</strong>
+          Train once on massive unlabeled text using self-supervised learning, then fine-tune cheaply on specific tasks.
+        </div>
+        <ul class="bullet">
+          <li><strong>Time:</strong> Training from scratch on large corpora takes extremely long — weeks to months on hundreds of GPUs.</li>
+          <li><strong>Cost &amp; Carbon:</strong> Pre-training is very expensive and creates a large environmental footprint.</li>
+          <li><strong>Data efficiency:</strong> Fine-tuning a pre-trained model requires far less labeled data than training from scratch.</li>
+          <li><strong>Domain knowledge:</strong> A pre-trained model already has statistical knowledge of language that transfers to the fine-tuning task.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>💡 Self-Supervised Learning</strong>
+          Labels are automatically created from the raw text (e.g., masking words, predicting next word) — no human labeling needed!
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>NLP Tasks Transformers Excel At</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>🌐 Machine Translation (MT)</h4>
+            <p>Translate text from one natural language to another (e.g., English → French).</p>
+          </div>
+          <div class="mini-card">
+            <h4>💬 Sentiment Analysis</h4>
+            <p>Identify the emotion or opinion in a sentence (positive/negative/neutral).</p>
+          </div>
+          <div class="mini-card">
+            <h4>📝 Text Summarization</h4>
+            <p>Condense a long document into a shorter, meaningful version.</p>
+          </div>
+          <div class="mini-card">
+            <h4>🔲 Fill-in-the-Blank (MLM)</h4>
+            <p>"This course will teach you all about ___ models." → Transformers</p>
+          </div>
+          <div class="mini-card">
+            <h4>🏷️ Named Entity Recognition (NER)</h4>
+            <p>Detect entities in text: people, places, dates, organizations.</p>
+          </div>
+          <div class="mini-card">
+            <h4>🔤 Part-of-Speech (POS) Tagging</h4>
+            <p>Assign grammatical labels: noun, verb, adjective, etc. to each word.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🏗️</div>
+      <div>
+        <h2>Transformer Architecture</h2>
+        <div class="sub">Encoder, decoder, and the three model families</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Encoder vs. Decoder Overview</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="arch-diagram">
+          <div class="arch-block arch-input">Input Tokens</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-embed">Token Embedding</div>
+          <div class="arch-arrow">+</div>
+          <div class="arch-block arch-pos">Positional Encoding</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-attn">Encoder Block(s)</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-out">Context Vectors</div>
+        </div>
+        <div class="callout">
+          <strong>Context Vector (Bottleneck)</strong>
+          The last encoder produces a fixed-length context vector that is passed to the decoder. The decoder attends to this to generate output.
+        </div>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>🔵 Encoder</h4>
+            <ul class="bullet">
+              <li>Reads the entire input sequence at once (bidirectional)</li>
+              <li>Produces a rich representation for each token</li>
+              <li>Best for <strong>understanding</strong> tasks (NLU)</li>
+              <li>Models: <strong>BERT, RoBERTa, ALBERT</strong></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>🟠 Decoder</h4>
+            <ul class="bullet">
+              <li>Generates tokens one at a time (left-to-right only)</li>
+              <li>Attends only to previously generated tokens (masked)</li>
+              <li>Best for <strong>generation</strong> tasks (NLG)</li>
+              <li>Models: <strong>GPT, GPT-2, GPT-3</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="model-card seq2seq" style="margin-top:12px">
+          <h4>🔵+🟠 Encoder–Decoder (Seq2Seq)</h4>
+          <span class="badge badge-s2s">Seq2Seq</span>
+          <p style="font-size:14px">Uses both components for generative tasks that require input (e.g., translation, summarization). Models: <strong>BART, T5</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Inside One Encoder Block (4 Modules)</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="arch-diagram" style="flex-wrap:wrap; gap:6px;">
+          <div class="arch-block arch-embed" style="flex:0 0 auto">Input<br>(Embedding + Pos)</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-attn" style="flex:0 0 auto">Self-Attention<br>Layer</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-norm" style="flex:0 0 auto">Add &amp; Norm<br>(Skip Connection)</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-ff" style="flex:0 0 auto">Feed-Forward<br>Network</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-norm" style="flex:0 0 auto">Add &amp; Norm<br>(Skip Connection)</div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-block arch-out" style="flex:0 0 auto">Output<br>(to next block)</div>
+        </div>
+        <div class="two-col" style="margin-top:16px">
+          <div class="mini-card">
+            <h4>① Self-Attention</h4>
+            <p>Computes relationships between all words in the sequence simultaneously using Q, K, V matrices.</p>
+          </div>
+          <div class="mini-card">
+            <h4>② Skip (Residual) Connection</h4>
+            <p>Adds the input directly to the attention output: <code>output = LayerNorm(x + Attention(x))</code>. Prevents vanishing gradients.</p>
+          </div>
+          <div class="mini-card">
+            <h4>③ Layer Normalization</h4>
+            <p>Normalizes the distribution of intermediate layers → smoother gradients, faster training, better generalization.</p>
+          </div>
+          <div class="mini-card">
+            <h4>④ Feed-Forward Network (FFN)</h4>
+            <p>Two linear layers with ReLU in between. Transforms attention vectors for the next block. Also has a skip connection + LayerNorm after it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Positional Encoding</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Transformers have no built-in sense of word order (unlike RNNs/CNNs). Positional encoding injects order information into the embeddings so the model knows <em>where</em> each word appears.</p>
+        </div>
+        <div class="formula-box"><span class="comment">// Positional Encoding formula</span>
+<span class="highlight">PE(pos, 2i)</span>   = <span class="eq">sin(pos / 10000^(2i/d_model))</span>   <span class="comment">← even indices</span>
+<span class="highlight">PE(pos, 2i+1)</span> = <span class="eq">cos(pos / 10000^(2i/d_model))</span>   <span class="comment">← odd indices</span>
+
+<span class="comment">// pos = position in sequence, i = dimension index</span>
+<span class="comment">// d_model = embedding dimension</span>
+<span class="comment">// Final input = Token Embedding + Positional Encoding</span></div>
+        <div class="callout tip">
+          <strong>💡 Key Point</strong>
+          Sine for <strong>even</strong> indices, cosine for <strong>odd</strong> indices. The resulting vectors are added to (not concatenated with) the word embeddings.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Multi-Head Attention</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Instead of a single self-attention computation, multi-head attention runs <strong>several attention operations in parallel</strong>, each with its own Q, K, V matrices. Outputs are concatenated and projected.</p>
+        </div>
+        <div class="callout">
+          <strong>Why Use Multiple Heads?</strong>
+          Each head can attend to different kinds of relationships simultaneously — e.g., one head captures syntax, another captures coreference, another captures semantic similarity.
+        </div>
+        <div class="formula-box"><span class="comment">// Multi-Head Attention</span>
+head_i    = Attention(<span class="query">Q·Wᵢᵠ</span>, <span class="key">K·Wᵢᵏ</span>, <span class="val">V·Wᵢᵛ</span>)
+MultiHead = Concat(head_1, ..., head_h) · Wᴼ
+
+<span class="comment">// Each head has its own learned projection matrices Wᵠ, Wᵏ, Wᵛ</span>
+<span class="comment">// Processed in parallel → efficient on GPUs</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SELF-ATTENTION DEEP DIVE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon teal">🔍</div>
+      <div>
+        <h2>Self-Attention: The Core Mechanism</h2>
+        <div class="sub">Query, Key, Value — understanding how attention scores are computed</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Intuition: "It was hungry" — which word does "it" refer to?</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">The Problem</div>
+          <p>Consider: <em>"The cat drank the milk because <strong>it</strong> was hungry."</em> vs <em>"The cat drank the milk because <strong>it</strong> was sweet."</em><br>
+          In the first sentence "it" = cat; in the second "it" = milk. Self-attention lets each word "look at" every other word to resolve this.</p>
+        </div>
+        <div class="callout tip">
+          <strong>💡 Self-Attention Purpose</strong>
+          For each word in the input, compute a weighted combination of all other words' representations, where the weights represent how relevant each word is to understanding the current word.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Query, Key, Value (Q, K, V) — Step by Step</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="kqv-demo">
+          <div class="kqv-box k">
+            <h5>🗝️ KEY (K)</h5>
+            <p>What each word <em>offers</em>.<br>"Here's what I contain."</p>
+          </div>
+          <div class="kqv-box q">
+            <h5>❓ QUERY (Q)</h5>
+            <p>What the current word is <em>looking for</em>.<br>"What am I interested in?"</p>
+          </div>
+          <div class="kqv-box v">
+            <h5>💰 VALUE (V)</h5>
+            <p>The <em>content</em> to be retrieved.<br>"Here's the actual information."</p>
+          </div>
+        </div>
+        <div class="formula-box"><span class="comment">// Step-by-step self-attention calculation</span>
+<span class="comment">// 1. Project each word embedding into Q, K, V vectors</span>
+<span class="query">q_i</span> = x_i · <span class="query">W_Q</span>   <span class="comment">← query for word i</span>
+<span class="key">k_j</span> = x_j · <span class="key">W_K</span>   <span class="comment">← key for word j</span>
+<span class="val">v_j</span> = x_j · <span class="val">W_V</span>   <span class="comment">← value for word j</span>
+
+<span class="comment">// 2. Compute raw attention score (dot product)</span>
+e_ij = <span class="query">q_i</span> · <span class="key">k_j</span>ᵀ / √d_k       <span class="comment">← scale to avoid large values</span>
+
+<span class="comment">// 3. Softmax to get attention weights (sum to 1)</span>
+α_ij = softmax(e_ij)
+
+<span class="comment">// 4. Weighted sum of values = output for word i</span>
+z_i  = Σⱼ α_ij · <span class="val">v_j</span>
+
+<span class="comment">// Matrix form (all words at once):</span>
+Attention(Q, K, V) = softmax( Q·Kᵀ / √d_k ) · V</div>
+        <div class="callout warning">
+          <strong>⚠️ Why divide by √d_k?</strong>
+          With large embedding dimensions, dot products grow very large → softmax becomes extremely peaked → vanishing gradients. Dividing by √d_k stabilizes training.
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: Self-Attention Visualizer -->
+    <div class="interactive-box">
+      <h4>🔬 Interactive: Self-Attention Weight Visualizer</h4>
+      <div class="desc">Click a query word to see how much attention it pays to each key word in the sentence.</div>
+      <div id="attn-sentence" class="attn-sentence"></div>
+      <div id="attn-heatmap" style="margin-top:16px"></div>
+      <div class="output-box" id="attn-out" style="min-height:40px"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: MODEL FAMILIES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🤖</div>
+      <div>
+        <h2>Model Families: BERT, GPT, T5</h2>
+        <div class="sub">Encoder-only, decoder-only, and encoder–decoder architectures</div>
+      </div>
+    </div>
+
+    <div class="model-card encoder">
+      <h4>BERT — Encoder-Only (Bidirectional)</h4>
+      <span class="badge badge-enc">NLU Tasks</span>
+      <div class="two-col">
+        <div>
+          <ul class="bullet">
+            <li>Trained on <strong>BooksCorpus</strong> (~800M words) + <strong>English Wikipedia</strong> (~2.5B words)</li>
+            <li>Two pre-training objectives: <strong>MLM</strong> + <strong>NSP</strong></li>
+            <li>Bidirectional: attends to words both before AND after</li>
+            <li>Great for: classification, Q&amp;A, NER, sentiment</li>
+            <li>Related: RoBERTa, ALBERT, DistilBERT (60% faster, 40% lighter)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="mini-card">
+            <h4>Masked Language Modeling (MLM)</h4>
+            <p>Mask ~15% of tokens → train model to predict them. Example:<br>
+            "The man went to the <strong>[MASK]</strong>." → "store"</p>
+          </div>
+          <div class="mini-card" style="margin-top:8px">
+            <h4>Next Sentence Prediction (NSP)</h4>
+            <p>Given two sentences A &amp; B, predict: IsNext or NotNext. Trains the model to understand sentence relationships (important for Q&amp;A, NLI).</p>
+          </div>
+        </div>
+      </div>
+      <div class="formula-box" style="margin-top:12px"><span class="comment"># HuggingFace BERT example — fill-mask pipeline</span>
+<span class="eq">from transformers import pipeline</span>
+<span class="highlight">pipe = pipeline("fill-mask", model="bert-base-uncased")</span>
+result = pipe("The man went to the [MASK]. He bought a [MASK] of milk.")
+<span class="comment"># MASK_1 → "store", MASK_2 → "gallon"</span></div>
+    </div>
+
+    <div class="model-card decoder" style="margin-top:16px">
+      <h4>GPT — Decoder-Only (Unidirectional, Autoregressive)</h4>
+      <span class="badge badge-dec">NLG Tasks</span>
+      <div class="two-col">
+        <div>
+          <ul class="bullet">
+            <li>Developed by OpenAI — Generative Pre-Training</li>
+            <li>Autoregressive: predicts the next word given all previous words</li>
+            <li>Unidirectional: only looks left (past tokens)</li>
+            <li>GPT-3: <strong>175 billion parameters</strong></li>
+          </ul>
+        </div>
+        <div>
+          <div class="mini-card">
+            <h4>Pre-training Objective</h4>
+            <p>Language modeling: given "The cat sat on the", predict "mat". Repeat for all positions. No labels needed — fully self-supervised.</p>
+          </div>
+        </div>
+      </div>
+      <div class="formula-box" style="margin-top:12px"><span class="comment"># HuggingFace GPT-2 example — text generation</span>
+<span class="eq">from transformers import pipeline</span>
+<span class="highlight">pipe = pipeline("text-generation", model="gpt2")</span>
+results = pipe("Help! I'm a language model", max_length=50, num_return_sequences=5)
+<span class="comment"># Generates 5 different continuations of the input text</span></div>
+    </div>
+
+    <div class="model-card seq2seq" style="margin-top:16px">
+      <h4>T5 / BART — Encoder–Decoder (Seq2Seq)</h4>
+      <span class="badge badge-s2s">Generative + Understanding</span>
+      <ul class="bullet" style="margin-top:8px">
+        <li>Use both encoder stack (to understand input) and decoder stack (to generate output)</li>
+        <li>Best for tasks needing <em>input → output</em>: translation, summarization, question answering with generation</li>
+        <li>Used the original "Attention Is All You Need" architecture (Vaswani et al., 2017)</li>
+      </ul>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="concept-card" style="margin-top:24px">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Complete Architecture Comparison</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr>
+            <th>Feature</th>
+            <th>RNN/LSTM</th>
+            <th>BERT (Encoder)</th>
+            <th>GPT (Decoder)</th>
+            <th>T5/BART (Seq2Seq)</th>
+          </tr>
+          <tr>
+            <td><strong>Attention</strong></td>
+            <td>Bahdanau (optional)</td>
+            <td>Bidirectional self-attn</td>
+            <td>Masked self-attn</td>
+            <td>Both</td>
+          </tr>
+          <tr>
+            <td><strong>Direction</strong></td>
+            <td>Left→Right</td>
+            <td>Bidirectional ✓</td>
+            <td>Left→Right only</td>
+            <td>Enc: bi, Dec: L→R</td>
+          </tr>
+          <tr>
+            <td><strong>Parallelization</strong></td>
+            <td class="bad">Sequential ✗</td>
+            <td class="good">Full parallel ✓</td>
+            <td class="good">Parallel (train) ✓</td>
+            <td class="good">Parallel (train) ✓</td>
+          </tr>
+          <tr>
+            <td><strong>Transfer Learning</strong></td>
+            <td class="bad">Poor ✗</td>
+            <td class="good">Excellent ✓</td>
+            <td class="good">Excellent ✓</td>
+            <td class="good">Excellent ✓</td>
+          </tr>
+          <tr>
+            <td><strong>Best For</strong></td>
+            <td>Short sequences</td>
+            <td>NLU (classification)</td>
+            <td>NLG (generation)</td>
+            <td>Seq-to-seq tasks</td>
+          </tr>
+          <tr>
+            <td><strong>Examples</strong></td>
+            <td>LSTM, GRU</td>
+            <td>BERT, RoBERTa, ALBERT</td>
+            <td>GPT-1/2/3, Llama</td>
+            <td>T5, BART, mT5</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: QUIZ PREP -->
+  <div class="quiz-section">
+    <h3>🎯 Quiz 8 Practice — Transformers, BERT &amp; GPT</h3>
+
+    <div class="quiz-q" id="q1">
+      <p>Q1. What is the main reason transformers can be trained faster than LSTMs?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q1', this, false)">They use smaller embedding dimensions</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1', this, true)">They process all tokens in parallel instead of sequentially</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1', this, false)">They require less training data</button>
+        <button class="quiz-opt" onclick="answerQuiz('q1', this, false)">They use recurrence for faster state updates</button>
+      </div>
+      <div class="quiz-feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q2">
+      <p>Q2. In the self-attention formula Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V, what does dividing by √d_k accomplish?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q2', this, false)">It normalizes the value vectors</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2', this, false)">It increases the learning rate automatically</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2', this, true)">It prevents dot products from growing too large, which would cause vanishing softmax gradients</button>
+        <button class="quiz-opt" onclick="answerQuiz('q2', this, false)">It ensures attention weights sum to d_k</button>
+      </div>
+      <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q3">
+      <p>Q3. BERT is described as "bidirectional." What does this mean?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q3', this, false)">It can read text both forward and backward (reversed)</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3', this, true)">Its attention layer looks at both the words before AND after a given word when forming representations</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3', this, false)">It uses two separate encoder stacks processing in parallel</button>
+        <button class="quiz-opt" onclick="answerQuiz('q3', this, false)">It generates text in both English and French simultaneously</button>
+      </div>
+      <div class="quiz-feedback" id="q3-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q4">
+      <p>Q4. Which pre-training objective does BERT use to learn sentence-level relationships?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q4', this, false)">Autoregressive Language Modeling (predict next word)</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4', this, false)">Masked Language Modeling only (MLM)</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4', this, true)">Next Sentence Prediction (NSP) — in addition to MLM</button>
+        <button class="quiz-opt" onclick="answerQuiz('q4', this, false)">Skip-Gram with negative sampling</button>
+      </div>
+      <div class="quiz-feedback" id="q4-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q5">
+      <p>Q5. What is positional encoding in transformers and why is it needed?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q5', this, false)">It encodes each word's definition using a lookup table</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5', this, false)">It replaces word embeddings entirely to reduce parameters</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5', this, true)">It adds order information to embeddings because transformers lack recurrence/convolution and can't inherently sense word position</button>
+        <button class="quiz-opt" onclick="answerQuiz('q5', this, false)">It assigns each encoder block a unique identifier</button>
+      </div>
+      <div class="quiz-feedback" id="q5-fb"></div>
+    </div>
+
+    <div class="quiz-q" id="q6">
+      <p>Q6. GPT is an "autoregressive" model. What does that mean during generation?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerQuiz('q6', this, false)">It generates all output tokens simultaneously in one forward pass</button>
+        <button class="quiz-opt" onclick="answerQuiz('q6', this, true)">It predicts the next token using all previously generated tokens, one token at a time</button>
+        <button class="quiz-opt" onclick="answerQuiz('q6', this, false)">It requires a separate encoder to process the input first</button>
+        <button class="quiz-opt" onclick="answerQuiz('q6', this, false)">It regresses output tokens back into the input embedding space</button>
+      </div>
+      <div class="quiz-feedback" id="q6-fb"></div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="week7.html">← Week 7: LSTM &amp; Attention</a>
+    <a href="index.html">🏠 All Weeks</a>
+  </div>
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function answerQuiz(qid, btn, correct) {
+  const qDiv = document.getElementById(qid);
+  const opts = qDiv.querySelectorAll('.quiz-opt');
+  opts.forEach(o => { o.disabled = true; o.style.cursor = 'default'; });
+  const fb = document.getElementById(qid + '-fb');
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ Correct!';
+    fb.className = 'quiz-feedback show correct';
+  } else {
+    btn.classList.add('wrong');
+    // find and highlight correct
+    opts.forEach(o => { if (o.onclick.toString().includes('true')) o.classList.add('correct'); });
+    fb.textContent = '❌ Not quite — the highlighted option is correct.';
+    fb.className = 'quiz-feedback show wrong';
+  }
+}
+
+// Self-Attention Visualizer
+const SENTENCE = ["The", "cat", "sat", "on", "the", "mat"];
+// Pre-defined attention weights for each query word (rows) over key words (cols)
+// Each row sums to 1
+const ATTN_WEIGHTS = [
+  [0.40, 0.25, 0.10, 0.05, 0.10, 0.10], // "The"
+  [0.15, 0.45, 0.15, 0.05, 0.08, 0.12], // "cat"
+  [0.08, 0.22, 0.35, 0.12, 0.08, 0.15], // "sat"
+  [0.05, 0.10, 0.20, 0.30, 0.15, 0.20], // "on"
+  [0.20, 0.10, 0.08, 0.08, 0.35, 0.19], // "the"
+  [0.12, 0.28, 0.18, 0.10, 0.12, 0.20], // "mat"
+];
+const COLORS = ['#0f766e','#0d9488','#0284c7','#2563eb','#7c3aed','#059669'];
+let activeQuery = -1;
+
+function buildAttnViz() {
+  const sentDiv = document.getElementById('attn-sentence');
+  SENTENCE.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'attn-word-btn';
+    btn.textContent = w;
+    btn.style.background = '#f8fafc';
+    btn.style.border = '2px solid #e2e8f0';
+    btn.style.color = '#1e293b';
+    btn.onclick = () => showAttn(i);
+    sentDiv.appendChild(btn);
+  });
+  // Build heatmap rows
+  const hm = document.getElementById('attn-heatmap');
+  SENTENCE.forEach((w, j) => {
+    const row = document.createElement('div');
+    row.className = 'attn-heat-row';
+    row.id = 'hrow-' + j;
+    const lbl = document.createElement('span');
+    lbl.className = 'word-label';
+    lbl.textContent = w;
+    row.appendChild(lbl);
+    const cell = document.createElement('div');
+    cell.className = 'attn-cell';
+    cell.id = 'hcell-' + j;
+    cell.style.background = '#e2e8f0';
+    cell.style.color = '#475569';
+    cell.textContent = '—';
+    row.appendChild(cell);
+    hm.appendChild(row);
+  });
+}
+
+function showAttn(qi) {
+  activeQuery = qi;
+  const btns = document.querySelectorAll('.attn-word-btn');
+  btns.forEach((b, i) => {
+    b.style.background = i === qi ? COLORS[qi] : '#f8fafc';
+    b.style.color = i === qi ? 'white' : '#1e293b';
+    b.style.border = i === qi ? `2px solid ${COLORS[qi]}` : '2px solid #e2e8f0';
+  });
+  const weights = ATTN_WEIGHTS[qi];
+  SENTENCE.forEach((w, j) => {
+    const cell = document.getElementById('hcell-' + j);
+    const alpha = weights[j];
+    const intensity = Math.round(alpha * 255);
+    // Color: mix teal based on intensity
+    const r = Math.round(15 + (229-15)*(1-alpha));
+    const g = Math.round(118 + (229-118)*(1-alpha));
+    const b2 = Math.round(110 + (229-110)*(1-alpha));
+    cell.style.background = `rgb(${r},${g},${b2})`;
+    cell.style.color = alpha > 0.2 ? 'white' : '#1e293b';
+    cell.textContent = (alpha * 100).toFixed(0) + '%';
+  });
+  const out = document.getElementById('attn-out');
+  const topIdx = weights.indexOf(Math.max(...weights));
+  out.textContent = `Query: "${SENTENCE[qi]}" attends most to: "${SENTENCE[topIdx]}" (${(weights[topIdx]*100).toFixed(0)}%)\n\nAll weights: ${SENTENCE.map((w,j) => `${w}=${(weights[j]*100).toFixed(0)}%`).join('  ')}`;
+}
+
+buildAttnViz();
+// Show first word by default
+showAttn(1);
+</script>
+</body>
+</html>
