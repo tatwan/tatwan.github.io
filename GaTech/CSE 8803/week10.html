@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 10 – Sequence Labeling: POS Tagging & NER | CSE 8803</title>
+<style>
+  :root {
+    --primary: #7c3aed; --primary-light: #f5f3ff; --primary-dark: #6d28d9;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626; --cyan: #0284c7;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #6d28d9; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #fbbf24; color: #92400e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 60%, #a78bfa 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #92400e; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.blue   { background: #dbeafe; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-icon.teal   { background: #ccfbf1; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why  { color: #059669; }
+  .explainer-label.how  { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #94a3b8; }
+  .formula-box .highlight { color: #c4b5fd; font-weight: bold; }
+  .formula-box .eq        { color: #86efac; }
+  .formula-box .key       { color: #f9a8d4; }
+  .formula-box .tag-b     { color: #fbbf24; }
+  .formula-box .tag-i     { color: #67e8f9; }
+  .formula-box .tag-o     { color: #94a3b8; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #6d28d9; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 4px; }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-outline.active { background: var(--primary); color: white; }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fef3c7; }
+  .callout.tip     { border-color: var(--green);  background: #d1fae5; }
+  .callout.danger  { border-color: var(--red);    background: #fee2e2; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* POS Tag demo styles */
+  .pos-sentence { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; align-items: flex-end; }
+  .pos-token { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pos-word { font-size: 15px; font-weight: 600; color: #1e293b; padding: 6px 10px; border-radius: 6px; background: #f1f5f9; border: 1px solid #e2e8f0; }
+  .pos-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; }
+  .pos-NN   { background: #dbeafe; color: #1e40af; }
+  .pos-VB   { background: #d1fae5; color: #065f46; }
+  .pos-JJ   { background: #fef3c7; color: #92400e; }
+  .pos-RB   { background: #fce7f3; color: #be185d; }
+  .pos-DT   { background: #e0e7ff; color: #3730a3; }
+  .pos-IN   { background: #ffedd5; color: #9a3412; }
+  .pos-NNP  { background: #ede9fe; color: #6d28d9; }
+  .pos-CC   { background: #f0fdf4; color: #166534; }
+  .pos-OTHER { background: #f1f5f9; color: #475569; }
+
+  /* IOB/BIO demo */
+  .bio-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; align-items: flex-end; }
+  .bio-token { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .bio-word { font-size: 14px; font-weight: 600; padding: 5px 10px; border-radius: 6px; background: #f1f5f9; border: 1px solid #e2e8f0; }
+  .bio-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; }
+  .bio-B-PER { background: #fde68a; color: #92400e; }
+  .bio-I-PER { background: #fef3c7; color: #a16207; }
+  .bio-B-LOC { background: #bfdbfe; color: #1e40af; }
+  .bio-I-LOC { background: #dbeafe; color: #1d4ed8; }
+  .bio-B-ORG { background: #bbf7d0; color: #14532d; }
+  .bio-I-ORG { background: #d1fae5; color: #065f46; }
+  .bio-O     { background: #f1f5f9; color: #94a3b8; }
+
+  /* Algorithm comparison cards */
+  .algo-card { border-radius: 12px; padding: 18px; margin-bottom: 12px; border: 2px solid; }
+  .algo-card.classical { border-color: #f59e0b; background: #fffbeb; }
+  .algo-card.neural { border-color: #7c3aed; background: #f5f3ff; }
+  .algo-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .algo-card.classical h4 { color: #b45309; }
+  .algo-card.neural h4 { color: #5b21b6; }
+
+  /* Quiz */
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+
+  /* Tag legend */
+  .tag-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .tag-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; }
+
+  /* Encoder preference diagram */
+  .arch-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .arch-compare { grid-template-columns: 1fr; } }
+  .arch-box { border-radius: 12px; padding: 16px; text-align: center; border: 2px solid; }
+  .arch-box.encoder { border-color: #7c3aed; background: #f5f3ff; }
+  .arch-box.encdec  { border-color: #dc2626; background: #fff1f2; }
+  .arch-box h5 { font-size: 14px; font-weight: 800; margin-bottom: 8px; }
+  .arch-box.encoder h5 { color: #6d28d9; }
+  .arch-box.encdec  h5 { color: #b91c1c; }
+  .arch-box ul { list-style: none; text-align: left; font-size: 13px; line-height: 1.8; }
+  .arch-box ul li::before { margin-right: 6px; }
+  .arch-box.encoder ul li::before { content: '✓'; color: #059669; }
+  .arch-box.encdec  ul li::before { content: '✗'; color: #dc2626; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week9.html">← Week 9</a>
+    <span class="you-are-here">Week 10 ← HERE</span>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 10 · Mar 16–20</div>
+  <h1>Sequence Labeling: POS Tagging &amp; NER</h1>
+  <p>Giving every token a label — from grammatical roles to named entities. The bridge between language understanding and structured information extraction.</p>
+  <div class="header-chips">
+    <span class="chip">Module 10 · 2 Lectures</span>
+    <span class="chip">POS Tagging</span>
+    <span class="chip">Named Entity Recognition</span>
+    <span class="chip">IOB/BIO Tagging</span>
+    <span class="chip alert">⚠️ Quiz 9 covers this week's content</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: SEQUENCE LABELING OVERVIEW       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🏷️</div>
+      <div>
+        <h2>What Is Sequence Labeling?</h2>
+        <div class="sub">Assigning a tag to every token in a sequence</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>The Core Idea: One Label Per Token</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>Sequence labeling is the task of mapping a sequence of input tokens (words) to a corresponding sequence of output labels — one label per token. Unlike text classification (which gives one label to an entire document), sequence labeling is <strong>token-level classification</strong>.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Many real-world NLP tasks require understanding at the word level: knowing that "Apple" is a company vs. a fruit, that "run" is a verb vs. a noun, or that "Bank of America" is a single entity spanning three words.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label how">How</div>
+          <p>The input/output sequences have the <strong>same length</strong> (one tag per token). This is why encoder-only models (like BERT) are preferred — they produce one representation per token, which can be directly fed into a classification layer.</p>
+        </div>
+        <table class="compare-table">
+          <tr><th>Task Type</th><th>Input</th><th>Output</th><th>Example</th></tr>
+          <tr><td><strong>Text Classification</strong></td><td>Full document</td><td>One label</td><td>"This email is spam" → SPAM</td></tr>
+          <tr><td><strong>Sequence Labeling</strong></td><td>N tokens</td><td>N labels</td><td>"Apple Inc. was founded" → [B-ORG, I-ORG, O, O]</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Two Major Sequence Labeling Tasks in Module 10</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>🔤 Part-of-Speech (POS) Tagging</h4>
+            <p>Assign each word its grammatical role: noun, verb, adjective, adverb, etc. One tag per word, same number of tags as words.</p>
+          </div>
+          <div class="mini-card">
+            <h4>🔍 Named Entity Recognition (NER)</h4>
+            <p>Identify and categorize <em>named entities</em> — people, places, organizations, dates — which can span multiple words. Uses special IOB tagging to handle multi-word spans.</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>🔗 POS tagging feeds NER!</strong>
+          POS tags are commonly used as <em>features</em> for NER models. Knowing "Franklin" is a proper noun (NNP) helps NER decide whether it's a person or a city.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: POS TAGGING                      -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue">🔤</div>
+      <div>
+        <h2>Part-of-Speech (POS) Tagging</h2>
+        <div class="sub">Labeling every word with its grammatical role</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>What POS Tagging Does &amp; Why It Matters</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>POS tagging labels each word with its grammatical category. The key challenge is <strong>ambiguity</strong>: the same word can be different parts of speech depending on context.</p>
+        </div>
+
+        <p style="font-size:13px; font-weight:700; color:var(--muted); margin-bottom:8px;">CLASSIC AMBIGUITY EXAMPLE — "sitting"</p>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>"This is a <u>sitting</u> objective area"</h4>
+            <p>Here <strong>sitting</strong> is used as an <strong>Adjective (JJ)</strong> — it modifies the noun "area".</p>
+          </div>
+          <div class="mini-card">
+            <h4>"I am <u>sitting</u> at my desk"</h4>
+            <p>Here <strong>sitting</strong> is used as a <strong>Verb (VBG)</strong> — present participle describing the action.</p>
+          </div>
+        </div>
+
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>POS tagging is useful for:</p>
+        </div>
+        <ul class="bullet">
+          <li><strong>Machine Translation:</strong> Knowing adjective vs. noun helps with word ordering (e.g., English "spacious car" → French "voiture spacieuse" — adjective comes after noun).</li>
+          <li><strong>Text-to-Speech (TTS):</strong> POS determines pronunciation — "I <em>read</em> the book every day" (present tense) vs. "I <em>read</em> it yesterday" (past tense, different vowel sound).</li>
+          <li><strong>Transcription Evaluation:</strong> Compare POS tags of reference vs. ASR output to measure how well the model captures grammatical structure.</li>
+          <li><strong>NER (downstream):</strong> POS tags are features that improve NER model performance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Common POS Tags (Penn Treebank Tagset)</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Tag</th><th>Full Name</th><th>Example</th></tr>
+          <tr><td><strong>NN</strong></td><td>Noun, singular</td><td>"dog", "book", "car"</td></tr>
+          <tr><td><strong>NNS</strong></td><td>Noun, plural</td><td>"dogs", "books"</td></tr>
+          <tr><td><strong>NNP</strong></td><td>Proper noun, singular</td><td>"Atlanta", "Google", "Paris"</td></tr>
+          <tr><td><strong>NNPS</strong></td><td>Proper noun, plural</td><td>"Americans", "Vikings"</td></tr>
+          <tr><td><strong>VB</strong></td><td>Verb, base form</td><td>"run", "visit", "travel"</td></tr>
+          <tr><td><strong>VBD</strong></td><td>Verb, past tense</td><td>"ran", "visited", "traveled"</td></tr>
+          <tr><td><strong>VBG</strong></td><td>Verb, gerund/present participle</td><td>"running", "visiting"</td></tr>
+          <tr><td><strong>JJ</strong></td><td>Adjective</td><td>"spacious", "big", "sitting"</td></tr>
+          <tr><td><strong>RB</strong></td><td>Adverb</td><td>"quickly", "very", "not"</td></tr>
+          <tr><td><strong>DT</strong></td><td>Determiner</td><td>"the", "a", "an", "this"</td></tr>
+          <tr><td><strong>IN</strong></td><td>Preposition or subordinating conjunction</td><td>"from", "to", "via", "in"</td></tr>
+          <tr><td><strong>CC</strong></td><td>Coordinating conjunction</td><td>"and", "but", "or"</td></tr>
+          <tr><td><strong>PRP</strong></td><td>Personal pronoun</td><td>"I", "he", "she", "we"</td></tr>
+        </table>
+        <div class="callout tip">
+          <strong>💡 Memory trick</strong>
+          NN = Noun, VB = Verb, JJ = adJective (J for jumbled!), RB = adveRB, DT = DeTerminer, IN = INpreposition, CC = Coordinating Conjunction.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>POS Tagging Algorithms</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="algo-card classical">
+          <h4>⚙️ Average Perceptron Tagger (NLTK default)</h4>
+          <ul class="bullet">
+            <li><strong>Step 1 — Vectorize:</strong> Represent each word using any encoding method (one-hot, Word2Vec, custom features).</li>
+            <li><strong>Step 2 — Initialize weights:</strong> Random weights for each grammatical category (NN, VB, JJ, etc.).</li>
+            <li><strong>Step 3 — Score:</strong> For each word, compute a dot product against each category's weight vector. The category with the highest score is predicted.</li>
+            <li><strong>Step 4 — Update:</strong> If the prediction is wrong vs. the true label, update the weights (perceptron update rule). Weights are averaged over all iterations ("average" perceptron) to reduce overfitting.</li>
+          </ul>
+        </div>
+        <div class="algo-card neural">
+          <h4>🤖 BERT (Encoder-based Transformer)</h4>
+          <ul class="bullet">
+            <li>Use a fine-tuned BERT model via HuggingFace pipeline for token classification.</li>
+            <li>BERT produces a contextualized embedding per token → feed into a linear classification layer → predict POS tag.</li>
+            <li>Handles ambiguity naturally: the same word gets different embeddings depending on context.</li>
+            <li><strong>Limitation:</strong> Pre-trained BERT may not recognize domain-specific proper nouns (it may sub-word-tokenize unfamiliar words). Fine-tuning on domain data helps.</li>
+          </ul>
+        </div>
+
+        <div class="callout warning">
+          <strong>⚠️ Why not Encoder-Decoder for POS?</strong>
+          Encoder-decoder (seq2seq) models are designed for tasks where input and output have <em>different lengths</em> (e.g., machine translation). POS tagging has equal-length input/output (one tag per token), so an encoder-decoder would be overkill — adding unnecessary complexity. An encoder-only model like BERT is preferred.
+        </div>
+
+        <div class="formula-box"><span class="comment"># NLTK Average Perceptron Tagger (Python)</span>
+<span class="highlight">import</span> nltk
+<span class="highlight">from</span> nltk.tokenize <span class="highlight">import</span> word_tokenize
+<span class="highlight">from</span> nltk.tag <span class="highlight">import</span> pos_tag
+
+sentence = <span class="key">"Professor traveled from Atlanta to Paris"</span>
+tokens = word_tokenize(sentence)
+tags   = pos_tag(tokens)
+<span class="comment"># Output: [('Professor', 'NNP'), ('traveled', 'VBD'), ('from', 'IN'), ...]</span>
+
+<span class="comment"># BERT via HuggingFace (Python)</span>
+<span class="highlight">from</span> transformers <span class="highlight">import</span> pipeline
+pos_pipeline = pipeline(<span class="key">"token-classification"</span>, model=<span class="key">"QCRI/bert-base-multilingual-cased-pos-english"</span>)
+result = pos_pipeline(sentence)
+<span class="comment"># Each token gets a label: {"word": "Professor", "entity": "NNP", "score": 0.98}</span></div>
+      </div>
+    </div>
+
+    <!-- POS Interactive Demo -->
+    <div class="interactive-box">
+      <h4>🎮 Interactive POS Tagger</h4>
+      <div class="desc">Click a sentence to see token-level POS tags visualized. (Simplified — shows representative tags for illustration.)</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+        <button class="btn-outline active" onclick="showPOS(0, this)">Sentence 1</button>
+        <button class="btn-outline" onclick="showPOS(1, this)">Sentence 2</button>
+        <button class="btn-outline" onclick="showPOS(2, this)">Sentence 3</button>
+      </div>
+      <div id="pos-display" class="pos-sentence"></div>
+      <div id="pos-explain" style="font-size:13px; color:var(--muted); margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: NAMED ENTITY RECOGNITION         -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green">🔍</div>
+      <div>
+        <h2>Named Entity Recognition (NER)</h2>
+        <div class="sub">Finding and categorizing named entities in text</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>What NER Does &amp; Why It's Harder than POS</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>NER identifies and categorizes <strong>named entities</strong> in text into predefined categories. The goal is to extract structured information from unstructured text — turning free text into a knowledge base.</p>
+        </div>
+        <div class="explainer">
+          <div class="explainer-label why">Why</div>
+          <p>Used in: <strong>information retrieval</strong> (finding documents about specific people/orgs), <strong>question answering</strong>, <strong>summarization</strong>, <strong>sentiment analysis</strong> (who is the sentiment about?), and <strong>knowledge graph construction</strong>.</p>
+        </div>
+
+        <div class="two-col" style="margin-top:16px;">
+          <div class="mini-card">
+            <h4>📌 Common NER Categories</h4>
+            <ul class="bullet">
+              <li><strong>PER</strong> — Person names ("Barack Obama")</li>
+              <li><strong>LOC</strong> — Locations ("Paris", "the Amazon")</li>
+              <li><strong>ORG</strong> — Organizations ("United Airlines")</li>
+              <li><strong>DATE</strong> — Time expressions ("last month")</li>
+              <li><strong>GPE</strong> — Geopolitical entities ("France", "Atlanta")</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>⚠️ Two Key Difficulties</h4>
+            <ul class="bullet">
+              <li><strong>Segmentation:</strong> Unlike POS (one tag per word), NER entities can span <em>multiple words</em> ("Bank of America" = one entity).</li>
+              <li><strong>Ambiguity:</strong> "Franklin" could be a person (PER) or a city in North Carolina (LOC) — context determines the correct label.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>IOB / BIO Tagging System — The Key to Multi-word Entities</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="explainer">
+          <div class="explainer-label what">What</div>
+          <p>IOB (Inside–Outside–Beginning) tagging — also called BIO — gives a structured way to annotate entities that span multiple words. Each token gets ONE of three prefixes:</p>
+        </div>
+
+        <div class="tag-legend">
+          <span class="tag-pill" style="background:#fde68a; color:#92400e;">B-TYPE = Beginning of entity</span>
+          <span class="tag-pill" style="background:#fef3c7; color:#a16207;">I-TYPE = Inside (continuation of) entity</span>
+          <span class="tag-pill" style="background:#f1f5f9; color:#64748b;">O = Outside (not an entity)</span>
+        </div>
+
+        <div class="formula-box"><span class="comment"># Example: "Professor traveled from Atlanta to Paris via United Airlines"</span>
+
+<span class="tag-b">B-PER</span>   <span class="tag-o">O</span>        <span class="tag-o">O</span>    <span class="tag-b">B-LOC</span>    <span class="tag-o">O</span>  <span class="tag-b">B-LOC</span>  <span class="tag-o">O</span>   <span class="tag-b">B-ORG</span>   <span class="tag-i">I-ORG</span>
+Professor traveled from Atlanta   to Paris via United  Airlines
+
+<span class="comment"># Key rules:</span>
+<span class="comment"># - First token of an entity → B-TYPE (Beginning)</span>
+<span class="comment"># - Subsequent tokens of SAME entity → I-TYPE (Inside)</span>
+<span class="comment"># - Non-entity tokens → O (Outside)</span>
+<span class="comment"># - "United Airlines" = TWO tokens, ONE entity → B-ORG + I-ORG</span></div>
+
+        <div class="explainer">
+          <div class="explainer-label why">Why IOB?</div>
+          <p>Without IOB, we couldn't distinguish: (a) two separate single-word entities back-to-back, vs. (b) one two-word entity. The B vs. I prefix solves this. IOB is also required for evaluation tools like CoNLL score.</p>
+        </div>
+
+        <p style="font-size:13px; font-weight:700; color:var(--muted); margin: 16px 0 8px;">LIVE BIO EXAMPLE — click a word to highlight its entity:</p>
+        <div class="bio-row" id="bio-display"></div>
+        <div id="bio-info" style="font-size:13px; color:var(--muted); margin-top:10px; min-height:20px;"></div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>NER Algorithms</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <div class="algo-card classical">
+          <h4>⚙️ NLTK ne_chunk (Maximum Entropy Classifier)</h4>
+          <ul class="bullet">
+            <li>NLTK's <code>ne_chunk()</code> uses a classifier trained on annotated data.</li>
+            <li>Uses a <strong>Maximum Entropy (MaxEnt)</strong> model — predicts the probability distribution over possible NER labels given features like: POS tags, word shape, surrounding words, capitalization.</li>
+            <li>Returns a tree structure. Use <code>tree2conlltags()</code> to convert to IOB format for comparison.</li>
+            <li><code>binary=True</code>: labels only NE vs. not-NE. <code>binary=False</code>: gives entity type (PERSON, GPE, etc.).</li>
+          </ul>
+          <div class="formula-box"><span class="comment"># NLTK NER (Python)</span>
+<span class="highlight">import</span> nltk
+<span class="highlight">from</span> nltk.chunk <span class="highlight">import</span> ne_chunk, tree2conlltags
+<span class="highlight">from</span> nltk.tag <span class="highlight">import</span> pos_tag
+<span class="highlight">from</span> nltk.tokenize <span class="highlight">import</span> word_tokenize
+
+sentence = <span class="key">"Professor traveled from Atlanta to Paris via United Airlines"</span>
+tokens = word_tokenize(sentence)
+pos_tagged = pos_tag(tokens)        <span class="comment"># Step 1: POS tag first!</span>
+tree = ne_chunk(pos_tagged)         <span class="comment"># Step 2: NER chunking</span>
+iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to IOB format</span>
+<span class="comment"># iob_tags: [('Atlanta', 'NNP', 'B-GPE'), ('Paris', 'NNP', 'B-GPE'), ...]</span></div>
+        </div>
+
+        <div class="algo-card neural">
+          <h4>🤖 BERT for NER (Preferred Approach)</h4>
+          <ul class="bullet">
+            <li>Use a BERT model fine-tuned for NER (e.g., <code>dslim/bert-base-NER</code> on HuggingFace).</li>
+            <li>BERT produces one contextualized token embedding per word → a linear classification layer predicts the IOB tag.</li>
+            <li>BERT is <strong>encoder-only</strong>, making it ideal: one output per input token, directly mapped to one IOB label.</li>
+            <li><strong>Known limitation:</strong> BERT sub-word tokenizes unusual proper nouns — an entity like an unfamiliar name may get split across sub-word tokens, requiring post-processing to realign.</li>
+          </ul>
+        </div>
+
+        <!-- Why encoder over encoder-decoder for NER -->
+        <p style="font-size:13px; font-weight:700; margin: 20px 0 10px; color:var(--muted);">WHY ENCODER-ONLY (BERT) IS PREFERRED OVER ENCODER-DECODER FOR NER:</p>
+        <div class="arch-compare">
+          <div class="arch-box encoder">
+            <h5>✅ Encoder-only (BERT) — Preferred</h5>
+            <ul>
+              <li>One output per input token (matches NER task)</li>
+              <li>Token outputs are independent → easy to add classification head</li>
+              <li>Uses masking in pre-training → richer token representations</li>
+              <li>Computationally efficient for sequence labeling</li>
+            </ul>
+          </div>
+          <div class="arch-box encdec">
+            <h5>✗ Encoder-Decoder — Less Preferred</h5>
+            <ul>
+              <li>Designed for different input/output lengths (NER has equal lengths)</li>
+              <li>Can't easily tweak individual output positions</li>
+              <li>Training is more computationally expensive</li>
+              <li>Used for translation, summarization — not token classification</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NER Interactive Demo -->
+    <div class="interactive-box">
+      <h4>🎮 Interactive NER Tagger with IOB Labels</h4>
+      <div class="desc">Click a sentence to see IOB-tagged tokens. Hover over colored tokens to see entity details.</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+        <button class="btn-outline active" onclick="showNER(0, this)">Example 1</button>
+        <button class="btn-outline" onclick="showNER(1, this)">Example 2</button>
+        <button class="btn-outline" onclick="showNER(2, this)">Example 3</button>
+      </div>
+      <div id="ner-display" class="bio-row" style="flex-wrap:wrap;"></div>
+      <div id="ner-explain" style="font-size:13px; color:var(--muted); margin-top:12px; min-height:20px;"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 4: POS vs NER COMPARISON            -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon orange">⚖️</div>
+      <div>
+        <h2>POS Tagging vs. NER — Side-by-Side</h2>
+        <div class="sub">Key similarities and differences to know for Quiz 8</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>Complete Comparison Table</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Dimension</th><th>POS Tagging</th><th>NER</th></tr>
+          <tr><td><strong>Goal</strong></td><td>Grammatical role per word</td><td>Named entity type per word/span</td></tr>
+          <tr><td><strong>Tag granularity</strong></td><td>Always 1 tag per word</td><td>IOB tags — can span multiple words</td></tr>
+          <tr><td><strong>Tag examples</strong></td><td>NN, VBD, JJ, RB, DT, IN, NNP</td><td>B-PER, I-ORG, B-LOC, O</td></tr>
+          <tr><td><strong>Key challenge</strong></td><td>Lexical ambiguity ("sitting")</td><td>Segmentation + semantic ambiguity ("Franklin")</td></tr>
+          <tr><td><strong>Classical algorithm</strong></td><td>Average Perceptron Tagger (NLTK)</td><td>MaxEnt NE Chunker (NLTK)</td></tr>
+          <tr><td><strong>DL approach</strong></td><td>BERT (fine-tuned for POS)</td><td>BERT (fine-tuned for NER)</td></tr>
+          <tr><td><strong>Preferred architecture</strong></td><td>Encoder-only</td><td>Encoder-only</td></tr>
+          <tr><td><strong>Input = Output length?</strong></td><td class="good">Yes</td><td class="good">Yes (with IOB, one tag per token)</td></tr>
+          <tr><td><strong>Relationship</strong></td><td>Often done first</td><td>Uses POS tags as features</td></tr>
+          <tr><td><strong>NLTK function</strong></td><td><code>pos_tag(tokens)</code></td><td><code>ne_chunk(pos_tagged)</code></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <h3>When to Use Which Transformer Architecture</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="concept-body open">
+        <table class="compare-table">
+          <tr><th>Architecture</th><th>Best For</th><th>Why</th><th>Examples</th></tr>
+          <tr>
+            <td><strong>Encoder-only</strong><br><small>(BERT, RoBERTa)</small></td>
+            <td class="good">POS Tagging, NER, Classification, Q&amp;A (extractive)</td>
+            <td>Bidirectional context; one output per input token; easy classification head</td>
+            <td>BERT, RoBERTa, DistilBERT</td>
+          </tr>
+          <tr>
+            <td><strong>Decoder-only</strong><br><small>(GPT family)</small></td>
+            <td class="good">Text generation, completion, chatbots</td>
+            <td>Autoregressive: predicts next token; unidirectional</td>
+            <td>GPT-2, GPT-3, GPT-4</td>
+          </tr>
+          <tr>
+            <td><strong>Encoder-Decoder</strong><br><small>(T5, BART)</small></td>
+            <td class="good">Translation, summarization, Q&amp;A (generative)</td>
+            <td>Different input/output lengths; encoder reads, decoder generates</td>
+            <td>T5, BART, mBART</td>
+          </tr>
+        </table>
+        <div class="callout tip">
+          <strong>💡 Exam insight:</strong> For tasks where <em>input length = output length</em> (POS, NER, token classification), always prefer <strong>encoder-only</strong>. Encoder-decoder is for tasks where lengths differ. Using encoder-decoder for POS/NER is possible but computationally wasteful.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 5: QUIZ PREP                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon teal">📝</div>
+      <div>
+        <h2>Quiz 8 Practice Questions</h2>
+        <div class="sub">Modeled after actual Quizzes 1–7 — this material is covered by Quiz 9</div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>🎯 Week 10 Practice Quiz — POS Tagging &amp; NER <span style="font-size:13px; font-weight:500; color:var(--muted);">(covers Quiz 9 material)</span></h3>
+
+      <!-- Q1 -->
+      <div class="quiz-q" id="q1">
+        <p>Q1. In the sentence "I read the book every day", the word "read" is tagged as VBP (present tense). In "I read the book yesterday", the same word would be tagged differently. What does this demonstrate about POS tagging?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this,'wrong','q1')">POS tagging is unreliable because it gives different tags to the same word.</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','q1')">POS tagging must account for lexical ambiguity — the same word can have different grammatical roles depending on context.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q1')">POS taggers always prefer the most common tag for a word, regardless of context.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q1')">POS tagging is only useful for distinguishing nouns from verbs, not tense forms.</button>
+        </div>
+        <div class="quiz-feedback" id="q1-fb"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-q" id="q2">
+        <p>Q2. Which of the following correctly describes the IOB/BIO tagging scheme used in NER? (Select all that apply)</p>
+        <div class="quiz-options">
+          <button class="quiz-opt multi" onclick="multiAnswer(this,'q2')">B-TYPE marks the first token of a named entity of the given type.</button>
+          <button class="quiz-opt multi" onclick="multiAnswer(this,'q2')">I-TYPE marks subsequent tokens belonging to the same named entity.</button>
+          <button class="quiz-opt multi" onclick="multiAnswer(this,'q2')">O marks tokens that are not part of any named entity.</button>
+          <button class="quiz-opt multi" onclick="multiAnswer(this,'q2')">A two-word entity like "United Airlines" would be tagged as [B-ORG, I-ORG].</button>
+          <button class="quiz-opt multi wrong-opt" onclick="multiAnswer(this,'q2')">IOB tagging is not needed because NER entities always consist of single words.</button>
+        </div>
+        <div style="margin-top:10px;"><button class="btn btn-sm" onclick="checkMulti('q2', [0,1,2,3])">Check Answer</button></div>
+        <div class="quiz-feedback" id="q2-fb"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="quiz-q" id="q3">
+        <p>Q3. Which of the following statements is <strong>FALSE</strong>?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this,'wrong','q3')">BERT is an encoder-only model, making it well-suited for POS tagging and NER.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q3')">POS tagging is commonly used as a feature to improve NER performance.</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','q3')">Encoder-decoder models are preferred over encoder-only models for NER because they produce more accurate token-level predictions.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q3')">In NER, "Franklin" could be tagged as either PER or LOC depending on context.</button>
+        </div>
+        <div class="quiz-feedback" id="q3-fb"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-q" id="q4">
+        <p>Q4. In NLTK, what is the correct order of operations to perform Named Entity Recognition?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this,'wrong','q4')">ne_chunk → word_tokenize → pos_tag</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q4')">pos_tag → word_tokenize → ne_chunk</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','q4')">word_tokenize → pos_tag → ne_chunk</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q4')">word_tokenize → ne_chunk → pos_tag</button>
+        </div>
+        <div class="quiz-feedback" id="q4-fb"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="quiz-q" id="q5">
+        <p>Q5. What is the primary reason why encoder-decoder (seq2seq) models are generally <em>not preferred</em> for Part-of-Speech tagging?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this,'wrong','q5')">Encoder-decoder models cannot process text input at all.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q5')">Encoder-decoder models do not support the Penn Treebank tagset.</button>
+          <button class="quiz-opt" onclick="answer(this,'correct','q5')">POS tagging has equal-length input and output sequences, making encoder-decoder architecture overkill — it adds computational cost without benefit over an encoder-only model.</button>
+          <button class="quiz-opt" onclick="answer(this,'wrong','q5')">Encoder-decoder models can only handle translation tasks, not classification.</button>
+        </div>
+        <div class="quiz-feedback" id="q5-fb"></div>
+      </div>
+
+    </div><!-- end quiz-section -->
+  </div>
+
+  <!-- PAGE NAV -->
+  <div class="page-nav">
+    <a href="week9.html">← Week 9: Transformers, BERT &amp; GPT</a>
+    <a href="index.html">🏠 Back to Home</a>
+  </div>
+
+</div><!-- end container -->
+
+<script>
+// ── Toggle accordion ──────────────────────────────────────────────
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ── Single-answer quiz ────────────────────────────────────────────
+const feedbacks = {
+  q1: { correct: "✓ Correct! This is the ambiguity problem in POS tagging — the same word can function as different parts of speech depending on context. Context-aware models (like BERT) handle this naturally.", wrong: "✗ POS tagging is specifically designed to resolve context-dependent ambiguity. The key challenge is that the same surface form can have multiple grammatical roles." },
+  q3: { correct: "✓ Correct! This statement is FALSE. Encoder-decoder models are designed for tasks where input and output have different lengths (e.g., translation). Since POS/NER input length = output length, encoder-only models like BERT are preferred — simpler, faster, and better suited.", wrong: "✗ That statement is true. The FALSE one is about encoder-decoders being preferred for NER — they are actually less preferred because NER input/output sequences have equal length." },
+  q4: { correct: "✓ Correct! The pipeline is: word_tokenize (split into tokens) → pos_tag (assign POS tags — required by ne_chunk) → ne_chunk (identify and classify named entities). NER needs POS features!", wrong: "✗ The correct order is word_tokenize → pos_tag → ne_chunk. NER chunking requires POS tags as input features, so tokenization and POS tagging must come first." },
+  q5: { correct: "✓ Correct! POS tagging maps N input tokens → N output tags (same length). Encoder-decoder architectures are designed for different-length inputs/outputs (like MT). Using one for POS is computationally expensive with no benefit.", wrong: "✗ The key issue is that POS tagging has equal-length I/O, making encoder-decoder unnecessary. An encoder-only model is more efficient and direct for token classification." }
+};
+
+function answer(btn, result, qid) {
+  const q = document.getElementById(qid);
+  q.querySelectorAll('.quiz-opt').forEach(b => { b.disabled = true; b.classList.remove('correct','wrong'); });
+  btn.classList.add(result);
+  const fb = document.getElementById(qid + '-fb');
+  fb.textContent = feedbacks[qid][result];
+  fb.className = 'quiz-feedback show ' + result;
+}
+
+// ── Multi-select quiz ──────────────────────────────────────────────
+function multiAnswer(btn, qid) {
+  btn.classList.toggle('active');
+}
+
+function checkMulti(qid, correctIndices) {
+  const q = document.getElementById(qid);
+  const opts = q.querySelectorAll('.multi');
+  let allCorrect = true;
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    const selected = btn.classList.contains('active');
+    const isCorrect = correctIndices.includes(i);
+    if (selected && isCorrect)  { btn.classList.add('correct'); }
+    else if (selected && !isCorrect) { btn.classList.add('wrong'); allCorrect = false; }
+    else if (!selected && isCorrect) { btn.classList.add('wrong'); allCorrect = false; }
+  });
+  const fb = document.getElementById(qid + '-fb');
+  if (allCorrect) {
+    fb.textContent = "✓ Perfect! All four correct answers: B marks entity starts, I marks continuations, O marks non-entities, and a two-word entity like 'United Airlines' gets [B-ORG, I-ORG]. IOB is essential because NER entities can span multiple words.";
+    fb.className = 'quiz-feedback show correct';
+  } else {
+    fb.textContent = "✗ Not quite. The correct answers are the first four options. IOB tagging is specifically needed because NER entities often span multiple words — without B/I distinction, two adjacent single-word entities would be indistinguishable from one two-word entity.";
+    fb.className = 'quiz-feedback show wrong';
+  }
+}
+
+// ── POS Interactive Demo ──────────────────────────────────────────
+const posSentences = [
+  {
+    tokens: [
+      { word: "Professor", tag: "NNP", cls: "NNP" },
+      { word: "traveled",  tag: "VBD", cls: "VB" },
+      { word: "from",      tag: "IN",  cls: "IN" },
+      { word: "Atlanta",   tag: "NNP", cls: "NNP" },
+      { word: "to",        tag: "IN",  cls: "IN" },
+      { word: "Paris",     tag: "NNP", cls: "NNP" },
+    ],
+    note: "Note: 'traveled' is VBD (verb, past tense). 'Atlanta' and 'Paris' are NNP (proper nouns, singular). 'from' and 'to' are IN (prepositions)."
+  },
+  {
+    tokens: [
+      { word: "This",    tag: "DT",  cls: "DT" },
+      { word: "is",      tag: "VBZ", cls: "VB" },
+      { word: "a",       tag: "DT",  cls: "DT" },
+      { word: "sitting", tag: "JJ",  cls: "JJ" },
+      { word: "area",    tag: "NN",  cls: "NN" },
+    ],
+    note: "Here 'sitting' is JJ (adjective) — it modifies the noun 'area'. Classic ambiguity: same word, different role."
+  },
+  {
+    tokens: [
+      { word: "I",       tag: "PRP", cls: "OTHER" },
+      { word: "am",      tag: "VBP", cls: "VB" },
+      { word: "sitting", tag: "VBG", cls: "VB" },
+      { word: "at",      tag: "IN",  cls: "IN" },
+      { word: "my",      tag: "PRP$",cls: "OTHER" },
+      { word: "desk",    tag: "NN",  cls: "NN" },
+    ],
+    note: "Now 'sitting' is VBG (verb, gerund/present participle). Same word as Sentence 2, but a completely different POS tag!"
+  }
+];
+
+function showPOS(idx, btn) {
+  document.querySelectorAll('.interactive-box .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const s = posSentences[idx];
+  const display = document.getElementById('pos-display');
+  display.innerHTML = s.tokens.map(t => `
+    <div class="pos-token">
+      <div class="pos-word">${t.word}</div>
+      <div class="pos-tag pos-${t.cls}">${t.tag}</div>
+    </div>`).join('');
+  document.getElementById('pos-explain').textContent = s.note;
+}
+showPOS(0, document.querySelector('.interactive-box .btn-outline.active'));
+
+// ── BIO display ────────────────────────────────────────────────────
+const bioExample = [
+  { word: "Professor", tag: "B-PER", cls: "bio-B-PER", entity: "PERSON (beginning)" },
+  { word: "traveled",  tag: "O",     cls: "bio-O",     entity: "Not an entity" },
+  { word: "from",      tag: "O",     cls: "bio-O",     entity: "Not an entity" },
+  { word: "Atlanta",   tag: "B-GPE", cls: "bio-B-LOC", entity: "GPE/Location (beginning)" },
+  { word: "to",        tag: "O",     cls: "bio-O",     entity: "Not an entity" },
+  { word: "Paris",     tag: "B-GPE", cls: "bio-B-LOC", entity: "GPE/Location (beginning)" },
+  { word: "via",       tag: "O",     cls: "bio-O",     entity: "Not an entity" },
+  { word: "United",    tag: "B-ORG", cls: "bio-B-ORG", entity: "ORGANIZATION (beginning)" },
+  { word: "Airlines",  tag: "I-ORG", cls: "bio-I-ORG", entity: "ORGANIZATION (inside, continues 'United')" },
+];
+
+const bioDisplay = document.getElementById('bio-display');
+bioDisplay.innerHTML = bioExample.map((t, i) => `
+  <div class="bio-token" onclick="showBioInfo(${i})" style="cursor:pointer;">
+    <div class="bio-word">${t.word}</div>
+    <div class="bio-tag ${t.cls}">${t.tag}</div>
+  </div>`).join('');
+
+function showBioInfo(i) {
+  document.getElementById('bio-info').textContent =
+    `"${bioExample[i].word}" → ${bioExample[i].tag}: ${bioExample[i].entity}`;
+}
+
+// ── NER Interactive Demo ───────────────────────────────────────────
+const nerExamples = [
+  {
+    tokens: [
+      { word: "Barack",    tag: "B-PER", cls: "bio-B-PER" },
+      { word: "Obama",     tag: "I-PER", cls: "bio-I-PER" },
+      { word: "visited",   tag: "O",     cls: "bio-O" },
+      { word: "Atlanta",   tag: "B-GPE", cls: "bio-B-LOC" },
+      { word: "last",      tag: "O",     cls: "bio-O" },
+      { word: "month",     tag: "O",     cls: "bio-O" },
+    ],
+    note: "'Barack Obama' = 2-token PERSON entity (B-PER + I-PER). 'Atlanta' = 1-token GPE entity."
+  },
+  {
+    tokens: [
+      { word: "Bank",      tag: "B-ORG", cls: "bio-B-ORG" },
+      { word: "of",        tag: "I-ORG", cls: "bio-I-ORG" },
+      { word: "America",   tag: "I-ORG", cls: "bio-I-ORG" },
+      { word: "is",        tag: "O",     cls: "bio-O" },
+      { word: "based",     tag: "O",     cls: "bio-O" },
+      { word: "in",        tag: "O",     cls: "bio-O" },
+      { word: "Charlotte", tag: "B-GPE", cls: "bio-B-LOC" },
+    ],
+    note: "'Bank of America' = 3-token ORG entity (B-ORG + I-ORG + I-ORG). Notice 'of' gets I-ORG — it is INSIDE the entity!"
+  },
+  {
+    tokens: [
+      { word: "Franklin",  tag: "B-PER", cls: "bio-B-PER" },
+      { word: "visited",   tag: "O",     cls: "bio-O" },
+      { word: "Franklin",  tag: "B-LOC", cls: "bio-B-LOC" },
+      { word: "NC",        tag: "I-LOC", cls: "bio-I-LOC" },
+    ],
+    note: "Classic ambiguity: first 'Franklin' = PERSON (B-PER). Second 'Franklin' = LOCATION (B-LOC). Context resolves the ambiguity!"
+  }
+];
+
+function showNER(idx, btn) {
+  document.querySelectorAll('#ner-display').forEach(() => {});
+  document.querySelectorAll('.interactive-box:nth-of-type(2) .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const s = nerExamples[idx];
+  document.getElementById('ner-display').innerHTML = s.tokens.map(t => `
+    <div class="bio-token">
+      <div class="bio-word">${t.word}</div>
+      <div class="bio-tag ${t.cls}">${t.tag}</div>
+    </div>`).join('');
+  document.getElementById('ner-explain').textContent = s.note;
+}
+showNER(0, document.querySelector('#ner-display').closest('.interactive-box').querySelector('.btn-outline.active') || document.querySelectorAll('.interactive-box')[1].querySelector('.btn-outline'));
+</script>
+
+</body>
+</html>
