@@ -101,6 +101,7 @@
   .pos-NNP  { background: #ede9fe; color: #6d28d9; }
   .pos-CC   { background: #f0fdf4; color: #166534; }
   .pos-OTHER { background: #f1f5f9; color: #475569; }
+  .pos-TO   { background: #fce7f3; color: #9d174d; }
 
   /* IOB/BIO demo */
   .bio-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; align-items: flex-end; }
@@ -312,10 +313,12 @@
           <tr><td><strong>VB</strong></td><td>Verb, base form</td><td>"run", "visit", "travel"</td></tr>
           <tr><td><strong>VBD</strong></td><td>Verb, past tense</td><td>"ran", "visited", "traveled"</td></tr>
           <tr><td><strong>VBG</strong></td><td>Verb, gerund/present participle</td><td>"running", "visiting"</td></tr>
+          <tr><td><strong>VBP</strong></td><td>Verb, non-3rd person singular present</td><td>"run", "travel" (I/we/they run)</td></tr>
+          <tr><td><strong>TO</strong></td><td>Infinitive marker "to" (before a verb)</td><td>"to visit", "to run" — NOT a preposition</td></tr>
           <tr><td><strong>JJ</strong></td><td>Adjective</td><td>"spacious", "big", "sitting"</td></tr>
           <tr><td><strong>RB</strong></td><td>Adverb</td><td>"quickly", "very", "not"</td></tr>
           <tr><td><strong>DT</strong></td><td>Determiner</td><td>"the", "a", "an", "this"</td></tr>
-          <tr><td><strong>IN</strong></td><td>Preposition or subordinating conjunction</td><td>"from", "to", "via", "in"</td></tr>
+          <tr><td><strong>IN</strong></td><td>Preposition or subordinating conjunction</td><td>"from", "via", "in", "of", "at"</td></tr>
           <tr><td><strong>CC</strong></td><td>Coordinating conjunction</td><td>"and", "but", "or"</td></tr>
           <tr><td><strong>PRP</strong></td><td>Personal pronoun</td><td>"I", "he", "she", "we"</td></tr>
         </table>
@@ -770,7 +773,7 @@ const posSentences = [
       { word: "traveled",  tag: "VBD", cls: "VB" },
       { word: "from",      tag: "IN",  cls: "IN" },
       { word: "Atlanta",   tag: "NNP", cls: "NNP" },
-      { word: "to",        tag: "IN",  cls: "IN" },
+      { word: "to",        tag: "TO",  cls: "TO" },
       { word: "Paris",     tag: "NNP", cls: "NNP" },
     ],
     note: "Note: 'traveled' is VBD (verb, past tense). 'Atlanta' and 'Paris' are NNP (proper nouns, singular). 'from' and 'to' are IN (prepositions)."

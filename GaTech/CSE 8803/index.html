@@ -6,17 +6,9 @@
 <title>CSE 8803 – Applied NLP Study Guide</title>
 <style>
   :root {
-    --primary: #2563eb;
-    --primary-dark: #1e40af;
-    --accent: #7c3aed;
-    --green: #059669;
-    --orange: #d97706;
-    --red: #dc2626;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #e2e8f0;
+    --primary: #2563eb; --primary-dark: #1e40af; --accent: #7c3aed;
+    --green: #059669; --orange: #d97706; --red: #dc2626;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -30,18 +22,15 @@
   header p { font-size: 18px; opacity: 0.85; max-width: 600px; margin: 0 auto 24px; }
   .header-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
   .header-meta span { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 16px; font-size: 14px; }
-
   .progress-bar-wrap { background: rgba(255,255,255,0.15); border-radius: 99px; height: 8px; max-width: 400px; margin: 20px auto 0; }
   .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 62.5%; transition: width 1s ease; }
   .progress-label { font-size: 13px; opacity: 0.8; margin-top: 6px; }
 
   main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
-
   .section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
   .section-title::after { content: ''; flex: 1; height: 2px; background: var(--border); }
 
   .weeks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-bottom: 56px; }
-
   .week-card {
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     overflow: hidden; text-decoration: none; color: var(--text);
@@ -59,27 +48,18 @@
   .topic-list li::before { content: '→'; color: var(--primary); font-weight: bold; flex-shrink: 0; margin-top: 1px; }
   .week-card-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
   .week-card-footer .hw-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
-  .week-card-footer .open-btn { font-size: 13px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap-4px; }
+  .week-card-footer .open-btn { font-size: 13px; font-weight: 600; color: var(--primary); }
 
   /* Color themes per week */
-  .w1 .week-card-header { background: linear-gradient(120deg, #eff6ff, #dbeafe); }
-  .w1 .week-num { color: #2563eb; }
-  .w2 .week-card-header { background: linear-gradient(120deg, #f0fdf4, #dcfce7); }
-  .w2 .week-num { color: #059669; }
-  .w3 .week-card-header { background: linear-gradient(120deg, #fff7ed, #fed7aa); }
-  .w3 .week-num { color: #d97706; }
-  .w4 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #f3e8ff); }
-  .w4 .week-num { color: #7c3aed; }
-  .w5 .week-card-header { background: linear-gradient(120deg, #fff1f2, #ffe4e6); }
-  .w5 .week-num { color: #e11d48; }
-  .w6 .week-card-header { background: linear-gradient(120deg, #f0f9ff, #e0f2fe); }
-  .w6 .week-num { color: #0284c7; }
-  .w7 .week-card-header { background: linear-gradient(120deg, #eef2ff, #e0e7ff); }
-  .w7 .week-num { color: #4f46e5; }
-  .w9  .week-card-header { background: linear-gradient(120deg, #f0fdfa, #ccfbf1); }
-  .w9  .week-num { color: #0d9488; }
-  .w10 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #ede9fe); }
-  .w10 .week-num { color: #7c3aed; }
+  .w1 .week-card-header { background: linear-gradient(120deg, #eff6ff, #dbeafe); } .w1 .week-num { color: #2563eb; }
+  .w2 .week-card-header { background: linear-gradient(120deg, #f0fdf4, #dcfce7); } .w2 .week-num { color: #059669; }
+  .w3 .week-card-header { background: linear-gradient(120deg, #fff7ed, #fed7aa); } .w3 .week-num { color: #d97706; }
+  .w4 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #f3e8ff); } .w4 .week-num { color: #7c3aed; }
+  .w5 .week-card-header { background: linear-gradient(120deg, #fff1f2, #ffe4e6); } .w5 .week-num { color: #e11d48; }
+  .w6 .week-card-header { background: linear-gradient(120deg, #f0f9ff, #e0f2fe); } .w6 .week-num { color: #0284c7; }
+  .w7 .week-card-header { background: linear-gradient(120deg, #eef2ff, #e0e7ff); } .w7 .week-num { color: #4f46e5; }
+  .w9 .week-card-header  { background: linear-gradient(120deg, #f0fdfa, #ccfbf1); } .w9 .week-num  { color: #0d9488; }
+  .w10 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #ede9fe); } .w10 .week-num { color: #7c3aed; }
 
   .hw-badge.hw1 { background: #dbeafe; color: #1d4ed8; }
   .hw-badge.hw2 { background: #dcfce7; color: #15803d; }
@@ -87,12 +67,24 @@
   .hw-badge.hw4 { background: #fef3c7; color: #b45309; }
   .hw-badge.none { background: #f1f5f9; color: #64748b; }
 
+  /* Quiz schedule table */
+  .quiz-map { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 56px; }
+  .quiz-map h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+  .quiz-map table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .quiz-map th { background: #1e40af; color: white; padding: 10px 14px; text-align: left; }
+  .quiz-map td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .quiz-map tr:last-child td { border-bottom: none; }
+  .quiz-map tr:nth-child(even) td { background: #f8fafc; }
+  .done { color: #059669; font-weight: 700; }
+  .upcoming { color: #d97706; font-weight: 700; }
+  .future { color: #94a3b8; }
+
   /* Roadmap */
   .roadmap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 48px; }
   .roadmap-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
   .roadmap-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
   .roadmap-node { background: var(--bg); border: 2px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 600; text-align: center; min-width: 120px; }
-  .roadmap-node.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+  .roadmap-node.active { border-color: var(--primary); background: #eff6ff; color: var(--primary-dark); }
   .roadmap-arrow { color: var(--muted); font-size: 20px; }
 
   /* Tips */
@@ -108,73 +100,72 @@
 <body>
 
 <header>
-  <div class="badge">CSE 8803 · Spring 2026</div>
+  <div class="badge">CSE 8803 &middot; Spring 2026</div>
   <h1>Applied NLP Study Guide</h1>
-  <p>Your interactive learning companion for Weeks 1–10. Built around <strong>What, Why, How</strong> — with visuals, demos, and quiz prep.</p>
+  <p>Your interactive learning companion for Weeks 1&ndash;10. Built from <strong>slides, transcripts, and real quiz patterns</strong> — with visuals, demos, and quiz prep.</p>
   <div class="header-meta">
-    <span>📅 Current: Week 10 (Mar 16–20)</span>
-    <span>📚 10 Weeks Covered</span>
-    <span>🎯 Quiz 9 covers Week 10 content</span>
+    <span>&#128197; Current: Week 10 (Mar 16&ndash;20)</span>
+    <span>&#128218; 10 Weeks Covered</span>
+    <span>&#127919; Quiz 9 covers Week 10 content</span>
   </div>
   <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" style="width:62.5%;"></div>
+    <div class="progress-bar-fill"></div>
   </div>
-  <div class="progress-label">Week 10 of 16 — 62.5% through the course</div>
+  <div class="progress-label">Week 10 of 16 &mdash; 62.5% through the course</div>
 </header>
 
 <main>
 
-  <div class="section-title">📖 Weekly Study Guides</div>
-
+  <div class="section-title">&#128218; Weekly Study Notes</div>
   <div class="weeks-grid">
 
     <a href="week1.html" class="week-card w1">
       <div class="week-card-header">
-        <div class="week-num">Week 1 · Jan 12–16</div>
-        <h2>Text Preprocessing &amp; Text Representations</h2>
-        <div class="dates">Modules 1 &amp; 2 — Foundational NLP</div>
+        <div class="week-num">Week 1 &middot; Jan 12&ndash;16</div>
+        <h2>Intro &amp; Text Preprocessing</h2>
+        <div class="dates">Modules 1 &amp; 2 &mdash; Foundational NLP</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
-          <li>Tokenization, Stemming, Lemmatization</li>
-          <li>Stop words, N-grams, Noise removal</li>
-          <li>One-Hot Encoding (sparse vectors)</li>
-          <li>Bag of Words (frequency counts)</li>
-          <li>TF-IDF (importance weighting)</li>
+          <li>Course overview &amp; NLP problem types</li>
+          <li>Tokenization, stemming, lemmatization</li>
+          <li>Stop words, N-grams, noise removal</li>
+          <li>One-Hot Encoding, Bag of Words (BoW)</li>
+          <li>TF-IDF importance weighting</li>
         </ul>
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw1">HW1 starts here</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week2.html" class="week-card w2">
       <div class="week-card-header">
-        <div class="week-num">Week 2 · Jan 19–23</div>
-        <h2>Naive Bayes &amp; Classification Evaluation</h2>
-        <div class="dates">Module 3 — First Classifier</div>
+        <div class="week-num">Week 2 &middot; Jan 19&ndash;23</div>
+        <h2>Na&iuml;ve Bayes &amp; Classification Evaluation</h2>
+        <div class="dates">Module 3 &mdash; First Classifier</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
-          <li>Bayes' Rule: Prior, Likelihood, Posterior</li>
-          <li>Generative vs Discriminative models</li>
-          <li>Multinomial Naive Bayes for NLP</li>
-          <li>Confusion Matrix, Accuracy, Precision, Recall</li>
-          <li>ROC Curve &amp; AUC</li>
+          <li>Bayes&rsquo; Rule: Prior, Likelihood, Posterior</li>
+          <li>Generative vs. Discriminative models</li>
+          <li>Multinomial Na&iuml;ve Bayes for NLP</li>
+          <li>Confusion Matrix, Precision, Recall, F1</li>
+          <li>ROC Curve &amp; AUC &mdash; MLK Day holiday (Jan 20)</li>
         </ul>
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw1">HW1 covers this</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week3.html" class="week-card w3">
       <div class="week-card-header">
-        <div class="week-num">Week 3 · Jan 26–30</div>
+        <div class="week-num">Week 3 &middot; Jan 26&ndash;30</div>
         <h2>Logistic Regression, SVM &amp; Perceptron</h2>
-        <div class="dates">Module 4 — Linear Classifiers</div>
+        <div class="dates">Module 4 &mdash; Linear Classifiers</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
@@ -187,15 +178,15 @@
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw2">HW2 starts here</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week4.html" class="week-card w4">
       <div class="week-card-header">
-        <div class="week-num">Week 4 · Feb 2–6</div>
+        <div class="week-num">Week 4 &middot; Feb 2&ndash;6</div>
         <h2>SVD, Co-occurrence &amp; GloVe</h2>
-        <div class="dates">Module 5 — Word Embeddings I</div>
+        <div class="dates">Module 5 &mdash; Word Embeddings I</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
@@ -208,15 +199,15 @@
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw2">HW2 covers this</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week5.html" class="week-card w5">
       <div class="week-card-header">
-        <div class="week-num">Week 5 · Feb 9–13</div>
+        <div class="week-num">Week 5 &middot; Feb 9&ndash;13</div>
         <h2>Neural Networks &amp; Word2Vec</h2>
-        <div class="dates">Module 6 — Deep Learning Intro</div>
+        <div class="dates">Module 6 &mdash; Deep Learning Intro</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
@@ -229,15 +220,15 @@
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw3">HW3 starts here</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week6.html" class="week-card w6">
       <div class="week-card-header">
-        <div class="week-num">Week 6 · Feb 16–20</div>
+        <div class="week-num">Week 6 &middot; Feb 16&ndash;20</div>
         <h2>Convolutional &amp; Recurrent Neural Networks</h2>
-        <div class="dates">Module 7 — Sequence &amp; Structure</div>
+        <div class="dates">Module 7 &mdash; Sequence &amp; Structure</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
@@ -249,82 +240,82 @@
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw3">HW3 covers this ✓</span>
-        <span class="open-btn">Open →</span>
+        <span class="hw-badge hw3">HW3 covers this &#10003;</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week7.html" class="week-card w7">
       <div class="week-card-header">
-        <div class="week-num">Week 7 · Feb 23–Mar 1</div>
+        <div class="week-num">Week 7 &middot; Feb 23&ndash;Mar 1</div>
         <h2>LSTM, GRU &amp; Attention</h2>
-        <div class="dates">Module 8 — Long-Term Memory &amp; Focus</div>
+        <div class="dates">Module 8 &mdash; Long-Term Memory &amp; Focus</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>LSTM: cell state, forget / input / output gates</li>
-          <li>Cell state update: C_t = f_t⊙C_{t-1} + i_t⊙C̃_t</li>
+          <li>Cell state update: C_t = f_t&#x2299;C_{t-1} + i_t&#x2299;C&#771;_t</li>
           <li>GRU: 2-gate simplified LSTM</li>
           <li>Encoder-Decoder architecture</li>
-          <li>Additive Attention (Bahdanau): α weights + C_t</li>
+          <li>Additive Attention (Bahdanau): &alpha; weights + C_t</li>
         </ul>
       </div>
       <div class="week-card-footer">
         <span class="hw-badge hw4">HW4 covers this</span>
-        <span class="open-btn">Open →</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week9.html" class="week-card w9">
       <div class="week-card-header">
-        <div class="week-num">Week 9 · Mar 9–13</div>
+        <div class="week-num">Week 9 &middot; Mar 9&ndash;13</div>
         <h2>Transformers, BERT &amp; GPT</h2>
-        <div class="dates">Module 9 — The Architecture That Changed NLP</div>
+        <div class="dates">Module 9 &mdash; The Architecture That Changed NLP</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Why Transformers? LSTM limitations &amp; pre-training benefits</li>
           <li>Encoder vs. Decoder: BERT, GPT, T5/BART families</li>
-          <li>Self-Attention: Q, K, V — Attention(Q,K,V) = softmax(QKᵀ/√d_k)·V</li>
+          <li>Self-Attention: Q, K, V &mdash; Attention(Q,K,V)&nbsp;=&nbsp;softmax(QK&#7488;/&#8730;d_k)&middot;V</li>
           <li>Positional Encoding: sine (even) / cosine (odd) indices</li>
           <li>BERT: MLM + NSP pre-training; GPT: autoregressive generation</li>
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw4">HW4 · Quiz 8 covers this</span>
-        <span class="open-btn">Open →</span>
+        <span class="hw-badge hw4">HW4 &middot; Quiz 8 covers this</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <a href="week10.html" class="week-card w10">
       <div class="week-card-header">
-        <div class="week-num">Week 10 · Mar 16–20 ← YOU ARE HERE</div>
+        <div class="week-num">Week 10 &middot; Mar 16&ndash;20 &larr; YOU ARE HERE</div>
         <h2>Sequence Labeling: POS Tagging &amp; NER</h2>
-        <div class="dates">Module 10 — Token-Level Classification</div>
+        <div class="dates">Module 10 &mdash; Token-Level Classification</div>
       </div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Sequence labeling: one label per token (input = output length)</li>
-          <li>POS Tagging: grammatical roles, lexical ambiguity, Penn Treebank tags</li>
-          <li>Algorithms: Average Perceptron Tagger &amp; BERT (HuggingFace)</li>
-          <li>NER: entities, IOB/BIO tagging — B-PER, I-ORG, O</li>
-          <li>Why encoder-only (BERT) beats encoder-decoder for NER/POS</li>
+          <li>POS Tagging: Penn Treebank tagset, lexical ambiguity, perceptron &amp; BERT</li>
+          <li>NER: 9 entity types, IOB/BIO tagging &mdash; B-PER, I-ORG, O</li>
+          <li>NLTK binary=True/False, Keras transformer, BERT (dslim)</li>
+          <li>Why encoder-only (BERT) is preferred for NER/POS over encoder-decoder</li>
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw4">HW4 · Quiz 9 covers this</span>
-        <span class="open-btn">Open →</span>
+        <span class="hw-badge hw4">HW4 &middot; Quiz 9 covers this</span>
+        <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
 
     <!-- Week 11: Spring Break -->
-    <div class="week-card" style="opacity:0.55; cursor:default; border: 2px dashed #cbd5e1; background: #f8fafc; pointer-events:none;">
-      <div class="week-card-header" style="background: linear-gradient(120deg, #f1f5f9, #e2e8f0);">
-        <div class="week-num" style="color:#94a3b8;">Week 11 · Mar 23–27</div>
-        <h2 style="color:#64748b;">🌴 Spring Break</h2>
-        <div class="dates" style="color:#94a3b8;">No lectures · No quiz · Recharge!</div>
+    <div class="week-card" style="opacity:0.55;cursor:default;border:2px dashed #cbd5e1;background:#f8fafc;pointer-events:none;">
+      <div class="week-card-header" style="background:linear-gradient(120deg,#f1f5f9,#e2e8f0);">
+        <div class="week-num" style="color:#94a3b8;">Week 11 &middot; Mar 23&ndash;27</div>
+        <h2 style="color:#64748b;">&#127796; Spring Break</h2>
+        <div class="dates" style="color:#94a3b8;">No lectures &middot; No quiz &middot; Recharge!</div>
       </div>
-      <div class="week-card-body" style="color:#94a3b8; font-size:14px; padding: 16px 20px;">
+      <div class="week-card-body" style="color:#94a3b8;font-size:14px;padding:16px 20px;">
         No new content this week. Week 12 resumes with Unsupervised Models &amp; Topic Modeling.
       </div>
       <div class="week-card-footer">
@@ -332,61 +323,82 @@
       </div>
     </div>
 
+  </div><!-- end weeks-grid -->
+
+  <!-- Quiz Schedule -->
+  <div class="section-title">&#128197; Quiz Schedule &amp; Coverage</div>
+  <div class="quiz-map">
+    <h3>All 12 Quizzes &mdash; Week Coverage &amp; Dates</h3>
+    <table>
+      <tr><th>Quiz</th><th>Covers Week</th><th>Topic</th><th>Due</th><th>Status</th></tr>
+      <tr><td><strong>Quiz 1</strong></td><td>Week 1</td><td>Text Preprocessing &amp; Representations</td><td>Jan 23</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 2</strong></td><td>Week 2</td><td>Na&iuml;ve Bayes &amp; Classification</td><td>Jan 30</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 3</strong></td><td>Week 3</td><td>Logistic Regression, SVM &amp; Perceptron</td><td>Feb 6</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 4</strong></td><td>Week 4</td><td>SVD, Co-occurrence &amp; GloVe</td><td>Feb 13</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 5</strong></td><td>Week 5</td><td>Neural Networks &amp; Word2Vec</td><td>Feb 20</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 6</strong></td><td>Week 6</td><td>CNN &amp; RNN</td><td>Feb 27</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 7</strong></td><td>Week 7</td><td>LSTM, GRU &amp; Attention</td><td>Mar 6</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 8</strong></td><td>Week 9</td><td>Transformers, BERT &amp; GPT</td><td>Mar 20</td><td class="upcoming">&#9888; Due today!</td></tr>
+      <tr><td><strong>Quiz 9</strong></td><td>Week 10</td><td>POS Tagging &amp; NER</td><td>Apr 3</td><td class="upcoming">&#9654; Upcoming</td></tr>
+      <tr><td><strong>Quiz 10</strong></td><td>Week 12</td><td>Unsupervised Models &amp; Topic Modeling</td><td>Apr 17</td><td class="future">&#8212; Future</td></tr>
+      <tr><td><strong>Quiz 11</strong></td><td>Week 13</td><td>LLMs &amp; Prompt Engineering</td><td>Apr 24</td><td class="future">&#8212; Future</td></tr>
+      <tr><td><strong>Quiz 12</strong></td><td>Week 14</td><td>AI Agents &amp; Applications</td><td>May 1</td><td class="future">&#8212; Future</td></tr>
+    </table>
   </div>
 
-  <!-- Roadmap -->
-  <div class="section-title">🗺️ Course Learning Roadmap</div>
+  <!-- Course Roadmap -->
+  <div class="section-title">&#128506;&#65039; Course Learning Roadmap</div>
   <div class="roadmap">
-    <div class="roadmap-title">From raw text → intelligent models</div>
+    <div class="roadmap-title">From raw text &#8594; intelligent models</div>
     <div class="roadmap-flow">
       <div class="roadmap-node active">Raw Text</div>
-      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-arrow">&#8594;</div>
       <div class="roadmap-node active">Preprocessing<br><small style="font-weight:400;color:#64748b">W1</small></div>
-      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-arrow">&#8594;</div>
       <div class="roadmap-node active">Representations<br><small style="font-weight:400;color:#64748b">W1</small></div>
-      <div class="roadmap-arrow">→</div>
-      <div class="roadmap-node active">Classifiers<br><small style="font-weight:400;color:#64748b">W2–W3</small></div>
-      <div class="roadmap-arrow">→</div>
-      <div class="roadmap-node active">Embeddings<br><small style="font-weight:400;color:#64748b">W4–W5</small></div>
-      <div class="roadmap-arrow">→</div>
-      <div class="roadmap-node active">Deep Models<br><small style="font-weight:400;color:#64748b">W5–W6</small></div>
-      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node active">Classifiers<br><small style="font-weight:400;color:#64748b">W2&ndash;W3</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node active">Embeddings<br><small style="font-weight:400;color:#64748b">W4&ndash;W5</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node active">Deep Models<br><small style="font-weight:400;color:#64748b">W5&ndash;W6</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
       <div class="roadmap-node active">Transformers<br><small style="font-weight:400;color:#64748b">W9</small></div>
-      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-arrow">&#8594;</div>
       <div class="roadmap-node active">Seq. Labeling<br><small style="font-weight:400;color:#64748b">W10</small></div>
-      <div class="roadmap-arrow">→</div>
-      <div class="roadmap-node">LLMs / Agents<br><small style="font-weight:400;color:#64748b">W13–W14</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node">LLMs / Agents<br><small style="font-weight:400;color:#64748b">W13&ndash;W14</small></div>
     </div>
   </div>
 
   <!-- Study Tips -->
-  <div class="section-title">💡 How to Use These Notes</div>
+  <div class="section-title">&#128161; How to Use These Notes</div>
   <div class="tips-grid">
     <div class="tip-card">
-      <div class="tip-icon">🧠</div>
-      <h4>What → Why → How</h4>
+      <div class="tip-icon">&#129504;</div>
+      <h4>What &#8594; Why &#8594; How</h4>
       <p>Every concept is explained in three layers: what it is, why we need it, and how it works mechanically. Read all three before moving on.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">🎮</div>
+      <div class="tip-icon">&#127918;</div>
       <h4>Use the Interactive Demos</h4>
-      <p>Each week has live calculators and visual sliders. Change the inputs and watch outputs update — this is the fastest way to build intuition.</p>
+      <p>Each week has live visualizers and clickable demos. Change the inputs and watch outputs update — this is the fastest way to build intuition.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">📝</div>
+      <div class="tip-icon">&#128221;</div>
       <h4>Quiz Yourself</h4>
-      <p>Each week ends with quiz-style questions modeled after actual Quiz 1–4. Cover the answer, try it yourself, then reveal. Repeat weak spots.</p>
+      <p>Each week ends with multiple-choice questions modeled after actual Quizzes 1&ndash;7. Cover the answer, try it yourself, then reveal. Repeat weak spots.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">🔗</div>
+      <div class="tip-icon">&#128279;</div>
       <h4>Follow the Thread</h4>
-      <p>Each week builds on the last. If something is confusing in Week 5, go back to Week 3. The roadmap above shows exactly how concepts connect.</p>
+      <p>Each week builds on the last. If something in Week 9 is confusing, check Week 7 (LSTMs). The roadmap above shows exactly how concepts connect.</p>
     </div>
   </div>
 
 </main>
 
-<footer>CSE 8803 Applied NLP · Spring 2026 · Tarek's Personal Study Guide · Week 10 of 16</footer>
+<footer>CSE 8803 Applied NLP &middot; Spring 2026 &middot; Tarek's Personal Study Guide &middot; Week 10 of 16</footer>
 
 </body>
 </html>
