@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 Study Hub</title>
+<style>
+:root {
+  --navy: #232f3e;
+  --orange: #ff9900;
+  --blue: #1d4ed8;
+  --green: #15803d;
+  --red: #c2410c;
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --border: #d9e1ec;
+  --text: #16202a;
+  --muted: #5f6b7a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg, #eef4fb 0%, #f8fafd 100%);
+  color: var(--text);
+}
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+.hero {
+  background: linear-gradient(135deg, #1c2734 0%, #334155 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+}
+.eyebrow {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #e5eef9;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 2rem;
+}
+.hero h1 span { color: var(--orange); }
+.hero p {
+  margin: 0;
+  color: #d9e5f1;
+  line-height: 1.65;
+  max-width: 900px;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.hero-actions a {
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.hero-actions a.primary {
+  background: var(--orange);
+  color: #111827;
+}
+.hero-actions a.secondary {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.16);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+  margin-top: 20px;
+}
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+.panel-head {
+  padding: 18px 20px 10px;
+  border-bottom: 1px solid #edf2f7;
+}
+.panel-head h2 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+.panel-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.panel-body {
+  padding: 18px 20px 22px;
+}
+.flow-list {
+  display: grid;
+  gap: 12px;
+}
+.flow-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: start;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fbfdff;
+}
+.step-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.flow-card h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+.flow-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border: 1px solid #dce7f5;
+  background: #eef4ff;
+  color: #334155;
+}
+.go {
+  align-self: center;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: var(--orange);
+  color: #111827;
+  font-weight: 800;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+.quick-links {
+  display: grid;
+  gap: 10px;
+}
+.quick-links a {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: #fff;
+}
+.quick-links a strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.quick-links a span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.tips {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.tip {
+  border-radius: 14px;
+  padding: 14px;
+  line-height: 1.58;
+}
+.tip.gold {
+  background: #fff8e8;
+  border: 1px solid #f1d28a;
+}
+.tip.blue {
+  background: #eef4ff;
+  border: 1px solid #d5e3ff;
+}
+.tip strong {
+  display: block;
+  margin-bottom: 4px;
+}
+@media (max-width: 920px) {
+  .grid { grid-template-columns: 1fr; }
+  .flow-card { grid-template-columns: auto 1fr; }
+  .go { grid-column: 2; justify-self: start; margin-top: 4px; }
+}
+@media (max-width: 640px) {
+  .shell { padding: 14px 12px 32px; }
+  .hero, .panel-head, .panel-body { padding-left: 16px; padding-right: 16px; }
+  .hero h1 { font-size: 1.65rem; }
+}
+<style>
+/* AIP-C01 Shared Navigation */
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;gap:0;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;letter-spacing:.01em;}
+.aip-nav-sep{color:#445;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;gap:0;scrollbar-width:none;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 13px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+</style>
+</head>
+<body>
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="hub">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+    </div>
+  </div>
+</nav>
+  <div class="shell">
+    <section class="hero">
+      <div class="eyebrow">AIP-C01 Main Start Page</div>
+      <h1>AIP-C01 <span>Study Hub</span></h1>
+      <p>This is the single starting point for your AIP-C01 prep. The flow below is designed for speed: start with the Study Guide to build the map, reinforce with Flashcards, pressure-test with the Practice Exam and Quick Drill, then finish with Final Practice for last-mile work.</p>
+      <div class="hero-actions">
+        <a class="primary" href="study-guide.html">Start With Study Guide</a>
+        <a class="secondary" href="final-practice.html">Open Final Practice</a>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Recommended Flow</h2>
+          <p>This order is optimized for the next 2 days: learn, reinforce, pressure-test, then correct.</p>
+        </div>
+        <div class="panel-body">
+          <div class="flow-list">
+            <div class="flow-card">
+              <div class="step-num">1</div>
+              <div>
+                <h3><a href="study-guide.html" style="color:inherit;text-decoration:none;">Study Guide</a> — Deep Study Guide</h3>
+                <p>Start here to get the exam blueprint, domain structure, service map, decision trees, and the highest-yield exam traps in one place.</p>
+                <div class="meta">
+                  <span class="pill">Start here</span>
+                  <span class="pill">Deep reference</span>
+                  <span class="pill">Decision trees</span>
+                </div>
+              </div>
+              <a class="go" href="study-guide.html">Open</a>
+            </div>
+
+            <div class="flow-card">
+              <div class="step-num">2</div>
+              <div>
+                <h3><a href="flashcards.html" style="color:inherit;text-decoration:none;">Flashcards</a> — Interactive Study Tool</h3>
+                <p>Move here for flashcards, rapid drills, pattern matching, readiness tracking, and the new 48-hour focus board.</p>
+                <div class="meta">
+                  <span class="pill">Active recall</span>
+                  <span class="pill">Flashcards</span>
+                  <span class="pill">Final 48h board</span>
+                </div>
+              </div>
+              <a class="go" href="flashcards.html">Open</a>
+            </div>
+
+            <div class="flow-card">
+              <div class="step-num">3</div>
+              <div>
+                <h3><a href="practice-exam.html" style="color:inherit;text-decoration:none;">Practice Exam</a> — Large Practice Exam</h3>
+                <p>Use this when you want a broader exam-style run with more volume, domain filters, flags, and review mode.</p>
+                <div class="meta">
+                  <span class="pill">85 questions</span>
+                  <span class="pill">Broad coverage</span>
+                  <span class="pill">Flag and review</span>
+                </div>
+              </div>
+              <a class="go" href="practice-exam.html">Open</a>
+            </div>
+
+            <div class="flow-card">
+              <div class="step-num">4</div>
+              <div>
+                <h3><a href="quick-drill.html" style="color:inherit;text-decoration:none;">Quick Drill</a> — Simulator</h3>
+                <p>Good for quick exam-style runs and mistake review from the extracted question bank.</p>
+                <div class="meta">
+                  <span class="pill">Simulator</span>
+                  <span class="pill">Saved mistakes</span>
+                  <span class="pill">Fast reps</span>
+                </div>
+              </div>
+              <a class="go" href="quick-drill.html">Open</a>
+            </div>
+
+            <div class="flow-card">
+              <div class="step-num">5</div>
+              <div>
+                <h3><a href="final-practice.html" style="color:inherit;text-decoration:none;">Final Practice</a> — Final Practice Lab</h3>
+                <p>Finish here. This is your last-mile pressure deck focused on AWS-native distinctions and common trap answers.</p>
+                <div class="meta">
+                  <span class="pill">Last-mile prep</span>
+                  <span class="pill">Retry misses</span>
+                  <span class="pill">High-yield</span>
+                </div>
+              </div>
+              <a class="go" href="final-practice.html">Open</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Reference Shortcuts</h2>
+          <p>Use these when you want a direct jump instead of following the full path.</p>
+        </div>
+        <div class="panel-body">
+          <div class="quick-links">
+            <a href="aip-c01-studyguide.html">
+              <strong>Visual Study Guide</strong>
+              <span>Supplemental visual study guide. Useful as a secondary reference, not the main cram flow.</span>
+            </a>
+            <a href="study-guide.html">
+              <strong>Study Guide</strong>
+              <span>Main reference guide with service coverage, quick reference, and exam traps.</span>
+            </a>
+            <a href="flashcards.html">
+              <strong>Flashcards</strong>
+              <span>Best interactive learning page for active recall and quick course correction.</span>
+            </a>
+            <a href="practice-exam.html">
+              <strong>Practice Exam</strong>
+              <span>Best large practice set when you want a bigger mixed exam run.</span>
+            </a>
+            <a href="quick-drill.html">
+              <strong>Quick Drill</strong>
+              <span>Fast simulator with mistake saving from the extracted question set.</span>
+            </a>
+            <a href="final-practice.html">
+              <strong>Final Practice</strong>
+              <span>Use this closest to the exam. It is the focused pressure-test deck.</span>
+            </a>
+          </div>
+
+          <div class="tips">
+            <div class="tip gold">
+              <strong>2-day recommendation</strong>
+              Day 1: Study Guide → Flashcards → Practice Exam.<br>
+              Day 2: Quick Drill → Final Practice → revisit misses in Study Guide and Flashcards.
+            </div>
+            <div class="tip blue">
+              <strong>Source of truth</strong>
+              Keep using the 18 official AWS training Word docs and the AWS PDFs as the factual backbone. These HTML tools should guide your navigation and recall, not replace the official source material.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
