@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 Interactive Study Tool | AWS Certified Generative AI Developer</title>
+<style>
+:root {
+  --aws-navy: #232F3E; --aws-orange: #FF9900; --aws-light-orange: #FFF3CD;
+  --aws-blue: #0073BB; --aws-green: #1D8348; --aws-red: #C0392B;
+  --aws-purple: #7D3C98; --aws-teal: #148F77;
+  --bg: #F0F2F5; --white: #fff; --border: #D5DBDB; --text: #1A1A2E;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.6; }
+
+.hdr { background:var(--aws-navy); color:#fff; padding:1rem 2rem; border-bottom:4px solid var(--aws-orange); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.hdr h1 { font-size:1.4rem; font-weight:700; }
+.hdr h1 span { color:var(--aws-orange); }
+.hdr-right { display:flex; align-items:center; gap:1rem; }
+.hdr-badges { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.badge { padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+.badge-pro { background:#7D3C98; color:#fff; }
+.badge-new { background:#1D8348; color:#fff; }
+.btn-reset { background:var(--aws-red); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:600; cursor:pointer; }
+.btn-reset:hover { opacity:0.85; }
+
+/* Tab navigation */
+.tab-nav { background:#fff; border-bottom:2px solid var(--border); padding:0 1.5rem; display:flex; gap:0; overflow-x:auto; }
+.tab-nav button { padding:0.85rem 1.2rem; border:none; background:none; cursor:pointer; font-size:0.85rem; font-weight:600; color:#666; border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+.tab-nav button:hover { color:var(--aws-orange); }
+.tab-nav button.active { color:var(--aws-navy); border-bottom-color:var(--aws-orange); }
+@media(max-width:768px) { .tab-nav button { padding:0.7rem 0.8rem; font-size:0.78rem; } }
+
+/* Main content */
+.main { max-width:1100px; margin:0 auto; padding:1.5rem; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* Cards & containers */
+.card { background:#fff; border-radius:10px; box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:1rem; overflow:hidden; }
+.card-header { padding:1rem 1.2rem; background:linear-gradient(135deg, var(--aws-navy) 0%, #3a4f6e 100%); color:#fff; }
+.card-header h2 { font-size:1.15rem; }
+.card-header p { color:#bbb; font-size:0.85rem; margin-top:0.3rem; }
+.card-body { padding:1.2rem; }
+
+/* Buttons */
+.btn { padding:8px 18px; border-radius:6px; border:none; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.15s; }
+.btn-primary { background:var(--aws-orange); color:#fff; }
+.btn-primary:hover { background:#e68a00; }
+.btn-secondary { background:var(--aws-navy); color:#fff; }
+.btn-secondary:hover { background:#1a2530; }
+.btn-outline { background:transparent; border:2px solid var(--aws-navy); color:var(--aws-navy); }
+.btn-outline:hover { background:var(--aws-navy); color:#fff; }
+.btn-success { background:var(--aws-green); color:#fff; }
+.btn-danger { background:var(--aws-red); color:#fff; }
+.btn-sm { padding:5px 12px; font-size:0.78rem; }
+.btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* Practice Questions */
+.q-progress { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+.q-progress .q-count { font-weight:700; color:var(--aws-navy); }
+.q-progress .q-domain-tag { padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+.q-scenario { background:#f8f9fa; border-left:4px solid var(--aws-blue); padding:1rem; border-radius:0 8px 8px 0; margin-bottom:1rem; font-size:0.9rem; line-height:1.7; }
+.q-options { list-style:none; }
+.q-options li { padding:0.8rem 1rem; margin-bottom:0.5rem; border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.15s; font-size:0.88rem; }
+.q-options li:hover:not(.disabled) { border-color:var(--aws-orange); background:#FFF8E7; }
+.q-options li.selected { border-color:var(--aws-blue); background:#e8f4fd; }
+.q-options li.correct { border-color:var(--aws-green); background:#e8f5e9; }
+.q-options li.incorrect { border-color:var(--aws-red); background:#fdecea; }
+.q-options li.disabled { cursor:default; opacity:0.7; }
+.q-options li.disabled.correct { opacity:1; }
+.q-explanation { margin-top:1rem; padding:1rem; border-radius:8px; font-size:0.85rem; line-height:1.7; }
+.q-explanation.correct-bg { background:#e8f5e9; border:1px solid #a5d6a7; }
+.q-explanation.incorrect-bg { background:#fdecea; border:1px solid #ef9a9a; }
+.q-explanation h4 { margin-bottom:0.5rem; }
+.q-explanation .why-wrong { margin-top:0.5rem; color:#555; }
+.q-score-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.8rem; margin:1rem 0; }
+.score-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:0.8rem; text-align:center; }
+.score-card .score-num { font-size:1.8rem; font-weight:700; }
+.score-card .score-label { font-size:0.75rem; color:#777; }
+
+/* Flashcards */
+.fc-container { perspective:1000px; margin:1.5rem auto; max-width:600px; }
+.fc-card { width:100%; min-height:280px; position:relative; cursor:pointer; transform-style:preserve-3d; transition:transform 0.5s; }
+.fc-card.flipped { transform:rotateY(180deg); }
+.fc-face { position:absolute; width:100%; min-height:280px; backface-visibility:hidden; border-radius:12px; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.fc-front { background:linear-gradient(135deg, var(--aws-navy), #3a4f6e); color:#fff; border:2px solid var(--aws-orange); }
+.fc-back { background:#fff; border:2px solid var(--aws-green); transform:rotateY(180deg); color:var(--text); }
+.fc-front h3 { font-size:1.1rem; line-height:1.5; }
+.fc-back p { font-size:0.9rem; line-height:1.7; }
+.fc-domain { position:absolute; top:12px; left:12px; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700; background:rgba(255,153,0,0.2); color:var(--aws-orange); }
+.fc-counter { text-align:center; margin-bottom:0.5rem; font-size:0.85rem; color:#777; }
+.fc-controls { display:flex; justify-content:center; gap:1rem; margin-top:1rem; }
+.fc-mastery { display:flex; justify-content:center; gap:2rem; margin:1rem 0; }
+.fc-mastery .stat { text-align:center; }
+.fc-mastery .stat-num { font-size:1.5rem; font-weight:700; }
+.fc-mastery .stat-label { font-size:0.75rem; color:#777; }
+
+/* Service Drill */
+.drill-timer { font-size:2rem; font-weight:700; color:var(--aws-orange); text-align:center; }
+.drill-timer.warning { color:var(--aws-red); animation:pulse 0.5s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+.drill-scenario { font-size:1.1rem; text-align:center; padding:1.5rem; background:#f8f9fa; border-radius:10px; margin:1rem 0; line-height:1.6; }
+.drill-options { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; max-width:600px; margin:1rem auto; }
+.drill-options button { padding:1rem; border:2px solid var(--border); border-radius:8px; background:#fff; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.drill-options button:hover { border-color:var(--aws-orange); background:#FFF8E7; }
+.drill-options button.correct { border-color:var(--aws-green); background:#e8f5e9; }
+.drill-options button.incorrect { border-color:var(--aws-red); background:#fdecea; }
+.drill-stats { display:flex; justify-content:center; gap:2rem; margin:1rem 0; }
+.drill-stats .stat { text-align:center; }
+.drill-stats .stat-num { font-size:1.5rem; font-weight:700; }
+.drill-stats .stat-label { font-size:0.75rem; color:#777; }
+
+/* Pattern Matcher */
+.pm-exercise { margin-bottom:1.5rem; }
+.pm-instruction { font-size:0.9rem; color:#555; margin-bottom:0.8rem; }
+.pm-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.pm-item { padding:0.7rem 1rem; border:2px solid var(--border); border-radius:8px; margin-bottom:0.5rem; font-size:0.85rem; cursor:pointer; transition:all 0.15s; user-select:none; }
+.pm-item:hover { border-color:var(--aws-orange); }
+.pm-item.selected { border-color:var(--aws-blue); background:#e8f4fd; }
+.pm-item.matched { border-color:var(--aws-green); background:#e8f5e9; opacity:0.7; }
+.pm-item.wrong { border-color:var(--aws-red); background:#fdecea; }
+
+/* Sequence ordering */
+.seq-list { list-style:none; max-width:600px; margin:0 auto; }
+.seq-item { padding:0.8rem 1rem; border:2px solid var(--border); border-radius:8px; margin-bottom:0.5rem; font-size:0.85rem; cursor:grab; display:flex; align-items:center; gap:0.8rem; background:#fff; transition:all 0.15s; }
+.seq-item:hover { border-color:var(--aws-orange); }
+.seq-item .seq-num { background:var(--aws-navy); color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+.seq-item.correct-pos { border-color:var(--aws-green); background:#e8f5e9; }
+.seq-item.wrong-pos { border-color:var(--aws-red); background:#fdecea; }
+.seq-arrows { display:flex; gap:0.3rem; margin-left:auto; }
+.seq-arrows button { background:none; border:1px solid var(--border); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.7rem; display:flex; align-items:center; justify-content:center; }
+.seq-arrows button:hover { background:var(--aws-orange); color:#fff; border-color:var(--aws-orange); }
+
+/* Study Tracker */
+.tracker-domain { margin-bottom:1.5rem; }
+.tracker-domain-hdr { display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1rem; background:var(--aws-navy); color:#fff; border-radius:8px 8px 0 0; }
+.tracker-domain-hdr h3 { font-size:0.95rem; }
+.tracker-domain-hdr .weight { background:var(--aws-orange); padding:2px 10px; border-radius:10px; font-size:0.75rem; font-weight:700; }
+.progress-bar { height:8px; background:#e0e0e0; border-radius:4px; overflow:hidden; margin:0.5rem 0; }
+.progress-fill { height:100%; border-radius:4px; transition:width 0.3s; }
+.tracker-task { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 1rem; border-bottom:1px solid #f0f0f0; font-size:0.85rem; }
+.tracker-task:last-child { border-bottom:none; }
+.tracker-task select { padding:4px 8px; border-radius:4px; border:1px solid var(--border); font-size:0.78rem; font-weight:600; }
+.priority-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.7rem; font-weight:700; }
+.priority-high { background:#fdecea; color:var(--aws-red); }
+.priority-medium { background:#FFF3CD; color:#856404; }
+.priority-low { background:#e8f5e9; color:var(--aws-green); }
+
+/* Study Material Accordions */
+.acc-section { margin-bottom:0.8rem; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:#fff; }
+.acc-header { padding:0.9rem 1.2rem; cursor:pointer; display:flex; align-items:center; gap:0.8rem; font-weight:600; font-size:0.9rem; background:#f9f9f9; transition:background 0.15s; }
+.acc-header:hover { background:#f0f0f0; }
+.acc-header.open { background:#e8f4fd; color:var(--aws-blue); border-bottom:1px solid var(--border); }
+.acc-header .chevron { margin-left:auto; transition:transform 0.2s; font-size:0.8rem; color:#999; }
+.acc-header.open .chevron { transform:rotate(90deg); }
+.acc-body { display:none; padding:1rem 1.2rem; font-size:0.87rem; line-height:1.7; }
+.acc-body.open { display:block; }
+
+.concept-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; margin:0.8rem 0; }
+.concept-card { background:#f9f9f9; border:1px solid var(--border); border-radius:8px; padding:0.9rem; }
+.concept-card h5 { font-size:0.85rem; font-weight:700; color:var(--aws-navy); margin-bottom:0.4rem; }
+.concept-card p, .concept-card ul { font-size:0.82rem; color:#555; }
+.concept-card ul { padding-left:1.2rem; margin-top:0.3rem; }
+.concept-card ul li { margin-bottom:0.2rem; }
+
+.exam-tip { background:#FFF3CD; border-left:4px solid var(--aws-orange); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.exam-tip strong { color:#856404; display:block; margin-bottom:0.2rem; }
+.key-concept { background:#e8f5e9; border-left:4px solid var(--aws-green); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.key-concept strong { color:var(--aws-green); display:block; margin-bottom:0.2rem; }
+.watch-out { background:#fdecea; border-left:4px solid var(--aws-red); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.watch-out strong { color:var(--aws-red); display:block; margin-bottom:0.2rem; }
+
+.compare-table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:0.82rem; }
+.compare-table th { background:var(--aws-navy); color:#fff; padding:0.5rem 0.8rem; text-align:left; }
+.compare-table td { padding:0.5rem 0.8rem; border-bottom:1px solid var(--border); vertical-align:top; }
+.compare-table tr:nth-child(even) td { background:#f9f9f9; }
+.code-block { background:#1e1e2e; color:#cdd6f4; padding:0.8rem 1rem; border-radius:6px; font-family:monospace; font-size:0.78rem; overflow-x:auto; margin:0.6rem 0; white-space:pre-wrap; }
+
+.countdown { text-align:center; padding:1rem; background:linear-gradient(135deg, var(--aws-navy), #3a4f6e); color:#fff; border-radius:10px; margin-bottom:1.5rem; }
+.countdown .days { font-size:2.5rem; font-weight:700; color:var(--aws-orange); }
+.countdown p { font-size:0.85rem; color:#bbb; }
+
+.tag-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0; }
+.tag { padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+.tag-blue { background:#e8f4fd; color:var(--aws-blue); }
+.tag-orange { background:#FFF3CD; color:#856404; }
+.tag-green { background:#e8f5e9; color:var(--aws-green); }
+.tag-purple { background:#f3e5f5; color:var(--aws-purple); }
+.tag-red { background:#fdecea; color:var(--aws-red); }
+
+footer { text-align:center; padding:1.5rem; color:#999; font-size:0.78rem; border-top:1px solid var(--border); margin-top:2rem; }
+footer a { color:var(--aws-blue); text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:700px) { .two-col, .pm-columns, .drill-options { grid-template-columns:1fr; } }
+
+.filter-row { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+.filter-btn { padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:#fff; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.filter-btn:hover { border-color:var(--aws-orange); }
+.filter-btn.active { background:var(--aws-navy); color:#fff; border-color:var(--aws-navy); }
+</style>
+<!-- AIP-C01 Shared Navigation -->
+<style>
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;gap:0;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;letter-spacing:.01em;}
+.aip-nav-sep{color:#7a8a9a;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;gap:0;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 13px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+</style>
+</head>
+<body>
+
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="flashcards">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hdr">
+  <div>
+    <h1>AIP-C01 <span>Interactive Study Tool</span></h1>
+    <div style="font-size:0.8rem;color:#aaa;">AWS Certified Generative AI Developer &mdash; Professional</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-badges">
+      <a href="index.html" class="badge" style="background:#e8f4fd; color:#0f3d6e; text-decoration:none;">🏠 Study Hub</a>
+      <a href="study-guide.html" class="badge" style="background:#eef4ff; color:#214a85; text-decoration:none;">Back: Study Guide</a>
+      <a href="practice-exam.html" class="badge" style="background:#e8f5e9; color:#1d5d2b; text-decoration:none;">Next: Practice Exam</a>
+      <a href="quick-drill.html" class="badge" style="background:var(--aws-orange); color:#000; text-decoration:none;">🚀 Exam Simulator</a>
+      <a href="final-practice.html" class="badge" style="background:#ffe0b2; color:#6a3906; text-decoration:none;">Final Practice</a>
+      <span class="badge badge-pro">Interactive</span>
+      <span class="badge badge-new">7 Modules</span>
+    </div>
+    <button class="btn-reset" onclick="resetAllProgress()">Reset Progress</button>
+  </div>
+</div>
+
+<div class="tab-nav" id="tabNav">
+  <button class="active" onclick="switchTab('practice',this)">Practice Questions</button>
+  <button onclick="switchTab('flashcards',this)">Flashcards</button>
+  <button onclick="switchTab('drill',this)">Service Drill</button>
+  <button onclick="switchTab('patterns',this)">Pattern Matcher</button>
+  <button onclick="switchTab('tracker',this)">Study Tracker</button>
+  <button onclick="switchTab('focus',this)">Final 48h</button>
+  <button onclick="switchTab('material',this)">Study Material</button>
+</div>
+
+<div class="main">
+
+<!-- ==================== TAB 1: PRACTICE QUESTIONS ==================== -->
+<div class="tab-panel active" id="panel-practice">
+  <div class="card">
+    <div class="card-header">
+      <h2>Scenario-Based Practice Questions</h2>
+      <p>40+ exam-style questions weighted by domain importance. Select a domain or attempt all.</p>
+    </div>
+    <div class="card-body">
+      <div class="filter-row" id="qDomainFilter"></div>
+      <div id="qArea"></div>
+      <div id="qScoreSummary" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: FLASHCARDS ==================== -->
+<div class="tab-panel" id="panel-flashcards">
+  <div class="card">
+    <div class="card-header">
+      <h2>Flashcard System</h2>
+      <p>60+ flashcards organized by domain. Click to flip, then rate your knowledge.</p>
+    </div>
+    <div class="card-body">
+      <div class="filter-row" id="fcDomainFilter"></div>
+      <div class="fc-mastery" id="fcMastery"></div>
+      <div class="fc-counter" id="fcCounter"></div>
+      <div class="fc-container">
+        <div class="fc-card" id="fcCard" onclick="flipCard()">
+          <div class="fc-face fc-front" id="fcFront"></div>
+          <div class="fc-face fc-back" id="fcBack"></div>
+        </div>
+      </div>
+      <div class="fc-controls" id="fcControls">
+        <button class="btn btn-danger btn-sm" onclick="fcRate('review')">Review Again</button>
+        <button class="btn btn-outline btn-sm" onclick="fcPrev()">Previous</button>
+        <button class="btn btn-outline btn-sm" onclick="fcNext()">Next</button>
+        <button class="btn btn-success btn-sm" onclick="fcRate('know')">Know It</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: SERVICE DRILL ==================== -->
+<div class="tab-panel" id="panel-drill">
+  <div class="card">
+    <div class="card-header">
+      <h2>"Which AWS Service?" Rapid-Fire Drill</h2>
+      <p>30+ timed scenarios. Pick the right service in 15 seconds!</p>
+    </div>
+    <div class="card-body">
+      <div id="drillStart" style="text-align:center;padding:2rem;">
+        <p style="font-size:1rem;margin-bottom:1rem;">Test your service knowledge under pressure. 15 seconds per question.</p>
+        <button class="btn btn-primary" onclick="startDrill()">Start Drill</button>
+      </div>
+      <div id="drillActive" style="display:none;">
+        <div class="drill-stats" id="drillStats"></div>
+        <div class="drill-timer" id="drillTimer">15</div>
+        <div class="drill-scenario" id="drillScenario"></div>
+        <div class="drill-options" id="drillOptions"></div>
+      </div>
+      <div id="drillResults" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 4: PATTERN MATCHER ==================== -->
+<div class="tab-panel" id="panel-patterns">
+  <div class="card">
+    <div class="card-header">
+      <h2>Architecture Pattern Matcher</h2>
+      <p>Match services to use cases, order pipeline steps, and connect architecture patterns.</p>
+    </div>
+    <div class="card-body">
+      <div class="filter-row" id="pmFilter"></div>
+      <div id="pmArea"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5: STUDY TRACKER ==================== -->
+<div class="tab-panel" id="panel-tracker">
+  <div class="card">
+    <div class="card-header">
+      <h2>Exam Readiness Tracker</h2>
+      <p>Self-assess your knowledge across all 5 domains. Progress saves automatically.</p>
+    </div>
+    <div class="card-body">
+      <div class="countdown" id="countdown"></div>
+      <div id="trackerArea"></div>
+      <div id="studyPriority" style="margin-top:1.5rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 6: STUDY MATERIAL ==================== -->
+<div class="tab-panel" id="panel-focus">
+  <div class="card">
+    <div class="card-header">
+      <h2>Final 48-Hour Focus Board</h2>
+      <p>Your fastest route to exam readiness: study the traps, then grind the final simulator.</p>
+    </div>
+    <div class="card-body">
+      <div class="exam-tip">
+        <strong>How to use this panel</strong>
+        If time is tight, memorize the decision pairs first, then work the challenge simulator in <a href="final-practice.html" style="color:var(--aws-blue);font-weight:700;">Final Practice</a>, then come back here for rapid correction of weak areas.
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h5>Tonight: Highest-Value Topics</h5>
+          <ul>
+            <li>Bedrock APIs: `Converse`, `InvokeModel`, `InvokeModelWithResponseStream`, `CreateModelInvocationJob`, `RetrieveAndGenerate`</li>
+            <li>Inference profiles vs. cross-Region inference vs. Provisioned Throughput</li>
+            <li>Knowledge Bases vs. OpenSearch hybrid search vs. custom RAG</li>
+            <li>Bedrock Agents vs. Strands vs. Step Functions vs. Flows</li>
+            <li>Guardrails: tracing, `GuardrailPolicyType`, `bedrock:GuardrailIdentifier`</li>
+          </ul>
+        </div>
+        <div class="concept-card">
+          <h5>Tomorrow: Stabilize the Gaps</h5>
+          <ul>
+            <li>Reranker models, hybrid retrieval, embedding drift, KB ingestion logging</li>
+            <li>Identity patterns: Cognito OIDC, IAM Identity Center, temporary credentials</li>
+            <li>Optimization patterns: prompt caching, batch inference, model cascading</li>
+            <li>Evaluation patterns: LLM-as-judge, RAGAs, A/B testing, canary rollout</li>
+            <li>Application patterns: Amplify AI Kit, Amazon Q Developer, MCP deployment</li>
+          </ul>
+        </div>
+        <div class="concept-card">
+          <h5>Final Practice Order</h5>
+          <ol class="step-list" style="padding-left:1.1rem;">
+            <li>Run the full deck once in Final Practice.</li>
+            <li>Review only missed questions and write the decision rule in one line.</li>
+            <li>Use flashcards here for weak domains.</li>
+            <li>Do one last retry-misses pass, then finish with a shuffled fresh run.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="acc-section">
+        <div class="acc-header open" onclick="toggleAcc(this)">
+          <span>Exam Trap Matrix</span>
+          <span class="chevron">&#9654;</span>
+        </div>
+        <div class="acc-body open">
+          <table class="compare-table">
+            <tr><th>If the question says...</th><th>Usually think...</th><th>Why it matters</th></tr>
+            <tr><td>Managed failover and best Region for inference</td><td>Inference profile</td><td>More precise than generic Route 53 or manual cross-Region logic.</td></tr>
+            <tr><td>Large async batch jobs for text/image workloads</td><td>`CreateModelInvocationJob`</td><td>`StartAsyncInvoke` is a trap for Nova Reel video generation, not general batch inference.</td></tr>
+            <tr><td>Need to improve ordering of already relevant retrieved docs</td><td>Reranker models</td><td>Retrieval found good docs, but ranking is weak.</td></tr>
+            <tr><td>Need to inspect KB ingestion failures</td><td>Knowledge base logging to CloudWatch Logs</td><td>CloudTrail logs API calls, not document-level ingestion statuses.</td></tr>
+            <tr><td>Need to force guardrail use on every model call</td><td>IAM with `bedrock:GuardrailIdentifier`</td><td>Central enforcement beats custom proxy Lambda.</td></tr>
+            <tr><td>Need to know exactly which guardrail policy intervened</td><td>`trace: enabled` + `GuardrailPolicyType` metrics</td><td>Better than only knowing input vs output was blocked.</td></tr>
+            <tr><td>Need a model to stop after a phrase</td><td>Stop sequences</td><td>Prompt instructions are weaker and unreliable.</td></tr>
+            <tr><td>Unpredictable traffic with long idle periods</td><td>On-demand Bedrock via Lambda/API</td><td>Provisioned Throughput is usually wrong unless utilization is steady.</td></tr>
+            <tr><td>Deterministic compliance workflow with audit</td><td>Step Functions</td><td>Agents and Flows are too dynamic for strict execution guarantees.</td></tr>
+            <tr><td>Persistent MCP server connections</td><td>ECS Fargate</td><td>Lambda is a common distractor but is a poor fit for persistent SSE connections.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="acc-section">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span>What You Cannot Afford to Mix Up</span>
+          <span class="chevron">&#9654;</span>
+        </div>
+        <div class="acc-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Retrieval Stack</h5>
+              <ul>
+                <li>Knowledge Bases = managed RAG, least ops</li>
+                <li>OpenSearch hybrid = best search tuning + high QPS</li>
+                <li>pgvector = vector + SQL joins</li>
+                <li>S3 Vectors = billion-scale, lowest cost</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Agent Stack</h5>
+              <ul>
+                <li>Bedrock Agents = managed agent orchestration</li>
+                <li>Strands = open-source, more control</li>
+                <li>AgentCore = runtime/policy/memory/evals building blocks</li>
+                <li>Step Functions = deterministic orchestration, not autonomous reasoning</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Security Stack</h5>
+              <ul>
+                <li>Guardrails = content safety and grounded responses</li>
+                <li>Cognito / Identity Center = federation and temporary access</li>
+                <li>PrivateLink = network isolation</li>
+                <li>CloudTrail = API audit, not KB ingestion detail</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 7: STUDY MATERIAL ==================== -->
+<div class="tab-panel" id="panel-material">
+  <div class="card">
+    <div class="card-header">
+      <h2>Additional Study Material</h2>
+      <p>Deep-dive content on topics not fully covered in the reference guide.</p>
+    </div>
+    <div class="card-body" id="materialArea">
+<!-- Study Material Content - injected into materialArea -->
+<div id="materialContent">
+
+<!-- SECTION 1: Application Integration Patterns -->
+<div class="acc-section">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <span>Task 2.5: Application Integration Patterns &amp; Development Tools</span>
+    <span class="chevron">&#9654;</span>
+  </div>
+  <div class="acc-body">
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>Amazon Q Developer</h5>
+        <p>AI-powered development assistant (replaced CodeWhisperer):</p>
+        <ul>
+          <li><b>Code Generation</b>: Inline suggestions, function completion, boilerplate</li>
+          <li><b>Code Transformation</b>: Refactoring, language translation, modernization</li>
+          <li><b>Security Scanning</b>: Vulnerability detection, remediation suggestions</li>
+          <li><b>Unit Test Generation</b>: Auto-generate tests for existing code</li>
+          <li><b>Code Explanation</b>: Explain complex code blocks in plain English</li>
+          <li><b>CLI Assistance</b>: Natural language to CLI commands</li>
+        </ul>
+        <p style="margin-top:0.5rem;"><b>IDE Support</b>: VS Code, JetBrains, Visual Studio, AWS Console, CLI</p>
+      </div>
+      <div class="concept-card">
+        <h5>Amazon Q Business</h5>
+        <p>Fully managed GenAI assistant for enterprise knowledge:</p>
+        <ul>
+          <li><b>40+ Data Source Connectors</b>: Confluence, SharePoint, Salesforce, S3, databases, Slack, Jira</li>
+          <li><b>ACL Respect</b>: Honors existing access permissions from source systems</li>
+          <li><b>Natural Language Q&amp;A</b>: Ask questions across all connected sources</li>
+          <li><b>Admin Controls</b>: Topic blocking, response guardrails</li>
+          <li><b>Plugins</b>: Create custom actions (ticket creation, approvals)</li>
+        </ul>
+        <div class="exam-tip">
+          <strong>Exam Tip:</strong>
+          Q Developer = code/IDE assistance. Q Business = enterprise knowledge search. Don't confuse them.
+        </div>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>AWS Amplify AI Kit</h5>
+        <ul>
+          <li>Declarative React components: <code>&lt;AIConversation&gt;</code></li>
+          <li>Built-in streaming response handling</li>
+          <li>Conversation history management</li>
+          <li>Authentication integration (Cognito)</li>
+          <li>Backend Bedrock connection (no direct client API calls)</li>
+          <li>Rapid prototyping for mobile/web GenAI features</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>Bedrock Flows vs Step Functions</h5>
+        <table class="compare-table">
+          <tr><th>Aspect</th><th>Bedrock Flows</th><th>Step Functions</th></tr>
+          <tr><td>Type</td><td>No-code prompt chain builder</td><td>General workflow orchestration</td></tr>
+          <tr><td>Users</td><td>Business analysts, non-devs</td><td>Developers</td></tr>
+          <tr><td>Best For</td><td>LLM prompt chains</td><td>Complex business logic, audit trails</td></tr>
+          <tr><td>Execution</td><td>Sequential prompt flow</td><td>Deterministic state machine</td></tr>
+          <tr><td>Integrations</td><td>Bedrock models, KBs, Guardrails</td><td>200+ AWS services</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>Bedrock Data Automation</h5>
+        <ul>
+          <li>Automated extraction from complex documents (PDFs, images)</li>
+          <li>Handles tables, forms, charts, key-value pairs</li>
+          <li>Pre-processes documents before Knowledge Base ingestion</li>
+          <li>Better retrieval accuracy for structured content</li>
+          <li>Replaces need for custom Textract + parsing pipelines</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>CRM Enhancement Pattern</h5>
+        <ul>
+          <li>CRM events → EventBridge → Lambda → Bedrock</li>
+          <li>Use cases: summarize customer interactions, generate next-best-action, auto-draft responses</li>
+          <li>Write results back to CRM via API</li>
+          <li>Works with Salesforce, HubSpot, ServiceNow</li>
+          <li>Lambda handles authentication and data transformation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: Prompt Caching -->
+<div class="acc-section">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <span>Prompt Caching (Critical New Feature)</span>
+    <span class="chevron">&#9654;</span>
+  </div>
+  <div class="acc-body">
+    <div class="key-concept">
+      <strong>How Prompt Caching Works</strong>
+      Bedrock caches static prompt prefixes (system prompts, document context, few-shot examples). The first request processes the full prompt and creates a cache checkpoint. Subsequent requests with the same prefix read from cache at reduced cost. Only new/changed tokens after the cached prefix are processed at full price.
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>TTL Options</h5>
+        <ul>
+          <li><b>Default TTL: 5 minutes</b> — Auto-expires if no requests with that prefix</li>
+          <li><b>Extended TTL: 1 hour</b> — For longer sessions (document QA, agentic workflows)</li>
+          <li>Cache refreshes on each access within TTL window</li>
+          <li>TTL is per-model, per-region</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>Supported APIs</h5>
+        <ul>
+          <li>Converse API</li>
+          <li>InvokeModel API</li>
+          <li>ConverseStream API</li>
+          <li>InvokeModelWithResponseStream API</li>
+          <li>Compatible with Cross-Region Inference</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>Key Requirements</h5>
+        <ul>
+          <li><b>Minimum tokens per checkpoint</b>: Varies by model (e.g., 1024 tokens for Claude)</li>
+          <li>Cache checkpoints are placed at the end of the cacheable prefix</li>
+          <li>Prefix must be an exact byte-for-byte match</li>
+          <li>Multiple cache checkpoints possible in a single prompt</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>Cost Model</h5>
+        <ul>
+          <li><b>Cache Write</b>: Slightly higher cost than normal processing (one-time)</li>
+          <li><b>Cache Read</b>: Up to 90% cheaper than normal processing</li>
+          <li><b>Break-even</b>: After ~2-3 cache reads, you save money</li>
+          <li>Response metadata shows cache hit/miss status</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exam-tip">
+      <strong>Exam Tip: Best Use Cases for Prompt Caching</strong>
+      1. Multi-turn conversations with long system prompts<br>
+      2. Document QA (same document, many questions)<br>
+      3. Agentic workflows with repeated tool definitions<br>
+      4. Few-shot learning with extensive example sets<br>
+      5. Any pattern where the prompt prefix is reused across requests
+    </div>
+    <div class="code-block">// Prompt caching with Converse API
+const response = await client.converse({
+  modelId: "anthropic.claude-3-5-sonnet-20240620-v1:0",
+  messages: [...],
+  system: [{
+    text: longSystemPrompt,  // This gets cached
+    cacheControl: { type: "ephemeral" }  // Enable caching
+  }],
+  // Extended TTL
+  performanceConfig: { cacheExpiry: { ttlInSeconds: 3600 } }
+});</div>
+  </div>
+</div>
+
+<!-- SECTION 3: AgentCore Deep Dive -->
+<div class="acc-section">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <span>AgentCore Deep Dive</span>
+    <span class="chevron">&#9654;</span>
+  </div>
+  <div class="acc-body">
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>AgentCore Runtime</h5>
+        <ul>
+          <li><b>Session Isolation</b>: Each user session runs in its own sandboxed environment</li>
+          <li><b>Duration</b>: Up to 8 hours of continuous execution per session</li>
+          <li><b>Bidirectional Streaming</b>: Real-time interaction between user and agent</li>
+          <li><b>Code Interpreter</b>: Execute Python/JavaScript in sandbox</li>
+          <li><b>Browser Runtime</b>: Navigate web pages, fill forms, extract data</li>
+          <li>Auto-scaling based on concurrent sessions</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>AgentCore Gateway</h5>
+        <ul>
+          <li><b>API → Tool</b>: Convert any REST API or Lambda into agent-compatible tools</li>
+          <li><b>MCP Server Connection</b>: Connect to external MCP servers</li>
+          <li><b>Unified Interface</b>: Single management layer for all tool integrations</li>
+          <li><b>Authentication</b>: Handles tool-level auth (API keys, OAuth, IAM)</li>
+          <li><b>Schema Management</b>: Auto-generates tool schemas for the agent</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>AgentCore Policy</h5>
+        <ul>
+          <li><b>Natural Language Rules</b>: "Only admin users can access the delete API"</li>
+          <li><b>Auto-compilation</b>: Converts to Cedar policy language</li>
+          <li><b>Real-time Enforcement</b>: Evaluated on every tool call during execution</li>
+          <li><b>Identity-aware</b>: Uses user role, tenant, custom claims for decisions</li>
+          <li><b>Audit Logging</b>: Every policy decision is logged</li>
+        </ul>
+        <div class="watch-out">
+          <strong>Watch Out:</strong>
+          Don't confuse AgentCore Policy with Bedrock Guardrails. Policy controls <em>which tools</em> a user can access. Guardrails controls <em>what content</em> the model can generate.
+        </div>
+      </div>
+      <div class="concept-card">
+        <h5>AgentCore Memory</h5>
+        <ul>
+          <li><b>Session Memory</b>: Short-term context within a single conversation</li>
+          <li><b>Episodic Memory</b>: Long-term memory that persists across sessions</li>
+          <li>Agents learn from past interactions (user preferences, past resolutions)</li>
+          <li>Semantic search over memory store</li>
+          <li>Memory scoped per user, per tenant</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>AgentCore Evaluations</h5>
+        <ul>
+          <li><b>13 Built-in Evaluators</b>: Tool selection, relevance, safety, consistency, etc.</li>
+          <li><b>Custom Evaluators</b>: Define domain-specific quality checks</li>
+          <li><b>Continuous Monitoring</b>: Evaluate every interaction in real-time</li>
+          <li><b>Batch Evaluation</b>: Run evaluations on historical conversations</li>
+          <li>Integrates with CloudWatch for alerting</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>AgentCore Identity &amp; Observability</h5>
+        <p><b>Identity:</b></p>
+        <ul>
+          <li>Integrates with identity providers (Okta, Azure AD, Cognito)</li>
+          <li>Custom claims for tenant-level isolation</li>
+          <li>Maps external identities to agent authorization context</li>
+        </ul>
+        <p style="margin-top:0.5rem;"><b>Observability:</b></p>
+        <ul>
+          <li>CloudWatch dashboards (latency, throughput, errors, tokens)</li>
+          <li>OpenTelemetry integration for distributed tracing</li>
+          <li>Track agent behavior across tools and sessions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: Domain 3 Expansion -->
+<div class="acc-section">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <span>Domain 3 Expansion: AI Governance &amp; Responsible AI</span>
+    <span class="chevron">&#9654;</span>
+  </div>
+  <div class="acc-body">
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>AI Governance Mechanisms</h5>
+        <ul>
+          <li><b>Model Inventory</b>: Centralized catalog of all AI models (SageMaker Model Registry)</li>
+          <li><b>Approval Workflows</b>: Pending → Approved → Rejected status for each model version</li>
+          <li><b>Version Control</b>: Track model versions, parameters, training data</li>
+          <li><b>Data Lineage</b>: Source data → preprocessing → training → deployment tracking</li>
+          <li><b>Risk Assessment</b>: Categorize models by risk level (low/medium/high)</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>SageMaker Model Cards</h5>
+        <ul>
+          <li>Standardized documentation for ML models</li>
+          <li><b>Content</b>: Purpose, training data, performance metrics, ethical considerations, limitations</li>
+          <li>Designed for auditor review</li>
+          <li>Integrates with Model Registry</li>
+          <li>Exportable as PDF for compliance records</li>
+          <li>Supports custom fields for domain-specific requirements</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>Responsible AI Principles on AWS</h5>
+        <table class="compare-table">
+          <tr><th>Principle</th><th>AWS Implementation</th></tr>
+          <tr><td>Fairness</td><td>SageMaker Clarify bias detection (pre/post-training)</td></tr>
+          <tr><td>Transparency</td><td>Model Cards, SHAP explanations, feature importance</td></tr>
+          <tr><td>Privacy</td><td>Data never used for training, encryption, VPC isolation</td></tr>
+          <tr><td>Security</td><td>Guardrails, IAM, KMS encryption, PrivateLink</td></tr>
+          <tr><td>Robustness</td><td>Model evaluation, A/B testing, canary deployments</td></tr>
+          <tr><td>Governance</td><td>Model Registry, approval workflows, audit trails</td></tr>
+        </table>
+      </div>
+      <div class="concept-card">
+        <h5>SageMaker Clarify Bias Metrics</h5>
+        <ul>
+          <li><b>DPPL</b> (Difference in Positive Proportions in Labels): Measures labeling bias between groups</li>
+          <li><b>KL Divergence</b>: Statistical measure of distribution difference between groups</li>
+          <li><b>Class Imbalance Ratio (CI)</b>: Detects over/under-representation</li>
+          <li><b>DPL</b> (Difference in Positive Proportions in Labels): Pre-training metric</li>
+          <li><b>DPPL</b>: Post-training — compares predicted outcomes across groups</li>
+        </ul>
+        <div class="exam-tip">
+          <strong>Exam Tip:</strong>
+          Know that Clarify provides BOTH pre-training bias detection (in the data) and post-training bias detection (in the model predictions). These are different and complementary.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: Domain 5 Expansion -->
+<div class="acc-section">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <span>Domain 5 Expansion: Testing, Evaluation &amp; Deployment</span>
+    <span class="chevron">&#9654;</span>
+  </div>
+  <div class="acc-body">
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>RAGAs Framework</h5>
+        <p>Purpose-built metrics for RAG pipeline evaluation:</p>
+        <ul>
+          <li><b>Context Relevance</b>: Are retrieved documents relevant to the query?</li>
+          <li><b>Faithfulness</b>: Is the answer grounded in retrieved context? (detects hallucination)</li>
+          <li><b>Answer Relevance</b>: Does the answer address the actual question?</li>
+          <li><b>Answer Correctness</b>: Is the answer factually correct?</li>
+        </ul>
+        <p>Automated evaluation using LLM-as-judge. Open-source Python library.</p>
+      </div>
+      <div class="concept-card">
+        <h5>LLM-as-Judge Pattern</h5>
+        <ul>
+          <li>Use a powerful evaluator model to score outputs of another model</li>
+          <li>Dimensions: coherence, relevance, fluency, harmlessness, helpfulness</li>
+          <li>Scalable alternative to human evaluation</li>
+          <li>Supported by Bedrock Model Evaluation (automatic mode)</li>
+          <li><b>Limitations</b>: May have style bias, position bias, verbosity bias</li>
+          <li>Best practice: use a different model family as judge than the one being evaluated</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>Bedrock Model Evaluation</h5>
+        <table class="compare-table">
+          <tr><th>Type</th><th>Automatic</th><th>Human</th></tr>
+          <tr><td>Method</td><td>Built-in metrics + LLM-as-judge</td><td>Human reviewers via Ground Truth</td></tr>
+          <tr><td>Speed</td><td>Fast, scalable</td><td>Slow, expensive</td></tr>
+          <tr><td>Best For</td><td>Objective metrics, model comparison</td><td>Subjective quality, edge cases</td></tr>
+          <tr><td>Metrics</td><td>Accuracy, toxicity, robustness, quality dimensions</td><td>Custom rubrics, preferences</td></tr>
+        </table>
+      </div>
+      <div class="concept-card">
+        <h5>SageMaker Deployment Strategies</h5>
+        <ul>
+          <li><b>Canary</b>: Send small % to new model first, gradually increase. Auto-rollback on CloudWatch alarm triggers.</li>
+          <li><b>Blue-Green</b>: Deploy new model in parallel, switch all traffic at once. Old model stays for instant rollback.</li>
+          <li><b>Linear</b>: Shift traffic in equal increments (e.g., 10% every 10 min).</li>
+          <li><b>All-at-once</b>: Switch immediately. Fastest but riskiest — no gradual rollout.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h5>A/B Testing with SageMaker Experiments</h5>
+        <ul>
+          <li>Organize model variants as experiment trials</li>
+          <li>Track parameters, metrics, and artifacts per variant</li>
+          <li>Compare results across trials with built-in visualization</li>
+          <li>Integrates with Model Registry for version tracking</li>
+          <li>Use for: prompt variants, model comparisons, hyperparameter tuning</li>
+        </ul>
+      </div>
+      <div class="concept-card">
+        <h5>Common Troubleshooting Patterns</h5>
+        <ul>
+          <li><b>Throttling (429)</b>: Retry with exponential backoff + Cross-Region Inference</li>
+          <li><b>RAG quality degradation</b>: Re-evaluate chunking, re-index, check embedding consistency</li>
+          <li><b>Agent wrong tool selection</b>: Improve tool descriptions, use AgentCore Evaluations</li>
+          <li><b>High latency</b>: Enable streaming, optimize prompt length, use prompt caching</li>
+          <li><b>Cost overruns</b>: Implement intelligent routing, prompt caching, batch processing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+  </div>
+</div>
+
+</div><!-- /.main -->
+
+<footer>
+  <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+</footer>
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const QUESTIONS = [{"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A company needs to build a customer service chatbot that processes multi-turn conversations with context from their product catalog (200K+ documents). They want to minimize infrastructure management and get production-ready quickly. The chatbot needs to cite sources in responses.", "options": ["A. Fine-tune a model on SageMaker with the product catalog, deploy to a real-time endpoint", "B. Use Bedrock Knowledge Bases with OpenSearch Serverless as the vector store, enable citations", "C. Build a custom RAG pipeline using Lambda, pgvector on Aurora, and the Bedrock InvokeModel API", "D. Use Amazon Kendra to index documents and integrate with Bedrock via a custom Lambda function"], "correct": 1, "explanation": "Bedrock Knowledge Bases is the fully managed RAG solution that handles document ingestion, chunking, embedding, vector storage, and retrieval with built-in citation support. OpenSearch Serverless is the default and recommended vector store for Knowledge Bases.", "whyWrong": "A: Fine-tuning teaches style/format, not factual recall from 200K docs \u2014 RAG is needed. C: Building custom RAG works but doesn't minimize infrastructure management. D: Kendra is an enterprise search service, not designed for LLM-integrated RAG with citations."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "An e-commerce company is building a product recommendation system. They need vector similarity search over 5 billion product embeddings. Cost must be minimized, and they don't need real-time updates \u2014 a nightly batch refresh is acceptable.", "options": ["A. Amazon OpenSearch Service with HNSW k-NN plugin", "B. Amazon Aurora PostgreSQL with pgvector extension", "C. Amazon S3 Vectors", "D. Pinecone on AWS Marketplace"], "correct": 2, "explanation": "Amazon S3 Vectors is purpose-built for billion-scale vector storage at the lowest cost. It integrates with S3's durability and pricing model. Since they only need nightly batch updates (not real-time), S3 Vectors' eventual consistency model is acceptable. It supports metadata filtering and returns results in single-digit milliseconds for common workloads.", "whyWrong": "A: OpenSearch works but is significantly more expensive at 5B vector scale. B: pgvector on Aurora doesn't scale well to billions of vectors. D: Marketplace solutions add cost and operational complexity vs. native AWS."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A legal firm needs to process lengthy contracts (50-100 pages each) through an LLM for clause extraction. They're using Anthropic Claude via Bedrock. The same system prompt and legal framework context (15,000 tokens) is sent with every request. Monthly API costs are very high.", "options": ["A. Switch to a smaller model like Claude Haiku to reduce per-token costs", "B. Enable prompt caching to cache the system prompt and legal framework prefix", "C. Use Provisioned Throughput to get a dedicated model capacity at a fixed cost", "D. Batch the contract processing using Bedrock Batch Inference"], "correct": 1, "explanation": "Prompt caching allows you to cache static prompt prefixes (system prompts, framework text) so they're only processed once. Subsequent requests that share the same prefix get cache-read pricing, which is significantly cheaper than re-processing those tokens. For a 15K token prefix sent repeatedly, savings are substantial. Cache TTL is 5 minutes by default, extendable to 1 hour.", "whyWrong": "A: Switching to a smaller model may reduce quality for complex legal analysis. C: Provisioned Throughput requires ~70% utilization to break even and doesn't reduce per-token cost for the repeated prefix. D: Batch inference helps with throughput but doesn't address the repeated prefix cost."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A media company wants to build an application that generates marketing copy, product descriptions, and social media posts. They need to route requests to different models based on complexity: simple social posts to a cheap model, complex marketing copy to a premium model. They want a single API integration point.", "options": ["A. Use Amazon Bedrock with model cascading via Intelligent Prompt Routing", "B. Implement custom routing logic in Lambda that calls different Bedrock models", "C. Deploy multiple SageMaker endpoints and use a Lambda router", "D. Use a single high-end model for all requests to ensure quality"], "correct": 0, "explanation": "Amazon Bedrock's Intelligent Prompt Routing automatically routes requests between a smaller/cheaper model and a larger/premium model based on request complexity. This optimizes cost while maintaining quality for complex requests. It provides a single API integration point and handles the routing logic automatically.", "whyWrong": "B: Custom Lambda routing works but requires building and maintaining classification logic. C: SageMaker endpoints add significant infrastructure management. D: Using a premium model for everything wastes money on simple tasks."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A healthcare company has sensitive patient data and wants to use an LLM to summarize medical records. They need the data to never leave their AWS account and want to ensure the model hasn't been fine-tuned on any patient data. They currently use Anthropic Claude on Bedrock.", "options": ["A. Use Bedrock with default settings \u2014 data is never used for model training", "B. Set up a VPC endpoint for Bedrock and use AWS PrivateLink to prevent data from traversing the internet", "C. Deploy a self-hosted open-source model on SageMaker within a VPC", "D. Both A and B \u2014 Bedrock doesn't train on your data AND use VPC endpoints for network isolation"], "correct": 3, "explanation": "Amazon Bedrock guarantees that customer data is never used to train or improve base models (A is correct). Additionally, using VPC endpoints with PrivateLink ensures data never traverses the public internet (B adds network isolation). Both protections together provide defense-in-depth for healthcare data.", "whyWrong": "A: While true, it doesn't address network isolation. B: While good for network security, doesn't address the model training concern on its own. C: Self-hosting adds massive operational burden and Bedrock already provides the needed guarantees."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A developer is building a multi-modal application that needs to process images, generate text, and understand video. They need low latency and want to use a single model family. The application will handle millions of requests per day across multiple AWS regions.", "options": ["A. Use the Amazon Nova model family (Nova Lite for simple tasks, Nova Pro for complex reasoning) with Cross-Region Inference", "B. Use Claude 3.5 Sonnet for all modalities with Provisioned Throughput in each region", "C. Use separate specialized models: Nova Canvas for images, Claude for text, Nova Reel for video", "D. Deploy Llama 3 on SageMaker with multi-region endpoints"], "correct": 0, "explanation": "The Nova model family provides unified multi-modal capabilities (text, image, video understanding) with Nova Lite for simpler/faster tasks and Nova Pro for complex reasoning. Cross-Region Inference automatically distributes traffic across regions for high availability and throughput without managing per-region provisioning. This is ideal for millions of daily requests.", "whyWrong": "B: Provisioned Throughput per region is expensive and inflexible compared to Cross-Region Inference. C: Using separate models adds complexity; Nova models handle all modalities natively. D: Llama 3 lacks native multi-modal capabilities and SageMaker requires infrastructure management."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A company is ingesting PDF documents into a Bedrock Knowledge Base. Documents contain both narrative text and structured tables with financial data. They're getting poor retrieval accuracy when users ask about specific financial figures in tables.", "options": ["A. Switch from fixed-size chunking to semantic chunking", "B. Switch to hierarchical chunking with parent-child relationships", "C. Use Amazon Bedrock Data Automation to parse and structure the documents before ingestion", "D. Increase the chunk size to capture full tables within a single chunk"], "correct": 2, "explanation": "Amazon Bedrock Data Automation is designed to extract structured data from complex documents including tables, forms, and charts. Pre-processing documents with Data Automation before ingestion into Knowledge Bases ensures that table data is properly parsed and structured, improving retrieval accuracy for specific figures.", "whyWrong": "A: Semantic chunking groups by meaning but may still split tables incorrectly. B: Hierarchical chunking helps with context but doesn't solve table parsing. D: Larger chunks reduce precision and may exceed context limits."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A developer needs to build a conversational AI that maintains conversation history, supports tool calling, and works with multiple model providers (Anthropic, Meta, Amazon) through Bedrock. They want minimal code changes when switching between models.", "options": ["A. Use the Bedrock InvokeModel API with provider-specific request formats", "B. Use the Bedrock Converse API which provides a unified interface across all models", "C. Use LangChain as an abstraction layer on top of Bedrock", "D. Build a custom abstraction layer that normalizes API calls across providers"], "correct": 1, "explanation": "The Bedrock Converse API provides a unified, model-agnostic interface for all Bedrock models. It handles conversation history management, tool use/function calling, and streaming through a consistent format. When switching models, you only change the model ID \u2014 no request format changes needed. It's the recommended API for multi-turn conversations.", "whyWrong": "A: InvokeModel requires provider-specific JSON formats which differ between Anthropic, Meta, and Amazon models. C: LangChain adds a third-party dependency; the native Converse API handles this natively. D: Building custom abstraction duplicates what Converse already provides."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A startup is building a search feature for their knowledge base. They want to combine keyword matching for product SKUs and codes with semantic understanding for natural language queries. Their data is already in Amazon OpenSearch.", "options": ["A. Use OpenSearch with HNSW k-NN plugin for pure vector search", "B. Use OpenSearch hybrid search combining BM25 keyword scoring with k-NN vector similarity", "C. Replace OpenSearch with pgvector for vector search, keep a separate full-text search index", "D. Use Bedrock Knowledge Bases which handles hybrid search automatically"], "correct": 1, "explanation": "OpenSearch's hybrid search mode combines traditional BM25 keyword matching (great for exact SKU/code matches) with HNSW-based k-NN vector similarity search (great for semantic understanding). Results are combined using reciprocal rank fusion. Since the data is already in OpenSearch, this leverages the existing infrastructure.", "whyWrong": "A: Pure vector search would miss exact SKU/code matches. C: Two separate systems add complexity and latency. D: Knowledge Bases use OpenSearch underneath but adding another layer is unnecessary when they already have OpenSearch."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A team wants to generate embeddings for a multilingual document corpus. Documents are in English, Spanish, French, and Japanese. They need a single embedding model that handles all languages well. Embeddings will be stored in OpenSearch for retrieval. They want to optimize storage costs.", "options": ["A. Use Amazon Titan Text Embeddings V2 with 256 dimensions", "B. Use Amazon Titan Text Embeddings V2 with 1024 dimensions", "C. Use Cohere Embed Multilingual v3 via Bedrock", "D. Fine-tune a BERT model on SageMaker for multilingual embeddings"], "correct": 0, "explanation": "Amazon Titan Text Embeddings V2 supports multilingual text and offers configurable dimensions: 256, 512, or 1024. For cost optimization with acceptable quality, 256 dimensions significantly reduces storage costs in OpenSearch while maintaining good retrieval performance. Titan Embeddings V2 natively supports 100+ languages.", "whyWrong": "B: 1024 dimensions gives best quality but doesn't optimize storage costs as requested. C: Cohere works but Titan V2 is the AWS-native option with dimension flexibility. D: Fine-tuning BERT is unnecessary when Titan V2 natively handles multilingual text."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A company needs to build an intelligent agent that can search their CRM, create support tickets, and query a billing database. The agent should handle multi-step reasoning and automatically determine which tools to call. They want AWS-managed infrastructure.", "options": ["A. Use Bedrock Agents with action groups defining the CRM, ticketing, and billing APIs", "B. Use Strands Agents SDK to build a custom agent with tool definitions", "C. Use Step Functions to orchestrate Lambda functions for each API call", "D. Build a ReAct loop manually using Bedrock InvokeModel with custom parsing"], "correct": 0, "explanation": "Bedrock Agents is the fully managed service for building AI agents that can reason, plan, and take actions. Action groups define the available tools (APIs) the agent can call. Bedrock handles the ReAct loop, tool selection, and orchestration automatically. For AWS-managed infrastructure with minimal custom code, this is the right choice.", "whyWrong": "B: Strands SDK is great for custom agents but requires self-managing the infrastructure (compute, scaling). C: Step Functions is deterministic \u2014 it can't dynamically decide which tool to call based on reasoning. D: Building ReAct manually is error-prone and duplicates what Bedrock Agents provides."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A data science team has labeled training data and wants to improve a model's performance on domain-specific insurance terminology and response format. The base model understands the concepts but doesn't use the right terminology or follow the desired output structure consistently.", "options": ["A. Build a RAG pipeline to retrieve insurance documents at inference time", "B. Use Bedrock Custom Model fine-tuning to train the model on labeled insurance examples", "C. Add detailed few-shot examples to the system prompt", "D. Use Bedrock Guardrails to enforce output format"], "correct": 1, "explanation": "Fine-tuning is ideal when you need to change a model's behavior, terminology, and output format consistently. With labeled training data available, fine-tuning teaches the model to adopt domain-specific language and response structure. This is different from RAG which adds knowledge \u2014 here the model already knows the concepts but needs style/format adjustment.", "whyWrong": "A: RAG adds retrieval knowledge; the model already understands the concepts \u2014 it needs behavioral change. C: Few-shot examples help but are limited by context window and inconsistent at scale. D: Guardrails filter/block content but don't teach the model new terminology or formats."}, {"domain": "Domain 1", "domainName": "Selecting & Integrating FMs and Data", "scenario": "A developer needs to process 500,000 customer feedback records through an LLM for sentiment classification. Results are needed within 24 hours but not in real-time. Cost must be minimized.", "options": ["A. Use Bedrock Batch Inference to process all records asynchronously", "B. Use Bedrock InvokeModel in a parallelized Lambda function", "C. Use SageMaker Batch Transform with a deployed model", "D. Use Bedrock with Provisioned Throughput for guaranteed capacity"], "correct": 0, "explanation": "Bedrock Batch Inference is designed for large-scale asynchronous processing. It offers up to 50% cost savings compared to on-demand pricing and handles job management automatically. For 500K records with a 24-hour window, batch inference is the most cost-effective approach.", "whyWrong": "B: Parallelized Lambda with on-demand Bedrock is more expensive and requires managing concurrency. C: SageMaker Batch Transform requires deploying and managing a model endpoint. D: Provisioned Throughput is for sustained real-time workloads, not batch processing."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A financial services company is building a compliance workflow where each customer query must go through: (1) PII detection, (2) regulatory lookup, (3) response generation, (4) compliance review, and (5) audit logging. The workflow must have a deterministic execution order with full audit trail for regulatory compliance.", "options": ["A. Use Bedrock Agents to orchestrate the multi-step workflow", "B. Use AWS Step Functions to orchestrate the pipeline with explicit state transitions", "C. Use Bedrock Flows to build the visual prompt chain", "D. Use Strands Agents SDK with a custom workflow definition"], "correct": 1, "explanation": "Step Functions provides deterministic, auditable workflow orchestration with explicit state transitions, built-in error handling, retry logic, and full execution history. For regulatory compliance requiring audit trails and guaranteed execution order, Step Functions is the correct choice. Every state transition is logged in CloudWatch.", "whyWrong": "A: Bedrock Agents use dynamic reasoning \u2014 they may skip steps or reorder them, which violates compliance requirements. C: Bedrock Flows is for prompt chains, not complex multi-step business workflows with audit needs. D: Strands SDK requires self-hosting and doesn't provide native audit trail integration."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A startup wants to add GenAI features to their mobile app. They need a pre-built UI component for a chat interface that connects to Bedrock, with support for streaming responses and conversation history. Their frontend uses React.", "options": ["A. Build a custom WebSocket API Gateway + Lambda backend with a React chat UI", "B. Use AWS Amplify AI Kit which provides a declarative <AIConversation> component", "C. Use Bedrock's built-in chat widget SDK", "D. Use a third-party chat UI library with Bedrock REST API calls from the client"], "correct": 1, "explanation": "AWS Amplify AI Kit provides pre-built, declarative React components (like <AIConversation>) that handle streaming, conversation history, and Bedrock integration out of the box. It manages authentication, WebSocket connections, and state management, dramatically reducing development time for chat interfaces.", "whyWrong": "A: Building custom WebSocket infrastructure is over-engineering when Amplify provides this out of the box. C: Bedrock doesn't have a built-in chat widget SDK. D: Direct client-side API calls expose credentials and don't handle streaming well."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "An enterprise needs to deploy MCP (Model Context Protocol) servers that expose their internal databases as tools for AI agents. The MCP servers need to handle concurrent connections, scale automatically, and maintain persistent connections for streaming.", "options": ["A. Deploy MCP servers on Lambda behind API Gateway", "B. Deploy MCP servers on ECS Fargate with Application Load Balancer", "C. Deploy MCP servers on EC2 instances in an Auto Scaling Group", "D. Use Bedrock AgentCore Gateway to expose databases as MCP-compatible tools"], "correct": 1, "explanation": "MCP servers require persistent connections (SSE/WebSocket) for bidirectional streaming, which Lambda cannot maintain due to its invocation timeout model. ECS Fargate provides containerized deployment with auto-scaling, persistent connections, and no server management. ALB handles connection routing and health checks.", "whyWrong": "A: Lambda has a maximum timeout (15 min) and doesn't support persistent bidirectional connections needed by MCP's SSE transport. C: EC2 works but requires managing servers and OS patches. D: AgentCore Gateway converts APIs to agent-compatible tools but the question asks about deploying MCP servers themselves."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A company's Bedrock-powered application is experiencing intermittent ThrottlingException errors during peak hours. They see 429 status codes. The application serves real-time customer requests and cannot tolerate long delays.", "options": ["A. Request a service quota increase and implement Cross-Region Inference", "B. Switch to Provisioned Throughput for guaranteed capacity", "C. Implement exponential backoff with jitter (100ms initial delay, 2x multiplier, max 5 retries)", "D. Both A and C \u2014 request quota increase with Cross-Region Inference AND implement retry with backoff"], "correct": 3, "explanation": "The correct approach is multi-layered: (1) Cross-Region Inference distributes traffic across regions for better availability, (2) Service quota increases raise the per-region limit, and (3) Exponential backoff with jitter handles transient throttling gracefully. The retry config (100ms initial, 2x backoff, 3-5 max retries) is the AWS-recommended pattern.", "whyWrong": "A: Only increases capacity but doesn't handle transient errors gracefully. B: Provisioned Throughput requires commitment and ~70% utilization to be cost-effective \u2014 overkill if throttling is only during peaks. C: Only handles retries but doesn't address the root cause of insufficient capacity."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A development team is building an agentic AI system that needs to: (1) isolate each user session in its own runtime, (2) enforce fine-grained access control on tools based on user identity, (3) learn from past interactions across sessions, and (4) scale to thousands of concurrent users.", "options": ["A. Use Bedrock Agents with session management and IAM roles", "B. Use Amazon Bedrock AgentCore with Runtime, Policy, and Memory components", "C. Use Strands SDK deployed on ECS with Redis for session state", "D. Build a custom agent framework on Lambda with DynamoDB for state"], "correct": 1, "explanation": "AgentCore provides exactly these capabilities: Runtime provides session isolation (up to 8 hours per session with bidirectional streaming), Policy converts natural language rules to Cedar policies for fine-grained tool access control, and Memory provides both session memory and episodic memory (learning across sessions). It's designed for production-scale agentic systems.", "whyWrong": "A: Bedrock Agents doesn't provide session isolation at the runtime level or natural language policy enforcement. C: Strands + ECS would work but requires building session isolation, policy enforcement, and cross-session learning from scratch. D: Custom Lambda+DynamoDB is massive engineering effort for what AgentCore provides natively."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A company wants to create a no-code prompt chain that: takes user input, retrieves relevant documents from a Knowledge Base, generates a draft response, and then applies a Guardrail before returning the result. A business analyst (non-developer) needs to modify the flow.", "options": ["A. Use AWS Step Functions with a visual workflow editor", "B. Use Amazon Bedrock Flows to build the visual prompt chain", "C. Use Amazon Bedrock Agents with a custom orchestration prompt", "D. Write a Python script using Strands SDK with a YAML config"], "correct": 1, "explanation": "Amazon Bedrock Flows is the no-code/low-code workflow builder specifically designed for creating prompt chains. It provides a visual drag-and-drop interface where business analysts can connect nodes (input, Knowledge Base retrieval, model invocation, Guardrail evaluation) without writing code. It's purpose-built for prompt chain orchestration.", "whyWrong": "A: Step Functions is a general-purpose workflow service \u2014 more complex to configure for prompt chains and requires JSON state machine definitions. C: Agents use dynamic reasoning, not deterministic prompt chains, and aren't no-code. D: Python scripts require developer skills, which the business analyst doesn't have."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A company wants to give their internal employees a natural language interface to search company wikis, Confluence pages, SharePoint documents, and Salesforce records. Employees should get answers without needing to know which system holds the information.", "options": ["A. Build a custom RAG pipeline with Bedrock Knowledge Bases connecting to each data source", "B. Use Amazon Q Business which natively connects to 40+ enterprise data sources", "C. Use Amazon Kendra for enterprise search with Bedrock for answer generation", "D. Use Amazon Q Developer for code-aware internal documentation search"], "correct": 1, "explanation": "Amazon Q Business is specifically designed for internal enterprise knowledge search. It natively connects to 40+ data sources including Confluence, SharePoint, Salesforce, and wikis. It handles authentication, permissions (respecting existing ACLs), and provides natural language Q&A across all connected sources without custom integration code.", "whyWrong": "A: Building custom RAG for each data source requires significant integration work. C: Kendra + Bedrock requires custom glue code and doesn't have as many native connectors. D: Amazon Q Developer is for code generation and developer productivity, not enterprise knowledge search."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A GenAI application needs to call a Lambda function as a tool, convert the response to be compatible with MCP protocol, and also connect to external MCP servers for additional tool access. The team wants a single management layer for all tool integrations.", "options": ["A. Write custom adapter code in each Lambda function for MCP compatibility", "B. Use Amazon Bedrock AgentCore Gateway as a unified tool management layer", "C. Deploy an MCP proxy server on ECS that wraps Lambda functions", "D. Use Bedrock Agents action groups with Lambda integration"], "correct": 1, "explanation": "AgentCore Gateway serves as a unified tool management layer that can convert Lambda functions and APIs into agent-compatible tools AND connect to external MCP servers. It provides a single interface for all tool integrations, handling protocol translation, authentication, and routing.", "whyWrong": "A: Custom adapters per Lambda create maintenance burden and inconsistency. C: An MCP proxy adds another service to manage. D: Bedrock Agents action groups work for Lambda but don't provide MCP server connectivity or a unified gateway."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A company wants their developers to code faster with AI assistance. They need code generation, refactoring suggestions, vulnerability detection, and the ability to generate unit tests. The AI should understand their existing codebase in the IDE.", "options": ["A. Amazon Q Developer integrated into the IDE", "B. Amazon Q Business with their code repository as a data source", "C. Amazon CodeWhisperer (legacy)", "D. Deploy a code-specialized model on SageMaker with a custom IDE plugin"], "correct": 0, "explanation": "Amazon Q Developer (which evolved from and replaced CodeWhisperer) provides inline code generation, refactoring suggestions, security scanning/vulnerability detection, unit test generation, and codebase-aware assistance directly in the IDE. It understands project context and integrates with popular IDEs like VS Code and JetBrains.", "whyWrong": "B: Q Business is for enterprise knowledge search, not code-level IDE assistance. C: CodeWhisperer was rebranded to Amazon Q Developer. D: Self-hosted models require significant infrastructure and don't provide IDE integration."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "A company is using Bedrock Agents but wants to ensure that the agent only accesses customer databases when the requesting user has the correct permissions, and denies access to admin tools for non-admin users. These rules need to be defined in plain English by the security team.", "options": ["A. Implement IAM policies on the Lambda functions behind each action group", "B. Use AgentCore Policy to define natural language rules that compile to Cedar policies", "C. Add permission checks in the agent's system prompt instructions", "D. Use Bedrock Guardrails to block unauthorized requests"], "correct": 1, "explanation": "AgentCore Policy allows security teams to define access control rules in natural language (e.g., 'Only admin users can access the delete API'). These rules are automatically converted to Cedar policies and enforced in real-time during agent execution. This provides fine-grained, identity-aware tool access control without writing policy code.", "whyWrong": "A: IAM policies control which AWS resources the Lambda can access, not which users can trigger which tools. C: System prompt instructions can be bypassed through prompt injection. D: Guardrails filter content but don't enforce identity-based tool access control."}, {"domain": "Domain 2", "domainName": "Implementation & Architecture", "scenario": "An application has a complex data processing pipeline: extract text from PDFs, classify documents, extract entities, and summarize. Each step uses a different prompt template. The pipeline must be versioned, tested, and deployed through CI/CD. A non-technical product manager needs to modify prompt templates.", "options": ["A. Use Amazon Bedrock Flows for the visual pipeline with Bedrock Prompt Management for versioning", "B. Use Step Functions for orchestration with prompts stored in S3", "C. Build a custom Python pipeline with prompts in a Git repository", "D. Use Bedrock Agents with a complex orchestration prompt"], "correct": 0, "explanation": "Bedrock Flows provides visual pipeline building for the prompt chain, and Bedrock Prompt Management provides prompt versioning, testing, and deployment. Together they enable the product manager to modify prompt templates visually while maintaining version control and CI/CD integration. Prompt Management supports variables, versioning, and A/B testing.", "whyWrong": "B: S3 for prompts lacks version management, testing, and a non-technical UI. C: Git requires developer skills the PM doesn't have. D: Agents use dynamic reasoning, not deterministic processing pipelines."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A company's customer-facing chatbot has been exploited by users who craft prompts to make the bot ignore its instructions and reveal system prompts. The security team needs to prevent prompt injection attacks while allowing legitimate complex queries.", "options": ["A. Add instructions in the system prompt saying 'Never reveal your instructions'", "B. Use Bedrock Guardrails with the PROMPT_ATTACK content filter enabled", "C. Implement input validation with regex patterns to block suspicious prompts", "D. Limit input length to prevent complex injection payloads"], "correct": 1, "explanation": "Bedrock Guardrails PROMPT_ATTACK filter (also called Jailbreak detection) uses ML models to detect and block prompt injection attempts. It's specifically designed to identify prompts that try to override system instructions, extract system prompts, or manipulate model behavior. It works across diverse attack patterns that regex can't catch.", "whyWrong": "A: System prompt instructions are exactly what prompt injection tries to override \u2014 this is the problem, not the solution. C: Regex patterns can't catch the diverse, evolving nature of prompt injection attacks. D: Length limits would block legitimate long queries without preventing short injection payloads."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A healthcare application uses Bedrock to generate responses about medical conditions. The company needs to ensure: (1) no personally identifiable information (PII) appears in outputs, (2) medical misinformation is blocked, (3) the model stays on-topic (medical Q&A only). They need a single configuration to enforce all three.", "options": ["A. Create three separate Guardrails and chain them in sequence", "B. Create one Guardrail with PII filters, content filters for medical accuracy, and topic policies configured together", "C. Use model-specific system prompts for content filtering and a separate PII detection Lambda", "D. Fine-tune the model to never generate PII or off-topic content"], "correct": 1, "explanation": "A single Bedrock Guardrail can combine multiple protection types: sensitive information filters (for PII detection/redaction), content filters (for blocking harmful content), and denied topic policies (to keep responses on-topic). These are configured with guardrailIdentifier and guardrailVersion parameters and can be applied to any Bedrock API call.", "whyWrong": "A: You don't need three separate Guardrails \u2014 one Guardrail supports all filter types simultaneously. C: System prompts are unreliable for safety; a separate Lambda adds latency and complexity. D: Fine-tuning can't guarantee PII removal or topic adherence."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A company needs to document their ML models for regulatory compliance, including model purpose, training data characteristics, performance metrics, ethical considerations, and known limitations. They need a standardized format that auditors can review.", "options": ["A. Create a custom documentation template in Confluence", "B. Use SageMaker Model Cards to create standardized model documentation", "C. Store model metadata in a DynamoDB table", "D. Write model documentation in SageMaker notebook markdown cells"], "correct": 1, "explanation": "SageMaker Model Cards provide a standardized framework for documenting ML models. They capture model purpose, training details, performance metrics across demographic groups, ethical considerations, and known limitations in a structured format. Model Cards are designed for governance/audit purposes and integrate with the SageMaker model registry.", "whyWrong": "A: Custom Confluence docs lack structure and aren't integrated with the ML workflow. C: DynamoDB stores data but provides no standardized documentation framework. D: Notebook markdown isn't accessible to auditors and isn't a governance tool."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A company wants to detect and measure bias in their text classification model before deploying it. They need to check if the model performs differently across demographic groups (gender, age) and get specific bias metrics.", "options": ["A. Use Amazon SageMaker Clarify to run bias detection with metrics like DPPL and KL divergence", "B. Manually split test data by demographic and compare accuracy", "C. Use Bedrock Model Evaluation with human reviewers", "D. Deploy the model and monitor bias metrics in production using CloudWatch"], "correct": 0, "explanation": "SageMaker Clarify provides automated pre-deployment and post-deployment bias detection. It calculates specific bias metrics including DPPL (Difference in Positive Proportions in Labels), KL divergence, Class Imbalance Ratio (CI), and others across specified demographic facets. This provides quantitative bias measurement before deployment.", "whyWrong": "B: Manual splitting works but doesn't provide standardized metrics or scale. C: Bedrock Model Evaluation is for generative model quality, not classification bias metrics. D: Detecting bias after deployment exposes users to potentially biased outputs."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "An enterprise is deploying multiple GenAI applications and needs centralized governance: model inventory tracking, approval workflows before deployment, version control for models and prompts, and data lineage tracking across all projects.", "options": ["A. Use SageMaker Model Registry for model inventory and versioning, combined with Step Functions for approval workflows", "B. Use a custom governance dashboard built on DynamoDB and Lambda", "C. Use AWS Service Catalog to manage approved model configurations", "D. Use Amazon Bedrock's built-in model governance features"], "correct": 0, "explanation": "SageMaker Model Registry provides centralized model inventory, version control, approval status tracking (Pending/Approved/Rejected), and metadata management. Combined with Step Functions for automated approval workflows and integration with CI/CD pipelines, it provides comprehensive AI governance. Model Registry also tracks data lineage through model packages.", "whyWrong": "B: Custom dashboard requires significant development and doesn't integrate with ML workflows. C: Service Catalog manages infrastructure templates, not ML model governance specifically. D: Bedrock doesn't have comprehensive governance features for custom models and cross-service tracking."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A Guardrail is configured on a Bedrock application. The team wants to debug why certain inputs are being blocked. They need to see which specific filter triggered and the confidence score of the detection.", "options": ["A. Check CloudWatch Logs for Guardrail invocation details", "B. Enable the 'trace' parameter in the Guardrail API call to get detailed filter assessments", "C. Use AWS X-Ray to trace the Guardrail evaluation pipeline", "D. Review the Guardrail configuration to check filter thresholds"], "correct": 1, "explanation": "Setting trace: 'enabled' in the Guardrail API call returns detailed assessment results showing which specific filter was triggered (content filter, topic policy, PII filter, etc.), the confidence score, and the action taken (BLOCKED/ANONYMIZED). This is the primary debugging mechanism for understanding Guardrail decisions.", "whyWrong": "A: CloudWatch Logs show invocation counts but not detailed per-filter assessment. C: X-Ray traces service calls but doesn't show internal Guardrail filter decisions. D: Reviewing configuration shows thresholds but not why a specific input was blocked."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A multi-tenant SaaS application uses Bedrock AgentCore to serve multiple enterprise customers. Each tenant's users should only access their own company's data and tools. The identity comes from each tenant's own Okta instance.", "options": ["A. Create separate AWS accounts per tenant with dedicated Bedrock resources", "B. Use AgentCore Identity with custom claims to map tenant identity and enforce tenant isolation", "C. Use IAM roles with session tags to separate tenant access", "D. Implement tenant isolation in the application layer with database row-level security"], "correct": 1, "explanation": "AgentCore Identity supports multiple identity providers (including Okta) and custom claims for multi-tenant scenarios. It maps each tenant's identity system to the agent's authorization framework, enabling fine-grained, identity-aware access control. Combined with AgentCore Policy, it enforces tenant isolation at the agent tool level.", "whyWrong": "A: Separate accounts per tenant is expensive and doesn't scale well. C: IAM session tags work for AWS resource isolation but don't integrate with tenant identity providers. D: Application-layer isolation doesn't prevent the agent from being tricked into accessing other tenants' data."}, {"domain": "Domain 3", "domainName": "Security, Compliance & Governance", "scenario": "A company generates content for children's educational platforms. They must ensure the LLM never generates violent content, sexual content, or content involving hate speech. They also need to block any discussion of weapons or drugs.", "options": ["A. Use Bedrock Guardrails with content filters (VIOLENCE, SEXUAL, HATE) set to HIGH strength and denied topic policies for weapons/drugs", "B. Fine-tune the model on child-safe content only", "C. Use a system prompt that instructs the model to never discuss inappropriate topics", "D. Implement post-processing with a content moderation API"], "correct": 0, "explanation": "Bedrock Guardrails provides configurable content filters for built-in categories (VIOLENCE, SEXUAL, HATE, INSULTS, MISCONDUCT) with adjustable strength levels (NONE/LOW/MEDIUM/HIGH). Setting these to HIGH provides the strictest filtering. Denied topic policies can block specific subjects like weapons and drugs. Together they provide robust, multi-layered content safety.", "whyWrong": "B: Fine-tuning reduces but can't guarantee elimination of harmful content. C: System prompts can be overridden by creative prompting. D: Post-processing catches issues after generation, meaning harmful content was already generated (wasting resources and creating risk)."}, {"domain": "Domain 4", "domainName": "Optimization & Cost Management", "scenario": "A company runs a customer service chatbot on Bedrock that handles ~50,000 requests per day consistently, 24/7. Their on-demand costs are $15,000/month. They want to reduce costs while maintaining response times. Traffic is fairly uniform throughout the day.", "options": ["A. Switch to a cheaper model family", "B. Purchase Provisioned Throughput since utilization exceeds the 70% break-even point", "C. Use Cross-Region Inference to distribute load", "D. Implement prompt caching to reduce token processing"], "correct": 1, "explanation": "Provisioned Throughput provides dedicated model capacity at a fixed hourly rate. The break-even point is approximately 70% utilization. With 50K consistent daily requests (24/7, uniform traffic), the utilization is well above 70%, making Provisioned Throughput more cost-effective than on-demand pricing. It also guarantees consistent response times.", "whyWrong": "A: Switching models may degrade quality \u2014 the question asks to maintain response quality. C: Cross-Region Inference improves availability but doesn't reduce costs. D: Prompt caching helps with repeated prefixes but doesn't address the fundamental pricing model for high-volume consistent traffic."}, {"domain": "Domain 4", "domainName": "Optimization & Cost Management", "scenario": "A company has a GenAI application where 80% of requests are simple (reformatting, extraction) and 20% are complex (multi-step reasoning, analysis). They're currently routing all requests to Claude 3.5 Sonnet. They want to reduce costs by at least 40%.", "options": ["A. Use Amazon Bedrock Intelligent Prompt Routing to automatically route based on complexity", "B. Build custom classification logic to route simple requests to Nova Lite and complex ones to Claude Sonnet", "C. Switch all traffic to a cheaper model", "D. Implement aggressive prompt caching"], "correct": 0, "explanation": "Bedrock's Intelligent Prompt Routing automatically classifies request complexity and routes simple requests to a smaller/cheaper model and complex requests to the premium model. Since 80% of requests are simple, routing them to a cheaper model can achieve 40%+ cost reduction while maintaining quality for the complex 20%. No custom classification logic needed.", "whyWrong": "B: Custom classification works but requires building, training, and maintaining the router. C: A single cheaper model degrades quality on complex requests. D: Prompt caching only helps with repeated prefixes, not the fundamental cost of processing diverse requests."}, {"domain": "Domain 4", "domainName": "Optimization & Cost Management", "scenario": "A company's Bedrock application experiences extreme traffic spikes during product launches (10x normal) but has moderate baseline traffic. During spikes, they get ThrottlingExceptions. They don't want to pay for capacity they don't use during normal hours.", "options": ["A. Purchase Provisioned Throughput for peak capacity", "B. Use Cross-Region Inference with on-demand pricing", "C. Pre-warm the model before product launches", "D. Queue requests in SQS and process them at a steady rate"], "correct": 1, "explanation": "Cross-Region Inference automatically distributes requests across multiple AWS regions, dramatically increasing available throughput during spikes. With on-demand pricing, you only pay for actual usage \u2014 no commitment for idle capacity during normal hours. This is ideal for spiky traffic patterns where Provisioned Throughput would waste money during off-peak.", "whyWrong": "A: Provisioned Throughput for 10x capacity wastes money during normal hours (only ~10% utilization). C: Bedrock models don't require pre-warming \u2014 they're always ready. D: Queuing adds latency, which is unacceptable for real-time product launch interactions."}, {"domain": "Domain 4", "domainName": "Optimization & Cost Management", "scenario": "A document QA application sends the same 20-page document context (about 8,000 tokens) with every user question. On average, 50 questions are asked about the same document within a 30-minute session. The team wants to reduce per-query costs.", "options": ["A. Summarize the document first and send the summary instead", "B. Use prompt caching with extended TTL (1 hour) to cache the document context", "C. Store document chunks in a Knowledge Base and retrieve only relevant chunks per question", "D. Pre-compute answers for common questions"], "correct": 1, "explanation": "Prompt caching with extended TTL (1 hour, vs 5 min default) is perfect for this pattern. The 8,000-token document context is cached after the first request, and subsequent questions in the 30-minute session get cache-read pricing (significantly cheaper). With 50 questions per session, the first query pays full price + cache write cost, but questions 2-50 pay only cache-read rates for those 8,000 tokens.", "whyWrong": "A: Summarization loses detail needed for specific questions. C: RAG retrieval adds latency and may miss context needed for some questions. D: Pre-computing answers doesn't work for arbitrary user questions."}, {"domain": "Domain 4", "domainName": "Optimization & Cost Management", "scenario": "A company's HNSW vector index in OpenSearch is consuming too much memory, causing high costs. The index has 10 million vectors with 1024 dimensions. They want to reduce memory usage while accepting a small decrease in recall accuracy.", "options": ["A. Reduce the HNSW M parameter from 16 to 8", "B. Switch to Titan Embeddings V2 with 256 dimensions instead of 1024", "C. Use product quantization (PQ) to compress vectors", "D. All of the above \u2014 combine reduced M, lower dimensions, and quantization"], "correct": 3, "explanation": "All three strategies reduce memory: (1) Lowering HNSW M (connections per node) from 16 to 8 reduces graph memory by ~50%. (2) Reducing embedding dimensions from 1024 to 256 reduces vector storage by 75%. (3) Product quantization compresses vectors further. Combined, these can reduce memory by 80%+ with modest recall impact. Titan V2's configurable dimensions make (2) easy.", "whyWrong": "A, B, C individually: Each is correct but the question asks for the best approach \u2014 combining all three provides the maximum memory reduction while the question explicitly accepts accuracy trade-offs."}, {"domain": "Domain 5", "domainName": "Testing, Troubleshooting & Deployment", "scenario": "A team has built a RAG application and needs to evaluate its quality. They want to measure: (1) whether retrieved documents are relevant, (2) whether the generated answer is grounded in the retrieved documents, and (3) whether the answer is actually correct. They want automated evaluation.", "options": ["A. Use human evaluators to score each dimension manually", "B. Use the RAGAs framework to evaluate retrieval relevance, faithfulness, and answer correctness", "C. Use Bedrock Model Evaluation with automatic metrics", "D. Calculate BLEU and ROUGE scores against reference answers"], "correct": 1, "explanation": "RAGAs (Retrieval Augmented Generation Assessment) is a purpose-built framework for evaluating RAG pipelines. It provides automated metrics for: context relevance (are retrieved docs relevant?), faithfulness (is the answer grounded in context?), and answer correctness (is it factually correct?). It's the standard framework for RAG quality evaluation.", "whyWrong": "A: Human evaluation doesn't scale and the question asks for automated evaluation. C: Bedrock Model Evaluation is for general model quality, not RAG-specific metrics. D: BLEU/ROUGE measure text similarity but can't evaluate retrieval quality or factual grounding."}, {"domain": "Domain 5", "domainName": "Testing, Troubleshooting & Deployment", "scenario": "A company wants to compare two different LLMs for their summarization task. They need to evaluate quality dimensions like coherence, relevance, fluency, and harmlessness without maintaining a labeled test dataset. Budget for human reviewers is limited.", "options": ["A. Use Bedrock Model Evaluation with LLM-as-judge evaluation pattern", "B. Calculate perplexity scores for each model", "C. Deploy both models and compare based on user feedback over time", "D. Use BLEU scores against a small reference set"], "correct": 0, "explanation": "Bedrock Model Evaluation supports the LLM-as-judge pattern where a powerful evaluator model (like Claude) automatically scores outputs across dimensions like coherence, relevance, fluency, and harmlessness. This provides scalable, multi-dimensional evaluation without labeled data or expensive human reviewers. It's especially useful for subjective quality metrics.", "whyWrong": "B: Perplexity measures model uncertainty, not output quality for specific tasks. C: Production A/B testing is slow and exposes users to potentially poor-quality model. D: BLEU only measures surface-level text similarity and requires reference answers."}, {"domain": "Domain 5", "domainName": "Testing, Troubleshooting & Deployment", "scenario": "A production GenAI agent built on AgentCore is exhibiting unexpected behavior: sometimes it calls the wrong tools, gives inconsistent answers, and occasionally produces harmful content. The team needs continuous monitoring across all these dimensions.", "options": ["A. Add logging statements in the agent code and review logs manually", "B. Use AgentCore Evaluations with built-in evaluators for tool selection, consistency, and safety", "C. Set up CloudWatch alarms on error rates", "D. Periodically run manual test cases against the agent"], "correct": 1, "explanation": "AgentCore Evaluations provides 13 built-in evaluators that continuously monitor agent behavior across dimensions including tool selection accuracy, response consistency, safety/toxicity, factual grounding, and more. It supports both real-time evaluation (every interaction) and batch evaluation, with the ability to add custom evaluators for domain-specific checks.", "whyWrong": "A: Manual log review doesn't scale and can't detect subtle quality issues. C: CloudWatch error rates catch crashes but not wrong tool selection or inconsistent answers. D: Periodic manual testing misses issues between test cycles."}, {"domain": "Domain 5", "domainName": "Testing, Troubleshooting & Deployment", "scenario": "A team wants to safely deploy a new version of their GenAI model in production. They want to gradually shift traffic from the old model to the new model, with the ability to instantly roll back if quality degrades. They're using SageMaker endpoints.", "options": ["A. Deploy the new model to a separate endpoint and switch DNS when ready", "B. Use SageMaker's canary deployment strategy with traffic shifting", "C. Replace the model in the existing endpoint and monitor", "D. Run both models simultaneously and compare outputs offline"], "correct": 1, "explanation": "SageMaker supports canary deployment (send small % of traffic to new model first, then gradually increase) and blue-green deployment strategies with automatic rollback. Canary deployment allows you to monitor the new model's quality metrics with real traffic while keeping the old model as a fallback. If metrics degrade, traffic automatically shifts back.", "whyWrong": "A: DNS switching is not gradual and makes rollback slow. C: Replacing in-place provides no rollback capability. D: Offline comparison doesn't test with real production traffic patterns."}, {"domain": "Domain 5", "domainName": "Testing, Troubleshooting & Deployment", "scenario": "A team notices their RAG application's answer quality has degraded over time even though the model hasn't changed. Retrieved documents seem less relevant than before. What is the most likely cause and how should they diagnose it?", "options": ["A. The model is experiencing model drift and needs retraining", "B. The knowledge base data has grown/changed, causing embedding space drift \u2014 re-evaluate chunking strategy and re-index", "C. The Bedrock API is throttling requests causing incomplete retrieval", "D. The vector database needs index optimization/compaction"], "correct": 1, "explanation": "When RAG quality degrades without model changes, the most common cause is data drift in the knowledge base. As new documents are added or updated, the embedding space shifts, and the original chunking strategy may no longer be optimal. The fix is to re-evaluate chunking (fixed vs semantic vs hierarchical), potentially re-generate embeddings, and re-index. Use RAGAs metrics to measure retrieval quality before and after.", "whyWrong": "A: Foundation models don't experience 'drift' \u2014 they're static until replaced. C: Throttling causes errors/timeouts, not gradual quality degradation. D: Index optimization affects speed, not the relevance of retrieved documents."}];
+const FLASHCARDS = [{"domain": "Domain 1", "front": "What are the 3 configurable dimension options for Amazon Titan Text Embeddings V2?", "back": "256, 512, and 1024 dimensions. Lower dimensions reduce storage cost and improve speed; higher dimensions improve accuracy. Default is 1024. Supports 100+ languages."}, {"domain": "Domain 1", "front": "When should you use RAG vs Fine-tuning?", "back": "<b>RAG</b>: When you need to add external/dynamic knowledge the model doesn't have. Knowledge can be updated without retraining.<br><b>Fine-tuning</b>: When you need to change the model's behavior, style, terminology, or output format. Uses labeled training data to adjust model weights."}, {"domain": "Domain 1", "front": "What is the difference between Bedrock InvokeModel and Converse API?", "back": "<b>InvokeModel</b>: Low-level API with provider-specific request/response formats (different JSON for Claude vs Llama vs Titan).<br><b>Converse</b>: Unified, model-agnostic API for multi-turn conversations, tool use, streaming. Change model ID without changing code. Recommended for most use cases."}, {"domain": "Domain 1", "front": "What are the 3 chunking strategies in Bedrock Knowledge Bases?", "back": "<b>Fixed-size</b>: Split by token count (e.g., 300 tokens with 20% overlap). Simple, fast.<br><b>Semantic</b>: Groups sentences by meaning using embeddings. Better coherence.<br><b>Hierarchical</b>: Parent-child chunks \u2014 parent provides broader context, child provides specific detail. Best for complex documents."}, {"domain": "Domain 1", "front": "What is the Amazon Nova model family?", "back": "Amazon's first-party models on Bedrock:<br>\u2022 <b>Nova Micro</b>: Text-only, fastest, lowest cost<br>\u2022 <b>Nova Lite</b>: Multimodal (text+image+video input), low cost<br>\u2022 <b>Nova Pro</b>: Multimodal, best balance of quality/speed/cost<br>\u2022 <b>Nova Premier</b>: Most capable, complex reasoning<br>\u2022 <b>Nova Canvas</b>: Image generation<br>\u2022 <b>Nova Reel</b>: Video generation<br>\u2022 <b>Nova Sonic</b>: Speech-to-speech"}, {"domain": "Domain 1", "front": "What is Cross-Region Inference in Bedrock?", "back": "Automatically routes requests across multiple AWS regions for higher throughput and availability. Uses a single inference profile \u2014 no need to manage per-region endpoints. Only pay for actual usage (on-demand). Works with prompt caching. Ideal for spiky or high-volume workloads."}, {"domain": "Domain 1", "front": "Compare Amazon OpenSearch vs pgvector vs S3 Vectors for vector storage", "back": "<b>OpenSearch</b>: Full-featured search engine. Supports hybrid search (keyword + vector). Best for complex search combining BM25 + k-NN. HNSW algorithm.<br><b>pgvector (Aurora)</b>: PostgreSQL extension. Good when you already use Aurora. Moderate scale.<br><b>S3 Vectors</b>: Lowest cost for billion-scale vector storage. Eventual consistency. Best for massive-scale, batch-updated workloads."}, {"domain": "Domain 1", "front": "What HNSW parameters should you know for the exam?", "back": "<b>M</b>: Max connections per node (default 16). Higher = better recall, more memory.<br><b>ef_construction</b>: Build-time search width (default 200). Higher = better index quality, slower build.<br><b>ef_search</b>: Query-time search width (default 100). Higher = better recall, slower queries.<br>Trade-off: accuracy vs speed/memory."}, {"domain": "Domain 1", "front": "What is Bedrock Batch Inference?", "back": "Asynchronous, large-scale model inference at up to 50% cost savings vs on-demand. Submit jobs via S3 (input JSONL \u2192 output JSONL). Ideal for processing thousands/millions of records without real-time requirements. No endpoint management."}, {"domain": "Domain 1", "front": "What is Model Distillation in Bedrock?", "back": "Transfer knowledge from a large 'teacher' model to a smaller 'student' model. The student learns to approximate the teacher's outputs at lower cost and latency. Done through Bedrock's managed distillation \u2014 no manual training pipeline needed."}, {"domain": "Domain 1", "front": "What is the Bedrock Intelligent Prompt Routing feature?", "back": "Automatically routes requests to an appropriate model based on prompt complexity. Simple requests go to cheaper/faster models; complex ones go to premium models. Single API integration point. Optimizes cost-to-quality ratio without building custom routing logic."}, {"domain": "Domain 1", "front": "When should you use Bedrock Knowledge Bases vs building custom RAG?", "back": "<b>Bedrock Knowledge Bases</b>: Fully managed ingestion, chunking, embedding, vector storage, retrieval, citations. Choose this for faster time-to-production and less infrastructure.<br><b>Custom RAG</b>: Build your own pipeline when you need custom chunking logic, hybrid search tuning, custom reranking, or specific vector DB features not supported by Knowledge Bases."}, {"domain": "Domain 1", "front": "What is Amazon Bedrock Data Automation?", "back": "Automatically extracts structured data from complex documents: tables, forms, charts, images. Pre-processes documents before ingestion into Knowledge Bases. Improves retrieval accuracy for structured content that simple text chunking handles poorly."}, {"domain": "Domain 2", "front": "What is the difference between Bedrock Agents vs Strands Agents SDK?", "back": "<b>Bedrock Agents</b>: Fully managed, serverless. Define action groups (tools) and KB integrations. AWS handles ReAct orchestration, scaling, session management. Less customizable.<br><b>Strands SDK</b>: Open-source Python framework. Full control over agent logic, tool definitions, and orchestration. Self-hosted (you manage compute, scaling). More customizable."}, {"domain": "Domain 2", "front": "When to use Bedrock Flows vs Step Functions?", "back": "<b>Bedrock Flows</b>: No-code visual builder for prompt chains. Best for LLM-centric workflows (prompt \u2192 retrieve \u2192 generate \u2192 guardrail). Business users can edit.<br><b>Step Functions</b>: General-purpose workflow orchestration. Best for complex business logic, deterministic execution, audit trails, error handling, integration with 200+ AWS services."}, {"domain": "Domain 2", "front": "What are the 7 components of Amazon Bedrock AgentCore?", "back": "1. <b>Runtime</b>: Isolated session execution (up to 8hr, bidirectional streaming)<br>2. <b>Gateway</b>: Convert APIs/Lambda to agent tools, MCP server connection<br>3. <b>Policy</b>: Natural language \u2192 Cedar policies, real-time enforcement<br>4. <b>Memory</b>: Session memory + episodic memory (cross-session learning)<br>5. <b>Evaluations</b>: 13 built-in evaluators, custom evaluators<br>6. <b>Identity</b>: Multi-tenant, identity provider integration<br>7. <b>Observability</b>: CloudWatch + OpenTelemetry"}, {"domain": "Domain 2", "front": "What is the MCP (Model Context Protocol)?", "back": "An open standard for connecting AI agents to external tools and data sources. Uses JSON-RPC over SSE (Server-Sent Events) or stdio transport. MCP servers expose tools; MCP clients (agents) consume them. Enables interoperable tool ecosystems. Deploy on ECS/Fargate for persistent connections (not Lambda)."}, {"domain": "Domain 2", "front": "Why can't you deploy MCP servers on Lambda?", "back": "MCP uses SSE (Server-Sent Events) for persistent bidirectional streaming. Lambda has a 15-minute max timeout and doesn't support persistent connections. Use ECS Fargate or EC2 for MCP servers. AgentCore Gateway can also connect to external MCP servers."}, {"domain": "Domain 2", "front": "What is Amazon Q Developer?", "back": "AI-powered development assistant (replaced CodeWhisperer). Features: inline code generation, code transformation/refactoring, security vulnerability scanning, unit test generation, code explanation, CLI assistance. Works in VS Code, JetBrains, and AWS Console. Understands project context."}, {"domain": "Domain 2", "front": "What is Amazon Q Business?", "back": "Fully managed GenAI assistant for enterprises. Connects to 40+ data sources (Confluence, SharePoint, Salesforce, S3, databases). Provides natural language Q&A across all sources. Respects existing ACLs/permissions. No custom RAG pipeline needed."}, {"domain": "Domain 2", "front": "What is AWS Amplify AI Kit?", "back": "Provides declarative React UI components for GenAI apps: &lt;AIConversation&gt; for chat interfaces with streaming, conversation history, and Bedrock integration. Handles auth, WebSocket connections, and state management. Rapid prototyping for mobile/web GenAI features."}, {"domain": "Domain 2", "front": "What retry configuration does AWS recommend for Bedrock?", "back": "\u2022 Initial delay: 100ms<br>\u2022 Backoff multiplier: 2x (exponential)<br>\u2022 Max retries: 3-5 attempts<br>\u2022 Add jitter to prevent thundering herd<br>\u2022 Circuit breaker: trip after 50% failures over 10 requests<br>This handles ThrottlingException (429) and transient errors."}, {"domain": "Domain 2", "front": "What is the circuit breaker pattern for Bedrock?", "back": "Prevent cascading failures by stopping requests when error rate exceeds threshold. Typical config: trip after 50% failure rate over 10 requests. States: Closed (normal) \u2192 Open (blocking) \u2192 Half-Open (testing). Combine with exponential backoff and fallback responses."}, {"domain": "Domain 2", "front": "What is AgentCore Runtime?", "back": "Provides isolated execution environments for agent sessions. Each session runs in its own sandbox with up to 8 hours of continuous execution. Supports bidirectional streaming for real-time interaction. Includes Code Interpreter (run Python/JS) and Browser Runtime (navigate web)."}, {"domain": "Domain 2", "front": "What is AgentCore Gateway?", "back": "A unified tool management layer that: (1) converts existing APIs and Lambda functions into agent-compatible tools, (2) connects to external MCP servers, (3) handles authentication and routing. Single integration point for all agent tool access."}, {"domain": "Domain 2", "front": "What is Bedrock Prompt Management?", "back": "Service for creating, versioning, testing, and managing prompt templates. Features: variable substitution, version control, A/B testing of prompt variants, integration with Bedrock Flows. Enables non-developers to iterate on prompts through a UI."}, {"domain": "Domain 2", "front": "What is Amazon Bedrock Data Automation?", "back": "Automated document processing: extracts text, tables, key-value pairs from PDFs, images, and other documents. Pre-processes content before ingestion into Knowledge Bases. Better than raw text extraction for structured content like financial statements and forms."}, {"domain": "Domain 2", "front": "How does CRM enhancement with Lambda + GenAI work?", "back": "Pattern: CRM events trigger Lambda \u2192 Lambda calls Bedrock for AI processing (summarize customer interactions, generate next-best-action recommendations, auto-draft responses) \u2192 results written back to CRM. Common with Salesforce, HubSpot integration via EventBridge."}, {"domain": "Domain 3", "front": "What Guardrail parameters are needed in API calls?", "back": "Required: <b>guardrailIdentifier</b> (Guardrail ID or ARN) and <b>guardrailVersion</b> (version number or 'DRAFT').<br>Optional: <b>trace: 'enabled'</b> to get detailed filter assessment results for debugging.<br>Applied via Converse API, InvokeModel, or Agents."}, {"domain": "Domain 3", "front": "What are the 5 built-in Guardrail content filter categories?", "back": "1. <b>HATE</b>: Discriminatory language<br>2. <b>INSULTS</b>: Demeaning language<br>3. <b>SEXUAL</b>: Sexual content<br>4. <b>VIOLENCE</b>: Violent content<br>5. <b>MISCONDUCT</b>: Criminal/harmful activities<br>Plus: <b>PROMPT_ATTACK</b> filter for prompt injection/jailbreak detection.<br>Each has configurable strength: NONE/LOW/MEDIUM/HIGH."}, {"domain": "Domain 3", "front": "What is SageMaker Model Cards?", "back": "Standardized documentation for ML models. Captures: model purpose, training data details, performance metrics across demographics, ethical considerations, limitations, and intended use cases. Required for AI governance, audit compliance, and regulatory requirements. Integrates with SageMaker Model Registry."}, {"domain": "Domain 3", "front": "What SageMaker Clarify bias metrics should you know?", "back": "<b>DPPL</b>: Difference in Positive Proportions in Labels \u2014 measures labeling bias.<br><b>KL Divergence</b>: Measures distribution difference between demographic groups.<br><b>Class Imbalance Ratio (CI)</b>: Measures if one group is over/under-represented.<br>Pre-training metrics detect data bias; post-training metrics detect model prediction bias."}, {"domain": "Domain 3", "front": "What is data lineage tracking in AI governance?", "back": "Tracking the origin, transformations, and usage of data throughout the ML pipeline. Includes: source data \u2192 preprocessing \u2192 feature engineering \u2192 training \u2192 evaluation \u2192 deployment. SageMaker Experiments and Model Registry help track lineage. Critical for compliance and reproducibility."}, {"domain": "Domain 3", "front": "What are the Responsible AI principles on AWS?", "back": "1. <b>Fairness</b>: No bias across demographic groups<br>2. <b>Transparency</b>: Explainable AI decisions<br>3. <b>Privacy</b>: Data protection, no training on customer data<br>4. <b>Security</b>: Encryption, access control, VPC isolation<br>5. <b>Robustness</b>: Consistent performance under varying conditions<br>6. <b>Governance</b>: Model inventory, approval workflows, audit trails"}, {"domain": "Domain 3", "front": "What is the Guardrail denied topics feature?", "back": "Custom topic policies that block the model from discussing specific subjects. Define topics with a natural language description and sample phrases. The Guardrail detects when input or output relates to a denied topic and blocks it. Use for: competitor discussions, financial advice, medical diagnosis, etc."}, {"domain": "Domain 3", "front": "What is the Guardrail word filter feature?", "back": "Blocks specific words or phrases in input or output. Supports exact match and pattern matching. Use for: profanity, competitor names, internal code names, banned terms. Simpler than content filters but useful for precise term blocking."}, {"domain": "Domain 3", "front": "How does Bedrock protect customer data?", "back": "\u2022 Data is never used to train or improve base models<br>\u2022 Data encrypted in transit (TLS 1.2) and at rest (AWS KMS)<br>\u2022 VPC endpoints via PrivateLink for network isolation<br>\u2022 No data stored by Bedrock after processing (stateless)<br>\u2022 SOC, ISO, HIPAA eligible<br>\u2022 Customer controls encryption keys"}, {"domain": "Domain 3", "front": "What is AgentCore Policy?", "back": "Converts natural language access rules into Cedar policies for real-time enforcement. Example: 'Only admin users can delete records' \u2192 Cedar policy. Enforced during agent execution at the tool-call level. Supports identity-aware policies (user role, tenant, custom claims)."}, {"domain": "Domain 3", "front": "What is AI governance model inventory?", "back": "A centralized catalog of all ML/AI models in the organization. Tracks: model name, owner, purpose, status (dev/staging/prod), version, approval status, risk level, data sources, performance metrics. SageMaker Model Registry provides this capability. Essential for enterprise AI governance."}, {"domain": "Domain 3", "front": "What encryption options exist for Bedrock?", "back": "\u2022 <b>In-transit</b>: TLS 1.2+ for all API calls<br>\u2022 <b>At-rest</b>: AWS-managed keys (default) or customer-managed KMS keys<br>\u2022 <b>Fine-tuned models</b>: Encrypted with customer KMS keys<br>\u2022 <b>Knowledge Bases</b>: Vector store encryption + S3 source encryption<br>\u2022 <b>Guardrails</b>: Config encrypted at rest"}, {"domain": "Domain 4", "front": "What is Provisioned Throughput in Bedrock?", "back": "Dedicated model capacity at a fixed hourly rate. You specify Model Units (throughput capacity). Break-even at ~70% utilization vs on-demand. Available as 1-month or 6-month commitments (longer = cheaper). Best for predictable, high-volume workloads. Guarantees consistent latency."}, {"domain": "Domain 4", "front": "What is a Model Unit in Bedrock?", "back": "A unit of throughput capacity for Provisioned Throughput. Represents a fixed amount of input/output token processing per minute. Different models require different numbers of Model Units. You purchase Model Units, not direct token capacity."}, {"domain": "Domain 4", "front": "How does prompt caching work in Bedrock?", "back": "Cache static prompt prefixes (system prompts, document context) so they're processed once. Subsequent requests with same prefix get cache-read pricing (cheaper).<br>\u2022 Default TTL: 5 minutes<br>\u2022 Extended TTL: 1 hour<br>\u2022 Minimum tokens per checkpoint: 1024 (Claude)<br>\u2022 Works with: Converse, InvokeModel, ConverseStream, InvokeModelWithResponseStream<br>\u2022 Compatible with Cross-Region Inference"}, {"domain": "Domain 4", "front": "What is model cascading for cost optimization?", "back": "Route requests through models of increasing capability/cost. Start with the cheapest model; if confidence is low, escalate to a more expensive model. Example: Nova Micro \u2192 Nova Lite \u2192 Nova Pro \u2192 Claude Sonnet. Reduces average cost while maintaining quality. Bedrock's Intelligent Prompt Routing automates this."}, {"domain": "Domain 4", "front": "How to optimize HNSW index memory in OpenSearch?", "back": "1. Reduce M parameter (fewer connections per node)<br>2. Use lower-dimension embeddings (Titan V2: 256 vs 1024)<br>3. Enable product quantization (PQ) for vector compression<br>4. Use disk-based k-NN for infrequently accessed data<br>5. Optimize ef_search based on latency requirements<br>Each trades some recall accuracy for significant memory savings."}, {"domain": "Domain 4", "front": "What is the difference between on-demand vs provisioned pricing in Bedrock?", "back": "<b>On-demand</b>: Pay per token (input + output). No commitment. Best for variable/unpredictable workloads. Higher per-token cost.<br><b>Provisioned</b>: Fixed hourly rate for dedicated capacity (Model Units). Commitment (1-month or 6-month). Best when utilization >70%. Lower effective per-token cost at scale."}, {"domain": "Domain 4", "front": "What is the prompt caching cost model?", "back": "\u2022 <b>Cache write</b>: May cost slightly more than normal token processing (one-time cost to cache the prefix)<br>\u2022 <b>Cache read</b>: Significantly cheaper than normal processing (up to 90% savings for cached tokens)<br>\u2022 Break-even: After ~2-3 cache reads, you save money<br>\u2022 Best for: repeated system prompts, document QA, agentic workflows"}, {"domain": "Domain 4", "front": "What are Cross-Region Inference cost implications?", "back": "Uses on-demand pricing \u2014 no additional charge for the cross-region routing itself. You pay the same per-token rate as single-region on-demand. Benefit is higher availability and throughput without provisioning. No commitment required. Ideal for spiky traffic."}, {"domain": "Domain 5", "front": "What is the RAGAs framework?", "back": "Retrieval Augmented Generation Assessment \u2014 a framework for evaluating RAG pipelines. Key metrics:<br>\u2022 <b>Context Relevance</b>: Are retrieved docs relevant to the query?<br>\u2022 <b>Faithfulness</b>: Is the answer grounded in retrieved context?<br>\u2022 <b>Answer Relevance</b>: Does the answer address the question?<br>\u2022 <b>Answer Correctness</b>: Is the answer factually correct?<br>Automated evaluation using LLM-as-judge."}, {"domain": "Domain 5", "front": "What is the LLM-as-judge evaluation pattern?", "back": "Use a powerful LLM (e.g., Claude 3.5 Sonnet) to evaluate outputs of another model across quality dimensions: coherence, relevance, fluency, harmlessness, helpfulness. Scalable alternative to human evaluation. Supported natively by Bedrock Model Evaluation. May have biases toward its own style."}, {"domain": "Domain 5", "front": "What Bedrock Model Evaluation job types exist?", "back": "<b>Automatic</b>: Uses built-in metrics (accuracy, toxicity, robustness) or LLM-as-judge. No human reviewers needed. Scalable.<br><b>Human</b>: Uses human reviewers via SageMaker Ground Truth. Higher quality but expensive and slow. Use for subjective quality assessment and edge cases."}, {"domain": "Domain 5", "front": "What is A/B testing with SageMaker Experiments?", "back": "Compare multiple model versions or configurations by tracking metrics across experiment runs. Log parameters, metrics, and artifacts for each variant. Use SageMaker Experiments to organize trials and compare results. Integrates with the Model Registry for version tracking."}, {"domain": "Domain 5", "front": "What deployment strategies exist for GenAI on SageMaker?", "back": "<b>Canary</b>: Send small % to new model, gradually increase. Auto-rollback on metric degradation.<br><b>Blue-Green</b>: Deploy new model in parallel, switch traffic at once. Old model stays available for rollback.<br><b>Linear</b>: Gradually shift traffic in equal increments (e.g., 10% every 10 min).<br>All use CloudWatch alarms for automated rollback."}, {"domain": "Domain 5", "front": "What are AgentCore's 13 built-in evaluators?", "back": "Evaluate agent quality across dimensions: tool selection accuracy, response relevance, factual grounding, safety/toxicity, instruction following, coherence, consistency, completeness, conciseness, helpfulness, harmlessness, code quality, and conversation quality. Support continuous monitoring and batch evaluation. Custom evaluators can be added."}, {"domain": "Domain 5", "front": "How to troubleshoot RAG quality degradation?", "back": "1. Check retrieval quality with RAGAs metrics (context relevance, faithfulness)<br>2. Evaluate chunking strategy \u2014 re-index if data has changed significantly<br>3. Check embedding model consistency (same model for indexing and querying)<br>4. Review vector DB index health (fragmentation, stale entries)<br>5. Validate metadata filters aren't too restrictive<br>6. Test with known-good queries to isolate retrieval vs generation issues"}, {"domain": "Domain 1", "front": "What is Bedrock Knowledge Bases RetrieveAndGenerate API?", "back": "A single API call that combines retrieval + augmentation + generation. Automatically: (1) embeds the query, (2) searches the vector store, (3) builds the augmented prompt, (4) generates a response with citations. Simplest way to implement RAG without managing the pipeline."}, {"domain": "Domain 2", "front": "What is AgentCore Observability?", "back": "Provides built-in monitoring via CloudWatch dashboards (latency, throughput, errors, token usage) and OpenTelemetry integration for distributed tracing. Enables tracking agent behavior across tools, sessions, and models. Critical for production debugging and performance optimization."}, {"domain": "Domain 2", "front": "What is AgentCore Code Interpreter?", "back": "A sandboxed execution environment within AgentCore Runtime. Agents can write and execute Python/JavaScript code to perform calculations, data analysis, chart generation, and file processing. Code runs in isolation \u2014 no access to external networks or host system."}, {"domain": "Domain 3", "front": "What is the Guardrail contextual grounding check?", "back": "Evaluates whether the model response is grounded in the provided source/context. Detects hallucinations by comparing the output against retrieved documents. Configurable grounding threshold. Blocks responses that are not supported by the provided context."}, {"domain": "Domain 4", "front": "What prompt caching TTL options are available?", "back": "<b>Default TTL</b>: 5 minutes \u2014 good for short sessions.<br><b>Extended TTL</b>: 1 hour \u2014 good for longer document QA sessions.<br>Cache is per-model, per-region. Minimum token requirement per checkpoint varies by model (e.g., 1024 tokens for Claude). Cache automatically refreshes on access within TTL."}, {"domain": "Domain 4", "front": "When does Cross-Region Inference make more sense than Provisioned Throughput?", "back": "<b>Cross-Region Inference</b>: Spiky/unpredictable traffic, no commitment wanted, need auto-scaling across regions. On-demand pricing.<br><b>Provisioned Throughput</b>: Steady 24/7 traffic, >70% utilization, need guaranteed latency, cost predictability. Committed pricing."}, {"domain": "Domain 5", "front": "What is Bedrock Model Evaluation?", "back": "Managed service for evaluating model quality. Two modes:<br>\u2022 <b>Automatic</b>: Built-in metrics + LLM-as-judge for quality dimensions (coherence, relevance, fluency, harmlessness)<br>\u2022 <b>Human</b>: Via SageMaker Ground Truth teams<br>Supports comparing multiple models side-by-side. Outputs detailed evaluation reports."}, {"domain": "Domain 1", "front": "What is the difference between Amazon Kendra and Bedrock Knowledge Bases?", "back": "<b>Kendra</b>: Enterprise search engine. Returns ranked documents/passages. Not designed for LLM integration natively.<br><b>Bedrock Knowledge Bases</b>: Purpose-built for RAG. Handles embedding, vector storage, retrieval, and augmentation. Built-in citations. Directly integrates with Bedrock models and Agents."}, {"domain": "Domain 2", "front": "What is the ReAct pattern in AI agents?", "back": "<b>Re</b>ason + <b>Act</b>: Agent loop where the LLM (1) Reasons about what to do, (2) Acts by calling a tool, (3) Observes the result, and repeats until it has enough info to answer. Bedrock Agents implement this automatically. Strands SDK gives you manual control over the loop."}, {"domain": "Domain 3", "front": "What is Cedar policy language?", "back": "An open-source authorization policy language created by AWS. Used by AgentCore Policy. Supports: permit/forbid rules, principal/action/resource patterns, conditions based on context. AgentCore Policy auto-generates Cedar from natural language rules. Also used by Amazon Verified Permissions."}];
+const DRILLS = [{"scenario": "You need billion-scale vector storage at the lowest possible cost", "answer": "S3 Vectors", "options": ["S3 Vectors", "OpenSearch", "pgvector", "DynamoDB"]}, {"scenario": "You need to combine keyword search (BM25) with semantic vector search", "answer": "OpenSearch Hybrid Search", "options": ["OpenSearch Hybrid Search", "pgvector", "Bedrock Knowledge Bases", "Kendra"]}, {"scenario": "You need deterministic workflow execution with full audit trail for compliance", "answer": "Step Functions", "options": ["Step Functions", "Bedrock Agents", "Bedrock Flows", "Strands SDK"]}, {"scenario": "You need to prevent prompt injection and jailbreak attacks", "answer": "Guardrails PROMPT_ATTACK filter", "options": ["Guardrails PROMPT_ATTACK filter", "WAF Rules", "System Prompt Instructions", "Input Validation Lambda"]}, {"scenario": "You need to generate and refactor code faster in your IDE", "answer": "Amazon Q Developer", "options": ["Amazon Q Developer", "Amazon Q Business", "CodeGuru", "SageMaker Notebooks"]}, {"scenario": "You need a unified conversational API that works across all Bedrock models", "answer": "Converse API", "options": ["Converse API", "InvokeModel API", "Chat Completions API", "LangChain"]}, {"scenario": "You need employees to search across Confluence, SharePoint, and Salesforce with natural language", "answer": "Amazon Q Business", "options": ["Amazon Q Business", "Amazon Q Developer", "Bedrock Knowledge Bases", "Amazon Kendra"]}, {"scenario": "You need to deploy an MCP server with persistent SSE connections", "answer": "ECS Fargate", "options": ["ECS Fargate", "Lambda", "EC2 Auto Scaling", "AppRunner"]}, {"scenario": "You need to extract structured table data from PDFs before RAG ingestion", "answer": "Bedrock Data Automation", "options": ["Bedrock Data Automation", "Textract", "Bedrock Knowledge Bases", "Custom Parser Lambda"]}, {"scenario": "You need to build a visual prompt chain that non-developers can edit", "answer": "Bedrock Flows", "options": ["Bedrock Flows", "Step Functions", "Bedrock Agents", "LangChain"]}, {"scenario": "You need to detect bias in model predictions across demographic groups", "answer": "SageMaker Clarify", "options": ["SageMaker Clarify", "Bedrock Guardrails", "Bedrock Model Evaluation", "CloudWatch Metrics"]}, {"scenario": "You need standardized ML model documentation for regulatory auditors", "answer": "SageMaker Model Cards", "options": ["SageMaker Model Cards", "SageMaker Experiments", "Bedrock Model Evaluation", "Custom Wiki"]}, {"scenario": "You need to evaluate RAG pipeline quality with automated metrics", "answer": "RAGAs Framework", "options": ["RAGAs Framework", "BLEU/ROUGE Scores", "Bedrock Model Evaluation", "Human Review"]}, {"scenario": "You need to process 500K records through an LLM at 50% cost savings", "answer": "Bedrock Batch Inference", "options": ["Bedrock Batch Inference", "Lambda Parallelization", "Provisioned Throughput", "SageMaker Batch Transform"]}, {"scenario": "You need to route simple prompts to cheap models and complex ones to premium models automatically", "answer": "Intelligent Prompt Routing", "options": ["Intelligent Prompt Routing", "Custom Lambda Router", "API Gateway with Rules", "Model Cascading"]}, {"scenario": "You need isolated agent sessions with up to 8 hours of execution time", "answer": "AgentCore Runtime", "options": ["AgentCore Runtime", "Bedrock Agents", "ECS Fargate Task", "Lambda with SQS"]}, {"scenario": "You need to convert natural language access rules into enforceable policies for an agent", "answer": "AgentCore Policy", "options": ["AgentCore Policy", "IAM Policies", "Guardrails", "Security Hub"]}, {"scenario": "You need an agent that remembers and learns from past interactions across sessions", "answer": "AgentCore Memory", "options": ["AgentCore Memory", "DynamoDB Session Store", "ElastiCache", "Bedrock Agent Session"]}, {"scenario": "You need pre-built React UI components for a GenAI chat interface", "answer": "AWS Amplify AI Kit", "options": ["AWS Amplify AI Kit", "Custom React Components", "Bedrock Chat Widget", "Streamlit"]}, {"scenario": "You need to handle 10x traffic spikes without pre-provisioning capacity", "answer": "Cross-Region Inference", "options": ["Cross-Region Inference", "Provisioned Throughput", "Auto Scaling", "Lambda Concurrency"]}, {"scenario": "You need to cache a 15K token system prompt used in every API call", "answer": "Prompt Caching", "options": ["Prompt Caching", "ElastiCache", "DynamoDB Cache", "S3 Object Cache"]}, {"scenario": "You need to redact PII from LLM outputs automatically", "answer": "Guardrails Sensitive Info Filter", "options": ["Guardrails Sensitive Info Filter", "Comprehend PII Detection", "Custom Regex Lambda", "Macie"]}, {"scenario": "You need continuous monitoring of agent tool selection accuracy in production", "answer": "AgentCore Evaluations", "options": ["AgentCore Evaluations", "CloudWatch Metrics", "X-Ray Tracing", "Custom Test Suite"]}, {"scenario": "You need to gradually shift traffic to a new model version with auto-rollback", "answer": "SageMaker Canary Deployment", "options": ["SageMaker Canary Deployment", "DNS Failover", "Blue-Green with ALB", "Feature Flags"]}, {"scenario": "You need a fully managed RAG solution with built-in citations", "answer": "Bedrock Knowledge Bases", "options": ["Bedrock Knowledge Bases", "Custom RAG Pipeline", "Amazon Kendra", "OpenSearch + Bedrock"]}, {"scenario": "You need to fine-tune a model to use industry-specific terminology", "answer": "Bedrock Custom Model Fine-tuning", "options": ["Bedrock Custom Model Fine-tuning", "RAG with Industry Docs", "Prompt Engineering", "SageMaker Training Job"]}, {"scenario": "You need to convert Lambda functions into agent-compatible tools AND connect to MCP servers", "answer": "AgentCore Gateway", "options": ["AgentCore Gateway", "API Gateway", "Bedrock Action Groups", "Custom MCP Proxy"]}, {"scenario": "You need multi-modal understanding (text + image + video) from a single model", "answer": "Amazon Nova Pro", "options": ["Amazon Nova Pro", "Claude 3.5 Sonnet", "Llama 3", "Titan Multimodal"]}, {"scenario": "You need to compare two models for summarization quality without labeled data", "answer": "Bedrock Model Eval (LLM-as-judge)", "options": ["Bedrock Model Eval (LLM-as-judge)", "BLEU Scores", "Human Evaluation", "Perplexity Measurement"]}, {"scenario": "You need multi-tenant identity management with external Okta integration for agents", "answer": "AgentCore Identity", "options": ["AgentCore Identity", "Amazon Cognito", "IAM Identity Center", "Custom Auth Layer"]}, {"scenario": "You need to version and A/B test prompt templates", "answer": "Bedrock Prompt Management", "options": ["Bedrock Prompt Management", "S3 Versioning", "Git Repository", "DynamoDB"]}, {"scenario": "You need speech-to-speech real-time AI conversation", "answer": "Amazon Nova Sonic", "options": ["Amazon Nova Sonic", "Amazon Polly + Transcribe", "Amazon Lex", "Custom Pipeline"]}];
+const PATTERNS = [{"type": "match", "title": "Match the Vector Store to Its Best Use Case", "left": ["Billion-scale, batch-updated embeddings", "Hybrid keyword + semantic search", "Already using PostgreSQL, moderate scale", "Default for Bedrock Knowledge Bases"], "right": ["S3 Vectors", "OpenSearch", "pgvector (Aurora)", "OpenSearch Serverless"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the Agent Framework to Its Characteristic", "left": ["Fully managed, serverless orchestration", "Open-source, self-hosted, full control", "No-code visual prompt chains", "Deterministic audit-trail workflows"], "right": ["Bedrock Agents", "Strands SDK", "Bedrock Flows", "Step Functions"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the Guardrail Feature to Its Purpose", "left": ["Block prompt injection attacks", "Redact credit card numbers from output", "Prevent discussion of competitor products", "Block violent and sexual content"], "right": ["PROMPT_ATTACK filter", "Sensitive Info PII filter", "Denied Topic policy", "Content Filters (VIOLENCE, SEXUAL)"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the AgentCore Component to Its Function", "left": ["Session isolation up to 8 hours", "Natural language \u2192 Cedar policies", "Cross-session learning", "13 built-in quality evaluators"], "right": ["Runtime", "Policy", "Memory", "Evaluations"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the Bedrock API to Its Use Case", "left": ["Provider-specific low-level access", "Unified multi-turn conversation", "Async large-scale processing", "Retrieve relevant knowledge chunks"], "right": ["InvokeModel", "Converse", "Batch Inference", "RetrieveAndGenerate"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the Amazon Q Product to Its Purpose", "left": ["IDE code generation and refactoring", "Enterprise knowledge search across 40+ sources", "Security vulnerability scanning in code", "Natural language Q&A for internal employees"], "right": ["Q Developer", "Q Business", "Q Developer", "Q Business"], "correctPairs": [[0, 0], [1, 1], [2, 0], [3, 1]]}, {"type": "match", "title": "Match the Cost Optimization Strategy to the Traffic Pattern", "left": ["Consistent 24/7 high-volume traffic", "10x traffic spikes during events", "Repeated 15K token system prompt", "500K records, results needed in 24 hours"], "right": ["Provisioned Throughput", "Cross-Region Inference", "Prompt Caching", "Batch Inference"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "match", "title": "Match the Chunking Strategy to Its Best Scenario", "left": ["Simple, fast processing of uniform text", "Grouping related sentences by meaning", "Complex documents needing broad + specific context", "Tables and structured data extraction"], "right": ["Fixed-size chunking", "Semantic chunking", "Hierarchical chunking", "Bedrock Data Automation + chunking"], "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]]}, {"type": "sequence", "title": "Order the RAG Pipeline Steps", "items": ["Document ingestion and preprocessing", "Chunking (fixed/semantic/hierarchical)", "Generate embeddings with embedding model", "Store vectors in vector database", "User query \u2192 generate query embedding", "Retrieve relevant chunks via similarity search", "Augment prompt with retrieved context", "Generate response with LLM"], "correctOrder": [0, 1, 2, 3, 4, 5, 6, 7]}, {"type": "sequence", "title": "Order the ReAct Agent Pattern Steps", "items": ["Receive user query", "Reason about what action to take", "Select and call appropriate tool", "Observe tool result", "Reason whether more actions needed", "Repeat action-observation if needed", "Generate final response to user"], "correctOrder": [0, 1, 2, 3, 4, 5, 6]}, {"type": "sequence", "title": "Order the Bedrock Knowledge Base Setup Steps", "items": ["Upload source documents to S3", "Create Knowledge Base and select embedding model", "Choose vector store (OpenSearch Serverless / Aurora / etc.)", "Configure chunking strategy", "Start data ingestion (sync)", "Test retrieval with sample queries", "Connect Knowledge Base to Agent or application"], "correctOrder": [0, 1, 2, 3, 4, 5, 6]}, {"type": "sequence", "title": "Order the Exponential Backoff Retry Pattern", "items": ["Send initial API request", "Receive ThrottlingException (429)", "Wait 100ms (initial delay)", "Retry the request", "If still failing, wait 200ms (2x backoff)", "Retry again", "If still failing, wait 400ms + random jitter", "After max retries, trip circuit breaker"], "correctOrder": [0, 1, 2, 3, 4, 5, 6, 7]}, {"type": "sequence", "title": "Order the Fine-tuning Workflow on Bedrock", "items": ["Prepare labeled training data in JSONL format", "Upload training data to S3", "Create a custom model training job in Bedrock", "Select base model and configure hyperparameters", "Training runs (managed by Bedrock)", "Evaluate custom model performance", "Deploy as Provisioned Throughput endpoint"], "correctOrder": [0, 1, 2, 3, 4, 5, 6]}, {"type": "sequence", "title": "Order the Guardrail Evaluation Flow", "items": ["User input received by application", "Input evaluated against Guardrail (input filters)", "If blocked, return blocked response to user", "If passed, send input to LLM for processing", "LLM generates response", "Output evaluated against Guardrail (output filters)", "If blocked, return safe fallback response", "If passed, return LLM response to user"], "correctOrder": [0, 1, 2, 3, 4, 5, 6, 7]}, {"type": "sequence", "title": "Order the MCP Tool Integration Flow", "items": ["Agent receives user request requiring external data", "Agent identifies needed tool via MCP client", "MCP client sends JSON-RPC request to MCP server", "MCP server authenticates and validates request", "MCP server executes tool (database query, API call, etc.)", "MCP server returns result via SSE stream", "Agent incorporates tool result into reasoning", "Agent generates final response to user"], "correctOrder": [0, 1, 2, 3, 4, 5, 6, 7]}, {"type": "sequence", "title": "Order the Prompt Caching Flow", "items": ["First request with long system prompt sent to Bedrock", "Bedrock processes full prompt (cache miss)", "Cache checkpoint created for the prompt prefix", "Response returned with cache-write metadata", "Second request with same prefix + new user message", "Bedrock detects cache hit for prefix tokens", "Only new tokens processed at full cost", "Response returned with cache-read metadata and lower cost"], "correctOrder": [0, 1, 2, 3, 4, 5, 6, 7]}];
+const TRACKER_DOMAINS = [{"name": "Domain 1: Selecting & Integrating Foundation Models and Data", "weight": "31%", "color": "#0073BB", "tasks": ["Task 1.1: Select appropriate foundation models for specific use cases", "Task 1.2: Select appropriate embedding models for RAG", "Task 1.3: Configure vector databases and indexing strategies", "Task 1.4: Implement data ingestion pipelines for Knowledge Bases", "Task 1.5: Implement retrieval and augmentation patterns", "Task 1.6: Understand model customization (fine-tuning, distillation)", "Task 1.7: Use Bedrock APIs (Converse, InvokeModel, Batch)"]}, {"name": "Domain 2: Building GenAI Applications and Agents", "weight": "26%", "color": "#FF9900", "tasks": ["Task 2.1: Implement Bedrock Agents with action groups", "Task 2.2: Build agentic patterns (ReAct, tool use, MCP)", "Task 2.3: Implement multi-step workflows (Flows, Step Functions)", "Task 2.4: Handle errors, retries, and resilience patterns", "Task 2.5: Application integration (Q Developer, Q Business, Amplify)", "Task 2.6: Understand AgentCore components (Runtime, Gateway, Policy, Memory)", "Task 2.7: Implement prompt management and versioning"]}, {"name": "Domain 3: Security, Compliance & Governance", "weight": "20%", "color": "#1D8348", "tasks": ["Task 3.1: Configure Bedrock Guardrails (content, PII, topics, prompt attack)", "Task 3.2: Implement data protection (encryption, VPC, PrivateLink)", "Task 3.3: AI governance (model inventory, approval workflows, Model Cards)", "Task 3.4: Responsible AI (bias detection, Clarify, fairness metrics)", "Task 3.5: Identity and access control (IAM, AgentCore Policy/Identity)"]}, {"name": "Domain 4: Optimization & Cost Management", "weight": "12%", "color": "#7D3C98", "tasks": ["Task 4.1: Optimize costs (Provisioned Throughput, Batch, prompt caching)", "Task 4.2: Implement intelligent routing and model cascading", "Task 4.3: Scale with Cross-Region Inference", "Task 4.4: Optimize vector index memory (HNSW params, dimensions, PQ)"]}, {"name": "Domain 5: Testing, Troubleshooting & Deployment", "weight": "11%", "color": "#C0392B", "tasks": ["Task 5.1: Evaluate RAG quality (RAGAs, retrieval metrics)", "Task 5.2: Model evaluation (LLM-as-judge, Bedrock Model Evaluation)", "Task 5.3: Deployment strategies (canary, blue-green, A/B testing)", "Task 5.4: Monitor agents (AgentCore Evaluations, observability)", "Task 5.5: Troubleshoot common issues (throttling, quality degradation)"]}];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = loadState();
+
+function loadState() {
+  try {
+    const s = JSON.parse(window._memStore || null);
+    if (s && s.version === 2) return s;
+  } catch(e) {}
+  return defaultState();
+}
+
+function defaultState() {
+  return {
+    version: 2,
+    qAnswers: {},
+    qCurrentIdx: 0,
+    qFilter: 'all',
+    fcMastery: {},
+    fcCurrentIdx: 0,
+    fcFilter: 'all',
+    drillResults: [],
+    pmResults: {},
+    trackerRatings: {},
+    examDate: null
+  };
+}
+
+function saveState() {
+  window._memStore = JSON.stringify(state);
+  
+}
+
+function resetAllProgress() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  state = defaultState();
+  saveState();
+  location.reload();
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tabId).classList.add('active');
+  if (btn) btn.classList.add('active');
+  // Initialize tab content
+  if (tabId === 'practice') initPractice();
+  if (tabId === 'flashcards') initFlashcards();
+  if (tabId === 'drill') initDrill();
+  if (tabId === 'patterns') initPatterns();
+  if (tabId === 'tracker') initTracker();
+}
+
+// ============================================================
+// PRACTICE QUESTIONS
+// ============================================================
+let qFiltered = [];
+
+function initPractice() {
+  const filterEl = document.getElementById('qDomainFilter');
+  const domains = ['all', 'Domain 1', 'Domain 2', 'Domain 3', 'Domain 4', 'Domain 5'];
+  const labels = ['All Domains', 'D1: FM Integration (31%)', 'D2: Implementation (26%)', 'D3: Security (20%)', 'D4: Optimization (12%)', 'D5: Testing (11%)'];
+  filterEl.innerHTML = domains.map((d, i) =>
+    '<button class="filter-btn ' + (state.qFilter === d ? 'active' : '') + '" onclick="filterQuestions(\x27' + d + '\x27)">' + labels[i] + '</button>'
+  ).join('');
+  filterQuestions(state.qFilter);
+}
+
+function filterQuestions(domain) {
+  state.qFilter = domain;
+  state.qCurrentIdx = 0;
+  saveState();
+  qFiltered = domain === 'all' ? [...QUESTIONS] : QUESTIONS.filter(q => q.domain === domain);
+  document.querySelectorAll('#qDomainFilter .filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.includes(domain === 'all' ? 'All' : domain.replace('Domain ', 'D')));
+  });
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const area = document.getElementById('qArea');
+  const summary = document.getElementById('qScoreSummary');
+  if (qFiltered.length === 0) {
+    area.innerHTML = '<p style="text-align:center;padding:2rem;color:#777;">No questions for this filter.</p>';
+    return;
+  }
+  const idx = state.qCurrentIdx;
+  if (idx >= qFiltered.length) {
+    showQuizSummary();
+    return;
+  }
+  summary.style.display = 'none';
+  const q = qFiltered[idx];
+  const answered = state.qAnswers[getQKey(q)];
+  let html = '<div class="q-progress">';
+  html += '<span class="q-count">Question ' + (idx + 1) + ' of ' + qFiltered.length + '</span>';
+  html += '<span class="q-domain-tag tag tag-blue">' + q.domain + '</span>';
+  html += '</div>';
+  html += '<div class="q-scenario">' + q.scenario + '</div>';
+  html += '<ul class="q-options">';
+  q.options.forEach((opt, i) => {
+    let cls = '';
+    if (answered !== undefined) {
+      cls = 'disabled';
+      if (i === q.correct) cls += ' correct';
+      else if (i === answered && answered !== q.correct) cls += ' incorrect';
+    } else if (i === state._qSelected) {
+      cls = 'selected';
+    }
+    html += '<li class="' + cls + '" onclick="selectAnswer(' + i + ')">' + opt + '</li>';
+  });
+  html += '</ul>';
+
+  if (answered !== undefined) {
+    const isCorrect = answered === q.correct;
+    html += '<div class="q-explanation ' + (isCorrect ? 'correct-bg' : 'incorrect-bg') + '">';
+    html += '<h4>' + (isCorrect ? '&#10004; Correct!' : '&#10008; Incorrect') + '</h4>';
+    html += '<p><b>Why:</b> ' + q.explanation + '</p>';
+    if (q.whyWrong) html += '<p class="why-wrong"><b>Why other answers are wrong:</b> ' + q.whyWrong + '</p>';
+    html += '</div>';
+  }
+
+  html += '<div style="display:flex;justify-content:space-between;margin-top:1rem;">';
+  html += '<button class="btn btn-outline btn-sm" onclick="prevQuestion()" ' + (idx === 0 ? 'disabled' : '') + '>&#8592; Previous</button>';
+  if (answered !== undefined) {
+    html += '<button class="btn btn-primary btn-sm" onclick="nextQuestion()">Next &#8594;</button>';
+  } else {
+    html += '<button class="btn btn-primary btn-sm" onclick="submitAnswer()" ' + (state._qSelected === undefined ? 'disabled' : '') + '>Submit Answer</button>';
+  }
+  html += '</div>';
+  area.innerHTML = html;
+}
+
+function getQKey(q) {
+  return q.domain + '_' + q.scenario.substring(0, 50);
+}
+
+function selectAnswer(i) {
+  const q = qFiltered[state.qCurrentIdx];
+  if (state.qAnswers[getQKey(q)] !== undefined) return;
+  state._qSelected = i;
+  renderQuestion();
+}
+
+function submitAnswer() {
+  if (state._qSelected === undefined) return;
+  const q = qFiltered[state.qCurrentIdx];
+  state.qAnswers[getQKey(q)] = state._qSelected;
+  state._qSelected = undefined;
+  saveState();
+  renderQuestion();
+}
+
+function nextQuestion() {
+  state.qCurrentIdx++;
+  state._qSelected = undefined;
+  if (state.qCurrentIdx >= qFiltered.length) {
+    showQuizSummary();
+  } else {
+    renderQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (state.qCurrentIdx > 0) {
+    state.qCurrentIdx--;
+    state._qSelected = undefined;
+    renderQuestion();
+  }
+}
+
+function showQuizSummary() {
+  const area = document.getElementById('qArea');
+  const summary = document.getElementById('qScoreSummary');
+
+  // Calculate scores per domain
+  const domainScores = {};
+  qFiltered.forEach(q => {
+    const key = getQKey(q);
+    if (!domainScores[q.domain]) domainScores[q.domain] = { correct: 0, total: 0 };
+    domainScores[q.domain].total++;
+    if (state.qAnswers[key] === q.correct) domainScores[q.domain].correct++;
+  });
+
+  let totalCorrect = 0, totalQ = 0;
+  let html = '<h3 style="margin-bottom:1rem;">Quiz Complete!</h3>';
+  html += '<div class="q-score-summary">';
+  Object.entries(domainScores).forEach(([domain, s]) => {
+    totalCorrect += s.correct;
+    totalQ += s.total;
+    const pct = Math.round((s.correct / s.total) * 100);
+    const color = pct >= 70 ? 'var(--aws-green)' : pct >= 50 ? 'var(--aws-orange)' : 'var(--aws-red)';
+    html += '<div class="score-card"><div class="score-num" style="color:' + color + '">' + pct + '%</div>';
+    html += '<div class="score-label">' + domain + '<br>' + s.correct + '/' + s.total + '</div></div>';
+  });
+  const totalPct = Math.round((totalCorrect / totalQ) * 100);
+  const totalColor = totalPct >= 70 ? 'var(--aws-green)' : totalPct >= 50 ? 'var(--aws-orange)' : 'var(--aws-red)';
+  html += '<div class="score-card" style="border:2px solid ' + totalColor + '"><div class="score-num" style="color:' + totalColor + '">' + totalPct + '%</div>';
+  html += '<div class="score-label">Overall<br>' + totalCorrect + '/' + totalQ + '</div></div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin-top:1rem;">';
+  html += '<button class="btn btn-primary" onclick="retakeQuiz()">Retake Quiz</button> ';
+  html += '<button class="btn btn-outline" onclick="reviewMissed()">Review Missed</button>';
+  html += '</div>';
+  area.innerHTML = html;
+  summary.style.display = 'block';
+  summary.innerHTML = '';
+}
+
+function retakeQuiz() {
+  qFiltered.forEach(q => delete state.qAnswers[getQKey(q)]);
+  state.qCurrentIdx = 0;
+  saveState();
+  renderQuestion();
+}
+
+function reviewMissed() {
+  const missed = qFiltered.filter(q => {
+    const key = getQKey(q);
+    return state.qAnswers[key] !== undefined && state.qAnswers[key] !== q.correct;
+  });
+  if (missed.length === 0) { alert('No missed questions!'); return; }
+  qFiltered.length = 0;
+  missed.forEach(q => qFiltered.push(q));
+  state.qCurrentIdx = 0;
+  renderQuestion();
+}
+
+// ============================================================
+// FLASHCARDS
+// ============================================================
+let fcFiltered = [];
+
+function initFlashcards() {
+  const filterEl = document.getElementById('fcDomainFilter');
+  const domains = ['all', 'Domain 1', 'Domain 2', 'Domain 3', 'Domain 4', 'Domain 5'];
+  const labels = ['All', 'D1', 'D2', 'D3', 'D4', 'D5'];
+  filterEl.innerHTML = domains.map((d, i) =>
+    '<button class="filter-btn ' + (state.fcFilter === d ? 'active' : '') + '" onclick="filterFlashcards(\x27' + d + '\x27)">' + labels[i] + '</button>'
+  ).join('');
+  filterFlashcards(state.fcFilter);
+}
+
+function filterFlashcards(domain) {
+  state.fcFilter = domain;
+  state.fcCurrentIdx = 0;
+  saveState();
+  fcFiltered = domain === 'all' ? [...FLASHCARDS] : FLASHCARDS.filter(c => c.domain === domain);
+  document.querySelectorAll('#fcDomainFilter .filter-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === ['all','Domain 1','Domain 2','Domain 3','Domain 4','Domain 5'].indexOf(domain));
+  });
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  if (fcFiltered.length === 0) return;
+  const idx = state.fcCurrentIdx % fcFiltered.length;
+  const card = fcFiltered[idx];
+  const cardEl = document.getElementById('fcCard');
+  cardEl.classList.remove('flipped');
+
+  document.getElementById('fcFront').innerHTML = '<div class="fc-domain">' + card.domain + '</div><h3>' + card.front + '</h3>';
+  document.getElementById('fcBack').innerHTML = '<div class="fc-domain">' + card.domain + '</div><p>' + card.back + '</p>';
+  document.getElementById('fcCounter').textContent = (idx + 1) + ' / ' + fcFiltered.length;
+
+  // Mastery stats
+  let know = 0, review = 0, unseen = 0;
+  fcFiltered.forEach((c, i) => {
+    const key = c.domain + '_' + i + '_' + c.front.substring(0, 30);
+    if (state.fcMastery[key] === 'know') know++;
+    else if (state.fcMastery[key] === 'review') review++;
+    else unseen++;
+  });
+  document.getElementById('fcMastery').innerHTML =
+    '<div class="stat"><div class="stat-num" style="color:var(--aws-green)">' + know + '</div><div class="stat-label">Know It</div></div>' +
+    '<div class="stat"><div class="stat-num" style="color:var(--aws-red)">' + review + '</div><div class="stat-label">Review</div></div>' +
+    '<div class="stat"><div class="stat-num" style="color:#999">' + unseen + '</div><div class="stat-label">Unseen</div></div>';
+}
+
+function flipCard() {
+  document.getElementById('fcCard').classList.toggle('flipped');
+}
+
+function fcNext() {
+  state.fcCurrentIdx = (state.fcCurrentIdx + 1) % fcFiltered.length;
+  saveState();
+  renderFlashcard();
+}
+
+function fcPrev() {
+  state.fcCurrentIdx = (state.fcCurrentIdx - 1 + fcFiltered.length) % fcFiltered.length;
+  saveState();
+  renderFlashcard();
+}
+
+function fcRate(rating) {
+  const idx = state.fcCurrentIdx % fcFiltered.length;
+  const card = fcFiltered[idx];
+  const key = card.domain + '_' + idx + '_' + card.front.substring(0, 30);
+  state.fcMastery[key] = rating;
+  saveState();
+  fcNext();
+}
+
+// ============================================================
+// SERVICE DRILL
+// ============================================================
+let drillIdx = 0;
+let drillTimer = null;
+let drillTime = 15;
+let drillScore = 0;
+let drillStreak = 0;
+let drillMaxStreak = 0;
+let drillAnswered = 0;
+let drillShuffled = [];
+
+function initDrill() {
+  document.getElementById('drillStart').style.display = 'block';
+  document.getElementById('drillActive').style.display = 'none';
+  document.getElementById('drillResults').style.display = 'none';
+}
+
+function startDrill() {
+  drillShuffled = shuffleArray([...DRILLS]);
+  drillIdx = 0;
+  drillScore = 0;
+  drillStreak = 0;
+  drillMaxStreak = 0;
+  drillAnswered = 0;
+  document.getElementById('drillStart').style.display = 'none';
+  document.getElementById('drillActive').style.display = 'block';
+  document.getElementById('drillResults').style.display = 'none';
+  showDrillQuestion();
+}
+
+function showDrillQuestion() {
+  if (drillIdx >= drillShuffled.length) {
+    endDrill();
+    return;
+  }
+  const d = drillShuffled[drillIdx];
+  document.getElementById('drillScenario').textContent = d.scenario;
+  const opts = shuffleArray([...d.options]);
+  document.getElementById('drillOptions').innerHTML = opts.map(o =>
+    '<button onclick="answerDrill(this, \x27' + escapeQuotes(o) + '\x27, \x27' + escapeQuotes(d.answer) + '\x27)">' + o + '</button>'
+  ).join('');
+  updateDrillStats();
+  startDrillTimer();
+}
+
+function escapeQuotes(s) { return s.replace(/'/g, "\'").replace(/"/g, '&quot;'); }
+
+function startDrillTimer() {
+  drillTime = 15;
+  const timerEl = document.getElementById('drillTimer');
+  timerEl.textContent = drillTime;
+  timerEl.classList.remove('warning');
+  clearInterval(drillTimer);
+  drillTimer = setInterval(() => {
+    drillTime--;
+    timerEl.textContent = drillTime;
+    if (drillTime <= 5) timerEl.classList.add('warning');
+    if (drillTime <= 0) {
+      clearInterval(drillTimer);
+      drillStreak = 0;
+      drillAnswered++;
+      // Highlight correct answer
+      document.querySelectorAll('#drillOptions button').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === drillShuffled[drillIdx].answer) b.classList.add('correct');
+        else b.classList.add('incorrect');
+      });
+      setTimeout(() => { drillIdx++; showDrillQuestion(); }, 1500);
+    }
+  }, 1000);
+}
+
+function answerDrill(btn, selected, correct) {
+  clearInterval(drillTimer);
+  drillAnswered++;
+  const isCorrect = selected === correct;
+  document.querySelectorAll('#drillOptions button').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+    else b.classList.add('incorrect');
+  });
+  if (isCorrect) {
+    btn.classList.remove('incorrect');
+    btn.classList.add('correct');
+    drillScore++;
+    drillStreak++;
+    if (drillStreak > drillMaxStreak) drillMaxStreak = drillStreak;
+  } else {
+    drillStreak = 0;
+  }
+  updateDrillStats();
+  setTimeout(() => { drillIdx++; showDrillQuestion(); }, 1200);
+}
+
+function updateDrillStats() {
+  document.getElementById('drillStats').innerHTML =
+    '<div class="stat"><div class="stat-num" style="color:var(--aws-green)">' + drillScore + '</div><div class="stat-label">Correct</div></div>' +
+    '<div class="stat"><div class="stat-num" style="color:var(--aws-orange)">' + drillStreak + '</div><div class="stat-label">Streak</div></div>' +
+    '<div class="stat"><div class="stat-num">' + (drillIdx + 1) + '/' + drillShuffled.length + '</div><div class="stat-label">Progress</div></div>';
+}
+
+function endDrill() {
+  clearInterval(drillTimer);
+  document.getElementById('drillActive').style.display = 'none';
+  const pct = Math.round((drillScore / drillShuffled.length) * 100);
+  const color = pct >= 70 ? 'var(--aws-green)' : pct >= 50 ? 'var(--aws-orange)' : 'var(--aws-red)';
+  let html = '<div style="text-align:center;padding:2rem;">';
+  html += '<h2 style="margin-bottom:1rem;">Drill Complete!</h2>';
+  html += '<div class="q-score-summary" style="justify-content:center;">';
+  html += '<div class="score-card"><div class="score-num" style="color:' + color + '">' + pct + '%</div><div class="score-label">Accuracy<br>' + drillScore + '/' + drillShuffled.length + '</div></div>';
+  html += '<div class="score-card"><div class="score-num" style="color:var(--aws-orange)">' + drillMaxStreak + '</div><div class="score-label">Best Streak</div></div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary" onclick="startDrill()" style="margin-top:1rem;">Try Again</button>';
+  html += '</div>';
+  document.getElementById('drillResults').innerHTML = html;
+  document.getElementById('drillResults').style.display = 'block';
+}
+
+// ============================================================
+// PATTERN MATCHER
+// ============================================================
+let pmCurrentIdx = 0;
+let pmLeftSelected = -1;
+let pmRightSelected = -1;
+let pmMatched = {};
+
+function initPatterns() {
+  const filterEl = document.getElementById('pmFilter');
+  filterEl.innerHTML =
+    '<button class="filter-btn active" onclick="filterPatterns(\x27all\x27,this)">All</button>' +
+    '<button class="filter-btn" onclick="filterPatterns(\x27match\x27,this)">Matching</button>' +
+    '<button class="filter-btn" onclick="filterPatterns(\x27sequence\x27,this)">Sequencing</button>';
+  pmCurrentIdx = 0;
+  renderPatternExercise();
+}
+
+function filterPatterns(type, btn) {
+  document.querySelectorAll('#pmFilter .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  pmCurrentIdx = 0;
+  state._pmType = type;
+  renderPatternExercise();
+}
+
+function getFilteredPatterns() {
+  const type = state._pmType || 'all';
+  return type === 'all' ? PATTERNS : PATTERNS.filter(p => p.type === type);
+}
+
+function renderPatternExercise() {
+  const area = document.getElementById('pmArea');
+  const filtered = getFilteredPatterns();
+  if (filtered.length === 0) { area.innerHTML = '<p>No exercises.</p>'; return; }
+  const ex = filtered[pmCurrentIdx % filtered.length];
+  const pmKey = ex.title;
+
+  let html = '<div class="pm-exercise">';
+  html += '<h3 style="margin-bottom:0.5rem;">' + ex.title + '</h3>';
+  html += '<p class="pm-instruction">Exercise ' + (pmCurrentIdx % filtered.length + 1) + ' of ' + filtered.length + '</p>';
+
+  if (ex.type === 'match') {
+    pmMatched = state.pmResults[pmKey] || {};
+    pmLeftSelected = -1;
+    pmRightSelected = -1;
+    html += '<div class="pm-columns"><div>';
+    ex.left.forEach((item, i) => {
+      const matchedCls = pmMatched['l' + i] !== undefined ? 'matched' : '';
+      html += '<div class="pm-item ' + matchedCls + '" data-side="left" data-idx="' + i + '" onclick="pmSelect(\x27left\x27,' + i + ')">' + item + '</div>';
+    });
+    html += '</div><div>';
+    ex.right.forEach((item, i) => {
+      const matchedCls = pmMatched['r' + i] !== undefined ? 'matched' : '';
+      html += '<div class="pm-item ' + matchedCls + '" data-side="right" data-idx="' + i + '" onclick="pmSelect(\x27right\x27,' + i + ')">' + item + '</div>';
+    });
+    html += '</div></div>';
+    html += '<div style="margin-top:1rem;text-align:center;">';
+    html += '<button class="btn btn-outline btn-sm" onclick="pmCheckMatch()">Check Matches</button> ';
+    html += '<button class="btn btn-danger btn-sm" onclick="pmResetExercise()">Reset</button>';
+    html += '</div>';
+  } else if (ex.type === 'sequence') {
+    const saved = state.pmResults[pmKey];
+    const items = saved ? saved : shuffleArray(ex.items.map((item, i) => ({text: item, origIdx: i})));
+    if (!saved) state.pmResults[pmKey] = items;
+    html += '<ul class="seq-list">';
+    items.forEach((item, i) => {
+      html += '<li class="seq-item" data-idx="' + i + '">';
+      html += '<span class="seq-num">' + (i + 1) + '</span>';
+      html += '<span>' + item.text + '</span>';
+      html += '<span class="seq-arrows">';
+      html += '<button onclick="pmMoveSeq(' + i + ',-1)" ' + (i === 0 ? 'disabled' : '') + '>&uarr;</button>';
+      html += '<button onclick="pmMoveSeq(' + i + ',1)" ' + (i === items.length - 1 ? 'disabled' : '') + '>&darr;</button>';
+      html += '</span></li>';
+    });
+    html += '</ul>';
+    html += '<div style="margin-top:1rem;text-align:center;">';
+    html += '<button class="btn btn-primary btn-sm" onclick="pmCheckSequence()">Check Order</button> ';
+    html += '<button class="btn btn-danger btn-sm" onclick="pmResetExercise()">Reset</button>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  html += '<div style="display:flex;justify-content:space-between;margin-top:1rem;">';
+  html += '<button class="btn btn-outline btn-sm" onclick="pmPrev()" ' + (pmCurrentIdx === 0 ? 'disabled' : '') + '>&larr; Previous</button>';
+  html += '<button class="btn btn-outline btn-sm" onclick="pmNext()">Next &rarr;</button>';
+  html += '</div>';
+
+  area.innerHTML = html;
+}
+
+function pmSelect(side, idx) {
+  const ex = getFilteredPatterns()[pmCurrentIdx % getFilteredPatterns().length];
+  if (ex.type !== 'match') return;
+  const pmKey = ex.title;
+  pmMatched = state.pmResults[pmKey] || {};
+
+  if (side === 'left') {
+    if (pmMatched['l' + idx] !== undefined) return;
+    pmLeftSelected = idx;
+  } else {
+    if (pmMatched['r' + idx] !== undefined) return;
+    pmRightSelected = idx;
+  }
+
+  // Update visual selection
+  document.querySelectorAll('.pm-item').forEach(el => el.classList.remove('selected'));
+  if (pmLeftSelected >= 0) {
+    const el = document.querySelector('.pm-item[data-side="left"][data-idx="' + pmLeftSelected + '"]');
+    if (el && !el.classList.contains('matched')) el.classList.add('selected');
+  }
+  if (pmRightSelected >= 0) {
+    const el = document.querySelector('.pm-item[data-side="right"][data-idx="' + pmRightSelected + '"]');
+    if (el && !el.classList.contains('matched')) el.classList.add('selected');
+  }
+
+  // Check if both selected
+  if (pmLeftSelected >= 0 && pmRightSelected >= 0) {
+    const pair = ex.correctPairs.find(p => p[0] === pmLeftSelected);
+    const isCorrect = pair && pair[1] === pmRightSelected;
+    const leftEl = document.querySelector('.pm-item[data-side="left"][data-idx="' + pmLeftSelected + '"]');
+    const rightEl = document.querySelector('.pm-item[data-side="right"][data-idx="' + pmRightSelected + '"]');
+    if (isCorrect) {
+      leftEl.classList.add('matched'); leftEl.classList.remove('selected');
+      rightEl.classList.add('matched'); rightEl.classList.remove('selected');
+      pmMatched['l' + pmLeftSelected] = pmRightSelected;
+      pmMatched['r' + pmRightSelected] = pmLeftSelected;
+      state.pmResults[pmKey] = pmMatched;
+      saveState();
+    } else {
+      leftEl.classList.add('wrong'); rightEl.classList.add('wrong');
+      setTimeout(() => {
+        leftEl.classList.remove('wrong', 'selected');
+        rightEl.classList.remove('wrong', 'selected');
+      }, 800);
+    }
+    pmLeftSelected = -1;
+    pmRightSelected = -1;
+  }
+}
+
+function pmCheckMatch() {
+  const ex = getFilteredPatterns()[pmCurrentIdx % getFilteredPatterns().length];
+  const pmKey = ex.title;
+  const matched = state.pmResults[pmKey] || {};
+  const total = ex.correctPairs.length;
+  const done = Object.keys(matched).filter(k => k.startsWith('l')).length;
+  if (done === total) {
+    alert('All matched correctly! ' + done + '/' + total);
+  } else {
+    alert(done + '/' + total + ' matched. Keep going!');
+  }
+}
+
+function pmMoveSeq(idx, dir) {
+  const ex = getFilteredPatterns()[pmCurrentIdx % getFilteredPatterns().length];
+  const pmKey = ex.title;
+  const items = state.pmResults[pmKey];
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= items.length) return;
+  [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
+  state.pmResults[pmKey] = items;
+  saveState();
+  renderPatternExercise();
+}
+
+function pmCheckSequence() {
+  const ex = getFilteredPatterns()[pmCurrentIdx % getFilteredPatterns().length];
+  const pmKey = ex.title;
+  const items = state.pmResults[pmKey];
+  let correct = 0;
+  items.forEach((item, i) => {
+    const seqEl = document.querySelectorAll('.seq-item')[i];
+    if (item.origIdx === ex.correctOrder[i]) {
+      seqEl.classList.add('correct-pos');
+      seqEl.classList.remove('wrong-pos');
+      correct++;
+    } else {
+      seqEl.classList.add('wrong-pos');
+      seqEl.classList.remove('correct-pos');
+    }
+  });
+  if (correct === items.length) {
+    alert('Perfect! All steps in correct order!');
+  } else {
+    alert(correct + '/' + items.length + ' in correct position. Green = correct, Red = wrong position.');
+  }
+}
+
+function pmResetExercise() {
+  const ex = getFilteredPatterns()[pmCurrentIdx % getFilteredPatterns().length];
+  delete state.pmResults[ex.title];
+  saveState();
+  renderPatternExercise();
+}
+
+function pmNext() {
+  pmCurrentIdx++;
+  renderPatternExercise();
+}
+
+function pmPrev() {
+  if (pmCurrentIdx > 0) pmCurrentIdx--;
+  renderPatternExercise();
+}
+
+// ============================================================
+// STUDY TRACKER
+// ============================================================
+function initTracker() {
+  renderCountdown();
+  renderTrackerDomains();
+  renderStudyPriority();
+}
+
+function renderCountdown() {
+  const el = document.getElementById('countdown');
+  if (!state.examDate) {
+    // Default: 2 days from now for final sprint prep
+    const d = new Date();
+    d.setDate(d.getDate() + 2);
+    state.examDate = d.toISOString();
+    saveState();
+  }
+  const exam = new Date(state.examDate);
+  const now = new Date();
+  const diff = Math.max(0, Math.ceil((exam - now) / (1000 * 60 * 60 * 24)));
+  el.innerHTML = '<div class="days">' + diff + '</div><p>days until exam</p>' +
+    '<p style="font-size:0.75rem;margin-top:0.3rem;">Exam date: ' + exam.toLocaleDateString() +
+    ' <button class="btn btn-sm" style="background:rgba(255,255,255,0.2);color:#fff;margin-left:0.5rem;" onclick="changeExamDate()">Change</button></p>';
+}
+
+function changeExamDate() {
+  const input = prompt('Enter exam date (YYYY-MM-DD):');
+  if (input) {
+    const d = new Date(input);
+    if (!isNaN(d.getTime())) {
+      state.examDate = d.toISOString();
+      saveState();
+      renderCountdown();
+    }
+  }
+}
+
+function renderTrackerDomains() {
+  const area = document.getElementById('trackerArea');
+  let html = '';
+  TRACKER_DOMAINS.forEach((domain, dIdx) => {
+    const tasks = domain.tasks;
+    let points = 0, max = tasks.length * 3;
+    tasks.forEach((t, tIdx) => {
+      const key = 'd' + dIdx + '_t' + tIdx;
+      const rating = state.trackerRatings[key] || 'not_started';
+      if (rating === 'learning') points += 1;
+      else if (rating === 'confident') points += 2;
+      else if (rating === 'mastered') points += 3;
+    });
+    const pct = Math.round((points / max) * 100);
+
+    html += '<div class="tracker-domain">';
+    html += '<div class="tracker-domain-hdr"><h3>' + domain.name + '</h3><span class="weight">' + domain.weight + '</span></div>';
+    html += '<div style="padding:0.5rem 1rem;background:#fff;border:1px solid var(--border);border-top:none;">';
+    html += '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%;background:' + domain.color + '"></div></div>';
+    html += '<div style="font-size:0.75rem;color:#777;margin-bottom:0.5rem;">' + pct + '% mastered</div>';
+    tasks.forEach((task, tIdx) => {
+      const key = 'd' + dIdx + '_t' + tIdx;
+      const rating = state.trackerRatings[key] || 'not_started';
+      html += '<div class="tracker-task">';
+      html += '<span>' + task + '</span>';
+      html += '<select onchange="rateTask(\x27' + key + '\x27,this.value)">';
+      ['not_started', 'learning', 'confident', 'mastered'].forEach(r => {
+        const labels = {not_started:'Not Started', learning:'Learning', confident:'Confident', mastered:'Mastered'};
+        html += '<option value="' + r + '" ' + (rating === r ? 'selected' : '') + '>' + labels[r] + '</option>';
+      });
+      html += '</select></div>';
+    });
+    html += '</div></div>';
+  });
+  area.innerHTML = html;
+}
+
+function rateTask(key, value) {
+  state.trackerRatings[key] = value;
+  saveState();
+  renderTrackerDomains();
+  renderStudyPriority();
+}
+
+function renderStudyPriority() {
+  const el = document.getElementById('studyPriority');
+  const priorities = [];
+  const weights = { 'Domain 1': 31, 'Domain 2': 26, 'Domain 3': 20, 'Domain 4': 12, 'Domain 5': 11 };
+
+  TRACKER_DOMAINS.forEach((domain, dIdx) => {
+    let points = 0, max = domain.tasks.length * 3;
+    domain.tasks.forEach((t, tIdx) => {
+      const key = 'd' + dIdx + '_t' + tIdx;
+      const rating = state.trackerRatings[key] || 'not_started';
+      if (rating === 'learning') points += 1;
+      else if (rating === 'confident') points += 2;
+      else if (rating === 'mastered') points += 3;
+    });
+    const mastery = points / max;
+    const domainKey = 'Domain ' + (dIdx + 1);
+    const weight = weights[domainKey] / 100;
+    const priority = weight * (1 - mastery);
+    priorities.push({ name: domain.name, priority, mastery: Math.round(mastery * 100), weight: domain.weight });
+  });
+
+  priorities.sort((a, b) => b.priority - a.priority);
+
+  let html = '<div class="card"><div class="card-header" style="background:var(--aws-navy);"><h2>Recommended Study Priority</h2><p>Based on domain weight × knowledge gaps</p></div><div class="card-body">';
+  priorities.forEach((p, i) => {
+    const cls = i === 0 ? 'priority-high' : i <= 2 ? 'priority-medium' : 'priority-low';
+    const label = i === 0 ? 'HIGH' : i <= 2 ? 'MEDIUM' : 'LOW';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid #f0f0f0;">';
+    html += '<span style="font-size:0.85rem;">' + p.name + '</span>';
+    html += '<span><span class="priority-badge ' + cls + '">' + label + '</span> <span style="font-size:0.75rem;color:#777;margin-left:0.5rem;">' + p.mastery + '% mastered · ' + p.weight + ' weight</span></span>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+  el.innerHTML = html;
+}
+
+// ============================================================
+// STUDY MATERIAL ACCORDIONS
+// ============================================================
+function toggleAcc(hdr) {
+  hdr.classList.toggle('open');
+  const body = hdr.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initPractice();
+});
+</script>
+</body></html>
