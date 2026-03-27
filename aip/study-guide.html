@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 Deep Study Guide | AWS Certified Generative AI Developer</title>
+<style>
+:root {
+  --aws-navy: #232F3E; --aws-orange: #FF9900; --aws-light-orange: #FFF3CD;
+  --aws-blue: #0073BB; --aws-green: #1D8348; --aws-red: #C0392B;
+  --aws-purple: #7D3C98; --aws-teal: #148F77;
+  --bg: #F0F2F5; --white: #fff; --border: #D5DBDB; --text: #1A1A2E;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.6; }
+
+/* Header */
+.hdr { background:var(--aws-navy); color:#fff; padding:1.2rem 2rem; border-bottom:4px solid var(--aws-orange); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.hdr h1 { font-size:1.5rem; font-weight:700; }
+.hdr h1 span { color:var(--aws-orange); }
+.hdr-meta { font-size:0.8rem; color:#aaa; }
+.hdr-badges { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.badge { padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+.badge-pro { background:#7D3C98; color:#fff; }
+.badge-beta { background:#C0392B; color:#fff; }
+.badge-new { background:#1D8348; color:#fff; }
+
+/* Search */
+.search-bar { background:var(--aws-navy); padding:0.8rem 2rem; border-bottom:1px solid #3d4f60; }
+.search-bar input { width:100%; max-width:600px; padding:0.5rem 1rem; border-radius:6px; border:none; font-size:0.95rem; background:#1a2638; color:#fff; outline:none; }
+.search-bar input::placeholder { color:#888; }
+.search-bar input:focus { box-shadow:0 0 0 2px var(--aws-orange); }
+
+/* Main Nav Tabs */
+.main-nav { background:#fff; border-bottom:2px solid var(--border); padding:0 2rem; display:flex; gap:0; overflow-x:auto; }
+.main-nav button { padding:0.9rem 1.4rem; border:none; background:none; cursor:pointer; font-size:0.9rem; font-weight:600; color:#666; border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+.main-nav button:hover { color:var(--aws-orange); }
+.main-nav button.active { color:var(--aws-navy); border-bottom-color:var(--aws-orange); }
+
+/* Layout */
+.layout { display:flex; min-height:calc(100vh - 140px); }
+
+/* Left sidebar */
+.sidebar { width:260px; min-width:220px; background:#fff; border-right:1px solid var(--border); overflow-y:auto; padding:1rem 0; position:sticky; top:0; height:calc(100vh - 140px); flex-shrink:0; }
+.sidebar-section { margin-bottom:0.5rem; }
+.sidebar-section-title { padding:0.5rem 1.2rem; font-size:0.7rem; font-weight:700; color:#999; text-transform:uppercase; letter-spacing:1px; }
+.sidebar-btn { display:block; width:100%; text-align:left; padding:0.5rem 1.2rem 0.5rem 1.5rem; border:none; background:none; cursor:pointer; font-size:0.85rem; color:#444; line-height:1.4; transition:all 0.15s; border-left:3px solid transparent; }
+.sidebar-btn:hover { background:#f5f5f5; color:var(--aws-orange); }
+.sidebar-btn.active { background:#FFF8E7; color:var(--aws-navy); border-left-color:var(--aws-orange); font-weight:600; }
+.sidebar-btn .pill { display:inline-block; float:right; font-size:0.65rem; padding:1px 6px; border-radius:8px; background:#eee; color:#666; font-weight:700; }
+
+/* Content area */
+.content { flex:1; overflow-y:auto; padding:1.5rem 2rem; max-width:1000px; }
+.content > .view { display:none; }
+.content > .view.active { display:block; }
+
+/* Domain card header */
+.domain-hdr { background:linear-gradient(135deg, var(--aws-navy) 0%, #3a4f6e 100%); color:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; }
+.domain-hdr h2 { font-size:1.3rem; margin-bottom:0.3rem; }
+.domain-hdr p { color:#bbb; font-size:0.88rem; }
+.domain-hdr .domain-weight { display:inline-block; background:var(--aws-orange); color:#fff; padding:3px 12px; border-radius:12px; font-size:0.8rem; font-weight:700; margin-top:0.5rem; }
+
+/* Task section */
+.task-section { margin-bottom:1.5rem; background:#fff; border-radius:10px; box-shadow:var(--shadow); overflow:hidden; border:1px solid var(--border); }
+.task-header { padding:1rem 1.2rem; cursor:pointer; display:flex; align-items:center; gap:0.8rem; user-select:none; transition:background 0.15s; }
+.task-header:hover { background:#fafafa; }
+.task-header.open { background:#FFF8E7; border-bottom:1px solid var(--border); }
+.task-num { background:var(--aws-navy); color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
+.task-header h3 { font-size:1rem; font-weight:700; color:var(--aws-navy); flex:1; }
+.task-header .chevron { color:#aaa; font-size:0.8rem; transition:transform 0.2s; }
+.task-header.open .chevron { transform:rotate(90deg); }
+.task-body { display:none; padding:1.2rem; }
+.task-body.open { display:block; }
+
+/* Sub-accordion */
+.sub-acc { margin-bottom:0.6rem; border-radius:6px; border:1px solid var(--border); overflow:hidden; }
+.sub-acc-hdr { padding:0.7rem 1rem; cursor:pointer; display:flex; align-items:center; gap:0.6rem; background:#f9f9f9; font-weight:600; font-size:0.88rem; transition:background 0.15s; }
+.sub-acc-hdr:hover { background:#f0f0f0; }
+.sub-acc-hdr.open { background:#e8f4fd; color:var(--aws-blue); border-bottom:1px solid #c8e6f8; }
+.sub-acc-hdr .sub-icon { font-size:1rem; }
+.sub-acc-body { display:none; padding:0.8rem 1rem; background:#fff; font-size:0.87rem; }
+.sub-acc-body.open { display:block; }
+
+/* Content styling */
+.concept-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0.8rem; margin:0.8rem 0; }
+.concept-card { background:#f9f9f9; border:1px solid var(--border); border-radius:8px; padding:0.9rem; }
+.concept-card h5 { font-size:0.85rem; font-weight:700; color:var(--aws-navy); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem; }
+.concept-card p, .concept-card ul { font-size:0.82rem; color:#555; }
+.concept-card ul { padding-left:1.2rem; }
+.concept-card ul li { margin-bottom:0.2rem; }
+
+.compare-table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:0.82rem; }
+.compare-table th { background:var(--aws-navy); color:#fff; padding:0.5rem 0.8rem; text-align:left; }
+.compare-table td { padding:0.5rem 0.8rem; border-bottom:1px solid var(--border); vertical-align:top; }
+.compare-table tr:nth-child(even) td { background:#f9f9f9; }
+.compare-table tr:hover td { background:#FFF8E7; }
+
+.exam-tip { background:#FFF3CD; border-left:4px solid var(--aws-orange); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.exam-tip strong { color:#856404; display:block; margin-bottom:0.2rem; }
+.watch-out { background:#fdecea; border-left:4px solid var(--aws-red); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.watch-out strong { color:var(--aws-red); display:block; margin-bottom:0.2rem; }
+.key-concept { background:#e8f5e9; border-left:4px solid var(--aws-green); border-radius:0 6px 6px 0; padding:0.7rem 1rem; margin:0.8rem 0; font-size:0.83rem; }
+.key-concept strong { color:var(--aws-green); display:block; margin-bottom:0.2rem; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; padding:0.8rem 1rem; border-radius:6px; font-family:monospace; font-size:0.78rem; overflow-x:auto; margin:0.6rem 0; white-space:pre-wrap; }
+.code-block .c-kw { color:#89b4fa; } .code-block .c-str { color:#a6e3a1; } .code-block .c-cm { color:#6c7086; } .code-block .c-num { color:#fab387; }
+
+.tag-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0; }
+.tag { padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+.tag-blue { background:#e8f4fd; color:var(--aws-blue); }
+.tag-orange { background:#FFF3CD; color:#856404; }
+.tag-green { background:#e8f5e9; color:var(--aws-green); }
+.tag-purple { background:#f3e5f5; color:var(--aws-purple); }
+.tag-red { background:#fdecea; color:var(--aws-red); }
+.tag-teal { background:#e0f2f1; color:var(--aws-teal); }
+
+.step-list { counter-reset:steps; padding:0; list-style:none; }
+.step-list li { counter-increment:steps; padding:0.5rem 0.5rem 0.5rem 2.5rem; position:relative; border-bottom:1px solid #f0f0f0; font-size:0.85rem; }
+.step-list li:last-child { border-bottom:none; }
+.step-list li::before { content:counter(steps); position:absolute; left:0; top:0.4rem; background:var(--aws-orange); color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:0.8rem 0; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; margin:0.8rem 0; }
+@media(max-width:700px) { .two-col,.three-col { grid-template-columns:1fr; } }
+
+.service-chip { display:inline-flex; align-items:center; gap:0.3rem; background:#fff; border:1px solid var(--border); border-radius:6px; padding:0.3rem 0.7rem; margin:0.2rem; font-size:0.78rem; cursor:pointer; transition:all 0.15s; }
+.service-chip:hover { border-color:var(--aws-orange); color:var(--aws-orange); }
+.service-chip .dot { width:8px; height:8px; border-radius:50%; }
+
+.highlight-box { background:#fff; border:1px solid var(--border); border-radius:8px; padding:1rem; margin:0.8rem 0; }
+.highlight-box h5 { font-size:0.85rem; font-weight:700; color:var(--aws-navy); border-bottom:1px solid var(--border); padding-bottom:0.4rem; margin-bottom:0.6rem; }
+
+hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
+
+/* Quick ref cards */
+.qr-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+.qr-card { background:#fff; border-radius:10px; box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; }
+.qr-card-hdr { padding:0.8rem 1rem; font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:0.5rem; }
+.qr-card-body { padding:0.5rem 1rem 1rem; font-size:0.82rem; }
+.qr-card-body dl { display:grid; grid-template-columns:auto 1fr; gap:0.2rem 0.8rem; }
+.qr-card-body dt { font-weight:700; color:#555; }
+.qr-card-body dd { color:#333; }
+
+.progress-overview { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.8rem; margin:1rem 0; }
+.prog-card { background:#fff; border-radius:8px; padding:1rem; border:1px solid var(--border); text-align:center; }
+.prog-card .big-num { font-size:2rem; font-weight:700; color:var(--aws-orange); }
+.prog-card p { font-size:0.78rem; color:#777; }
+
+/* Search highlighting */
+.search-highlight { background:#FFE082; border-radius:2px; padding:1px 2px; }
+.hidden-by-search { display:none !important; }
+</style>
+<!-- AIP-C01 Shared Navigation -->
+<style>
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;gap:0;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;letter-spacing:.01em;}
+.aip-nav-sep{color:#7a8a9a;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;gap:0;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 13px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+</style>
+</head>
+<body>
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="study-guide">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hdr">
+  <div>
+    <h1>AIP-C01 <span>Deep Study Guide</span></h1>
+    <div class="hdr-meta">AWS Certified Generative AI Developer — Professional</div>
+  </div>
+  <div class="hdr-badges">
+    <a href="index.html" class="badge" style="background:#e8f4fd; color:#0f3d6e; text-decoration:none;">🏠 Study Hub</a>
+    <a href="flashcards.html" class="badge" style="background:#e8f5e9; color:#1d5d2b; text-decoration:none;">Next: Flashcards</a>
+    <a href="quick-drill.html" class="badge" style="background:var(--aws-orange); color:#000; text-decoration:none;">🚀 Exam Simulator</a>
+    <a href="final-practice.html" class="badge" style="background:#ffe0b2; color:#6a3906; text-decoration:none;">Final Practice</a>
+    <span class="badge badge-pro">Professional Level</span>
+    <span class="badge badge-beta">Beta Exam</span>
+    <span class="badge badge-new">5 Domains · 65 Questions</span>
+  </div>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="🔍  Search topics, services, concepts... (e.g. 'guardrails', 'RAG chunking', 'Nova Forge')" oninput="handleSearch(this.value)">
+</div>
+
+<div class="main-nav">
+  <button class="active" onclick="switchView('overview',this)">📊 Overview</button>
+  <button onclick="switchView('domain1',this)">Domain 1: FM Integration & Data</button>
+  <button onclick="switchView('domain2',this)">Domain 2: Implementation</button>
+  <button onclick="switchView('domain3',this)">Domain 3: Security & Governance</button>
+  <button onclick="switchView('domain4',this)">Domain 4: Optimization</button>
+  <button onclick="switchView('domain5',this)">Domain 5: Testing & Troubleshoot</button>
+  <button onclick="switchView('services',this)">🔧 By Service</button>
+  <button onclick="switchView('quickref',this)">⚡ Quick Reference</button>
+</div>
+
+<div class="layout">
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Domains</div>
+    <button class="sidebar-btn" onclick="switchView('overview',null,this)">📊 Overview & Exam Map</button>
+    <button class="sidebar-btn" onclick="switchView('domain1',null,this)">Domain 1: FM Integration <span class="pill">~30%</span></button>
+    <button class="sidebar-btn" onclick="switchView('domain2',null,this)">Domain 2: Implementation <span class="pill">~25%</span></button>
+    <button class="sidebar-btn" onclick="switchView('domain3',null,this)">Domain 3: Security <span class="pill">~20%</span></button>
+    <button class="sidebar-btn" onclick="switchView('domain4',null,this)">Domain 4: Optimization <span class="pill">~15%</span></button>
+    <button class="sidebar-btn" onclick="switchView('domain5',null,this)">Domain 5: Testing <span class="pill">~10%</span></button>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Key Services</div>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('bedrock')">Amazon Bedrock</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('agents')">Bedrock Agents</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('kb')">Bedrock Knowledge Bases</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('guardrails')">Bedrock Guardrails</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('nova')">Amazon Nova Models</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('sagemaker')">Amazon SageMaker</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('opensearch')">OpenSearch + pgvector</button>
+    <button class="sidebar-btn" onclick="switchView('services',null,this);showService('stepfunctions')">Step Functions</button>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Quick Access</div>
+    <button class="sidebar-btn" onclick="switchView('quickref',null,this)">⚡ Cheat Sheet</button>
+    <button class="sidebar-btn" onclick="switchView('quickref',null,this);setTimeout(()=>document.getElementById('decision-trees').scrollIntoView(),100)">🌳 Decision Trees</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ============================================================ OVERVIEW VIEW ============================================================ -->
+<div id="view-overview" class="view active">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#1a2638,#2d4a6e)">
+    <h2>AIP-C01 Exam Blueprint & Study Map</h2>
+    <p>AWS Certified Generative AI Developer — Professional · 65 Questions · 130 minutes · ~$300 USD</p>
+    <span class="domain-weight">Target: Developers with 2+ yrs AWS + 1+ yr GenAI hands-on</span>
+  </div>
+
+  <div class="progress-overview">
+    <div class="prog-card"><div class="big-num">5</div><p>Content Domains</p></div>
+    <div class="prog-card"><div class="big-num">65</div><p>Exam Questions</p></div>
+    <div class="prog-card"><div class="big-num">130</div><p>Minutes</p></div>
+    <div class="prog-card"><div class="big-num">~100</div><p>Bedrock Models Available</p></div>
+    <div class="prog-card"><div class="big-num">750</div><p>Passing Score (scaled)</p></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header open" onclick="toggleTask(this)">
+      <div class="task-num">📋</div>
+      <h3>Domain Weight Distribution & Key Focus Areas</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body open">
+      <table class="compare-table">
+        <thead><tr><th>Domain</th><th>Approx Weight</th><th>Core Tasks</th><th>High-Priority Services</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. FM Integration, Data & Compliance</strong></td><td><span class="tag tag-orange">~30%</span></td><td>FM selection, Data pipelines, Vector stores, RAG, Prompt engineering</td><td>Bedrock, OpenSearch, SageMaker, S3, Glue</td></tr>
+          <tr><td><strong>2. Implementation & Integration</strong></td><td><span class="tag tag-blue">~25%</span></td><td>Agentic AI, Deployment strategies, Enterprise integration, API patterns</td><td>Bedrock Agents, Step Functions, Lambda, API GW, ECS</td></tr>
+          <tr><td><strong>3. AI Safety, Security & Governance</strong></td><td><span class="tag tag-red">~20%</span></td><td>Guardrails, IAM, Compliance, Responsible AI, Audit</td><td>Bedrock Guardrails, IAM, CloudTrail, Security Hub, KMS</td></tr>
+          <tr><td><strong>4. Operational Efficiency & Optimization</strong></td><td><span class="tag tag-green">~15%</span></td><td>Cost optimization, Performance tuning, Monitoring, Caching</td><td>CloudWatch, Cost Explorer, Bedrock Prompt Routing, SageMaker</td></tr>
+          <tr><td><strong>5. Testing, Validation & Troubleshooting</strong></td><td><span class="tag tag-purple">~10%</span></td><td>Model evaluation, QA frameworks, Debugging, Regression testing</td><td>Bedrock Model Eval, SageMaker Experiments, CloudWatch Logs</td></tr>
+        </tbody>
+      </table>
+      <div class="exam-tip"><strong>🎯 Exam Strategy (given your AIF-C01 background)</strong>Focus deep on: (1) <strong>Agentic AI patterns</strong> — Bedrock Agents, Strands, MCP, multi-agent orchestration; (2) <strong>Advanced RAG</strong> — chunking strategies, hybrid search, re-ranking; (3) <strong>Nova model family</strong> — Pro/Lite/Sonic/Forge use cases; (4) <strong>Deployment decision trees</strong> — when Lambda vs Provisioned Throughput vs SageMaker endpoints; (5) <strong>Guardrails deep config</strong>.</div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">🗺️</div>
+      <h3>Services You Must Know Cold</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="concept-grid">
+        <div class="concept-card" style="border-top:3px solid #FF9900">
+          <h5>🟠 Amazon Bedrock Core</h5>
+          <ul>
+            <li>InvokeModel / InvokeModelWithResponseStream</li>
+            <li>Converse API (unified multi-model)</li>
+            <li>Knowledge Bases (RAG)</li>
+            <li>Agents + Action Groups</li>
+            <li>Guardrails (content/PII/topic)</li>
+            <li>Prompt Management + Flows</li>
+            <li>Model Evaluation</li>
+            <li>Custom Model Import</li>
+            <li>Provisioned Throughput</li>
+            <li>Cross-Region Inference</li>
+            <li>Intelligent Prompt Routing</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="border-top:3px solid #0073BB">
+          <h5>🔵 Amazon Nova Family</h5>
+          <ul>
+            <li><strong>Nova 2 Pro</strong> — complex multi-step reasoning</li>
+            <li><strong>Nova 2 Lite</strong> — cost-effective, high-volume</li>
+            <li><strong>Nova 2 Sonic</strong> — real-time voice/conversation</li>
+            <li><strong>Nova Canvas</strong> — image generation</li>
+            <li><strong>Nova Reel</strong> — video generation</li>
+            <li><strong>Nova Forge</strong> — custom model training from checkpoints</li>
+            <li>Supports system messages, multimodal, streaming</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="border-top:3px solid #1D8348">
+          <h5>🟢 Agentic Stack</h5>
+          <ul>
+            <li>Bedrock Agents (managed)</li>
+            <li>Bedrock AgentCore (composable services)</li>
+            <li>Strands Agents SDK (open-source)</li>
+            <li>AWS Agent Squad (multi-agent)</li>
+            <li>MCP (Model Context Protocol)</li>
+            <li>Step Functions (ReAct/CoT workflows)</li>
+            <li>Lambda (stateless MCP servers)</li>
+            <li>ECS (complex MCP servers)</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="border-top:3px solid #7D3C98">
+          <h5>🟣 Vector & RAG Stack</h5>
+          <ul>
+            <li>Amazon OpenSearch (neural plugin, HNSW)</li>
+            <li>Aurora PostgreSQL + pgvector</li>
+            <li>Amazon S3 Vectors (new — billions of vectors)</li>
+            <li>Bedrock Knowledge Bases</li>
+            <li>Amazon Titan Embeddings (V1/V2/Multimodal)</li>
+            <li>Amazon Kendra (keyword + semantic hybrid)</li>
+            <li>Bedrock Data Automation</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="border-top:3px solid #C0392B">
+          <h5>🔴 Security & Governance</h5>
+          <ul>
+            <li>Bedrock Guardrails (content filter, PII, topic)</li>
+            <li>IAM + resource-based policies</li>
+            <li>AWS KMS (data encryption)</li>
+            <li>AWS CloudTrail (audit)</li>
+            <li>AWS Security Hub (near-real-time risk)</li>
+            <li>Amazon Macie (PII in S3)</li>
+            <li>VPC Endpoints (PrivateLink)</li>
+            <li>SageMaker Model Cards</li>
+          </ul>
+        </div>
+        <div class="concept-card" style="border-top:3px solid #148F77">
+          <h5>🩵 Deployment & Ops</h5>
+          <ul>
+            <li>SageMaker Real-time, Serverless, Async endpoints</li>
+            <li>SageMaker Multi-model / Multi-container endpoints</li>
+            <li>SageMaker Inference Components</li>
+            <li>EC2 UltraServers (large model inference)</li>
+            <li>DeepSpeed / Triton model parallelism</li>
+            <li>Nova Forge (custom training via SageMaker)</li>
+            <li>CloudWatch (metrics, alarms, dashboards)</li>
+            <li>AWS X-Ray (distributed tracing)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">⚡</div>
+      <h3>Critical "Know the Difference" Decision Points</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <table class="compare-table">
+        <thead><tr><th>Decision</th><th>Option A</th><th>Option B</th><th>Choose When</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Bedrock vs SageMaker</strong></td><td>Bedrock — managed, pay-per-token</td><td>SageMaker — custom containers, full control</td><td>Bedrock for standard FMs; SageMaker for custom/open-source models or complex inference pipelines</td></tr>
+          <tr><td><strong>On-demand vs Provisioned Throughput</strong></td><td>On-demand — variable traffic, pay-per-use</td><td>Provisioned — predictable, dedicated capacity</td><td>Provisioned for steady high-volume; On-demand for spiky/low traffic</td></tr>
+          <tr><td><strong>RAG vs Fine-tuning</strong></td><td>RAG — dynamic, updatable knowledge</td><td>Fine-tuning — baked-in domain knowledge</td><td>RAG when data changes frequently; Fine-tuning for style/tone/format adaptation</td></tr>
+          <tr><td><strong>Lambda vs ECS for MCP</strong></td><td>Lambda — stateless, lightweight tools</td><td>ECS — stateful, complex compute tools</td><td>Lambda for simple tool calls; ECS for code execution, image processing</td></tr>
+          <tr><td><strong>OpenSearch vs pgvector vs S3 Vectors</strong></td><td>OpenSearch — full-text + vector hybrid</td><td>pgvector — relational + vector in RDS</td><td>S3 Vectors for billions of vectors, cost-optimized; pgvector when you need SQL joins; OpenSearch for hybrid keyword+semantic</td></tr>
+          <tr><td><strong>Fixed vs Semantic Chunking</strong></td><td>Fixed-size — simple, predictable</td><td>Semantic — content-aware boundaries</td><td>Fixed for uniform content; Semantic for varied documents; Hierarchical for structured docs</td></tr>
+          <tr><td><strong>Nova Pro vs Lite vs Sonic</strong></td><td>Pro — complex reasoning tasks</td><td>Lite — high-volume, cost-efficient</td><td>Sonic for real-time voice/conversation; Lite for batch/simple; Pro for analysis/reasoning</td></tr>
+          <tr><td><strong>Bedrock Agents vs Strands vs Step Functions</strong></td><td>Bedrock Agents — fully managed, conversational</td><td>Strands — open-source, custom control</td><td>Step Functions for deterministic workflows with branching; Bedrock Agents/Strands for autonomous LLM-driven action selection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DOMAIN 1 VIEW ============================================================ -->
+<div id="view-domain1" class="view">
+  <div class="domain-hdr">
+    <h2>Domain 1: Foundation Model Integration, Data Management &amp; Compliance</h2>
+    <p>Tasks 1.1–1.6 · Covers FM selection, data pipelines, vector stores, RAG, and prompt engineering</p>
+    <span class="domain-weight">~30% of Exam Weight</span>
+  </div>
+
+  <!-- TASK 1.1 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.1</div>
+      <h3>Analyze Requirements &amp; Design GenAI Solutions</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🏗️</span> Architectural Patterns for GenAI Solutions</div>
+        <div class="sub-acc-body">
+          <p>Three primary integration approaches based on control/expertise trade-offs:</p>
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Amazon Bedrock (Unified API)</h5><ul><li>Fully managed, no infrastructure</li><li>Pay-per-use (tokens)</li><li>Quick time-to-market</li><li>~100 models via single API</li><li>Best for: standard FMs, rapid prototyping</li></ul></div>
+            <div class="concept-card"><h5>SageMaker (Custom/Control)</h5><ul><li>Bring your own model/container</li><li>Fine-grained instance control</li><li>Supports open-source models</li><li>GPU selection (g5, p4d families)</li><li>Best for: custom models, complex inference</li></ul></div>
+            <div class="concept-card"><h5>AWS AI Factories (On-Prem)</h5><ul><li>AWS-managed infra in your DC</li><li>Cloud-like AI in own environment</li><li>For data sovereignty requirements</li><li>Also: AWS Outposts for hybrid</li></ul></div>
+          </div>
+          <div class="exam-tip"><strong>🎯 Exam Tip</strong> Questions about "which service to use" almost always hinge on: (1) level of control needed, (2) data residency requirements, (3) traffic pattern (steady vs. spiky), and (4) team ML expertise. Memorize these trade-offs.</div>
+
+          <h5 style="margin-top:1rem">AWS Well-Architected for GenAI (6 Pillars applied)</h5>
+          <table class="compare-table">
+            <thead><tr><th>Pillar</th><th>GenAI-Specific Consideration</th></tr></thead>
+            <tbody>
+              <tr><td>Operational Excellence</td><td>Automated model retraining, baseline behavior metrics, self-healing capabilities</td></tr>
+              <tr><td>Security</td><td>IAM for model access, VPC endpoints, KMS encryption, Guardrails for output safety</td></tr>
+              <tr><td>Reliability</td><td>Multi-AZ by default, cross-Region inference for HA, circuit breakers, fallback models</td></tr>
+              <tr><td>Performance Efficiency</td><td>Right-sizing (Lambda vs. Provisioned), caching embeddings/responses, batch inference</td></tr>
+              <tr><td>Cost Optimization</td><td>On-demand vs. provisioned throughput, model cascading (cheap→expensive), prompt caching</td></tr>
+              <tr><td>Sustainability</td><td>Model distillation, parameter-efficient fine-tuning (PEFT), smaller specialized models</td></tr>
+            </tbody>
+          </table>
+
+          <h5 style="margin-top:1rem">PoC → Production Transition Framework</h5>
+          <ol class="step-list">
+            <li>Define use case scope with success criteria and ROI metrics</li>
+            <li>Select FM: benchmark on custom eval set, not just public leaderboards</li>
+            <li>Build PoC using Bedrock + Lambda + simple front-end</li>
+            <li>Validate with stakeholders: accuracy, latency, cost per inference</li>
+            <li>Harden for production: add Guardrails, monitoring, error handling</li>
+            <li>Phased rollout: pilot → limited release → full production</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧩</span> Enterprise Adoption Strategy</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div class="highlight-box"><h5>AI Center of Excellence (CoE)</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li>Central governance and best practices</li><li>Pattern library and code templates</li><li>Model governance committee</li><li>Standardized onboarding process</li><li>Cross-functional team structure</li></ul></div>
+            <div class="highlight-box"><h5>Production Monitoring Framework</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li><strong>Technical:</strong> inference latency (p50/p95/p99), throughput, error rates</li><li><strong>Business:</strong> cost per inference, user satisfaction, task completion</li><li><strong>Quality:</strong> accuracy, consistency, hallucination rate</li><li>CloudWatch dashboards + automated alerts</li></ul></div>
+          </div>
+          <div class="key-concept"><strong>💡 Nova Forge — Cost Optimization for Custom Models</strong>Nova Forge allows continued pre-training from checkpoints (pre/mid/post-training phases), blending proprietary data with Nova-curated data. This significantly reduces cost vs. full retraining and preserves foundational skills. Uses RL with your own reward functions and orchestrator for multi-turn rollouts. Accessed via Amazon SageMaker AI.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 1.2 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.2</div>
+      <h3>Select &amp; Configure Foundation Models</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📊</span> FM Evaluation Frameworks &amp; Benchmarks</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>General Benchmarks</h5><ul><li><strong>MMLU</strong> — 57 subjects, knowledge breadth</li><li><strong>HELM</strong> — 42+ models, multidimensional (fairness, bias, toxicity)</li><li><strong>BigBench</strong> — 204+ diverse tasks, capability boundaries</li><li><strong>BIG-Bench Hard</strong> — complex multi-step reasoning</li><li><strong>GLUE/SuperGLUE</strong> — language understanding</li></ul></div>
+            <div class="concept-card"><h5>Task-Specific</h5><ul><li><strong>HumanEval+ / MBPP+</strong> — code generation</li><li><strong>GSM8K / MATH</strong> — mathematical reasoning</li><li><strong>MT-Bench</strong> — multi-turn conversation (GPT-4 as judge)</li><li><strong>MedPaLM</strong> — medical domain</li><li><strong>FinanceBench</strong> — financial analysis + compliance</li></ul></div>
+            <div class="concept-card"><h5>Multimodal</h5><ul><li><strong>MMMLU</strong> — text/image/audio/video</li><li><strong>MME</strong> — fine-grained perception vs. reasoning</li><li><strong>MMMU</strong> — professional multimodal tasks</li><li><strong>LMSys Chatbot Arena</strong> — human preference (Elo ratings)</li></ul></div>
+          </div>
+          <div class="exam-tip"><strong>🎯 Key Insight</strong> Benchmark scores don't always translate to real-world performance. Always supplement with <strong>custom benchmarks</strong> built from your actual use case data. The Bedrock Model Evaluation feature lets you run your own evals (automatic + human review).</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔀</span> Model Routing Strategies (Critical Topic)</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Strategy</th><th>How It Works</th><th>Best For</th><th>AWS Implementation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Static Routing</strong></td><td>Predetermined rules (department, content type, user role)</td><td>Simple, predictable workloads</td><td>Lambda + JSON routing config, AppConfig feature flags</td></tr>
+              <tr><td><strong>Dynamic / Intelligent Routing</strong></td><td>Runtime analysis of prompt complexity, content type, cost/quality</td><td>Mixed workloads needing optimization</td><td>Bedrock Intelligent Prompt Routing</td></tr>
+              <tr><td><strong>Content-Based Routing</strong></td><td>Step Functions Choice states evaluate input characteristics</td><td>Specialized models per domain</td><td>Step Functions + Lambda classifier</td></tr>
+              <tr><td><strong>Model Cascading</strong></td><td>Start cheap (Nova Lite) → escalate to Pro only if quality &lt; threshold</td><td>Cost optimization with quality floor</td><td>Lambda confidence scoring + escalation logic</td></tr>
+              <tr><td><strong>Cross-Region Inference</strong></td><td>Distribute requests across AWS regions</td><td>Throughput scaling, HA, latency optimization</td><td>Bedrock Cross-Region Inference Profiles</td></tr>
+            </tbody>
+          </table>
+
+          <h5 style="margin-top:1rem">Nova Model Routing Tiers</h5>
+          <div class="three-col">
+            <div class="concept-card" style="border-top:3px solid #FF9900"><h5>Nova 2 Pro</h5><p>High-complexity: multi-step reasoning, detailed analysis, document understanding. Highest cost/quality.</p></div>
+            <div class="concept-card" style="border-top:3px solid #0073BB"><h5>Nova 2 Lite</h5><p>Medium complexity: standard generation, high-volume processing. Best cost/performance ratio for most workloads.</p></div>
+            <div class="concept-card" style="border-top:3px solid #1D8348"><h5>Nova 2 Sonic</h5><p>Real-time conversational AI with lowest latency. Optimized for voice applications and streaming dialogue.</p></div>
+          </div>
+
+          <div class="key-concept"><strong>💡 Bedrock Intelligent Prompt Routing — Key Facts</strong>
+            <ul style="padding-left:1.2rem">
+              <li>Analyzes: prompt length, complexity, content type, performance requirements</li>
+              <li>Evaluates: latency requirements, cost limits, quality thresholds</li>
+              <li>Routes between: Claude, Nova, Titan, and other Bedrock models</li>
+              <li>Learns from performance data over time (improves routing accuracy)</li>
+              <li>Maintains consistent response formats across models</li>
+              <li>Configure via Bedrock API — minimal code changes required</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Resilient AI System Design</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Circuit Breaker Pattern</h5><ul><li>Monitor error rate over N requests</li><li>Threshold: ~50% failures → open circuit</li><li>Recovery timeout: 30-60 seconds</li><li>Half-open: test 10-20% traffic</li><li>Implement with: Step Functions + CloudWatch alarms</li></ul></div>
+            <div class="concept-card"><h5>Fallback Hierarchy</h5><ul><li>Primary model → Smaller model</li><li>Smaller model → Cached response</li><li>Cached → Static response</li><li>Each level has quality threshold check</li><li>Log all fallback events for analysis</li></ul></div>
+            <div class="concept-card"><h5>Cross-Region HA</h5><ul><li>Active-active or active-passive</li><li>Route 53 health checks (30s interval, 3 failures)</li><li>Cross-region inference profiles in Bedrock</li><li>DynamoDB Global Tables for state sync</li><li>S3 Cross-Region Replication for assets</li></ul></div>
+          </div>
+          <div class="watch-out"><strong>⚠️ Watch Out</strong> "Graceful degradation" is a key exam theme. Know how to design systems that degrade gracefully: return a cached/simplified response rather than fail completely. AWS AppConfig for dynamic config updates without redeployment.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 1.3 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.3</div>
+      <h3>Implement Data Validation &amp; Processing Pipelines</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Data Quality &amp; Validation Architecture</div>
+        <div class="sub-acc-body">
+          <p>Data quality impacts FMs through three channels: <strong>prompts</strong>, <strong>retrieved information</strong> (RAG), and <strong>fine-tuning datasets</strong>.</p>
+          <table class="compare-table">
+            <thead><tr><th>Tool</th><th>Role in Pipeline</th><th>Key Capability</th></tr></thead>
+            <tbody>
+              <tr><td><strong>AWS Glue</strong></td><td>ETL, Data Catalog, Crawlers</td><td>Schema detection, data cataloging, validation workflows, PySpark transforms</td></tr>
+              <tr><td><strong>SageMaker Data Wrangler</strong></td><td>Data exploration &amp; transformation UI</td><td>300+ built-in transforms, data quality reports, bias detection</td></tr>
+              <tr><td><strong>SageMaker Processing Jobs</strong></td><td>Large-scale data processing</td><td>Pre-built Scikit-learn/Spark containers, feature engineering, evaluation</td></tr>
+              <tr><td><strong>AWS Lambda</strong></td><td>Custom validation logic, real-time checks</td><td>Schema validation, type checks, range validation, normalization</td></tr>
+              <tr><td><strong>Step Functions</strong></td><td>Pipeline orchestration with quality gates</td><td>Error handling, retries, parallel processing, feedback loops</td></tr>
+              <tr><td><strong>Amazon Comprehend</strong></td><td>NLP enrichment</td><td>Entity extraction, sentiment, PII detection for data enhancement</td></tr>
+              <tr><td><strong>Bedrock Data Automation</strong></td><td>Unstructured data processing</td><td>Auto-cleansing, tokenization, formatting for training/RAG data</td></tr>
+              <tr><td><strong>CloudWatch</strong></td><td>Data quality monitoring</td><td>Custom metrics for data drift, quality scores, anomaly detection</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📦</span> JSON Formatting for Bedrock APIs (Must Know)</div>
+        <div class="sub-acc-body">
+          <p>Each FM has a specific JSON schema. The <strong>Converse API</strong> provides a unified interface.</p>
+          <div class="two-col">
+            <div>
+              <p><strong>Claude / Nova (messages format):</strong></p>
+              <div class="code-block"><span class="c-cm">// Claude format</span>
+{
+  <span class="c-str">"anthropic_version"</span>: <span class="c-str">"bedrock-2023-05-31"</span>,
+  <span class="c-str">"max_tokens"</span>: <span class="c-num">1000</span>,
+  <span class="c-str">"system"</span>: <span class="c-str">"You are an assistant..."</span>,
+  <span class="c-str">"messages"</span>: [{
+    <span class="c-str">"role"</span>: <span class="c-str">"user"</span>,
+    <span class="c-str">"content"</span>: <span class="c-str">"Your prompt here"</span>
+  }],
+  <span class="c-str">"temperature"</span>: <span class="c-num">0.7</span>,
+  <span class="c-str">"top_p"</span>: <span class="c-num">0.9</span>
+}
+<span class="c-cm">// Nova format (similar, uses inferenceConfig)</span>
+{
+  <span class="c-str">"system"</span>: [{<span class="c-str">"text"</span>: <span class="c-str">"..."</span>}],
+  <span class="c-str">"messages"</span>: [{...}],
+  <span class="c-str">"inferenceConfig"</span>: {
+    <span class="c-str">"maxTokens"</span>: <span class="c-num">1000</span>,
+    <span class="c-str">"temperature"</span>: <span class="c-num">0.7</span>
+  }
+}</div>
+            </div>
+            <div>
+              <p><strong>Amazon Titan format:</strong></p>
+              <div class="code-block">{
+  <span class="c-str">"inputText"</span>: <span class="c-str">"Your prompt"</span>,
+  <span class="c-str">"textGenerationConfig"</span>: {
+    <span class="c-str">"maxTokenCount"</span>: <span class="c-num">500</span>,
+    <span class="c-str">"temperature"</span>: <span class="c-num">0.8</span>,
+    <span class="c-str">"topP"</span>: <span class="c-num">0.9</span>,
+    <span class="c-str">"stopSequences"</span>: [<span class="c-str">"User:"</span>]
+  }
+}</div>
+              <p style="margin-top:0.6rem"><strong>HTTP Error Codes:</strong></p>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>400</strong> — Bad Request (invalid JSON, missing fields)</li>
+                <li><strong>401/403</strong> — Auth/permission issues (non-retriable)</li>
+                <li><strong>429</strong> — Throttling (retriable with backoff)</li>
+                <li><strong>500/503</strong> — Service errors (retriable)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="exam-tip"><strong>🎯 Retry Strategy</strong>: Exponential backoff starting at 100ms, factor of 2, max 3-5 attempts, add ±100ms jitter. SDK does this automatically if configured.</div>
+
+          <h5 style="margin-top:1rem">Multimodal Input (image in messages):</h5>
+          <div class="code-block">{
+  <span class="c-str">"messages"</span>: [{
+    <span class="c-str">"role"</span>: <span class="c-str">"user"</span>,
+    <span class="c-str">"content"</span>: [
+      {<span class="c-str">"type"</span>: <span class="c-str">"text"</span>, <span class="c-str">"text"</span>: <span class="c-str">"Describe this diagram"</span>},
+      {<span class="c-str">"type"</span>: <span class="c-str">"image"</span>, <span class="c-str">"source"</span>: {
+        <span class="c-str">"type"</span>: <span class="c-str">"base64"</span>,
+        <span class="c-str">"media_type"</span>: <span class="c-str">"image/jpeg"</span>,
+        <span class="c-str">"data"</span>: <span class="c-str">"&lt;base64-encoded-image&gt;"</span>
+      }}
+    ]
+  }]
+}</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🎭</span> Multimodal Data Processing</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Text Processing</h5><ul><li>Amazon Comprehend: entities, sentiment, PII</li><li>AWS Glue: ETL, normalization</li><li>Lambda: custom cleaning, tokenization</li><li>Bedrock Data Automation: AI-powered prep</li></ul></div>
+            <div class="concept-card"><h5>Image Processing</h5><ul><li>Amazon Rekognition: object detection, labels</li><li>Bedrock Nova Canvas/Titan Image</li><li>Base64 encoding for Bedrock API</li><li>S3 + Lambda trigger pipeline</li></ul></div>
+            <div class="concept-card"><h5>Audio/Video</h5><ul><li>Amazon Transcribe: speech-to-text</li><li>Cross-modal alignment (sync audio/video)</li><li>Nova Reel: video generation</li><li>Nova Sonic: real-time audio conversation</li></ul></div>
+          </div>
+          <div class="key-concept"><strong>💡 S3 Vectors (New Feature)</strong>Amazon S3 Vectors is a new capability for storing and querying vector embeddings natively in S3. Supports billions of vectors with sub-second query latency. Key advantages: 40-60% cost reduction with Intelligent-Tiering, metadata pre-filtering reduces search space 50-70%, multi-region replication with &lt;15 min sync, ABAC for fine-grained access.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 1.4 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.4</div>
+      <h3>Design &amp; Implement Vector Store Solutions</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📐</span> Vector Database Deep Dive</div>
+        <div class="sub-acc-body">
+          <h5>Distance Metrics — Know All Three:</h5>
+          <table class="compare-table">
+            <thead><tr><th>Metric</th><th>Formula Concept</th><th>Best For</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Cosine Similarity</strong></td><td>Angle between vectors (direction only)</td><td>Text embeddings, docs of different lengths</td><td>Range: -1 to 1; ignores magnitude; most common for NLP</td></tr>
+              <tr><td><strong>Euclidean Distance</strong></td><td>Straight-line distance in vector space</td><td>When magnitude matters, dense embeddings</td><td>Sensitive to dimensionality; lower = more similar</td></tr>
+              <tr><td><strong>Dot Product</strong></td><td>Magnitude + direction combined</td><td>When content volume is relevant</td><td>Can favor longer documents; efficient compute</td></tr>
+            </tbody>
+          </table>
+
+          <h5 style="margin-top:1rem">AWS Vector Store Options:</h5>
+          <table class="compare-table">
+            <thead><tr><th>Service</th><th>Index Type</th><th>Hybrid Search</th><th>Scale</th><th>Best Use Case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>OpenSearch Neural</strong></td><td>HNSW or IVF</td><td>✅ Keyword + Vector</td><td>Large to very large</td><td>Full-text + semantic search, enterprise search</td></tr>
+              <tr><td><strong>Aurora pgvector</strong></td><td>IVFFlat, HNSW</td><td>✅ SQL + Vector</td><td>Medium</td><td>Need relational queries + similarity (e.g., filter by user_id then similarity)</td></tr>
+              <tr><td><strong>S3 Vectors</strong></td><td>Native S3 distributed</td><td>❌ Vector only</td><td>Billions of vectors</td><td>Cost-optimized large-scale vector storage</td></tr>
+              <tr><td><strong>Bedrock Knowledge Bases</strong></td><td>Managed (OSS backend)</td><td>✅ Managed hybrid</td><td>Enterprise</td><td>Managed RAG — no infra management</td></tr>
+              <tr><td><strong>Amazon MemoryDB</strong></td><td>Redis-compatible</td><td>❌</td><td>Medium</td><td>Ultra-low latency vector + key-value</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> OpenSearch HNSW Configuration (Deep Detail)</div>
+        <div class="sub-acc-body">
+          <p>Hierarchical Navigable Small World (HNSW) is the primary index type for vector search in OpenSearch:</p>
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Index Construction Parameters</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>M</strong>: Max connections per node — higher M = better recall but more memory (typical: 16-64)</li>
+                <li><strong>ef_construction</strong>: Search width during build — higher = better quality, slower indexing (typical: 100-512)</li>
+                <li><strong>max_connections</strong>: Upper limit on node connections</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>Search Parameters</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>ef_search</strong>: Search width during query — higher = better recall, slower (typical: 100-512)</li>
+                <li><strong>num_candidates</strong>: Candidates to evaluate</li>
+                <li><strong>rescore</strong>: Enable for improved accuracy</li>
+                <li>Performance: p50/p95/p99 latency + recall@k</li>
+              </ul>
+            </div>
+          </div>
+          <h5 style="margin-top:1rem">4-Stage Hierarchical Search Pipeline:</h5>
+          <ol class="step-list">
+            <li><strong>Coarse filtering</strong>: Apply metadata filters, document clustering, semantic routing to relevant partitions</li>
+            <li><strong>Approximate ANN search</strong>: Fast approximate nearest neighbor, retrieve larger candidate set</li>
+            <li><strong>Fine-grained ranking</strong>: Precise cosine scores, business logic weighting, diversity algorithms</li>
+            <li><strong>Result assembly</strong>: Retrieve full content + metadata, final formatting, relevance explanations</li>
+          </ol>
+          <div class="exam-tip"><strong>🎯 S3 Vectors Performance</strong>: Pre-filter metadata BEFORE vector calculations to reduce search space 50-70%. Use prefix-based hierarchical organization for efficient filtering. Configure Intelligent-Tiering for 40-60% cost reduction on infrequently accessed vectors.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Vector Store Data Maintenance Systems</div>
+        <div class="sub-acc-body">
+          <div class="three-col">
+            <div class="concept-card"><h5>Event-Driven Updates</h5><ul><li>S3 event → Lambda → re-embed → upsert</li><li>DynamoDB Streams → update pipeline</li><li>Near real-time freshness</li><li>Best for: frequently changing docs</li></ul></div>
+            <div class="concept-card"><h5>Batch Sync</h5><ul><li>Scheduled Glue jobs or Step Functions</li><li>Delta detection (last-modified timestamps)</li><li>Cost-efficient for bulk updates</li><li>Best for: large corpora, nightly updates</li></ul></div>
+            <div class="concept-card"><h5>Hybrid Approach</h5><ul><li>Real-time for high-priority content</li><li>Batch for bulk/archival content</li><li>Drift monitoring with CloudWatch</li><li>Version control for knowledge bases</li></ul></div>
+          </div>
+          <h5 style="margin-top:0.8rem">S3 Metadata Framework for RAG Enhancement:</h5>
+          <div class="two-col">
+            <div class="highlight-box"><h5>System-Defined Metadata</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li>Content-Type, Content-Length</li><li>Last-Modified timestamp</li><li>ETag (content fingerprint)</li><li>x-amz-version-id</li></ul></div>
+            <div class="highlight-box"><h5>User-Defined Metadata (x-amz-meta-*)</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li>document-author, department, category</li><li>expiry-date, version, language</li><li>security-classification, jurisdiction</li><li>Enables pre-filtering before vector search</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 1.5 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.5</div>
+      <h3>Design Retrieval Mechanisms for FM Augmentation (RAG)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✂️</span> Chunking Strategies — Critical Deep Dive</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Strategy</th><th>How It Works</th><th>Pros</th><th>Cons</th><th>Use When</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Fixed-Size</strong></td><td>Split every N tokens (e.g., 512) with optional overlap (e.g., 50 tokens)</td><td>Simple, predictable, consistent embeddings</td><td>May break semantic units</td><td>Uniform content (FAQs, reports)</td></tr>
+              <tr><td><strong>Recursive Character</strong></td><td>Try splitting on paragraphs → sentences → words → chars</td><td>Preserves natural boundaries better</td><td>Variable chunk sizes</td><td>General-purpose documents</td></tr>
+              <tr><td><strong>Semantic</strong></td><td>Split where embedding similarity drops below threshold</td><td>Content-aware, preserves meaning</td><td>Slower, requires embedding during chunking</td><td>Varied documents, conversational content</td></tr>
+              <tr><td><strong>Hierarchical</strong></td><td>Parent chunks (large context) + child chunks (precise retrieval)</td><td>Best of both worlds: precision + context</td><td>More complex, higher storage cost</td><td>Long documents needing both broad and specific retrieval</td></tr>
+              <tr><td><strong>Document-Structure</strong></td><td>Use headers, sections, paragraphs as boundaries</td><td>Preserves logical document structure</td><td>Requires structured input</td><td>PDFs, Word docs, HTML with clear structure</td></tr>
+            </tbody>
+          </table>
+          <div class="key-concept"><strong>💡 Chunking Best Practices</strong>
+            <ul style="padding-left:1.2rem">
+              <li>Overlap: 10-20% of chunk size to preserve cross-boundary context</li>
+              <li>Include metadata in chunk (source, page, section) for better retrieval context</li>
+              <li>Measure: chunk cohesion (intra-chunk cosine similarity), retrievability metrics</li>
+              <li>Bedrock Knowledge Bases offers: fixed-size, semantic, and hierarchical chunking built-in</li>
+              <li>Custom chunking: Lambda function for complex logic (hierarchical workflows)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧲</span> Embedding Models — Amazon Titan Embeddings</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Titan Text Embeddings V2</h5><ul><li>Dimensions: 256, 512, or 1024 (configurable)</li><li>Supports normalization (for cosine)</li><li>English + multilingual support</li><li>Best for: text-only semantic search</li></ul></div>
+            <div class="concept-card"><h5>Titan Multimodal Embeddings G1</h5><ul><li>Embeds both text AND images in same space</li><li>Cross-modal similarity search</li><li>Dimension: 1024</li><li>Best for: product search, media retrieval</li></ul></div>
+            <div class="concept-card"><h5>Embedding Selection Criteria</h5><ul><li>Match dimensionality to quality/cost need</li><li>Use SAME model for indexing AND querying</li><li>Consider: throughput, cost per 1K tokens</li><li>Cohere Embed for multilingual enterprise</li></ul></div>
+          </div>
+          <div class="exam-tip"><strong>🎯 Critical Rule</strong>: Always use the exact same embedding model for both creating the vector index AND for embedding queries at search time. Mixing models produces meaningless similarity scores.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔎</span> Advanced Query Engineering</div>
+        <div class="sub-acc-body">
+          <h5>Query Enhancement Techniques:</h5>
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Query Expansion</h5><ul><li>Use LLM to generate synonyms/related terms</li><li>HyDE: generate hypothetical answer, embed it, search for similar docs</li><li>Multi-query: generate N variations → union results</li><li>Domain-specific expansion (medical/legal terms)</li></ul></div>
+            <div class="concept-card"><h5>Query Decomposition</h5><ul><li>Break complex queries into sub-queries</li><li>Identify: temporal, entity, constraint components</li><li>Run sub-queries in parallel (Lambda)</li><li>Aggregate + deduplicate results</li><li>Use Step Functions for orchestration</li></ul></div>
+            <div class="concept-card"><h5>Re-ranking</h5><ul><li>First-pass: fast ANN retrieval (top-k)</li><li>Re-rank with cross-encoder model</li><li>Apply business logic weighting</li><li>Diversity algorithms (avoid result clustering)</li><li>Amazon Kendra: hybrid keyword + semantic</li></ul></div>
+          </div>
+          <div class="code-block"><span class="c-cm"># Query pipeline classification example</span>
+<span class="c-kw">def</span> select_processing_pipeline(query, classification):
+    <span class="c-kw">if</span> classification == <span class="c-str">'simple'</span>:
+        <span class="c-kw">return</span> [<span class="c-str">'expansion'</span>]
+    <span class="c-kw">elif</span> classification == <span class="c-str">'complex'</span>:
+        <span class="c-kw">return</span> [<span class="c-str">'decomposition'</span>, <span class="c-str">'expansion'</span>, <span class="c-str">'transformation'</span>]
+    <span class="c-kw">elif</span> classification == <span class="c-str">'domain_specific'</span>:
+        <span class="c-kw">return</span> [<span class="c-str">'domain_expansion'</span>, <span class="c-str">'specialized_transformation'</span>]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 1.6 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1.6</div>
+      <h3>Implement Prompt Engineering Strategies &amp; Governance</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✍️</span> Advanced Prompt Engineering Techniques</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Technique</th><th>Description</th><th>AWS Implementation</th><th>Best For</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Chain-of-Thought (CoT)</strong></td><td>"Think step by step" — forces intermediate reasoning before answer</td><td>System message + prompt structure; Step Functions for multi-step</td><td>Math, logic, complex analysis</td></tr>
+              <tr><td><strong>ReAct (Reason+Act)</strong></td><td>Interleaved Reasoning-Action-Observation loop</td><td>Step Functions state machine (Reason state → Action state → Observe state)</td><td>Agentic tasks needing tool use</td></tr>
+              <tr><td><strong>Few-Shot</strong></td><td>Provide 3-5 examples in prompt</td><td>Bedrock Prompt Management templates with examples</td><td>Classification, format adherence</td></tr>
+              <tr><td><strong>Tree of Thought</strong></td><td>Explore multiple reasoning branches in parallel</td><td>Step Functions Parallel states + aggregation Lambda</td><td>Complex multi-path problems</td></tr>
+              <tr><td><strong>Self-Consistency</strong></td><td>Sample N responses, majority vote</td><td>Lambda to invoke model N times + aggregation</td><td>Factual accuracy, reducing hallucination</td></tr>
+              <tr><td><strong>Prompt Chaining</strong></td><td>Output of prompt A feeds prompt B</td><td>Bedrock Flows (visual) or Step Functions</td><td>Multi-stage document processing</td></tr>
+            </tbody>
+          </table>
+
+          <div class="key-concept"><strong>💡 Bedrock Flows</strong>: Visual, node-based builder for prompt chains. Nodes include: FM inference nodes, Lambda nodes, Condition nodes, Iterator nodes, Collector nodes, Knowledge Base retrieval nodes. Use for: RAG + generation pipelines, multi-step reasoning, conditional branching without custom code.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Bedrock Guardrails — Deep Configuration</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Content Filters</h5><ul><li>Categories: Hate, Insults, Sexual, Violence, Misconduct, Prompt Attack</li><li>Severity levels: LOW, MEDIUM, HIGH</li><li>Applies to: INPUT and/or OUTPUT</li><li>Custom threshold per category</li></ul></div>
+            <div class="concept-card"><h5>Topic Denial</h5><ul><li>Define forbidden topics with plain language</li><li>Examples: competitor products, legal advice, medical diagnoses</li><li>LLM-based classification (no regex)</li><li>Returns custom denial message</li></ul></div>
+            <div class="concept-card"><h5>PII Redaction</h5><ul><li>50+ PII types: SSN, credit card, email, phone, name, address</li><li>Modes: REDACT (replace with type) or BLOCK</li><li>Applies to both input and output</li><li>Audit-ready with CloudTrail logging</li></ul></div>
+            <div class="concept-card"><h5>Grounding Check</h5><ul><li>Detects hallucinations vs. source documents</li><li>Checks if output is grounded in retrieved context</li><li>Relevance scoring threshold configurable</li><li>Essential for RAG pipelines</li></ul></div>
+            <div class="concept-card"><h5>Word Filters</h5><ul><li>Custom blocked word lists</li><li>Managed lists (profanity)</li><li>Applied post-generation</li></ul></div>
+            <div class="concept-card"><h5>Prompt Injection Defense</h5><ul><li>PROMPT_ATTACK filter category in content filter</li><li>Detects jailbreak attempts, role-play attacks</li><li>System prompt separation (protected)</li><li>Input validation in Lambda pre-Bedrock call</li></ul></div>
+          </div>
+          <div class="watch-out"><strong>⚠️ Guardrails Gotcha</strong>: Guardrails must be explicitly associated with a model invocation (via guardrailIdentifier + guardrailVersion in the API call). They do NOT auto-apply to all Bedrock calls. Also: Guardrails can be applied at both REQUEST and RESPONSE level independently.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📋</span> Prompt Management &amp; Governance (Enterprise)</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div>
+              <h5>Bedrock Prompt Management Features:</h5>
+              <ul style="padding-left:1.2rem;font-size:0.85rem">
+                <li><strong>Centralized repository</strong>: Store prompt templates with versions</li>
+                <li><strong>Parameterization</strong>: Variables in templates ({{input}}, {{context}})</li>
+                <li><strong>Version control</strong>: Draft → Review → Approved → Production</li>
+                <li><strong>Approval workflows</strong>: Governance gates before deployment</li>
+                <li><strong>A/B testing</strong>: Route % traffic to different prompt versions</li>
+                <li><strong>Analytics</strong>: Track performance per prompt version</li>
+              </ul>
+            </div>
+            <div>
+              <h5>Governance Architecture:</h5>
+              <ul style="padding-left:1.2rem;font-size:0.85rem">
+                <li><strong>CloudTrail</strong>: All prompt management API calls logged</li>
+                <li><strong>IAM policies</strong>: Role-based access to prompt versions</li>
+                <li><strong>Security Hub</strong>: Near-real-time risk analytics for FM deployments</li>
+                <li><strong>Centralized vs. Federated</strong>: Central policy + distributed implementation</li>
+                <li><strong>Async monitoring</strong>: Don't impact latency with sync governance checks</li>
+              </ul>
+            </div>
+          </div>
+          <div class="exam-tip"><strong>🎯 QA for Probabilistic Outputs</strong>: FM outputs are probabilistic — same input can produce different outputs. Design validation around: semantic similarity scoring (not exact match), threshold-based acceptance, statistical validation over N runs. Use SageMaker AI serverless RL-based customization (new feature) to reduce fine-tuning time from months to days.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DOMAIN 2 VIEW ============================================================ -->
+<div id="view-domain2" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#1a3a2e,#2d6a4f)">
+    <h2>Domain 2: Implementation &amp; Integration</h2>
+    <p>Tasks 2.1–2.5 · Agentic AI, Deployment Strategies, Enterprise Integration, API Patterns, Dev Tools</p>
+    <span class="domain-weight">~25% of Exam Weight</span>
+  </div>
+
+  <!-- TASK 2.1 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">2.1</div>
+      <h3>Implement Agentic AI Solutions &amp; Tool Integrations</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤖</span> Agentic AI Architecture Overview</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Technology</th><th>Type</th><th>Key Characteristics</th><th>When to Use</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Amazon Bedrock Agents</strong></td><td>Fully Managed</td><td>Built-in orchestration, action groups, knowledge bases, memory, Guardrails integration</td><td>Standard agentic workflows, minimal infra management, conversational agents</td></tr>
+              <tr><td><strong>Bedrock AgentCore</strong></td><td>Composable Services</td><td>Framework-agnostic (works with any SDK/model), AgentCore Policy (governance), AgentCore Evaluations, episodic memory for enhanced context</td><td>Complex agents needing fine-grained composability, multi-framework environments</td></tr>
+              <tr><td><strong>Strands Agents SDK</strong></td><td>Open-Source</td><td>Full code visibility, modular (swap components), built-in eval, MCP integration, @tool decorator</td><td>Custom agent logic, need transparency/control, contributing to open-source</td></tr>
+              <tr><td><strong>AWS Agent Squad</strong></td><td>Multi-Agent Orchestration</td><td>Coordinates multiple specialized agents, shared context/state, task delegation</td><td>Complex tasks requiring collaboration between specialized agents</td></tr>
+              <tr><td><strong>Step Functions (ReAct)</strong></td><td>Workflow Engine</td><td>Deterministic state machines, guaranteed execution, built-in error handling, human approval steps</td><td>Predictable workflows needing audit trail, human-in-the-loop, compliance</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔗</span> Model Context Protocol (MCP) — Deep Dive</div>
+        <div class="sub-acc-body">
+          <p>MCP is a standardized protocol for agent-tool interactions. Agents discover tools, invoke them, and get results via MCP servers.</p>
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>MCP Transport Protocols</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>stdio</strong>: Local process communication (dev/local)</li>
+                <li><strong>SSE</strong>: Server-Sent Events (streaming, HTTP)</li>
+                <li><strong>streamable-http</strong>: For AWS deployments (Mcp-Session-Id header for isolation)</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>MCP Server Hosting Options</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>Lambda</strong>: Stateless, lightweight tools (web search, calculations, data retrieval)</li>
+                <li><strong>ECS</strong>: Stateful, complex tools (code execution, image processing, large compute)</li>
+                <li><strong>API Gateway</strong>: Expose MCP-compatible endpoints for existing services</li>
+              </ul>
+            </div>
+          </div>
+
+          <h5 style="margin-top:1rem">6-Step MCP Workflow:</h5>
+          <ol class="step-list">
+            <li><strong>MCP Client Initialization</strong>: Agent app connects to MCP server via transport protocol</li>
+            <li><strong>Tool Discovery</strong>: Agent calls list_tools() — gets name, description, input schema for each tool</li>
+            <li><strong>Agent Creation</strong>: Agent created with discovered tools; LLM can now see tools in system prompt</li>
+            <li><strong>Reasoning &amp; Tool Selection</strong>: LLM analyzes user query, decides which tool to call and with what arguments</li>
+            <li><strong>MCP Server Execution</strong>: Server executes tool function, returns result to agent (server is stateless)</li>
+            <li><strong>Final Response</strong>: Agent synthesizes tool results into coherent response to user</li>
+          </ol>
+
+          <div class="code-block"><span class="c-cm"># Strands Agent with MCP integration pattern</span>
+<span class="c-kw">from</span> mcp <span class="c-kw">import</span> stdio_client, StdioServerParameters
+<span class="c-kw">from</span> strands <span class="c-kw">import</span> Agent
+<span class="c-kw">from</span> strands.tools.mcp <span class="c-kw">import</span> MCPClient
+
+mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
+    StdioServerParameters(command=<span class="c-str">"uvx"</span>, args=[<span class="c-str">"awslabs.aws-documentation-mcp-server@latest"</span>])
+))
+<span class="c-kw">with</span> mcp_client:
+    tools = mcp_client.list_tools_sync()
+    agent = Agent(tools=tools, model=<span class="c-str">"anthropic.claude-3-5-sonnet-20241022-v2:0"</span>)
+    response = agent(<span class="c-str">"What is the Bedrock Converse API?"</span>)  <span class="c-cm"># Agent auto-selects tools</span></div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔒</span> Safeguarded AI Workflows</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Stopping Conditions</h5><ul><li>Step Functions: max iteration count in Choice state</li><li>Lambda: timeout settings (predictable execution)</li><li>CloudWatch alarms: auto-halt on error rate threshold</li><li>Circuit breaker: 50% failure → open circuit 30-60s</li></ul></div>
+            <div class="concept-card"><h5>IAM Boundaries for Agents</h5><ul><li>Least-privilege resource policies</li><li>Restrict agent to only necessary actions/resources</li><li>Deny any unneeded service calls</li><li>Session policies for temporary credentials</li></ul></div>
+            <div class="concept-card"><h5>Human-in-the-Loop</h5><ul><li>Step Functions Human Task state (wait for token)</li><li>API Gateway: collect human feedback</li><li>DynamoDB: store review decisions with TTL</li><li>Escalation criteria based on confidence scores</li></ul></div>
+            <div class="concept-card"><h5>Input Validation</h5><ul><li>Schema validation before agent processing</li><li>Lambda pre-processing for malformed inputs</li><li>Bedrock Guardrails: prompt injection detection</li><li>Rate limiting via API Gateway usage plans</li></ul></div>
+          </div>
+          <div class="exam-tip"><strong>🎯 ReAct Pattern in Step Functions</strong>: State machine alternates: <code>Reason</code> state (invoke LLM) → <code>Parse Action</code> state (Lambda extracts tool call) → <code>Execute Action</code> state (call tool) → <code>Observe</code> state (feed result back to LLM) → repeat until final answer or max steps reached.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤝</span> Multi-Agent Coordination Patterns</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Ensemble / Aggregation</h5><ul><li>Multiple agents/models on same task</li><li>Majority voting for classification</li><li>Weighted averaging for numeric outputs</li><li>Ranked fusion for retrieval</li><li>Lambda aggregation logic</li></ul></div>
+            <div class="concept-card"><h5>Specialized Routing</h5><ul><li>Agent Squad: route to specialized agent</li><li>Claude → complex reasoning tasks</li><li>Nova Pro → document analysis</li><li>Nova Lite → simple/high-volume tasks</li><li>Domain-specific agents (medical, legal)</li></ul></div>
+            <div class="concept-card"><h5>Hierarchical Agents</h5><ul><li>Orchestrator agent decomposes task</li><li>Sub-agents handle specific components</li><li>Results aggregated by orchestrator</li><li>Step Functions manages coordination</li><li>DynamoDB shares state between agents</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2.2 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">2.2</div>
+      <h3>Implement Model Deployment Strategies</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🚀</span> Deployment Strategy Decision Framework</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Strategy</th><th>Service</th><th>Traffic Pattern</th><th>Latency</th><th>Cost Model</th><th>Key Config</th></tr></thead>
+            <tbody>
+              <tr><td><strong>On-Demand Serverless</strong></td><td>Lambda + Bedrock</td><td>Spiky, unpredictable</td><td>Variable (cold start risk)</td><td>Pay per invocation</td><td>Memory, timeout, concurrency limits</td></tr>
+              <tr><td><strong>Bedrock On-Demand</strong></td><td>Bedrock InvokeModel</td><td>Any</td><td>Low-medium</td><td>Pay per token</td><td>Model ID, throttling limits</td></tr>
+              <tr><td><strong>Bedrock Provisioned Throughput</strong></td><td>Bedrock PT</td><td>Steady, high-volume</td><td>Consistent, low</td><td>Per-hour commitment (1mo/6mo)</td><td>Model Units (MUs), CloudWatch monitoring</td></tr>
+              <tr><td><strong>SageMaker Real-time</strong></td><td>SageMaker Endpoints</td><td>Consistent, latency-sensitive</td><td>Low (&lt;1s)</td><td>Instance hours + data</td><td>Instance type, auto-scaling policy</td></tr>
+              <tr><td><strong>SageMaker Serverless</strong></td><td>SageMaker Serverless</td><td>Intermittent</td><td>Medium (cold start)</td><td>Pay per request</td><td>Memory size, max concurrency</td></tr>
+              <tr><td><strong>SageMaker Async</strong></td><td>SageMaker Async Endpoints</td><td>Batch, non-latency-sensitive</td><td>Minutes</td><td>Instance hours (scale-to-zero)</td><td>S3 input/output, max concurrency</td></tr>
+              <tr><td><strong>Multi-Model Endpoint</strong></td><td>SageMaker MME</td><td>Many models, low per-model traffic</td><td>Variable (model loading)</td><td>Shared instance across models</td><td>Container + model artifacts, routing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🖥️</span> Large Language Model Deployment Challenges</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Memory Management</h5><ul><li>LLMs can be 10s-100s of GB</li><li>SageMaker: up to 500GB model size</li><li>GPU instances: ml.g5, ml.p4d.24xlarge (for large models)</li><li>CPU for small NER/classification: ml.c5.9xlarge</li><li>Container health check timeout: up to 60 min</li></ul></div>
+            <div class="concept-card"><h5>Model Parallelism</h5><ul><li>DeepSpeed: tensor/pipeline parallelism</li><li>Triton + FasterTransformer: optimized inference</li><li>SageMaker Distributed Inference</li><li>UltraServers: multi-EC2 instances with low-latency interconnect</li><li>For models larger than single GPU memory</li></ul></div>
+            <div class="concept-card"><h5>Token Processing Optimization</h5><ul><li>Batching: group requests to maximize GPU utilization</li><li>Continuous batching: process tokens as they arrive</li><li>KV-cache: reuse attention computations</li><li>Quantization (INT8/INT4): reduce model size</li><li>Knowledge distillation: train smaller model from large</li></ul></div>
+          </div>
+
+          <h5 style="margin-top:0.8rem">SageMaker Endpoint Types Comparison:</h5>
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Inference Components (New)</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Host multiple models on single endpoint</li>
+                <li>Define separate scaling policies per model</li>
+                <li>Control memory/CPU allocation per component</li>
+                <li>Scale each model independently based on traffic</li>
+                <li>Best for: multi-model serving with different traffic patterns</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>Serial Inference Pipelines</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Chain multiple models in sequence</li>
+                <li>Output of model N → input of model N+1</li>
+                <li>E.g.: preprocessing model → LLM → postprocessing</li>
+                <li>Single endpoint for the pipeline</li>
+                <li>Best for: fixed multi-step inference workflows</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="key-concept"><strong>💡 Nova Forge via SageMaker</strong>: Custom model training starting from Nova checkpoints. Mix proprietary data with Nova-curated data across all training phases (pre/mid/post-training). Supports RL with custom reward functions and custom orchestrator for multi-turn rollouts. Prevents catastrophic forgetting better than pure custom training.</div>
+          <div class="key-concept"><strong>💡 Bedrock Custom Model Import</strong>: Import models trained/fine-tuned in SageMaker into Bedrock. Get on-demand API access without managing endpoints. More cost-effective than provisioned throughput for variable traffic.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚖️</span> Optimized Deployment Approaches</div>
+        <div class="sub-acc-body">
+          <h5>Model Cascading Architecture:</h5>
+          <ol class="step-list">
+            <li>Route all requests to smallest/cheapest model first (Nova Lite)</li>
+            <li>Evaluate response quality with confidence scoring Lambda</li>
+            <li>If quality &lt; threshold (e.g., 0.7-0.9), escalate to Nova Pro</li>
+            <li>Cache high-quality responses for similar future queries</li>
+            <li>Monitor cascade metrics: escalation rate, cost savings, quality distribution</li>
+          </ol>
+
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Caching Strategies</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li><strong>Response caching</strong>: ElastiCache/DynamoDB for identical/near-identical queries</li>
+                <li><strong>Embedding caching</strong>: Avoid re-embedding same content</li>
+                <li><strong>Semantic caching</strong>: Return cached if query vector is close enough (similarity threshold)</li>
+                <li><strong>API Gateway cache</strong>: 300s default TTL for GET requests</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>Asynchronous Inference Pattern</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>SQS queue → Lambda → SageMaker Async Endpoint</li>
+                <li>Results stored in S3, notification via SNS</li>
+                <li>Scale to zero when no traffic</li>
+                <li>SQS visibility timeout matches processing duration (5-15 min for LLMs)</li>
+                <li>DLQ after 3-5 failed attempts</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2.3 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">2.3</div>
+      <h3>Design &amp; Implement Enterprise Integration Architectures</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🏢</span> Enterprise Connectivity Patterns</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>API-Based Integration</h5><ul><li>API Gateway: REST/HTTP/WebSocket APIs</li><li>Custom domain mappings for branding</li><li>Regional (low-latency) vs Edge-optimized (global)</li><li>Lambda integration for custom logic</li><li>Usage plans + throttling per API key</li></ul></div>
+            <div class="concept-card"><h5>Event-Driven Integration</h5><ul><li>EventBridge: route business events to FM processing</li><li>Pattern matching: select which events need GenAI</li><li>SQS DLQ: handle failed event processing</li><li>EventBridge Pipes: source → filter → enrich → target</li><li>Loose coupling between systems</li></ul></div>
+            <div class="concept-card"><h5>Hybrid/On-Premises</h5><ul><li>AWS Outposts: run FM inference in your DC</li><li>AWS Wavelength: edge deployments for ultra-low latency</li><li>Local Zones: geographic compliance</li><li>Direct Connect: dedicated network to AWS</li><li>Site-to-Site VPN: encrypted connectivity</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔐</span> Secure Access Framework for GenAI</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Security Layer</th><th>Service/Pattern</th><th>Implementation Detail</th></tr></thead>
+            <tbody>
+              <tr><td>Identity Federation</td><td>IAM Identity Center / Cognito</td><td>Attribute mapping from IdP, role assignment per user group</td></tr>
+              <tr><td>Fine-grained Access</td><td>Amazon Verified Permissions</td><td>Cedar policy language, attribute-based (ABAC) policies on resources</td></tr>
+              <tr><td>Network Isolation</td><td>VPC Endpoints (PrivateLink)</td><td>Private connectivity to Bedrock without internet; security groups + NACLs</td></tr>
+              <tr><td>Encryption in Transit</td><td>ACM + TLS 1.2+</td><td>All API calls to Bedrock are TLS encrypted by default</td></tr>
+              <tr><td>Encryption at Rest</td><td>AWS KMS</td><td>Customer-managed keys (CMK) for model artifacts, prompt logs, knowledge bases</td></tr>
+              <tr><td>Audit Logging</td><td>CloudTrail + CloudWatch Logs</td><td>Log all FM API calls with request/response for compliance</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔧</span> CI/CD for GenAI + GenAI Gateway Architecture</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>CI/CD Pipeline (CodePipeline + CodeBuild)</h5>
+              <ol style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Source: CodeCommit/GitHub trigger</li>
+                <li>Build: CodeBuild — package Lambda, validate prompts, dependency scan</li>
+                <li>Test: Automated FM behavior tests (deterministic + probabilistic)</li>
+                <li>Security scan: SAST/DAST, dependency vulnerabilities</li>
+                <li>Staging deploy: limited traffic rollout</li>
+                <li>Approval gate: human review or automated quality check</li>
+                <li>Production deploy: blue/green or canary</li>
+                <li>Post-deploy: CloudWatch alarms, rollback trigger</li>
+              </ol>
+            </div>
+            <div class="highlight-box">
+              <h5>GenAI Gateway Pattern</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Centralized entry point for all FM access</li>
+                <li>API Gateway → Lambda Gateway → Bedrock/SageMaker</li>
+                <li>Enforces: auth, rate limiting, logging, cost tracking</li>
+                <li>Model routing logic centralized here</li>
+                <li>X-Ray tracing across all hops</li>
+                <li>Cost allocation by team/use-case via tags</li>
+                <li>Supports: A/B testing, gradual rollout</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2.4 -->
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">2.4</div>
+      <h3>Implement FM API Integrations</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🌊</span> Streaming &amp; Real-Time AI</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Bedrock Streaming API</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>InvokeModelWithResponseStream</li>
+                <li>Returns chunks as they're generated</li>
+                <li>Buffer management: 5-20 chunks, flush on sentence completion</li>
+                <li>Client-side progressive rendering</li>
+                <li>Error recovery: fallback to full-response API if streaming fails persistently</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>WebSocket / SSE Patterns</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>WebSocket: bidirectional, keep-alive ping every 30-60s</li>
+                <li>Idle timeout: ~10 min for interactive sessions</li>
+                <li>SSE: reconnection backoff from 1s to max 30-60s</li>
+                <li>Event IDs: resume streams after disconnection</li>
+                <li>API Gateway: chunked transfer encoding</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Resilience Patterns — Key Numbers to Know</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Retry Configuration</h5><ul><li>Initial backoff: 100ms</li><li>Backoff factor: 2x (exponential)</li><li>Max backoff: 20 seconds</li><li>Max attempts: 3-5</li><li>Jitter: ±100ms or factor 0.1-0.3</li><li>Retriable: 429, 500, 503</li><li>Non-retriable: 400, 401, 403</li></ul></div>
+            <div class="concept-card"><h5>Circuit Breaker</h5><ul><li>Failure threshold: 50% over 10 requests</li><li>Recovery timeout: 30-60 seconds</li><li>Half-open test traffic: 10-20%</li><li>Implement: Step Functions + CloudWatch</li><li>Alert: CloudWatch alarm → SNS → Lambda</li></ul></div>
+            <div class="concept-card"><h5>Throttling Config</h5><ul><li>Account-level: 10,000 RPS</li><li>Stage-level: 1,000-5,000 RPS</li><li>Route-level: 50-500 RPS (complex models)</li><li>SQS for request buffering under throttle</li><li>SQS visibility timeout: 5-15 min for LLMs</li></ul></div>
+            <div class="concept-card"><h5>Connection Pooling</h5><ul><li>Pool size: 10-20 connections per instance</li><li>Connection TTL: 60-300 seconds</li><li>Reduce SDK client instantiation (reuse across Lambda invocations)</li><li>Use global variables for SDK clients in Lambda</li></ul></div>
+          </div>
+          <div class="exam-tip"><strong>🎯 X-Ray Tracing Pattern</strong>: Add custom subsegments for: (1) input preprocessing, (2) model invocation, (3) response postprocessing. Annotate with: model_name, input_complexity_score, output_quality_score, cost_estimate. This enables performance analysis by model and query type.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DOMAIN 3 VIEW ============================================================ -->
+<div id="view-domain3" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#4a1a1a,#7b2d2d)">
+    <h2>Domain 3: AI Safety, Security &amp; Governance</h2>
+    <p>Guardrails, IAM, Responsible AI, Compliance, Audit, Data Privacy</p>
+    <span class="domain-weight">~20% of Exam Weight</span>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">3.1</div>
+      <h3>Implement AI Safety Controls &amp; Responsible AI</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Bedrock Guardrails — Complete Configuration</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Guardrail Feature</th><th>Configuration Detail</th><th>Applied At</th><th>Use Case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Content Filters</strong></td><td>Categories: HATE, INSULTS, SEXUAL, VIOLENCE, MISCONDUCT, PROMPT_ATTACK. Severity: LOW/MEDIUM/HIGH per category</td><td>INPUT and/or OUTPUT independently</td><td>Block harmful content generation</td></tr>
+              <tr><td><strong>Denied Topics</strong></td><td>Plain language topic description (LLM-based classification, not regex). Custom denial message.</td><td>INPUT (topic detection)</td><td>Block competitor questions, legal/medical advice</td></tr>
+              <tr><td><strong>Word Filters</strong></td><td>Custom word lists + AWS managed profanity list</td><td>OUTPUT</td><td>Enforce brand/compliance word policies</td></tr>
+              <tr><td><strong>PII Detection &amp; Redaction</strong></td><td>50+ entity types: SSN, email, phone, credit card, name, address, IP. Mode: REDACT or BLOCK</td><td>INPUT and/or OUTPUT</td><td>HIPAA, PCI-DSS, GDPR compliance</td></tr>
+              <tr><td><strong>Grounding Check</strong></td><td>Verifies output is grounded in source context. Configurable relevance threshold.</td><td>OUTPUT (requires context)</td><td>Reduce hallucinations in RAG pipelines</td></tr>
+              <tr><td><strong>Sensitive Info Filters</strong></td><td>Regex patterns for custom sensitive data (e.g., employee IDs, internal codes)</td><td>INPUT and OUTPUT</td><td>Organization-specific PII beyond standard types</td></tr>
+            </tbody>
+          </table>
+          <div class="watch-out"><strong>⚠️ Guardrails Must Be Explicitly Invoked</strong>: Pass guardrailIdentifier + guardrailVersion in InvokeModel/Converse API call. They don't auto-apply. Can test guardrails independently with ApplyGuardrail API before deploying.</div>
+          <div class="exam-tip"><strong>🎯 Prompt Injection Defense</strong>: Use PROMPT_ATTACK content filter + keep system prompt in system parameter (separate from user messages, protected by Bedrock). Also: validate/sanitize user input in Lambda before sending to Bedrock. Input validation + Guardrails = defense in depth.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚖️</span> Responsible AI Principles on AWS</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Bias Detection &amp; Mitigation</h5><ul><li>SageMaker Clarify: bias metrics (class imbalance, DPPL, KL divergence)</li><li>SageMaker Data Wrangler: data quality reports</li><li>Model Cards (SageMaker): document model limitations, bias findings</li><li>HELM benchmark: includes fairness + toxicity metrics</li></ul></div>
+            <div class="concept-card"><h5>Explainability</h5><ul><li>SageMaker Clarify: SHAP values for feature importance</li><li>Chain-of-Thought prompting: expose reasoning</li><li>Model Cards: document intended use, out-of-scope uses</li><li>Attribution in RAG: cite source documents</li></ul></div>
+            <div class="concept-card"><h5>Privacy &amp; Data Protection</h5><ul><li>Amazon Macie: detect PII in S3 automatically</li><li>Bedrock: no model training on customer data (by default)</li><li>VPC Endpoints: data doesn't leave AWS network</li><li>KMS CMK: customer controls encryption keys</li></ul></div>
+            <div class="concept-card"><h5>Auditability</h5><ul><li>CloudTrail: all Bedrock API calls logged</li><li>CloudWatch Logs: model inputs/outputs (optional logging)</li><li>Bedrock Model Invocation Logging: S3 + CloudWatch</li><li>CloudTrail Lake: query audit events with SQL</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔑</span> IAM &amp; Security for GenAI</div>
+        <div class="sub-acc-body">
+          <div class="highlight-box">
+            <h5>Key IAM Actions for Bedrock (Know These)</h5>
+            <div class="tag-row">
+              <span class="tag tag-red">bedrock:InvokeModel</span>
+              <span class="tag tag-red">bedrock:InvokeModelWithResponseStream</span>
+              <span class="tag tag-blue">bedrock:Retrieve</span>
+              <span class="tag tag-blue">bedrock:RetrieveAndGenerate</span>
+              <span class="tag tag-orange">bedrock:ApplyGuardrail</span>
+              <span class="tag tag-green">bedrock:CreateKnowledgeBase</span>
+              <span class="tag tag-purple">bedrock:GetFoundationModel</span>
+              <span class="tag tag-teal">bedrock:ListFoundationModels</span>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Service Control Policies (SCPs)</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Org-level deny: prevent use of non-approved models</li>
+                <li>Region restrictions: only us-east-1, us-west-2</li>
+                <li>Require conditions: VPC source, MFA, time-of-day</li>
+                <li>Block: CreateProvisionedModelThroughput without approval</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>Resource-Based Policies for Bedrock</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Knowledge Base policies: control who can Retrieve/RetrieveAndGenerate</li>
+                <li>Cross-account access for shared models</li>
+                <li>Agent resource policies: restrict which roles can invoke</li>
+                <li>Condition keys: bedrock:RequestedModelId (restrict to approved models)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="key-concept"><strong>💡 AWS Security Hub for GenAI</strong>: New enhanced capabilities — near-real-time risk analytics, improved prioritization for FM-related findings. Integrates with CloudTrail for prompt management audit events. Correlates findings across sources. Configure custom security standards for FM-specific risks (prompt injection attempts, unusual API usage patterns).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">3.2</div>
+      <h3>Compliance, Governance &amp; Data Privacy</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📜</span> Compliance Frameworks &amp; Controls</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Regulation</th><th>Key Requirement</th><th>AWS Controls</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GDPR</strong></td><td>Data minimization, right to erasure, consent</td><td>Macie (PII detection), Guardrails (PII redaction), KMS (encryption), VPC endpoints (data residency)</td></tr>
+              <tr><td><strong>HIPAA</strong></td><td>PHI protection, audit trails, BAA</td><td>Bedrock HIPAA eligibility (with BAA), Macie, CloudTrail, dedicated endpoints, encryption</td></tr>
+              <tr><td><strong>PCI-DSS</strong></td><td>Cardholder data protection</td><td>Guardrails PII filter (credit card), KMS, VPC, CloudTrail, WAF on API Gateway</td></tr>
+              <tr><td><strong>SOC 2</strong></td><td>Security, availability, confidentiality</td><td>CloudTrail audit, Security Hub, GuardDuty, Access Analyzer</td></tr>
+            </tbody>
+          </table>
+          <div class="exam-tip"><strong>🎯 Data Residency</strong>: For regulatory requirements, use: (1) VPC Endpoints to keep data within AWS network, (2) AWS Outposts for on-premises data that can't leave DC, (3) Specific region selection (e.g., eu-west-1 for EU data), (4) S3 Object Lock for retention compliance, (5) Local Zones for specific geographic requirements.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DOMAIN 4 VIEW ============================================================ -->
+<div id="view-domain4" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#1a3d1a,#2d6e2d)">
+    <h2>Domain 4: Operational Efficiency &amp; Optimization</h2>
+    <p>Cost optimization, Performance tuning, Caching, Monitoring, Auto-scaling</p>
+    <span class="domain-weight">~15% of Exam Weight</span>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">4.1</div>
+      <h3>Cost Optimization for GenAI</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">💰</span> Cost Optimization Strategies</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Model Selection</h5><ul><li>Use smaller models for simple tasks (cascading)</li><li>Nova Lite for high-volume → Pro only when needed</li><li>Measure: cost per task completion (not per token)</li><li>A/B test model quality vs. cost</li></ul></div>
+            <div class="concept-card"><h5>Prompt Optimization</h5><ul><li>Shorter prompts = fewer input tokens = lower cost</li><li>Remove unnecessary context</li><li>Structured prompts produce shorter outputs</li><li>Max tokens limit prevents runaway costs</li></ul></div>
+            <div class="concept-card"><h5>Caching</h5><ul><li>Semantic cache: return cached if cosine similarity &gt; 0.95</li><li>Response cache: ElastiCache for exact-match queries</li><li>Embedding cache: avoid re-embedding same documents</li><li>Up to 90% cost reduction for repetitive queries</li></ul></div>
+            <div class="concept-card"><h5>Provisioned Throughput</h5><ul><li>1-month or 6-month commitment</li><li>Break-even: typically ~70% utilization</li><li>Use CloudWatch to track PT utilization</li><li>Only for truly steady, predictable workloads</li></ul></div>
+          </div>
+          <div class="key-concept"><strong>💡 Nova Forge Cost Optimization</strong>: Continued pre-training from checkpoints is dramatically cheaper than full retraining. Blending approach reduces catastrophic forgetting, meaning you don't need to retrain as often when adding new domain knowledge. RL with custom reward functions enables efficient post-training.</div>
+          <div class="key-concept"><strong>💡 S3 Vectors + Intelligent-Tiering</strong>: Automatically moves infrequently accessed vectors to lower-cost tiers. 40-60% storage cost reduction for large vector collections. No performance impact for frequently queried vectors (cached in high-performance tier).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">4.2</div>
+      <h3>Performance Optimization &amp; Monitoring</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📊</span> Key Metrics &amp; Monitoring Architecture</div>
+        <div class="sub-acc-body">
+          <div class="three-col">
+            <div class="concept-card"><h5>Technical Metrics</h5><ul><li>Inference latency: p50, p90, p95, p99</li><li>Throughput (tokens/s, requests/s)</li><li>Error rate by error type</li><li>Token utilization (input vs. output)</li><li>Cache hit rate</li><li>Model invocation count</li></ul></div>
+            <div class="concept-card"><h5>Business Metrics</h5><ul><li>Cost per inference / per task completion</li><li>User satisfaction (CSAT, thumbs up/down)</li><li>Task completion rate</li><li>Time-to-first-token (UX)</li><li>Business value per dollar spent</li></ul></div>
+            <div class="concept-card"><h5>Quality Metrics</h5><ul><li>Hallucination rate (grounding check score)</li><li>Response relevance (semantic similarity)</li><li>Guardrail trigger rate (by category)</li><li>Human review escalation rate</li><li>Model drift (quality degradation over time)</li></ul></div>
+          </div>
+          <h5 style="margin-top:0.8rem">CloudWatch Dashboard Components:</h5>
+          <ul style="padding-left:1.2rem;font-size:0.85rem">
+            <li>Bedrock invocation metrics (built-in namespace: AWS/Bedrock)</li>
+            <li>Custom metrics: quality scores, cache hit rates, business KPIs (via PutMetricData)</li>
+            <li>Log Insights queries: identify patterns in prompt confusion, slow responses</li>
+            <li>Composite alarms: trigger only when multiple conditions met simultaneously</li>
+            <li>Anomaly detection: ML-based baseline for adaptive alerting</li>
+          </ul>
+          <div class="exam-tip"><strong>🎯 Bedrock Model Invocation Logging</strong>: Enable to capture: full request/response to S3 or CloudWatch Logs. Use for: quality auditing, debugging, fine-tuning data collection, compliance. Configure at account level or per model. Important: logging adds slight latency — consider async delivery to S3 via Firehose for high-volume production.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📈</span> Auto-Scaling Strategies</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Service</th><th>Scaling Trigger</th><th>Scaling Type</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>SageMaker Endpoints</strong></td><td>InvocationsPerInstance, CPU utilization, custom metrics</td><td>Target tracking or Step scaling</td><td>Cooldown periods prevent thrashing; Inference Components allow per-model scaling</td></tr>
+              <tr><td><strong>Lambda</strong></td><td>Concurrent executions (auto)</td><td>Automatic, up to account limit</td><td>Reserved concurrency for predictability; Provisioned concurrency for cold start elimination</td></tr>
+              <tr><td><strong>Bedrock Provisioned Throughput</strong></td><td>Manual or CloudWatch-triggered scaling</td><td>Model Units (MUs)</td><td>No auto-scale; plan capacity from usage metrics</td></tr>
+              <tr><td><strong>OpenSearch</strong></td><td>CPU, memory, storage utilization</td><td>Horizontal (add data nodes) or vertical</td><td>UltraWarm for cost-efficient historical vectors; Auto-Tune for JVM optimization</td></tr>
+              <tr><td><strong>API Gateway</strong></td><td>Throttling limits per stage/route</td><td>Usage plans (no auto-scale)</td><td>SQS buffer behind API GW for burst handling</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DOMAIN 5 VIEW ============================================================ -->
+<div id="view-domain5" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#2a1a4a,#4a2d7b)">
+    <h2>Domain 5: Testing, Validation &amp; Troubleshooting</h2>
+    <p>Model evaluation, QA frameworks, Regression testing, Debugging GenAI applications</p>
+    <span class="domain-weight">~10% of Exam Weight</span>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">5.1</div>
+      <h3>Model Evaluation &amp; Validation Frameworks</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="task-body">
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧪</span> Bedrock Model Evaluation</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>Automatic Evaluation</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Metrics: accuracy, robustness, toxicity</li>
+                <li>Uses built-in or custom datasets</li>
+                <li>Comparisons across multiple models</li>
+                <li>Results in S3 and viewable in console</li>
+                <li>ROUGE, METEOR, BERTScore for text quality</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>Human Evaluation (A/B)</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Side-by-side model comparison</li>
+                <li>Human raters rank responses</li>
+                <li>Criteria: accuracy, coherence, helpfulness</li>
+                <li>Works with AWS Mechanical Turk or internal teams</li>
+                <li>Statistical significance testing</li>
+              </ul>
+            </div>
+          </div>
+          <div class="key-concept"><strong>💡 Probabilistic Validation Approach</strong>: For deterministic outputs (JSON schemas, specific formats) → use exact match / schema validation. For generative outputs (summaries, answers) → use semantic similarity scoring (cosine similarity &gt; threshold), not exact match. Run N samples, validate distribution of quality scores.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> Testing Frameworks &amp; Strategies</div>
+        <div class="sub-acc-body">
+          <table class="compare-table">
+            <thead><tr><th>Test Type</th><th>What It Tests</th><th>Implementation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Functional Testing</strong></td><td>Correct outputs for expected inputs</td><td>Lambda test harness, expected output comparison</td></tr>
+              <tr><td><strong>Edge Case Testing</strong></td><td>Boundary inputs, empty strings, very long prompts, special characters</td><td>Parameterized test suite, automated via Step Functions</td></tr>
+              <tr><td><strong>Prompt Injection Testing</strong></td><td>Resistance to jailbreak/injection attacks</td><td>Red-teaming prompts, Guardrail PROMPT_ATTACK filter testing</td></tr>
+              <tr><td><strong>Regression Testing</strong></td><td>New model/prompt version doesn't degrade previous quality</td><td>Golden dataset + automated quality comparison, CloudWatch quality metrics</td></tr>
+              <tr><td><strong>Load Testing</strong></td><td>Performance under expected traffic</td><td>Lambda concurrent invocations, API GW throttle testing</td></tr>
+              <tr><td><strong>Hallucination Testing</strong></td><td>Factual accuracy, grounding in source docs</td><td>Bedrock Grounding Check, RAGAs framework, human spot checks</td></tr>
+              <tr><td><strong>Bias Testing</strong></td><td>Consistent quality across demographic groups</td><td>SageMaker Clarify, HELM fairness metrics</td></tr>
+            </tbody>
+          </table>
+          <div class="exam-tip"><strong>🎯 SageMaker AI RL-based Customization</strong>: Serverless RL-based fine-tuning (new feature) reduces fine-tuning time from months to days. Enables rapid testing of new prompt architectures and domain-specific model behaviors. Used in QA workflows to quickly validate if a model variant improves target metrics.</div>
+        </div>
+      </div>
+
+      <div class="sub-acc">
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🐛</span> Troubleshooting GenAI Applications</div>
+        <div class="sub-acc-body">
+          <div class="concept-grid">
+            <div class="concept-card"><h5>Poor RAG Quality</h5><ul><li>Check: chunk size vs. query complexity</li><li>Verify: same embedding model for index + query</li><li>Inspect: similarity scores (too low = bad embeddings)</li><li>Review: metadata filters (over-filtering?)</li><li>Embedding drift: re-embed if model updated</li></ul></div>
+            <div class="concept-card"><h5>High Latency</h5><ul><li>X-Ray trace: find slow subsegment</li><li>Cold starts: enable Lambda Provisioned Concurrency</li><li>Vector search: reduce ef_search, add metadata pre-filter</li><li>Model: try smaller model or Cross-Region inference</li><li>Cache hit rate too low: review semantic threshold</li></ul></div>
+            <div class="concept-card"><h5>Hallucinations</h5><ul><li>Enable Bedrock Grounding Check guardrail</li><li>Increase retrieved context (more chunks)</li><li>Add citation requirement to prompt</li><li>Reduce temperature (0.1-0.3 for factual tasks)</li><li>Use CoT to expose reasoning</li></ul></div>
+            <div class="concept-card"><h5>Throttling (429 errors)</h5><ul><li>Check: Bedrock quota limits in Service Quotas</li><li>Request quota increase via support ticket</li><li>Implement exponential backoff + jitter</li><li>Add SQS buffer for burst absorption</li><li>Use Cross-Region inference for capacity</li></ul></div>
+          </div>
+          <div class="watch-out"><strong>⚠️ CloudWatch Logs Insights for GenAI Debugging</strong>: Query patterns: filter @message like "throttle" | stats count() by @logStream — find throttled Lambda functions. Also query for guardrail trigger patterns, slow invocations (filter @duration &gt; 5000), and error message patterns to identify systemic issues.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SERVICES VIEW ============================================================ -->
+<div id="view-services" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#1a2638,#2d4a6e)">
+    <h2>Deep Dive by Service</h2>
+    <p>Reference architecture, configuration details, and exam tips per AWS service</p>
+  </div>
+
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+    <button class="service-chip" onclick="showService('bedrock')"><span class="dot" style="background:#FF9900"></span>Amazon Bedrock</button>
+    <button class="service-chip" onclick="showService('agents')"><span class="dot" style="background:#0073BB"></span>Bedrock Agents</button>
+    <button class="service-chip" onclick="showService('kb')"><span class="dot" style="background:#1D8348"></span>Knowledge Bases</button>
+    <button class="service-chip" onclick="showService('guardrails')"><span class="dot" style="background:#C0392B"></span>Guardrails</button>
+    <button class="service-chip" onclick="showService('nova')"><span class="dot" style="background:#FF9900"></span>Nova Models</button>
+    <button class="service-chip" onclick="showService('sagemaker')"><span class="dot" style="background:#7D3C98"></span>SageMaker</button>
+    <button class="service-chip" onclick="showService('opensearch')"><span class="dot" style="background:#148F77"></span>OpenSearch + pgvector</button>
+    <button class="service-chip" onclick="showService('stepfunctions')"><span class="dot" style="background:#0073BB"></span>Step Functions</button>
+  </div>
+
+  <!-- BEDROCK -->
+  <div id="svc-bedrock" class="svc-panel">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟠</div><h3>Amazon Bedrock — Complete Service Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon">📡</span> Bedrock APIs — Know Every One</div>
+        <div class="sub-acc-body open">
+          <table class="compare-table">
+            <thead><tr><th>API</th><th>Purpose</th><th>Key Parameters</th><th>Response Type</th></tr></thead>
+            <tbody>
+              <tr><td><strong>InvokeModel</strong></td><td>Synchronous single inference</td><td>modelId, body (model-specific JSON)</td><td>Complete response</td></tr>
+              <tr><td><strong>InvokeModelWithResponseStream</strong></td><td>Streaming inference</td><td>modelId, body</td><td>Event stream (chunk by chunk)</td></tr>
+              <tr><td><strong>Converse</strong></td><td>Unified multi-model API (recommended)</td><td>modelId, messages[], system[], inferenceConfig</td><td>Complete, unified format</td></tr>
+              <tr><td><strong>ConverseStream</strong></td><td>Unified streaming API</td><td>Same as Converse</td><td>Event stream, unified format</td></tr>
+              <tr><td><strong>Retrieve</strong></td><td>Knowledge Base vector search only</td><td>knowledgeBaseId, retrievalQuery</td><td>Retrieved chunks + metadata</td></tr>
+              <tr><td><strong>RetrieveAndGenerate</strong></td><td>RAG: retrieve + generate in one call</td><td>knowledgeBaseId, input, retrievalConfig, generationConfig</td><td>Generated response + citations</td></tr>
+              <tr><td><strong>ApplyGuardrail</strong></td><td>Test guardrails without model call</td><td>guardrailIdentifier, guardrailVersion, source, content</td><td>Action (NONE/GUARDRAIL_INTERVENED) + assessments</td></tr>
+              <tr><td><strong>CreateModelEvaluationJob</strong></td><td>Automated model evaluation</td><td>evaluationConfig, inferenceConfig, outputDataConfig</td><td>Job ARN</td></tr>
+            </tbody>
+          </table>
+          <div class="exam-tip"><strong>🎯 Converse API Advantage</strong>: Unified format works across all Bedrock models (Claude, Nova, Titan, Llama, Mistral). One code path for all models. Handles system prompts, multi-turn conversation, tool use, document understanding. Preferred over InvokeModel for new development.</div>
+        </div></div>
+
+        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚡</span> Provisioned Throughput — Detailed Config</div>
+        <div class="sub-acc-body">
+          <div class="two-col">
+            <div class="highlight-box">
+              <h5>What is a Model Unit (MU)?</h5>
+              <p style="font-size:0.82rem">A Model Unit represents a specific throughput capacity (tokens per minute). Different models have different MU sizes. Purchase 1+ MUs based on peak throughput requirement.</p>
+              <ul style="padding-left:1.2rem;font-size:0.82rem;margin-top:0.5rem">
+                <li>1-month term: lower commitment, higher per-MU cost</li>
+                <li>6-month term: better rate, more risk</li>
+                <li>No-commitment: available for some models (most expensive)</li>
+                <li>CloudWatch: TokensPerMinute metric for utilization</li>
+              </ul>
+            </div>
+            <div class="highlight-box">
+              <h5>When to Use Provisioned Throughput</h5>
+              <ul style="padding-left:1.2rem;font-size:0.82rem">
+                <li>Steady traffic (70%+ utilization to break even)</li>
+                <li>Need guaranteed capacity (SLA requirements)</li>
+                <li>Consistent low latency requirements</li>
+                <li>Avoid: spiky/unpredictable traffic (use on-demand)</li>
+                <li>Cross-Region inference: use inference profiles instead</li>
+              </ul>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOVA MODELS -->
+  <div id="svc-nova" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟡</div><h3>Amazon Nova Model Family — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <table class="compare-table">
+          <thead><tr><th>Model</th><th>Input Types</th><th>Best For</th><th>Key Feature</th><th>Use in Routing</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Nova 2 Pro</strong></td><td>Text, Image, Video, Doc</td><td>Complex reasoning, multi-step analysis, document understanding</td><td>Highest capability in Nova family, agentic tasks</td><td>Final escalation tier</td></tr>
+            <tr><td><strong>Nova 2 Lite</strong></td><td>Text, Image, Video</td><td>High-volume, cost-effective, standard generation</td><td>Best price/performance ratio</td><td>Default routing tier</td></tr>
+            <tr><td><strong>Nova 2 Sonic</strong></td><td>Audio + Text (real-time)</td><td>Voice AI, real-time conversation, low-latency dialogue</td><td>Optimized for audio streaming, lowest latency</td><td>Voice/RT applications</td></tr>
+            <tr><td><strong>Nova Canvas</strong></td><td>Text (prompt)</td><td>Image generation, editing</td><td>High-quality image synthesis</td><td>Image generation tasks</td></tr>
+            <tr><td><strong>Nova Reel</strong></td><td>Text + Image (optional)</td><td>Video generation</td><td>AI video creation</td><td>Video generation tasks</td></tr>
+            <tr><td><strong>Nova Forge</strong></td><td>Training pipeline</td><td>Custom model creation</td><td>Training from checkpoints (pre/mid/post-training), RL support</td><td>N/A (training, not inference)</td></tr>
+          </tbody>
+        </table>
+        <div class="key-concept"><strong>💡 Nova Forge Key Details for Exam</strong>
+          <ul style="padding-left:1.2rem">
+            <li>Access via: Amazon SageMaker AI (not directly in Bedrock console)</li>
+            <li>Training phases: pre-training, mid-training (domain adaptation), post-training (instruction following)</li>
+            <li>Data mixing: blend YOUR data with Amazon Nova-curated data at all phases</li>
+            <li>Prevents catastrophic forgetting better than training on raw data alone</li>
+            <li>RL support: plug in your own reward functions and orchestrator</li>
+            <li>Multi-turn RL: supports sequential decision-making (agent workflows)</li>
+            <li>Cost: dramatically cheaper than full model training from scratch</li>
+          </ul>
+        </div>
+        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📝</span> Nova JSON Format (Exam Must-Know)</div>
+        <div class="sub-acc-body">
+          <div class="code-block"><span class="c-cm">// Nova 2 Pro inference request format</span>
+{
+  <span class="c-str">"system"</span>: [
+    {<span class="c-str">"text"</span>: <span class="c-str">"You are a financial analysis assistant."</span>}
+  ],
+  <span class="c-str">"messages"</span>: [
+    {
+      <span class="c-str">"role"</span>: <span class="c-str">"user"</span>,
+      <span class="c-str">"content"</span>: [{<span class="c-str">"text"</span>: <span class="c-str">"Analyze Q3 earnings..."</span>}]
+    }
+  ],
+  <span class="c-str">"inferenceConfig"</span>: {
+    <span class="c-str">"maxTokens"</span>: <span class="c-num">2000</span>,
+    <span class="c-str">"temperature"</span>: <span class="c-num">0.3</span>,
+    <span class="c-str">"topP"</span>: <span class="c-num">0.9</span>
+  }
+}
+<span class="c-cm">// Note: system is an ARRAY of objects (different from Claude's string)</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAGEMAKER -->
+  <div id="svc-sagemaker" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟣</div><h3>Amazon SageMaker AI — GenAI Developer Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <table class="compare-table">
+          <thead><tr><th>SageMaker Feature</th><th>Purpose for GenAI</th><th>Key Config</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Real-time Endpoints</strong></td><td>Low-latency synchronous inference</td><td>Instance type, initial instance count, auto-scaling policy</td></tr>
+            <tr><td><strong>Serverless Inference</strong></td><td>Intermittent traffic, scale-to-zero</td><td>Memory size (1GB-6GB), max concurrency</td></tr>
+            <tr><td><strong>Async Endpoints</strong></td><td>Long-running inference, batch</td><td>S3 input/output, max concurrency, SNS notification, auto scale-to-zero</td></tr>
+            <tr><td><strong>Multi-Model Endpoints</strong></td><td>Host many models on shared infra</td><td>Container image, model artifact S3 paths, routing logic</td></tr>
+            <tr><td><strong>Inference Components</strong></td><td>Separate scaling per model on shared endpoint</td><td>Per-component memory/CPU allocation, independent scaling policies</td></tr>
+            <tr><td><strong>Serial Inference Pipeline</strong></td><td>Chain preprocessing → LLM → postprocessing</td><td>Container sequence, data transformation between stages</td></tr>
+            <tr><td><strong>Multi-Container Endpoints</strong></td><td>Different containers on same instance</td><td>Direct invocation of specific container, resource isolation</td></tr>
+            <tr><td><strong>Processing Jobs</strong></td><td>Data prep, validation, evaluation</td><td>Pre-built containers (Scikit, Spark), custom containers</td></tr>
+            <tr><td><strong>Clarify</strong></td><td>Bias detection, explainability (SHAP)</td><td>DataConfig, ModelConfig, BiasConfig, ExplainabilityConfig</td></tr>
+            <tr><td><strong>Model Cards</strong></td><td>Document model intent, limitations, bias</td><td>Structured JSON with intended use, evaluation results, risk ratings</td></tr>
+            <tr><td><strong>Experiments</strong></td><td>Track prompt/model A/B test results</td><td>Runs, metrics, artifacts, comparison views</td></tr>
+          </tbody>
+        </table>
+        <div class="exam-tip"><strong>🎯 Instance Selection for LLMs</strong>: ml.g5 family — excellent for inference (A10G GPUs), good price/performance. ml.p4d.24xlarge — for very large models (8x A100). ml.p3 — older, still valid for medium models. ml.c5 — for NLP/NER on CPU (no GPU needed, cheaper). UltraServers: multi-node with NVLink for models &gt;1TB.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPENSEARCH + pgvector -->
+  <div id="svc-opensearch" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🩵</div><h3>OpenSearch + Aurora pgvector — Vector Search Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <div class="two-col">
+          <div class="highlight-box">
+            <h5>Amazon OpenSearch Neural Plugin</h5>
+            <ul style="padding-left:1.2rem;font-size:0.82rem">
+              <li>Vector field type: knn_vector</li>
+              <li>Index settings: index.knn: true</li>
+              <li>Space types: cosinesimil, l2 (Euclidean), innerproduct</li>
+              <li>HNSW: ef_construction (100-512), m (16-64)</li>
+              <li>IVF: nlist (cluster count), nprobes (search clusters)</li>
+              <li>Neural search pipeline: embedding model → k-NN query</li>
+              <li>Hybrid scoring: combine BM25 + vector scores</li>
+              <li>ML inference pipeline: auto-embed at query time</li>
+            </ul>
+          </div>
+          <div class="highlight-box">
+            <h5>Aurora PostgreSQL + pgvector</h5>
+            <ul style="padding-left:1.2rem;font-size:0.82rem">
+              <li>Extension: CREATE EXTENSION vector;</li>
+              <li>Column type: vector(1536) or vector(N)</li>
+              <li>Cosine: 1 - (embedding &lt;=&gt; query_vector)</li>
+              <li>Euclidean: embedding &lt;-&gt; query_vector</li>
+              <li>Inner product: (embedding &lt;#&gt; query_vector) * -1</li>
+              <li>Index: CREATE INDEX USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100)</li>
+              <li>Key advantage: JOIN vector results with relational data</li>
+              <li>Use case: "Find similar products for user_id = 123 in category = 'electronics'"</li>
+            </ul>
+          </div>
+        </div>
+        <div class="watch-out"><strong>⚠️ pgvector Scaling Limit</strong>: pgvector is suitable for millions of vectors, not billions. For billion-scale vector search, use OpenSearch or S3 Vectors. pgvector's main advantage is when you need to combine vector similarity with complex SQL queries (joins, aggregations, filters).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP FUNCTIONS -->
+  <div id="svc-stepfunctions" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔵</div><h3>AWS Step Functions — GenAI Orchestration Patterns</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <div class="concept-grid">
+          <div class="concept-card"><h5>ReAct Pattern States</h5><ul><li><strong>Reason</strong>: Task state → invoke LLM, get reasoning + proposed action</li><li><strong>ParseAction</strong>: Lambda state → extract tool name + params from LLM output</li><li><strong>ExecuteAction</strong>: Task/Lambda state → call the tool</li><li><strong>Observe</strong>: Pass state → combine tool result with conversation history</li><li><strong>MaxIterations</strong>: Choice state → check loop count, break if max reached</li></ul></div>
+          <div class="concept-card"><h5>Human-in-Loop (waitForTaskToken)</h5><ul><li>Task state with .waitForTaskToken heartbeat timeout</li><li>Sends token to SQS/SNS/API GW for human approval</li><li>Human sends SendTaskSuccess/SendTaskFailure with token</li><li>Workflow resumes from approval decision</li><li>DynamoDB stores decision + timestamp for audit</li></ul></div>
+          <div class="concept-card"><h5>Parallel Processing</h5><ul><li>Parallel state: run N branches simultaneously</li><li>All branches must complete before next state</li><li>Use for: multi-query expansion, ensemble inference</li><li>Error handling: Catch on each branch, ResultPath</li></ul></div>
+          <div class="concept-card"><h5>Error Handling for GenAI</h5><ul><li>Retry: MaxAttempts 3, BackoffRate 2.0, IntervalSeconds 1</li><li>Catch States.TaskFailed → fallback path</li><li>Catch Bedrock.ThrottlingException → SQS queue state</li><li>TimeoutSeconds per state for LLM latency SLA</li></ul></div>
+        </div>
+        <div class="exam-tip"><strong>🎯 Bedrock + Step Functions</strong>: Step Functions has native optimized integration with Bedrock (no Lambda needed). Use <code>arn:aws:states:::bedrock:invokeModel</code> resource. Supports: InvokeModel and RetrieveAndGenerate directly. Pass model parameters in Parameters block. ResponseBody automatically available as output.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE BASES -->
+  <div id="svc-kb" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟢</div><h3>Bedrock Knowledge Bases — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <table class="compare-table">
+          <thead><tr><th>Feature</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Data Sources</strong></td><td>S3 (primary), Web Crawler, Confluence, SharePoint, Salesforce, custom connector</td></tr>
+            <tr><td><strong>Chunking Options</strong></td><td>Default (300 tokens), Fixed-size (configurable), Hierarchical (parent+child), Semantic, No chunking</td></tr>
+            <tr><td><strong>Embedding Models</strong></td><td>Amazon Titan Text Embeddings V2 (default), Cohere Embed English/Multilingual, custom</td></tr>
+            <tr><td><strong>Vector Stores</strong></td><td>OpenSearch Serverless (default, managed), Aurora pgvector, Pinecone, Redis Enterprise, MongoDB Atlas</td></tr>
+            <tr><td><strong>Retrieval Methods</strong></td><td>Semantic (vector), Hybrid (vector + keyword), Metadata filtering</td></tr>
+            <tr><td><strong>Reranking</strong></td><td>Built-in reranking with Amazon Rerank or Cohere Rerank models</td></tr>
+            <tr><td><strong>Sync</strong></td><td>Manual or automatic on schedule; incremental sync (only changed docs)</td></tr>
+            <tr><td><strong>Query Config</strong></td><td>numberOfResults, searchType (SEMANTIC/HYBRID), filter (metadata conditions)</td></tr>
+            <tr><td><strong>Citations</strong></td><td>RetrieveAndGenerate returns source documents + page numbers + S3 URI</td></tr>
+          </tbody>
+        </table>
+        <div class="key-concept"><strong>💡 Hierarchical Chunking in Knowledge Bases</strong>: Creates two levels — large parent chunks (context) and small child chunks (precision). At retrieval time, finds matching child chunks but returns the parent chunk as context. Best of both worlds: precise matching + sufficient context for generation.</div>
+        <div class="exam-tip"><strong>🎯 Bedrock Knowledge Bases vs. Custom RAG</strong>: KB = fully managed (no infra, auto-embed, auto-sync). Custom RAG = Lambda + OpenSearch/pgvector = full control, more complex. Choose KB for: rapid deployment, standard use cases, managed vector store. Choose Custom RAG for: complex pre-processing, custom chunking logic, specific index configurations.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENTS -->
+  <div id="svc-agents" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔵</div><h3>Amazon Bedrock Agents — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <div class="concept-grid">
+          <div class="concept-card"><h5>Core Components</h5><ul><li><strong>Agent</strong>: FM + orchestration logic + memory</li><li><strong>Action Groups</strong>: APIs the agent can call (OpenAPI schema)</li><li><strong>Knowledge Bases</strong>: RAG data sources (auto-query)</li><li><strong>Guardrails</strong>: Safety controls on agent I/O</li><li><strong>Memory</strong>: Session context persistence</li><li><strong>Agent Alias</strong>: Version pointer for deployment</li></ul></div>
+          <div class="concept-card"><h5>Action Group Config</h5><ul><li>Define with OpenAPI 3.0 schema in S3</li><li>Lambda function for each API operation</li><li>Agent auto-decides when to invoke which action</li><li>Parameters: validation via schema</li><li>Return: JSON response back to agent</li><li>Built-in: code interpreter, user confirmation</li></ul></div>
+          <div class="concept-card"><h5>Multi-Agent (Agent Squad)</h5><ul><li>Supervisor agent routes to sub-agents</li><li>Sub-agents are specialized (billing, support, search)</li><li>Communication via InvokeAgent API calls</li><li>Each agent has own action groups + KB</li><li>Shared session context across agents</li></ul></div>
+          <div class="concept-card"><h5>AgentCore Features</h5><ul><li>AgentCore Policy: governance controls</li><li>AgentCore Evaluations: quality assessment</li><li>Episodic Memory: recall past interactions</li><li>Framework-agnostic (works with Strands, LangChain, etc.)</li><li>Works with any Bedrock model</li></ul></div>
+        </div>
+        <div class="watch-out"><strong>⚠️ Bedrock Agents vs. Strands vs. Step Functions</strong>: Agents = managed LLM-driven orchestration (agent decides flow). Step Functions = deterministic developer-defined flow (no LLM makes routing decisions). Strands = open-source LLM-driven (full control). Mixed approach: use Step Functions for compliance-critical steps, Agents for flexible LLM-driven reasoning within those steps.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUARDRAILS -->
+  <div id="svc-guardrails" class="svc-panel" style="display:none">
+    <div class="task-section">
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔴</div><h3>Amazon Bedrock Guardrails — Detailed Configuration</h3><span class="chevron">▶</span></div>
+      <div class="task-body open">
+        <div class="code-block"><span class="c-cm"># CreateGuardrail API structure</span>
+{
+  <span class="c-str">"name"</span>: <span class="c-str">"my-production-guardrail"</span>,
+  <span class="c-str">"contentPolicyConfig"</span>: {
+    <span class="c-str">"filtersConfig"</span>: [
+      {<span class="c-str">"type"</span>: <span class="c-str">"SEXUAL"</span>, <span class="c-str">"inputStrength"</span>: <span class="c-str">"HIGH"</span>, <span class="c-str">"outputStrength"</span>: <span class="c-str">"HIGH"</span>},
+      {<span class="c-str">"type"</span>: <span class="c-str">"VIOLENCE"</span>, <span class="c-str">"inputStrength"</span>: <span class="c-str">"MEDIUM"</span>, <span class="c-str">"outputStrength"</span>: <span class="c-str">"HIGH"</span>},
+      {<span class="c-str">"type"</span>: <span class="c-str">"PROMPT_ATTACK"</span>, <span class="c-str">"inputStrength"</span>: <span class="c-str">"HIGH"</span>, <span class="c-str">"outputStrength"</span>: <span class="c-str">"NONE"</span>}
+    ]
+  },
+  <span class="c-str">"topicPolicyConfig"</span>: {
+    <span class="c-str">"topicsConfig"</span>: [
+      {<span class="c-str">"name"</span>: <span class="c-str">"competitor-products"</span>, <span class="c-str">"definition"</span>: <span class="c-str">"Questions about competitor X products"</span>, <span class="c-str">"type"</span>: <span class="c-str">"DENY"</span>}
+    ]
+  },
+  <span class="c-str">"sensitiveInformationPolicyConfig"</span>: {
+    <span class="c-str">"piiEntitiesConfig"</span>: [
+      {<span class="c-str">"type"</span>: <span class="c-str">"EMAIL"</span>, <span class="c-str">"action"</span>: <span class="c-str">"REDACT"</span>},
+      {<span class="c-str">"type"</span>: <span class="c-str">"CREDIT_DEBIT_CARD_NUMBER"</span>, <span class="c-str">"action"</span>: <span class="c-str">"BLOCK"</span>}
+    ]
+  },
+  <span class="c-str">"groundingPolicyConfig"</span>: {
+    <span class="c-str">"filtersConfig"</span>: [{<span class="c-str">"type"</span>: <span class="c-str">"GROUNDING"</span>, <span class="c-str">"threshold"</span>: <span class="c-num">0.7</span>}]
+  }
+}</div>
+        <div class="exam-tip"><strong>🎯 Guardrail Invocation</strong>: Include in InvokeModel or Converse calls: <code>"guardrailConfig": {"guardrailIdentifier": "abc123", "guardrailVersion": "1", "trace": "enabled"}</code>. Enable trace to see which guardrail triggered and why. Use ApplyGuardrail API to test guardrail in isolation before deployment.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ QUICK REFERENCE VIEW ============================================================ -->
+<div id="view-quickref" class="view">
+  <div class="domain-hdr" style="background:linear-gradient(135deg,#2a2a2a,#4a4a4a)">
+    <h2>⚡ Quick Reference Cheat Sheet</h2>
+    <p>Critical numbers, decision trees, and patterns for exam day</p>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔢</div><h3>Critical Numbers &amp; Thresholds to Memorize</h3><span class="chevron">▶</span></div>
+    <div class="task-body open">
+      <div class="qr-grid">
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD">⚡ Retry &amp; Resilience</div><div class="qr-card-body"><dl><dt>Initial backoff</dt><dd>100ms</dd><dt>Backoff factor</dt><dd>2x (exponential)</dd><dt>Max backoff</dt><dd>20 seconds</dd><dt>Max attempts</dt><dd>3-5</dd><dt>Jitter</dt><dd>±100ms or 0.1-0.3 factor</dd><dt>Circuit open at</dt><dd>50% fail over 10 requests</dd><dt>Recovery timeout</dt><dd>30-60 seconds</dd><dt>Half-open traffic</dt><dd>10-20%</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f4fd">🔄 SQS for LLMs</div><div class="qr-card-body"><dl><dt>Visibility timeout</dt><dd>5-15 minutes (LLM tasks)</dd><dt>DLQ after</dt><dd>3-5 failed attempts</dd><dt>Max message size</dt><dd>256KB (use S3 pointer for large)</dd><dt>Retention</dt><dd>Up to 14 days</dd><dt>FIFO vs Standard</dt><dd>FIFO for ordered processing</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9">🔌 API Gateway</div><div class="qr-card-body"><dl><dt>Request timeout max</dt><dd>29 seconds (REST API)</dd><dt>Account-level throttle</dt><dd>10,000 RPS default</dd><dt>Stage-level</dt><dd>1,000-5,000 RPS</dd><dt>Route-level</dt><dd>50-500 RPS (complex models)</dd><dt>Burst limit</dt><dd>2-3x steady-state rate</dd><dt>Cache TTL</dt><dd>300s default</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#fdecea">🔴 Bedrock Throttling</div><div class="qr-card-body"><dl><dt>429 error</dt><dd>Throttled (retriable)</dd><dt>400 error</dt><dd>Bad request (NOT retriable)</dd><dt>401/403</dt><dd>Auth (NOT retriable)</dd><dt>500/503</dt><dd>Service error (retriable)</dd><dt>Bedrock timeout</dt><dd>Up to 120s complex models</dd><dt>Simple models</dt><dd>15-30s timeout OK</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#f3e5f5">📊 Vector Search</div><div class="qr-card-body"><dl><dt>HNSW M param</dt><dd>16-64 (connections/node)</dd><dt>ef_construction</dt><dd>100-512 (build quality)</dd><dt>ef_search</dt><dd>100-512 (query quality)</dd><dt>Cosine range</dt><dd>-1 to 1 (1 = identical)</dd><dt>Semantic cache threshold</dt><dd>Cosine &gt; 0.95</dd><dt>S3 Vectors pre-filter saves</dt><dd>50-70% search space</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e0f2f1">🔗 Lambda + GenAI</div><div class="qr-card-body"><dl><dt>Connection pool size</dt><dd>10-20 connections/instance</dd><dt>Connection TTL</dt><dd>60-300 seconds</dd><dt>Provisioned concurrency</dt><dd>Eliminate cold starts</dd><dt>Global SDK client</dt><dd>Initialize OUTSIDE handler</dd><dt>LLM task timeout</dt><dd>5-15 minutes (async)</dd><dt>Max Lambda timeout</dt><dd>15 minutes</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD">💰 Cost Thresholds</div><div class="qr-card-body"><dl><dt>Provisioned break-even</dt><dd>~70% utilization</dd><dt>S3 Vectors Intelligent-Tiering</dt><dd>40-60% cost reduction</dd><dt>Semantic cache savings</dt><dd>Up to 90% for repetitive queries</dd><dt>Model cascade target</dt><dd>Start with Nova Lite, escalate only if quality &lt; threshold</dd></dl></div></div>
+
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9">📡 Streaming</div><div class="qr-card-body"><dl><dt>Buffer size</dt><dd>5-20 chunks</dd><dt>Flush trigger</dt><dd>Sentence completion or 100-500ms</dd><dt>WebSocket keep-alive</dt><dd>Ping every 30-60s</dd><dt>WebSocket idle timeout</dt><dd>~10 minutes</dd><dt>SSE reconnect</dt><dd>1s → backoff → max 30-60s</dd></dl></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🧠</div><h3>Last-Mile Exam Traps</h3><span class="chevron">▶</span></div>
+    <div class="task-body">
+      <div class="exam-tip"><strong>🎯 Why this matters</strong>The official-style practice questions are less about broad GenAI knowledge and more about picking the precise AWS-native answer when multiple options feel plausible. Use this section as your final decision matrix.</div>
+      <table class="compare-table">
+        <thead><tr><th>Common Trap</th><th>Correct Lean</th><th>What AWS Is Testing</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Need managed failover and performance-aware regional routing</strong></td><td>Inference profile</td><td>Not just "multi-Region"; choose the Bedrock-native routing construct.</td></tr>
+          <tr><td><strong>Need general async batch inference for text/image workloads</strong></td><td><code>CreateModelInvocationJob</code></td><td><code>StartAsyncInvoke</code> is the distractor for Nova Reel video generation.</td></tr>
+          <tr><td><strong>Need to inspect which knowledge base files failed ingestion</strong></td><td>Knowledge base logging to CloudWatch Logs</td><td>CloudTrail audits API calls, not document-level ingestion outcomes.</td></tr>
+          <tr><td><strong>Need to reorder already relevant retrieval results</strong></td><td>Reranker models</td><td>Hybrid search improves retrieval; rerank improves final ordering.</td></tr>
+          <tr><td><strong>Need to guarantee every inference call includes a guardrail</strong></td><td>IAM condition key <code>bedrock:GuardrailIdentifier</code></td><td>Central enforcement beats custom proxy code.</td></tr>
+          <tr><td><strong>Need to know which specific guardrail layer intervened</strong></td><td><code>trace: "enabled"</code> + <code>GuardrailPolicyType</code> metrics</td><td>Not just whether input/output was blocked, but which policy fired.</td></tr>
+          <tr><td><strong>Need generation to halt on a phrase</strong></td><td>Stop sequences</td><td>Prompt instructions are weaker than inference parameters.</td></tr>
+          <tr><td><strong>Unpredictable traffic with long idle periods</strong></td><td>On-demand Bedrock</td><td>Provisioned Throughput is usually only right for high steady utilization.</td></tr>
+          <tr><td><strong>Deterministic workflow with audit and mandatory sequence</strong></td><td>Step Functions</td><td>Agents/Flows are often distractors when compliance is explicit.</td></tr>
+          <tr><td><strong>Persistent MCP tool servers</strong></td><td>ECS/Fargate</td><td>Lambda is attractive, but poor for persistent SSE-style connections.</td></tr>
+        </tbody>
+      </table>
+      <div class="key-concept"><strong>💡 Final Heuristic</strong>If two answers both work, the exam usually wants the option with the least custom infrastructure, the clearest AWS-native fit, and the most direct match to the exact constraint in the question stem.</div>
+    </div>
+  </div>
+
+  <div class="task-section" id="decision-trees">
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🌳</div><h3>Decision Trees — What to Use When</h3><span class="chevron">▶</span></div>
+    <div class="task-body">
+      <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon">🚀</span> Deployment Strategy Decision Tree</div>
+      <div class="sub-acc-body open">
+        <div class="code-block">Q: What type of traffic pattern?
+├── Spiky / unpredictable, low volume
+│   └── → Lambda + Bedrock On-Demand (pay per token)
+├── Steady, high volume (>70% utilization)
+│   └── → Bedrock Provisioned Throughput (hourly commitment)
+├── Need custom/open-source model
+│   ├── Low latency needed → SageMaker Real-time Endpoint
+│   ├── Intermittent traffic → SageMaker Serverless Inference  
+│   ├── Batch, non-urgent → SageMaker Async Endpoint
+│   └── Many models, low per-model traffic → SageMaker MME
+├── Model too large for single GPU (>80GB)
+│   └── → SageMaker + DeepSpeed/Triton OR EC2 UltraServer
+└── On-premises data requirement
+    └── → AWS Outposts OR AWS Wavelength (edge)</div>
+      </div></div>
+
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> Vector Store Selection Decision Tree</div>
+      <div class="sub-acc-body">
+        <div class="code-block">Q: What are your requirements?
+├── Billions of vectors, lowest cost
+│   └── → Amazon S3 Vectors (new) with Intelligent-Tiering
+├── Need keyword + semantic (hybrid) search
+│   └── → Amazon OpenSearch Service with Neural Plugin
+├── Need vector + relational SQL queries (JOINs, filters)
+│   └── → Aurora PostgreSQL + pgvector extension
+├── Fully managed RAG (no infra)
+│   └── → Amazon Bedrock Knowledge Bases (managed KNN with OpenSearch Serverless)
+├── Ultra-low latency + key-value
+│   └── → Amazon MemoryDB (Redis-compatible)
+└── Enterprise search + AI (hybrid)
+    └── → Amazon Kendra (semantic + keyword, pre-built connectors)</div>
+      </div></div>
+
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤖</span> Agentic Architecture Decision Tree</div>
+      <div class="sub-acc-body">
+        <div class="code-block">Q: What type of agentic workflow?
+├── Simple autonomous agent (managed)
+│   └── → Amazon Bedrock Agents
+│       (+ Knowledge Bases for RAG, + Guardrails for safety)
+├── Need full code control + transparency
+│   └── → Strands Agents SDK (open-source)
+│       + MCP servers (Lambda for simple, ECS for complex tools)
+├── Multiple specialized agents collaborating
+│   └── → AWS Agent Squad + Strands OR Bedrock Agents multi-agent
+├── Deterministic workflow (compliance, audit required)
+│   └── → AWS Step Functions state machine
+│       (ReAct pattern or sequential with LLM at each step)
+├── Complex governance + composability
+│   └── → Amazon Bedrock AgentCore (framework-agnostic composable services)
+└── Human approval required in workflow
+    └── → Step Functions waitForTaskToken (human-in-the-loop)</div>
+      </div></div>
+
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔒</span> Guardrails Decision Tree</div>
+      <div class="sub-acc-body">
+        <div class="code-block">Q: What safety requirement do you have?
+├── Block harmful content (hate, violence, sexual)
+│   └── → ContentPolicyConfig with appropriate inputStrength/outputStrength
+├── Block specific topics (competitors, legal advice)
+│   └── → TopicPolicyConfig (DENY + plain language description)
+├── Detect/redact PII (HIPAA, GDPR)
+│   └── → SensitiveInformationPolicyConfig (REDACT or BLOCK per PII type)
+├── Block custom words/phrases
+│   └── → WordPolicyConfig (custom list + managed profanity)
+├── Prevent hallucinations in RAG
+│   └── → GroundingPolicyConfig (GROUNDING filter with threshold 0.7-0.9)
+├── Prevent prompt injection attacks
+│   └── → ContentPolicyConfig with PROMPT_ATTACK filter (HIGH on INPUT)
+└── Need to test guardrail before deploying
+    └── → Use ApplyGuardrail API independently</div>
+      </div></div>
+
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✂️</span> Chunking Strategy Decision Tree</div>
+      <div class="sub-acc-body">
+        <div class="code-block">Q: What type of document and use case?
+├── Uniform, structured content (FAQs, product descriptions)
+│   └── → Fixed-size chunking (256-512 tokens, 10-20% overlap)
+├── Long documents needing both precision + context
+│   └── → Hierarchical chunking (parent=large context, child=small precision)
+├── Varied documents, conversational data
+│   └── → Semantic chunking (split where similarity drops)
+├── Documents with clear headers/sections (PDFs, docs)
+│   └── → Document-structure chunking (split at headings)
+├── Custom logic required (domain-specific, preprocessing)
+│   └── → Lambda custom chunking workflow
+└── Using Bedrock Knowledge Bases (managed)
+    └── → Choose: Default (300 tokens), Fixed, Hierarchical, or Semantic in KB config</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🎯</div><h3>Top 20 Exam-Day Tips (High-Yield)</h3><span class="chevron">▶</span></div>
+    <div class="task-body">
+      <ol class="step-list">
+        <li><strong>Converse API = unified multi-model</strong>: Single code path for Claude, Nova, Titan, Llama. Preferred for new development over InvokeModel.</li>
+        <li><strong>Bedrock Guardrails must be explicitly invoked</strong>: Add guardrailConfig to every API call. Not auto-applied. Test with ApplyGuardrail API.</li>
+        <li><strong>Same embedding model for index AND query</strong>: Never mix models. This is a common trap question.</li>
+        <li><strong>Nova Forge = SageMaker AI</strong>: Accessed through SageMaker, NOT directly in Bedrock. Training from checkpoints to prevent catastrophic forgetting.</li>
+        <li><strong>S3 Vectors = billions of vectors</strong>: New service for massive-scale vector storage with Intelligent-Tiering. Pre-filter metadata before vector calculation (50-70% savings).</li>
+        <li><strong>Provisioned Throughput break-even ~70% utilization</strong>: Below that, on-demand is cheaper. Use CloudWatch to track PT utilization before committing.</li>
+        <li><strong>Step Functions + Bedrock = native integration</strong>: No Lambda needed for InvokeModel or RetrieveAndGenerate in Step Functions.</li>
+        <li><strong>MCP: Lambda = lightweight, ECS = complex</strong>: Lambda for stateless tool access (search, calc), ECS for code execution or image processing.</li>
+        <li><strong>HNSW ef_search tradeoff</strong>: Higher ef_search = better recall but slower queries. Tune based on acceptable latency at p99.</li>
+        <li><strong>pgvector advantage = SQL + vector</strong>: When you need relational queries combined with similarity search. Not for billion-scale.</li>
+        <li><strong>Cross-Region Inference Profiles</strong>: Use for distributing load across regions. Automatic failover, no additional cost vs. on-demand tokens.</li>
+        <li><strong>AgentCore vs. Agents</strong>: AgentCore = composable services (Policy, Evaluations, Memory) that work with ANY framework/model. Bedrock Agents = specific managed agent runtime.</li>
+        <li><strong>Probabilistic validation</strong>: FM outputs vary. Use semantic similarity scoring + thresholds (not exact match) for QA. Run N samples, validate distribution.</li>
+        <li><strong>ReAct in Step Functions</strong>: Reason (LLM) → Parse Action (Lambda) → Execute Tool (Lambda/API) → Observe (Pass state) → loop. Max iterations in Choice state.</li>
+        <li><strong>Hierarchical chunking = parent+child</strong>: Child chunks for precise matching, parent chunks returned as context. Built into Bedrock Knowledge Bases.</li>
+        <li><strong>Grounding Check = hallucination prevention</strong>: Bedrock Guardrail feature. Only works when you pass source context. Set threshold 0.7-0.9.</li>
+        <li><strong>Lambda cold starts</strong>: Use Provisioned Concurrency for latency-sensitive paths. Initialize SDK clients OUTSIDE handler function (global scope).</li>
+        <li><strong>SageMaker Inference Components</strong>: Host multiple models on one endpoint with INDEPENDENT scaling policies per model. Different from Multi-Model Endpoints (which share compute).</li>
+        <li><strong>Model cascading pattern</strong>: Route ALL traffic to Nova Lite first. Escalate to Nova Pro only when quality score &lt; threshold. Can save 60-80% of inference costs.</li>
+        <li><strong>Security Hub + Bedrock</strong>: Near-real-time risk analytics for FM deployments. Correlates CloudTrail events with security findings. Configure custom standards for FM-specific risks.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">📚</div><h3>Services Not to Forget (Often Overlooked)</h3><span class="chevron">▶</span></div>
+    <div class="task-body">
+      <div class="concept-grid">
+        <div class="concept-card"><h5>Amazon Kendra</h5><p>Enterprise search combining keyword (BM25) + semantic. Pre-built connectors (S3, SharePoint, Confluence, Salesforce). FAQ extraction. Relevance tuning. Use when: existing enterprise docs, need zero-config search quality.</p></div>
+        <div class="concept-card"><h5>Amazon Macie</h5><p>ML-powered PII detection in S3. Auto-discovers sensitive data. Integrates with Security Hub. Use for: data governance, GDPR compliance, before feeding data to FMs.</p></div>
+        <div class="concept-card"><h5>AWS AppConfig</h5><p>Dynamic configuration without redeployment. Use for: routing rules, model selection logic, feature flags, A/B test percentages. Supports gradual rollout with automatic rollback.</p></div>
+        <div class="concept-card"><h5>Amazon Verified Permissions</h5><p>Fine-grained authorization using Cedar policy language. ABAC (attribute-based) policies. Use for: controlling which users can query which knowledge bases, role-based FM access.</p></div>
+        <div class="concept-card"><h5>Amazon Bedrock Data Automation</h5><p>AI-powered pipeline for processing unstructured documents (PDFs, images, audio, video). Extracts structured data automatically. Reduces manual preprocessing for RAG pipelines.</p></div>
+        <div class="concept-card"><h5>AWS X-Ray</h5><p>Distributed tracing across Lambda → Bedrock → OpenSearch. Custom segments + annotations (model_name, cost, quality_score). Service map visualization. Filter traces by annotation. Use for latency debugging.</p></div>
+        <div class="concept-card"><h5>Amazon Comprehend</h5><p>NLP enrichment for data pipelines. Entity extraction, sentiment, key phrases, PII detection, topic modeling. Use to enrich documents with metadata BEFORE indexing into vector store.</p></div>
+        <div class="concept-card"><h5>CloudTrail Lake</h5><p>Query audit events with SQL (Athena-like). Use for: compliance reporting on FM usage, query who invoked which model when, detect unusual access patterns in prompt management.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end content -->
+</div><!-- end layout -->
+
+<script>
+// ============ VIEW SWITCHING ============
+function switchView(viewName, btnEl, sidebarBtn) {
+  // Hide all views
+  document.querySelectorAll('.content > .view').forEach(v => v.classList.remove('active'));
+  // Show target
+  const target = document.getElementById('view-' + viewName);
+  if (target) target.classList.add('active');
+  // Update main nav
+  if (btnEl) {
+    document.querySelectorAll('.main-nav button').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  // Update sidebar
+  if (sidebarBtn) {
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    sidebarBtn.classList.add('active');
+  }
+  // Scroll to top
+  document.querySelector('.content').scrollTop = 0;
+}
+
+// ============ SERVICE PANEL SWITCHING ============
+function showService(svcName) {
+  document.querySelectorAll('.svc-panel').forEach(p => p.style.display = 'none');
+  const target = document.getElementById('svc-' + svcName);
+  if (target) { target.style.display = 'block'; }
+  else {
+    // Default: show bedrock
+    const def = document.getElementById('svc-bedrock');
+    if (def) def.style.display = 'block';
+  }
+}
+
+// ============ TASK ACCORDION ============
+function toggleTask(header) {
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  // Close all task bodies in same task-section parent
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ============ SUB ACCORDION ============
+function toggleSub(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ============ SEARCH ============
+let searchTimeout = null;
+function handleSearch(query) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => performSearch(query.trim().toLowerCase()), 200);
+}
+
+function performSearch(query) {
+  // Remove previous highlights
+  document.querySelectorAll('.search-highlight').forEach(el => {
+    el.outerHTML = el.textContent;
+  });
+
+  if (!query || query.length < 2) {
+    document.querySelectorAll('.task-section, .sub-acc, .concept-card').forEach(el => {
+      el.classList.remove('hidden-by-search');
+    });
+    return;
+  }
+
+  // Search across all views - open/show matching content
+  let found = false;
+  document.querySelectorAll('.task-body, .sub-acc-body').forEach(body => {
+    const text = body.textContent.toLowerCase();
+    if (text.includes(query)) {
+      // Open parent task
+      const taskBody = body.classList.contains('task-body') ? body : body.closest('.task-body');
+      if (taskBody) {
+        taskBody.classList.add('open');
+        taskBody.previousElementSibling.classList.add('open');
+      }
+      // Open sub acc
+      if (body.classList.contains('sub-acc-body')) {
+        body.classList.add('open');
+        body.previousElementSibling.classList.add('open');
+      }
+      found = true;
+      // Make the view visible
+      const view = body.closest('.view');
+      if (view) {
+        const viewId = view.id.replace('view-', '');
+        document.querySelectorAll('.content > .view').forEach(v => v.classList.remove('active'));
+        view.classList.add('active');
+      }
+    }
+  });
+}
+
+// ============ KEYBOARD SHORTCUT ============
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+    document.getElementById('searchInput').select();
+  }
+});
+
+// ============ INITIAL OPEN STATE ============
+// Open first task in each domain view by default
+document.querySelectorAll('.task-section:first-of-type .task-header').forEach(h => {
+  h.classList.add('open');
+  if (h.nextElementSibling) h.nextElementSibling.classList.add('open');
+});
+
+// ============ SIDEBAR ACTIVE ON CLICK ============
+document.querySelectorAll('.sidebar-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ============ SERVICES VIEW — default show bedrock ============
+document.querySelectorAll('.svc-panel').forEach((p, i) => {
+  if (i > 0) p.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
