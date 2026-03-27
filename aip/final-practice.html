@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 Final Practice | AWS Certified Generative AI Developer</title>
+<style>
+:root {
+  --navy: #1f2a37;
+  --orange: #ff9900;
+  --blue: #1d4ed8;
+  --green: #15803d;
+  --red: #b91c1c;
+  --gold: #fff7e6;
+  --border: #d6dce5;
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #16202a;
+  --muted: #5f6b7a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg, #eff4fb 0%, #f8fafc 100%);
+  color: var(--text);
+}
+.shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+}
+.hero {
+  background: linear-gradient(135deg, #1f2a37 0%, #334155 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(31, 42, 55, 0.18);
+}
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+.hero h1 span { color: var(--orange); }
+.hero p {
+  margin: 0;
+  color: #dbe5f0;
+  line-height: 1.6;
+}
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.hero-links a,
+.hero-links button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.hero-links a {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.hero-links button {
+  background: var(--orange);
+  color: #111827;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.stat {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 14px;
+}
+.stat .num {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff;
+}
+.stat .label {
+  font-size: 0.8rem;
+  color: #dbe5f0;
+  margin-top: 4px;
+}
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  margin-top: 18px;
+  overflow: hidden;
+}
+.panel-head {
+  padding: 18px 20px 10px;
+  border-bottom: 1px solid #ecf1f6;
+}
+.panel-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.panel-head p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.panel-body { padding: 18px 20px 22px; }
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip,
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.chip:hover,
+.btn:hover { border-color: var(--orange); }
+.chip.active {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.btn.primary {
+  background: var(--orange);
+  color: #111827;
+  border-color: var(--orange);
+}
+.btn.secondary {
+  background: #eef5ff;
+  color: var(--blue);
+  border-color: #cfe0ff;
+}
+.callout {
+  margin-top: 16px;
+  background: var(--gold);
+  border: 1px solid #f1d28a;
+  border-radius: 14px;
+  padding: 14px 16px;
+  line-height: 1.6;
+}
+.callout strong { color: #7c4a03; }
+.progress-wrap {
+  margin-top: 18px;
+}
+.progress-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.progress-bar {
+  margin-top: 10px;
+  height: 10px;
+  background: #edf2f7;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--orange), #ffb84d);
+  transition: width 0.2s ease;
+}
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tag {
+  background: #eef2ff;
+  color: #334155;
+  border: 1px solid #dbe4ff;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.question {
+  margin-top: 18px;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+  border-left: 5px solid var(--blue);
+  border-radius: 16px;
+  padding: 18px;
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+.options {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.option {
+  appearance: none;
+  width: 100%;
+  text-align: left;
+  border: 2px solid #d9e2ec;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font: inherit;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+.option:hover { border-color: var(--orange); background: #fffaf1; }
+.option.correct {
+  border-color: #7fd29d;
+  background: #edfdf3;
+}
+.option.incorrect {
+  border-color: #f2a3a3;
+  background: #fff3f3;
+}
+.option.dimmed { opacity: 0.72; cursor: default; }
+.feedback {
+  display: none;
+  margin-top: 16px;
+  border-radius: 16px;
+  padding: 16px 18px;
+  line-height: 1.65;
+}
+.feedback.good {
+  display: block;
+  background: #edfdf3;
+  border: 1px solid #b8e7c8;
+}
+.feedback.bad {
+  display: block;
+  background: #fff4f4;
+  border: 1px solid #f2c3c3;
+}
+.feedback h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+.summary {
+  display: none;
+  margin-top: 18px;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+.summary-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+.summary-card .big {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.domain-breakdown {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.domain-row {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #fbfdff;
+}
+.domain-row strong {
+  display: block;
+  margin-bottom: 6px;
+}
+.miss-list {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+.miss-item {
+  border: 1px solid #f2d4a0;
+  background: #fffaf2;
+  border-radius: 14px;
+  padding: 12px 14px;
+  line-height: 1.55;
+}
+.hidden { display: none; }
+@media (max-width: 700px) {
+  .shell { padding: 14px 12px 36px; }
+  .hero, .panel-head, .panel-body { padding-left: 16px; padding-right: 16px; }
+  .controls { justify-content: flex-start; }
+}
+</style>
+<!-- AIP-C01 Shared Navigation -->
+<style>
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;gap:0;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;letter-spacing:.01em;}
+.aip-nav-sep{color:#7a8a9a;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;gap:0;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 13px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+</style>
+</head>
+<body>
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="final-practice">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+    </div>
+  </div>
+</nav>
+<div class="shell">
+  <section class="hero">
+    <h1>AIP-C01 <span>Final Practice Lab</span></h1>
+    <p>Thirty fresh, high-yield exam-style questions built around the AWS-specific distinctions that most often cause misses: Bedrock APIs, inference routing, agent frameworks, guardrails, retrieval quality, optimization, and troubleshooting.</p>
+    <div class="hero-links">
+      <button onclick="restartDeck(false)">Start Fresh</button>
+      <button onclick="restartDeck(true)">Retry Misses</button>
+      <a href="index.html">Study Hub</a>
+      <a href="study-guide.html">Open Study Guide</a>
+      <a href="flashcards.html">Open Flashcards</a>
+      <a href="practice-exam.html">Open Practice Exam</a>
+      <a href="quick-drill.html">Open Quick Drill</a>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="num" id="totalCount">30</div>
+        <div class="label">Fresh challenge questions</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="missCount">0</div>
+        <div class="label">Saved misses</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="domainCount">5</div>
+        <div class="label">Domains covered</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>How To Use This</h2>
+      <p>Run the full deck once, then retry misses only. If you miss a question, distill the rule into one sentence and cross-check it against the trap lists in <a href="study-guide.html">Study Guide</a> and <a href="flashcards.html">Flashcards</a>.</p>
+    </div>
+    <div class="panel-body">
+      <div class="toolbar">
+        <div class="toolbar-group" id="domainFilters"></div>
+        <div class="toolbar-group">
+          <button class="btn primary" onclick="restartDeck(false)">Restart</button>
+          <button class="btn secondary" onclick="restartDeck(true)">Retry Misses</button>
+          <button class="btn" onclick="shuffleDeck()">Shuffle</button>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Final 2-day rule:</strong> when two answers look valid, prefer the one that is the most AWS-native, the least custom, and the closest fit to the exact constraint in the stem.
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <div><strong id="progressText">Question 1 of 30</strong></div>
+          <div id="modeText">Fresh run</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <div class="tag-row" id="tagRow"></div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+
+      <div class="controls">
+        <button class="btn" onclick="prevQuestion()">Previous</button>
+        <button class="btn primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+      </div>
+
+      <div class="summary" id="summary">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="big" id="scoreValue">0%</div>
+            <div>Overall score</div>
+          </div>
+          <div class="summary-card">
+            <div class="big" id="correctValue">0/0</div>
+            <div>Correct answers</div>
+          </div>
+          <div class="summary-card">
+            <div class="big" id="missedValue">0</div>
+            <div>Missed this run</div>
+          </div>
+        </div>
+
+        <div class="domain-breakdown" id="domainBreakdown"></div>
+        <div class="miss-list" id="missList"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const STORAGE_KEY = "aip_c01_final_practice_misses_v1";
+
+const QUESTIONS = [
+  {
+    id: "d1-q1",
+    domain: "Domain 1",
+    tags: ["multimodal", "knowledge base", "least ops"],
+    prompt: "A company is building natural-language search across 250,000 archived videos. It needs scene-level metadata, transcripts, and a Bedrock knowledge base with the least operational overhead. Which design is the best fit?",
+    options: [
+      "Use Rekognition Video for scene detection, Transcribe for transcripts, and Nova Lite batch inference to enrich scene metadata before ingesting into a Bedrock knowledge base.",
+      "Use SageMaker Processing with a scikit-learn container to detect scenes, then call Nova Micro on demand for metadata generation.",
+      "Use Lambda functions to parse raw video files directly, then write custom embeddings into DynamoDB.",
+      "Use Kinesis Video Streams and Bedrock Agents to inspect each frame in real time."
+    ],
+    answer: 0,
+    explanation: "This uses purpose-built managed services end to end: Rekognition Video for scenes, Transcribe for transcripts, Nova Lite for multimodal enrichment, and Knowledge Bases for managed retrieval. The other options add custom infrastructure or choose the wrong model/service shape."
+  },
+  {
+    id: "d1-q2",
+    domain: "Domain 1",
+    tags: ["search", "opensearch", "hybrid relevance"],
+    prompt: "A GenAI developer needs a search system for 100,000 documents that must return snippets, support more than 100 queries per second, and allow custom relevance tuning. Which option is strongest?",
+    options: [
+      "Use Bedrock Knowledge Bases with default chunking and semantic search only.",
+      "Use OpenSearch Ingestion into OpenSearch Service with sparse plus dense retrieval and custom hybrid scoring.",
+      "Use Kendra because it removes all search tuning decisions.",
+      "Use Aurora PostgreSQL with pgvector because relational storage is always simpler."
+    ],
+    answer: 1,
+    explanation: "OpenSearch Service is the best fit when the question emphasizes scale, snippets, high QPS, and custom relevance tuning. Knowledge Bases are great for managed RAG, but not when deep control over search behavior is the main requirement."
+  },
+  {
+    id: "d1-q3",
+    domain: "Domain 1",
+    tags: ["embeddings", "cost", "multilingual"],
+    prompt: "A team is indexing multilingual documents in OpenSearch and wants one embedding model that supports many languages while keeping vector storage costs down. What is the best answer?",
+    options: [
+      "Amazon Titan Text Embeddings V2 at 256 dimensions",
+      "Amazon Titan Text Embeddings V2 at 1024 dimensions",
+      "A custom BERT fine-tune on SageMaker",
+      "Nova Pro with prompt-based embeddings"
+    ],
+    answer: 0,
+    explanation: "Titan Text Embeddings V2 supports multilingual text and lets you reduce dimensions for lower storage and faster search. The 1024-dimension option improves quality, but the question explicitly asks to minimize storage cost."
+  },
+  {
+    id: "d1-q4",
+    domain: "Domain 1",
+    tags: ["api", "converse", "provider switching"],
+    prompt: "An application needs tool use, conversation history, and minimal code changes when switching between Anthropic, Meta, and Amazon models in Bedrock. Which API choice is best?",
+    options: [
+      "InvokeModel, because every provider should keep its own request format",
+      "Converse, because it gives a unified multi-model conversational interface",
+      "Direct provider SDKs behind Lambda, because Bedrock adds extra abstraction",
+      "A custom normalization layer in API Gateway"
+    ],
+    answer: 1,
+    explanation: "Converse is the Bedrock-native answer when the exam stresses multi-model portability, tool use, and conversation state. InvokeModel is lower level and keeps provider-specific request formats."
+  },
+  {
+    id: "d1-q5",
+    domain: "Domain 1",
+    tags: ["vectors", "scale", "cost"],
+    prompt: "An e-commerce workload needs similarity search across billions of product embeddings, with nightly batch refreshes and the lowest possible storage cost. What should you choose?",
+    options: [
+      "OpenSearch Service with HNSW indexes",
+      "Aurora PostgreSQL with pgvector",
+      "Amazon S3 Vectors",
+      "DynamoDB with custom cosine similarity code"
+    ],
+    answer: 2,
+    explanation: "S3 Vectors is the exam-specific answer for billion-scale, cost-optimized vector storage, especially when updates are batch-oriented rather than truly real time. OpenSearch and pgvector are better when search flexibility or SQL joins matter more."
+  },
+  {
+    id: "d1-q6",
+    domain: "Domain 1",
+    tags: ["data automation", "tables", "rag quality"],
+    prompt: "A Bedrock knowledge base is ingesting PDF financial reports, but users asking about table values get poor answers. What is the best improvement?",
+    options: [
+      "Increase chunk size so entire documents fit into fewer chunks",
+      "Switch immediately to hierarchical chunking",
+      "Pre-process the documents with Bedrock Data Automation before ingestion",
+      "Fine-tune the generation model on finance terminology"
+    ],
+    answer: 2,
+    explanation: "When the weakness is table extraction from complex documents, Bedrock Data Automation is the strongest fit. Chunking alone does not reliably fix poorly parsed structured content."
+  },
+  {
+    id: "d1-q7",
+    domain: "Domain 1",
+    tags: ["distillation", "optimization", "model customization"],
+    prompt: "A team has a high-performing large teacher model, but it needs a smaller, cheaper student model that preserves most task behavior. Which AWS capability best fits?",
+    options: [
+      "RAG with Bedrock Knowledge Bases",
+      "Model distillation in Bedrock",
+      "Prompt caching",
+      "Guardrails with grounding checks"
+    ],
+    answer: 1,
+    explanation: "Distillation is the right answer when the goal is to transfer behavior from a larger teacher model into a smaller student model for lower latency and cost. RAG and prompt caching solve different problems."
+  },
+  {
+    id: "d2-q1",
+    domain: "Domain 2",
+    tags: ["strands", "mcp", "dynamic tools"],
+    prompt: "A customer assistant must call internal tools in flexible, changing sequences based on user needs. The company wants a decoupled design where tools can be added without rewriting a rigid workflow. Which answer fits best?",
+    options: [
+      "Bedrock Flows with a fixed branch for each request type",
+      "A single large Lambda function that contains the full ReAct loop and every tool implementation",
+      "Strands with MCP-based tool integrations so the agent can choose tools dynamically",
+      "Step Functions with a separate hard-coded state for every possible tool order"
+    ],
+    answer: 2,
+    explanation: "The key signals are dynamic tool choice, flexible sequencing, and decoupled architecture. Strands plus MCP is the strongest fit when the exam wants open, extensible agent behavior rather than a predeclared deterministic workflow."
+  },
+  {
+    id: "d2-q2",
+    domain: "Domain 2",
+    tags: ["step functions", "compliance", "audit"],
+    prompt: "A regulated workflow must always run in this order: PII scan, policy lookup, response draft, compliance review, audit logging. Every step must be explicit and auditable. What should you use?",
+    options: [
+      "Bedrock Agents",
+      "Step Functions",
+      "Bedrock Flows",
+      "AgentCore Runtime"
+    ],
+    answer: 1,
+    explanation: "Step Functions is the exam answer when the stem says deterministic order, explicit states, and auditability. Bedrock Agents and Flows are more dynamic and not the best match for strict compliance sequencing."
+  },
+  {
+    id: "d2-q3",
+    domain: "Domain 2",
+    tags: ["frontend", "react", "amplify ai kit"],
+    prompt: "A React team needs a pre-built Bedrock chat UI with streaming responses and conversation history, while minimizing custom frontend code. What is the best choice?",
+    options: [
+      "Amplify AI Kit",
+      "QuickSight Q",
+      "Amazon Lex",
+      "A custom WebSocket API and React component library"
+    ],
+    answer: 0,
+    explanation: "Amplify AI Kit is the direct exam answer for a pre-built React-oriented GenAI chat interface. The other options either solve a different problem or add unnecessary custom work."
+  },
+  {
+    id: "d2-q4",
+    domain: "Domain 2",
+    tags: ["async processing", "s3", "sqs", "lambda"],
+    prompt: "Users upload documents through a web app. Each document takes 1 to 2 minutes to process with Bedrock, and users do not need a live stream of progress. Results should be stored for later lookup, and the system must absorb business-hour spikes with minimal effort. What design is best?",
+    options: [
+      "Synchronous API Gateway to Lambda to Bedrock, then DynamoDB",
+      "S3 pre-signed upload, S3 event to SQS, Lambda processing, and DynamoDB for results",
+      "A long-lived WebSocket for every upload request",
+      "Direct browser calls to Bedrock with local caching"
+    ],
+    answer: 1,
+    explanation: "The least-effort scalable async pattern is S3 plus SQS plus Lambda plus DynamoDB. The question explicitly tells you not to pay for real-time interaction while still handling spikes safely."
+  },
+  {
+    id: "d2-q5",
+    domain: "Domain 2",
+    tags: ["batch inference", "api integration", "realtime"],
+    prompt: "A healthcare application must support both low-latency real-time summarization and non-urgent large note uploads for batch trend analysis. Which architecture best fits?",
+    options: [
+      "One Step Functions workflow for both, using StartAsyncInvoke for all batch work",
+      "API Gateway plus Lambda plus InvokeModel for real time, and SQS plus Lambda plus CreateModelInvocationJob for batch work",
+      "Provisioned Throughput for all requests, regardless of urgency",
+      "A single Lambda that waits for every batch job to finish before returning"
+    ],
+    answer: 1,
+    explanation: "The test point here is that real-time and batch paths should split. CreateModelInvocationJob is the right general Bedrock batch API, while StartAsyncInvoke is a distractor associated with Nova Reel."
+  },
+  {
+    id: "d2-q6",
+    domain: "Domain 2",
+    tags: ["mcp", "ecs", "persistent connections"],
+    prompt: "An enterprise wants to deploy MCP servers that must hold persistent SSE connections, scale automatically, and avoid managing EC2 instances. What is the best answer?",
+    options: [
+      "Lambda behind API Gateway",
+      "ECS Fargate with an Application Load Balancer",
+      "Step Functions Express Workflows",
+      "OpenSearch Serverless"
+    ],
+    answer: 1,
+    explanation: "Persistent SSE-style MCP connections are a poor fit for Lambda. ECS Fargate is the clean managed container answer when the exam stresses persistence, concurrency, and low ops."
+  },
+  {
+    id: "d2-q7",
+    domain: "Domain 2",
+    tags: ["flows", "prompt chaining", "no code"],
+    prompt: "A product team wants a visual prompt chain that non-developers can edit. The chain must retrieve context, branch conditionally, and call models without building a custom orchestration app. Which answer fits best?",
+    options: [
+      "Bedrock Flows",
+      "Step Functions",
+      "Bedrock Agents",
+      "Amazon MQ"
+    ],
+    answer: 0,
+    explanation: "Bedrock Flows is the direct answer for visual, LLM-centric prompt chaining. Step Functions becomes the stronger answer only when the question emphasizes broader workflow orchestration, heavy business logic, or strict audit control."
+  },
+  {
+    id: "d3-q1",
+    domain: "Domain 3",
+    tags: ["authentication", "oidc", "cognito"],
+    prompt: "A third-party application needs secure access to Bedrock using the company's existing identity provider, temporary credentials, and no long-lived keys. Which service is the best fit?",
+    options: [
+      "Amazon Cognito with OIDC federation",
+      "IAM users with access key rotation",
+      "A Lambda authorizer that returns signed Bedrock requests",
+      "Secrets Manager plus static IAM access keys"
+    ],
+    answer: 0,
+    explanation: "For an application-facing federation scenario, Cognito with OIDC is the clean AWS answer. The distractors keep long-lived credentials or create unnecessary custom auth layers."
+  },
+  {
+    id: "d3-q2",
+    domain: "Domain 3",
+    tags: ["workforce identity", "sso", "identity center"],
+    prompt: "An enterprise wants workforce SSO from its corporate IdP so employees can access GenAI applications on AWS with temporary credentials and centralized permission sets. Which answer is strongest?",
+    options: [
+      "IAM Identity Center with SAML federation",
+      "IAM users for every employee",
+      "API Gateway Lambda authorizers for all tools",
+      "Bedrock Guardrails"
+    ],
+    answer: 0,
+    explanation: "Identity Center is the workforce-oriented answer. The question signals employee access, SSO, temporary credentials, and centralized access management."
+  },
+  {
+    id: "d3-q3",
+    domain: "Domain 3",
+    tags: ["guardrails", "iam", "enforcement"],
+    prompt: "A company policy says every InvokeModel and Converse call must include a specific guardrail. What is the most operationally efficient enforcement mechanism?",
+    options: [
+      "A proxy Lambda that validates every request",
+      "Store the guardrail ID in Parameter Store and inject it at runtime",
+      "IAM policies that require the bedrock:GuardrailIdentifier condition key",
+      "CloudTrail alerts on calls that omit a guardrail"
+    ],
+    answer: 2,
+    explanation: "The exam wants centralized, built-in enforcement rather than custom proxy code. IAM with the bedrock:GuardrailIdentifier condition key is the cleanest answer."
+  },
+  {
+    id: "d3-q4",
+    domain: "Domain 3",
+    tags: ["guardrail tracing", "metrics", "policy type"],
+    prompt: "A developer needs to know exactly which guardrail layer blocked a request or response so legitimate traffic can be separated from true prompt attacks. What should they enable and inspect?",
+    options: [
+      "Only CloudTrail, because it captures every API call",
+      "Invocation logging alone, because it contains the full prompt",
+      "Guardrail tracing plus CloudWatch metrics filtered by GuardrailPolicyType",
+      "Only GuardrailContentSource, because input versus output is enough detail"
+    ],
+    answer: 2,
+    explanation: "Guardrail tracing tells you more about the intervention, and GuardrailPolicyType is the metric dimension that identifies the specific policy layer. GuardrailContentSource only tells you whether the intervention happened on input or output."
+  },
+  {
+    id: "d3-q5",
+    domain: "Domain 3",
+    tags: ["private link", "data security", "bedrock"],
+    prompt: "A healthcare workload needs assurance that Bedrock will not train on customer data and that inference traffic will not traverse the public internet. Which answer is best?",
+    options: [
+      "Bedrock plus VPC endpoints through PrivateLink",
+      "Self-host every open-source model on EC2",
+      "Guardrails plus CloudTrail",
+      "Only SSE-KMS encryption on S3 documents"
+    ],
+    answer: 0,
+    explanation: "Bedrock already does not use customer data to train base models, and PrivateLink addresses the network-isolation requirement. The other answers do not directly meet both conditions together."
+  },
+  {
+    id: "d3-q6",
+    domain: "Domain 3",
+    tags: ["responsible ai", "bias", "clarify"],
+    prompt: "A team must measure whether model predictions differ unfairly across demographic groups before and after deployment. Which AWS capability best matches?",
+    options: [
+      "SageMaker Clarify",
+      "Bedrock Guardrails",
+      "CloudWatch Logs Insights",
+      "AWS Config"
+    ],
+    answer: 0,
+    explanation: "Clarify is the direct answer for bias and fairness analysis. Guardrails focus on content safety, not fairness metrics across demographic groups."
+  },
+  {
+    id: "d3-q7",
+    domain: "Domain 3",
+    tags: ["governance", "model cards", "audit"],
+    prompt: "A regulated organization needs standardized model documentation that captures purpose, limitations, evaluation results, and ethical considerations for auditors. What should it use?",
+    options: [
+      "SageMaker Model Cards",
+      "SageMaker Experiments only",
+      "CloudTrail Lake",
+      "A custom wiki page"
+    ],
+    answer: 0,
+    explanation: "Model Cards exist specifically for structured model documentation and governance review. Experiments track runs, but they are not the canonical governance artifact."
+  },
+  {
+    id: "d4-q1",
+    domain: "Domain 4",
+    tags: ["prompt caching", "cost optimization"],
+    prompt: "A legal analysis app reuses the same 15,000-token system prompt and reference framework for many requests. Costs are rising sharply. What is the best optimization?",
+    options: [
+      "Provisioned Throughput",
+      "Prompt caching",
+      "Batch inference",
+      "A bigger context window model"
+    ],
+    answer: 1,
+    explanation: "Prompt caching is designed for repeated static prompt prefixes. Provisioned Throughput changes capacity economics, but it does not solve repeated prompt-prefix processing by itself."
+  },
+  {
+    id: "d4-q2",
+    domain: "Domain 4",
+    tags: ["traffic pattern", "on demand", "cost"],
+    prompt: "A customer-service chatbot has unpredictable bursts with long idle periods. The company wants the most cost-effective model access pattern. What is the best answer?",
+    options: [
+      "Provisioned Throughput with a 6-month commitment",
+      "SageMaker real-time endpoints with a minimum instance count",
+      "On-demand Bedrock invocation behind Lambda or an API layer",
+      "EC2 GPU instances running a self-hosted model"
+    ],
+    answer: 2,
+    explanation: "When traffic is spiky and idle periods are long, on-demand Bedrock is the exam answer. Provisioned and persistent endpoints become better only when utilization is predictably high."
+  },
+  {
+    id: "d4-q3",
+    domain: "Domain 4",
+    tags: ["inference profile", "multi region", "ha"],
+    prompt: "An app using Nova Pro needs managed multi-Region failover plus performance-aware routing of inference traffic. What should the team choose?",
+    options: [
+      "Route 53 latency-based routing to regional Bedrock endpoints",
+      "An inference profile",
+      "Global Accelerator in front of custom regional proxies",
+      "Provisioned Throughput in each Region"
+    ],
+    answer: 1,
+    explanation: "This is one of the cleanest exam traps: if the stem says managed failover plus best-performing Region, think inference profile. The other answers add custom routing or miss the exact Bedrock-native construct."
+  },
+  {
+    id: "d4-q4",
+    domain: "Domain 4",
+    tags: ["provisioned throughput", "utilization", "steady traffic"],
+    prompt: "A workload runs continuously at high volume, needs predictable latency, and is expected to exceed roughly 70 percent utilization. Which pricing and deployment model is best?",
+    options: [
+      "On-demand Bedrock invocations",
+      "Bedrock Provisioned Throughput",
+      "Batch inference jobs",
+      "S3 Vectors"
+    ],
+    answer: 1,
+    explanation: "Provisioned Throughput is the right answer when traffic is steady, utilization is high, and predictable latency matters. The stem is giving you the classic break-even signal."
+  },
+  {
+    id: "d4-q5",
+    domain: "Domain 4",
+    tags: ["batch inference", "asynchronous", "cost"],
+    prompt: "A team must process 500,000 records through a model within 24 hours, with no real-time requirement and a strong push to reduce cost. Which answer is best?",
+    options: [
+      "Parallel Lambda calls to InvokeModel",
+      "Provisioned Throughput",
+      "Bedrock Batch Inference",
+      "Step Functions Express with retries"
+    ],
+    answer: 2,
+    explanation: "Batch Inference is the dedicated Bedrock answer for large asynchronous workloads and lower cost than on-demand real-time calls. The question is explicitly pointing away from synchronous architectures."
+  },
+  {
+    id: "d5-q1",
+    domain: "Domain 5",
+    tags: ["knowledge base", "logging", "troubleshooting"],
+    prompt: "A company needs to see which knowledge base files were ignored, failed embedding, or failed indexing during ingestion. What should it configure?",
+    options: [
+      "CloudTrail logging only",
+      "Knowledge base logging to CloudWatch Logs",
+      "Model invocation logging",
+      "CloudWatch Application Signals"
+    ],
+    answer: 1,
+    explanation: "Knowledge base logging to CloudWatch Logs is the right answer for document-level ingestion details. CloudTrail captures API activity, not the per-document ingestion statuses the question asks for."
+  },
+  {
+    id: "d5-q2",
+    domain: "Domain 5",
+    tags: ["reranker", "retrieval quality", "rag"],
+    prompt: "A RAG application already retrieves relevant support documents, but users say the most useful result often appears too low in the ranked list. What is the best targeted improvement with minimal extra overhead?",
+    options: [
+      "Fine-tune the generation model on support articles",
+      "Use Bedrock reranker models to reorder retrieval results",
+      "Switch from OpenSearch to pgvector",
+      "Increase generation temperature"
+    ],
+    answer: 1,
+    explanation: "The issue is ranking, not generation or basic retrieval. Rerankers are designed for this exact gap: reorder candidate results so the best supporting context surfaces first."
+  },
+  {
+    id: "d5-q3",
+    domain: "Domain 5",
+    tags: ["embedding drift", "troubleshooting", "retrieval"],
+    prompt: "After a Lambda update, a RAG app suddenly starts returning generic answers like 'no relevant information found' even though the vector store is healthy and latency is unchanged. What is the most likely cause?",
+    options: [
+      "The model temperature increased",
+      "The query path now uses a different embedding model than the one used to index documents",
+      "CloudWatch Logs retention expired",
+      "Guardrails blocked the retrieval API"
+    ],
+    answer: 1,
+    explanation: "This is the classic embedding drift failure mode. If indexing and query embeddings come from different models or configurations, similarity search degrades even when infrastructure looks healthy."
+  },
+  {
+    id: "d5-q4",
+    domain: "Domain 5",
+    tags: ["stop sequences", "api controls", "generation"],
+    prompt: "An application must stop model output when a specific phrase appears. Which mechanism is the most reliable?",
+    options: [
+      "Put the phrase in the prompt and hope the model obeys",
+      "Use stop sequences in the inference configuration",
+      "Lower the temperature",
+      "Raise top-k"
+    ],
+    answer: 1,
+    explanation: "Stop sequences are the direct API-level control for terminating generation on specific text. Prompt wording, temperature, and top-k are weaker or unrelated."
+  },
+  {
+    id: "d5-q5",
+    domain: "Domain 5",
+    tags: ["evaluation", "llm as judge", "bedrock model evaluation"],
+    prompt: "A team wants to compare two summarization models but does not have labeled reference outputs. Which approach is the best AWS-native starting point?",
+    options: [
+      "BLEU scoring with random sampled prompts",
+      "Bedrock Model Evaluation in automatic mode using LLM-as-judge",
+      "Only human review, because automatic evaluation cannot help",
+      "SageMaker Clarify"
+    ],
+    answer: 1,
+    explanation: "When labeled outputs do not exist, LLM-as-judge inside Bedrock Model Evaluation is the direct managed answer. Clarify is about bias, and BLEU assumes reference outputs that are not present here."
+  },
+  {
+    id: "d5-q6",
+    domain: "Domain 5",
+    tags: ["deployment", "canary", "rollback"],
+    prompt: "A team wants to gradually shift traffic to a new model version and automatically roll back if quality or latency metrics regress. Which deployment strategy best matches?",
+    options: [
+      "SageMaker canary deployment with CloudWatch alarms",
+      "A one-step blue-green cutover with no alarms",
+      "On-demand Bedrock invocations with no routing controls",
+      "A manual DNS switch during business hours"
+    ],
+    answer: 0,
+    explanation: "Canary deployment is the direct answer when the exam says gradual rollout plus automatic rollback. The other options lack controlled progressive exposure or automatic recovery."
+  }
+];
+
+const domainOrder = ["all", "Domain 1", "Domain 2", "Domain 3", "Domain 4", "Domain 5"];
+let savedMisses = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+let currentDomain = "all";
+let retryMode = false;
+let deck = [];
+let currentIndex = 0;
+let answered = {};
+
+function updateStats() {
+  document.getElementById("totalCount").textContent = QUESTIONS.length;
+  document.getElementById("missCount").textContent = savedMisses.size;
+}
+
+function buildDomainFilters() {
+  const wrap = document.getElementById("domainFilters");
+  wrap.innerHTML = "";
+  domainOrder.forEach((domain) => {
+    const btn = document.createElement("button");
+    btn.className = "chip" + (currentDomain === domain ? " active" : "");
+    btn.textContent = domain === "all" ? "All Domains" : domain;
+    btn.onclick = () => {
+      currentDomain = domain;
+      restartDeck(retryMode);
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function shuffled(list) {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function filteredQuestions() {
+  let base = QUESTIONS;
+  if (currentDomain !== "all") {
+    base = base.filter((q) => q.domain === currentDomain);
+  }
+  if (retryMode) {
+    base = base.filter((q) => savedMisses.has(q.id));
+  }
+  return base;
+}
+
+function restartDeck(missesOnly) {
+  retryMode = missesOnly;
+  answered = {};
+  currentIndex = 0;
+  deck = shuffled(filteredQuestions());
+  buildDomainFilters();
+  document.getElementById("summary").style.display = "none";
+  document.getElementById("nextBtn").disabled = true;
+  if (!deck.length) {
+    renderEmptyState();
+    return;
+  }
+  renderQuestion();
+}
+
+function shuffleDeck() {
+  if (!deck.length) return;
+  deck = shuffled(deck);
+  currentIndex = 0;
+  answered = {};
+  document.getElementById("summary").style.display = "none";
+  renderQuestion();
+}
+
+function renderEmptyState() {
+  document.getElementById("tagRow").innerHTML = "";
+  document.getElementById("questionText").textContent = retryMode
+    ? "No saved misses match this filter yet. Switch to a fresh run or another domain."
+    : "No questions match this filter.";
+  document.getElementById("options").innerHTML = "";
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback hidden";
+  feedback.style.display = "none";
+  document.getElementById("progressText").textContent = "Ready";
+  document.getElementById("modeText").textContent = retryMode ? "Retry misses" : "Fresh run";
+  document.getElementById("progressFill").style.width = "0%";
+  document.getElementById("nextBtn").disabled = true;
+}
+
+function renderQuestion() {
+  const q = deck[currentIndex];
+  document.getElementById("progressText").textContent = "Question " + (currentIndex + 1) + " of " + deck.length;
+  document.getElementById("modeText").textContent = retryMode ? "Retry misses" : "Fresh run";
+  document.getElementById("progressFill").style.width = (((currentIndex + 1) / deck.length) * 100) + "%";
+  document.getElementById("questionText").textContent = q.prompt;
+  document.getElementById("tagRow").innerHTML = [
+    '<span class="tag">' + q.domain + "</span>",
+    ...q.tags.map((tag) => '<span class="tag">' + tag + "</span>")
+  ].join("");
+  const optionsWrap = document.getElementById("options");
+  optionsWrap.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.innerHTML = "<strong>" + String.fromCharCode(65 + idx) + ".</strong> " + opt;
+    button.onclick = () => answerQuestion(idx);
+    optionsWrap.appendChild(button);
+  });
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback hidden";
+  feedback.style.display = "none";
+  feedback.innerHTML = "";
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").textContent = currentIndex === deck.length - 1 ? "Finish" : "Next";
+  if (answered[q.id] !== undefined) {
+    renderAnsweredState(q, answered[q.id]);
+  }
+}
+
+function answerQuestion(choice) {
+  const q = deck[currentIndex];
+  if (answered[q.id] !== undefined) return;
+  answered[q.id] = choice;
+  renderAnsweredState(q, choice);
+  const correct = choice === q.answer;
+  if (!correct) savedMisses.add(q.id);
+  else savedMisses.delete(q.id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...savedMisses]));
+  updateStats();
+}
+
+function renderAnsweredState(q, choice) {
+  const correct = choice === q.answer;
+  const optionNodes = [...document.querySelectorAll(".option")];
+  optionNodes.forEach((node, idx) => {
+    node.classList.remove("correct", "incorrect", "dimmed");
+    if (idx === q.answer) node.classList.add("correct");
+    else if (idx === choice && !correct) node.classList.add("incorrect");
+    else node.classList.add("dimmed");
+  });
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback " + (correct ? "good" : "bad");
+  feedback.style.display = "block";
+  feedback.innerHTML =
+    "<h3>" + (correct ? "Correct" : "Not quite") + "</h3>" +
+    "<div><strong>Best answer:</strong> " + String.fromCharCode(65 + q.answer) + "</div>" +
+    "<div style='margin-top:8px;'>" + q.explanation + "</div>";
+  document.getElementById("nextBtn").disabled = false;
+}
+
+function prevQuestion() {
+  if (currentIndex === 0) return;
+  currentIndex -= 1;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (currentIndex >= deck.length - 1) {
+    renderSummary();
+    return;
+  }
+  currentIndex += 1;
+  renderQuestion();
+}
+
+function renderSummary() {
+  document.getElementById("progressFill").style.width = "100%";
+  const total = deck.length;
+  let correct = 0;
+  const byDomain = {};
+  const misses = [];
+
+  deck.forEach((q) => {
+    if (!byDomain[q.domain]) byDomain[q.domain] = { total: 0, correct: 0 };
+    byDomain[q.domain].total += 1;
+    const gotIt = answered[q.id] === q.answer;
+    if (gotIt) {
+      correct += 1;
+      byDomain[q.domain].correct += 1;
+    } else {
+      misses.push(q);
+    }
+  });
+
+  const pct = total ? Math.round((correct / total) * 100) : 0;
+  document.getElementById("scoreValue").textContent = pct + "%";
+  document.getElementById("correctValue").textContent = correct + "/" + total;
+  document.getElementById("missedValue").textContent = total - correct;
+
+  const breakdown = document.getElementById("domainBreakdown");
+  breakdown.innerHTML = "";
+  Object.keys(byDomain).forEach((domain) => {
+    const item = byDomain[domain];
+    const row = document.createElement("div");
+    row.className = "domain-row";
+    row.innerHTML =
+      "<strong>" + domain + "</strong>" +
+      "<div>" + item.correct + " of " + item.total + " correct</div>";
+    breakdown.appendChild(row);
+  });
+
+  const missList = document.getElementById("missList");
+  if (!misses.length) {
+    missList.innerHTML = '<div class="miss-item"><strong>Clean run.</strong> Keep the momentum and do one more pass in a different order.</div>';
+  } else {
+    missList.innerHTML = misses.map((q) =>
+      '<div class="miss-item"><strong>' + q.domain + "</strong><div style='margin-top:6px;'>" +
+      q.prompt + "</div><div style='margin-top:8px;color:#7c4a03;'><strong>Rule:</strong> " +
+      q.explanation + "</div></div>"
+    ).join("");
+  }
+
+  document.getElementById("summary").style.display = "block";
+}
+
+updateStats();
+buildDomainFilters();
+restartDeck(false);
+</script>
+</body>
+</html>
