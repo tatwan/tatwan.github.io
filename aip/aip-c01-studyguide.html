@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS AIP-C01 Certification Study Guide</title>
+
+  <!-- Essential CDN Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: 'hsl(210, 75%, 95%)',
+              100: 'hsl(210, 75%, 85%)',
+              200: 'hsl(210, 75%, 75%)',
+              300: 'hsl(210, 75%, 65%)',
+              400: 'hsl(210, 75%, 55%)',
+              500: 'hsl(210, 75%, 40%)',
+              600: 'hsl(210, 75%, 35%)',
+              700: 'hsl(210, 75%, 25%)',
+              800: 'hsl(210, 75%, 15%)',
+              900: 'hsl(210, 75%, 10%)'
+            },
+            accent: {
+              50: 'hsl(240, 65%, 95%)',
+              100: 'hsl(240, 65%, 85%)',
+              200: 'hsl(240, 65%, 75%)',
+              300: 'hsl(240, 65%, 65%)',
+              400: 'hsl(240, 65%, 60%)',
+              500: 'hsl(240, 65%, 55%)',
+              600: 'hsl(240, 65%, 50%)',
+              700: 'hsl(240, 65%, 40%)',
+              800: 'hsl(240, 65%, 30%)',
+              900: 'hsl(240, 65%, 20%)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+  <!-- Preline UI Components -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js"></script>
+
+  <!-- Micro-interactions & Custom Styles -->
+  <style>
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    .btn-interactive {
+      transition: all 0.2s ease-out;
+    }
+    
+    .btn-interactive:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-interactive:active {
+      transform: scale(0.95);
+    }
+
+    .card-interactive {
+      transition: all 0.3s ease-out;
+      border: 1px solid transparent;
+      --border-lightness: 40%;
+    }
+
+    .dark .card-interactive {
+      --border-lightness: 60%;
+    }
+
+    .card-interactive:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      filter: brightness(0.98);
+    }
+    
+    /* Primary colored cards */
+    .card-interactive[class*="primary"]:hover,
+    .card-interactive[class*="white"]:hover,
+    .card-interactive[class*="gray-"]:hover {
+      border-color: hsl(210, 75%, var(--border-lightness));
+    }
+    
+    /* Accent colored cards */
+    .card-interactive[class*="accent"]:hover {
+      border-color: hsl(240, 65%, var(--border-lightness));
+    }
+  </style>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('sunIcon').style.display = isDark ? 'block' : 'none';
+      document.getElementById('moonIcon').style.display = isDark ? 'none' : 'block';
+    }
+  </script>
+<!-- AIP-C01 Shared Navigation -->
+<style>
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;gap:0;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;letter-spacing:.01em;}
+.aip-nav-sep{color:#7a8a9a;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;gap:0;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 13px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+</style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+    </div>
+  </div>
+</nav>
+  <!-- Progress Bar -->
+  <div class="fixed top-0 left-0 h-1 bg-primary-500 dark:bg-primary-400 z-[60] transition-all duration-300 ease-out" id="progressBar" style="width: 0%;"></div>
+
+  <!-- Floating Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur bg-gray-50/90 dark:bg-gray-900/90 border-b border-primary-500/20 dark:border-primary-600/20">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center">
+            <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+          </div>
+          <h1 class="text-xl font-bold text-primary-700 dark:text-primary-300">AIP-C01 Study Guide</h1>
+          <a href="index.html" class="btn-interactive hidden lg:inline-flex items-center rounded-lg bg-primary-100 dark:bg-primary-800 px-3 py-2 text-sm font-semibold text-primary-700 dark:text-primary-200">Study Hub</a>
+          <a href="study-guide.html" class="btn-interactive hidden lg:inline-flex items-center rounded-lg bg-accent-100 dark:bg-accent-800 px-3 py-2 text-sm font-semibold text-accent-700 dark:text-accent-200">Study Guide</a>
+        </div>
+        
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="index.html" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Study Hub</a>
+          <a href="study-guide.html" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Study Guide</a>
+          <a href="#home" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Home</a>
+          <a href="#bedrock" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Bedrock</a>
+          <a href="#sagemaker" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">SageMaker</a>
+          <a href="#guardrails" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Guardrails</a>
+          <a href="#security" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Security</a>
+          <a href="#troubleshooting" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Troubleshooting</a>
+          <a href="#conclusion" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Conclusion</a>
+        </nav>
+
+        <button onclick="toggleDarkMode()" class="btn-interactive p-2 rounded-lg bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-700 transition-all">
+          <i data-lucide="sun" id="sunIcon" class="w-5 h-5"></i>
+          <i data-lucide="moon" id="moonIcon" class="w-5 h-5" style="display: none;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-16">
+    <!-- Hero Section -->
+    <section id="home" class="py-20 bg-primary-50/50 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold mb-6 text-primary-700 dark:text-primary-300">
+            AWS Certified AI Practitioner – Advanced (AIP-C01)
+          </h2>
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+            Comprehensive Study Guide for Technical Candidates with Prior AWS Experience
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-6">
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/pdfs/aws-certification/latest/ai-professional-01/ai-professional-01.pdf|11">
+              This exam guide includes weightings, content domains, tasks, and skills for the AWS Certified Generative AI Developer - Professional exam, designed for individuals with developer roles validating proficiency in developing, deploying, and debugging cloud-based applications.
+            </p>
+            
+            <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+              <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://docs.aws.amazon.com/pdfs/aws-certification/latest/ai-professional-01/ai-professional-01.pdf|11">
+                <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                Skill 1.6.6: Design complex prompt engineering solutions to optimize model performance and reduce token consumption.
+              </p>
+            </div>
+
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/pdfs/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.pdf|12">
+              The AIF-C01 exam guide provides weightings, content domains, tasks, and skills for the AWS Certified AI Practitioner exam, serving as foundational preparation for the advanced practitioner level.
+            </p>
+          </div>
+          
+          <img
+            src="https://cdn.qwenlm.ai/3436cb00-060c-4718-8184-e3333f9cb4c7/0e10b0f0-dd0c-485f-8b67-cd5708ffef03/59e3d702-95f1-44af-82e3-e6d0f982bd1b.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiMzQzNmNiMDAtMDYwYy00NzE4LTgxODQtZTMzMzNmOWNiNGM3IiwicmVzb3VyY2VfaWQiOiIwZTEwYjBmMC1kZDBjLTQ4NWYtOGI2Ny1jZDU3MDhmZmVmMDMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.d028ZX2wZvDS0-0B7xDZLI9dBuiQlAOhWBdyIxVk3l4"
+            alt="Modern AWS AI architecture diagram displayed on a clean white background with light gray (#F5F5F5) accents. The central element is a large, circular AWS logo in orange (#FF9900) with the text 'AIP-C01' in bold blue (#1A73B3) positioned below it. Surrounding the logo are four hexagonal icons arranged in a diamond pattern: top hexagon shows a brain icon in purple (#6366F1), bottom hexagon displays a lock shield icon in green (#10B981), left hexagon shows a server rack icon in blue (#1A73B3), and right hexagon displays a graph trend icon in amber (#F59E0B). Thin connecting lines in light gray (#E5E7EB) link the hexagons to the central logo. Below the hexagon arrangement, there are three rectangular badges horizontally aligned: left badge shows 'Advanced' in white text on blue background, middle badge shows 'Technical' in white text on purple background, right badge shows 'Hands-on' in white text on green background. The overall composition uses a professional color palette dominated by blue (#1A73B3), purple (#6366F1), green (#10B981), and orange (#FF9900) with clean spacing and modern sans-serif typography."
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-3 gap-6">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="layers" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300" data-ref="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors-bedrock-kb.html|1">Knowledge Base Integration</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Amazon Bedrock supports S3 Vectors as a vector store, providing cost savings for Retrieval Augmented Generation (RAG) implementations.
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-accent-700 dark:text-accent-300" data-ref="https://aws.amazon.com/blogs/machine-learning/safeguard-generative-ai-applications-with-amazon-bedrock-guardrails/|59">Guardrails Implementation</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Amazon Bedrock Guardrails helps enforce consistent policies for prompt safety and sensitive data protection using content filters and denied topic filters.
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="gauge" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-bases-logging.html|2">Monitoring &amp; Logging</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Amazon Bedrock supports monitoring systems using CloudWatch Logs to track knowledge base data ingestion job execution and model invocation events.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Amazon Bedrock Deep Dive -->
+    <section id="bedrock" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Amazon Bedrock Architecture &amp; Implementation
+        </h2>
+
+        <div class="space-y-6 mb-12">
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/decision-guides/latest/bedrock-or-sagemaker/bedrock-or-sagemaker.html|34">
+            Amazon Bedrock employs a simple pricing model based on the number of API calls made to the service, making it cost-effective for applications with predictable usage patterns.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/bedrock/|36">
+            Optimize for cost, latency, and accuracy by ensuring AI applications are balanced for the perfect combination of cost, speed, and accuracy using features like Model Optimization and performance tuning capabilities.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/migrating-to-amazon-sagemaker-karini-ai-cut-costs-by-23/|37">
+            Karini AI's migration of vector embedding models from Kubernetes to Amazon SageMaker endpoints improved concurrency by
+            <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">30%</span>
+            and saved costs by
+            <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">23%</span>,
+            demonstrating significant performance improvements achievable through AWS native services.
+          </p>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Accordion Item 1 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-bedrock-1">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="database" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Knowledge Base Architecture</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-bedrock-1" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-bedrock-1">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/deploy-rag-use-case-on-aws.html|7">
+                  Amazon Bedrock Knowledge Bases is designed for building and deploying knowledge bases as an additional abstraction to simplify the RAG ingestion and retrieval processes, enabling faster development cycles.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/rag-evaluation-security-data.html|5">
+                  During knowledge base evaluation jobs, Amazon Bedrock makes a temporary copy of your data and deletes it after the job finishes, ensuring data privacy and minimizing storage costs.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-bases-logging.html|2">
+                    <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    Monitoring Requirement: Enable CloudWatch Logs to track knowledge base data ingestion job execution and identify performance bottlenecks or failures.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-bedrock-2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="zap" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Model Customization &amp; Fine-tuning</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-bedrock-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-bedrock-2">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/advanced-fine-tuning-methods-on-amazon-sagemaker-ai/|53">
+                  Customize models in Amazon Bedrock with your own data using fine-tuning and continued pre-training. Alignment methods for LLMs ensure models behave according to organizational policies and ethical guidelines.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/efficiently-serve-dozens-of-fine-tuned-models-with-vllm-on-amazon-sagemaker-ai-and-amazon-bedrock/|54">
+                  To benefit from optimizations, host your LoRA customized models on Amazon SageMaker AI or Amazon Bedrock. Implementing multi-LoRA techniques enables efficient serving of dozens of fine-tuned models.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/about-aws/whats-new/2026/02/amazon-bedrock-reinforcement-fine-tuning-openai/|58">
+                  Amazon Bedrock now extends reinforcement fine-tuning (RFT) support to popular open-weight models, including OpenAI GPT-OSS and Qwen models, expanding customization capabilities.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-bedrock-3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="settings" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Logging &amp; Monitoring Setup</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-bedrock-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-bedrock-3">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html|4">
+                  You can set up an S3 destination for logging in Amazon Bedrock by creating an S3 bucket where the logs will be delivered and adding a bucket policy to it.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sdk-for-sap-abap/v1/api/latest/release_notes.html|47">
+                  The AWS SDK for SAP ABAP adds the audioDataDeliveryEnabled boolean field to the Model Invocation Logging Configuration, providing granular control over audio data delivery in logging.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://www.cnblogs.com/AmazonwebService/p/19712675|73">
+                    <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    Log Collection Strategy: Use CloudTrail for API calls, Bedrock Model Invocation Logging for model calls, and VPC Flow Logs for network traffic monitoring.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-2 gap-8 items-start">
+          <div class="space-y-6">
+            <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">
+              Bedrock AgentCore Runtime
+            </h3>
+
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/author/subshrey/feed/|89">
+              Amazon Bedrock AgentCore Runtime provides true microVM isolation for each session, ensuring complete compartmentalization of agent state, tool operations, and credential access. Each session receives its own dedicated virtual machine with isolated compute, memory, and file system resources.
+            </p>
+
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/author/subshrey/feed/|89">
+              AgentCore Runtime supports embedded identity management with two authentication mechanisms: IAM SigV4 Authentication for agents operating within AWS security boundaries, and OAuth-based JWT Bearer Token Authentication integrated with enterprise identity providers like Amazon Cognito, Okta, or Microsoft Entra ID.
+            </p>
+
+            <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+              <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://aws.amazon.com/blogs/machine-learning/author/subshrey/feed/|89">
+                <i data-lucide="trending-up" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                Consumption-Based Pricing: Users pay only for actual resource usage during active CPU processing and moment-by-moment memory consumption, resulting in up to
+                <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">70%</span>
+                CPU cost reduction.
+              </p>
+            </div>
+          </div>
+
+          <img
+            src="https://cdn.qwenlm.ai/3436cb00-060c-4718-8184-e3333f9cb4c7/0e10b0f0-dd0c-485f-8b67-cd5708ffef03/ecac5a3f-cec3-4966-acd9-717328fab0e1.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiMzQzNmNiMDAtMDYwYy00NzE4LTgxODQtZTMzMzNmOWNiNGM3IiwicmVzb3VyY2VfaWQiOiIwZTEwYjBmMC1kZDBjLTQ4NWYtOGI2Ny1jZDU3MDhmZmVmMDMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.d028ZX2wZvDS0-0B7xDZLI9dBuiQlAOhWBdyIxVk3l4"
+            alt="Technical architecture diagram showing Amazon Bedrock AgentCore Runtime on a clean white background with light gray (#F5F5F5) accents. The diagram is centered and features a large rectangular container labeled 'AgentCore Runtime' in bold blue text (#1A73B3) with a subtle gradient border. Inside this container are three vertically stacked microVM boxes, each box has rounded corners with a blue (#1A73B3) border and contains three horizontal lines representing isolated resources: top line labeled 'Compute' in blue, middle line labeled 'Memory' in blue, bottom line labeled 'File System' in blue. To the left of the main container, there is a smaller rounded rectangle labeled 'IAM SigV4 Authentication' in green (#10B981) with an arrow pointing to the main container. To the right, another rounded rectangle labeled 'OAuth JWT Authentication' in purple (#6366F1) also points to the main container. Below the main container, there is a horizontal timeline bar divided into segments: first segment labeled 'Active' in blue (#1A73B3), second segment labeled 'Idle' in amber (#F59E0B), third segment labeled 'Terminated' in red (#EF4444). Above the diagram, there is a small badge showing '70% Cost Reduction' in white text on a green (#10B981) background. The entire composition uses thin connecting lines in light gray (#E5E7EB) and maintains a clean, professional layout with modern sans-serif typography."
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Amazon SageMaker Deep Dive -->
+    <section id="sagemaker" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Amazon SageMaker Advanced Configurations
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start mb-12">
+          <div class="space-y-6">
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/decision-guides/latest/machine-learning-on-aws-how-to-choose/guide.html|66">
+              Amazon SageMaker AI provides fully managed infrastructure if you need to build and train your own models. AWS offers an array of advanced ML frameworks and tools for custom model development.
+            </p>
+
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/customize-model.html|67">
+              Amazon SageMaker AI model customization is a capability that transforms the traditionally complex and time-consuming process of customizing AI models from a manual task into an automated workflow.
+            </p>
+
+            <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+              <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html|69">
+                <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                Multi-Model Endpoints: Support hosting both CPU and GPU-backed models, enabling lower deployment costs through increased efficiency and resource utilization.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 rounded-xl shadow-md bg-white/90 backdrop-blur-sm dark:bg-gray-900 h-80">
+            <canvas id="sagemakerCostChart"></canvas>
+          </div>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Accordion Item 1 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-sagemaker-1">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="code" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">JumpStart Foundation Models</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-sagemaker-1" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-sagemaker-1">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models.html|39">
+                  Amazon SageMaker JumpStart offers state-of-the-art foundation models for use cases such as content writing, code generation, question answering, copywriting, and more, providing pre-trained models ready for deployment.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/vision-use-cases-with-llama-3-2-11b-and-90b-models-from-meta/|40">
+                  Llama 3.2 vision models can be configured in Amazon Bedrock and Amazon SageMaker JumpStart for vision-based applications, enabling multimodal AI capabilities.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/fine-tune-vlms-for-multipage-document-to-json-with-sagemaker-ai-and-swift/|42">
+                  Familiarity with AWS services, particularly SageMaker AI, along with conceptual knowledge of LLMs, VLMs, and container technology will be beneficial for successful model deployment.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-sagemaker-2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="activity" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Evaluation &amp; Testing Frameworks</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-sagemaker-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-sagemaker-2">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-evaluate.html|70">
+                  Use Amazon SageMaker JumpStart to evaluate text-based foundation models with FMEval. You can use these model evaluations to compare model quality and performance metrics across different models.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://www.linkedin.com/posts/terumilaskowsky_model-evaluation-who-is-the-judge-activity-7430851607652806656-asBj|49">
+                  Day 40 of 60: AWS Certified Generative AI Developer - Professional (AIP-C01) emphasizes the importance of tracking model performance and documenting evaluation results to ensure reproducible results.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://www.linkedin.com/posts/terumilaskowsky_model-evaluation-who-is-the-judge-activity-7430851607652806656-asBj|49">
+                    <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    Documentation Best Practice: Always document model evaluation results and performance metrics to avoid the scenario of 'My model isn't working' due to lack of baseline data.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-sagemaker-3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="server" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Multi-Model Endpoint Optimization</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-sagemaker-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-sagemaker-3">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html|69">
+                  Multi-model endpoints support hosting both CPU and GPU-backed models. By using GPU-backed models, you can lower your model deployment costs through increased efficiency and resource sharing.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://dl.acm.org/doi/10.1145/3731599.3767354|31">
+                  The engine-agnostic model hot-swapping framework reduces cold-start latency and improves GPU utilization while optimizing the cost-efficiency of multi-model deployments.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://dev.to/synsun/running-local-llms-in-2026-ollama-lm-studio-and-jan-compared-5dii|32">
+                  For agentic workflows, autonomous agents make dozens of LLM calls per task. Even a
+                  <span class="mx-1 px-1.5 py-0.5 rounded-md bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 font-semibold text-sm">300ms</span>
+                  round-trip per call adds up to real wall-clock latency, making optimization critical for production performance.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 space-y-6">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">
+            Enterprise-Scale RAG Implementation
+          </h3>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/building-enterprise-scale-rag-applications-with-amazon-s3-vectors-and-deepseek-r1-on-amazon-sagemaker-ai/|43">
+            Build a cost-effective, enterprise-scale RAG application using Amazon S3 Vectors, SageMaker AI for scalable model serving, and Bedrock for intelligent retrieval and response generation.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/vision-use-cases-with-llama-3-2-11b-and-90b-models-from-meta/|40">
+            Configure Llama 3.2 vision models in Amazon Bedrock and Amazon SageMaker JumpStart for vision-based applications, enabling multimodal AI capabilities across enterprise use cases.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/alps/switzerlands-open-source-apertus-llms-now-available-on-amazon-sagemaker-ai/|71">
+            As part of the AWS AI offerings, SageMaker JumpStart provides customizable ML solutions which you can deploy to SageMaker AI inference endpoints within your AWS environment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guardrails & Responsible AI -->
+    <section id="guardrails" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Amazon Bedrock Guardrails &amp; Responsible AI
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center mb-12">
+          <img
+            src="https://cdn.qwenlm.ai/3436cb00-060c-4718-8184-e3333f9cb4c7/0e10b0f0-dd0c-485f-8b67-cd5708ffef03/35864727-d6be-4dca-933c-05b26b2f21f6.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiMzQzNmNiMDAtMDYwYy00NzE4LTgxODQtZTMzMzNmOWNiNGM3IiwicmVzb3VyY2VfaWQiOiIwZTEwYjBmMC1kZDBjLTQ4NWYtOGI2Ny1jZDU3MDhmZmVmMDMiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.d028ZX2wZvDS0-0B7xDZLI9dBuiQlAOhWBdyIxVk3l4"
+            alt="Technical diagram illustrating Amazon Bedrock Guardrails on a clean white background with light gray (#F5F5F5) accents. The central element is a large octagonal shield icon in blue (#1A73B3) with a white checkmark inside, representing guardrails. From the shield, three arrows extend outward in different directions: top arrow labeled 'Input Filters' in blue (#1A73B3), right arrow labeled 'Content Filters' in purple (#6366F1), bottom arrow labeled 'Output Filters' in green (#10B981). Around the shield, there are three smaller circular icons arranged in a triangular pattern: top circle shows a speech bubble icon in amber (#F59E0B), right circle shows a document icon in blue (#1A73B3), bottom circle shows a shield icon in red (#EF4444). Below the main diagram, there is a horizontal timeline bar divided into three segments: left segment labeled 'Pre-processing' in blue (#1A73B3), middle segment labeled 'Real-time' in purple (#6366F1), right segment labeled 'Post-processing' in green (#10B981). Above the diagram, there is a small badge showing 'Responsible AI' in white text on a purple (#6366F1) background. The entire composition uses thin connecting lines in light gray (#E5E7EB) and maintains a clean, professional layout with modern sans-serif typography."
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+
+          <div class="space-y-6">
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/safeguard-generative-ai-applications-with-amazon-bedrock-guardrails/|59">
+              You will learn how to use Amazon Bedrock ApplyGuardrail API to help enforce consistent policies for prompt safety and sensitive data protection for LLMs from various providers.
+            </p>
+
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-guardrails-announces-iam-policy-based-enforcement-to-deliver-safe-ai-interactions/|60">
+              Amazon Bedrock Guardrails enables you to implement safeguards in generative AI applications customized to your specific use cases and responsible AI policies.
+            </p>
+
+            <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+              <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://aws.amazon.com/blogs/machine-learning/protect-sensitive-data-in-rag-applications-with-amazon-bedrock/|61">
+                <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                Content Filtering: The guardrail evaluates and applies predefined responsible AI policies using content filters, denied topic filters, and word filters on user input.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Accordion Item 1 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-guardrails-1">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="shield-alert" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Guardrails Implementation Patterns</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-guardrails-1" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-guardrails-1">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/connect/latest/adminguide/create-ai-guardrails.html|62">
+                  This document details adding a guardrail component to filter content in an Amazon Bedrock flow app, including enabling content filters, applying denied topic filters, and configuring word filters.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions.html|99">
+                  To set up a role with permissions for guardrails, create an IAM role and attach the required permissions by following the steps at Creating a role, ensuring proper access control.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/gen-ai-lifecycle-operational-excellence.pdf|83">
+                  For example, you can use Amazon Bedrock Guardrails to detect and filter harmful content. The recommended guardrails include Input filters, Content filters, and Output filters.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-guardrails-2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="key" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">IAM Policy-Based Controls</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-guardrails-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-guardrails-2">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-guardrails-announces-iam-policy-based-enforcement-to-deliver-safe-ai-interactions/|60">
+                  Amazon Bedrock Guardrails enables you to implement safeguards in generative AI applications customized to your specific use cases and responsible AI policies using IAM policy-based controls.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/agentic-ai-serverless/agentic-ai-serverless.pdf|84">
+                  The Amazon Bedrock Guardrails feature constrains agent behavior and enforces enterprise policy. Capabilities of guardrails include Content filtering, Topic filtering, and Word filtering.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/pdfs/wellarchitected/latest/generative-ai-lens/generative-ai-lens.pdf|85">
+                  Content can be filtered with AWS services like Amazon Bedrock Guardrails or custom validation logic. Apply these filters as a preprocessing step in your workflow, and pass filtered data to downstream components.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-guardrails-3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="lock" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">PII Protection in Audio Summarization</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-guardrails-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-guardrails-3">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/category/architecture/feed/|90">
+                  The audio summarization solution uses Whisper Large V3 Turbo from Amazon Bedrock Marketplace for transcription, Anthropic Claude Sonnet 3.5 for summarization, and Amazon Bedrock Guardrails for PII redaction.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/category/architecture/feed/|90">
+                  The audio summarization workflow implements Amazon Bedrock Guardrails using the ApplyGuardrail API with 'OUTPUT' parameter for redacting PII in summaries, replacing sensitive data with type indicators like {PHONE} or {EMAIL}.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://aws.amazon.com/blogs/machine-learning/category/architecture/feed/|90">
+                    <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    PII Redaction Configuration: Configure filters to detect and redact names, phone numbers, email addresses, physical addresses, and financial information while preserving informative content.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security & Compliance -->
+    <section id="security" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Security Architecture &amp; Encryption
+        </h2>
+
+        <div class="space-y-6 mb-12">
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/data-encryption.html|108">
+            You pass AWS Identity and Access Management (IAM) roles to Amazon Bedrock to provide permissions to access resources on your behalf for training and deployment, ensuring proper authorization.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/rft-access-security.html|109">
+            For basic model customization security setup including trust relationships, Amazon S3 permissions, and KMS encryption, see Create an IAM service role for model customization workflows.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/encryption-custom-job.html|110">
+            Amazon Bedrock automatically enables encryption at rest using AWS owned keys at no charge. If you use a customer managed key, AWS KMS charges apply, providing flexibility in security controls.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-4" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/ltm-permissions.html|111">
+              Agent Session Encryption
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Amazon Bedrock uses these permissions to generate encrypted data keys and then use the generated keys to encrypt agent memory, ensuring session data confidentiality.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/encryption-agents-new.html|120">
+              Amazon Bedrock uses default AWS-owned keys to automatically encrypt agent's information, including control plane data and session data, providing seamless security.
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300 mb-4" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-data-management.html|112">
+              Evaluation Job Encryption
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Amazon Bedrock encrypts this data using a AWS KMS key. You can choose to specify your own AWS KMS key or to use an Amazon Bedrock-owned key to encrypt the data.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-security-data.html|107">
+              Amazon Bedrock uses the following IAM and AWS KMS permissions to use your AWS KMS key to decrypt your files and access them, ensuring secure data handling.
+            </p>
+          </div>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Accordion Item 1 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-security-1">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="network" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">VPC Connectivity &amp; PrivateLink</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-security-1" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-security-1">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/vpc-interface-endpoints.html|126">
+                  Amazon Bedrock AgentCore supports private connectivity using AWS PrivateLink. This is achieved by creating an interface endpoint, which establishes a private connection between a user's VPC and AgentCore resources without traversing the public internet.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-vpc.html|128">
+                  To enable VPC connectivity, AgentCore creates Elastic Network Interfaces (ENIs) in the user's VPC using the service-linked role AWSServiceRoleForBedrockAgentCoreNetwork. These ENIs are assigned private IP addresses from specified subnets.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-vpc.html|128">
+                  Required endpoints include: Docker endpoint (com.amazonaws.region.ecr.dkr), ECR API endpoint (com.amazonaws.region.ecr.api), Gateway endpoint for S3 (com.amazonaws.region.s3), and CloudWatch Logs endpoint (com.amazonaws.region.logs).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-security-2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="shield" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Fine-tuning Security Best Practices</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-security-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-security-2">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/machine-learning/security-best-practices-to-consider-while-fine-tuning-models-in-amazon-bedrock/|127">
+                  The VPC is equipped with private endpoints for Amazon S3 and AWS KMS access, enhancing overall security. The fine-tuning process generates model artifacts securely within the protected environment.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+                  A multi-layered approach is recommended for securing sensitive data during model customization. This includes using a VPC with interface endpoints for network isolation, restricting S3 bucket access to the VPC endpoint ID, and enforcing encryption at rest using a customer-managed KMS key.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+                    <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    Least Privilege Enforcement: Create a dedicated service role assumed by the Amazon Bedrock service principal with conditions like StringEquals: aws:SourceAccount and ArnEquals: aws:SourceArn to prevent cross-service impersonation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-security-3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="circle-help" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Model Access Control &amp; SCPs</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-security-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-security-3">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+                  Amazon Bedrock offers a 'deny all except a few' approach for managing third-party foundation models (FMs) via AWS Marketplace. This method uses deny statements in an IAM policy to block subscription to any FM not explicitly listed.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+                  To restrict model usage at scale across an entire AWS Organization, Service Control Policies (SCPs) can be applied to Organizational Units (OUs). An SCP with a statement that denies bedrock:InvokeModel and bedrock:InvokeModelWithResponseStream actions for ARNs matching arn:aws:bedrock:*::foundation-model/anthropic.* will prevent any user or service from invoking Anthropic foundation models.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam-awsmanpol.html|130">
+                  You can attach the AmazonBedrockLimitedAccess policy to your IAM identities to allow access to Amazon Bedrock services, AWS KMS key management, networking resources, and other related services.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 space-y-6">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">
+            Model Invocation Logging Best Practices
+          </h3>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+            Model invocation logging in Amazon Bedrock captures prompts and completions, which may contain sensitive information. Best practices include enabling this logging, writing logs to secure destinations like S3 or CloudWatch, optionally encrypting them with a KMS key, and applying strict IAM policies to limit access to log reviewers.
+          </p>
+
+          <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+            <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://aws.amazon.com/blogs/security/implementing-least-privilege-access-for-amazon-bedrock/|129">
+              <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+              Separation of Duties: Use distinct roles for redacted log review and unredacted log review to minimize exposure of sensitive data captured in model invocation logs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Troubleshooting & Error Handling -->
+    <section id="troubleshooting" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Troubleshooting &amp; Error Resolution
+        </h2>
+
+        <div class="space-y-6 mb-12">
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/troubleshooting-api-error-codes.html|72">
+            Learn about common Amazon Bedrock API errors, their causes, and how to resolve them when using Amazon Bedrock services, ensuring reliable application performance.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipeline-troubleshoot.html|77">
+            To troubleshoot inference pipeline issues, use CloudWatch logs and error messages. If you are using custom Docker images in a pipeline that includes Amazon services, check container configurations and dependencies.
+          </p>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-troubleshoot.html|78">
+            To troubleshoot this issue, you should check the CloudWatch Logs logs for the endpoint in question to see if there are any errors or issues that are preventing successful model deployment.
+          </p>
+        </div>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Accordion Item 1 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-troubleshooting-1">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="bug" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Common SageMaker Endpoint Issues</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-troubleshooting-1" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-troubleshooting-1">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://repost.aws/questions/QUOKNtaCicTXC4plDgXwdt0A/sagemaker-endpoint-deployment-not-working|79">
+                  Facing issues in deploying an endpoint on SageMaker later to be invoked by a downstream service - ECS. Check container configuration, model artifact integrity, and IAM role permissions.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://stackoverflow.com/questions/74509933/aws-sagemaker-pipeline-model-endpoint-deployment-failing|80">
+                  The actual problem is that the endpoint is not able to ping the container. It is because, when there are multiple containers, every container is using some ports, causing port conflicts and connectivity issues.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://stackoverflow.com/questions/70120800/logs-not-coming-for-endpoint-being-created-in-sagemaker|94">
+                  Logs not coming for endpoint being created in SageMaker. The status of the endpoint goes to failed with the message 'The primary container for production variant...' indicating container startup failures.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-troubleshooting-2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="cloud" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">CloudWatch Metrics &amp; Logs Issues</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-troubleshooting-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-troubleshooting-2">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://repost.aws/knowledge-center/sagemaker-missing-cloudwatch-metrics|82">
+                  Troubleshoot missing CloudWatch metrics in SageMaker AI by checking the correct CloudWatch namespace: The AWS/SageMaker namespace includes model loading metrics from API calls to InvokeEndpoint.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-troubleshooting.html|95">
+                  Log group not found: Disable, and then re-enable your monitor. Enabling a monitor restarts log group creation, which might correct the problem. PutLogEvents permission issues can also cause logging failures.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-trouble-shooting.html|96">
+                  Use the following information to help you troubleshoot errors that might come up when you're using Amazon EMR. Connection failure – If the connection fails with timeout or authentication errors, check network connectivity and IAM permissions.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-troubleshooting-3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="circle-alert" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">Model Registry &amp; Evaluation Errors</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-troubleshooting-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-troubleshooting-3">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://repost.aws/knowledge-center/sagemaker-model-registry-issues|100">
+                  To resolve this issue, use ModelStep to register the model. You can also use Boto3 or SageMaker AI Studio to register your model, ensuring proper metadata and artifact linking.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate-troubleshooting.html|101">
+                  If you run into an error while creating a model evaluation job, use the following list to troubleshoot your evaluation. Check IAM permissions, KMS key access, and S3 bucket policies.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://repost.aws/knowledge-center/sagemaker-jumpstart-troubleshooting|102">
+                  This error occurs when SageMaker updates all models to use uncompressed model artifacts. To resolve this issue, set your notebook model_version attribute to an older compatible version.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 4 -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-troubleshooting-4">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="lock-keyhole" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">Permissions &amp; Customization Errors</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-troubleshooting-4" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-troubleshooting-4">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/fine-tuning-troubleshooting.html|103">
+                  This section summarizes errors that you might encounter and what to check if you do. Permissions issues If you encounter an issue with permissions to access an AWS resource, verify IAM role trust policies and attached permissions.
+                </p>
+
+                <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-security-kms.html|119">
+                  Every AWS KMS key must have exactly one key policy. The statements in the key policy determine who has permission to use the AWS KMS key and how they can use it, ensuring proper encryption control.
+                </p>
+
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed" data-ref="https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-security-kms.html|119">
+                    <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    Key Policy Requirement: Every AWS KMS key must have exactly one key policy. Missing or incorrect key policies are a common cause of encryption-related errors in model evaluation jobs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 space-y-6">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">
+            VPC Connectivity Troubleshooting
+          </h3>
+
+          <p class="text-gray-700 dark:text-gray-300" data-ref="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-vpc.html|128">
+            Troubleshooting common issues involves checking several areas: verifying security group rules allow traffic, ensuring route tables are correctly configured (e.g., a default route to a NAT gateway in private subnets), confirming DNS resolution is enabled in the VPC, and checking that the execution role has appropriate permissions for any AWS services accessed via VPC endpoints.
+          </p>
+
+          <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+            <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed" data-ref="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-vpc.html|128">
+              <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+              High Availability Best Practice: Deploy at least two private subnets in different AZs for high availability, place runtime subnets in the same AZ as target resources to reduce latency, and apply the principle of least privilege with security groups.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section id="conclusion" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
+          Exam Preparation Summary
+        </h2>
+
+        <div class="space-y-6 mb-12">
+          <p class="text-gray-700 dark:text-gray-300">
+            The AWS Certified AI Practitioner – Advanced (AIP-C01) certification requires deep technical expertise in Amazon Bedrock, SageMaker, and responsible AI implementation. This study guide has covered essential topics including knowledge base architecture, model customization, guardrails implementation, security best practices, and troubleshooting methodologies.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="flex-shrink-0 w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="layers" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300">Bedrock Mastery</h3>
+              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                Focus on knowledge base architecture, model customization workflows, and advanced prompt engineering techniques for optimal performance.
+              </p>
+            </div>
+
+            <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="flex-shrink-0 w-10 h-10 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="server" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-accent-700 dark:text-accent-300">SageMaker Deep Dive</h3>
+              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                Master JumpStart models, multi-model endpoints, evaluation frameworks, and enterprise-scale RAG implementations for cost-effective deployments.
+              </p>
+            </div>
+
+            <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="flex-shrink-0 w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="shield-check" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300">Security &amp; Compliance</h3>
+              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                Implement robust encryption, VPC connectivity, IAM policies, and model invocation logging to ensure enterprise-grade security.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">
+            Key Exam Tips
+          </h3>
+
+          <div class="space-y-4">
+            <div class="card-interactive p-5 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mt-1">
+                  <i data-lucide="circle-check" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">Hands-On Practice</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Deploy actual Bedrock knowledge bases, customize models, and implement guardrails in your AWS account to gain practical experience with the services.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-interactive p-5 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center mt-1">
+                  <i data-lucide="book-open" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-accent-700 dark:text-accent-300 mb-2">Official Documentation</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Review AWS documentation for Bedrock, SageMaker, and related services. Pay special attention to pricing models, service limits, and integration patterns.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-interactive p-5 bg-white/90 backdrop-blur-sm dark:bg-gray-900 rounded-xl shadow-md">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mt-1">
+                  <i data-lucide="triangle-alert" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">Troubleshooting Scenarios</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Practice troubleshooting common issues including endpoint failures, missing CloudWatch metrics, permissions errors, and VPC connectivity problems.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+            <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+              <i data-lucide="lightbulb" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+              Final Recommendation: Combine theoretical knowledge with hands-on practice. Build end-to-end solutions incorporating Bedrock knowledge bases, SageMaker endpoints, guardrails, and security best practices to reinforce your understanding of advanced AI practitioner concepts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary-900 dark:bg-gray-950 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-10 h-10 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center">
+              <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+            </div>
+            <h3 class="text-lg font-bold">AIP-C01 Study Guide</h3>
+          </div>
+          <p class="text-sm text-gray-300">
+            Comprehensive resource for AWS Certified AI Practitioner – Advanced candidates with prior AWS experience.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4 text-primary-300">Key Topics</h4>
+          <ul class="space-y-2 text-sm text-gray-300">
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Amazon Bedrock Architecture</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>SageMaker Advanced Configurations</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Guardrails &amp; Responsible AI</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Security &amp; Encryption</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4 text-primary-300">Study Resources</h4>
+          <ul class="space-y-2 text-sm text-gray-300">
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Hands-On Labs</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Official Documentation</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Troubleshooting Practice</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              <span>Exam Simulation</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-primary-700 dark:border-gray-800 pt-8 text-center">
+        <p class="text-sm text-gray-400">
+          Study Guide for AWS AIP-C01 Certification | Educational Resource Only
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Chart Initialization Script -->
+  <script>
+    const getThemeColor = (light, dark) => document.body.classList.contains('dark') ? dark : light;
+    let charts = {};
+    
+    const getColors = () => ({
+      primary: getThemeColor('hsl(210, 75%, 25%)', 'hsl(210, 75%, 65%)'),
+      accent: getThemeColor('hsl(240, 65%, 40%)', 'hsl(240, 65%, 65%)'),
+      text: getThemeColor('#374151', '#d1d5db'),
+      grid: getThemeColor('#e5e7eb', '#374151')
+    });
+    
+    const updateCharts = () => {
+      const { text, grid } = getColors();
+      
+      Object.values(charts).forEach(chart => {
+        if (chart?.options) {
+          if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = text;
+          if (chart.options.plugins?.title) chart.options.plugins.title.color = text;
+          if (chart.options.scales) {
+            Object.values(chart.options.scales).forEach(scale => {
+              if (scale.ticks) scale.ticks.color = text;
+              if (scale.grid) scale.grid.color = grid;
+              if (scale.pointLabels) scale.pointLabels.color = text;
+              if (scale.title) scale.title.color = text;
+            });
+          }
+          chart.update('none');
+        }
+      });
+    };
+
+    // Data from https://aws.amazon.com/sagemaker/ai/pricing/|35 - AWS Pricing Calculator information
+    const sagemakerCostData = {
+      labels: ['Training', 'Hosting', 'Endpoints'],
+      datasets: [{
+        label: 'Monthly Cost ($)',
+        data: [1200, 800, 1500], // Example values based on typical SageMaker usage patterns
+        backgroundColor: ['#1A73B3', '#6366F1', '#10B981']
+      }]
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Initialize AOS animations
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+      });
+
+      // Progress bar update
+      const updateProgressBar = () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        document.getElementById('progressBar').style.width = scrollPercent + '%';
+      };
+      
+      window.addEventListener('scroll', updateProgressBar);
+
+      // Initialize charts with sample data
+      const { primary, accent, text, grid } = getColors();
+      
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { 
+            labels: { 
+              color: text,
+              font: { size: 11 }
+            } 
+          } 
+        },
+        scales: {
+          x: { 
+            ticks: { color: text }, 
+            grid: { color: grid } 
+          },
+          y: { 
+            beginAtZero: true, 
+            ticks: { color: text }, 
+            grid: { color: grid } 
+          }
+        }
+      };
+
+      // SageMaker Cost Chart
+      if (document.getElementById('sagemakerCostChart')) {
+        charts.sagemakerCost = new Chart(document.getElementById('sagemakerCostChart'), {
+          type: 'bar',
+          data: sagemakerCostData,
+          options: {
+            ...commonOptions,
+            plugins: {
+              ...commonOptions.plugins,
+              title: {
+                display: true,
+                text: 'SageMaker Monthly Cost Comparison',
+                color: text,
+                font: { size: 14, weight: 'bold' }
+              }
+            }
+          }
+        });
+      }
+
+      // Update charts when theme changes
+      new MutationObserver(() => updateCharts()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      
+      // Initial theme-based styling for charts
+      updateCharts();
+    });
+
+    // Safari iOS fix for accordion height calculation
+    document.addEventListener('click', (e) => {
+      const accordionToggle = e.target.closest('.hs-accordion-toggle');
+      if (accordionToggle) {
+        requestAnimationFrame(() => {
+          const accordion = accordionToggle.parentElement;
+          const content = accordion.querySelector('.hs-accordion-content');
+          if (content && !content.classList.contains('hidden')) {
+            content.style.height = 'auto';
+            const height = content.scrollHeight;
+            content.style.height = '0px';
+            requestAnimationFrame(() => {
+              content.style.height = height + 'px';
+            });
+          }
+        });
+      }
+    });
+  </script>
+
+  <!-- Citation System Script -->
+  <script>
+    function initCitationSystem() {
+      let i = 1, map = new Map();
+      document.querySelectorAll('[data-ref]').forEach(el => {
+        if (el.dataset.citationProcessed) return;
+        const raw = (el.getAttribute('data-ref')||'').trim();
+        if (!raw) return;
+
+        const parts = raw.split('|');
+        const url = parts[0].trim();
+        const idx = (parts[1]||'').trim() || map.get(raw) || (map.set(raw, String(i)), String(i++));
+
+        if (!el.textContent || !el.textContent.trim()) { el.dataset.citationProcessed = 'true'; return; }
+
+        const btn = document.createElement('sup'); btn.textContent = String(idx);
+        Object.assign(btn.style, { fontSize:'8px', color:'#fff', cursor:'pointer', top: '1px', fontWeight:'bold', backgroundColor:'#0284c7', borderRadius:'50%', transition:'all .15s', userSelect:'none', minWidth:'19px', height:'19px', marginLeft:'6px', display:'inline-flex', alignItems:'center', justifyContent:'center', boxShadow:'0 1px 3px rgba(0,0,0,.2)', lineHeight:'1'});
+        btn.addEventListener('mouseenter', ()=> Object.assign(btn.style, { backgroundColor:'#0369a1', transform:'scale(1.12)' }));
+        btn.addEventListener('mouseleave', ()=> Object.assign(btn.style, { backgroundColor:'#0284c7', transform:'scale(1)' }));
+        btn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); window.open(url, '_blank'); });
+
+        el.appendChild(btn); el.dataset.citationProcessed = 'true';
+      });
+    }
+
+    // Initialize citation system after DOM loads
+    document.addEventListener('DOMContentLoaded', initCitationSystem);
+  </script>
+</body>
+</html>
