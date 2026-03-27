@@ -199,9 +199,9 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="hdr-meta">AWS Certified Generative AI Developer — Professional</div>
   </div>
   <div class="hdr-badges">
-    <span class="badge badge-pro">Professional Level</span>
-    <span class="badge badge-beta">Beta Exam</span>
-    <span class="badge badge-new">5 Domains · 65 Questions</span>
+    <span class="badge" style="background:#e8edf3;color:#344054;border:1px solid #c8d3df;">Professional Level</span>
+    <span class="badge" style="background:#e8edf3;color:#344054;border:1px solid #c8d3df;">Beta Exam</span>
+    <span class="badge" style="background:#e8edf3;color:#344054;border:1px solid #c8d3df;">5 Domains · 75 Questions (65 scored)</span>
   </div>
 </div>
 
@@ -209,16 +209,6 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
   <input type="text" id="searchInput" placeholder="🔍  Search topics, services, concepts... (e.g. 'guardrails', 'RAG chunking', 'Nova Forge')" oninput="handleSearch(this.value)">
 </div>
 
-<div class="main-nav">
-  <button class="active" onclick="switchView('overview',this)">📊 Overview</button>
-  <button onclick="switchView('domain1',this)">Domain 1: FM Integration & Data</button>
-  <button onclick="switchView('domain2',this)">Domain 2: Implementation</button>
-  <button onclick="switchView('domain3',this)">Domain 3: Security & Governance</button>
-  <button onclick="switchView('domain4',this)">Domain 4: Optimization</button>
-  <button onclick="switchView('domain5',this)">Domain 5: Testing & Troubleshoot</button>
-  <button onclick="switchView('services',this)">🔧 By Service</button>
-  <button onclick="switchView('quickref',this)">⚡ Quick Reference</button>
-</div>
 
 <div class="layout">
 <div class="sidebar" id="sidebar">
