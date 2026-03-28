@@ -897,6 +897,570 @@ const QUESTIONS = [
     answer: 0,
     explanation: "Canary deployment is the direct answer when the exam says gradual rollout plus automatic rollback. The other options lack controlled progressive exposure or automatic recovery."
   }
+  ,
+  {
+    id: "d2-q8",
+    domain: "Domain 2",
+    tags: ["agentic AI", "tool design", "bedrock agents"],
+    prompt: "A Bedrock Agent is calling the wrong tool when users ask about refund policies. The agent has two tools: `get_order_status` and `get_refund_policy`. Both have one-sentence descriptions. What is the most effective fix?",
+    options: [
+      "Increase the agent's maxIterations limit to allow more reasoning steps before selecting a tool.",
+      "Rewrite both tool descriptions with explicit 'use when...' guidance that distinguishes the scenarios each tool handles.",
+      "Add a third tool called `router_tool` that determines which tool to call based on the user's intent.",
+      "Switch the agent from Bedrock Agents to AWS Step Functions for more deterministic tool routing."
+    ],
+    answer: 1,
+    explanation: "The tool description is what the LLM reads to decide which tool to call. Vague or overlapping descriptions cause wrong tool selection. Rewriting with explicit 'use when the user asks about X' language is the direct fix. Increasing maxIterations does not help with selection logic. A router tool adds unnecessary complexity. Step Functions is for deterministic workflows, not autonomous reasoning."
+  },
+  {
+    id: "d2-q9",
+    domain: "Domain 2",
+    tags: ["agentic AI", "strands", "bedrock agents", "framework selection"],
+    prompt: "A team wants to build an agent that orchestrates calls to three different foundation model providers (Bedrock, OpenAI-compatible, and an internal LLM), implements custom memory logic that persists reasoning patterns across sessions, and integrates with MCP servers for tool discovery. Which agent framework best fits these requirements?",
+    options: [
+      "Amazon Bedrock Agents with three separate action groups, one per provider.",
+      "AWS Step Functions with Lambda functions calling each provider sequentially.",
+      "Strands SDK, because it provides open-source multi-model support, customizable memory, and native MCP integration.",
+      "Amazon Bedrock Flows with a branching node for each provider."
+    ],
+    answer: 2,
+    explanation: "Strands SDK is correct when requirements include multi-provider model support, custom memory implementation, and MCP integration. Bedrock Agents is managed but locked to Bedrock models and does not natively support custom memory or MCP. Step Functions is deterministic orchestration, not autonomous reasoning. Bedrock Flows is a no-code prompt chain, not an autonomous agent."
+  },
+  {
+    id: "d2-q10",
+    domain: "Domain 2",
+    tags: ["agentic AI", "step functions", "deterministic workflow", "audit trail"],
+    prompt: "A financial services company needs to automate loan document review: extract fields, validate against 12 business rules, generate a summary, and produce an audit log that regulators can inspect step by step. Every execution must follow the exact same sequence. Which service is most appropriate?",
+    options: [
+      "Amazon Bedrock Agents with an action group for each step.",
+      "AWS Step Functions orchestrating Lambda functions for each stage, with Bedrock called for extraction and summarization.",
+      "Strands SDK with a custom reasoning loop that enforces the 12 rules.",
+      "Amazon Bedrock Flows with conditional routing between steps."
+    ],
+    answer: 1,
+    explanation: "Step Functions is correct when execution must be deterministic, auditable, and follow a guaranteed sequence. It provides a visual state machine, built-in retry/error handling, and execution history satisfying regulatory audit requirements. Bedrock Agents uses autonomous reasoning — execution order is not guaranteed. Strands adds unnecessary ops overhead for a fixed-sequence workflow. Bedrock Flows lacks the audit trail depth and error-handling granularity required here."
+  },
+  {
+    id: "d2-q11",
+    domain: "Domain 2",
+    tags: ["MCP", "ECS Fargate", "Lambda", "persistent connections"],
+    prompt: "A developer is deploying an MCP server that tools-enabled agents will connect to for real-time database queries. The MCP server needs to maintain persistent Server-Sent Events (SSE) connections with multiple agents simultaneously. Which hosting option is correct?",
+    options: [
+      "AWS Lambda with a 15-minute timeout to keep connections alive.",
+      "Amazon ECS Fargate with a long-running container process.",
+      "AWS Lambda with a reserved concurrency of 100 to handle parallel connections.",
+      "Amazon API Gateway with WebSocket support backed by Lambda."
+    ],
+    answer: 1,
+    explanation: "MCP servers require persistent SSE connections. Lambda is stateless and terminates after each invocation — it cannot hold persistent connections. ECS Fargate runs a long-lived container that holds open SSE connections indefinitely. API Gateway WebSocket + Lambda is stateless per message, not a true persistent SSE stream. Increasing Lambda concurrency does not solve the stateless architecture mismatch."
+  },
+  {
+    id: "d2-q12",
+    domain: "Domain 2",
+    tags: ["batch inference", "bedrock API", "CreateModelInvocationJob", "cost"],
+    prompt: "A media company needs to generate SEO descriptions for 800,000 product images overnight. Results are needed before the morning business report but real-time latency is not required. Which Bedrock API minimizes cost?",
+    options: [
+      "Call InvokeModel in a Lambda loop with 500 concurrent executions.",
+      "Use StartAsyncInvoke with an S3 output bucket for each image.",
+      "Use CreateModelInvocationJob to submit the full dataset as a batch inference job with results written to S3.",
+      "Use RetrieveAndGenerate with a Knowledge Base containing all product images."
+    ],
+    answer: 2,
+    explanation: "CreateModelInvocationJob is the Bedrock batch inference API for large-scale asynchronous text and image workloads at roughly 50% the cost of on-demand inference. StartAsyncInvoke is exclusively for Nova Reel video generation, not general batch inference. A Lambda loop with high concurrency hits throttling and pays on-demand rates. RetrieveAndGenerate is for RAG, not batch generation."
+  },
+  {
+    id: "d2-q13",
+    domain: "Domain 2",
+    tags: ["inference profiles", "cross-region", "failover", "availability"],
+    prompt: "A global SaaS application uses Amazon Bedrock for customer-facing features and needs automatic failover across AWS regions when one region's model capacity is constrained, without writing custom retry logic or managing Route 53 health checks. What is the correct solution?",
+    options: [
+      "Configure Route 53 latency-based routing with health checks pointing to Bedrock endpoints in each region.",
+      "Use a Bedrock inference profile to route requests across eligible regions automatically.",
+      "Deploy Lambda functions in each region and use EventBridge to fan out requests to the least-loaded region.",
+      "Enable Bedrock Provisioned Throughput in three regions and implement round-robin routing in the application layer."
+    ],
+    answer: 1,
+    explanation: "Bedrock inference profiles are the purpose-built solution for automatic cross-region routing and failover. AWS manages the routing logic transparently — no custom code, health checks, or multi-region infrastructure required. Route 53 is designed for DNS-level routing to application endpoints, not model APIs. Lambda fan-out adds custom orchestration overhead. Provisioned Throughput with round-robin does not provide automatic failover — it just distributes load."
+  },
+  {
+    id: "d2-q14",
+    domain: "Domain 2",
+    tags: ["model distillation", "Bedrock", "student model", "teacher model"],
+    prompt: "A team is using Amazon Bedrock Model Distillation with Nova Pro as the teacher model. They have 10,000 high-quality Nova Pro prompt-response pairs assembled. What should they provide as input to the distillation job?",
+    options: [
+      "The prompt-response pairs directly, so Bedrock can learn from the teacher's outputs.",
+      "Only the prompts — Bedrock uses the teacher model to synthesize responses during the distillation job.",
+      "Only the responses — Bedrock generates matching prompts automatically.",
+      "Prompts with a confidence score for each response to weight the training examples."
+    ],
+    answer: 1,
+    explanation: "Bedrock Model Distillation requires only the prompts as input. Bedrock invokes the teacher model (Nova Pro) to generate responses during the job, ensuring the student learns from the teacher's current behavior. Providing your own prompt-response pairs is not the correct input format. Bedrock does not accept confidence-weighted pairs or auto-generate prompts from responses."
+  },
+  {
+    id: "d2-q15",
+    domain: "Domain 2",
+    tags: ["provisioned throughput", "fine-tuned model", "custom model", "production"],
+    prompt: "A company has fine-tuned a Titan Text model on Bedrock for a specialized legal document task and wants to deploy it for production use with consistent low latency. What is required?",
+    options: [
+      "Fine-tuned models can be used on-demand immediately after training with no additional configuration.",
+      "Deploy the fine-tuned model to a SageMaker real-time endpoint for production use.",
+      "Purchase Bedrock Provisioned Throughput and associate the fine-tuned model with the provisioned capacity.",
+      "Export the model weights to S3 and serve them via a Lambda container image."
+    ],
+    answer: 2,
+    explanation: "Fine-tuned models on Bedrock require Provisioned Throughput to serve production traffic with guaranteed latency. On-demand access is available but provides no SLA-backed latency and is unsuitable for production workloads. SageMaker endpoints cannot host Bedrock fine-tuned models. Bedrock model weights are not exportable to S3."
+  },
+  {
+    id: "d4-q6",
+    domain: "Domain 4",
+    tags: ["prompt caching", "cost optimization", "token efficiency"],
+    prompt: "A customer support chatbot sends a 4,000-token system prompt containing company policies with every API request. There are approximately 50,000 user sessions per day. The system prompt changes weekly. Which optimization has the highest cost impact?",
+    options: [
+      "Switch to a smaller model tier for all requests to reduce per-token cost.",
+      "Enable Bedrock prompt caching on the system prompt prefix to get a roughly 90% discount on repeated input tokens.",
+      "Reduce the system prompt to under 100 tokens by removing the policy details.",
+      "Use batch inference instead of real-time API calls for all sessions."
+    ],
+    answer: 1,
+    explanation: "Prompt caching is the highest-impact optimization because the 4,000-token system prompt is identical across all 50,000 daily sessions. With caching, the prefix is processed once and subsequent cache-hit requests receive a roughly 90% discount on those tokens. Switching models may degrade quality. Removing the policy changes product behavior. Batch inference is incompatible with real-time customer support sessions."
+  },
+  {
+    id: "d4-q7",
+    domain: "Domain 4",
+    tags: ["semantic caching", "ElastiCache", "cost optimization", "paraphrase"],
+    prompt: "A legal Q&A application receives thousands of daily queries. Analysis shows 40% are semantically equivalent to questions asked in the previous 24 hours (e.g., 'What is fair use?' vs. 'Define fair use in copyright law'). The team wants to eliminate redundant model calls for these similar queries. What is the correct implementation?",
+    options: [
+      "Use DynamoDB with an exact-string hash of each query as the key and cache the response.",
+      "Configure Bedrock prompt caching with the user query as the cached prefix.",
+      "Implement semantic caching: embed each query, check cosine similarity against cached embeddings in ElastiCache, and return the cached response if similarity exceeds the threshold.",
+      "Use API Gateway caching with a 24-hour TTL on all POST requests."
+    ],
+    answer: 2,
+    explanation: "Semantic caching handles paraphrased queries by comparing query embeddings rather than exact strings. DynamoDB exact-match caching misses semantically equivalent but textually different queries. Bedrock prompt caching works on repeated prefixes within a session, not cross-session semantic equivalence. API Gateway caching hashes the exact request body and would not match paraphrased queries."
+  },
+  {
+    id: "d4-q8",
+    domain: "Domain 4",
+    tags: ["OpenSearch", "Auto-Tune", "latency", "least ops overhead"],
+    prompt: "A RAG application's OpenSearch vector search latency has increased from 45ms to 380ms P99 over three months as the corpus grew. The team wants to restore performance with the least possible operational overhead. What should they do first?",
+    options: [
+      "Add an ElastiCache Redis cluster in front of OpenSearch to cache frequent vector query results.",
+      "Enable OpenSearch Auto-Tune, which automatically optimizes JVM heap, shard allocation, and cache settings.",
+      "Provision three additional OpenSearch data nodes and rebalance the index.",
+      "Re-create the index with HNSW parameters tuned for the current corpus size."
+    ],
+    answer: 1,
+    explanation: "OpenSearch Auto-Tune is a built-in feature requiring no new infrastructure. It automatically optimizes JVM heap sizing, shard allocation, and cache settings on a schedule — the correct answer when 'least operational overhead' is the constraint. ElastiCache adds a new service to manage and only helps for repeated identical queries. Adding nodes and re-creating the index are valid but high-effort manual interventions that should follow Auto-Tune if insufficient."
+  },
+  {
+    id: "d4-q9",
+    domain: "Domain 4",
+    tags: ["tiered model routing", "cost optimization", "model cascading"],
+    prompt: "A company spends $28,000/month on Bedrock Claude Opus calls. Analysis shows 65% of requests are simple classification tasks (intent routing, sentiment detection) that a smaller model handles with equal accuracy. Which strategy reduces cost most effectively without degrading quality on complex tasks?",
+    options: [
+      "Switch all requests to Claude Haiku and accept quality reduction on complex tasks.",
+      "Implement tiered model routing: classify query complexity and route simple tasks to Claude Haiku while escalating complex reasoning to Claude Opus.",
+      "Enable Provisioned Throughput for Opus to reduce the per-token rate.",
+      "Use batch inference for all requests to get the 50% batch discount."
+    ],
+    answer: 1,
+    explanation: "Tiered model routing matches query complexity to model cost, preserving quality on complex tasks while dramatically reducing cost on the 65% of simple tasks. Claude Haiku costs roughly 20x less than Opus. Switching everything to Haiku degrades complex task quality. Provisioned Throughput reduces latency variance, not token costs. Batch inference requires tolerating hours of latency — incompatible with real-time routing decisions."
+  },
+  {
+    id: "d4-q10",
+    domain: "Domain 4",
+    tags: ["streaming", "latency", "user experience", "InvokeModelWithResponseStream"],
+    prompt: "Users of a writing assistant report that the interface feels slow — they wait 8-12 seconds for a blank screen before any text appears. The underlying Bedrock call takes 10 seconds to complete a 500-token generation. No infrastructure changes have been made. What is the most impactful fix?",
+    options: [
+      "Switch to a smaller, faster model to reduce generation time to under 3 seconds.",
+      "Add CloudFront caching in front of the API endpoint to serve cached responses.",
+      "Implement response streaming using InvokeModelWithResponseStream so the first tokens appear within 500ms.",
+      "Purchase Provisioned Throughput to reduce model invocation latency."
+    ],
+    answer: 2,
+    explanation: "The problem is perceived latency, not total generation time. Streaming delivers the first tokens within 300-500ms, eliminating the blank-screen experience while total generation time remains the same. Switching models changes content quality but does not address the UX problem of waiting for all tokens. CloudFront caches static content, not dynamic AI-generated responses. Provisioned Throughput reduces latency variance but not the fundamental user experience problem of waiting for long generations."
+  },
+  {
+    id: "d4-q11",
+    domain: "Domain 4",
+    tags: ["CloudWatch", "monitoring", "anomaly detection", "token usage"],
+    prompt: "A production RAG application's daily Bedrock token costs spike unpredictably — some days cost 10x the baseline. Legitimate usage varies significantly by day of week and season. The team wants to automatically detect and alert on abnormal consumption without false alarms from normal variation. What is the correct CloudWatch approach?",
+    options: [
+      "Create a CloudWatch metric alarm with a static threshold of 2x the historical average daily token count.",
+      "Use CloudWatch Anomaly Detection to create an ML-based expected band on the InputTokenCount metric and alarm when usage exceeds the band.",
+      "Enable AWS Cost Explorer anomaly detection with a daily budget alert.",
+      "Create a Lambda function that checks token usage every hour and sends an SNS alert if usage exceeds the previous hour."
+    ],
+    answer: 1,
+    explanation: "CloudWatch Anomaly Detection trains an ML model on the metric's historical pattern including day-of-week and seasonal variation, creating a dynamic expected band. Alarms fire when usage exceeds the band, handling natural variation without false alarms. A static threshold would generate false alarms on legitimately high-traffic days. Cost Explorer anomaly detection has a reporting lag of hours to a day. The Lambda polling approach is fragile and does not account for usage patterns."
+  },
+  {
+    id: "d4-q12",
+    domain: "Domain 4",
+    tags: ["cost allocation", "tagging", "Cost Explorer", "chargeback"],
+    prompt: "A company runs three GenAI products (customer support, internal search, and a coding assistant) all using Amazon Bedrock. The finance team needs to attribute Bedrock costs to each product for monthly chargeback reporting. What is the correct approach?",
+    options: [
+      "Use separate AWS accounts for each product and consolidate billing at the organization level.",
+      "Tag all Bedrock-related resources with a Product tag and use AWS Cost Explorer cost allocation tags to break down spend by product.",
+      "Export CloudTrail logs to Athena and query by IAM principal to attribute costs per product.",
+      "Use Amazon CloudWatch Contributor Insights to identify which application generates the most tokens."
+    ],
+    answer: 1,
+    explanation: "Cost allocation tags are the standard mechanism for attributing AWS costs by business unit or product. Tag all supporting resources (Lambda, S3, DynamoDB, Knowledge Bases) with a consistent Product tag, activate the tag in Cost Explorer, and generate per-product cost reports. Separate accounts works but is operationally heavy for three products sharing Bedrock models. CloudTrail records API call events but does not map to billing cost. CloudWatch Contributor Insights is for performance analysis, not cost attribution."
+  },
+  {
+    id: "d4-q13",
+    domain: "Domain 4",
+    tags: ["X-Ray", "latency", "distributed tracing", "performance diagnosis"],
+    prompt: "A Bedrock-powered API has P99 latency of 12 seconds across the chain: API Gateway → Lambda → OpenSearch retrieval → Bedrock InvokeModel → Lambda response formatting. The team suspects OpenSearch is the bottleneck but cannot confirm. What is the fastest way to isolate which service is causing the latency?",
+    options: [
+      "Add CloudWatch logging to each Lambda function with manual timestamps at the start and end of each operation.",
+      "Enable AWS X-Ray tracing across API Gateway, Lambda, and OpenSearch to generate a per-service subsegment timing breakdown.",
+      "Run a load test with 100 concurrent users and observe which service's CPU spikes first.",
+      "Enable Bedrock model invocation logging and correlate request IDs across service logs manually."
+    ],
+    answer: 1,
+    explanation: "X-Ray is the correct tool for latency attribution across a multi-service chain. It generates a trace with subsegment timings for each service, immediately showing whether OpenSearch retrieval, Bedrock inference, or Lambda processing is the bottleneck. CloudWatch logging with manual timestamps requires correlating log entries across services — much slower. Load testing diagnoses throughput capacity, not latency attribution. Bedrock invocation logging covers only the model call segment, not the full chain."
+  },
+  {
+    id: "d5-q7",
+    domain: "Domain 5",
+    tags: ["RAGAS", "faithfulness", "hallucination", "evaluation diagnosis"],
+    prompt: "A RAG application's RAGAS evaluation shows: Faithfulness = 0.61, Answer Relevance = 0.88, Context Precision = 0.91, Context Recall = 0.89. What does this pattern indicate, and what should be fixed first?",
+    options: [
+      "The retrieval system is returning irrelevant documents. Fix: improve embedding model and add a reranker.",
+      "The retrieval system is missing relevant documents. Fix: increase top-k and improve chunking strategy.",
+      "The model is ignoring retrieved context and generating from parametric knowledge. Fix: strengthen grounding instructions and lower temperature.",
+      "The answer is off-topic. Fix: clarify the system prompt to better address user intent."
+    ],
+    answer: 2,
+    explanation: "High Context Precision (0.91) and Context Recall (0.89) confirm retrieval is working well — relevant documents are being found without much noise. High Answer Relevance (0.88) shows the model is addressing the right question. Low Faithfulness (0.61) specifically means the model's response contains claims not supported by retrieved context — it is hallucinating from parametric knowledge. The fix is stronger grounding instructions, lower temperature, and citation enforcement."
+  },
+  {
+    id: "d5-q8",
+    domain: "Domain 5",
+    tags: ["RAGAS", "context recall", "retrieval failure", "evaluation diagnosis"],
+    prompt: "A knowledge base Q&A system shows: Faithfulness = 0.93, Answer Relevance = 0.90, Context Precision = 0.88, Context Recall = 0.54. Users frequently see 'I don't have information on that' for topics well-documented in the KB. What is the root cause?",
+    options: [
+      "The model is hallucinating answers not supported by retrieved context.",
+      "The retrieval system is returning noisy, irrelevant chunks that dilute correct information.",
+      "The retrieval system is failing to surface relevant documents that exist in the knowledge base.",
+      "The model's answer relevance is too low — it is answering a different question than what was asked."
+    ],
+    answer: 2,
+    explanation: "Low Context Recall (0.54) means only 54% of the information needed to answer queries is being retrieved, even though it exists in the KB. This directly explains the 'I don't have information' responses — correct documents are present but not being found. High Faithfulness (0.93) and Answer Relevance (0.90) confirm the model uses what it receives faithfully, but retrieval is the bottleneck. Fixes: increase top-k, improve query preprocessing (HyDE or query expansion), or switch to hybrid search."
+  },
+  {
+    id: "d5-q9",
+    domain: "Domain 5",
+    tags: ["evaluation metrics", "NDCG", "MRR", "Recall@k", "retrieval"],
+    prompt: "A search team evaluates three scenarios: (A) whether the most relevant document appears at rank 1, (B) whether all relevant documents are included anywhere in the top-20 results, and (C) overall ranking quality accounting for diminishing value of lower-ranked positions. Which metrics match A, B, and C respectively?",
+    options: [
+      "A: Recall@K, B: MRR, C: NDCG",
+      "A: MRR, B: Recall@K, C: NDCG",
+      "A: NDCG, B: Precision@K, C: MRR",
+      "A: Precision@K, B: NDCG, C: Recall@K"
+    ],
+    answer: 1,
+    explanation: "MRR (Mean Reciprocal Rank) measures where the first relevant result appears — ideal for single-answer queries where rank-1 matters most. Recall@K measures what fraction of all relevant documents are in the top-K — important when completeness matters. NDCG (Normalized Discounted Cumulative Gain) measures overall ranking quality with diminishing credit for lower positions — the most comprehensive ordering metric for multiple relevant documents at varying relevance levels."
+  },
+  {
+    id: "d5-q10",
+    domain: "Domain 5",
+    tags: ["BLEU", "ROUGE", "summarization", "translation", "evaluation metrics"],
+    prompt: "A team evaluates two tasks: (1) AI-generated news summaries compared to human summaries, and (2) AI-translated text from English to French. Which metrics should they use for (1) and (2) respectively?",
+    options: [
+      "(1) BLEU, (2) ROUGE — BLEU for content coverage, ROUGE for word-level accuracy",
+      "(1) ROUGE, (2) BLEU — ROUGE for summarization recall, BLEU for translation precision",
+      "(1) BERTScore, (2) BERTScore — it handles both paraphrasing and translation",
+      "(1) Perplexity, (2) NDCG — language quality and ranking metrics"
+    ],
+    answer: 1,
+    explanation: "ROUGE (Recall-Oriented Understudy for Gisting Evaluation) is the standard summarization metric — it measures how much of the human summary's content appears in the generated summary. BLEU (Bilingual Evaluation Understudy) was designed for machine translation — it measures n-gram precision against reference translations. Using BLEU for summarization penalizes valid paraphrasing. BERTScore handles paraphrasing but is more computationally expensive and less standard for these specific evaluation tasks."
+  },
+  {
+    id: "d5-q11",
+    domain: "Domain 5",
+    tags: ["KB ingestion", "CloudWatch Logs", "CloudTrail", "troubleshooting"],
+    prompt: "A Bedrock Knowledge Base sync job shows 100% completion in the console, but users report that answers about recently added PDFs are missing. A developer needs to find which specific documents failed during ingestion and why. Where should they look?",
+    options: [
+      "AWS CloudTrail — filter by StartIngestionJob events to see document-level processing status.",
+      "Amazon S3 server access logs for the source bucket to see which PDFs were accessed.",
+      "Amazon CloudWatch Logs for the Knowledge Base ingestion log group, filtering for RESOURCE_IGNORED, EMBEDDING_FAILED, and INDEXING_FAILED error codes.",
+      "Bedrock console Model Invocation Logs to see which embedding model calls failed."
+    ],
+    answer: 2,
+    explanation: "Bedrock Knowledge Bases log document-level ingestion status to CloudWatch Logs — not CloudTrail. Error codes include RESOURCE_IGNORED (unsupported format or duplicate), EMBEDDING_FAILED (embedding model timeout or quota), and INDEXING_FAILED (vector store write failure). CloudTrail records who called StartIngestionJob and when, but not per-document outcomes. S3 access logs show file reads, not processing results. Model Invocation Logs cover foundation model calls, not the ingestion pipeline. A 100% completion status means the job finished, not that all documents ingested successfully."
+  },
+  {
+    id: "d5-q12",
+    domain: "Domain 5",
+    tags: ["troubleshooting", "retrieval vs generation", "RAG diagnosis"],
+    prompt: "A RAG chatbot gives incorrect answers about the company's return policy. When the developer manually searches the knowledge base with the same query, the correct return policy document appears in the top-3 results. What does this indicate?",
+    options: [
+      "The retrieval system is failing — the correct document is not being surfaced to the model. Fix: retune the embedding model.",
+      "The issue is in the generation layer — the correct context is likely reaching the model but not being used faithfully. Investigate the full prompt sent to the model including retrieved chunks.",
+      "The knowledge base is out of date and the return policy document needs to be re-indexed.",
+      "The embedding dimensions between query encoder and document encoder are mismatched."
+    ],
+    answer: 1,
+    explanation: "If a manual search surfaces the correct document in top-3, retrieval is working. The problem is in the generation layer: either the correct chunks are not being passed to the model (a pipeline bug), the model is ignoring them (low faithfulness), or the prompt instructions are causing the model to override retrieved content. The correct investigation is to inspect the full prompt sent to the model — specifically the included chunks and grounding instructions. Retuning embeddings would address a retrieval problem, which has been ruled out."
+  },
+  {
+    id: "d5-q13",
+    domain: "Domain 5",
+    tags: ["A/B testing", "LLM-as-judge", "model evaluation", "canary rollout"],
+    prompt: "A team wants to replace Claude Sonnet with Amazon Nova Pro for their customer service application. They need to verify Nova Pro produces equivalent or better quality before routing production traffic. What is the correct evaluation and deployment sequence?",
+    options: [
+      "Deploy Nova Pro to 100% of traffic for 24 hours, collect user feedback, and roll back if satisfaction drops.",
+      "Run both models against a 500-question golden dataset, score with LLM-as-Judge and RAGAS metrics, confirm Nova Pro meets quality thresholds, then do a canary rollout starting at 5% of traffic.",
+      "Have three team members manually compare 20 response pairs and vote on the winner.",
+      "Use Bedrock model evaluation in the console and deploy immediately if the automated score exceeds 0.7."
+    ],
+    answer: 1,
+    explanation: "The correct sequence is automated evaluation on a representative dataset, objective scoring, statistical confidence, then staged rollout. A 500-question golden dataset with LLM-as-Judge and RAGAS provides statistically meaningful comparison. A canary rollout (5% to 20% to 50% to 100%) limits blast radius if quality issues appear in production. Deploying to 100% first has no safety net. Manual evaluation of 20 pairs is too small to be statistically significant. Console model evaluation should precede a staged rollout, not an immediate full deployment."
+  },
+  {
+    id: "d5-q14",
+    domain: "Domain 5",
+    tags: ["guardrails", "GuardrailPolicyType", "troubleshooting", "over-blocking"],
+    prompt: "After enabling a Bedrock Guardrail, legitimate user queries about medical topics are being blocked. The team needs to determine exactly which guardrail policy is triggering the blocks to adjust the configuration. Where is this information found?",
+    options: [
+      "AWS CloudTrail — filter InvokeModel events where the response status is BLOCKED.",
+      "The GuardrailPolicyType dimension in Amazon CloudWatch metrics, plus enabling trace in the API response to see per-policy details.",
+      "Amazon Macie — configure it to scan Bedrock response logs for PII patterns causing blocks.",
+      "The Bedrock console Model Invocation Logs — search for requests where guardrailAction is BLOCKED."
+    ],
+    answer: 1,
+    explanation: "GuardrailPolicyType is a CloudWatch metric dimension that identifies the specific triggering policy: ContentPolicy, TopicPolicy, SensitiveInformationPolicy, or PromptAttackPolicy. Additionally, setting trace: ENABLED in the API call returns guardrail trace metadata directly in the response, showing exactly which policy and entity caused the block. CloudTrail records that an InvokeModel call was made but does not include guardrail policy details. Macie scans S3 for sensitive data and is unrelated to Guardrail policy diagnosis."
+  },
+  {
+    id: "d5-q15",
+    domain: "Domain 5",
+    tags: ["agent troubleshooting", "infinite loop", "maxIterations", "structured errors"],
+    prompt: "A Bedrock Agent gets stuck in a loop: it repeatedly calls the same tool with slightly different parameters and never returns a final response. Users see a timeout error after 60 seconds. What are the two most effective immediate fixes?",
+    options: [
+      "Increase the Lambda timeout on the tool function to 5 minutes and allocate more memory.",
+      "Set maxIterations on the agent configuration to cap reasoning steps, and rewrite the tool to return a structured error object when results are empty so the agent knows to stop.",
+      "Switch from Bedrock Agents to Step Functions so the tool call sequence is deterministic and bounded.",
+      "Add a second monitoring agent that terminates the primary agent after 3 tool calls."
+    ],
+    answer: 1,
+    explanation: "Infinite agent loops have two root causes: no iteration cap allows the loop to run indefinitely, and uninterpretable tool outputs (empty results, raw exceptions) give the agent no signal to stop. The fix addresses both: maxIterations caps the loop at a safe number of steps, and structured error returns (e.g., status: no_results with a clear message) give the model the information it needs to generate a final response instead of retrying. Increasing Lambda timeout makes the loop run longer. Step Functions changes the architecture unnecessarily. A monitoring agent adds complexity without addressing the root causes."
+  }
+  ,
+  {
+    id: "d1-q8",
+    domain: "Domain 1",
+    tags: ["chunking", "RAG", "knowledge base"],
+    prompt: "A knowledge base ingests 500-page technical manuals where concepts build progressively across chapters. Users ask multi-step questions that span several sections. Fixed-size chunking at 500 tokens is producing answers that miss context from surrounding sections. What chunking strategy best addresses this?",
+    options: [
+      "Reduce chunk size to 100 tokens so each chunk is more focused and precise.",
+      "Use hierarchical chunking: store both paragraph-level chunks for precision and document-level summaries for broad context, retrieving from both.",
+      "Switch to semantic chunking that splits on sentence boundaries regardless of topic continuity.",
+      "Increase fixed-size chunks to 4000 tokens to capture more context per chunk."
+    ],
+    answer: 1,
+    explanation: "Hierarchical chunking stores fine-grained chunks for precise retrieval alongside broader parent chunks or summaries, allowing the system to retrieve specific passages while preserving surrounding context. Smaller fixed chunks lose cross-section context. Semantic chunking on sentence boundaries doesn't respect topic continuity across chapters. Very large chunks reduce retrieval precision and can exceed embedding model token limits."
+  },
+  {
+    id: "d1-q9",
+    domain: "Domain 1",
+    tags: ["embedding models", "FM selection", "knowledge base"],
+    prompt: "A team is building a multilingual customer support knowledge base that must retrieve relevant documents in Spanish, French, and Japanese. They are selecting an embedding model. Which criterion is most critical for this use case?",
+    options: [
+      "Choose the embedding model with the highest English MTEB benchmark score.",
+      "Choose an embedding model trained on multilingual corpora that produces language-agnostic semantic representations.",
+      "Use a separate embedding model per language and maintain three distinct vector stores.",
+      "Use the largest available embedding model by parameter count to ensure maximum coverage."
+    ],
+    answer: 1,
+    explanation: "Multilingual retrieval requires an embedding model trained on multilingual data so that semantically similar content in different languages maps to nearby vectors. English-only benchmarks don't reflect multilingual performance. Separate models per language create operational complexity and prevent cross-lingual retrieval. Parameter count alone doesn't guarantee multilingual capability — the training data distribution matters most."
+  },
+  {
+    id: "d1-q10",
+    domain: "Domain 1",
+    tags: ["vector store", "HNSW", "IVF", "index types"],
+    prompt: "A GenAI application searches a vector store with 50 million embeddings and requires query latency under 20ms at p99. The dataset changes infrequently (monthly updates). Which index configuration best meets these requirements?",
+    options: [
+      "Flat (brute-force) index, which guarantees exact nearest-neighbor results.",
+      "IVF (Inverted File Index) with a small number of clusters to minimize search scope.",
+      "HNSW (Hierarchical Navigable Small World) index, which provides fast approximate nearest-neighbor search with low latency at scale.",
+      "LSH (Locality-Sensitive Hashing) index, optimal for real-time streaming inserts."
+    ],
+    answer: 2,
+    explanation: "HNSW provides excellent query speed (sub-millisecond to low-millisecond) with high recall for large static datasets because its graph structure enables efficient traversal. Flat/brute-force search is O(n) and far too slow at 50M vectors for <20ms p99. IVF with few clusters reduces accuracy significantly. LSH is optimized for streaming inserts, not low-latency retrieval at this scale."
+  },
+  {
+    id: "d1-q11",
+    domain: "Domain 1",
+    tags: ["hybrid search", "RAG", "retrieval"],
+    prompt: "A legal document search system uses semantic (vector) search but misses documents when users search for precise case numbers, statute codes, or exact legal terms. What retrieval approach should be added to address this?",
+    options: [
+      "Increase the number of retrieved candidates (top-K) to capture more documents.",
+      "Implement hybrid search combining dense vector retrieval with sparse keyword (BM25) retrieval, then fuse results using Reciprocal Rank Fusion.",
+      "Fine-tune the embedding model on legal documents to improve vector representations.",
+      "Switch entirely to keyword-based BM25 search since legal documents require exact term matching."
+    ],
+    answer: 1,
+    explanation: "Hybrid search combines the semantic understanding of dense retrieval with the exact-match precision of sparse keyword search (BM25). Reciprocal Rank Fusion merges the ranked lists from both approaches. This handles both 'what does this law mean' (semantic) and 'find case 2024-CV-0042' (exact match). Increasing top-K adds noise. Fine-tuning helps semantic recall but not exact-term matching. Switching entirely to BM25 loses semantic understanding for concept-based queries."
+  },
+  {
+    id: "d1-q12",
+    domain: "Domain 1",
+    tags: ["re-ranking", "retrieval", "cross-encoder"],
+    prompt: "A RAG pipeline retrieves 20 candidate documents using a bi-encoder (dense embeddings) but the final answer quality is poor because many top-retrieved chunks are topically related but not directly relevant to the specific question. What should be added to improve precision?",
+    options: [
+      "Increase chunk size so each retrieved document contains more information.",
+      "Add a cross-encoder re-ranker that scores each query-document pair jointly and reorders the candidates before generation.",
+      "Replace the bi-encoder with a larger embedding model to improve initial retrieval quality.",
+      "Reduce top-K from 20 to 3 to force the retrieval stage to be more selective."
+    ],
+    answer: 1,
+    explanation: "A cross-encoder re-ranker reads the query and each candidate document together (jointly), producing a fine-grained relevance score that captures precise query-document interaction — something bi-encoders can't do since they encode independently. Adding re-ranking after initial retrieval is the standard approach to improve precision without changing the retrieval architecture. Larger chunk size dilutes relevance. A larger embedding model helps recall but not precision for specificity. Reducing top-K too aggressively risks missing the correct document entirely."
+  },
+  {
+    id: "d1-q13",
+    domain: "Domain 1",
+    tags: ["metadata filtering", "knowledge base", "retrieval"],
+    prompt: "A multi-tenant SaaS platform uses a shared Amazon Bedrock Knowledge Base to serve 200 enterprise customers. Each customer's documents must only be retrieved for that customer's queries. What is the most scalable approach to enforce this isolation?",
+    options: [
+      "Create a separate knowledge base and vector store per customer.",
+      "Add a customer_id metadata attribute to all documents during ingestion, and apply metadata filter expressions on every retrieval call to restrict results to the querying customer.",
+      "Prepend each document with the customer's name so the LLM can filter out irrelevant results.",
+      "Use IAM policies on the S3 bucket to prevent cross-customer document access at the storage layer."
+    ],
+    answer: 1,
+    explanation: "Metadata filtering allows a single shared knowledge base to serve multiple tenants by tagging documents with tenant identifiers and including filter expressions (e.g., customer_id = 'cust-123') in every RetrieveAndGenerate API call. This scales to thousands of tenants without creating separate infrastructure. Separate KBs per customer create O(N) management overhead. Prepending names relies on the LLM to enforce isolation, which is unreliable. S3 IAM policies control storage access but not vector retrieval, which happens in the vector store layer."
+  },
+  {
+    id: "d1-q14",
+    domain: "Domain 1",
+    tags: ["FM selection", "latency", "cost", "model tiers"],
+    prompt: "A customer service chatbot handles three query types: simple FAQs (70% of traffic), complex policy interpretations (20%), and rare edge cases requiring nuanced reasoning (10%). The team wants to minimize cost while maintaining quality. Which architecture best fits?",
+    options: [
+      "Route all queries to Claude Sonnet for consistent quality across all request types.",
+      "Implement model cascading: classify query complexity first, then route FAQs to a lightweight model (e.g., Claude Haiku), complex queries to a mid-tier model, and edge cases to a high-capability model.",
+      "Use the largest available model for all queries since latency is not a constraint.",
+      "Fine-tune a single small model on all query types to handle everything cost-effectively."
+    ],
+    answer: 1,
+    explanation: "Model cascading (tiered routing) matches model capability to query complexity, dramatically reducing cost because 70% of traffic (FAQs) is handled by the cheapest model. Only the 10% requiring deep reasoning incurs high-tier model costs. Using a single mid or high-tier model for all requests wastes money on simple queries. The largest model for all queries maximizes cost. A single fine-tuned small model may not have sufficient capability for complex reasoning tasks."
+  },
+  {
+    id: "d1-q15",
+    domain: "Domain 1",
+    tags: ["knowledge base", "ingestion", "incremental updates"],
+    prompt: "A company's knowledge base is built from product documentation that is updated weekly. After each update, some documents change, new ones are added, and outdated ones are removed. What is the correct approach to keep the knowledge base synchronized?",
+    options: [
+      "Delete and recreate the entire knowledge base weekly to ensure a clean state.",
+      "Use the StartIngestionJob API on the data source, which handles incremental sync by detecting changed, added, and deleted documents since the last sync.",
+      "Manually call DeleteDocument and CreateDocument APIs for each changed file.",
+      "Update the S3 bucket contents and the knowledge base will automatically re-index without any action."
+    ],
+    answer: 1,
+    explanation: "StartIngestionJob performs incremental synchronization: Bedrock compares the current data source state against the last ingestion snapshot and only re-processes added, modified, or deleted documents. This is efficient and avoids re-embedding unchanged content. Full deletion and recreation wastes processing time and incurs unnecessary embedding costs. Manual document-level APIs at scale are error-prone. The knowledge base does not auto-sync on S3 changes — an explicit ingestion job must be triggered."
+  },
+  {
+    id: "d1-q16",
+    domain: "Domain 1",
+    tags: ["prompt engineering", "few-shot", "chain-of-thought"],
+    prompt: "A GenAI application needs to extract structured JSON from unstructured medical notes with high consistency. Zero-shot prompting produces inconsistent field naming and missing fields. What prompt engineering technique should be applied first?",
+    options: [
+      "Add a longer system prompt explaining the importance of accuracy.",
+      "Provide 3-5 few-shot examples in the prompt that demonstrate the exact input format, desired JSON schema, and correctly extracted output.",
+      "Increase the model's temperature to 1.0 to encourage more creative outputs.",
+      "Switch to a larger foundation model, as zero-shot failure indicates insufficient model capability."
+    ],
+    answer: 1,
+    explanation: "Few-shot prompting provides concrete demonstrations of the expected input/output format, which dramatically improves consistency for structured extraction tasks. The model learns the exact field names, nesting, and format from the examples. A longer system prompt without examples doesn't provide the format anchoring needed. Increasing temperature introduces more variance, worsening consistency. Switching models is a costly escalation when a prompt engineering fix should be tried first."
+  },
+  {
+    id: "d1-q17",
+    domain: "Domain 1",
+    tags: ["prompt governance", "system prompts", "versioning"],
+    prompt: "A team deploying a Bedrock-powered application needs to manage prompt templates across development, staging, and production environments, track changes over time, and roll back to a previous prompt version if a new release degrades output quality. Which approach best addresses these requirements?",
+    options: [
+      "Store prompt templates as hardcoded strings in the application source code and redeploy the app to change prompts.",
+      "Use Amazon Bedrock Prompt Management to version, test, and deploy prompt templates, enabling rollback and environment-specific variants without code deployments.",
+      "Store prompts in an S3 bucket and load them at runtime, using S3 versioning for rollback capability.",
+      "Include prompt templates in environment variables managed by AWS Systems Manager Parameter Store."
+    ],
+    answer: 1,
+    explanation: "Amazon Bedrock Prompt Management is designed specifically for this use case: it provides versioning, variant management (for A/B testing across environments), and the ability to roll back to a previous prompt version. It decouples prompt lifecycle from application deployments. Hardcoding in source requires redeployment to change prompts. S3 versioning works but lacks prompt-specific metadata, testing, and variant management. Parameter Store handles secrets/config but has no prompt-specific tooling for evaluation or variant management."
+  },
+  {
+    id: "d1-q18",
+    domain: "Domain 1",
+    tags: ["multimodal", "FM selection", "Nova"],
+    prompt: "A retail application needs to accept product images from customers and generate detailed descriptions, compare them against catalog images, and answer questions about the items shown. Which Amazon Bedrock model family is best suited for this multimodal input use case?",
+    options: [
+      "Amazon Titan Text models, which offer the most extensive text generation capabilities on Bedrock.",
+      "Amazon Nova family models (e.g., Nova Pro or Nova Lite), which natively support image, video, and text inputs for multimodal understanding tasks.",
+      "Anthropic Claude Haiku, optimized for fast text-only inference at low cost.",
+      "Meta Llama text models with a custom image preprocessing Lambda function to convert images to text descriptions."
+    ],
+    answer: 1,
+    explanation: "Amazon Nova Pro and Nova Lite are Amazon's multimodal foundation models that natively accept image and text inputs in a single request, making them ideal for visual understanding tasks like product image analysis. Titan Text models are text-only. Claude Haiku is text-optimized and the fastest/cheapest model, not designed for multimodal workloads in this context. Adding a preprocessing Lambda to convert images to text is an indirect workaround that loses visual fidelity compared to native multimodal processing."
+  }
+  ,
+  {
+    id: "d3-q8",
+    domain: "Domain 3",
+    tags: ["VPC endpoint", "PrivateLink", "network security"],
+    prompt: "A financial services company requires that all Amazon Bedrock API calls from their application must never traverse the public internet. They are running their workloads in a VPC. What is the correct AWS network architecture to enforce this?",
+    options: [
+      "Place the application in a public subnet and use an internet gateway to reach Bedrock endpoints.",
+      "Create an AWS PrivateLink interface VPC endpoint for Amazon Bedrock in the VPC, configure security groups to allow outbound to the endpoint, and disable internet access from the application subnet.",
+      "Use an AWS NAT gateway to route all Bedrock traffic through a private IP before reaching the public Bedrock endpoint.",
+      "Enable VPC Flow Logs to monitor Bedrock traffic and alert if any calls traverse the public internet."
+    ],
+    answer: 1,
+    explanation: "AWS PrivateLink creates an interface VPC endpoint that routes traffic to Bedrock over Amazon's private network backbone, never touching the public internet. The application connects to a private IP in the VPC. A public subnet + internet gateway exposes traffic to the internet. A NAT gateway still routes to the public Bedrock endpoint — traffic exits to the internet. VPC Flow Logs provide visibility but don't prevent internet traversal."
+  },
+  {
+    id: "d3-q9",
+    domain: "Domain 3",
+    tags: ["PII", "Guardrails", "Macie", "Comprehend", "data privacy"],
+    prompt: "A healthcare application processes patient messages before sending them to a foundation model. The team needs to detect and redact PHI (names, dates, medical record numbers) in real-time during inference. Which service is most appropriate?",
+    options: [
+      "Amazon Macie, which automatically discovers and protects sensitive data in S3 buckets.",
+      "Amazon Bedrock Guardrails with sensitive information filters configured to detect and redact PII/PHI entity types in real-time during model invocations.",
+      "AWS Config rules to detect PHI in API payloads and trigger remediation actions.",
+      "Amazon Comprehend Medical as a standalone preprocessing step, with application logic to redact detected entities before calling Bedrock."
+    ],
+    answer: 1,
+    explanation: "Bedrock Guardrails sensitive information filters detect and redact PII/PHI entity types (names, dates, SSNs, medical terms) natively within the inference pipeline without additional application code. This is the integrated, real-time solution for protecting sensitive data at the model layer. Macie scans S3 for stored data — it has no real-time inference capability. AWS Config is for resource compliance, not inference-time content filtering. Comprehend Medical works but requires custom application logic for redaction, adding latency and complexity compared to the native Guardrails solution."
+  },
+  {
+    id: "d3-q10",
+    domain: "Domain 3",
+    tags: ["model invocation logging", "compliance", "audit", "CloudTrail"],
+    prompt: "A regulated enterprise must maintain a complete audit trail of all foundation model inputs and outputs for compliance review. They also need to detect anomalous usage patterns. What combination of services enables this?",
+    options: [
+      "Enable AWS CloudTrail data events for Bedrock, which logs the full prompt and response content for every model invocation.",
+      "Enable Amazon Bedrock model invocation logging to S3 (for full input/output storage) and CloudWatch Logs (for metrics and anomaly detection), with CloudTrail capturing the API-level audit trail.",
+      "Store all prompts in DynamoDB before sending to Bedrock, and log responses to S3 after receiving them using application-level code.",
+      "Use Amazon Inspector to scan Bedrock API calls for sensitive content and compliance violations."
+    ],
+    answer: 1,
+    explanation: "Bedrock model invocation logging captures full request/response payloads to S3 (for compliance archive) and/or CloudWatch Logs (for real-time analysis and anomaly detection). CloudTrail captures the API call metadata (who called, when, from where) but does NOT log the actual prompt or response content — those only appear in invocation logs. Application-level logging works but adds code complexity. Amazon Inspector is a vulnerability assessment service, not an AI compliance logging tool."
+  },
+  {
+    id: "d3-q11",
+    domain: "Domain 3",
+    tags: ["IAM", "cross-account", "least privilege", "Bedrock"],
+    prompt: "A company has a central AI platform account where Amazon Bedrock models are deployed with Provisioned Throughput. Application teams in separate AWS accounts need to invoke these models. What is the correct approach to grant least-privilege cross-account access?",
+    options: [
+      "Share the platform account's IAM user access keys with each application team.",
+      "In each application account, create an IAM role with bedrock:InvokeModel permission scoped to the specific model ARN. In the platform account, create a resource-based policy on the Provisioned Throughput model allowing the application roles to invoke it.",
+      "Make the Bedrock models public so any AWS account can invoke them without authentication.",
+      "Deploy identical foundation models in each application account to avoid cross-account complexity."
+    ],
+    answer: 1,
+    explanation: "Cross-account Bedrock access requires two parts: (1) an IAM role in the calling account with bedrock:InvokeModel scoped to the specific model ARN, and (2) a resource-based policy on the Bedrock resource in the platform account that trusts the calling account's role. This follows least-privilege principles — only specific roles can invoke specific models. Sharing IAM user keys violates security best practices. Bedrock models can't be made public. Deploying duplicate models in every account defeats the purpose of centralization and doubles Provisioned Throughput costs."
+  }
+
 ];
 
 const domainOrder = ["all", "Domain 1", "Domain 2", "Domain 3", "Domain 4", "Domain 5"];
