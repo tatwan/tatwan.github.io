@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 — Advanced Implementation & Optimization</title>
+<style>
+:root {
+  --navy:#232f3e; --orange:#ff9900; --blue:#0073bb; --green:#1d8348;
+  --red:#c0392b; --purple:#7d3c98; --teal:#148f77; --gold:#d4a017;
+  --bg:#f0f2f5; --white:#fff; --border:#d5dbdb; --text:#1a1a2e;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;}
+
+/* ── NAV ── */
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;}
+.aip-nav-sep{color:#445;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;gap:0;scrollbar-width:none;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 11px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"],
+.aip-nav[data-current="advanced-impl"] [data-tab="advanced-impl"],
+.aip-nav[data-current="troubleshooting-eval"] [data-tab="troubleshooting-eval"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:260px;flex-shrink:0;background:var(--navy);color:#fff;padding:1.2rem 0;position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;}
+.sidebar h3{padding:.4rem 1.1rem;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-top:.6rem;}
+.sidebar-btn{display:block;width:100%;background:none;border:none;color:#c5cfe0;text-align:left;padding:.45rem 1.1rem;font-size:.82rem;cursor:pointer;border-left:3px solid transparent;transition:all .15s;}
+.sidebar-btn:hover{color:#fff;background:rgba(255,255,255,.06);}
+.sidebar-btn.active{color:#ff9900;border-left-color:#ff9900;background:rgba(255,153,0,.08);}
+.content{flex:1;padding:1.6rem 2rem;max-width:900px;}
+@media(max-width:900px){.layout{flex-direction:column;}.sidebar{width:100%;height:auto;position:static;display:flex;flex-wrap:wrap;padding:.5rem;gap:.3rem;}.sidebar h3{display:none;}.sidebar-btn{width:auto;border-left:none;border-bottom:2px solid transparent;padding:.35rem .7rem;font-size:.78rem;border-radius:6px;}.sidebar-btn.active{border-bottom-color:#ff9900;border-left:none;}.content{padding:1rem;}}
+
+/* ── SECTIONS ── */
+.section{display:none;}.section.active{display:block;}
+.page-title{margin-bottom:1.5rem;}
+.page-title h1{font-size:1.6rem;color:var(--navy);}
+.page-title h1 span{color:var(--orange);}
+.page-title p{color:#555;margin-top:.4rem;line-height:1.65;}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1rem;overflow:hidden;}
+.card-header{padding:.9rem 1.2rem;color:#fff;}
+.card-header.navy{background:linear-gradient(135deg,var(--navy),#3a4f6e);}
+.card-header.green{background:linear-gradient(135deg,var(--green),#239b56);}
+.card-header.blue{background:linear-gradient(135deg,var(--blue),#0099d6);}
+.card-header.purple{background:linear-gradient(135deg,var(--purple),#a569bd);}
+.card-header.teal{background:linear-gradient(135deg,var(--teal),#1abc9c);}
+.card-header.red{background:linear-gradient(135deg,var(--red),#e74c3c);}
+.card-header.gold{background:linear-gradient(135deg,#b7860b,var(--gold));}
+.card-header h2{font-size:1.05rem;margin:0;}
+.card-header p{color:rgba(255,255,255,.8);font-size:.82rem;margin-top:.25rem;}
+.card-body{padding:1.1rem 1.2rem;}
+
+/* ── TABLES ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.5rem;}
+.compare-table th{background:var(--navy);color:#fff;padding:.5rem .7rem;text-align:left;}
+.compare-table td{padding:.45rem .7rem;border-bottom:1px solid #eee;vertical-align:top;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:nth-child(even) td{background:#f8f9fa;}
+
+/* ── DECISION BOX ── */
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.7rem;}
+@media(max-width:640px){.decision-grid{grid-template-columns:1fr;}}
+.decision-card{border-radius:8px;padding:.85rem;border:2px solid;}
+.decision-card.use-when{border-color:#1d8348;background:#eafaf1;}
+.decision-card.avoid-when{border-color:#c0392b;background:#fdedec;}
+.decision-card.consider{border-color:#0073bb;background:#eaf4fb;}
+.decision-card h4{font-size:.8rem;font-weight:800;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.04em;}
+.decision-card.use-when h4{color:#1d8348;}
+.decision-card.avoid-when h4{color:#c0392b;}
+.decision-card.consider h4{color:#0073bb;}
+.decision-card ul{padding-left:1.1rem;font-size:.82rem;line-height:1.65;}
+
+/* ── CONCEPT GRID ── */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-top:.7rem;}
+.concept-card{border-radius:8px;padding:.85rem;background:#f8f9fa;border:1px solid #e0e0e0;}
+.concept-card h5{font-size:.82rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;}
+.concept-card ul{padding-left:1rem;font-size:.8rem;line-height:1.7;}
+.concept-card p{font-size:.8rem;line-height:1.65;color:#444;}
+
+/* ── FLOW STEPS ── */
+.flow-steps{counter-reset:step;margin-top:.7rem;}
+.flow-step{display:flex;gap:.8rem;margin-bottom:.6rem;align-items:flex-start;}
+.flow-step::before{counter-increment:step;content:counter(step);min-width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;margin-top:.1rem;}
+.flow-step-body{font-size:.83rem;line-height:1.65;}
+.flow-step-body strong{display:block;margin-bottom:.15rem;color:var(--navy);}
+
+/* ── TRAP BOX ── */
+.trap-box{background:#fff8e8;border:1px solid #f1d28a;border-left:4px solid #e67e22;border-radius:8px;padding:.85rem 1rem;margin-top:.7rem;}
+.trap-box h4{font-size:.8rem;font-weight:800;color:#e67e22;margin-bottom:.4rem;text-transform:uppercase;}
+.trap-box ul{padding-left:1rem;font-size:.82rem;line-height:1.7;}
+
+/* ── CODE BLOCK ── */
+.code-block{background:#1e2433;color:#e2e8f0;border-radius:8px;padding:.85rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;margin-top:.5rem;}
+.code-block .key{color:#79c0ff;} .code-block .val{color:#a5f3a5;} .code-block .cmt{color:#8b949e;}
+
+/* ── BADGE ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;margin-left:6px;vertical-align:middle;}
+.badge.d2{background:#d5e8d4;color:#1d6932;} .badge.d4{background:#dae8fc;color:#1464ad;}
+.badge.new{background:#e1d5e7;color:#6a0dad;}
+
+/* ── HIGHLIGHT ── */
+.highlight{background:#fffde7;border:1px solid #ffe082;border-radius:6px;padding:.65rem .85rem;font-size:.82rem;margin:.6rem 0;line-height:1.65;}
+.highlight strong{color:#b7700d;}
+
+/* ── PILL LABEL ── */
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.72rem;font-weight:700;border:1px solid #dce7f5;background:#eef4ff;color:#334155;margin:.1rem;}
+</style>
+</head>
+<body>
+
+<nav class="aip-nav" data-current="advanced-impl">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <h3>Domain 2 — Implementation</h3>
+    <button class="sidebar-btn active" onclick="show('agentic')">Agentic AI &amp; Tool Use</button>
+    <button class="sidebar-btn" onclick="show('deployment')">Model Deployment Strategies</button>
+    <button class="sidebar-btn" onclick="show('enterprise')">Enterprise Integration</button>
+    <button class="sidebar-btn" onclick="show('apis')">FM API Patterns</button>
+    <h3>Domain 4 — Optimization</h3>
+    <button class="sidebar-btn" onclick="show('cost')">Cost Optimization</button>
+    <button class="sidebar-btn" onclick="show('performance')">Performance Optimization</button>
+    <button class="sidebar-btn" onclick="show('caching')">Caching Strategies</button>
+    <h3>Quick Reference</h3>
+    <button class="sidebar-btn" onclick="show('traps')">Exam Traps</button>
+    <button class="sidebar-btn" onclick="show('decisions')">Decision Trees</button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ══════════════════════════════════════════
+         AGENTIC AI
+    ══════════════════════════════════════════ -->
+    <div class="section active" id="sec-agentic">
+      <div class="page-title">
+        <h1>Agentic AI &amp; <span>Tool Integrations</span> <span class="badge d2">Domain 2.1</span></h1>
+        <p>AI agents are autonomous systems that perceive, reason, and act using tools. This is one of the highest-weight Domain 2 topics — master the architecture, tool design, and AWS service mapping.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>What Is an AI Agent?</h2></div>
+        <div class="card-body">
+          <p>An AI agent combines a foundation model (the "brain") with a set of tools and an execution loop. It moves beyond single-turn Q&amp;A to <strong>multi-step autonomous task completion</strong>: it reasons about which action to take, calls a tool, observes the result, and decides whether to act again or respond.</p>
+          <div class="concept-grid" style="margin-top:.8rem;">
+            <div class="concept-card">
+              <h5>ReAct Loop (Reason → Act → Observe)</h5>
+              <ul>
+                <li><strong>Thought:</strong> LLM reasons about what action to take next</li>
+                <li><strong>Action:</strong> Calls a specific tool with parameters</li>
+                <li><strong>Observation:</strong> Receives and processes the tool's result</li>
+                <li><strong>Repeat</strong> until task is complete</li>
+                <li><strong>Final response</strong> returned to user</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Bedrock Agents Architecture</h5>
+              <ul>
+                <li>Fully managed agent orchestration on AWS</li>
+                <li>Connects to <strong>Action Groups</strong> (Lambda-backed tools)</li>
+                <li>Connects to <strong>Knowledge Bases</strong> for RAG context</li>
+                <li>Supports <strong>Guardrails</strong> for safe execution</li>
+                <li>Built-in memory (session context up to 8h with AgentCore)</li>
+                <li>Trace mode for step-by-step debugging</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Strands SDK (Open-Source)</h5>
+              <ul>
+                <li>AWS open-source agent framework</li>
+                <li>Full developer control vs. managed Bedrock Agents</li>
+                <li>Supports MCP (Model Context Protocol) natively</li>
+                <li>Modular: swap prompting strategy, memory, tools independently</li>
+                <li>Built-in testing &amp; evaluation hooks</li>
+                <li>Choose when you need customization or self-hosted deployment</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>AgentCore Components</h5>
+              <ul>
+                <li><strong>Runtime:</strong> Session isolation up to 8 hours</li>
+                <li><strong>Policy:</strong> Natural language → Cedar policies</li>
+                <li><strong>Memory:</strong> Cross-session learning &amp; persistence</li>
+                <li><strong>Evaluations:</strong> 13 built-in quality evaluators</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Tool / Function Calling — Schema Design</h2></div>
+        <div class="card-body">
+          <p>Tools are the "hands" of an agent. Each tool needs a well-defined schema so the LLM knows when and how to call it.</p>
+          <div class="code-block">
+<span class="cmt"># Bedrock Agents Action Group — Lambda Tool Schema example</span>
+{
+  <span class="key">"name"</span>: <span class="val">"query_customer_database"</span>,
+  <span class="key">"description"</span>: <span class="val">"Retrieve customer order history by customer ID. Use when the user asks about past orders, delivery status, or purchase records."</span>,
+  <span class="key">"parameters"</span>: {
+    <span class="key">"customer_id"</span>: {
+      <span class="key">"type"</span>: <span class="val">"string"</span>,
+      <span class="key">"description"</span>: <span class="val">"Unique customer identifier (format: CUST-XXXXX)"</span>,
+      <span class="key">"required"</span>: <span class="val">true</span>
+    },
+    <span class="key">"date_range_days"</span>: {
+      <span class="key">"type"</span>: <span class="val">"integer"</span>,
+      <span class="key">"description"</span>: <span class="val">"Number of days to look back (default: 90)"</span>,
+      <span class="key">"required"</span>: <span class="val">false</span>
+    }
+  }
+}
+          </div>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>Key rule:</strong> The <code>description</code> field is what the LLM reads to decide when to call a tool. A vague description causes wrong tool selection. A precise description with "use when…" language dramatically improves accuracy.
+          </div>
+          <table class="compare-table" style="margin-top:.8rem;">
+            <tr><th>Tool Design Principle</th><th>Good Practice</th><th>Common Mistake</th></tr>
+            <tr><td>Tool granularity</td><td>One tool per atomic capability</td><td>One mega-tool that does everything</td></tr>
+            <tr><td>Parameter names</td><td>Self-documenting (customer_id, not id)</td><td>Generic names (param1, data)</td></tr>
+            <tr><td>Error handling</td><td>Return structured error objects the LLM can interpret</td><td>Throw raw exceptions that confuse the agent</td></tr>
+            <tr><td>Output format</td><td>Consistent JSON schema every time</td><td>Variable format depending on result</td></tr>
+            <tr><td>Idempotency</td><td>Safe to retry without side effects</td><td>Tools that charge a card or send an email on every call</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Agent Error Handling &amp; Multi-Step Patterns</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Error Handling Patterns</h5>
+              <ul>
+                <li><strong>Tool timeout:</strong> Lambda 15-min max; return partial result + error flag</li>
+                <li><strong>Tool returns empty:</strong> Agent should re-reason, not loop indefinitely</li>
+                <li><strong>Hallucinated parameters:</strong> Validate inputs in Lambda before execution</li>
+                <li><strong>Infinite loops:</strong> Set <code>maxIterations</code> in Bedrock Agents config</li>
+                <li><strong>Step Functions circuit breaker:</strong> Use for deterministic multi-step workflows</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Sequential vs. Parallel Tool Calls</h5>
+              <ul>
+                <li><strong>Sequential:</strong> Each tool result feeds the next (data dependencies)</li>
+                <li><strong>Parallel:</strong> Independent data fetches that are merged later</li>
+                <li>Bedrock Agents supports parallel tool calls natively</li>
+                <li>Use parallel when: search + profile lookup + pricing query all needed</li>
+                <li>Use sequential when: step B requires step A's output</li>
+              </ul>
+            </div>
+          </div>
+          <div class="decision-grid" style="margin-top:.8rem;">
+            <div class="decision-card use-when">
+              <h4>Use Bedrock Agents When</h4>
+              <ul>
+                <li>You want managed infrastructure &amp; zero agent loop code</li>
+                <li>You need built-in KB integration + Guardrails</li>
+                <li>Minimal ops overhead is the top priority</li>
+                <li>Standard tool-calling patterns are sufficient</li>
+              </ul>
+            </div>
+            <div class="decision-card consider">
+              <h4>Use Strands SDK When</h4>
+              <ul>
+                <li>You need custom prompting strategy or memory logic</li>
+                <li>Multi-model agent orchestration across providers</li>
+                <li>MCP (Model Context Protocol) server integration needed</li>
+                <li>Full control over agent loop is required</li>
+              </ul>
+            </div>
+            <div class="decision-card avoid-when">
+              <h4>Use Step Functions (NOT Agents) When</h4>
+              <ul>
+                <li>Workflow must be deterministic with audit trail</li>
+                <li>Compliance requires guaranteed execution order</li>
+                <li>No autonomous reasoning needed — just orchestration</li>
+              </ul>
+            </div>
+            <div class="decision-card consider">
+              <h4>MCP on ECS Fargate When</h4>
+              <ul>
+                <li>MCP server needs persistent SSE connections</li>
+                <li>Lambda is a trap here — no persistent connections</li>
+                <li>Long-lived tool connections (databases, streaming)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <h4>⚠ Agentic AI Exam Traps</h4>
+        <ul>
+          <li><strong>Lambda for MCP servers:</strong> Wrong — Lambda can't maintain persistent SSE connections. Use ECS Fargate.</li>
+          <li><strong>Bedrock Flows vs. Agents:</strong> Flows = no-code visual prompt chains (not autonomous). Agents = autonomous reasoning loops.</li>
+          <li><strong>Step Functions vs. Agents:</strong> Step Functions when deterministic; Agents when adaptive reasoning needed.</li>
+          <li><strong>AgentCore Runtime session limit:</strong> 8 hours max — not unlimited, not 24 hours.</li>
+          <li><strong>Strands requires self-hosting:</strong> More ops overhead than Bedrock Agents — not serverless by default.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODEL DEPLOYMENT
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-deployment">
+      <div class="page-title">
+        <h1>Model Deployment <span>Strategies</span> <span class="badge d2">Domain 2.2</span></h1>
+        <p>How you deploy a model determines your latency, cost, and scalability profile. Know each option's tradeoffs cold.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>The Three Deployment Strategies</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Strategy</th><th>Service / API</th><th>When to Use</th><th>Key Trade-off</th></tr>
+            <tr><td><strong>On-Demand (serverless)</strong></td><td>Bedrock InvokeModel / Lambda</td><td>Variable/unpredictable traffic, event-driven, cost-sensitive</td><td>Cold start latency; pay per token</td></tr>
+            <tr><td><strong>Provisioned Throughput</strong></td><td>Bedrock Provisioned Throughput</td><td>Consistent high-volume traffic, SLA-bound latency</td><td>Reserved capacity cost even when idle; commit required</td></tr>
+            <tr><td><strong>Hybrid</strong></td><td>SageMaker AI Endpoints</td><td>Variable workloads needing auto-scale with baseline</td><td>More infra to manage; most flexible</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Bedrock Provisioned Throughput Deep Dive</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>What It Provides</h5>
+              <ul>
+                <li>Reserved model capacity in Model Units (MUs)</li>
+                <li>Consistent low-latency regardless of AWS load</li>
+                <li>Required for: custom fine-tuned models, no-expiry commitments</li>
+                <li>Commitment: 1-month or 6-month terms (no-commit = on-demand rate)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>When NOT to Use It</h5>
+              <ul>
+                <li>Unpredictable or spiky traffic patterns</li>
+                <li>Development or testing workloads</li>
+                <li>Traffic &lt; 70% utilization of reserved capacity</li>
+                <li>Short-lived experiments (pays for idle capacity)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="highlight">
+            <strong>Exam rule:</strong> Provisioned Throughput is correct when the question says "consistent high-volume", "guaranteed latency SLA", or "fine-tuned custom model in production." It is a distractor when traffic is "unpredictable" or "with long idle periods."
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Model Optimization Techniques</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Technique</th><th>What It Does</th><th>Use When</th><th>Trade-off</th></tr>
+            <tr><td><strong>Quantization</strong></td><td>Reduces model weight precision (FP32→FP16→INT8)</td><td>Reduce memory footprint &amp; inference cost; edge deployment</td><td>Slight accuracy loss; INT8 saves ~75% memory vs FP32</td></tr>
+            <tr><td><strong>Knowledge Distillation</strong></td><td>Trains small "student" model to mimic large "teacher"</td><td>Need small, fast model with similar capability</td><td>Training cost up front; student has lower ceiling</td></tr>
+            <tr><td><strong>Model Pruning</strong></td><td>Removes low-importance weights</td><td>Further reduce model size after training</td><td>Complex; can degrade quality if over-pruned</td></tr>
+            <tr><td><strong>Speculative Decoding</strong></td><td>Small draft model generates tokens; large model verifies</td><td>Reduce latency for large model inference</td><td>Requires two models; draft model accuracy matters</td></tr>
+          </table>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>Distillation on Bedrock:</strong> When using Bedrock Model Distillation, provide <strong>only prompts</strong> (not prompt-response pairs) — Bedrock uses the teacher model to synthesize the responses. Student model must be smaller than teacher (e.g., Nova Lite ← Nova Pro).
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Inference Endpoint Types (SageMaker)</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Endpoint Type</th><th>Best For</th><th>Key Feature</th></tr>
+            <tr><td><strong>Real-Time Endpoint</strong></td><td>Low-latency synchronous requests</td><td>Always-on, instant response</td></tr>
+            <tr><td><strong>Serverless Endpoint</strong></td><td>Infrequent, unpredictable traffic</td><td>Auto-scale to zero; cold start latency</td></tr>
+            <tr><td><strong>Async Endpoint</strong></td><td>Large payloads, long processing (up to 1 hour)</td><td>Non-blocking; result via S3 + SNS</td></tr>
+            <tr><td><strong>Batch Transform</strong></td><td>Offline bulk inference (no real-time needed)</td><td>Process full dataset; results to S3</td></tr>
+            <tr><td><strong>Multi-Model Endpoint</strong></td><td>Many models, low per-model traffic</td><td>Dynamic model loading; cost efficient</td></tr>
+          </table>
+          <div class="trap-box" style="margin-top:.8rem;">
+            <h4>⚠ Batch Inference Trap</h4>
+            <ul>
+              <li><strong>Bedrock batch:</strong> <code>CreateModelInvocationJob</code> — for general text/image batch workloads</li>
+              <li><strong><code>StartAsyncInvoke</code>:</strong> Nova Reel video generation ONLY — not general batch</li>
+              <li>SageMaker Batch Transform = offline, S3-to-S3, no endpoint required</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal"><h2>Containerization &amp; Safeguarding</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Container Benefits for GenAI</h5>
+              <ul>
+                <li>Reproducible environment (model + dependencies pinned)</li>
+                <li>Portable across dev → staging → prod</li>
+                <li>ECS / EKS for scalable deployment</li>
+                <li>Amazon ECR for private container registry</li>
+                <li>Lambda container images for serverless (up to 10GB)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Safeguarding Workflows</h5>
+              <ul>
+                <li><strong>Step Functions:</strong> Prevent infinite workflow loops; timeout states</li>
+                <li><strong>Lambda timeouts:</strong> Control max run time (up to 15 min)</li>
+                <li><strong>IAM policies:</strong> Resource boundaries prevent unauthorized access</li>
+                <li><strong>ECS circuit breaker:</strong> Auto rollback on deployment failures</li>
+                <li><strong>Bedrock Guardrails:</strong> Input/output safety at model layer</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         ENTERPRISE INTEGRATION
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-enterprise">
+      <div class="page-title">
+        <h1>Enterprise Integration <span>Architectures</span> <span class="badge d2">Domain 2.3</span></h1>
+        <p>Real-world GenAI solutions connect to existing enterprise systems. Know the integration patterns, async workflows, and identity federation approaches.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Integration Architecture Patterns</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Pattern</th><th>Components</th><th>Use Case</th></tr>
+            <tr><td><strong>Synchronous API</strong></td><td>API Gateway → Lambda → Bedrock</td><td>Chatbots, real-time Q&amp;A, low-latency responses (&lt;30s)</td></tr>
+            <tr><td><strong>Async / Queue-backed</strong></td><td>SQS → Lambda → Bedrock → SNS</td><td>Batch document processing, report generation, email summarization</td></tr>
+            <tr><td><strong>Event-driven</strong></td><td>S3 Event → EventBridge → Lambda → Bedrock</td><td>Auto-process uploads (PDFs, images) as they arrive</td></tr>
+            <tr><td><strong>Streaming</strong></td><td>API Gateway WebSocket / AppSync → Bedrock streaming</td><td>Real-time token streaming for chat UX</td></tr>
+            <tr><td><strong>Workflow orchestration</strong></td><td>Step Functions → multiple Lambda → Bedrock</td><td>Multi-step document pipelines with retry/error handling</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Identity &amp; Access Patterns</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Cognito OIDC Pattern</h5>
+              <ul>
+                <li>User authenticates via Cognito User Pool</li>
+                <li>Cognito issues JWT → exchanged for temporary AWS credentials</li>
+                <li>Credentials scoped to user's IAM role</li>
+                <li>Use for: web/mobile apps calling Bedrock directly</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>IAM Identity Center (SSO)</h5>
+              <ul>
+                <li>Federated access for enterprise employees</li>
+                <li>Maps corporate IdP (Okta, Azure AD) → AWS roles</li>
+                <li>Use for: internal tools, developer access to Bedrock</li>
+                <li>Supports permission sets across multiple accounts</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Cross-Account Access</h5>
+              <ul>
+                <li>Resource-based policies on Bedrock knowledge bases</li>
+                <li>IAM role assumption from trusted accounts</li>
+                <li>Use for: centralized AI account serving multiple business units</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>VPC Endpoints for Bedrock</h5>
+              <ul>
+                <li>PrivateLink endpoint keeps traffic off public internet</li>
+                <li>Required for compliance (HIPAA, FedRAMP)</li>
+                <li>Endpoint type: Interface endpoint for <code>bedrock-runtime</code></li>
+                <li>Also use for S3, DynamoDB (Gateway endpoints — free)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>SQS Buffer Pattern for Knowledge Base Sync</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>S3 Event Notification fires when document is uploaded</strong>Triggers a message to SQS queue immediately.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>SQS buffers the event</strong>Provides resilience if KB sync is temporarily unavailable; batch processing up to 10 messages at once.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Lambda polls SQS and calls IngestKnowledgeBaseDocuments or DeleteKnowledgeBaseDocuments</strong>Triggers incremental sync — only processes the changed document, not the full KB.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Knowledge Base logs ingestion result to CloudWatch Logs</strong>Check for RESOURCE_IGNORED, EMBEDDING_FAILED, or INDEXING_FAILED error codes to diagnose issues.</div></div>
+          </div>
+          <div class="highlight">
+            <strong>Exam distinction:</strong> <code>StartIngestionJob</code> = full sync. <code>IngestKnowledgeBaseDocuments</code> = incremental/document-level sync. The SQS pattern uses the incremental API for efficiency and resilience.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         FM API PATTERNS
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-apis">
+      <div class="page-title">
+        <h1>Foundation Model <span>API Patterns</span> <span class="badge d2">Domain 2.4</span></h1>
+        <p>Know every Bedrock API by name, purpose, and when it is the right choice vs. a distractor.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Bedrock API Reference</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>API</th><th>Purpose</th><th>Key Detail</th></tr>
+            <tr><td><code>InvokeModel</code></td><td>Provider-specific single-turn call</td><td>Request/response body is model-specific JSON; synchronous</td></tr>
+            <tr><td><code>InvokeModelWithResponseStream</code></td><td>Streaming token response</td><td>Use for chat UX; returns chunked stream</td></tr>
+            <tr><td><code>Converse</code></td><td>Unified multi-turn chat — provider agnostic</td><td>Standardized message format; preferred for multi-model apps</td></tr>
+            <tr><td><code>ConverseStream</code></td><td>Streaming version of Converse</td><td>Same as Converse but chunks token output</td></tr>
+            <tr><td><code>RetrieveAndGenerate</code></td><td>RAG in one managed call</td><td>Bedrock handles retrieval + generation; citations included</td></tr>
+            <tr><td><code>Retrieve</code></td><td>KB retrieval only (no generation)</td><td>Use when you want to handle generation yourself</td></tr>
+            <tr><td><code>CreateModelInvocationJob</code></td><td>Async batch inference</td><td>Large-scale text/image batch; results to S3</td></tr>
+            <tr><td><code>StartAsyncInvoke</code></td><td>Nova Reel video generation async</td><td>Video ONLY — NOT general batch inference</td></tr>
+            <tr><td><code>ApplyGuardrail</code></td><td>Run guardrail independently of model call</td><td>Useful for testing guardrail responses in isolation</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Inference Profiles &amp; Cross-Region Routing</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Inference Profiles</h5>
+              <ul>
+                <li>Route requests across multiple AWS regions automatically</li>
+                <li>Best option for: automatic failover + traffic balancing</li>
+                <li>System-defined: AWS manages routing logic</li>
+                <li>Cross-region: you define which regions are eligible</li>
+                <li>Preferred over manual Route 53 routing for model calls</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>On-Demand vs. Provisioned</h5>
+              <ul>
+                <li><strong>On-demand:</strong> Pay per token, scales instantly, no commitment</li>
+                <li><strong>Provisioned:</strong> Reserved MUs, consistent latency, 1–6 month commit</li>
+                <li>Fine-tuned models <em>must</em> use Provisioned Throughput for prod</li>
+                <li>On-demand fine-tuned: available but at on-demand rate (no SLA)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="highlight">
+            <strong>Exam trap:</strong> "Best Region for inference with managed failover" → answer is <strong>Inference Profiles</strong>, not Route 53 health checks or Lambda with retry logic.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal"><h2>Prompt Caching</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>First request: cache miss</strong>Full prompt (system prompt + user message) sent. Bedrock processes all tokens. Cache checkpoint created for the prefix.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Subsequent requests: cache hit</strong>Same prefix (system prompt) detected. Only new tokens (user message) processed at full cost. Cached prefix at reduced rate (~90% discount).</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Cache metadata returned</strong>Response includes <code>cacheWriteInputTokens</code> and <code>cacheReadInputTokens</code> for cost tracking.</div></div>
+          </div>
+          <div class="highlight">
+            <strong>When to use:</strong> Repeated long system prompts (&gt;1,000 tokens) reused across many requests. NOT effective for single-use or highly variable prompts. Prefix must be exact byte-for-byte match to trigger cache hit.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         COST OPTIMIZATION
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-cost">
+      <div class="page-title">
+        <h1>Cost Optimization <span>&amp; Resource Efficiency</span> <span class="badge d4">Domain 4.1</span></h1>
+        <p>GenAI costs are token-driven. Master token efficiency, tiered model routing, and caching to dramatically reduce spend.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Token Cost Fundamentals</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>What Costs Tokens</h5>
+              <ul>
+                <li><strong>Input tokens:</strong> System prompt + conversation history + user message + retrieved context</li>
+                <li><strong>Output tokens:</strong> Model-generated response (typically 3–5× more expensive per token than input)</li>
+                <li><strong>Context tokens:</strong> Accumulated history in multi-turn conversations</li>
+                <li>Different models have different tokenizers (same text ≠ same token count)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Token Reduction Techniques</h5>
+              <ul>
+                <li><strong>Prompt compression:</strong> Summarize conversation history instead of passing full context</li>
+                <li><strong>Context window optimization:</strong> Truncate old messages using sliding window</li>
+                <li><strong>Response limiting:</strong> Set <code>maxTokens</code> parameter; use stop sequences</li>
+                <li><strong>Shorter system prompts:</strong> Remove redundant instructions</li>
+                <li><strong>Retrieval precision:</strong> Retrieve fewer, better chunks (reduce RAG context size)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Tiered Model Routing Strategy</h2></div>
+        <div class="card-body">
+          <p>Not all requests need a powerful (expensive) model. Route by query complexity:</p>
+          <table class="compare-table" style="margin-top:.5rem;">
+            <tr><th>Query Type</th><th>Recommended Model Tier</th><th>Why</th></tr>
+            <tr><td>Simple FAQ, classification, yes/no</td><td>Haiku / Nova Micro / Lite</td><td>Cheap, fast, accurate enough</td></tr>
+            <tr><td>Multi-step reasoning, analysis</td><td>Sonnet / Nova Pro</td><td>Good cost-quality balance</td></tr>
+            <tr><td>Complex code gen, research synthesis</td><td>Opus / Nova Premier</td><td>Maximum capability needed</td></tr>
+            <tr><td>Repeated identical tasks at scale</td><td>Batch inference (any tier)</td><td>50% cost reduction vs. real-time</td></tr>
+          </table>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>Model Cascading:</strong> Try cheap model first; escalate to expensive model only if confidence is below threshold. Implement with a confidence score check in Lambda after first model call.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Batch Inference for Cost Reduction</h2></div>
+        <div class="card-body">
+          <div class="decision-grid">
+            <div class="decision-card use-when">
+              <h4>Use Batch Inference When</h4>
+              <ul>
+                <li>Results needed in hours, not seconds</li>
+                <li>Large volume: 100s–millions of records</li>
+                <li>No interactive user waiting for response</li>
+                <li>Cost reduction of ~50% vs. on-demand</li>
+                <li>Report generation, document summarization, embeddings refresh</li>
+              </ul>
+            </div>
+            <div class="decision-card avoid-when">
+              <h4>Do NOT Use Batch When</h4>
+              <ul>
+                <li>User is waiting for real-time response</li>
+                <li>Latency SLA &lt; 5 seconds</li>
+                <li>Interactive chat or streaming needed</li>
+                <li>Small number of records (&lt;100) — overhead not worth it</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Capacity Planning &amp; Auto-Scaling</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Scenario</th><th>Strategy</th><th>AWS Service</th></tr>
+            <tr><td>Steady 24/7 high volume</td><td>Provisioned Throughput (committed)</td><td>Bedrock Provisioned Throughput</td></tr>
+            <tr><td>10× event-based spikes</td><td>Cross-Region Inference Profile</td><td>Bedrock Inference Profiles</td></tr>
+            <tr><td>Dev/test workloads</td><td>On-demand only; no reservation</td><td>Bedrock On-Demand</td></tr>
+            <tr><td>SageMaker endpoint scaling</td><td>Auto Scaling policy on endpoint</td><td>Application Auto Scaling</td></tr>
+            <tr><td>Cost monitoring &amp; alerts</td><td>Budget alerts + Cost Explorer tags</td><td>AWS Budgets + Cost Explorer</td></tr>
+          </table>
+          <div class="highlight">
+            <strong>Tagging for cost allocation:</strong> Tag all Bedrock / SageMaker resources with <code>Project</code>, <code>CostCenter</code>, <code>Environment</code> tags. Use AWS Cost Explorer to break down GenAI spend by tag.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PERFORMANCE OPTIMIZATION
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-performance">
+      <div class="page-title">
+        <h1>Performance <span>Optimization</span> <span class="badge d4">Domain 4.2</span></h1>
+        <p>Latency in GenAI comes from retrieval, model inference, and network. Address each layer systematically.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Latency Optimization Framework</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Latency Source</th><th>Optimization Technique</th><th>Expected Impact</th></tr>
+            <tr><td>Model inference time</td><td>Use smaller/faster model tier; quantization; Provisioned Throughput</td><td>20–80% reduction</td></tr>
+            <tr><td>Token generation speed</td><td>Streaming response (<code>InvokeModelWithResponseStream</code>); speculative decoding</td><td>Perceived latency drops for users</td></tr>
+            <tr><td>Retrieval time</td><td>HNSW vector index (ANN); pre-filter metadata; index warm-up</td><td>ms-level retrieval</td></tr>
+            <tr><td>Pre-computed responses</td><td>Cache answers for predictable queries (FAQ, product descriptions)</td><td>Near-zero latency for cached hits</td></tr>
+            <tr><td>Cold start (Lambda)</td><td>Provisioned concurrency; keep-warm pings; container reuse</td><td>Eliminates cold start</td></tr>
+            <tr><td>Prompt processing</td><td>Prompt caching for repeated prefixes; shorter system prompts</td><td>Reduces input token cost &amp; time</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Vector Index Optimization</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Index Types</h5>
+              <ul>
+                <li><strong>HNSW (Hierarchical NSW):</strong> Best for high-QPS, ANN search; OpenSearch default</li>
+                <li><strong>IVF (Inverted File):</strong> Good for large datasets; slower but memory-efficient</li>
+                <li><strong>Flat/Exact:</strong> 100% accurate but O(n) — only for small datasets</li>
+                <li><strong>Hybrid (BM25 + HNSW):</strong> OpenSearch hybrid search for best relevance</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>OpenSearch Auto-Tune</h5>
+              <ul>
+                <li>Built-in feature — <strong>no new service needed</strong></li>
+                <li>Automatically optimizes: JVM heap, shard allocation, cache settings</li>
+                <li>Least operational overhead for latency issues</li>
+                <li>Exam trap: ElastiCache in front of OpenSearch adds complexity &amp; management — wrong answer for "least ops overhead"</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Query Optimization</h5>
+              <ul>
+                <li>Metadata pre-filtering (filter by domain/date before vector search)</li>
+                <li>Query expansion: synonym injection, HyDE (Hypothetical Document Embeddings)</li>
+                <li>Reranker model: cross-encoder re-scores top-k after retrieval</li>
+                <li>RRF (Reciprocal Rank Fusion): merge BM25 + semantic scores</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Parameter Tuning</h5>
+              <ul>
+                <li><code>temperature</code>: 0 = deterministic; 1 = creative</li>
+                <li><code>top_p</code>: nucleus sampling — limits vocabulary breadth</li>
+                <li><code>top_k</code>: limits token candidates per step</li>
+                <li><code>maxTokens</code>: hard cap on output length (cost + latency)</li>
+                <li>Stop sequences: terminate output at defined strings</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Parallel Processing &amp; Streaming</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Parallel Requests Pattern</h5>
+              <ul>
+                <li>Fan-out: send multiple Bedrock calls simultaneously via async Python/Lambda</li>
+                <li>Use <code>asyncio.gather()</code> or Step Functions parallel branches</li>
+                <li>Combine results after all complete (or first-finished wins)</li>
+                <li>Good for: multi-section document generation, multi-query retrieval</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Response Streaming</h5>
+              <ul>
+                <li>Use <code>InvokeModelWithResponseStream</code> or <code>ConverseStream</code></li>
+                <li>First token appears in ~300ms vs. ~5s for full non-streaming response</li>
+                <li>Required for real-time chat feel in web apps</li>
+                <li>AppSync subscriptions or WebSocket API Gateway for browser push</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CACHING
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-caching">
+      <div class="page-title">
+        <h1>Caching <span>Strategies</span> <span class="badge d4">Domain 4.1–4.2</span></h1>
+        <p>Caching reduces both cost (fewer model invocations) and latency. There are three distinct caching layers — know when to use each.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Three Caching Layers</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Cache Layer</th><th>What's Cached</th><th>AWS Service</th><th>Invalidation</th></tr>
+            <tr><td><strong>Prompt Cache</strong></td><td>Repeated token prefix (system prompt)</td><td>Bedrock native prompt caching</td><td>Automatic on prefix change</td></tr>
+            <tr><td><strong>Semantic Cache</strong></td><td>Full responses for semantically similar queries</td><td>ElastiCache (Redis) + embedding similarity check</td><td>TTL-based or explicit flush</td></tr>
+            <tr><td><strong>Embedding Cache</strong></td><td>Pre-computed document embeddings</td><td>ElastiCache / DynamoDB</td><td>On document update</td></tr>
+            <tr><td><strong>Result Cache</strong></td><td>Exact-match query responses</td><td>DynamoDB / ElastiCache</td><td>TTL or version-key based</td></tr>
+            <tr><td><strong>Edge Cache</strong></td><td>Static/semi-static AI-generated content</td><td>CloudFront</td><td>Cache invalidation API</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Semantic Caching Pattern</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>User query arrives</strong>Generate embedding for the query using the same embedding model used for the cache.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Similarity search in cache</strong>Compare query embedding against stored embeddings in ElastiCache or Redis with vector search. If cosine similarity &gt; threshold (e.g., 0.95), return cached response.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Cache miss → call model</strong>Send query to foundation model. Store (query embedding, response) pair in cache with TTL.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Return response</strong>Identical for cache hit and miss from user perspective — zero model cost on hits.</div></div>
+          </div>
+          <div class="highlight">
+            <strong>When semantic caching works best:</strong> FAQ-heavy workloads, support chatbots, product Q&amp;A where many users ask similar questions. Cache hit rate of 30–60% typical in production.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>DynamoDB + ElastiCache Decision</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Need</th><th>Use</th><th>Why</th></tr>
+            <tr><td>Microsecond exact-match lookups at scale</td><td>ElastiCache (Redis)</td><td>In-memory; sub-millisecond reads</td></tr>
+            <tr><td>Persistent cache that survives restart</td><td>DynamoDB (TTL attribute)</td><td>Durable; serverless; auto-TTL expiry</td></tr>
+            <tr><td>Session state for multi-turn chat</td><td>DynamoDB (session_id key)</td><td>Serverless; scales with users automatically</td></tr>
+            <tr><td>Embedding cache with vector search</td><td>ElastiCache for Redis (RediSearch)</td><td>Built-in vector similarity search</td></tr>
+            <tr><td>Distributed rate limiting</td><td>ElastiCache (Redis atomic ops)</td><td>INCR + EXPIRE pattern for token bucket</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         EXAM TRAPS
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-traps">
+      <div class="page-title">
+        <h1>Exam <span>Traps — Domain 2 &amp; 4</span></h1>
+        <p>These are the most common wrong-answer choices. Read each carefully before exam day.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header red"><h2>Domain 2 Traps</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Trap</th><th>Wrong Answer</th><th>Correct Answer</th></tr>
+            <tr><td>MCP server hosting</td><td>AWS Lambda (no persistent connection)</td><td>ECS Fargate (persistent SSE connections)</td></tr>
+            <tr><td>Deterministic multi-step workflow</td><td>Bedrock Agents</td><td>AWS Step Functions</td></tr>
+            <tr><td>Bedrock Flows purpose</td><td>"Autonomous reasoning agent"</td><td>No-code visual prompt chain (not autonomous)</td></tr>
+            <tr><td>Batch inference API</td><td><code>StartAsyncInvoke</code> (video only)</td><td><code>CreateModelInvocationJob</code></td></tr>
+            <tr><td>Agent memory across sessions</td><td>"Built-in Bedrock Agents"</td><td>AgentCore Memory module</td></tr>
+            <tr><td>Fine-tuned model in production</td><td>On-demand access</td><td>Provisioned Throughput (required for prod custom models)</td></tr>
+            <tr><td>Cross-region failover</td><td>Route 53 health checks</td><td>Bedrock Inference Profiles</td></tr>
+            <tr><td>Model distillation input</td><td>Prompt-response pairs</td><td>Prompts only (Bedrock synthesizes responses)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold"><h2>Domain 4 Traps</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Trap</th><th>Wrong Answer</th><th>Correct Answer</th></tr>
+            <tr><td>OpenSearch latency with least ops</td><td>Add ElastiCache in front</td><td>Enable OpenSearch Auto-Tune (built-in, zero new service)</td></tr>
+            <tr><td>Reduce costs for repeated prompts</td><td>Smaller model only</td><td>Prompt caching (same prefix → 90% token discount)</td></tr>
+            <tr><td>Real-time chat feel</td><td>Full synchronous response</td><td>Streaming (<code>ConverseStream</code> / <code>InvokeModelWithResponseStream</code>)</td></tr>
+            <tr><td>Consistent high traffic</td><td>On-demand Bedrock</td><td>Provisioned Throughput</td></tr>
+            <tr><td>Unpredictable traffic</td><td>Provisioned Throughput</td><td>On-demand or inference profiles for burst</td></tr>
+            <tr><td>Cost tagging GenAI workloads</td><td>CloudTrail only</td><td>AWS Cost Explorer + resource tags</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         DECISION TREES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-decisions">
+      <div class="page-title">
+        <h1>Decision <span>Trees</span></h1>
+        <p>Use these frameworks to quickly pick the right answer on scenario-based questions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Which Agent Framework?</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the workflow deterministic with a fixed execution order?</strong>YES → Step Functions. STOP.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Do you need visual no-code prompt chaining?</strong>YES → Bedrock Flows. STOP.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Do you need full developer control, custom memory, or MCP integration?</strong>YES → Strands SDK. STOP.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Otherwise (managed, serverless, standard tool-use, KB integration)?</strong>→ Bedrock Agents.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Which Deployment Mode?</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>Is traffic consistent and high-volume with SLA requirements?</strong>YES → Bedrock Provisioned Throughput.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is it a custom fine-tuned model going to production?</strong>YES → Provisioned Throughput (mandatory).</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is traffic unpredictable or are there long idle periods?</strong>YES → On-demand Bedrock via Lambda.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is cross-region failover needed?</strong>YES → Inference Profiles.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is it a large offline batch job?</strong>YES → <code>CreateModelInvocationJob</code> (Bedrock) or SageMaker Batch Transform.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Which Caching Strategy?</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the same long system prompt sent on every request?</strong>YES → Bedrock Prompt Caching (prefix must be identical).</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Are many users asking semantically similar questions?</strong>YES → Semantic Cache with ElastiCache + embedding similarity.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Are exact-match repeated queries the pattern?</strong>YES → DynamoDB result cache with TTL.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is static GenAI-generated content served to many users?</strong>YES → CloudFront edge caching.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

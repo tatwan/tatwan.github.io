@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 — Troubleshooting, Monitoring &amp; Evaluation</title>
+<style>
+:root {
+  --navy:#232f3e; --orange:#ff9900; --blue:#0073bb; --green:#1d8348;
+  --red:#c0392b; --purple:#7d3c98; --teal:#148f77; --gold:#d4a017;
+  --bg:#f0f2f5; --white:#fff; --border:#d5dbdb; --text:#1a1a2e;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;}
+
+/* ── NAV ── */
+.aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;}
+.aip-nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 20px;flex-wrap:wrap;}
+.aip-nav-brand{display:flex;align-items:center;gap:14px;padding:10px 0;}
+.aip-nav-title{color:#fff;font-weight:800;font-size:13px;}
+.aip-nav-sep{color:#445;font-size:12px;}
+.aip-nav-back{color:#94a3b8;font-size:11px;font-weight:600;text-decoration:none;}
+.aip-nav-back:hover{color:#ff9900;}
+.aip-nav-tabs{display:flex;align-items:stretch;overflow-x:auto;gap:0;scrollbar-width:none;}
+.aip-nav-tabs::-webkit-scrollbar{display:none;}
+.aip-tab{display:flex;align-items:center;padding:0 11px;color:#94a3b8;font-weight:600;font-size:11px;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s;}
+.aip-tab:hover{color:#fff;}
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"],
+.aip-nav[data-current="advanced-impl"] [data-tab="advanced-impl"],
+.aip-nav[data-current="troubleshooting-eval"] [data-tab="troubleshooting-eval"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+@media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:260px;flex-shrink:0;background:var(--navy);color:#fff;padding:1.2rem 0;position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;}
+.sidebar h3{padding:.4rem 1.1rem;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-top:.6rem;}
+.sidebar-btn{display:block;width:100%;background:none;border:none;color:#c5cfe0;text-align:left;padding:.45rem 1.1rem;font-size:.82rem;cursor:pointer;border-left:3px solid transparent;transition:all .15s;}
+.sidebar-btn:hover{color:#fff;background:rgba(255,255,255,.06);}
+.sidebar-btn.active{color:#ff9900;border-left-color:#ff9900;background:rgba(255,153,0,.08);}
+.content{flex:1;padding:1.6rem 2rem;max-width:900px;}
+@media(max-width:900px){.layout{flex-direction:column;}.sidebar{width:100%;height:auto;position:static;display:flex;flex-wrap:wrap;padding:.5rem;gap:.3rem;}.sidebar h3{display:none;}.sidebar-btn{width:auto;border-left:none;border-bottom:2px solid transparent;padding:.35rem .7rem;font-size:.78rem;border-radius:6px;}.sidebar-btn.active{border-bottom-color:#ff9900;border-left:none;}.content{padding:1rem;}}
+
+/* ── SECTIONS ── */
+.section{display:none;}.section.active{display:block;}
+.page-title{margin-bottom:1.5rem;}
+.page-title h1{font-size:1.6rem;color:var(--navy);}
+.page-title h1 span{color:var(--orange);}
+.page-title p{color:#555;margin-top:.4rem;line-height:1.65;}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1rem;overflow:hidden;}
+.card-header{padding:.9rem 1.2rem;color:#fff;}
+.card-header.navy{background:linear-gradient(135deg,var(--navy),#3a4f6e);}
+.card-header.green{background:linear-gradient(135deg,var(--green),#239b56);}
+.card-header.blue{background:linear-gradient(135deg,var(--blue),#0099d6);}
+.card-header.purple{background:linear-gradient(135deg,var(--purple),#a569bd);}
+.card-header.teal{background:linear-gradient(135deg,var(--teal),#1abc9c);}
+.card-header.red{background:linear-gradient(135deg,var(--red),#e74c3c);}
+.card-header.gold{background:linear-gradient(135deg,#b7860b,var(--gold));}
+.card-header h2{font-size:1.05rem;margin:0;}
+.card-header p{color:rgba(255,255,255,.8);font-size:.82rem;margin-top:.25rem;}
+.card-body{padding:1.1rem 1.2rem;}
+
+/* ── TABLES ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.5rem;}
+.compare-table th{background:var(--navy);color:#fff;padding:.5rem .7rem;text-align:left;}
+.compare-table td{padding:.45rem .7rem;border-bottom:1px solid #eee;vertical-align:top;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:nth-child(even) td{background:#f8f9fa;}
+
+/* ── CONCEPT GRID ── */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin-top:.7rem;}
+.concept-card{border-radius:8px;padding:.85rem;background:#f8f9fa;border:1px solid #e0e0e0;}
+.concept-card h5{font-size:.82rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;}
+.concept-card ul{padding-left:1rem;font-size:.8rem;line-height:1.7;}
+.concept-card p{font-size:.8rem;line-height:1.65;color:#444;}
+
+/* ── DECISION BOX ── */
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.7rem;}
+@media(max-width:640px){.decision-grid{grid-template-columns:1fr;}}
+.decision-card{border-radius:8px;padding:.85rem;border:2px solid;}
+.decision-card.retrieval{border-color:#0073bb;background:#eaf4fb;}
+.decision-card.generation{border-color:#7d3c98;background:#f5eef8;}
+.decision-card.infra{border-color:#148f77;background:#e8f8f5;}
+.decision-card.data{border-color:#e67e22;background:#fef9e7;}
+.decision-card h4{font-size:.8rem;font-weight:800;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.04em;}
+.decision-card.retrieval h4{color:#0073bb;}
+.decision-card.generation h4{color:#7d3c98;}
+.decision-card.infra h4{color:#148f77;}
+.decision-card.data h4{color:#e67e22;}
+.decision-card ul{padding-left:1.1rem;font-size:.82rem;line-height:1.65;}
+
+/* ── FLOW STEPS ── */
+.flow-steps{counter-reset:step;margin-top:.7rem;}
+.flow-step{display:flex;gap:.8rem;margin-bottom:.6rem;align-items:flex-start;}
+.flow-step::before{counter-increment:step;content:counter(step);min-width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;margin-top:.1rem;}
+.flow-step-body{font-size:.83rem;line-height:1.65;}
+.flow-step-body strong{display:block;margin-bottom:.15rem;color:var(--navy);}
+
+/* ── CODE BLOCK ── */
+.code-block{background:#1e2433;color:#e2e8f0;border-radius:8px;padding:.85rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.7;overflow-x:auto;margin-top:.5rem;}
+.code-block .key{color:#79c0ff;} .code-block .val{color:#a5f3a5;} .code-block .cmt{color:#8b949e;} .code-block .str{color:#f0a050;}
+
+/* ── TRAP BOX ── */
+.trap-box{background:#fff8e8;border:1px solid #f1d28a;border-left:4px solid #e67e22;border-radius:8px;padding:.85rem 1rem;margin-top:.7rem;}
+.trap-box h4{font-size:.8rem;font-weight:800;color:#e67e22;margin-bottom:.4rem;text-transform:uppercase;}
+.trap-box ul{padding-left:1rem;font-size:.82rem;line-height:1.7;}
+
+/* ── HIGHLIGHT ── */
+.highlight{background:#fffde7;border:1px solid #ffe082;border-radius:6px;padding:.65rem .85rem;font-size:.82rem;margin:.6rem 0;line-height:1.65;}
+.highlight strong{color:#b7700d;}
+
+/* ── METRIC BADGE ── */
+.metric-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0;}
+.metric{background:var(--navy);color:#fff;border-radius:8px;padding:.5rem .8rem;font-size:.78rem;}
+.metric strong{display:block;font-size:.9rem;color:var(--orange);}
+
+/* ── BADGE ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;margin-left:6px;vertical-align:middle;}
+.badge.d4{background:#dae8fc;color:#1464ad;} .badge.d5{background:#d5e8d4;color:#1d6932;}
+
+/* ── ALERT ── */
+.alert{border-radius:8px;padding:.8rem 1rem;margin:.7rem 0;font-size:.82rem;line-height:1.65;border-left:4px solid;}
+.alert.info{background:#eaf4fb;border-color:#0073bb;}
+.alert.warning{background:#fef9e7;border-color:#e67e22;}
+.alert.success{background:#eafaf1;border-color:#1d8348;}
+.alert strong{font-weight:700;}
+</style>
+</head>
+<body>
+
+<nav class="aip-nav" data-current="troubleshooting-eval">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01</span>
+      <span class="aip-nav-sep">|</span>
+      <a class="aip-nav-back" href="https://tatwan.github.io">← tatwan.github.io</a>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <h3>Domain 4 — Monitoring</h3>
+    <button class="sidebar-btn active" onclick="show('monitoring')">CloudWatch &amp; Observability</button>
+    <button class="sidebar-btn" onclick="show('vectormon')">Vector DB Monitoring</button>
+    <h3>Domain 5 — Troubleshooting</h3>
+    <button class="sidebar-btn" onclick="show('diagnose')">Diagnostic Framework</button>
+    <button class="sidebar-btn" onclick="show('retrieval-ts')">Retrieval Failures</button>
+    <button class="sidebar-btn" onclick="show('generation-ts')">Generation Failures</button>
+    <button class="sidebar-btn" onclick="show('agent-ts')">Agent Failures</button>
+    <h3>Domain 5 — Evaluation</h3>
+    <button class="sidebar-btn" onclick="show('metrics')">Evaluation Metrics</button>
+    <button class="sidebar-btn" onclick="show('ragas')">RAGAS Framework</button>
+    <button class="sidebar-btn" onclick="show('abtesting')">A/B Testing &amp; QA</button>
+    <h3>Security &amp; Governance</h3>
+    <button class="sidebar-btn" onclick="show('security')">Security Controls</button>
+    <button class="sidebar-btn" onclick="show('governance')">Governance &amp; Compliance</button>
+    <h3>Quick Reference</h3>
+    <button class="sidebar-btn" onclick="show('cwqueries')">CloudWatch Queries</button>
+    <button class="sidebar-btn" onclick="show('traps')">Exam Traps</button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ══════════════════════════════════════════
+         MONITORING
+    ══════════════════════════════════════════ -->
+    <div class="section active" id="sec-monitoring">
+      <div class="page-title">
+        <h1>CloudWatch &amp; <span>Observability</span> <span class="badge d4">Domain 4.3</span></h1>
+        <p>GenAI monitoring differs from traditional apps — you need to track token usage, prompt quality, hallucination rates, and retrieval relevance in addition to standard infrastructure metrics.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Bedrock-Specific CloudWatch Metrics</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Metric / Log</th><th>What It Measures</th><th>When to Alert</th></tr>
+            <tr><td><code>InputTokenCount</code></td><td>Tokens consumed in prompts per request</td><td>Sudden spike → prompt injection or runaway context</td></tr>
+            <tr><td><code>OutputTokenCount</code></td><td>Tokens generated in responses</td><td>Consistently near <code>maxTokens</code> → responses being truncated</td></tr>
+            <tr><td><code>InvocationLatency</code></td><td>End-to-end model call latency</td><td>P99 &gt; SLA threshold</td></tr>
+            <tr><td><code>InvocationThrottles</code></td><td>Throttled requests due to quota limits</td><td>Any non-zero value → scale up provisioned throughput</td></tr>
+            <tr><td><code>GuardrailPolicyType</code></td><td>Which specific guardrail policy triggered</td><td>High rate on ContentPolicy → review content filter config</td></tr>
+            <tr><td><strong>Model Invocation Logs</strong></td><td>Full request/response JSON logged to S3/CloudWatch</td><td>Enable for debugging; disable in production if PII present</td></tr>
+          </table>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>GuardrailPolicyType dimension:</strong> Identifies exactly which policy blocked a request — ContentPolicy, TopicPolicy, SensitiveInformationPolicy, PromptAttackPolicy. Use this to distinguish why a block occurred, not just that it occurred.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Monitoring Architecture — Three Layers</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Infrastructure Layer</h5>
+              <ul>
+                <li>Lambda: invocations, errors, duration, concurrency</li>
+                <li>API Gateway: 4xx/5xx rates, latency, cache hit rate</li>
+                <li>SQS: ApproximateNumberOfMessages (queue depth)</li>
+                <li>DynamoDB: read/write capacity consumed vs. provisioned</li>
+                <li>ECS: CPU/memory utilization, task count</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>AI Application Layer</h5>
+              <ul>
+                <li>Token consumption per user / per session</li>
+                <li>Prompt effectiveness score (custom metric)</li>
+                <li>Cache hit rate (semantic &amp; prompt cache)</li>
+                <li>Knowledge Base retrieval latency</li>
+                <li>Guardrail block rate by policy type</li>
+                <li>Agent tool call success/failure rate</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Business Layer</h5>
+              <ul>
+                <li>Cost per query / per user session</li>
+                <li>User satisfaction scores (thumbs up/down)</li>
+                <li>Task completion rate for agents</li>
+                <li>Hallucination rate (from evaluator pipeline)</li>
+                <li>Response quality score trend over time</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>X-Ray Distributed Tracing for GenAI</h2></div>
+        <div class="card-body">
+          <p>X-Ray traces the full request path across services, letting you pinpoint exactly where latency or errors originate:</p>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>API Gateway receives request</strong>X-Ray trace ID generated and propagated downstream.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Lambda invoked</strong>Subsegment created; measure time before Bedrock call. Identify if Lambda code is the bottleneck.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Bedrock InvokeModel call</strong>Subsegment records model call latency separately from Lambda overhead.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>OpenSearch / pgvector retrieval</strong>Subsegment for KB retrieval; isolate vector search latency from model latency.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Response returned</strong>Full trace shows per-segment time breakdown. Service map visualizes bottleneck service.</div></div>
+          </div>
+          <div class="alert info">
+            <strong>X-Ray vs. CloudWatch Logs:</strong> X-Ray for latency attribution across services (where is slow?). CloudWatch Logs for content-level debugging (what did the prompt/response look like?). Use both together.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Anomaly Detection &amp; Alerting</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Anomaly Type</th><th>Detection Method</th><th>Response</th></tr>
+            <tr><td>Token cost spike</td><td>CloudWatch metric alarm on <code>InputTokenCount</code> sum</td><td>SNS alert → Lambda auto-throttle user sessions</td></tr>
+            <tr><td>Guardrail block surge</td><td>CloudWatch alarm on <code>GuardrailCoverage</code> &gt; threshold</td><td>Review prompt injection attack patterns in logs</td></tr>
+            <tr><td>Retrieval quality drop</td><td>CloudWatch custom metric for retrieval score</td><td>Trigger KB re-sync or embedding model refresh</td></tr>
+            <tr><td>Latency regression</td><td>CloudWatch Anomaly Detection band on P99 latency</td><td>Auto-scale or switch to provisioned throughput</td></tr>
+            <tr><td>Hallucination rate increase</td><td>Automated evaluator Lambda checking factuality score</td><td>Alert on-call; roll back prompt template</td></tr>
+          </table>
+          <div class="highlight">
+            <strong>Baseline establishment:</strong> GenAI metrics are variable — token counts and latency fluctuate significantly by request type. Use CloudWatch Anomaly Detection (ML-based) rather than fixed thresholds. Collect 2 weeks of baseline data before enabling anomaly alerts.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         VECTOR DB MONITORING
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-vectormon">
+      <div class="page-title">
+        <h1>Vector Database <span>Monitoring</span> <span class="badge d4">Domain 4.3</span></h1>
+        <p>RAG system performance depends heavily on vector database health. These metrics are specific to high-dimensional operations.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Key Performance Indicators</h2></div>
+        <div class="card-body">
+          <div class="metric-row">
+            <div class="metric"><strong>Query Latency P99</strong>Time for vector similarity search</div>
+            <div class="metric"><strong>Index Build Time</strong>Time to index new documents</div>
+            <div class="metric"><strong>Recall@K</strong>% of true matches in top-K results</div>
+            <div class="metric"><strong>QPS</strong>Queries per second throughput</div>
+            <div class="metric"><strong>Index Size</strong>Memory footprint of vector index</div>
+            <div class="metric"><strong>Shard Health</strong>OpenSearch shard distribution</div>
+          </div>
+          <table class="compare-table" style="margin-top:.8rem;">
+            <tr><th>KPI</th><th>Healthy Range</th><th>Problem Indicator</th></tr>
+            <tr><td>Query latency P99</td><td>&lt; 100ms for HNSW</td><td>&gt; 500ms → index not warmed, over-sharded, or undersized</td></tr>
+            <tr><td>Recall@10</td><td>&gt; 0.95</td><td>&lt; 0.90 → HNSW efSearch too low; index quality degraded</td></tr>
+            <tr><td>Index memory usage</td><td>&lt; 75% of available RAM</td><td>&gt; 90% → risk of OOM; add nodes or reduce vector dimension</td></tr>
+            <tr><td>Shard count per index</td><td>~10GB per shard</td><td>Too many small shards → overhead; too few → hot shards</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>OpenSearch Auto-Tune vs. Manual Tuning</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>OpenSearch Auto-Tune (Built-In)</h5>
+              <ul>
+                <li>Automatically optimizes JVM heap sizing</li>
+                <li>Adjusts shard allocation across nodes</li>
+                <li>Optimizes cache settings (field data, query cache)</li>
+                <li>Schedules optimizations during low-traffic windows</li>
+                <li><strong>Zero new infrastructure</strong> — just enable it</li>
+                <li><strong>Exam answer for "least ops overhead"</strong></li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Manual Tuning Options</h5>
+              <ul>
+                <li>HNSW parameters: <code>m</code> (connections), <code>ef_construction</code> (build quality), <code>ef_search</code> (query quality)</li>
+                <li>Refresh interval: increase for write-heavy workloads</li>
+                <li>Segment merging: control merge policy for index size</li>
+                <li>Replica count: 1 replica = HA; 0 = write performance only</li>
+              </ul>
+            </div>
+          </div>
+          <div class="trap-box" style="margin-top:.8rem;">
+            <h4>⚠ Exam Trap: OpenSearch + ElastiCache</h4>
+            <ul>
+              <li>Adding ElastiCache in front of OpenSearch = additional service to manage, additional cost, cache invalidation complexity</li>
+              <li>The exam question says "least operational overhead" → Auto-Tune wins over ElastiCache every time</li>
+              <li>Only add ElastiCache when the need is specifically caching <em>identical repeated queries</em> (not general latency improvement)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Knowledge Base Ingestion Monitoring</h2></div>
+        <div class="card-body">
+          <p>When using Bedrock Knowledge Bases, ingestion failures log to CloudWatch Logs — not CloudTrail. Know the error codes:</p>
+          <table class="compare-table" style="margin-top:.5rem;">
+            <tr><th>Error Code</th><th>Meaning</th><th>Fix</th></tr>
+            <tr><td><code>RESOURCE_IGNORED</code></td><td>Document skipped (unsupported format, too large, or duplicate)</td><td>Check file format + size limits; deduplicate source data</td></tr>
+            <tr><td><code>EMBEDDING_FAILED</code></td><td>Embedding model call failed (timeout, rate limit)</td><td>Check embedding model quota; add retry with exponential backoff</td></tr>
+            <tr><td><code>INDEXING_FAILED</code></td><td>Vector store write failed (OpenSearch down, auth error)</td><td>Check OpenSearch cluster health; verify IAM permissions for KB</td></tr>
+            <tr><td><code>METADATA_EXTRACTION_FAILED</code></td><td>Metadata parsing failed (malformed JSON/tags)</td><td>Validate metadata format before ingestion</td></tr>
+          </table>
+          <div class="alert info" style="margin-top:.8rem;">
+            <strong>CloudTrail vs. CloudWatch Logs for KB:</strong> CloudTrail logs <em>API calls</em> (who called StartIngestionJob, when). CloudWatch Logs captures <em>document-level ingestion status</em> (which specific document failed and why). For troubleshooting ingestion failures, you need CloudWatch Logs.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         DIAGNOSTIC FRAMEWORK
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-diagnose">
+      <div class="page-title">
+        <h1>Diagnostic <span>Framework</span> <span class="badge d5">Domain 5.2</span></h1>
+        <p>When a GenAI application misbehaves, the first step is isolating <em>which layer</em> is the problem. This framework guides you to the right diagnosis quickly.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>The Four-Layer Diagnostic Model</h2></div>
+        <div class="card-body">
+          <div class="decision-grid">
+            <div class="decision-card retrieval">
+              <h4>Layer 1: Retrieval</h4>
+              <ul>
+                <li>Wrong documents retrieved</li>
+                <li>No results returned</li>
+                <li>Irrelevant chunks in context</li>
+                <li>Stale / outdated information</li>
+                <li>Low recall (missing correct docs)</li>
+              </ul>
+            </div>
+            <div class="decision-card generation">
+              <h4>Layer 2: Generation</h4>
+              <ul>
+                <li>Hallucination (fabricated facts)</li>
+                <li>Off-topic or irrelevant response</li>
+                <li>Format errors (wrong JSON, missing fields)</li>
+                <li>Truncated responses</li>
+                <li>Inconsistent style or language</li>
+              </ul>
+            </div>
+            <div class="decision-card infra">
+              <h4>Layer 3: Infrastructure</h4>
+              <ul>
+                <li>High latency (&gt; expected)</li>
+                <li>Throttling errors (429)</li>
+                <li>Timeout errors</li>
+                <li>Cold start delays</li>
+                <li>Memory / compute exhaustion</li>
+              </ul>
+            </div>
+            <div class="decision-card data">
+              <h4>Layer 4: Data / Input</h4>
+              <ul>
+                <li>PII leakage in output</li>
+                <li>Prompt injection detected</li>
+                <li>Guardrail blocks legitimate content</li>
+                <li>Data quality issues in source docs</li>
+                <li>Schema drift in structured inputs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Step-by-Step Diagnostic Decision Tree</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the response factually wrong or invented?</strong>→ Hallucination → Go to Generation Failures section. Check: was the correct information even in the retrieved context?</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the retrieved context correct but the answer still wrong?</strong>→ Generation issue → model isn't using context correctly. Try: better instruction in system prompt; higher-capability model; fewer distracting chunks.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the retrieved context empty or irrelevant?</strong>→ Retrieval failure → Go to Retrieval Failures section. Check: embedding model mismatch, query preprocessing, chunk quality.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the latency too high?</strong>→ Infrastructure issue. Use X-Ray to identify which service is slow. Check: cold starts, vector DB query time, model inference time separately.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is a guardrail blocking legitimate content?</strong>→ Data/safety layer issue. Check guardrail trace with <code>trace: ENABLED</code>; identify which <code>GuardrailPolicyType</code> triggered; adjust policy thresholds.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Is the problem intermittent?</strong>→ Check for: ThrottlingExceptions (use exponential backoff), embedding model quota limits, OpenSearch shard contention during index refresh.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         RETRIEVAL FAILURES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-retrieval-ts">
+      <div class="page-title">
+        <h1>Retrieval <span>Failure Troubleshooting</span> <span class="badge d5">Domain 5.2</span></h1>
+        <p>Most RAG quality problems trace back to retrieval — wrong chunks, missing chunks, or irrelevant context being passed to the model.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Common Retrieval Failure Patterns</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Symptom</th><th>Root Cause</th><th>Fix</th></tr>
+            <tr><td>Always returns same documents regardless of query</td><td>Embedding model saturating (all vectors similar); poor chunking</td><td>Increase chunk diversity; try different embedding model; add metadata filtering</td></tr>
+            <tr><td>Returns 0 results</td><td>Index empty / not synced; embedding dimension mismatch; query preprocessing issue</td><td>Check KB sync status in CloudWatch; verify embedding dimensions match between index and query</td></tr>
+            <tr><td>Returns technically relevant but contextually wrong docs</td><td>Pure semantic search missing keyword signals</td><td>Switch to hybrid search (BM25 + semantic); add reranker</td></tr>
+            <tr><td>Retrieves outdated information</td><td>KB not re-synced after source update</td><td>Enable S3 Event Notifications → incremental sync (<code>IngestKnowledgeBaseDocuments</code>)</td></tr>
+            <tr><td>Retrieves correct docs but model hallucinates anyway</td><td>Chunks too large (irrelevant content dilutes signal); too many chunks</td><td>Reduce top_k; use smaller, more precise chunks; add reranker to filter top-k</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Embedding &amp; Chunking Issues</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Embedding Model Mismatch</h5>
+              <ul>
+                <li>Document embeddings and query embeddings <strong>must use the same model</strong></li>
+                <li>Changing embedding model → must re-index all documents</li>
+                <li>Check: embedding dimension (e.g., 1536 vs. 3072) matches index config</li>
+                <li>Drift detection: monitor cosine similarity distribution over time</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Chunking Strategy Fixes</h5>
+              <ul>
+                <li><strong>Fixed-size chunks returning wrong context:</strong> Switch to semantic chunking</li>
+                <li><strong>Tables being split across chunks:</strong> Use Bedrock Data Automation + chunking</li>
+                <li><strong>Hierarchical docs (headers + sub-content):</strong> Hierarchical chunking</li>
+                <li><strong>Chunk too short:</strong> Add overlap (10-15%) to preserve context across boundaries</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Reranker Usage</h5>
+              <ul>
+                <li>Retrieve top-50 docs, rerank to top-5 before passing to model</li>
+                <li>Reranker uses cross-encoder (expensive but accurate)</li>
+                <li>When to add: retrieval finds relevant docs but ordering is poor</li>
+                <li>Metrics: compare NDCG@10 before and after reranker</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Query Preprocessing</h5>
+              <ul>
+                <li><strong>HyDE:</strong> Generate a hypothetical answer, embed it, search with that</li>
+                <li><strong>Query expansion:</strong> Add synonyms or related terms before embedding</li>
+                <li><strong>Sub-query decomposition:</strong> Split complex query into 2-3 simpler searches, merge results with RRF</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         GENERATION FAILURES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-generation-ts">
+      <div class="page-title">
+        <h1>Generation <span>Failure Troubleshooting</span> <span class="badge d5">Domain 5.2</span></h1>
+        <p>Generation failures happen at the model layer — hallucination, format errors, and safety blocks are the most common categories.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Hallucination Detection &amp; Prevention</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Detecting Hallucinations</h5>
+              <ul>
+                <li><strong>Citation checking:</strong> Verify every claim in response is supported by a retrieved chunk</li>
+                <li><strong>Faithfulness score:</strong> RAGAS faithfulness metric (automated)</li>
+                <li><strong>LLM-as-Judge:</strong> Use a second model to evaluate factual accuracy</li>
+                <li><strong>Ground truth comparison:</strong> Compare against known-correct answers</li>
+                <li><strong>Bedrock Guardrail trace:</strong> Check <code>groundednessScore</code> if grounding filter enabled</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Prevention Techniques</h5>
+              <ul>
+                <li><strong>Explicit grounding instruction:</strong> "Only use information from the provided context. Say 'I don't know' if the answer isn't in the context."</li>
+                <li><strong>Reduce temperature:</strong> Lower temperature = less creative/hallucinated</li>
+                <li><strong>Citation enforcement:</strong> Require model to cite source chunk IDs</li>
+                <li><strong>Retrieval quality first:</strong> Hallucination drops when relevant context is present</li>
+                <li><strong>Smaller context window:</strong> Fewer chunks reduces off-topic generation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="alert warning">
+            <strong>Important distinction:</strong> Hallucination is a <em>generation</em> problem but its most common cause is a <em>retrieval</em> problem. If the correct information is absent from retrieved context, the model invents an answer. Fix retrieval first.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red"><h2>Format &amp; Safety Block Failures</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Failure Type</th><th>Diagnosis</th><th>Fix</th></tr>
+            <tr><td>JSON output malformed</td><td>Model didn't follow schema; output truncated by maxTokens</td><td>Use JSON mode / constrained generation; increase maxTokens; provide schema in prompt with example</td></tr>
+            <tr><td>Response truncated mid-sentence</td><td><code>maxTokens</code> too low</td><td>Increase maxTokens limit; or add "be concise" instruction to reduce response length</td></tr>
+            <tr><td>Guardrail blocks legitimate queries</td><td>Over-aggressive policy; topic too broad in denied topics list</td><td>Enable Guardrail trace; identify which policy triggered; narrow the policy scope or adjust sensitivity</td></tr>
+            <tr><td>PII in output despite filter</td><td>PII type not covered in sensitive info policy; entity not recognized by model</td><td>Add specific PII types to guardrail; test with Amazon Comprehend for detection validation</td></tr>
+            <tr><td>Prompt injection bypassed guardrail</td><td>Attack pattern not covered by PROMPT_ATTACK filter</td><td>Update Guardrail config; add adversarial examples to filter; use system prompt injection warnings</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AGENT FAILURES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-agent-ts">
+      <div class="page-title">
+        <h1>Agent <span>Failure Troubleshooting</span> <span class="badge d5">Domain 5.2</span></h1>
+        <p>Agent failures are multi-step — the bug could be in tool selection, parameter extraction, tool execution, or response synthesis.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Agent Trace Debugging</h2></div>
+        <div class="card-body">
+          <p>Enable Bedrock Agents trace to see each reasoning step:</p>
+          <div class="code-block">
+<span class="cmt"># Enable trace in Bedrock Agents API call</span>
+response = bedrock_agent_runtime.invoke_agent(
+    agentId=<span class="str">'AGENT_ID'</span>,
+    agentAliasId=<span class="str">'ALIAS_ID'</span>,
+    sessionId=<span class="str">'SESSION_123'</span>,
+    inputText=<span class="str">'user query'</span>,
+    <span class="key">enableTrace</span>=<span class="val">True</span>  <span class="cmt"># Returns step-by-step reasoning</span>
+)
+
+<span class="cmt"># Trace output includes:</span>
+<span class="cmt"># - modelInvocationInput: what was sent to the model</span>
+<span class="cmt"># - rationale: model's reasoning about next action</span>
+<span class="cmt"># - invocationInput: tool call + parameters</span>
+<span class="cmt"># - observation: tool result returned</span>
+<span class="cmt"># - finalResponse: agent's final answer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red"><h2>Common Agent Failure Patterns</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Symptom</th><th>Root Cause</th><th>Fix</th></tr>
+            <tr><td>Agent calls wrong tool</td><td>Tool descriptions are ambiguous or overlapping</td><td>Rewrite tool descriptions with explicit "use when..." guidance; disambiguate similar tools</td></tr>
+            <tr><td>Agent passes wrong parameters to tool</td><td>Parameter names/types unclear; model hallucinated values</td><td>Improve parameter descriptions; add validation in Lambda; use enum types for constrained values</td></tr>
+            <tr><td>Agent loops indefinitely</td><td>Tool returns error agent can't interpret; no exit condition</td><td>Set <code>maxIterations</code>; return structured error objects; add fallback "give up" instruction</td></tr>
+            <tr><td>Agent returns "I couldn't complete the task" without reason</td><td>All tools failed; guardrail blocked; token limit hit</td><td>Check trace for failed tool calls; increase token budget; review guardrail trace</td></tr>
+            <tr><td>Tool Lambda timing out</td><td>Database query too slow; external API rate-limited</td><td>Add DynamoDB caching; implement exponential backoff for external APIs; increase Lambda timeout</td></tr>
+            <tr><td>Agent ignores retrieved KB context</td><td>Tool result format unrecognized by agent; context window overflow</td><td>Standardize tool output format; reduce top-k chunks; prioritize most recent/relevant</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>ThrottlingException Handling</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># Exponential backoff pattern for Bedrock throttling</span>
+<span class="key">import</span> time, random
+
+<span class="key">def</span> invoke_with_retry(client, model_id, body, max_retries=<span class="val">5</span>):
+    <span class="key">for</span> attempt <span class="key">in</span> range(max_retries):
+        <span class="key">try</span>:
+            <span class="key">return</span> client.invoke_model(modelId=model_id, body=body)
+        <span class="key">except</span> client.exceptions.ThrottlingException:
+            <span class="key">if</span> attempt == max_retries - <span class="val">1</span>:
+                <span class="key">raise</span>
+            wait = (<span class="val">2</span> ** attempt) * <span class="val">0.1</span> + random.uniform(<span class="val">0</span>, <span class="val">0.1</span>)
+            time.sleep(wait)  <span class="cmt"># 100ms, 200ms, 400ms + jitter</span>
+  </div>
+          <div class="highlight">
+            <strong>Retry pattern for exam questions:</strong> Initial delay 100ms → double on each retry → add random jitter → circuit breaker after max retries. The jitter prevents thundering herd if many clients retry simultaneously.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         EVALUATION METRICS
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-metrics">
+      <div class="page-title">
+        <h1>Evaluation <span>Metrics</span> <span class="badge d5">Domain 5.1</span></h1>
+        <p>GenAI evaluation requires different metrics than traditional ML. Know which metric to use for which evaluation goal.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Metric Selection Guide</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>What You're Measuring</th><th>Metric</th><th>Range &amp; Interpretation</th></tr>
+            <tr><td>Retrieval ranking quality</td><td><strong>NDCG@K</strong> (Normalized Discounted Cumulative Gain)</td><td>0–1; higher = better; rewards finding relevant docs in top positions</td></tr>
+            <tr><td>First relevant result position</td><td><strong>MRR</strong> (Mean Reciprocal Rank)</td><td>0–1; MRR=1 means first result always relevant; good for single-answer queries</td></tr>
+            <tr><td>% of relevant docs retrieved</td><td><strong>Recall@K</strong></td><td>0–1; "Did we find all relevant docs in top K?" Critical for high-recall use cases</td></tr>
+            <tr><td>% of retrieved docs that are relevant</td><td><strong>Precision@K</strong></td><td>0–1; "How many of our top-K results are actually relevant?"</td></tr>
+            <tr><td>Summarization / translation quality</td><td><strong>ROUGE</strong> (n-gram overlap)</td><td>0–1; ROUGE-1 (unigrams), ROUGE-2 (bigrams), ROUGE-L (longest common subsequence)</td></tr>
+            <tr><td>Machine translation quality</td><td><strong>BLEU</strong> (Bilingual Evaluation Understudy)</td><td>0–1; compares n-gram overlap with human reference; strict on word choice</td></tr>
+            <tr><td>Semantic similarity (meaning-preserving)</td><td><strong>BERTScore</strong></td><td>0–1; uses BERT embeddings; tolerates paraphrasing unlike BLEU/ROUGE</td></tr>
+            <tr><td>Language model quality</td><td><strong>Perplexity</strong></td><td>Lower = better; measures how well model predicts text; not suited for open-ended generation</td></tr>
+          </table>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>BLEU vs. ROUGE:</strong> BLEU = translation quality (precision-focused). ROUGE = summarization quality (recall-focused). BLEU penalizes missing reference words; ROUGE penalizes missing summary content.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>LLM-as-Judge Evaluation</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>What It Is</h5>
+              <ul>
+                <li>Use a powerful LLM (e.g., Claude Opus) to evaluate outputs of another model</li>
+                <li>Judge scores: relevance, factuality, helpfulness, safety, coherence</li>
+                <li>Can replace or augment human evaluators at scale</li>
+                <li>Bedrock supports LLM-as-Judge natively in evaluation jobs</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>When to Use</h5>
+              <ul>
+                <li>No ground truth available (open-ended Q&amp;A)</li>
+                <li>Need scalable evaluation without human labelers</li>
+                <li>Evaluating creative or long-form content</li>
+                <li>A/B testing two model versions at scale</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Limitations</h5>
+              <ul>
+                <li>Judge model can have same biases as evaluated model</li>
+                <li>Positional bias: judge often prefers response listed first</li>
+                <li>Length bias: longer responses rated higher regardless of quality</li>
+                <li>Mitigation: swap order of responses; use multiple judges; calibrate with human labels</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Evaluation Frameworks in AWS</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Framework / Service</th><th>What It Evaluates</th><th>Key Feature</th></tr>
+            <tr><td><strong>Bedrock Model Evaluation</strong></td><td>Built-in evaluation for Bedrock models</td><td>Automated + human evaluation jobs; supports custom metrics</td></tr>
+            <tr><td><strong>SageMaker Clarify</strong></td><td>Bias detection, explainability, drift</td><td>Model cards integration; fairness metrics</td></tr>
+            <tr><td><strong>AgentCore Evaluations</strong></td><td>Agent quality (13 built-in evaluators)</td><td>Task success rate, tool accuracy, response quality</td></tr>
+            <tr><td><strong>RAGAS</strong></td><td>RAG pipeline end-to-end quality</td><td>4 core metrics: faithfulness, answer relevance, context precision, context recall</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         RAGAS
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-ragas">
+      <div class="page-title">
+        <h1>RAGAS <span>Framework</span> <span class="badge d5">Domain 5.1</span></h1>
+        <p>RAGAS (Retrieval Augmented Generation Assessment) is the standard evaluation framework for RAG pipelines. Know all four metrics and what they measure independently.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>The Four RAGAS Metrics</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card" style="border-color:#0073bb;border-width:2px;">
+              <h5 style="color:#0073bb;">1. Faithfulness</h5>
+              <p>Does the generated answer contain <strong>only</strong> information from the retrieved context? Measures hallucination at the answer level.</p>
+              <ul style="margin-top:.4rem;">
+                <li>Score: 0–1 (1 = fully grounded in context)</li>
+                <li>Low score = model is hallucinating or ignoring context</li>
+                <li>Fix: improve grounding instructions; reduce temperature</li>
+              </ul>
+            </div>
+            <div class="concept-card" style="border-color:#1d8348;border-width:2px;">
+              <h5 style="color:#1d8348;">2. Answer Relevance</h5>
+              <p>Does the generated answer <strong>actually address</strong> the user's question? Measures if the response is on-topic.</p>
+              <ul style="margin-top:.4rem;">
+                <li>Score: 0–1 (1 = directly answers the question)</li>
+                <li>Low score = model gave tangential or off-topic response</li>
+                <li>Fix: improve system prompt instructions; better few-shot examples</li>
+              </ul>
+            </div>
+            <div class="concept-card" style="border-color:#7d3c98;border-width:2px;">
+              <h5 style="color:#7d3c98;">3. Context Precision</h5>
+              <p>Of the retrieved chunks, how many were <strong>actually needed</strong> to answer the question? Measures retrieval relevance.</p>
+              <ul style="margin-top:.4rem;">
+                <li>Score: 0–1 (1 = all retrieved chunks were relevant)</li>
+                <li>Low score = retrieval is returning noisy/irrelevant chunks</li>
+                <li>Fix: better chunking; metadata filtering; reranker</li>
+              </ul>
+            </div>
+            <div class="concept-card" style="border-color:#c0392b;border-width:2px;">
+              <h5 style="color:#c0392b;">4. Context Recall</h5>
+              <p>Were <strong>all necessary pieces</strong> of information retrieved? Measures retrieval completeness.</p>
+              <ul style="margin-top:.4rem;">
+                <li>Score: 0–1 (1 = all needed context was retrieved)</li>
+                <li>Low score = relevant docs are in the KB but not being retrieved</li>
+                <li>Fix: increase top-k; improve query preprocessing; hybrid search</li>
+              </ul>
+            </div>
+          </div>
+          <div class="highlight" style="margin-top:.8rem;">
+            <strong>Exam diagnostic pattern:</strong> Low Faithfulness → generation problem. Low Answer Relevance → generation problem. Low Context Precision → retrieval returning noise. Low Context Recall → retrieval missing relevant docs.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>What RAGAS Tells You About Your Pipeline</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>RAGAS Pattern</th><th>Diagnosis</th><th>Fix</th></tr>
+            <tr><td>Low Faithfulness + High Context Precision</td><td>Good retrieval but model ignores context (hallucinates)</td><td>Stronger grounding instructions; lower temperature; citation enforcement</td></tr>
+            <tr><td>High Faithfulness + Low Answer Relevance</td><td>Model uses context faithfully but answers wrong question</td><td>Better query understanding; clarify intent in system prompt</td></tr>
+            <tr><td>Low Context Precision + High Context Recall</td><td>Retrieving too many docs (noisy); recall is fine</td><td>Reduce top-k; add reranker; tighten metadata filter</td></tr>
+            <tr><td>High Context Precision + Low Context Recall</td><td>Retrieved docs are relevant but missing key information</td><td>Increase top-k; improve chunking to avoid splitting key facts</td></tr>
+            <tr><td>All four metrics low</td><td>Systemic failure — likely embedding model or KB indexing issue</td><td>Audit KB ingestion logs; test embedding model independently; re-index</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         A/B TESTING
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-abtesting">
+      <div class="page-title">
+        <h1>A/B Testing <span>&amp; Quality Assurance</span> <span class="badge d5">Domain 5.1</span></h1>
+        <p>Systematic testing before and after changes — new model version, new prompt, new chunking strategy — prevents regressions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>A/B Testing Framework for LLM Changes</h2></div>
+        <div class="card-body">
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-body"><strong>Define the change and success metric</strong>E.g., "Switching from Claude Sonnet to Nova Pro. Success = faithfulness ≥ 0.90 and answer relevance ≥ 0.85 with 20% lower cost."</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Create evaluation dataset</strong>100–500 test queries with expected answers (ground truth). Include edge cases, adversarial inputs, and high-frequency query types.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Run both variants against the dataset</strong>Model A (control) and Model B (treatment) process identical queries. Use Bedrock Model Evaluation jobs or custom evaluation Lambda.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Score with RAGAS + LLM-as-Judge</strong>Automated scoring for all four RAGAS metrics plus cost per query for each variant.</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Statistical significance check</strong>Ensure sample size is large enough (n ≥ 100 per variant) and difference is statistically significant (p &lt; 0.05).</div></div>
+            <div class="flow-step"><div class="flow-step-body"><strong>Canary rollout if variant wins</strong>Route 5% → 20% → 50% → 100% of traffic to new variant. Monitor production metrics at each stage before full rollout.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Regression Testing &amp; Quality Gates</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Regression Test Suite</h5>
+              <ul>
+                <li>Maintain a golden dataset of queries with expected outputs</li>
+                <li>Run on every deployment (CI/CD pipeline)</li>
+                <li>Fail the pipeline if faithfulness &lt; threshold</li>
+                <li>Track metric trends over time (detect gradual drift)</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Quality Gates</h5>
+              <ul>
+                <li><strong>Pre-deploy gate:</strong> Automated RAGAS score on staging dataset</li>
+                <li><strong>Safety gate:</strong> Guardrail test with adversarial inputs</li>
+                <li><strong>Performance gate:</strong> P99 latency &lt; SLA threshold</li>
+                <li><strong>Cost gate:</strong> Average tokens/query within budget</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Synthetic Evaluation Data</h5>
+              <ul>
+                <li>When real labeled data is scarce, generate synthetic test cases</li>
+                <li>Use a powerful LLM to create query-answer pairs from your KB documents</li>
+                <li>Validate synthetic data before using (LLM can make errors)</li>
+                <li>Mix synthetic + real data for best coverage</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SECURITY
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-security">
+      <div class="page-title">
+        <h1>Security <span>Controls</span> <span class="badge d4">Domain 3.2</span></h1>
+        <p>Defense-in-depth for GenAI: seven layers from network to application. Know which AWS service addresses which layer.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Seven-Layer Security Model</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Layer</th><th>Control</th><th>AWS Service</th></tr>
+            <tr><td>1. Network isolation</td><td>Keep traffic off public internet</td><td>VPC + PrivateLink (Interface VPC Endpoints) for Bedrock, S3, DynamoDB</td></tr>
+            <tr><td>2. Identity &amp; Access</td><td>Least-privilege IAM roles; no wildcard permissions</td><td>IAM + AWS Organizations SCPs + IAM Identity Center</td></tr>
+            <tr><td>3. Data protection at rest</td><td>Encrypt all stored data</td><td>KMS (CMK for Bedrock KB, S3, DynamoDB); automatic key rotation</td></tr>
+            <tr><td>4. Data protection in transit</td><td>TLS 1.2+ everywhere</td><td>Enforced by Bedrock, API Gateway; validate certificates</td></tr>
+            <tr><td>5. Input/Output safety</td><td>Filter harmful content, PII, injections</td><td>Bedrock Guardrails; Amazon Comprehend; Amazon Macie</td></tr>
+            <tr><td>6. Monitoring &amp; audit</td><td>Log all access and changes</td><td>CloudTrail (API calls); CloudWatch Logs (app logs); AWS Config (resource drift)</td></tr>
+            <tr><td>7. Fine-grained data access</td><td>Row/column level data access control</td><td>AWS Lake Formation; DynamoDB fine-grained access control</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red"><h2>PII Detection &amp; Redaction</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Bedrock Guardrails (PII)</h5>
+              <ul>
+                <li>Supported actions: <strong>BLOCK</strong>, <strong>MASK</strong>, <strong>ANONYMIZE</strong>, <strong>DETECT</strong></li>
+                <li>Per entity type: name, SSN, credit card, phone, email, address</li>
+                <li>Applied to: input (pre-model), output (post-model), or both</li>
+                <li>Only one global <code>blockedInputMessaging</code> and <code>blockedOutputsMessaging</code> — not per entity type</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Amazon Comprehend</h5>
+              <ul>
+                <li>PII detection and redaction in text at scale</li>
+                <li>Supports 100+ PII entity types</li>
+                <li>Redact mode: replace with <code>[PII]</code> placeholder</li>
+                <li>Use for: batch document scanning, preprocessing before KB ingestion</li>
+                <li>Also: sentiment analysis, entity recognition, key phrase extraction</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Amazon Macie</h5>
+              <ul>
+                <li>Automated sensitive data discovery in <strong>S3 buckets</strong></li>
+                <li>Detects: PII, financial data, credentials in stored files</li>
+                <li>Use for: ongoing monitoring of S3 data lake for sensitive content</li>
+                <li>Alerts when new sensitive data appears in monitored buckets</li>
+              </ul>
+            </div>
+          </div>
+          <div class="highlight">
+            <strong>Decision rule:</strong> Guardrails = real-time PII filtering at model I/O boundary. Comprehend = batch processing or pre-ingestion scanning. Macie = S3 data lake monitoring for sensitive data discovery.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>IAM Enforcement for Guardrails</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># IAM Deny policy — forces all Bedrock calls to include a guardrail</span>
+{
+  <span class="key">"Effect"</span>: <span class="str">"Deny"</span>,
+  <span class="key">"Action"</span>: [<span class="str">"bedrock:InvokeModel"</span>, <span class="str">"bedrock:Converse"</span>],
+  <span class="key">"Resource"</span>: <span class="str">"*"</span>,
+  <span class="key">"Condition"</span>: {
+    <span class="key">"StringNotEquals"</span>: {
+      <span class="key">"bedrock:GuardrailIdentifier"</span>: [
+        <span class="str">"guardrail-id-prod-v1"</span>,
+        <span class="str">"guardrail-id-prod-v2"</span>
+      ]
+    }
+  }
+}
+<span class="cmt"># Any InvokeModel call WITHOUT a valid GuardrailIdentifier is DENIED</span>
+<span class="cmt"># This is the CENTRAL enforcement mechanism — no proxy Lambda needed</span>
+          </div>
+          <div class="alert info" style="margin-top:.8rem;">
+            <strong>Exam pattern:</strong> "Force all developers to use guardrails on every Bedrock call" → IAM Deny with <code>bedrock:GuardrailIdentifier</code> condition key. This is stronger than documentation or guidelines — it's technically enforced at the API level.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         GOVERNANCE
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-governance">
+      <div class="page-title">
+        <h1>AI Governance <span>&amp; Compliance</span> <span class="badge d4">Domain 3.3–3.4</span></h1>
+        <p>Governance ensures AI systems are deployed responsibly, with audit trails, model versioning, and compliance frameworks in place.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Governance, Security, and Compliance Triad</h2></div>
+        <div class="card-body">
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>Governance</h5>
+              <ul>
+                <li>Framework of rules, practices, and processes</li>
+                <li>Defines who has authority and accountability</li>
+                <li>SageMaker Model Registry: version control for models</li>
+                <li>SageMaker Model Cards: document model metadata, intended use, limitations</li>
+                <li>AWS Organizations SCPs: prevent policy violations across accounts</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Compliance</h5>
+              <ul>
+                <li>Adhering to laws, regulations, and internal policies</li>
+                <li>HIPAA: PHI encryption + access logging + BAA with AWS</li>
+                <li>SOC2: audit logging, access controls, change management</li>
+                <li>FedRAMP: requires GovCloud region; PrivateLink required</li>
+                <li>GDPR: right to erasure → document data lineage</li>
+                <li>AWS Artifact: download compliance reports</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Audit &amp; Monitoring</h5>
+              <ul>
+                <li><strong>CloudTrail:</strong> All API calls logged (who, when, what) — immutable</li>
+                <li><strong>AWS Config:</strong> Resource configuration drift detection</li>
+                <li><strong>CloudWatch Logs:</strong> Application-level audit trail</li>
+                <li><strong>S3 Object Lock:</strong> WORM compliance for audit logs</li>
+                <li><strong>Macie:</strong> Monitor for accidental PII exposure in S3</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>SageMaker Model Cards</h2></div>
+        <div class="card-body">
+          <p>Model Cards provide structured documentation for ML models — a governance requirement for responsible AI deployment.</p>
+          <div class="concept-grid">
+            <div class="concept-card">
+              <h5>What Model Cards Document</h5>
+              <ul>
+                <li>Model description and intended use cases</li>
+                <li>Training data description and known biases</li>
+                <li>Evaluation results (performance metrics by demographic)</li>
+                <li>Ethical considerations and limitations</li>
+                <li>Model version and deployment history</li>
+              </ul>
+            </div>
+            <div class="concept-card">
+              <h5>Integration with Model Registry</h5>
+              <ul>
+                <li>Each model version in SageMaker Model Registry links to its Model Card</li>
+                <li>Approval workflow: models require approval before prod deployment</li>
+                <li>SageMaker Clarify generates bias reports attached to Model Cards</li>
+                <li>SageMaker Model Dashboard: unified view of all deployed models</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Responsible AI — Bias &amp; Explainability</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Tool / Feature</th><th>Purpose</th><th>When to Use</th></tr>
+            <tr><td><strong>SageMaker Clarify</strong></td><td>Bias detection in training data &amp; model predictions; feature importance (SHAP)</td><td>Before and after model training to audit fairness</td></tr>
+            <tr><td><strong>SageMaker Model Monitor</strong></td><td>Detect data drift and model quality drift in production</td><td>After deployment to catch degradation over time</td></tr>
+            <tr><td><strong>Bedrock Guardrails (grounding)</strong></td><td>Prevent model from making claims not supported by retrieved context</td><td>RAG applications where hallucination is a compliance risk</td></tr>
+            <tr><td><strong>Amazon Augmented AI (A2I)</strong></td><td>Human review workflow for low-confidence AI predictions</td><td>When automated decisions need human oversight (lending, healthcare)</td></tr>
+          </table>
+          <div class="highlight">
+            <strong>Fairness metrics (SageMaker Clarify):</strong> Demographic parity difference, disparate impact, equal opportunity difference. These measure whether model performance differs across demographic groups.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CLOUDWATCH QUERIES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-cwqueries">
+      <div class="page-title">
+        <h1>CloudWatch <span>Insights Queries</span></h1>
+        <p>Ready-to-use CloudWatch Logs Insights queries for diagnosing common GenAI application issues.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy"><h2>Token Usage &amp; Cost Queries</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># High token consumption sessions (top 20)</span>
+fields @timestamp, sessionId, inputTokens, outputTokens
+| filter inputTokens + outputTokens &gt; 5000
+| sort (inputTokens + outputTokens) desc
+| limit 20
+          </div>
+          <div class="code-block" style="margin-top:.6rem;">
+<span class="cmt"># Token usage trend by hour</span>
+stats sum(inputTokens) as totalInput, sum(outputTokens) as totalOutput
+| by bin(1h)
+| sort @timestamp asc
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header green"><h2>Latency &amp; Performance Queries</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># P50/P90/P99 latency breakdown</span>
+stats percentile(latencyMs, 50) as p50,
+      percentile(latencyMs, 90) as p90,
+      percentile(latencyMs, 99) as p99
+| by bin(5m)
+          </div>
+          <div class="code-block" style="margin-top:.6rem;">
+<span class="cmt"># Slow requests (> 10 seconds)</span>
+fields @timestamp, requestId, latencyMs, modelId, inputTokens
+| filter latencyMs &gt; 10000
+| sort latencyMs desc
+| limit 50
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header blue"><h2>Error &amp; Guardrail Queries</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># Throttling errors by minute</span>
+filter @message like /ThrottlingException/
+| stats count(*) as throttleCount by bin(1m)
+| sort @timestamp asc
+          </div>
+          <div class="code-block" style="margin-top:.6rem;">
+<span class="cmt"># KB ingestion failures by error type</span>
+fields @timestamp, documentId, errorCode, errorMessage
+| filter errorCode in ["RESOURCE_IGNORED","EMBEDDING_FAILED","INDEXING_FAILED"]
+| stats count(*) as failures by errorCode
+| sort failures desc
+          </div>
+          <div class="code-block" style="margin-top:.6rem;">
+<span class="cmt"># Guardrail blocks by policy type</span>
+fields @timestamp, requestId, guardrailPolicyType, action
+| filter action = "BLOCKED"
+| stats count(*) as blockCount by guardrailPolicyType
+| sort blockCount desc
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header purple"><h2>Agent Debugging Queries</h2></div>
+        <div class="card-body">
+          <div class="code-block">
+<span class="cmt"># Failed tool calls in Bedrock Agents</span>
+fields @timestamp, sessionId, toolName, errorType, errorMessage
+| filter type = "TOOL_CALL_FAILURE"
+| stats count(*) as failures by toolName, errorType
+| sort failures desc
+          </div>
+          <div class="code-block" style="margin-top:.6rem;">
+<span class="cmt"># Agent sessions that exceeded max iterations</span>
+fields @timestamp, sessionId, iterationCount, finalStatus
+| filter finalStatus = "MAX_ITERATIONS_EXCEEDED"
+| sort iterationCount desc
+| limit 20
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         EXAM TRAPS
+    ══════════════════════════════════════════ -->
+    <div class="section" id="sec-traps">
+      <div class="page-title">
+        <h1>Exam Traps — <span>Monitoring, Troubleshooting &amp; Evaluation</span></h1>
+        <p>The most common wrong-answer choices in Domain 4 and 5 questions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header red"><h2>Monitoring &amp; Troubleshooting Traps</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Trap</th><th>Wrong Answer</th><th>Correct Answer</th></tr>
+            <tr><td>KB ingestion failures</td><td>CloudTrail (logs API calls)</td><td>CloudWatch Logs (EMBEDDING_FAILED, INDEXING_FAILED, RESOURCE_IGNORED)</td></tr>
+            <tr><td>Which guardrail policy blocked?</td><td>CloudTrail events</td><td>GuardrailPolicyType CloudWatch metric dimension</td></tr>
+            <tr><td>OpenSearch latency with least ops overhead</td><td>Add ElastiCache in front</td><td>Enable OpenSearch Auto-Tune (built-in, no new service)</td></tr>
+            <tr><td>Multi-service latency attribution</td><td>CloudWatch Logs only</td><td>AWS X-Ray (shows per-service breakdown in trace)</td></tr>
+            <tr><td>Guardrail per-action-type custom message</td><td>"Bedrock Guardrails settings per PII type"</td><td>Not possible — only one global blockedInputMessaging + blockedOutputsMessaging per guardrail</td></tr>
+            <tr><td>Force guardrail use on all API calls</td><td>Custom proxy Lambda</td><td>IAM Deny with bedrock:GuardrailIdentifier condition key</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold"><h2>Evaluation Metric Traps</h2></div>
+        <div class="card-body">
+          <table class="compare-table">
+            <tr><th>Trap</th><th>Wrong Answer</th><th>Correct Answer</th></tr>
+            <tr><td>Measuring if retrieved docs are in correct order</td><td>ROUGE</td><td>NDCG@K (accounts for position of relevant documents)</td></tr>
+            <tr><td>Measuring summarization quality</td><td>BLEU</td><td>ROUGE (BLEU is for translation; ROUGE for summarization)</td></tr>
+            <tr><td>Semantic similarity (paraphrase-tolerant)</td><td>BLEU or ROUGE</td><td>BERTScore (uses embeddings, not n-gram overlap)</td></tr>
+            <tr><td>RAG faithfulness (no hallucination)</td><td>BLEU score</td><td>RAGAS Faithfulness metric</td></tr>
+            <tr><td>Retrieval missing relevant docs</td><td>Low Context Precision</td><td>Low Context Recall (Precision = noise in retrieved; Recall = missed relevant)</td></tr>
+            <tr><td>A/B testing LLM versions for correctness</td><td>Run on 5 examples manually</td><td>Automated evaluation with LLM-as-Judge on 100+ query golden dataset</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

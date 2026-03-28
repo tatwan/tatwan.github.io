@@ -132,7 +132,9 @@
 .aip-nav[data-current="flashcards"] [data-tab="flashcards"],
 .aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
 .aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
-.aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"],
+.aip-nav[data-current="advanced-impl"] [data-tab="advanced-impl"],
+.aip-nav[data-current="troubleshooting-eval"] [data-tab="troubleshooting-eval"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
 @media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
 </style>
 </head>
@@ -153,6 +155,8 @@
       <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
       <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
     </div>
   </div>
 </nav>
@@ -166,13 +170,9 @@
             <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
           </div>
           <h1 class="text-xl font-bold text-primary-700 dark:text-primary-300">AIP-C01 Study Guide</h1>
-          <a href="index.html" class="btn-interactive hidden lg:inline-flex items-center rounded-lg bg-primary-100 dark:bg-primary-800 px-3 py-2 text-sm font-semibold text-primary-700 dark:text-primary-200">Study Hub</a>
-          <a href="study-guide.html" class="btn-interactive hidden lg:inline-flex items-center rounded-lg bg-accent-100 dark:bg-accent-800 px-3 py-2 text-sm font-semibold text-accent-700 dark:text-accent-200">Study Guide</a>
         </div>
         
         <nav class="hidden md:flex items-center space-x-6">
-          <a href="index.html" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Study Hub</a>
-          <a href="study-guide.html" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Study Guide</a>
           <a href="#home" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Home</a>
           <a href="#bedrock" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">Bedrock</a>
           <a href="#sagemaker" class="btn-interactive text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors">SageMaker</a>

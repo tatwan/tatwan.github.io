@@ -124,6 +124,51 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-seri
 .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; margin:0.8rem 0; }
 @media(max-width:700px) { .two-col,.three-col { grid-template-columns:1fr; } }
 
+/* ── Mobile sidebar drawer ── */
+.mobile-menu-btn {
+  display:none;
+  align-items:center;
+  gap:0.5rem;
+  background:var(--aws-orange);
+  color:#111;
+  border:none;
+  border-radius:6px;
+  padding:0.45rem 0.9rem;
+  font-size:0.9rem;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.sidebar-overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:998;
+}
+@media(max-width:768px) {
+  .mobile-menu-btn { display:flex; }
+  .layout { display:block; }
+  .sidebar {
+    position:fixed;
+    top:0; left:-290px;
+    width:275px;
+    height:100vh;
+    z-index:999;
+    transition:left 0.28s ease;
+    box-shadow:none;
+    padding-top:1rem;
+  }
+  .sidebar.open {
+    left:0;
+    box-shadow:6px 0 28px rgba(0,0,0,0.22);
+  }
+  .sidebar-overlay.open { display:block; }
+  .content { padding:1rem; }
+  .search-bar { display:flex; gap:0.6rem; align-items:center; padding:0.6rem 1rem; }
+  .search-bar input { flex:1; }
+}
+
 .service-chip { display:inline-flex; align-items:center; gap:0.3rem; background:#fff; border:1px solid var(--border); border-radius:6px; padding:0.3rem 0.7rem; margin:0.2rem; font-size:0.78rem; cursor:pointer; transition:all 0.15s; }
 .service-chip:hover { border-color:var(--aws-orange); color:var(--aws-orange); }
 .service-chip .dot { width:8px; height:8px; border-radius:50%; }
@@ -189,6 +234,8 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
       <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
     </div>
   </div>
 </nav>
@@ -206,8 +253,10 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 </div>
 
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="🔍  Search topics, services, concepts... (e.g. 'guardrails', 'RAG chunking', 'Nova Forge')" oninput="handleSearch(this.value)">
+  <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle navigation menu">☰ Topics</button>
+  <input type="text" id="searchInput" placeholder="🔍  Search topics, services, concepts..." oninput="handleSearch(this.value)">
 </div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 
 <div class="layout">
@@ -2067,6 +2116,31 @@ document.querySelectorAll('.sidebar-btn').forEach(btn => {
 // ============ SERVICES VIEW — default show bedrock ============
 document.querySelectorAll('.svc-panel').forEach((p, i) => {
   if (i > 0) p.style.display = 'none';
+});
+
+// ============ MOBILE SIDEBAR DRAWER ============
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    closeSidebar();
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close sidebar automatically when a topic is selected on mobile
+document.querySelectorAll('.sidebar-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
 });
 </script>
 
