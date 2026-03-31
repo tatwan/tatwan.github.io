@@ -266,6 +266,11 @@ body {
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
       <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
       <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#445;font-size:11px;">|</span>
+      <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
+      <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
+      <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
+      <a class="aip-tab" data-tab="study-d45" href="study-d45.html">D4-5</a>
     </div>
   </div>
 </nav>
@@ -428,6 +433,25 @@ body {
               <strong>Troubleshoot &amp; Eval</strong>
               <span>Monitoring, RAGAS, troubleshooting framework, A/B testing, security, governance. Covers Domain 5 gap.</span>
             </a>
+            <div style="border-top:1px solid #e5edf5;margin:6px 0;padding-top:10px;">
+              <div style="font-size:0.75rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">🎯 Gap-Targeted Domain Guides</div>
+            </div>
+            <a href="study-d1.html">
+              <strong>Domain 1 — Data &amp; FM Selection</strong>
+              <span>FM selection, distillation, BDA, chunking, vector stores, semantic cache, KB sync.</span>
+            </a>
+            <a href="study-d2.html">
+              <strong>Domain 2 — Agentic &amp; Deployment</strong>
+              <span>Strands+MCP, ReAct, SageMaker inference types, shadow test, async processing, API GW.</span>
+            </a>
+            <a href="study-d3.html">
+              <strong>Domain 3 — Responsible AI</strong>
+              <span>Guardrails map, IAM Identity Center, VPC endpoints, OIDC+Cognito, PII, BOLD dataset.</span>
+            </a>
+            <a href="study-d45.html">
+              <strong>Domain 4 &amp; 5 — Ops &amp; Evaluation</strong>
+              <span>Batch inference, semantic caching, CloudWatch GenAI, CreateEvaluationJob, troubleshooting.</span>
+            </a>
           </div>
 
           <div class="tips">
@@ -443,6 +467,84 @@ body {
         </div>
       </section>
     </div>
+
+    <!-- Gap-Targeted Domain Study Guides Section -->
+    <section style="margin-top:22px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,#e5edf5 0%,transparent 100%);"></div>
+        <span style="font-size:0.8rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">🎯 Gap-Targeted Domain Study Guides</span>
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent 0%,#e5edf5 100%);"></div>
+      </div>
+      <p style="margin:0 0 14px;color:#5f6b7a;font-size:0.9rem;line-height:1.6;">These four guides are driven by your specific weak spots from 120 practice questions. Each one covers tips, gotchas, mental traps, and service decision rules — not wrong/right answer lists.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+
+        <a href="study-d1.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🗄️</div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 1</div>
+              <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Data &amp; FM Selection</div>
+            </div>
+          </div>
+          <p style="margin:0 0 12px;color:#5f6b7a;font-size:0.88rem;line-height:1.6;">FM selection criteria, model distillation, BDA blueprints, embedding chunking strategies, vector stores, semantic cache, KB sync patterns.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">BDA</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">RAG &amp; Chunking</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Distillation</span>
+          </div>
+        </a>
+
+        <a href="study-d2.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🤖</div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 2</div>
+              <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Agentic &amp; Deployment</div>
+            </div>
+          </div>
+          <p style="margin:0 0 12px;color:#5f6b7a;font-size:0.88rem;line-height:1.6;">Strands SDK + MCP, Bedrock Flows vs agents, ReAct vs CoT, SageMaker inference types, shadow testing, async pipelines, API Gateway patterns.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Strands+MCP</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Shadow Test</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Inference Types</span>
+          </div>
+        </a>
+
+        <a href="study-d3.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#15803d,#4ade80);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🛡️</div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 3</div>
+              <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Responsible AI &amp; Security</div>
+            </div>
+          </div>
+          <p style="margin:0 0 12px;color:#5f6b7a;font-size:0.88rem;line-height:1.6;">Guardrails component map, monitoring metrics/dimensions, IAM Identity Center vs IAM, VPC Interface endpoint, OIDC+Cognito, PII toolkit, BOLD dataset.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Guardrails</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">IAM IdC</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">VPC Endpoints</span>
+          </div>
+        </a>
+
+        <a href="study-d45.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#c2410c,#fb923c);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">📊</div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 4 &amp; 5</div>
+              <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Ops, Evaluation &amp; Troubleshoot</div>
+            </div>
+          </div>
+          <p style="margin:0 0 12px;color:#5f6b7a;font-size:0.88rem;line-height:1.6;">Batch inference for cost, semantic caching, CloudWatch GenAI observability, CreateEvaluationJob API, 1,000-prompt limit, Cognito workforce, troubleshooting decision table.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Evaluation</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">CloudWatch GenAI</span>
+            <span style="background:#eef4ff;border:1px solid #d5e3ff;border-radius:999px;padding:4px 9px;font-size:0.7rem;font-weight:700;color:#334155;">Troubleshooting</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
   </div>
 </body>
 </html>

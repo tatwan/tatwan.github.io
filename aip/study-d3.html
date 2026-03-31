@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Domain 3 — Safety, Security &amp; Governance</title>
+<style>
+:root{--bg:#0b0b18;--card:#11112a;--border:#1e1e3e;--text:#dde;--muted:#666;--hero-a:#1a0000;--hero-b:#0a0020;--hero-c:#6a0000}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13.5px;line-height:1.6}a{color:#7aade8;text-decoration:none}
+.topnav{background:#080818;border-bottom:1px solid var(--border);padding:9px 18px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}.topnav .brand{font-size:11px;color:var(--muted);margin-right:6px}.topnav a{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:3px 11px;font-size:11px;color:#aac}.topnav a.active{background:#2a0a0a;border-color:#6a1a1a;color:#faa}.topnav a:hover{background:#1a1a35;text-decoration:none}
+.hero{padding:20px 22px 14px;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));border-bottom:2px solid var(--hero-c)}.hero h1{font-size:18px;font-weight:800}.hero p{font-size:12px;color:#aab;margin-top:4px}.score-row{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}.score-badge{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:3px 11px;font-size:11px}.score-badge .n{font-weight:800;font-size:14px;margin-right:3px}.ok .n{color:#e67e22}.good .n{color:#2ecc71}.bad .n{color:#e74c3c}
+.sec{margin:14px 16px}.sec-title{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}.sec-title span{color:#ff8888;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:9px}.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 14px}.card.wide{grid-column:1/-1}.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#8899bb;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.tip,.gotcha,.remember,.when,.avoid,.note{border-radius:0 4px 4px 0;padding:5px 9px;margin-bottom:5px;font-size:12.5px;line-height:1.5}
+.tip{background:rgba(41,128,185,.1);border-left:3px solid #2980b9;color:#b0cce8}.tip::before{content:"💡 "}
+.gotcha{background:rgba(192,57,43,.1);border-left:3px solid #c0392b;color:#daa}.gotcha::before{content:"⚠️ "}
+.remember{background:rgba(142,68,173,.1);border-left:3px solid #8e44ad;color:#ccb}.remember::before{content:"🧠 "}
+.when{background:rgba(22,160,133,.1);border-left:3px solid #16a085;color:#adc}.when::before{content:"🎯 "}
+.avoid{background:rgba(243,156,18,.08);border-left:3px solid #f39c12;color:#cba}.avoid::before{content:"🚫 "}
+.note{background:#111128;border-left:3px solid #333;color:#889}.note::before{content:"📎 "}
+table.cmp{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0}table.cmp th{background:#0d0d22;color:#8899bb;padding:5px 9px;border:1px solid var(--border);text-align:left}table.cmp td{padding:4px 9px;border:1px solid #161630;vertical-align:top}table.cmp tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.vs-use,.vs-no{border-radius:5px;padding:8px 10px;font-size:12px}.vs-use{border:1px solid #1a4a1a;background:rgba(39,174,96,.06)}.vs-no{border:1px solid #4a1a1a;background:rgba(192,57,43,.06)}.vs-use h4{color:#2ecc71;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-no h4{color:#e74c3c;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-use li,.vs-no li{list-style:none;padding:1.5px 0;font-size:11.5px}
+code{background:#141430;color:#7fc;font-size:11px;padding:1px 5px;border-radius:3px;font-family:monospace}strong{color:#ddf}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:10px}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="brand">AIP-C01</span>
+  <a href="study-d1.html">Domain 1</a>
+  <a href="study-d2.html">Domain 2</a>
+  <a href="study-d3.html" class="active">Domain 3</a>
+  <a href="study-d45.html">Domain 4 &amp; 5</a>
+  <a href="gap-cheatsheet.html">Gap Sheet</a>
+  <a href="index.html">🏠 Home</a>
+</nav>
+
+<div class="hero">
+  <h1>🔴 Domain 3 — AI Safety, Security &amp; Governance</h1>
+  <p>Subdomains 3.1–3.4 · You scored 0% on ALL subdomains in Set 1 — highest priority domain</p>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 3.1 GUARDRAILS                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>3.1</span> — Input &amp; Output Safety Controls (Guardrails)</div>
+<div class="grid">
+
+  <div class="card wide">
+    <h3>Guardrails Component Map — Know What Each Part Does</h3>
+    <table class="cmp">
+      <tr><th>Component</th><th>What It Catches</th><th>Key Exam Trigger</th></tr>
+      <tr><td><strong>Content filters</strong></td><td>Harmful content: violence, hate speech, sexual content, insults — by category and severity level</td><td>"Block toxic or offensive AI responses"</td></tr>
+      <tr><td><strong>Denied topics</strong></td><td>Specific off-topic subjects you define (e.g., competitors, cryptocurrencies, politics)</td><td>"Prevent discussion of [specific topic]"</td></tr>
+      <tr><td><strong>Word filters</strong></td><td>Specific words or phrases you blocklist</td><td>"Block profanity" or custom forbidden terms</td></tr>
+      <tr><td><strong>Sensitive info / PII</strong></td><td>Credit cards, SSNs, phone numbers, emails — detect and/or redact in I/O</td><td>"Prevent PII exposure in AI responses"</td></tr>
+      <tr><td><strong>Contextual grounding</strong></td><td>Hallucinations — responses not supported by retrieved context</td><td>"Ensure RAG responses are grounded in retrieved docs"</td></tr>
+      <tr><td><strong>Prompt attack filter</strong></td><td>Prompt injection, jailbreaks, instruction override attempts</td><td>"Prevent users from overriding the system prompt" or "SQL injection via prompt"</td></tr>
+    </table>
+    <div class="gotcha">The most common trap: using "denied topics" to block injection attacks. Denied topics = content restrictions (what the model talks about). Prompt attack filter = security (preventing manipulation of the model). These are completely different things.</div>
+  </div>
+
+  <div class="card">
+    <h3>Guardrails Monitoring — The Right Metric Dimension</h3>
+    <div class="tip">To monitor which guardrail policies are triggering, use the <strong><code>InvocationsIntervened</code></strong> metric filtered by the <strong><code>GuardrailPolicyType</code></strong> dimension.</div>
+    <div class="remember"><code>GuardrailPolicyType</code> dimension values:
+      <code>ContentPolicy</code> · <code>TopicPolicy</code> · <code>SensitiveInformationPolicy</code> · <code>WordPolicy</code> · <code>GroundingPolicy</code>
+    </div>
+    <div class="gotcha"><code>GuardrailContentSource</code> = filters by whether the intervention was on INPUT or OUTPUT — a different dimension. The exam will swap these two dimensions on you.</div>
+    <div class="tip">Always enable tracing first: set <code>{"trace": "enabled"}</code> in <code>guardrailConfig</code> on your API call. Without this, you get no per-policy intervention details.</div>
+  </div>
+
+  <div class="card">
+    <h3>Enforcing Guardrails — IAM Condition Key (Not Lambda Proxy)</h3>
+    <div class="tip">To enforce that ALL calls to Bedrock use a specific guardrail, add this IAM condition to the policies of every role that accesses Bedrock:</div>
+    <div class="remember"><code>bedrock:GuardrailIdentifier</code> condition key on <code>InvokeModel</code> and <code>Converse</code> API actions. This makes it impossible for any caller to skip the guardrail.</div>
+    <div class="gotcha">Lambda proxy approach (all Bedrock calls go through a validation Lambda) adds latency, creates a single point of failure, and still requires additional enforcement to prevent direct Bedrock access. IAM conditions enforce at the API level — no bypass possible.</div>
+    <div class="when">Scenario: "ensure ALL FM interactions are secured with guardrails, no exceptions" → IAM condition key <code>bedrock:GuardrailIdentifier</code> applied to all roles accessing Bedrock.</div>
+  </div>
+
+  <div class="card">
+    <h3>Guardrails for Non-Bedrock Models (SageMaker)</h3>
+    <div class="tip">Even if your FM is deployed on SageMaker (not Bedrock), you can still apply Bedrock Guardrails to its I/O by calling the Guardrails API separately and applying the filter to the model's input/output.</div>
+    <div class="tip">Pattern: SageMaker inference → Lambda post-processor → EventBridge event → Lambda applies Bedrock Guardrails to the output.</div>
+    <div class="gotcha">SageMaker Clarify = bias detection and explainability for ML training. It is not a runtime content safety tool. Using SageMaker Clarify + Model Monitor to enforce usage policies is the wrong architecture.</div>
+    <div class="remember">Bedrock Guardrails = runtime content safety for any FM (Bedrock or SageMaker). SageMaker Clarify = training-time fairness analysis.</div>
+  </div>
+
+  <div class="card">
+    <h3>WAF vs Guardrails — Two Different Attack Surfaces</h3>
+    <div class="vs">
+      <div class="vs-use">
+        <h4>Bedrock Guardrails Handles</h4>
+        <li>Harmful AI content (toxic, violent, offensive)</li>
+        <li>Prompt injection / jailbreaks</li>
+        <li>PII in AI I/O</li>
+        <li>Off-topic AI responses</li>
+        <li>RAG hallucinations (contextual grounding)</li>
+        <li>✓ AI-layer safety and control</li>
+      </div>
+      <div class="vs-no">
+        <h4>AWS WAF Handles</h4>
+        <li>HTTP-layer attacks (SQLi, XSS, path traversal)</li>
+        <li>DDoS protection at CloudFront/ALB layer</li>
+        <li>Bot protection, rate limiting</li>
+        <li>IP reputation blocking</li>
+        <li>✗ Does NOT understand AI content</li>
+        <li>✗ Does NOT prevent prompt injection</li>
+      </div>
+    </div>
+    <div class="gotcha">WAF protects your web application's HTTP layer. Guardrails protect your AI model's I/O. A prompt injection attack passes through WAF as valid HTTP — WAF has no concept of "this text is trying to jailbreak an LLM." Only Guardrails understands that.</div>
+  </div>
+
+  <div class="card">
+    <h3>Contextual Grounding for RAG Quality</h3>
+    <div class="tip">Contextual grounding checks compare the model's response against the retrieved context. If the model says something that isn't supported by the retrieved documents, the grounding check intervenes.</div>
+    <div class="when">Scenario: "RAG application, need to ensure responses are based only on retrieved documents, prevent hallucination" → enable <strong>contextual grounding checks</strong> in Bedrock Guardrails. Not SageMaker Clarify, not custom Lambda validation.</div>
+    <div class="remember">Two thresholds: <strong>groundedness</strong> (response supported by context) and <strong>relevance</strong> (response addresses the query). Both configurable.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 3.2 DATA SECURITY & PRIVACY        -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>3.2</span> — Data Security &amp; Privacy Controls</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>IAM Identity Center — The Enterprise Identity Answer</h3>
+    <div class="tip"><strong>AWS IAM Identity Center</strong> is the right answer whenever the scenario involves enterprise employees needing access to AWS services, especially when a corporate directory (Active Directory, Microsoft Entra ID, Okta) is already in use.</div>
+    <div class="remember">Pattern: Corporate IdP (Entra ID / AD) → IAM Identity Center → <strong>Permission Sets</strong> (define what access each role gets) → assigned to AWS accounts. Permission sets can include Bedrock model-specific access conditions.</div>
+    <div class="gotcha">Creating IAM users that mirror Active Directory usernames is an anti-pattern. You end up managing two identity systems, credentials can drift, and there's no single source of truth. IAM Identity Center federates to AD — users sign in with their AD credentials.</div>
+    <div class="when">Scenario mentions: "corporate Active Directory," "Microsoft Entra ID," "employees need access," "consistent permissions across accounts" → IAM Identity Center + permission sets. Every time.</div>
+  </div>
+
+  <div class="card">
+    <h3>OIDC + Cognito for App Authentication (Not IAM Users)</h3>
+    <div class="tip">For third-party apps or web/mobile apps that need to access AWS resources (including Bedrock), use: existing IdP → <strong>Amazon Cognito</strong> via OIDC → Cognito exchanges IdP tokens for temporary AWS credentials via STS.</div>
+    <div class="remember">Temporary credentials from STS expire automatically — no long-lived secrets to rotate, no Secrets Manager needed for this purpose. That's the security advantage.</div>
+    <div class="gotcha">Creating IAM users + Secrets Manager rotation is operationally heavy and still uses long-lived credentials. OIDC + Cognito = federated, temporary, auditable. IAM users = static credentials, rotation risk.</div>
+    <div class="tip">Cognito user pools = user directory for authentication. Cognito identity pools = exchange third-party tokens for AWS credentials. The latter is what you need for Bedrock access.</div>
+  </div>
+
+  <div class="card">
+    <h3>VPC Endpoint Type for Amazon Bedrock</h3>
+    <div class="remember">Amazon Bedrock uses a <strong>VPC Interface endpoint</strong> (PrivateLink). Traffic stays on the AWS private network — never traverses the public internet.</div>
+    <div class="gotcha">VPC <strong>Gateway</strong> endpoints only work with <strong>Amazon S3</strong> and <strong>Amazon DynamoDB</strong>. Everything else — Bedrock, SageMaker, SSM, Secrets Manager, Kinesis — uses <strong>Interface endpoints</strong>.</div>
+    <div class="when">Scenario: "application in private subnet must call Bedrock without internet access" → VPC Interface endpoint for the Bedrock Runtime service + update subnet route tables.</div>
+    <div class="tip">Interface endpoint creates an Elastic Network Interface (ENI) in your subnet. Your app resolves the Bedrock endpoint to this private IP, keeping all traffic inside AWS.</div>
+  </div>
+
+  <div class="card">
+    <h3>PII Detection Toolkit — Right Tool for Right Job</h3>
+    <table class="cmp">
+      <tr><th>Tool</th><th>Use For</th><th>How It Works</th></tr>
+      <tr><td><strong>Amazon Comprehend</strong></td><td>Detect + redact PII in text (emails, transcripts, documents)</td><td>NLP API — real-time or batch. Returns entity types with offsets. Can redact in place.</td></tr>
+      <tr><td><strong>Amazon Macie</strong></td><td>Discover sensitive data (PII) across S3 buckets at scale</td><td>Managed service — scans S3 continuously. Custom classifiers for specific data types.</td></tr>
+      <tr><td><strong>Amazon Textract</strong></td><td>Extract text from scanned documents, images, PDFs</td><td>OCR + form extraction. Extracts the text — does not analyze it for PII.</td></tr>
+      <tr><td><strong>Bedrock Guardrails PII</strong></td><td>Block/redact PII in LLM I/O at inference time</td><td>Intercepts prompts and responses, redacts configured entity types</td></tr>
+    </table>
+    <div class="gotcha">The exam uses Textract + Macie together as a distractor for email PII scenarios. Textract is OCR (for scanned images). Macie is for S3 bucket discovery, not active redaction. For text PII → Comprehend.</div>
+    <div class="remember">Real-time stream PII = Comprehend real-time API. Batch historical data = Comprehend batch. S3 bucket-level discovery = Macie with custom classifiers. Runtime AI I/O = Guardrails.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 3.3 AI GOVERNANCE                  -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>3.3</span> — AI Governance &amp; Compliance</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Bedrock Prompt Management — Governance Features</h3>
+    <div class="tip">Prompt Management provides: <strong>versioning</strong> (track every change to a template), <strong>review workflows</strong> (approve before activating), <strong>parameterized templates</strong> (reusable with variables), and <strong>role definitions</strong> (system/user/assistant roles embedded in template).</div>
+    <div class="gotcha">Auto-activating new versions as they save bypasses the review workflow entirely — that's the anti-pattern. The exam distinguishes between "versioning with review" vs "versioning with auto-activation." Review = governance. Auto-activate = no governance.</div>
+    <div class="when">Scenario: "governance requirement, all prompt changes must be approved before deployment" → Prompt Management with <strong>review workflow</strong> + versioning. Not auto-activation.</div>
+  </div>
+
+  <div class="card">
+    <h3>Compliance Stack — What Belongs Where</h3>
+    <div class="remember">The correct governance + compliance stack:
+      <br><br>
+      <strong>Bedrock Prompt Management</strong> → manage parameterized templates, versioning, review workflows
+      <br>
+      <strong>Bedrock Guardrails</strong> → enforce content safety policies (not RBAC, not compliance logging)
+      <br>
+      <strong>AWS CloudTrail</strong> → audit log of API calls (who called what Bedrock API, with which template, when) — this is your compliance record
+      <br>
+      <strong>IAM + permission sets</strong> → role-based access control (who can invoke which models)
+    </div>
+    <div class="gotcha">CloudWatch Logs = operational monitoring (errors, latency). CloudTrail = compliance audit trail (API activity). For "compliance" and "audit trail" questions → CloudTrail. Never CloudWatch.</div>
+    <div class="avoid">Avoid: "use Guardrails for RBAC." Guardrails filter content — they don't control who can invoke which model. RBAC = IAM.</div>
+  </div>
+
+  <div class="card">
+    <h3>Prompt Lineage — Tracking Template History</h3>
+    <div class="tip">Prompt lineage = tracking which version of a template was used for which invocation, and what changed between versions.</div>
+    <div class="tip">Implementation: <strong>Bedrock Prompt Management</strong> stores template versions → <strong>AWS CloudTrail</strong> records the specific template version ARN used in each Bedrock API call → you can reconstruct exactly what prompt was sent and when.</div>
+    <div class="gotcha">CloudWatch Logs stores the text of invocations but not the template version management. S3 object tags are a manual approach with no native versioning integration. Prompt Management + CloudTrail is the AWS-native lineage solution.</div>
+  </div>
+
+  <div class="card">
+    <h3>Output Source Traceability</h3>
+    <div class="tip">When you want to know "which document from the knowledge base influenced this response?", the pattern is: <strong>tag FM outputs with metadata from the data source</strong> at generation time — include source document ID, title, chunk reference in the response metadata.</div>
+    <div class="gotcha">Model invocation logs tell you what went in and came out of the LLM, but not which retrieved KB chunk was the source of truth. Tagging the output explicitly at generation time is how you get end-to-end traceability.</div>
+  </div>
+
+  <div class="card">
+    <h3>IAM Identity Center — Permission Sets vs IAM Roles Directly</h3>
+    <div class="tip"><strong>Permission sets</strong> in IAM Identity Center define what access a role has across multiple AWS accounts. They're defined once and assigned to accounts — no need to replicate roles manually across accounts.</div>
+    <div class="tip">For Bedrock model access control: permission sets can include condition keys like <code>bedrock:ModelArn</code> to restrict which models a department can invoke.</div>
+    <div class="remember">IAM Identity Center + permission sets = single definition, multi-account consistency. IAM roles created per-account = drift, inconsistency, management overhead. The exam always prefers Identity Center for enterprise multi-account scenarios.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 3.4 RESPONSIBLE AI                 -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>3.4</span> — Responsible AI Principles</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Bias Detection in Text Generation — BOLD Dataset</h3>
+    <div class="tip">For detecting <strong>demographic bias</strong> in text generation models (loan decisions, customer communications), the correct approach is <strong>Amazon Bedrock model evaluation jobs</strong> using the <strong>BOLD dataset</strong> (Bias in Open-Ended Language Generation).</div>
+    <div class="remember">BOLD = designed specifically for demographic bias assessment in language generation. It tests whether the model generates biased text about different demographic groups.</div>
+    <div class="gotcha">SageMaker Clarify uses the <strong>RealToxicityPrompts</strong> dataset which focuses on toxicity, not demographic bias. It also lacks a secondary model validation methodology. Wrong tool for demographic bias in text gen.</div>
+    <div class="when">Scenario: "text generation model for loan processing, must evaluate for demographic bias" → Bedrock model evaluation + BOLD dataset + secondary evaluator model. Not SageMaker Clarify.</div>
+  </div>
+
+  <div class="card">
+    <h3>Responsible AI Tools Summary</h3>
+    <table class="cmp">
+      <tr><th>Need</th><th>Right Tool</th><th>Wrong Tool</th></tr>
+      <tr><td>Demographic bias in text generation</td><td>Bedrock eval + BOLD dataset</td><td>SageMaker Clarify</td></tr>
+      <tr><td>Toxicity in model outputs</td><td>Bedrock Guardrails content filters</td><td>SageMaker Clarify</td></tr>
+      <tr><td>ML model fairness (classification, regression)</td><td>SageMaker Clarify</td><td>Bedrock eval (wrong use)</td></tr>
+      <tr><td>Explainability for ML predictions</td><td>SageMaker Clarify</td><td>Bedrock Guardrails (wrong use)</td></tr>
+      <tr><td>Grounding / hallucination in RAG</td><td>Bedrock Guardrails contextual grounding</td><td>SageMaker Clarify</td></tr>
+    </table>
+    <div class="remember">SageMaker Clarify = ML model fairness + explainability (training time, feature importance). Bedrock = LLM evaluation, content safety, bias in text generation. They operate at different layers.</div>
+  </div>
+
+</div>
+</div>
+
+<footer>Domain 3 Study Guide · AIP-C01 Exam Prep · Focus areas based on your actual exam performance · You scored 0% in Set 1 — this domain needs the most attention</footer>
+</body>
+</html>

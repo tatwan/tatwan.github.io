@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP-C01 Gap Cheat Sheet — Complete Weak Areas</title>
+<style>
+  :root {
+    --red: #c0392b; --green: #27ae60; --blue: #2980b9; --orange: #e67e22;
+    --purple: #8e44ad; --teal: #16a085; --dark: #0d0d1a; --card: #13132a;
+    --accent: #0f3460; --text: #e0e0e0; --muted: #777; --highlight: #e74c3c;
+    --correct: #2ecc71;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.55; }
+
+  header { background: linear-gradient(135deg, #7b0f22, #1a0838, #0f3460); padding: 22px 24px; text-align: center; border-bottom: 2px solid #3a1050; }
+  header h1 { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+  header p { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+
+  .score-bar { display: flex; justify-content: center; gap: 10px; padding: 10px 16px; background: #080814; flex-wrap: wrap; border-bottom: 1px solid #1a1a3a; }
+  .score-pill { background: var(--card); border-radius: 20px; padding: 5px 14px; font-size: 11px; border: 1px solid #252545; }
+  .score-pill .val { font-weight: 800; font-size: 15px; margin-right: 3px; }
+  .score-pill.bad .val { color: #e74c3c; }
+  .score-pill.ok .val { color: #e67e22; }
+  .score-pill.good .val { color: #2ecc71; }
+
+  .toc-wrap { padding: 12px 16px; background: #0a0a18; border-bottom: 1px solid #1a1a3a; }
+  .toc-wrap h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 8px; }
+  .toc-links { display: flex; flex-wrap: wrap; gap: 5px; }
+  .toc-links a { background: #1a1a35; border: 1px solid #2a2a55; color: #9ab; text-decoration: none; padding: 3px 10px; border-radius: 12px; font-size: 10px; white-space: nowrap; transition: background 0.15s; }
+  .toc-links a:hover { background: #252550; }
+  .toc-links a.hot { border-color: #7b2020; color: #f99; }
+  .toc-links a.new { border-color: #7b4a10; color: #fca; }
+
+  .section { margin: 16px; }
+  .sec-header { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px 8px 0 0; }
+  .sec-header .icon { font-size: 17px; }
+  .sec-header h2 { font-size: 14px; font-weight: 700; flex: 1; }
+  .sec-header .dtag { font-size: 10px; background: rgba(255,255,255,0.12); padding: 2px 8px; border-radius: 10px; color: #ccc; }
+  .badge { display: inline-block; font-size: 8px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle; font-weight: 800; text-transform: uppercase; }
+  .badge.hot { background: #c0392b; color: white; }
+  .badge.new { background: #d35400; color: white; }
+  .badge.tip { background: #1a5276; color: #7fc; }
+
+  .sec-red .sec-header    { background: linear-gradient(90deg, #2a0a0a, #1a0a2a); border-bottom: 2px solid #a00; }
+  .sec-orange .sec-header { background: linear-gradient(90deg, #1a0c00, #1a0a2a); border-bottom: 2px solid #c60; }
+  .sec-blue .sec-header   { background: linear-gradient(90deg, #001830, #0a0a2a); border-bottom: 2px solid #058; }
+  .sec-purple .sec-header { background: linear-gradient(90deg, #160a28, #0a0a2a); border-bottom: 2px solid #70a; }
+  .sec-teal .sec-header   { background: linear-gradient(90deg, #001a18, #0a0a2a); border-bottom: 2px solid #196; }
+  .sec-green .sec-header  { background: linear-gradient(90deg, #001a10, #0a0a2a); border-bottom: 2px solid #070; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); border: 1px solid #1e1e3a; border-top: none; border-radius: 0 0 8px 8px; background: #0e0e20; }
+  .card { padding: 13px 15px; border-right: 1px solid #1a1a30; border-bottom: 1px solid #1a1a30; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #8899bb; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid #1e1e3a; }
+
+  .x { background: rgba(192,57,43,0.13); border-left: 3px solid #a00; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 12px; }
+  .x::before { content: "✗ "; color: #e74c3c; font-weight: 700; }
+  .ck { background: rgba(39,174,96,0.11); border-left: 3px solid #0a7; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 12px; }
+  .ck::before { content: "✓ "; color: #2ecc71; font-weight: 700; }
+  .note { background: rgba(41,128,185,0.1); border-left: 3px solid #069; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #8ab; }
+  .note::before { content: "💡 "; }
+  .rule { background: rgba(142,68,173,0.1); border-left: 3px solid #70a; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #baa; }
+  .rule::before { content: "📌 "; }
+  .warn { background: rgba(214,137,16,0.1); border-left: 3px solid #c70; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #ca8; }
+  .warn::before { content: "⚠️ "; }
+  code, .tag { display: inline; background: #1a1a35; color: #7fc; font-size: 10.5px; padding: 1px 5px; border-radius: 4px; font-family: monospace; }
+  .tag.r { background: #2a1010; color: #f88; }
+  .tag.g { background: #0d1f0d; color: #8f8; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 5px; }
+  .vs-box { border: 1px solid #1e1e3a; border-radius: 5px; padding: 8px 10px; }
+  .vs-box h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .vs-box.use { border-color: #1a5a1a; background: rgba(39,174,96,0.05); }
+  .vs-box.use h4 { color: #2ecc71; }
+  .vs-box.no  { border-color: #5a1a1a; background: rgba(192,57,43,0.05); }
+  .vs-box.no h4 { color: #e74c3c; }
+  .vs-box li { list-style: none; padding: 1.5px 0; font-size: 11px; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 6px; }
+  table.t th { background: #141428; color: #8899bb; padding: 5px 9px; text-align: left; border: 1px solid #1e1e3a; }
+  table.t td { padding: 4px 9px; border: 1px solid #181830; vertical-align: top; }
+  table.t tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .bad { color: #e74c3c; font-weight: 700; }
+  .ok  { color: #e67e22; font-weight: 700; }
+  .gd  { color: #2ecc71; font-weight: 700; }
+
+  .recall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 5px; margin-top: 7px; }
+  .recall-item { background: rgba(15,52,96,0.3); border: 1px solid #1a2a4a; border-radius: 5px; padding: 6px 9px; font-size: 11px; color: #aac; }
+  .recall-item strong { color: #7fc; display: block; margin-bottom: 2px; font-size: 10px; text-transform: uppercase; }
+
+  footer { text-align: center; padding: 18px; color: var(--muted); font-size: 10px; border-top: 1px solid #1a1a3a; margin-top: 8px; }
+  .topnav{background:#080818;border-bottom:1px solid #1e1e3e;padding:9px 18px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+  .topnav .brand{font-size:11px;color:#777;margin-right:6px}
+  .topnav a{background:#13132a;border:1px solid #1e1e3e;border-radius:14px;padding:3px 11px;font-size:11px;color:#aac;text-decoration:none;white-space:nowrap}
+  .topnav a.active{background:#1a0a2a;border-color:#5a1a7a;color:#caf}
+  .topnav a:hover{background:#1a1a35}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="brand">AIP-C01</span>
+  <a href="study-d1.html">Domain 1</a>
+  <a href="study-d2.html">Domain 2</a>
+  <a href="study-d3.html">Domain 3</a>
+  <a href="study-d45.html">Domain 4 &amp; 5</a>
+  <a href="gap-cheatsheet.html" class="active">Gap Sheet</a>
+  <a href="index.html">🏠 Home</a>
+</nav>
+
+<header>
+  <h1>🎯 AIP-C01 Complete Gap Cheat Sheet</h1>
+  <p>Common Mistakes to watch for</p>
+</header>
+
+<div class="toc-wrap">
+  <h3>Jump to Section</h3>
+  <div class="toc-links">
+    <a class="hot" href="#guardrails">🛡️ Guardrails Deep Dive</a>
+    <a class="hot" href="#evaluation">🧪 Evaluation Systems</a>
+    <a class="hot" href="#iam">🔐 IAM Identity Center &amp; Auth</a>
+    <a class="new" href="#strands">🤖 Strands + MCP Servers</a>
+    <a class="new" href="#inference-profiles">📍 Inference Profiles</a>
+    <a class="new" href="#distillation">🧠 Model Distillation</a>
+    <a class="new" href="#semantic-cache">⚡ Semantic Caching</a>
+    <a class="new" href="#observability">📡 CloudWatch GenAI Observability</a>
+    <a href="#bda">📄 BDA Data Automation</a>
+    <a href="#prompt-mgmt">📝 Prompt Management</a>
+    <a href="#rag">🔍 RAG &amp; Knowledge Bases</a>
+    <a href="#integration">🔗 Integration Patterns</a>
+    <a href="#sagemaker">⚙️ SageMaker Inference</a>
+    <a href="#data">📦 Data Processing</a>
+    <a href="#opensearch">🔎 OpenSearch Hybrid Search</a>
+    <a href="#summary">📊 Domain Summary</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- GUARDRAILS                                              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="guardrails" class="section sec-red">
+  <div class="sec-header">
+    <span class="icon">🛡️</span>
+    <h2>Bedrock Guardrails — Deep Dive <span class="badge hot">HOT · 4 mistakes</span></h2>
+    <span class="dtag">Domain 3.1 · 3.3 · 3.4</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Guardrail Component Map — What Does What</h3>
+      <div class="ck"><strong>Content filters</strong> — harmful content (violence, hate, sexual) by category + strength</div>
+      <div class="ck"><strong>Word filters</strong> — block specific forbidden words/phrases</div>
+      <div class="ck"><strong>Sensitive info / PII filters</strong> — detect/redact PII in I/O</div>
+      <div class="ck"><strong>Denied topics</strong> — block specific off-topic discussions (competitors, crypto, etc.)</div>
+      <div class="ck"><strong>Contextual grounding</strong> — detect hallucination / unauthorized data leakage in RAG</div>
+      <div class="ck"><strong>Prompt attack filter</strong> — detect jailbreaks and <em>prompt injection attacks</em></div>
+      <div class="warn">Denied topics ≠ injection prevention. SQL injection / jailbreaks → <strong>Prompt Attack Filter</strong></div>
+    </div>
+
+    <div class="card">
+      <h3>Guardrails Monitoring Metrics <span class="badge hot">Tricky</span></h3>
+      <div class="x">Monitor <code>InvocationsIntervened</code> filtered by <code>GuardrailContentSource</code> dimension</div>
+      <div class="ck">Filter by <code>GuardrailPolicyType</code> dimension — shows <em>which policy</em> is intervening</div>
+      <div class="rule">GuardrailPolicyType values: <code>ContentPolicy</code> <code>TopicPolicy</code> <code>SensitiveInformationPolicy</code> <code>WordPolicy</code> <code>GroundingPolicy</code></div>
+      <div class="note">Enable tracing first: <code>{"trace": "enabled"}</code> in <code>guardrailConfig</code></div>
+    </div>
+
+    <div class="card">
+      <h3>Enforcing Guardrails — IAM Condition Key</h3>
+      <div class="x">Lambda proxy that validates guardrails before forwarding to Bedrock</div>
+      <div class="ck">IAM policy condition key <code>bedrock:GuardrailIdentifier</code> on <code>InvokeModel</code> and <code>Converse</code> API calls</div>
+      <div class="rule">Apply to ALL roles accessing Bedrock → mandatory guardrail with no bypass. No Lambda overhead, no single point of failure.</div>
+    </div>
+
+    <div class="card">
+      <h3>WAF vs Guardrails vs SageMaker Clarify</h3>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>✓ Use Bedrock Guardrails For</h4>
+          <li>AI content safety (harmful, toxic)</li>
+          <li>Prompt injection / jailbreak detection</li>
+          <li>PII in AI I/O</li>
+          <li>Topic restriction for AI</li>
+          <li>RAG hallucination (grounding)</li>
+          <li>Bedrock Agents protection</li>
+        </div>
+        <div class="vs-box no">
+          <h4>✗ Not These</h4>
+          <li>AWS WAF → HTTP attacks, DDoS</li>
+          <li>Not for AI content</li>
+          <li>SageMaker Clarify → bias/explainability for ML training, NOT policy enforcement</li>
+          <li>NOT for governance/RBAC</li>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Bias Detection — BOLD Dataset <span class="badge new">NEW</span></h3>
+      <div class="x">SageMaker Clarify + RealToxicityPrompts dataset for text generation bias</div>
+      <div class="ck">Bedrock model evaluation jobs using <strong>BOLD dataset</strong> (Bias in Open-Ended Language Generation) + secondary model validation</div>
+      <div class="note">BOLD = purpose-built for bias detection in language generation models. SageMaker Clarify = ML model bias/explainability (not text gen evaluation).</div>
+    </div>
+
+    <div class="card">
+      <h3>Guardrails Contextual Grounding for RAG Quality</h3>
+      <div class="x">SageMaker Clarify for RAG quality and explainability assessment</div>
+      <div class="ck">Bedrock Guardrails <strong>contextual grounding checks</strong> — detects responses not grounded in retrieved context</div>
+      <div class="note">Grounding checks compare the model's response against the retrieved context. If the response contains claims not supported by the KB → intervention triggers.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- EVALUATION SYSTEMS                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="evaluation" class="section sec-red">
+  <div class="sec-header">
+    <span class="icon">🧪</span>
+    <h2>Evaluation Systems <span class="badge hot">CRITICAL · 6 mistakes · 17–20% score</span></h2>
+    <span class="dtag">Domain 5.1 — Your Single Weakest Domain</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>CreateEvaluationJob API — The Correct Approach</h3>
+      <div class="x">Batch inference jobs → custom LLM judge Lambda → Spearman correlation</div>
+      <div class="ck">Use <code>CreateEvaluationJob</code> API with a <strong>consistent evaluator model</strong> for ALL candidate FMs → parallel managed processing → results to S3</div>
+      <div class="rule">Then use Lambda for Spearman's rank correlation on S3 results. Managed API = consistent + parallel + automatic. DIY = inconsistent + fragile.</div>
+    </div>
+
+    <div class="card">
+      <h3>Evaluation Dataset Hard Limit <span class="badge hot">EXACT LIMIT</span></h3>
+      <div class="x">S3 versioning + CORS config for 5,000-prompt dataset</div>
+      <div class="ck">Hard limit: <strong>1,000 prompts per evaluation job</strong>. For 5,000 prompts → split into 5 jobs of 1,000 each.</div>
+      <div class="rule">CORS = browser console access. S3 versioning = file history. Neither affects prompt limits. The fix is always: split the dataset.</div>
+    </div>
+
+    <div class="card">
+      <h3>Human Evaluation Workforce</h3>
+      <div class="x">SageMaker Ground Truth labeling job with AwsManagedHumanLoopRequestSource</div>
+      <div class="ck">Create an <strong>Amazon Cognito user pool</strong> → manage custom workforce → assign to Bedrock evaluation work team</div>
+      <div class="note">SageMaker Ground Truth = data labeling for ML training. Bedrock human evaluation = Cognito user pools for your custom expert workforce.</div>
+    </div>
+
+    <div class="card">
+      <h3>Custom vs Benchmark Evaluation Metrics</h3>
+      <div class="x">Industry-standard benchmark dataset (MMLU etc.) for company-specific tone</div>
+      <div class="ck">Human-validated <strong>custom dataset</strong> + <strong>custom metrics</strong> for formality scale and brand-specific tone/style</div>
+      <div class="rule">General benchmarks = general capability. Company-specific quality (tone, formality, domain) = custom dataset + custom metrics. Always.</div>
+    </div>
+
+    <div class="card">
+      <h3>Evaluation Process Order <span class="badge tip">Sequence</span></h3>
+      <div class="x">Create test dataset with diverse scenarios first (to replace a model in production)</div>
+      <div class="ck">Run eval → <strong>Analyze results and generate a comprehensive evaluation report</strong> — that's the final step and primary deliverable</div>
+      <div class="note">The exam tests whether you know the OUTPUT of an evaluation process (the report/analysis) vs just creating inputs. Analysis + report = the answer when asked about systematic evaluation.</div>
+    </div>
+
+    <div class="card">
+      <h3>Output Traceability — Tag at Generation Time</h3>
+      <div class="x">Bedrock invocation logging to correlate logs with data source</div>
+      <div class="ck"><strong>Tag FM outputs with metadata from the data source</strong> at generation time — content, timestamps, source ID</div>
+      <div class="note">Invocation logs capture inputs/outputs but don't inherently link to which source influenced the output. Tagging at generation = traceability baked in.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- IAM IDENTITY CENTER & AUTH                             -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="iam" class="section sec-blue">
+  <div class="sec-header">
+    <span class="icon">🔐</span>
+    <h2>IAM Identity Center &amp; Authentication <span class="badge hot">6 mistakes</span></h2>
+    <span class="dtag">Domain 3.2</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Enterprise Federation — Always IAM Identity Center</h3>
+      <div class="x">Create IAM users matching AD usernames + cross-account roles</div>
+      <div class="x">IAM roles + AssumeRole API calls for on-prem apps</div>
+      <div class="ck"><strong>IAM Identity Center</strong> + external IdP (Microsoft Entra ID / Active Directory) + <strong>permission sets</strong> mapped to departments + multi-account Regional failover</div>
+      <div class="rule">Corporate IdP → IAM Identity Center → Permission Sets per dept → access to Bedrock models. Never create IAM users that mirror AD accounts.</div>
+    </div>
+
+    <div class="card">
+      <h3>Third-Party App Auth — OIDC + Cognito</h3>
+      <div class="x">IAM users per employee + Secrets Manager credential rotation</div>
+      <div class="ck">OIDC integration with <strong>Amazon Cognito</strong> → authenticate via IdP → exchange for <strong>temporary AWS credentials</strong> (STS)</div>
+      <div class="rule">Temporary credentials &gt; long-lived IAM creds. Secrets Manager rotation ≠ federation. Cognito = federated identity for apps → STS tokens.</div>
+    </div>
+
+    <div class="card">
+      <h3>PII Detection — Comprehend Right Tool <span class="badge hot">2 mistakes</span></h3>
+      <div class="x">Batch Comprehend + weekly Macie scans</div>
+      <div class="x">Textract + Macie + Kendra for email PII + search</div>
+      <div class="ck"><strong>Comprehend real-time PII detection API</strong> + Macie <strong>custom classifiers</strong> for continuous monitoring; Kendra for search after PII redaction</div>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>Correct Tool Per Use Case</h4>
+          <li>Email/text PII → Comprehend (real-time)</li>
+          <li>S3 bucket discovery → Macie (custom classifiers)</li>
+          <li>Document OCR → Textract</li>
+          <li>Enterprise search → Kendra</li>
+        </div>
+        <div class="vs-box no">
+          <h4>Common Wrong Combos</h4>
+          <li>Textract for email → OCR tool, not NLP</li>
+          <li>Batch PII → too slow for continuous</li>
+          <li>Weekly Macie → not continuous enough</li>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>VPC Endpoint for Amazon Bedrock</h3>
+      <div class="x">VPC <strong>Gateway</strong> endpoint for Bedrock Runtime</div>
+      <div class="ck">VPC <strong>Interface</strong> endpoint (PrivateLink) for Bedrock Runtime</div>
+      <div class="rule">Gateway endpoints = S3 and DynamoDB ONLY. Everything else (Bedrock, SageMaker, SSM, etc.) = Interface endpoints via PrivateLink.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- STRANDS + MCP + AGENTS                                 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="strands" class="section sec-purple">
+  <div class="sec-header">
+    <span class="icon">🤖</span>
+    <h2>Strands SDK + MCP Servers + Agentic Patterns <span class="badge new">NEW · 2 mistakes</span></h2>
+    <span class="dtag">Domain 2.1</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Strands + MCP vs Bedrock Flows</h3>
+      <div class="x">Bedrock Flows with sequential LLM invocations + Lambda for dynamic tool access</div>
+      <div class="ck"><strong>Strands Agents SDK</strong> + create <strong>MCP servers</strong> for each tool → deploy Strands agent + MCP servers as Lambda → dynamic tool selection by the agent</div>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>Strands + MCP</h4>
+          <li>Dynamic tool selection at runtime</li>
+          <li>LLM decides which tool to call</li>
+          <li>Each company tool = one MCP server</li>
+          <li>Flexible, agentic workflows</li>
+        </div>
+        <div class="vs-box no">
+          <h4>Bedrock Flows</h4>
+          <li>Predefined sequential steps</li>
+          <li>Fixed execution path</li>
+          <li>Good for deterministic pipelines</li>
+          <li>NOT for dynamic tool routing</li>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Strands Multi-Specialist Agents</h3>
+      <div class="x">Single Bedrock Agent with OpenAPI schema per task (BillingTool, SupportTool)</div>
+      <div class="ck">Strands Agents SDK → specialist agents per domain (BillingAgent, TechSupportAgent) → deploy as Lambda → register in Strands → orchestration routes requests</div>
+      <div class="rule">Multi-domain complex queries → Strands with specialist agents. Single-task automation → Bedrock Agents with action groups.</div>
+    </div>
+
+    <div class="card">
+      <h3>ReAct Pattern in Step Functions</h3>
+      <div class="x">Chain-of-thought with Choice states to adjust reasoning path</div>
+      <div class="ck">ReAct states: <strong>Observation → Reasoning → Action</strong> + built-in Step Functions error handling + retry logic</div>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>ReAct (Reasoning + Acting)</h4>
+          <li>Interleaves reasoning + tool use</li>
+          <li>Observe env → reason → act</li>
+          <li>Dynamic — loops until done</li>
+          <li>Agentic/tool-use workflows</li>
+        </div>
+        <div class="vs-box no">
+          <h4>Chain-of-Thought</h4>
+          <li>Explicit reasoning chain</li>
+          <li>No action/tool loop</li>
+          <li>Linear reasoning path</li>
+          <li>Complex reasoning (not actions)</li>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- INFERENCE PROFILES                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="inference-profiles" class="section sec-teal">
+  <div class="sec-header">
+    <span class="icon">📍</span>
+    <h2>Inference Profiles — Multi-Use <span class="badge new">NEW · 2 mistakes</span></h2>
+    <span class="dtag">Domain 1.2 · 4.1</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Inference Profiles for Cost Attribution</h3>
+      <div class="x">S3 Event Notifications + Lambda routing by S3 key prefix</div>
+      <div class="ck">Create <strong>Bedrock inference profiles</strong> per clinic/cost center → invoke model via profile → cost reports broken down by profile</div>
+      <div class="rule">1 inference profile = 1 cost center. Tag profile with clinic ID. AWS Cost Explorer shows costs per profile = per-clinic attribution.</div>
+    </div>
+
+    <div class="card">
+      <h3>Inference Profiles for Multi-Region HA</h3>
+      <div class="x">Cross-Region inference in round-robin pattern for HA</div>
+      <div class="ck">Inference profile with <strong>primary region + secondary region</strong> configuration — automatic failover (NOT round-robin load balancing)</div>
+      <div class="note">Cross-Region inference provides failover capability. An inference profile defines the failover order. Round-robin = load balancing ≠ HA. The exam wants failover.</div>
+      <div class="rule">Inference profile = (primary region) + (secondary region) → failover on primary unavailability</div>
+    </div>
+
+    <div class="card">
+      <h3>Batch Inference + Inference Profiles for High Throughput</h3>
+      <div class="x">Synchronous API calls + Lambda concurrent invocations for millions of documents</div>
+      <div class="ck">Batch inference jobs with <strong>S3 I/O configuration</strong> + <strong>inference profiles</strong> for workload distribution across regions = max throughput + cost efficiency</div>
+      <div class="note">Synchronous = latency-sensitive, not designed for bulk. Batch inference = purpose-built for large-scale async processing. S3 I/O = input from S3, results to S3.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- MODEL DISTILLATION                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="distillation" class="section sec-orange">
+  <div class="sec-header">
+    <span class="icon">🧠</span>
+    <h2>Model Distillation <span class="badge new">NEW · 1 mistake</span></h2>
+    <span class="dtag">Domain 1.2</span>
+  </div>
+  <div class="cards">
+    <div class="card wide">
+      <h3>Distillation — Prompts Only, Teacher Generates Responses</h3>
+      <div class="x">Use prompt-response pairs from invocation logs as distillation training data</div>
+      <div class="ck">Model distillation = supply <strong>only prompts</strong> to Bedrock. The <strong>teacher model generates the responses</strong> during the distillation process — Bedrock handles the teacher inference internally.</div>
+      <table class="t" style="margin-top:8px;">
+        <tr><th>Technique</th><th>Training Input</th><th>Who Generates Responses</th></tr>
+        <tr><td>Fine-tuning</td><td>Prompt + response pairs (JSONL)</td><td>You provide the responses</td></tr>
+        <tr><td><strong>Distillation ✓</strong></td><td><strong>Prompts only</strong></td><td><strong>Teacher model (Bedrock handles it)</strong></td></tr>
+        <tr><td>Continued pre-training</td><td>Raw text corpus</td><td>N/A (unsupervised)</td></tr>
+      </table>
+      <div class="rule" style="margin-top:6px;">Distillation: small student model learns from large teacher model's outputs. You just provide the prompts — Bedrock runs the teacher and captures its responses automatically.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SEMANTIC CACHING                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="semantic-cache" class="section sec-teal">
+  <div class="sec-header">
+    <span class="icon">⚡</span>
+    <h2>Semantic Caching <span class="badge new">NEW · 1 mistake</span></h2>
+    <span class="dtag">Domain 4.2</span>
+  </div>
+  <div class="cards">
+    <div class="card wide">
+      <h3>OpenSearch k-NN for Semantic Cache vs ElastiCache Exact-String</h3>
+      <div class="x">ElastiCache Redis with <em>custom semantic caching</em> using exact string matching</div>
+      <div class="ck">OpenSearch Service with <strong>k-NN vector index</strong> → Lambda generates embedding for incoming query → finds <strong>semantically similar</strong> cached response → returns cache hit without FM invocation</div>
+      <div class="two" style="margin-top:6px;">
+        <div class="vs-box use">
+          <h4>OpenSearch k-NN Semantic Cache</h4>
+          <li>Embeddings stored in vector index</li>
+          <li>Finds similar (not identical) queries</li>
+          <li>"What's the price?" ≈ "How much does it cost?"</li>
+          <li>Cache hits even with different wording</li>
+          <li>✓ True semantic caching</li>
+        </div>
+        <div class="vs-box no">
+          <h4>ElastiCache Exact-String</h4>
+          <li>Key-value: exact query string = key</li>
+          <li>Only matches identical strings</li>
+          <li>"What's the price?" ≠ "How much?"</li>
+          <li>Low cache hit rate for conversational AI</li>
+          <li>✗ NOT semantic</li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- CLOUDWATCH GENAI OBSERVABILITY                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="observability" class="section sec-blue">
+  <div class="sec-header">
+    <span class="icon">📡</span>
+    <h2>Monitoring &amp; Observability <span class="badge new">NEW · 3 mistakes</span></h2>
+    <span class="dtag">Domain 4.3 · 5.2</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>CloudWatch GenAI Observability (Not X-Ray)</h3>
+      <div class="x">CloudWatch Application Signals + X-Ray traces for Lambda-Bedrock interactions</div>
+      <div class="ck"><strong>Amazon CloudWatch GenAI observability</strong> for deployed Lambda + Bedrock functions — purpose-built for GenAI monitoring</div>
+      <div class="note">CloudWatch GenAI observability = new capability purpose-built for tracking model invocations, latency, token counts, errors in GenAI apps. X-Ray = distributed tracing for microservices, not optimized for GenAI metrics.</div>
+    </div>
+
+    <div class="card">
+      <h3>RAG Performance: CloudWatch Dashboard vs X-Ray</h3>
+      <div class="x">X-Ray distributed tracing focusing on OpenSearch vector query latency</div>
+      <div class="ck">Custom <strong>CloudWatch dashboard</strong> combining retrieval latency + OpenSearch operation counts → analyze <strong>Bedrock invocation logs</strong> to identify degraded KB queries</div>
+      <div class="note">For RAG: you need a combined view of retrieval latency + model latency + KB query patterns. CloudWatch dashboards with multiple metrics sources = better picture than X-Ray traces alone.</div>
+    </div>
+
+    <div class="card">
+      <h3>KB Logging vs Model Invocation Logging</h3>
+      <div class="x">Model invocation logging for KB document processing failures</div>
+      <div class="ck"><strong>Knowledge base logging</strong> → CloudWatch Logs → CloudWatch Logs Insights to query KB ingestion failures</div>
+      <div class="note">Two separate log types:<br>
+        <code>Model Invocation Logs</code> = LLM I/O, latency, tokens<br>
+        <code>KB Ingestion Logs</code> = document processing, chunking, embedding failures
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Troubleshooting Truncated Responses</h3>
+      <div class="x">CloudWatch Logs Insights to analyze API call patterns for truncation issue</div>
+      <div class="ck">Truncated/cut-off responses = increase the <strong><code>max_tokens</code></strong> parameter in model invocation</div>
+      <div class="rule">Troubleshooting quick-reference:<br>
+        Cut-off output → <code>max_tokens</code> too low<br>
+        Repetitive output → temperature too low or top-p issue<br>
+        Irrelevant output → RAG retrieval / reranking issue<br>
+        High latency → batch inference or streaming
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- BDA                                                     -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="bda" class="section sec-orange">
+  <div class="sec-header">
+    <span class="icon">📄</span>
+    <h2>Bedrock Data Automation (BDA) <span class="badge new">4 mistakes</span></h2>
+    <span class="dtag">Domain 1.3</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>BDA Architecture: 1 Project, Many Blueprints</h3>
+      <div class="x">Create separate BDA projects per document type</div>
+      <div class="ck">ONE BDA project + <strong>multiple blueprints</strong> (one per doc type) → BDA <strong>auto-selects</strong> correct blueprint per document</div>
+      <div class="rule">Invoke via <code>InvokeDataAutomationAsync</code> API → pass the single project → BDA picks the right blueprint automatically.</div>
+    </div>
+
+    <div class="card">
+      <h3>BDA as Multimodal Parser Before RAG</h3>
+      <div class="x">Simple S3 → Knowledge Base for multimodal data (PDFs, filings, charts)</div>
+      <div class="ck"><strong>BDA as parser</strong> → extracts structured insights from multimodal content → THEN feeds into Knowledge Base for RAG</div>
+      <div class="rule">Pattern: S3 → <strong>BDA parser</strong> → structured output → KB ingestion → RAG queries. BDA handles: PDFs, images, tables, charts, audio, video.</div>
+    </div>
+
+    <div class="card">
+      <h3>BDA Blueprint: Transformation vs Validation</h3>
+      <div class="x">Validation to enforce required subfields (FIRST_NAME, LAST_NAME) and reject malformed</div>
+      <div class="ck"><strong>Transformation</strong> with a reusable <strong>custom type</strong> to split/reformat extracted fields (e.g., split "AuthorizedSigner" into components)</div>
+      <div class="note">Validation = check constraints, reject bad data. Transformation = reshape/split/convert the value. Custom type = reusable transformation definition in blueprints.</div>
+    </div>
+
+    <div class="card">
+      <h3>BDA vs EventBridge + Step Functions for Orchestration</h3>
+      <div class="x">BDA blueprint to orchestrate video processing (Rekognition + Bedrock)</div>
+      <div class="ck">BDA = document/media <em>intelligence extraction</em> only. For multi-step <em>orchestration</em> → <strong>EventBridge + Step Functions</strong></div>
+      <div class="rule">S3 upload → EventBridge rule → Step Functions state machine → calls Rekognition → calls Bedrock FMs → returns results</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PROMPT MANAGEMENT                                       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="prompt-mgmt" class="section sec-purple">
+  <div class="sec-header">
+    <span class="icon">📝</span>
+    <h2>Bedrock Prompt Management &amp; Governance · 5 mistakes</h2>
+    <span class="dtag">Domain 3.3</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Prompt Management Features</h3>
+      <div class="ck"><strong>Versioning</strong> — track template changes over time</div>
+      <div class="ck"><strong>Review workflows</strong> — approve versions BEFORE going live (never auto-activate)</div>
+      <div class="ck"><strong>Parameterized templates</strong> — reusable prompts with variables</div>
+      <div class="x">Auto-activate new versions as they save (bypasses governance!)</div>
+      <div class="warn">CloudTrail = compliance audit. CloudWatch Logs = operational monitoring. For prompt compliance → <strong>CloudTrail</strong>.</div>
+    </div>
+
+    <div class="card">
+      <h3>Complete Governance Stack</h3>
+      <div class="rule">
+        1. <strong>Bedrock Prompt Management</strong> — parameterized templates + versioning + review workflows<br>
+        2. <strong>Bedrock Guardrails</strong> — content safety policies (NOT for RBAC!)<br>
+        3. <strong>AWS CloudTrail</strong> — audit log of all prompt invocations + template changes<br>
+        4. <strong>IAM + permission sets</strong> — for RBAC (role-based access)
+      </div>
+      <div class="x">Use Guardrails for role-based access control (RBAC)</div>
+      <div class="note">Guardrails = content safety. RBAC = IAM. Compliance logs = CloudTrail (not CloudWatch).</div>
+    </div>
+
+    <div class="card">
+      <h3>Prompt Lineage / Audit Trail</h3>
+      <div class="x">CloudWatch Logs + S3 object tags for prompt lineage and metadata</div>
+      <div class="ck"><strong>Bedrock Prompt Management</strong> for template versioning + <strong>CloudTrail</strong> to record all Bedrock API calls (who called what, when, which template version)</div>
+    </div>
+
+    <div class="card">
+      <h3>Output Source Tagging</h3>
+      <div class="x">Bedrock invocation logging to correlate outputs with data source</div>
+      <div class="ck"><strong>Tag FM outputs with metadata from the data source</strong> at generation time (source ID, timestamp, doc name)</div>
+      <div class="note">Invocation logs tell you inputs/outputs. They don't tell you which KB document influenced the answer. Tagging at generation time = traceability built in.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- RAG & KNOWLEDGE BASES                                   -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="rag" class="section sec-green">
+  <div class="sec-header">
+    <span class="icon">🔍</span>
+    <h2>RAG &amp; Knowledge Bases — Nuances · 4 mistakes</h2>
+    <span class="dtag">Domain 1.4 · 1.5</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Retrieval Relevance — Reranking</h3>
+      <div class="x">Increase number of retrieved documents to improve relevance</div>
+      <div class="ck">Configure <strong>reranking</strong> in Bedrock Knowledge Bases — second-pass semantic re-scoring of retrieved chunks</div>
+      <div class="rule">More docs ≠ better. Often adds noise. Reranking pipeline: Vector search → Top-K → Reranker → Best-N → LLM</div>
+    </div>
+
+    <div class="card">
+      <h3>KB Sync: SQS Buffer for Resilience</h3>
+      <div class="x">S3 Event Notifications → direct Lambda trigger → IngestKnowledgeBaseDocuments</div>
+      <div class="ck">S3 Events → <strong>SQS queue</strong> → Lambda polls queue → <code>IngestKnowledgeBaseDocuments</code></div>
+      <div class="rule">SQS buffer = retry on failure. Direct Lambda trigger = if Lambda fails, the message is lost. SQS = resilient by design.</div>
+    </div>
+
+    <div class="card">
+      <h3>KB Ingestion: Split Docs, Don't Compress</h3>
+      <div class="x">Enable S3 bucket compression for large PDF files before KB ingestion</div>
+      <div class="ck"><strong>Split large documents into smaller files</strong> before ingestion — compression doesn't help with Bedrock's document size limits</div>
+      <div class="note">Bedrock KB has per-document size limits. Compression changes file size but doesn't affect how Bedrock processes the document content. Splitting is the solution.</div>
+    </div>
+
+    <div class="card">
+      <h3>RAG Accuracy vs Streaming Latency</h3>
+      <div class="x">Implement response streaming to fix product accuracy issues</div>
+      <div class="ck">Accuracy issues → <strong>RAG Knowledge Bases</strong> with current product catalog. Streaming → reduces perceived latency only.</div>
+      <div class="rule">Streaming = first-token faster. RAG = model knows correct facts. Different problems, different solutions.</div>
+    </div>
+
+    <div class="card">
+      <h3>Custom Chunking for Complex HTML</h3>
+      <div class="x">Built-in hierarchical chunking with parent/child chunk size settings</div>
+      <div class="ck">Custom Lambda function + <strong>LangChain</strong> framework → deploy via Lambda layer → configure as custom chunking in Knowledge Base</div>
+      <div class="note">Built-in hierarchical = simple docs. Complex HTML with nested headers, tables, mixed content = custom Lambda chunking for fine-grained control.</div>
+    </div>
+
+    <div class="card">
+      <h3>Bedrock On-Demand vs SageMaker for Nova Models</h3>
+      <div class="x">SageMaker AI real-time endpoint + auto scaling for unpredictable traffic with Nova models</div>
+      <div class="ck">Deploy Nova model <strong>in Amazon Bedrock</strong> → invoke via Lambda <strong>on-demand inference</strong> API calls → no infrastructure management</div>
+      <div class="rule">If the model is available in Bedrock natively (e.g., Nova, Claude, Titan), use Bedrock on-demand — no endpoints to manage, automatic scaling, pay per token.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- OPENSEARCH HYBRID SEARCH                               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="opensearch" class="section sec-teal">
+  <div class="sec-header">
+    <span class="icon">🔎</span>
+    <h2>OpenSearch: Hybrid Search &amp; Service vs Serverless <span class="badge new">NEW · 1 mistake</span></h2>
+    <span class="dtag">Domain 1.4</span>
+  </div>
+  <div class="cards">
+    <div class="card wide">
+      <h3>OpenSearch Service vs Serverless for Sub-Second Hybrid Search</h3>
+      <div class="x">OpenSearch <strong>Serverless</strong> + dense-only vectors for sub-second search</div>
+      <div class="ck">OpenSearch <strong>Service</strong> (managed) + <strong>BOTH sparse AND dense</strong> vectors = hybrid search for best accuracy + sub-second performance</div>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>OpenSearch Service (managed)</h4>
+          <li>Full feature support including hybrid search</li>
+          <li>Sparse vectors (BM25/keyword) + dense vectors</li>
+          <li>Best for sub-second + accuracy requirements</li>
+          <li>More control over indexing, replicas</li>
+        </div>
+        <div class="vs-box no">
+          <h4>OpenSearch Serverless</h4>
+          <li>Simpler, auto-scaling</li>
+          <li>Good for variable workloads</li>
+          <li>Limited: no cross-cluster search, less feature set</li>
+          <li>Dense vectors only (at exam time)</li>
+        </div>
+      </div>
+      <div class="rule" style="margin-top:6px;">Hybrid search = sparse (keyword/BM25) + dense (semantic embedding) combined. Better precision + recall than either alone.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- INTEGRATION PATTERNS                                    -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="integration" class="section sec-blue">
+  <div class="sec-header">
+    <span class="icon">🔗</span>
+    <h2>Integration Patterns · 4 mistakes</h2>
+    <span class="dtag">Domain 2.3 · 2.4 · 2.5</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Async Document Processing Architecture</h3>
+      <div class="x">API Gateway WebSocket + InvokeModelWithResponseStream for document upload + processing</div>
+      <div class="ck">S3 <strong>presigned URL</strong> → user uploads to S3 directly → <strong>S3 Event Notifications → SQS</strong> → Lambda polls → Bedrock async processing → results to S3</div>
+      <div class="note">Document processing = async (not streaming). Streaming = real-time token-by-token output. Large doc processing = async queue-based pipeline.</div>
+    </div>
+
+    <div class="card">
+      <h3>IAM for WebSocket Streaming</h3>
+      <div class="x">DynamoDB table + DynamoDB Streams to buffer and forward streaming tokens</div>
+      <div class="ck">IAM role for Lambda needs: <code>bedrock:InvokeModelWithResponseStream</code> + <code>execute-api:ManageConnections</code> — resource ARNs must include WebSocket API ID</div>
+    </div>
+
+    <div class="card">
+      <h3>API Gateway for Model Routing</h3>
+      <div class="x">Separate API GWs per provider + client-side routing + client-side API keys</div>
+      <div class="ck">Single API GW REST API + <strong>non-proxy integration</strong> + <strong>mapping templates (VTL)</strong> + <strong>Secrets Manager</strong> for keys + stage variables for endpoint URLs</div>
+      <div class="rule">Never store API keys client-side. 1 API GW → mapping templates transform per provider → Secrets Manager for API keys.</div>
+    </div>
+
+    <div class="card">
+      <h3>Amazon Q Developer — Full Scope <span class="badge new">NEW</span></h3>
+      <div class="x">Q Developer = only code completions + documentation lookups</div>
+      <div class="x">Q Developer = only security analysis + compliance</div>
+      <div class="ck">Q Developer does ALL: code generation + refactoring, <strong>IDE contextual suggestions based on YOUR project codebase</strong>, API guidance, performance optimization, security analysis, code transformation/modernization</div>
+      <div class="note">Key word: "contextual" — Q Developer understands YOUR project, not just generic APIs. It's an AI coding assistant, not just autocomplete.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SAGEMAKER INFERENCE                                     -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sagemaker" class="section sec-orange">
+  <div class="sec-header">
+    <span class="icon">⚙️</span>
+    <h2>SageMaker Inference Types · 2 mistakes</h2>
+    <span class="dtag">Domain 2.2 · 5.2</span>
+  </div>
+  <div class="cards">
+
+    <div class="card wide">
+      <h3>SageMaker Inference Decision Matrix</h3>
+      <table class="t">
+        <tr><th>Type</th><th>When to Use</th><th>Instance Type</th><th>Your Mistake</th></tr>
+        <tr><td><strong>Real-time</strong></td><td>Low latency, synchronous, always-on traffic</td><td>Any</td><td>—</td></tr>
+        <tr><td><strong>Asynchronous ✓</strong></td><td>Long-running, large payloads, <strong>image/video generation</strong>, spiky traffic</td><td><strong>Accelerated (GPU)</strong></td><td>Used Serverless + general purpose</td></tr>
+        <tr><td><strong>Serverless</strong></td><td>Infrequent/variable traffic, cost savings when idle, simple models</td><td>General purpose (auto)</td><td>Wrong for image gen (needs GPU)</td></tr>
+        <tr><td><strong>Batch</strong></td><td>Offline large dataset, no latency req</td><td>Any</td><td>—</td></tr>
+        <tr><td><strong>Shadow test</strong></td><td>Validate new model version without production impact</td><td>Any</td><td>Picked A/B testing instead</td></tr>
+      </table>
+      <div class="warn" style="margin-top:6px;">Shadow test = traffic copy, no user impact. A/B test = splits live traffic between variants. For safe validation → shadow test.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- DATA PROCESSING                                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="data" class="section sec-green">
+  <div class="sec-header">
+    <span class="icon">📦</span>
+    <h2>Data Processing &amp; Storage Patterns · 6 mistakes</h2>
+    <span class="dtag">Domain 1.3 · 1.4</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>Fine-Tuning Data Pipeline</h3>
+      <div class="x">AWS Glue crawler + <strong>Amazon EMR</strong> + Apache Spark to produce JSONL</div>
+      <div class="ck">Glue crawler → Glue Data Catalog → <strong>Glue ETL jobs</strong> → transform to JSONL (Converse API format) → S3 → Bedrock fine-tuning job</div>
+      <div class="rule">Glue ETL = serverless, managed. EMR = complex cluster. For format conversion to JSONL → Glue ETL is the correct AWS-native path.</div>
+    </div>
+
+    <div class="card">
+      <h3>S3 Metadata Types</h3>
+      <table class="t">
+        <tr><th>Type</th><th>Examples</th><th>Set By</th></tr>
+        <tr><td><strong>System-defined</strong></td><td>Last-Modified, Content-Type, ETag, Content-Length</td><td>S3 (auto)</td></tr>
+        <tr><td><strong>User-defined</strong></td><td>x-amz-meta-author, x-amz-meta-source, x-amz-meta-dept</td><td>You on upload</td></tr>
+        <tr><td><strong>Object tags</strong></td><td>Classification=Confidential, Discipline=Physics</td><td>You anytime</td></tr>
+      </table>
+      <div class="x" style="margin-top:6px;">Store timestamps as user-defined metadata</div>
+      <div class="ck">Timestamps → <strong>system-defined</strong> (S3 auto). Authorship → user-defined. Classifications → tags or user-defined.</div>
+    </div>
+
+    <div class="card">
+      <h3>Comprehend: Entity Recognition vs Classification</h3>
+      <div class="x">Comprehend custom <strong>classification</strong> to categorize products</div>
+      <div class="ck">Comprehend <strong>entity recognition</strong> to <em>extract</em> product attributes (brand, model, specs)</div>
+      <div class="two">
+        <div class="vs-box use">
+          <h4>Entity Recognition</h4>
+          <li>Extract named entities from text</li>
+          <li>Product names, brands, specs</li>
+          <li>People, places, dates</li>
+          <li>Output: structured attributes</li>
+        </div>
+        <div class="vs-box no">
+          <h4>Custom Classification</h4>
+          <li>Label whole document/text</li>
+          <li>Assign category labels</li>
+          <li>Sentiment categories</li>
+          <li>Output: class labels</li>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>PII in Existing Text vs New Stream</h3>
+      <div class="ck">Existing email data in S3 → <strong>Comprehend</strong> PII detection/redaction + <strong>Kendra</strong> for enterprise search</div>
+      <div class="ck">Real-time data stream → Comprehend <strong>real-time PII detection API</strong> (not batch)</div>
+      <div class="ck">S3 bucket PII discovery → <strong>Macie</strong> with custom classifiers for continuous monitoring</div>
+      <div class="x">Textract for email text (Textract = OCR for documents, not NLP for text PII)</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- DOMAIN SUMMARY                                          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="summary" class="section sec-orange">
+  <div class="sec-header">
+    <span class="icon">📊</span>
+    <h2>Complete Domain Score Analysis — All 7 Documents</h2>
+    <span class="dtag">120 Questions Total</span>
+  </div>
+  <div class="cards">
+
+    <div class="card wide">
+      <h3>Mistakes by Subdomain — Priority Order</h3>
+      <table class="t">
+        <tr><th>Domain</th><th>Mistakes</th><th>Priority</th><th>Key Gap</th></tr>
+        <tr><td>5.1 Evaluation Systems</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>CreateEvaluationJob API, 1000-prompt limit, Cognito workforce, custom metrics, BOLD dataset</td></tr>
+        <tr><td>3.2 Data Security &amp; Privacy</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>IAM Identity Center vs IAM users, OIDC+Cognito, VPC interface endpoint, Comprehend PII real-time</td></tr>
+        <tr><td>1.3 Data Validation &amp; Pipelines</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>BDA blueprints, Glue ETL vs EMR, BDA multimodal parser, custom chunking, Comprehend entity</td></tr>
+        <tr><td>3.3 AI Governance &amp; Compliance</td><td class="ok">5</td><td>🔥🔥 HIGH</td><td>Prompt Management versioning/review, GuardrailIdentifier IAM key, CloudTrail vs CloudWatch</td></tr>
+        <tr><td>2.3 Enterprise Integration</td><td class="ok">4</td><td>🔥🔥 HIGH</td><td>ReAct vs CoT, S3 presigned+SQS for async, EventBridge+Step Functions, RAG vs streaming</td></tr>
+        <tr><td>3.1 Input/Output Safety</td><td class="ok">4</td><td>🔥🔥 HIGH</td><td>Prompt attack filter vs denied topics, GuardrailPolicyType metrics, contextual grounding for RAG</td></tr>
+        <tr><td>4.3 Monitoring Systems</td><td class="ok">3</td><td>🔥🔥 HIGH</td><td>CloudWatch GenAI observability, KB logging vs invocation logging, max_tokens troubleshooting</td></tr>
+        <tr><td>2.5 App Integration Patterns</td><td class="ok">3</td><td>🔥 MEDIUM</td><td>Q Developer contextual IDE integration, WebSocket IAM permissions</td></tr>
+        <tr><td>5.2 Troubleshooting</td><td class="ok">3</td><td>🔥 MEDIUM</td><td>Shadow test vs A/B test, split docs vs compress, max_tokens for truncation</td></tr>
+        <tr><td>2.1 Agentic AI Solutions</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Strands+MCP vs Bedrock Flows, multi-specialist agents</td></tr>
+        <tr><td>2.2 Model Deployment</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>SageMaker async+GPU for image gen, Bedrock on-demand for Nova</td></tr>
+        <tr><td>1.2 Select &amp; Configure FMs</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Inference profile for HA (primary+secondary), distillation = prompts only</td></tr>
+        <tr><td>1.4 Vector Store Solutions</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>OpenSearch Service+hybrid search vs Serverless, S3 metadata types</td></tr>
+        <tr><td>4.1 Cost Optimization</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Batch inference + inference profiles, inference profiles for cost attribution</td></tr>
+        <tr><td>1.5 Retrieval Mechanisms</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Reranking, SQS-buffered KB sync</td></tr>
+        <tr><td>3.4 Responsible AI</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>BOLD dataset via Bedrock eval (not SageMaker Clarify)</td></tr>
+        <tr><td>4.2 App Performance</td><td class="ok">1</td><td>✅ LOW</td><td>Semantic caching with OpenSearch k-NN</td></tr>
+        <tr><td>2.4 FM API Integrations</td><td class="ok">1</td><td>✅ LOW</td><td>Single API GW + mapping templates + Secrets Manager</td></tr>
+      </table>
+    </div>
+
+    <div class="card wide">
+      <h3>🧠 Master Recall Card — 25 Rules to Memorize</h3>
+      <div class="recall-grid">
+        <div class="recall-item"><strong>BDA Structure</strong>1 project, multiple blueprints → BDA auto-selects per document</div>
+        <div class="recall-item"><strong>Eval Prompt Limit</strong>Max 1,000 prompts per evaluation job → split into multiple jobs</div>
+        <div class="recall-item"><strong>Shadow Test</strong>Safe validation (traffic copy) vs A/B (live split) — use shadow for new model validation</div>
+        <div class="recall-item"><strong>VPC Endpoint</strong>Bedrock = Interface endpoint (PrivateLink). Gateway = S3/DynamoDB ONLY</div>
+        <div class="recall-item"><strong>Guardrail IAM</strong>bedrock:GuardrailIdentifier condition key on InvokeModel/Converse — not Lambda proxy</div>
+        <div class="recall-item"><strong>Prompt Attack Filter</strong>For injection attacks. Denied topics = off-topic content. NOT the same.</div>
+        <div class="recall-item"><strong>IAM Identity Center</strong>Always for enterprise AD/Entra ID. Never create IAM users matching AD accounts.</div>
+        <div class="recall-item"><strong>Glue ETL not EMR</strong>Fine-tuning data → Glue ETL for JSONL. EMR = overkill for format conversion.</div>
+        <div class="recall-item"><strong>Comprehend Entity</strong>Entity recognition = extract attributes. Classification = assign labels to doc.</div>
+        <div class="recall-item"><strong>ReAct vs CoT</strong>ReAct = observe→reason→act (agentic). CoT = linear reasoning chain (no actions).</div>
+        <div class="recall-item"><strong>KB Sync Resilience</strong>S3 Event → SQS queue → Lambda (poll) → IngestKnowledgeBaseDocuments</div>
+        <div class="recall-item"><strong>Custom Eval Metrics</strong>Company-specific quality = custom dataset + custom metrics. Not industry benchmarks.</div>
+        <div class="recall-item"><strong>S3 Timestamps</strong>Timestamps = system-defined metadata (S3 auto). Authorship = user-defined.</div>
+        <div class="recall-item"><strong>RAG vs Streaming</strong>RAG = accuracy. Streaming = latency. Different problems, different solutions.</div>
+        <div class="recall-item"><strong>Inference Profiles HA</strong>Primary + secondary region config. Failover, not round-robin.</div>
+        <div class="recall-item"><strong>Prompt Management</strong>Versioning + review workflow before activation. CloudTrail for compliance audit.</div>
+        <div class="recall-item"><strong>CloudWatch GenAI</strong>Use CloudWatch GenAI observability (not Application Signals + X-Ray) for Lambda+Bedrock.</div>
+        <div class="recall-item"><strong>BDA = Parser only</strong>BDA extracts from docs/media. Orchestration = EventBridge + Step Functions.</div>
+        <div class="recall-item"><strong>Strands+MCP</strong>Dynamic tool use at runtime. Bedrock Flows = predefined sequential steps only.</div>
+        <div class="recall-item"><strong>Cognito Workforce</strong>Bedrock human evaluation = Cognito user pool (not SageMaker Ground Truth).</div>
+        <div class="recall-item"><strong>Distillation = Prompts</strong>Supply only prompts. Teacher model generates responses internally during distillation.</div>
+        <div class="recall-item"><strong>Semantic Cache</strong>OpenSearch k-NN for semantic matching. ElastiCache Redis = exact-string only.</div>
+        <div class="recall-item"><strong>BOLD Dataset</strong>Bias detection in text gen = Bedrock eval + BOLD dataset. Not SageMaker Clarify.</div>
+        <div class="recall-item"><strong>max_tokens</strong>Truncated responses = increase max_tokens parameter. Not a logging/monitoring fix.</div>
+        <div class="recall-item"><strong>Hybrid Search</strong>OpenSearch Service (not Serverless) + sparse + dense vectors = sub-second hybrid search.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Comprehensive analysis of 7 official AIP-C01 practice documents · 120 total questions · 56 mistakes across all files · 15 new gap topics identified beyond previous analysis
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Domain 2 — Implementation &amp; Integration</title>
+<style>
+:root{--bg:#0b0b18;--card:#11112a;--border:#1e1e3e;--text:#dde;--muted:#666;--hero-a:#1a0f00;--hero-b:#120820;--hero-c:#4a3000}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13.5px;line-height:1.6}a{color:#7aade8;text-decoration:none}
+.topnav{background:#080818;border-bottom:1px solid var(--border);padding:9px 18px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}.topnav .brand{font-size:11px;color:var(--muted);margin-right:6px}.topnav a{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:3px 11px;font-size:11px;color:#aac}.topnav a.active{background:#2a1a0a;border-color:#6a4a0a;color:#fca}.topnav a:hover{background:#1a1a35;text-decoration:none}
+.hero{padding:20px 22px 14px;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));border-bottom:2px solid var(--hero-c)}.hero h1{font-size:18px;font-weight:800}.hero p{font-size:12px;color:#aab;margin-top:4px}.score-row{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}.score-badge{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:3px 11px;font-size:11px}.score-badge .n{font-weight:800;font-size:14px;margin-right:3px}.ok .n{color:#e67e22}.good .n{color:#2ecc71}.bad .n{color:#e74c3c}
+.sec{margin:14px 16px}.sec-title{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}.sec-title span{color:#f0a040;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:9px}.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 14px}.card.wide{grid-column:1/-1}.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#8899bb;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.tip,.gotcha,.remember,.when,.avoid,.note{border-radius:0 4px 4px 0;padding:5px 9px;margin-bottom:5px;font-size:12.5px;line-height:1.5}
+.tip{background:rgba(41,128,185,.1);border-left:3px solid #2980b9;color:#b0cce8}.tip::before{content:"💡 "}
+.gotcha{background:rgba(192,57,43,.1);border-left:3px solid #c0392b;color:#daa}.gotcha::before{content:"⚠️ "}
+.remember{background:rgba(142,68,173,.1);border-left:3px solid #8e44ad;color:#ccb}.remember::before{content:"🧠 "}
+.when{background:rgba(22,160,133,.1);border-left:3px solid #16a085;color:#adc}.when::before{content:"🎯 "}
+.avoid{background:rgba(243,156,18,.08);border-left:3px solid #f39c12;color:#cba}.avoid::before{content:"🚫 "}
+.note{background:#111128;border-left:3px solid #333;color:#889}.note::before{content:"📎 "}
+table.cmp{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0}table.cmp th{background:#0d0d22;color:#8899bb;padding:5px 9px;border:1px solid var(--border);text-align:left}table.cmp td{padding:4px 9px;border:1px solid #161630;vertical-align:top}table.cmp tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.vs-use,.vs-no{border-radius:5px;padding:8px 10px;font-size:12px}.vs-use{border:1px solid #1a4a1a;background:rgba(39,174,96,.06)}.vs-no{border:1px solid #4a1a1a;background:rgba(192,57,43,.06)}.vs-use h4{color:#2ecc71;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-no h4{color:#e74c3c;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-use li,.vs-no li{list-style:none;padding:1.5px 0;font-size:11.5px}
+code{background:#141430;color:#7fc;font-size:11px;padding:1px 5px;border-radius:3px;font-family:monospace}strong{color:#ddf}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:10px}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="brand">AIP-C01</span>
+  <a href="study-d1.html">Domain 1</a>
+  <a href="study-d2.html" class="active">Domain 2</a>
+  <a href="study-d3.html">Domain 3</a>
+  <a href="study-d45.html">Domain 4 &amp; 5</a>
+  <a href="gap-cheatsheet.html">Gap Sheet</a>
+  <a href="index.html">🏠 Home</a>
+</nav>
+
+<div class="hero">
+  <h1>🟠 Domain 2 — Implementation &amp; Integration</h1>
+  <p>Subdomains 2.1–2.5 · Your gap areas: 2.1 Agents · 2.2 Deployment · 2.3 Architecture · 2.5 App Integration</p>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2.1 AGENTIC AI                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>2.1</span> — Agentic AI Solutions &amp; Tool Integration</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Strands SDK — When Single Bedrock Agents Aren't Enough</h3>
+    <div class="tip"><strong>Strands Agents SDK</strong> is an open-source framework for building multi-agent systems where different specialist agents handle different domains. Think of it as a routing layer that directs queries to the right expert agent.</div>
+    <div class="tip"><strong>MCP (Model Context Protocol)</strong> servers = the connectors between your Strands agent and external tools/APIs. Each company system or tool gets its own MCP server. The agent dynamically selects which MCP server to call at runtime.</div>
+    <div class="vs">
+      <div class="vs-use">
+        <h4>Use Strands + MCP When</h4>
+        <li>Multiple specialist domains needed</li>
+        <li>Dynamic tool selection at runtime</li>
+        <li>Complex multi-step, multi-domain workflows</li>
+        <li>LLM needs to decide which tool to call</li>
+        <li>Each tool = its own MCP server deployed as Lambda</li>
+      </div>
+      <div class="vs-no">
+        <h4>Use Bedrock Flows When</h4>
+        <li>Fixed, predictable execution path</li>
+        <li>Sequential steps you define in advance</li>
+        <li>Deterministic pipelines (no dynamic routing)</li>
+        <li>Simple LLM → Lambda → LLM chains</li>
+        <li>NOT for dynamic tool selection</li>
+      </div>
+    </div>
+    <div class="gotcha">Bedrock Flows implements predefined sequential steps with fixed logic. If the scenario involves an LLM deciding at runtime which tool to call, or routing between specialist domains, Flows can't do that — use Strands.</div>
+  </div>
+
+  <div class="card">
+    <h3>Strands Specialist Multi-Agent Pattern</h3>
+    <div class="tip">Pattern: Create one specialist agent per domain (BillingAgent, TechSupportAgent, AccountAgent). Deploy each as a Lambda function. Register them all in Strands. An orchestrator agent routes user requests to the right specialist.</div>
+    <div class="gotcha">A single Bedrock Agent with many OpenAPI action groups becomes unwieldy for complex multi-domain scenarios. The LLM has to process all the tool schemas at once, increasing latency and confusion. Specialist agents keep the context focused.</div>
+    <div class="when">Scenario: "AI assistant handles subscriptions, billing, AND tech support" → Strands with specialist agents (one per domain) routed by an orchestrator. Not a single Bedrock Agent trying to do everything.</div>
+  </div>
+
+  <div class="card">
+    <h3>ReAct Pattern vs Chain-of-Thought in Step Functions</h3>
+    <div class="vs">
+      <div class="vs-use">
+        <h4>ReAct (Reasoning + Acting)</h4>
+        <li><strong>Interleaves</strong> reasoning and action</li>
+        <li>Observe → Reason → Act → Observe again…</li>
+        <li>Dynamic — loops until task complete</li>
+        <li>Good for: tool use, multi-step data retrieval</li>
+        <li>In Step Functions: states for Observe/Reason/Act</li>
+      </div>
+      <div class="vs-no">
+        <h4>Chain-of-Thought (CoT)</h4>
+        <li>Explicit reasoning steps in the <em>prompt</em></li>
+        <li>Linear — no action loop, no tool calls</li>
+        <li>Good for: complex math, logical reasoning</li>
+        <li>Not designed for tool use or dynamic workflows</li>
+        <li>CoT Choice states = not how ReAct works</li>
+      </div>
+    </div>
+    <div class="remember">When the exam asks about Step Functions + FM for a dynamic data retrieval/workflow system → <strong>ReAct pattern</strong> with states for Observation, Reasoning, and Action. Use built-in Step Functions error handling + retry logic for model invocations.</div>
+    <div class="gotcha">Chain-of-thought with "Choice states to dynamically adjust the reasoning path" — this is CoT terminology mixed with Step Functions, not the right architecture for agentic workflows.</div>
+  </div>
+
+  <div class="card">
+    <h3>IAM for WebSocket + Bedrock Streaming</h3>
+    <div class="tip">When Lambda streams Bedrock responses over a WebSocket API, it needs TWO permissions in its IAM role:</div>
+    <div class="tip"><code>bedrock:InvokeModelWithResponseStream</code> — permission to stream from Bedrock (not just InvokeModel)</div>
+    <div class="tip"><code>execute-api:ManageConnections</code> — permission to push to WebSocket clients via API Gateway</div>
+    <div class="remember">The resource ARN for ManageConnections must include your specific API Gateway WebSocket API ID. Generic <code>*</code> ARNs are not best practice and may not work.</div>
+    <div class="gotcha">Buffering streaming tokens in DynamoDB + DynamoDB Streams adds unnecessary complexity and latency. The solution is just correct IAM permissions — streaming is designed to work directly without buffering.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2.2 MODEL DEPLOYMENT               -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>2.2</span> — Model Deployment Strategies</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>SageMaker Inference Type Decision Tree</h3>
+    <table class="cmp">
+      <tr><th>Type</th><th>Choose When</th><th>Instance</th><th>Key Trait</th></tr>
+      <tr><td><strong>Real-time</strong></td><td>Low latency (&lt;1s), synchronous, constant traffic</td><td>Any</td><td>Always-on endpoint, billed per hour</td></tr>
+      <tr><td><strong>Asynchronous</strong></td><td>Long-running (image/video gen), large payloads, spiky traffic</td><td><strong>Accelerated (GPU)</strong></td><td>Queue-based, result to S3</td></tr>
+      <tr><td><strong>Serverless</strong></td><td>Infrequent/bursty traffic, simple models, cost savings at idle</td><td>General purpose (auto)</td><td>Pay per invocation, cold starts possible</td></tr>
+      <tr><td><strong>Batch</strong></td><td>Offline, large dataset, no latency requirement</td><td>Any</td><td>Process millions at once, lowest cost</td></tr>
+    </table>
+    <div class="gotcha">Image generation models are GPU-intensive and have variable processing time. They need <strong>Asynchronous inference + accelerated (GPU) instance types</strong>. Serverless endpoints use general-purpose instances which lack GPU acceleration for image gen workloads.</div>
+    <div class="remember">Serverless = general compute, auto-scaled to zero. Async = queue-based, GPU-capable, designed for long-running ML inference.</div>
+  </div>
+
+  <div class="card">
+    <h3>Shadow Testing vs A/B Testing — Validation Before Release</h3>
+    <div class="vs">
+      <div class="vs-use">
+        <h4>Shadow Test ✓ — Safe Validation</h4>
+        <li>New model receives a <em>copy</em> of prod traffic</li>
+        <li>Users only see old model responses</li>
+        <li>Zero production impact on users</li>
+        <li>Compare metrics: latency, accuracy, errors</li>
+        <li>Use to validate BEFORE releasing to users</li>
+      </div>
+      <div class="vs-no">
+        <h4>A/B Test (Production Variants)</h4>
+        <li>Live traffic split between old + new model</li>
+        <li>Real users see different model responses</li>
+        <li>Good for incremental rollout / comparison</li>
+        <li>Risk: users see potentially worse responses</li>
+        <li>Use when you're ready to expose both models</li>
+      </div>
+    </div>
+    <div class="when">Scenario: "validate a new model version without impacting production users" → shadow test. If the question says "gradually shift traffic" → that's A/B or canary deployment.</div>
+  </div>
+
+  <div class="card">
+    <h3>Bedrock On-Demand vs SageMaker — Which to Deploy To</h3>
+    <div class="tip">If the model is <strong>natively available in Amazon Bedrock</strong> (Amazon Nova, Claude, Titan, Llama via Bedrock) → use Bedrock on-demand inference. Zero infrastructure. Pay per token. Automatic scaling.</div>
+    <div class="tip">If the model is <strong>custom-trained, fine-tuned by you, or from HuggingFace via JumpStart</strong> → deploy to SageMaker endpoint (real-time or async).</div>
+    <div class="gotcha">The exam tries to get you to deploy Nova or Claude to SageMaker. Don't take the bait. Bedrock-native models should always stay in Bedrock. SageMaker is for your own models.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2.3 ENTERPRISE INTEGRATION         -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>2.3</span> — Enterprise Integration Architectures</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Async Document Processing Pattern</h3>
+    <div class="tip">Pattern for document upload + AI processing: <strong>S3 presigned URL</strong> (client uploads directly to S3, no API Gateway needed) → <strong>S3 Event Notification → SQS → Lambda → Bedrock</strong> (async processing) → results back to S3 or DynamoDB.</div>
+    <div class="gotcha">Using WebSocket + InvokeModelWithResponseStream for document processing is the wrong pattern. Streaming is for interactive real-time output where users are waiting. Document processing is async — the user uploads and comes back for results.</div>
+    <div class="remember">Presigned URLs keep large file uploads out of Lambda memory limits. S3 → SQS → Lambda = decoupled, resilient, retryable. This is the AWS-recommended pattern for file-based AI workflows.</div>
+    <div class="when">Scenario: "users upload documents for AI analysis" → presigned URL upload to S3 → event-driven pipeline. NOT API Gateway + streaming.</div>
+  </div>
+
+  <div class="card">
+    <h3>EventBridge + Step Functions for Video/Multi-Service Orchestration</h3>
+    <div class="tip">When you need to chain multiple AWS services (e.g., Rekognition + Transcribe + Bedrock), use <strong>EventBridge rule → Step Functions state machine</strong> as the orchestrator. Step Functions calls each service API directly — no Lambda glue code needed for simple integrations.</div>
+    <div class="remember">S3 upload → EventBridge rule (matches PutObject) → Step Functions workflow → state 1: Rekognition (object detection) → state 2: Bedrock FM (generate summary) → state 3: store results.</div>
+    <div class="gotcha">BDA blueprints define document field extraction schemas — they are not workflow orchestrators. You cannot use a BDA blueprint to "orchestrate Rekognition and Bedrock."</div>
+  </div>
+
+  <div class="card">
+    <h3>API Gateway for Multi-Provider Model Routing</h3>
+    <div class="tip">Pattern: Single API Gateway REST API + <strong>non-proxy integrations</strong> + <strong>mapping templates (VTL)</strong> to transform request/response per provider + <strong>stage variables</strong> for endpoint URLs + <strong>AWS Secrets Manager</strong> for API keys.</div>
+    <div class="gotcha">Never store API keys in client-side code. Never create one API Gateway per model provider — that's unmanageable and insecure. One API GW handles all providers through routing logic in mapping templates.</div>
+    <div class="avoid">Avoid: separate API GWs per model provider + client-side routing + API keys in the client app. This is a security disaster and a scaling nightmare.</div>
+    <div class="when">Header-based routing: API GW reads a header (e.g., Content-Type or X-Model-Provider) and uses the stage variable to route to the right backend model endpoint.</div>
+  </div>
+
+  <div class="card">
+    <h3>RAG vs Streaming — Same Answer, Different Context</h3>
+    <div class="tip">This pattern appears multiple times. Memorize it:</div>
+    <div class="remember">
+      <strong>Accuracy problem</strong> (wrong answers, stale data, hallucination about your products) → <strong>RAG + Knowledge Bases</strong> with up-to-date product catalog.<br><br>
+      <strong>Latency/UX problem</strong> (users waiting too long to see any response) → <strong>response streaming</strong> (show tokens as they arrive).<br><br>
+      These solve completely different things. Streaming the wrong answer is still the wrong answer.
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2.4 FM API INTEGRATIONS            -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>2.4</span> — FM API Integrations</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Converse API vs InvokeModel API</h3>
+    <div class="tip"><strong>Converse API</strong> = unified multi-turn conversation interface. Works across all Bedrock models with a consistent message format. Automatically handles system prompts, conversation history, tool use. Best for chat applications.</div>
+    <div class="tip"><strong>InvokeModel API</strong> = model-specific, lower-level. Each model has its own request/response format. More control, but you have to handle the format differences yourself.</div>
+    <div class="remember">Fine-tuning data format = JSONL in <strong>Converse API format</strong> (not InvokeModel format). The exam specifies this when asking about fine-tuning data prep with Glue ETL.</div>
+  </div>
+
+  <div class="card">
+    <h3>InvokeModelWithResponseStream — Streaming Specifics</h3>
+    <div class="tip">For streaming responses: use <code>InvokeModelWithResponseStream</code> (not <code>InvokeModel</code>). The response comes back as a stream of chunks (SSE events) that you send progressively to the client.</div>
+    <div class="remember">IAM permission needed: <code>bedrock:InvokeModelWithResponseStream</code> — this is a separate permission from <code>bedrock:InvokeModel</code>. Both must be granted if your app uses both.</div>
+    <div class="tip">For WebSocket delivery: Lambda needs <code>bedrock:InvokeModelWithResponseStream</code> AND <code>execute-api:ManageConnections</code>. The ManageConnections permission is what lets Lambda push to WebSocket clients.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2.5 APP INTEGRATION PATTERNS       -->
+<!-- ═══════════════════════════════════ -->
+<div class="sec">
+<div class="sec-title"><span>2.5</span> — Application Integration Patterns &amp; Development Tools</div>
+<div class="grid">
+
+  <div class="card">
+    <h3>Amazon Q Developer — What It Actually Does</h3>
+    <div class="tip">Q Developer is a full AI coding assistant — not just autocomplete. Key capabilities:</div>
+    <div class="tip"><strong>Contextual code suggestions</strong> — understands YOUR project's codebase, not just generic patterns. It reads your existing code to give relevant suggestions.</div>
+    <div class="tip"><strong>Code generation + refactoring</strong> — generate new functions, refactor existing ones, rename variables across files.</div>
+    <div class="tip"><strong>API guidance</strong> — explains AWS service APIs and how to use them correctly in context.</div>
+    <div class="tip"><strong>Performance optimization</strong> — identifies bottlenecks and suggests improvements.</div>
+    <div class="tip"><strong>Security analysis</strong> — flags security issues in code (one of many capabilities, not the only one).</div>
+    <div class="gotcha">The exam tries to limit Q Developer to "security analysis only" or "just code completions and documentation lookups." Q Developer does all of the above plus code transformation, test generation, and modernization.</div>
+    <div class="remember">Key word: <strong>contextual</strong> — it understands your project's specific code, dependencies, and patterns. Not just generic AWS documentation lookups.</div>
+  </div>
+
+  <div class="card">
+    <h3>Inference Profiles for Cost Attribution</h3>
+    <div class="tip">Inference profiles are a routing and tagging mechanism. When you invoke Bedrock through an inference profile, AWS automatically tags the API calls with the profile's metadata for cost reporting.</div>
+    <div class="remember">Create one inference profile per business unit / cost center / clinic. Invoke models via the profile ARN instead of the model ARN directly. AWS Cost Explorer shows costs broken down by profile.</div>
+    <div class="when">Scenario: "medical company, multiple clinics, need to track Bedrock costs per clinic" → create one inference profile per clinic ID → each Lambda invocation uses the clinic's profile → cost reports per clinic.</div>
+    <div class="gotcha">Routing by S3 key prefix or tagging Lambda functions doesn't give you clean Bedrock cost attribution. Only inference profiles give you direct cost breakdown at the Bedrock API level.</div>
+  </div>
+
+  <div class="card">
+    <h3>Bedrock Flows vs Agents vs Strands — When to Use Each</h3>
+    <table class="cmp">
+      <tr><th>Service</th><th>Use For</th><th>Dynamic?</th></tr>
+      <tr><td><strong>Bedrock Flows</strong></td><td>Fixed multi-step LLM pipelines with predictable paths</td><td>No — steps predefined</td></tr>
+      <tr><td><strong>Bedrock Agents</strong></td><td>Single domain agent with defined action groups (tools)</td><td>Yes — LLM picks which tool</td></tr>
+      <tr><td><strong>Strands SDK</strong></td><td>Multi-specialist agents, MCP tool integration, complex orchestration</td><td>Yes — dynamic at runtime</td></tr>
+    </table>
+    <div class="when">Fixed sequential document summarization pipeline → Flows.<br>Customer service bot that can look up orders OR check inventory → Bedrock Agent.<br>Platform with billing, tech support, AND account agents, each needing their own context → Strands.</div>
+  </div>
+
+</div>
+</div>
+
+<footer>Domain 2 Study Guide · AIP-C01 Exam Prep · Focus areas based on your actual exam performance</footer>
+</body>
+</html>

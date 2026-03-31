@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DP-700 Mission Control — 4-Hour Study Sprint</title>
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --bg:#0f1117; --surface:#161b22; --surface2:#1c2128; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --faint:#484f58;
+  --primary:#58a6ff; --primary-dim:#1f3a5f;
+  --green:#3fb950; --green-dim:#1a3625;
+  --yellow:#e3b341; --yellow-dim:#3d2f0a;
+  --red:#f85149; --red-dim:#3d1a19;
+  --purple:#bc8cff; --purple-dim:#2d1f4e;
+  --orange:#ffa657; --orange-dim:#3d2508;
+  --cyan:#39d0d8; --cyan-dim:#0d3136;
+  --radius:8px; --radius-lg:12px; --radius-xl:16px;
+  --shadow:0 4px 24px rgba(0,0,0,.45);
+  --font:'Segoe UI',system-ui,sans-serif;
+  --mono:'Cascadia Code','Fira Code','JetBrains Mono',monospace;
+  --header-h:60px; --sidebar-w:260px;
+}
+[data-theme="light"] {
+  --bg:#f6f8fa; --surface:#fff; --surface2:#f0f2f5; --border:#d0d7de;
+  --text:#1f2328; --muted:#57606a; --faint:#adb5bd;
+  --primary:#0969da; --primary-dim:#dbeafe;
+  --green:#1a7f37; --green-dim:#dafbe1;
+  --yellow:#9a6700; --yellow-dim:#fef9c3;
+  --red:#d1242f; --red-dim:#ffebe9;
+  --purple:#8250df; --purple-dim:#fbefff;
+  --orange:#bc4c00; --orange-dim:#fff1e5;
+  --cyan:#0598a0; --cyan-dim:#e0f7fa;
+  --shadow:0 4px 16px rgba(0,0,0,.12);
+}
+/* ── RESET ───────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 12px)}
+body{font-family:var(--font);font-size:14px;color:var(--text);background:var(--bg);line-height:1.6;min-height:100vh}
+a{color:var(--primary);text-decoration:none}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+code,pre{font-family:var(--mono)}
+table{border-collapse:collapse;width:100%}
+/* ── HEADER ─────────────────────────────────────────────────── */
+#header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:200;backdrop-filter:blur(8px)}
+.logo{background:linear-gradient(135deg,var(--primary),var(--purple));border-radius:var(--radius);padding:6px 10px;font-weight:800;font-size:13px;color:#fff;letter-spacing:.5px;white-space:nowrap}
+.header-title{font-weight:600;font-size:15px;color:var(--text);white-space:nowrap}
+.header-sep{flex:1}
+/* Timer */
+#timer-wrap{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px}
+#timer{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);letter-spacing:2px;min-width:80px;text-align:center}
+#timer.warn{color:var(--yellow)}
+#timer.danger{color:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+/* Search */
+#search-wrap{position:relative;width:220px}
+#search{width:100%;padding:7px 12px 7px 32px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s}
+#search:focus{border-color:var(--primary)}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+/* Theme + Quiz btns */
+.hbtn{padding:6px 14px;border-radius:var(--radius);font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s}
+.hbtn:hover{background:var(--border)}
+.hbtn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.hbtn.primary:hover{opacity:.85}
+/* Progress bar */
+#progress-bar{position:fixed;top:var(--header-h);left:0;right:0;height:3px;background:var(--border);z-index:199}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--purple));width:0%;transition:width .4s}
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+#app{display:flex;padding-top:var(--header-h);min-height:100vh}
+/* ── SIDEBAR ─────────────────────────────────────────────────── */
+#sidebar{position:fixed;top:var(--header-h);left:0;width:var(--sidebar-w);height:calc(100vh - var(--header-h));overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;z-index:100}
+#sidebar::-webkit-scrollbar{width:4px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.nav-section{padding:6px 16px 4px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:13px;color:var(--muted);border-left:3px solid transparent;transition:all .15s;cursor:pointer}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--primary);border-left-color:var(--primary);background:var(--primary-dim)}
+.nav-item.done{color:var(--green)}
+.nav-item .check{font-size:12px;margin-left:auto;opacity:.6}
+.nav-divider{height:1px;background:var(--border);margin:8px 16px}
+/* ── MAIN ────────────────────────────────────────────────────── */
+#main{margin-left:var(--sidebar-w);flex:1;padding:24px 32px 80px;max-width:1100px}
+/* ── SECTION HEADERS ─────────────────────────────────────────── */
+.section{margin-bottom:40px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.section-num{background:var(--primary);color:#fff;border-radius:var(--radius);padding:2px 8px;font-size:12px;font-weight:700}
+.section-title{font-size:20px;font-weight:700;color:var(--text)}
+.mark-done{margin-left:auto;font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:var(--surface2);cursor:pointer;transition:all .2s}
+.mark-done:hover,.mark-done.done{background:var(--green-dim);color:var(--green);border-color:var(--green)}
+/* ── CARDS ───────────────────────────────────────────────────── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow)}
+.card-title{font-weight:700;font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card-body{font-size:13px;color:var(--muted);line-height:1.7}
+.pct{font-size:24px;font-weight:800;color:var(--primary)}
+.domain-card{border-left:4px solid}
+.domain-card.d1{border-left-color:var(--primary)}
+.domain-card.d2{border-left-color:var(--purple)}
+.domain-card.d3{border-left-color:var(--cyan)}
+/* ── TABLES ──────────────────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto;margin:12px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table{font-size:13px}
+th{background:var(--surface2);padding:8px 12px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.check-y{color:var(--green)}
+.check-n{color:var(--red)}
+/* ── CODE BLOCKS ─────────────────────────────────────────────── */
+.code-block{position:relative;background:#0d1117;border:1px solid var(--border);border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.code-label{background:var(--surface2);padding:4px 12px;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.copy-btn{font-size:11px;padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.copy-btn.copied{background:var(--green);color:#fff;border-color:var(--green)}
+pre{padding:14px;font-size:12.5px;line-height:1.6;overflow-x:auto;color:#e6edf3}
+.kw{color:#ff7b72}
+.fn{color:#79c0ff}
+.str{color:#a5d6ff}
+.cmt{color:#8b949e;font-style:italic}
+.kql-kw{color:#ff7b72}
+.kql-fn{color:#d2a8ff}
+.kql-op{color:#79c0ff}
+.kql-str{color:#a5d6ff}
+/* ── CALLOUTS ────────────────────────────────────────────────── */
+.callout{border-radius:var(--radius);padding:12px 16px;margin:10px 0;font-size:13px;border-left:4px solid;display:flex;gap:10px}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.callout.trap{background:var(--red-dim);border-color:var(--red);color:var(--text)}
+.callout.tip{background:var(--green-dim);border-color:var(--green);color:var(--text)}
+.callout.warn{background:var(--yellow-dim);border-color:var(--yellow);color:var(--text)}
+.callout.info{background:var(--primary-dim);border-color:var(--primary);color:var(--text)}
+.callout.purple{background:var(--purple-dim);border-color:var(--purple);color:var(--text)}
+/* ── BADGES ─────────────────────────────────────────────────── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge.green{background:var(--green-dim);color:var(--green)}
+.badge.red{background:var(--red-dim);color:var(--red)}
+.badge.blue{background:var(--primary-dim);color:var(--primary)}
+.badge.yellow{background:var(--yellow-dim);color:var(--yellow)}
+.badge.purple{background:var(--purple-dim);color:var(--purple)}
+.badge.cyan{background:var(--cyan-dim);color:var(--cyan)}
+.badge.orange{background:var(--orange-dim);color:var(--orange)}
+/* ── ACCORDION ───────────────────────────────────────────────── */
+.accordion{border:1px solid var(--border);border-radius:var(--radius);margin:8px 0;overflow:hidden}
+.acc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);cursor:pointer;font-weight:600;font-size:13px;transition:background .15s}
+.acc-head:hover{background:var(--surface2)}
+.acc-arrow{transition:transform .25s;color:var(--muted)}
+.acc-body{display:none;padding:16px;background:var(--surface2);border-top:1px solid var(--border)}
+.accordion.open .acc-arrow{transform:rotate(90deg)}
+.accordion.open .acc-body{display:block}
+/* ── QUIZ ────────────────────────────────────────────────────── */
+#quiz-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
+#quiz-modal.open{display:flex}
+#quiz-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;max-width:620px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow)}
+.quiz-progress{font-size:12px;color:var(--muted);margin-bottom:8px}
+.quiz-q{font-size:16px;font-weight:600;margin-bottom:20px;line-height:1.5}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;transition:all .2s;text-align:left}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-dim)}
+.quiz-opt.correct{border-color:var(--green);background:var(--green-dim);color:var(--green)}
+.quiz-opt.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red)}
+.quiz-opt.reveal{border-color:var(--green);background:var(--green-dim);color:var(--green)}
+.quiz-opt:disabled{cursor:default}
+.quiz-explain{font-size:13px;color:var(--muted);background:var(--surface2);border-radius:var(--radius);padding:12px;margin-bottom:16px;border-left:3px solid var(--primary)}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center}
+.quiz-score{font-size:13px;color:var(--muted)}
+.quiz-next{padding:8px 20px;background:var(--primary);color:#fff;border-radius:var(--radius);font-weight:600}
+.quiz-next:hover{opacity:.85}
+.quiz-close{padding:8px 20px;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted)}
+.quiz-close:hover{background:var(--surface2)}
+/* ── HIGHLIGHT (search) ──────────────────────────────────────── */
+mark{background:var(--yellow-dim);color:var(--yellow);border-radius:3px;padding:0 2px}
+/* ── SCROLLBAR ───────────────────────────────────────────────── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* ── MISC ────────────────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:768px){.two-col,.three-col{grid-template-columns:1fr}#sidebar{display:none}#main{margin-left:0;padding:16px}}
+p{margin-bottom:10px;font-size:13px;color:var(--muted);line-height:1.7}
+ul,ol{padding-left:20px;font-size:13px;color:var(--muted);line-height:1.8}
+li{margin-bottom:2px}
+h3{font-size:15px;font-weight:700;color:var(--text);margin:16px 0 8px}
+h4{font-size:13px;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+strong{color:var(--text)}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:32px;font-weight:800;color:var(--primary)}
+.hero-stat .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+</style>
+</head>
+<body>
+<header id="header">
+  <div class="logo">DP-700</div>
+  <div class="header-title">Mission Control — 4-Hour Study Sprint</div>
+  <div class="header-sep"></div>
+  <div id="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search" type="text" placeholder="Search topics..." autocomplete="off">
+  </div>
+  <button class="hbtn" onclick="toggleTheme()">🌓 Theme</button>
+  <button class="hbtn primary" onclick="openQuiz()">🎯 Practice Quiz</button>
+</header>
+<div id="progress-bar"><div id="progress-fill"></div></div>
+<div id="app">
+<nav id="sidebar">
+  <div class="nav-section">Overview</div>
+  <div class="nav-item active" onclick="scrollTo('s0')">Exam Overview</div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">Domain 1 · 30–35%</div>
+  <div class="nav-item" onclick="scrollTo('s1')">Architecture &amp; OneLake</div>
+  <div class="nav-item" onclick="scrollTo('s2')">Security &amp; Governance</div>
+  <div class="nav-item" onclick="scrollTo('s3')">Orchestration</div>
+  <div class="nav-item" onclick="scrollTo('s4')">Lifecycle &amp; Deployment</div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">Domain 2 · 30–35%</div>
+  <div class="nav-item" onclick="scrollTo('s5')">Decision Matrices</div>
+  <div class="nav-item" onclick="scrollTo('s6')">Batch Ingestion &amp; Transform</div>
+  <div class="nav-item" onclick="scrollTo('s7')">Streaming &amp; Real-Time Intel</div>
+  <div class="nav-item" onclick="scrollTo('s8')">Delta Lake Deep Dive</div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">Domain 3 · 30–35%</div>
+  <div class="nav-item" onclick="scrollTo('s9')">Monitoring &amp; Capacity</div>
+  <div class="nav-item" onclick="scrollTo('s10')">Troubleshooting &amp; Errors</div>
+  <div class="nav-item" onclick="scrollTo('s11')">Performance Optimization</div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">Quick Reference</div>
+  <div class="nav-item" onclick="scrollTo('s12')">KQL Syntax Reference</div>
+  <div class="nav-item" onclick="scrollTo('s13')">PySpark &amp; T-SQL Snippets</div>
+  <div class="nav-item" onclick="scrollTo('s14')">Exam Traps &amp; Gotchas</div>
+</nav>
+<main id="main">
+
+<div class="section" id="s0">
+  <div class="section-header">
+    <span class="section-num">START</span>
+    <span class="section-title">DP-700 Exam Overview</span>
+    <button class="mark-done" onclick="markDone(this,'s0')">✓ Done</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="card hero-stat"><div class="num">700</div><div class="lbl">Passing Score / 1000</div></div>
+    <div class="card hero-stat"><div class="num">~55</div><div class="lbl">Questions (est.)</div></div>
+    <div class="card hero-stat"><div class="num">3</div><div class="lbl">Equally Weighted Domains</div></div>
+    <div class="card hero-stat"><div class="num">Open</div><div class="lbl">Book Exam (MS Learn)</div></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card domain-card d1">
+      <div class="card-title"><span style="color:var(--primary)">Domain 1</span> <span class="badge blue">30–35%</span></div>
+      <div class="card-body">
+        <strong>Implement &amp; Manage Analytics Solution</strong><br>
+        Workspace settings (Spark, domain, OneLake, Dataflows Gen2), lifecycle management (Git, deployment pipelines, database projects), security &amp; governance (RLS, CLS, DDM, sensitivity labels, audit logs), orchestration patterns.
+      </div>
+    </div>
+    <div class="card domain-card d2">
+      <div class="card-title"><span style="color:var(--purple)">Domain 2</span> <span class="badge purple">30–35%</span></div>
+      <div class="card-body">
+        <strong>Ingest &amp; Transform Data</strong><br>
+        Full/incremental loads, dimensional model prep, shortcuts, mirroring, pipelines, PySpark/SQL/KQL transforms, streaming (Eventstreams, Spark Structured Streaming), windowing functions.
+      </div>
+    </div>
+    <div class="card domain-card d3">
+      <div class="card-title"><span style="color:var(--cyan)">Domain 3</span> <span class="badge cyan">30–35%</span></div>
+      <div class="card-body">
+        <strong>Monitor &amp; Optimize Analytics Solution</strong><br>
+        Monitor ingestion/transformation/semantic model refresh, configure alerts, resolve pipeline/Dataflow/notebook/KQL/Eventstream/T-SQL errors, optimize Lakehouse/pipeline/warehouse/Spark/query performance.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">📖</span>
+    <div><strong>Open-book strategy:</strong> At exam start, immediately open 3 MS Learn tabs: search <code>arg_max()</code> (KQL reference), <code>DENSE_RANK</code> (T-SQL reference), <code>pyspark.sql</code> (PySpark reference). Use split-screen for at most 5–10 lookups — it eats time fast. Answer all questions first.</div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">🎯</span>
+    <div><strong>What this exam really tests:</strong> Pick the RIGHT Fabric item for each scenario. Three pattern types dominate: (1) Lakehouse vs Warehouse vs Eventhouse, (2) Pipeline vs Dataflow vs Notebook, (3) Write/debug code in T-SQL / PySpark / KQL. <strong>Fabric-native ALWAYS beats legacy Azure equivalents.</strong></div>
+  </div>
+
+  <h3>The 5 "Always Wrong" Answers</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>If you see…</th><th>The exam answer is…</th></tr>
+      <tr><td>Azure Data Factory</td><td><strong>Fabric Data Pipeline</strong> (same UI, SaaS-native)</td></tr>
+      <tr><td>Synapse Dedicated SQL Pool</td><td><strong>Fabric Warehouse</strong></td></tr>
+      <tr><td>Azure Stream Analytics</td><td><strong>Eventstream + Eventhouse</strong></td></tr>
+      <tr><td>DAX authoring questions</td><td><strong>Not on DP-700</strong> (that's DP-600)</td></tr>
+      <tr><td>ARM templates for deployment</td><td><strong>Fabric Deployment Pipeline + Git integration</strong></td></tr>
+    </table>
+  </div>
+</div>
+<div class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">D1·1</span>
+    <span class="section-title">Architecture &amp; OneLake</span>
+    <button class="mark-done" onclick="markDone(this,'s1')">✓ Done</button>
+  </div>
+
+  <div class="callout info"><span class="callout-icon">💡</span>
+    <div><strong>OneLake = "OneDrive for data."</strong> One per tenant. Zero provisioning. Built on ADLS Gen2 (same APIs/SDKs) but fully SaaS — no storage accounts, no access keys, no resource groups. Every Fabric item writes <strong>Delta Parquet</strong> to OneLake automatically.</div>
+  </div>
+
+  <h3>Hierarchy — Memorize This</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Level</th><th>Description</th><th>Key fact</th></tr>
+    <tr><td><strong>Tenant</strong></td><td>One OneLake per org</td><td>Single Azure AD tenant</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>Compute unit (CUs)</td><td>Runs in ONE Azure region; defines SKU (F2–F2048)</td></tr>
+    <tr><td><strong>Workspace</strong></td><td>Primary security boundary</td><td>Linked to exactly one capacity</td></tr>
+    <tr><td><strong>Item</strong></td><td>Lakehouse, Warehouse, Pipeline, Notebook, Eventhouse…</td><td>All store data in OneLake as Delta Parquet</td></tr>
+    <tr><td><strong>Sub-item</strong></td><td>/Tables, /Files folders</td><td>Only /Tables (Delta) visible in SQL endpoint &amp; Direct Lake</td></tr>
+  </table></div>
+
+  <h3>OneLake Shortcuts — The Exam Loves These</h3>
+  <p>Shortcuts are <strong>symbolic links</strong> that point to data elsewhere without copying it.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Property</th><th>Detail</th></tr>
+    <tr><td>Where creatable</td><td>Lakehouses and KQL databases ONLY</td></tr>
+    <tr><td>Internal sources</td><td>Other lakehouses, warehouses, KQL databases, mirrored databases</td></tr>
+    <tr><td>External sources</td><td>ADLS Gen2, Amazon S3, Google Cloud Storage, Dataverse, Azure Blob Storage, S3-compatible</td></tr>
+    <tr><td>In /Tables</td><td><strong>Top-level ONLY</strong> — target must contain Delta data to be recognized as a table</td></tr>
+    <tr><td>In /Files</td><td>Any folder level</td></tr>
+    <tr><td>Internal security</td><td><strong>Passthrough</strong> (caller's identity)</td></tr>
+    <tr><td>External security</td><td><strong>Delegated</strong> (stored credentials — any lakehouse user can read through)</td></tr>
+    <tr><td>Cross-cloud caching</td><td>1–28 day retention; files &gt;1 GB are NOT cached</td></tr>
+    <tr><td>Deleting a shortcut</td><td>Removes pointer ONLY — target data untouched</td></tr>
+  </table></div>
+
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>Exam trap:</strong> "S3 data with egress cost concerns" → shortcut with <strong>caching disabled</strong> (no local copy). Know the difference between <strong>accelerated vs. non-accelerated shortcuts</strong> in Real-Time Intelligence (query acceleration adds a cached copy in OneLake).</div>
+  </div>
+
+  <h3>Lakehouse vs. Warehouse vs. Eventhouse</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Signal in the question</th><th>Answer</th></tr>
+    <tr><td>Spark, PySpark, notebooks, unstructured data, ML, medallion architecture</td><td><span class="badge blue">Lakehouse</span></td></tr>
+    <tr><td>T-SQL, stored procedures, multi-table transactions, star schema, dimensional model</td><td><span class="badge purple">Warehouse</span></td></tr>
+    <tr><td>Streaming, telemetry, IoT, logs, time-series, sub-second latency, KQL</td><td><span class="badge cyan">Eventhouse / KQL DB</span></td></tr>
+    <tr><td>Semi-structured data readable by T-SQL, KQL, AND Spark, written by Spark</td><td><span class="badge blue">Lakehouse</span></td></tr>
+    <tr><td>On-premises SQL Server data to Fabric</td><td><span class="badge yellow">Data Pipeline (Copy)</span></td></tr>
+  </table></div>
+
+  <h3>SQL Analytics Endpoint — Read-Only, Period</h3>
+  <p>Every Lakehouse auto-gets a SQL analytics endpoint. Supports: <code>SELECT</code>, <code>CREATE VIEW</code>, <code>CREATE FUNCTION</code>, <code>CREATE SECURITY POLICY</code>. <strong>No INSERT, UPDATE, DELETE, CREATE TABLE, or any DML.</strong> Auto-syncs Delta tables from /Tables within ~1 min. Sync halts after <strong>15 min of inactivity</strong>.</p>
+  <p><em>Note: Lakehouses now support custom schemas (e.g., beyond just `dbo`). Tables organized into custom schemas via Spark will successfully sync to the SQL analytics endpoint.</em></p>
+
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>Exam trap:</strong> Unmanaged external tables created via Spark with a custom <code>LOCATION</code> pointing to <code>/Files</code> are <strong>NOT visible</strong> in the SQL analytics endpoint. Only managed Delta tables in <code>/Tables</code> appear. Use OneLake shortcuts to bridge the gap.</div>
+  </div>
+
+  <h3>Managed vs. External Tables</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>Managed</th><th>External (Unmanaged)</th></tr>
+    <tr><td>Spark manages</td><td>Data + metadata</td><td>Metadata only</td></tr>
+    <tr><td>Storage</td><td><code>/Tables</code> (default)</td><td>User-specified (e.g., <code>/Files/bronze/</code>)</td></tr>
+    <tr><td>On DROP TABLE</td><td><strong>Data + metadata deleted</strong></td><td><strong>Only metadata removed</strong> — files persist</td></tr>
+    <tr><td>SQL analytics endpoint</td><td><span class="check-y">✅ Visible</span></td><td><span class="check-n">❌ Not visible</span></td></tr>
+    <tr><td>Direct Lake (Power BI)</td><td><span class="check-y">✅ Works</span></td><td><span class="check-n">❌ Does not work</span></td></tr>
+  </table></div>
+
+  <h3>Fabric Warehouse Key Facts</h3>
+  <div class="two-col">
+    <div>
+      <h4>Supported</h4>
+      <ul><li>Full T-SQL DML/DDL: INSERT, UPDATE, DELETE, MERGE</li><li>Stored procedures, COPY INTO, CTAS</li><li><code>CREATE TABLE AS CLONE OF</code> (zero-copy, 30-day time travel)</li><li>Three-part cross-database queries (same workspace)</li><li><code>IDENTITY</code> property for generating surrogate keys</li></ul>
+    </div>
+    <div>
+      <h4>NOT Supported</h4>
+      <ul><li>Triggers, user-created indexes, cursors</li><li>Recursive CTEs, materialized views</li><li><code>@@IDENTITY / SCOPE_IDENTITY()</code>, <code>FOR XML</code></li><li>DBCC commands, <code>CREATE USER</code></li><li>Named procedure parameters</li><li>Spark access (Warehouse is T-SQL only)</li></ul>
+    </div>
+  </div>
+  <div class="callout warn"><span class="callout-icon">⚠️</span>
+    <div><strong>Data type migration gotchas:</strong> <code>money</code>→<code>decimal(19,4)</code>, <code>nvarchar</code>→<code>varchar</code>, <code>tinyint</code>→<code>smallint</code>, <code>datetimeoffset</code>→<code>datetime2</code> (time zone data lost)</div>
+  </div>
+</div><div class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">D1·2</span>
+    <span class="section-title">Security &amp; Governance</span>
+    <button class="mark-done" onclick="markDone(this,'s2')">✓ Done</button>
+  </div>
+
+  <h3>Workspace Roles Permission Matrix</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Capability</th><th>Admin</th><th>Member</th><th>Contributor</th><th>Viewer</th></tr>
+    <tr><td>Delete workspace, manage Git integration</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
+    <tr><td>Add/remove users (lower roles)</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
+    <tr><td>Create/modify/execute items (notebooks, pipelines)</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td></tr>
+    <tr><td>Read data via T-SQL / SQL endpoint</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td></tr>
+    <tr><td>Read data via Spark / OneLake APIs</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td></tr>
+    <tr><td>Share items with others</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
+  </table></div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>Critical:</strong> Admin/Member/Contributor have implicit OneLake Write access that <strong>overrides</strong> OneLake security roles and RLS/CLS. Viewers can query the SQL analytics endpoint but CANNOT access data via Spark, Lakehouse explorer, or OneLake APIs.</div>
+  </div>
+
+  <h3>Item-Level Permissions</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Permission</th><th>Allows</th><th>Watch out</th></tr>
+    <tr><td><span class="badge blue">Read</span></td><td>Connect to the item</td><td></td></tr>
+    <tr><td><span class="badge yellow">ReadData</span></td><td>Query data via T-SQL (SQL endpoint)</td><td>Respects RLS/CLS/DDM</td></tr>
+    <tr><td><span class="badge red">ReadAll</span></td><td>Access raw OneLake files directly</td><td><strong>BYPASSES all SQL-level security!</strong></td></tr>
+    <tr><td><span class="badge purple">Write</span></td><td>Full administrative access</td><td></td></tr>
+    <tr><td><span class="badge cyan">Share</span></td><td>Manage permissions for others</td><td></td></tr>
+  </table></div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>ReadAll bypasses RLS/CLS/DDM.</strong> When implementing SQL security, ensure users have ONLY <code>ReadData</code>, not <code>ReadAll</code>. <code>ReadAll</code> gives access to raw Parquet files in OneLake, bypassing all warehouse-level security.</div>
+  </div>
+
+  <h3>Row-Level Security (RLS)</h3>
+  <div class="code-block">
+    <div class="code-label">T-SQL — RLS Setup <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">-- Step 1: Create filter function</span>
+<span class="kw">CREATE FUNCTION</span> Security.fn_filter(<span class="str">@SalesRep</span> varchar(50))
+<span class="kw">RETURNS TABLE WITH SCHEMABINDING AS</span>
+<span class="kw">RETURN SELECT</span> 1 <span class="kw">AS</span> result
+<span class="kw">WHERE</span> <span class="str">@SalesRep</span> = USER_NAME() <span class="kw">OR</span> USER_NAME() = <span class="str">'manager@contoso.com'</span>;
+
+<span class="cmt">-- Step 2: Create security policy</span>
+<span class="kw">CREATE SECURITY POLICY</span> SalesFilter
+<span class="kw">ADD FILTER PREDICATE</span> Security.fn_filter(SalesPersonColumn)
+<span class="kw">ON</span> dbo.Sales <span class="kw">WITH</span> (STATE = <span class="kw">ON</span>);</pre>
+  </div>
+  <p>Works in both <strong>Warehouse</strong> and <strong>Lakehouse SQL analytics endpoint</strong>. Uses <code>USER_NAME()</code> or <code>SUSER_SNAME()</code>. <strong>Admin/Member/Contributor bypass RLS</strong> — it only restricts Viewer-level and shared-access users.</p>
+
+  <h3>Dynamic Data Masking (DDM)</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Mask type</th><th>Output example</th><th>Use case</th></tr>
+    <tr><td><code>default()</code></td><td>XXXX / 0 / 01-01-1900</td><td>Generic sensitive values</td></tr>
+    <tr><td><code>email()</code></td><td>aXX@XXXX.com</td><td>Email addresses</td></tr>
+    <tr><td><code>partial(2,"XXX",2)</code></td><td>55XXXXX89</td><td>Phone numbers, IDs</td></tr>
+    <tr><td><code>random(1,100)</code></td><td>42 (random number)</td><td>Numeric values</td></tr>
+  </table></div>
+  <div class="callout warn"><span class="callout-icon">⚠️</span>
+    <div>Admin/Member/Contributor see <strong>unmasked</strong> data. Use <code>GRANT UNMASK</code> to selectively reveal. DDM alone doesn't protect against inference attacks — pair with RLS/CLS.</div>
+  </div>
+
+  <h3>OneLake Security (Data Access Roles)</h3>
+  <ul>
+    <li>Fine-grained <strong>deny-by-default</strong> access at storage layer for Lakehouses</li>
+    <li>Create roles granting Read (or ReadWrite) to specific tables/folders, assign Entra users/groups</li>
+    <li><strong>Only affects Viewer-level users</strong> — Admin/Member/Contributor override it</li>
+    <li>Every Lakehouse has a <strong>DefaultReader</strong> role — can be modified or deleted</li>
+  </ul>
+
+  <h3>Microsoft Purview Integration</h3>
+  <div class="three-col">
+    <div class="card"><div class="card-title">📖 Unified Data Catalog</div><div class="card-body">Auto-catalogs all Fabric assets for discovery</div></div>
+    <div class="card"><div class="card-title">🔗 Data Lineage</div><div class="card-body">Traces data flow across items automatically</div></div>
+    <div class="card"><div class="card-title">🏷️ Sensitivity Labels</div><div class="card-body">Propagate downstream — label source, derived items inherit. Requires Power BI Pro + AIP license</div></div>
+    <div class="card"><div class="card-title">🛡️ DLP Policies</div><div class="card-body">Detect sensitive data in OneLake</div></div>
+    <div class="card"><div class="card-title">📋 Audit Logs</div><div class="card-body">Activity logging via Fabric audit log (Admin portal → Audit logs)</div></div>
+  </div>
+</div><div class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">D1·3</span>
+    <span class="section-title">Orchestration: Pipeline vs Dataflow vs Notebook</span>
+    <button class="mark-done" onclick="markDone(this,'s3')">✓ Done</button>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Tool</th><th>Use when</th><th>Do NOT use when</th></tr>
+    <tr><td><span class="badge yellow">Dataflows Gen2</span></td><td>Low-code Power Query transforms, 100+ connectors, light ingestion + reshaping</td><td>Complex orchestration, massive datasets, code-heavy logic</td></tr>
+    <tr><td><span class="badge blue">Data Pipelines</span></td><td>Orchestrating end-to-end workflows, scheduling, chaining, conditional logic, error handling</td><td>Transforming data (pipelines have <strong>no native transformation</strong>)</td></tr>
+    <tr><td><span class="badge purple">Spark Notebooks</span></td><td>Complex transforms, large-scale data, SCD Type 2 logic, ML, schema inference</td><td>Simple copy operations (overkill — use Copy activity)</td></tr>
+  </table></div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>Key rule:</strong> Pipelines are the <em>orchestrator</em> (the "glue"). They call Notebooks, Dataflows, Stored Procedures, and Copy activities. They <strong>never transform data themselves.</strong><br>• "Orchestrate/schedule" → Pipeline &nbsp;• "Transform 50M rows" → Notebook &nbsp;• "Ingest from SharePoint/API with light cleanup" → Dataflow Gen2</div>
+  </div>
+
+  <h3>Dataflows Gen2 Key Facts</h3>
+  <div class="two-col">
+    <div><h4>Gen2 vs Gen1</h4>
+      <ul>
+        <li>Gen2 outputs to <strong>multiple destinations</strong> (Lakehouse, Warehouse, Azure SQL DB, KQL DB) — Gen1 only wrote to internal storage</li>
+        <li>Gen2 supports Git integration; Gen1 does not</li>
+        <li>Gen2 requires Fabric capacity (no Pro workspace)</li>
+      </ul>
+    </div>
+    <div><h4>Output modes &amp; Staging</h4>
+      <ul>
+        <li>Only <strong>append or replace</strong> — no native upsert/MERGE</li>
+        <li>For SCD Type 2 → use a Notebook</li>
+        <li>Staging: <strong>Enabled by default for ALL destinations</strong>, including Lakehouses. <em>Best practice: manually disable for simple copy-to-lakehouse to avoid double-write penalty.</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Pipeline Activities Cheat Sheet</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Activity</th><th>Purpose</th></tr>
+    <tr><td><strong>Copy Data</strong></td><td>Moves data source→destination, no transformation</td></tr>
+    <tr><td><strong>Notebook</strong></td><td>Runs a Spark notebook</td></tr>
+    <tr><td><strong>Dataflow</strong></td><td>Triggers Dataflow Gen2</td></tr>
+    <tr><td><strong>Stored Procedure</strong></td><td>Runs SP in supported SQL databases</td></tr>
+    <tr><td><strong>ForEach</strong></td><td>Iterates over a collection</td></tr>
+    <tr><td><strong>If Condition / Switch</strong></td><td>Conditional branching</td></tr>
+    <tr><td><strong>Lookup</strong></td><td>Reads a value from a source; output feeds downstream</td></tr>
+    <tr><td><strong>Set Variable / Append Variable</strong></td><td>Manage pipeline variables</td></tr>
+    <tr><td><strong>Invoke Pipeline</strong></td><td>Calls another pipeline (supports cross-workspace)</td></tr>
+    <tr><td><strong>Web</strong></td><td>Calls a REST endpoint</td></tr>
+    <tr><td><strong>Get Metadata</strong></td><td>Retrieves metadata from data sources</td></tr>
+    <tr><td><strong>Fail</strong></td><td>Forces pipeline failure with custom error message</td></tr>
+  </table></div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>Activities with no dependency arrows run SIMULTANEOUSLY</strong> (not sequentially). Max <strong>120 activities</strong> per pipeline.</div>
+  </div>
+</div><div class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">D1·4</span>
+    <span class="section-title">Lifecycle Management &amp; Deployment</span>
+    <button class="mark-done" onclick="markDone(this,'s4')">✓ Done</button>
+  </div>
+  <div class="two-col">
+    <div>
+      <h3>Git Integration</h3>
+      <ul>
+        <li>Supports <strong>Azure DevOps</strong> and <strong>GitHub</strong></li>
+        <li>For Azure DevOps you need: <strong>organization, project, Git repository, and branch</strong></li>
+        <li>Only one Git repo branch per workspace at a time</li>
+        <li>Not all items support Git (e.g., dashboards, some real-time items)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Deployment Pipelines</h3>
+      <ul>
+        <li>Fabric-native CI/CD: Dev → Test → Prod stages</li>
+        <li><strong>Use Fabric Deployment Pipeline</strong> (not GitHub Actions, not ADF, not ARM templates)</li>
+        <li>Deploy eventhouse, lakehouse, warehouse, notebooks, pipelines</li>
+        <li>Pre/post-deployment rules can parameterize connections per stage</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>"Deploy an eventhouse to production"</strong> → Use a <strong>Fabric deployment pipeline</strong>, NOT GitHub Actions, NOT Azure DevOps pipeline, NOT ARM templates.</div>
+  </div>
+  <h3>Workspace Settings (Exam Targets)</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Setting type</th><th>What you configure</th></tr>
+    <tr><td>Spark settings</td><td>Spark compute pools, default runtime version, environment defaults, high concurrency mode</td></tr>
+    <tr><td>OneLake settings</td><td>OneLake security roles, data access controls at folder/table level</td></tr>
+    <tr><td>Domain settings</td><td>Assign workspace to a domain for governance grouping in Purview</td></tr>
+    <tr><td>Dataflows Gen2 settings</td><td>Enable/disable staging, configure default destination</td></tr>
+  </table></div>
+</div><div class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">D2·1</span>
+    <span class="section-title">The Big Decision Matrices</span>
+    <button class="mark-done" onclick="markDone(this,'s5')">✓ Done</button>
+  </div>
+  <div class="callout purple"><span class="callout-icon">🧠</span>
+    <div><strong>These decision trees appear in nearly every question set. Memorize them cold.</strong></div>
+  </div>
+
+  <h3>Choosing the Right Data Store</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Need</th><th>Use</th><th>Why</th></tr>
+    <tr><td>File storage + Spark processing + SQL access</td><td><span class="badge blue">Lakehouse</span></td><td>Delta tables in /Tables auto-exposed to SQL endpoint</td></tr>
+    <tr><td>Full T-SQL with transactions, star schema</td><td><span class="badge purple">Warehouse</span></td><td>Full DML, stored procs, MERGE, CLONE OF</td></tr>
+    <tr><td>Real-time streaming, IoT, telemetry, KQL analytics</td><td><span class="badge cyan">Eventhouse/KQL DB</span></td><td>Auto-indexed, partitioned by time, KQL is native</td></tr>
+    <tr><td>Connect to existing external data without copying</td><td><span class="badge green">OneLake Shortcut</span></td><td>Symbolic link — no data movement, no egress</td></tr>
+    <tr><td>Mirror existing Azure/external DB to Fabric</td><td><span class="badge orange">Mirroring</span></td><td>Near-real-time replication into OneLake Delta</td></tr>
+  </table></div>
+
+  <h3>Choosing the Right Transform / Ingest Tool</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Scenario</th><th>Best tool</th></tr>
+    <tr><td>Large-scale transform, SCD Type 2, ML, complex joins</td><td><span class="badge purple">Spark Notebook</span></td></tr>
+    <tr><td>Low-code, 100+ connectors, Power Query logic</td><td><span class="badge yellow">Dataflow Gen2</span></td></tr>
+    <tr><td>Copy data source to destination (no transform)</td><td><span class="badge blue">Pipeline: Copy Data activity</span></td></tr>
+    <tr><td>Schedule, orchestrate, chain multiple tasks</td><td><span class="badge blue">Data Pipeline</span></td></tr>
+    <tr><td>T-SQL transform inside Warehouse</td><td><span class="badge blue">T-SQL / Stored Procedure</span></td></tr>
+    <tr><td>KQL transform in Eventhouse</td><td><span class="badge cyan">KQL / Update Policy</span></td></tr>
+  </table></div>
+
+  <h3>Choosing the Right Streaming Engine</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Scenario</th><th>Use</th></tr>
+    <tr><td>Ingest from Event Hubs / IoT Hub / Kafka, route to Eventhouse/Lakehouse</td><td><span class="badge cyan">Eventstream</span></td></tr>
+    <tr><td>Complex event processing with PySpark on a stream</td><td><span class="badge purple">Spark Structured Streaming</span></td></tr>
+    <tr><td>Query, aggregate, alert on time-series data in KQL DB</td><td><span class="badge cyan">KQL + Activator</span></td></tr>
+    <tr><td>Trigger action when condition met (email, Teams, PA flow)</td><td><span class="badge green">Fabric Activator</span></td></tr>
+  </table></div>
+
+  <h3>Native vs. OneLake Shortcuts in Real-Time Intelligence</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Option</th><th>When to use</th><th>Tradeoff</th></tr>
+    <tr><td>Native KQL tables</td><td>Best query performance, real-time alerting</td><td>Data stored inside Eventhouse</td></tr>
+    <tr><td>OneLake shortcut (standard)</td><td>Data lives in OneLake/Lakehouse, query via KQL</td><td>No caching; queries go to OneLake every time</td></tr>
+    <tr><td>OneLake shortcut (query-accelerated)</td><td>Frequently queried external OneLake data</td><td>Cached copy maintained, faster queries</td></tr>
+  </table></div>
+</div><div class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">D2·2</span>
+    <span class="section-title">Batch Ingestion &amp; Transformation</span>
+    <button class="mark-done" onclick="markDone(this,'s6')">✓ Done</button>
+  </div>
+
+  <h3>Loading Patterns</h3>
+  <div class="two-col">
+    <div class="card"><div class="card-title">🔄 Full Load</div><div class="card-body">Truncate-and-reload. Simple but expensive. Use for small/slowly changing dimensions or when change tracking isn't available.</div></div>
+    <div class="card"><div class="card-title">➕ Incremental Load</div><div class="card-body">Load only new/changed records. Use watermark column (timestamp/ID). More complex but efficient for large tables.</div></div>
+  </div>
+
+  <h3>SCD Type 2 with Hash-Based Change Detection</h3>
+  <div class="callout tip"><span class="callout-icon">✅</span>
+    <div><strong>Exam tip:</strong> "SCD Type 2 with many columns" → use a <strong>hash function on SOURCE TABLE attributes</strong> to detect changes efficiently instead of comparing each column.</div>
+  </div>
+  <div class="code-block">
+    <div class="code-label">PySpark — Hash-Based Change Detection <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+
+<span class="cmt"># Create hash of all tracked columns</span>
+df_source = df_source.withColumn(
+    <span class="str">"row_hash"</span>,
+    F.md5(F.concat_ws(<span class="str">"||"</span>, F.col(<span class="str">"col1"</span>), F.col(<span class="str">"col2"</span>), F.col(<span class="str">"col3"</span>)))
+)
+<span class="cmt"># Compare hash with target to detect changes</span>
+changed = df_source.join(df_target, <span class="str">"id"</span>).filter(
+    df_source.row_hash != df_target.row_hash
+)</pre>
+  </div>
+
+  <h3>Mirroring</h3>
+  <ul>
+    <li>Near-real-time replication of external DBs into Fabric OneLake (Delta format)</li>
+    <li>Supported sources: Azure SQL DB, Azure Cosmos DB, Azure SQL MI, Snowflake, and more</li>
+    <li>No pipeline needed — zero-ETL replication</li>
+    <li>Data lands as Delta Parquet in OneLake → queryable via SQL endpoint, Spark, etc.</li>
+  </ul>
+
+  <h3>Data Quality: Handling Common Issues</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Issue</th><th>PySpark approach</th></tr>
+    <tr><td>Duplicates</td><td><code>df.dropDuplicates(["id", "date"])</code> or <code>MERGE</code> with dedup logic</td></tr>
+    <tr><td>Missing values</td><td><code>df.fillna({"col": 0})</code> or <code>df.dropna(subset=["key_col"])</code></td></tr>
+    <tr><td>Late-arriving data</td><td>Watermarking in Spark Structured Streaming; or reprocess with incremental load using event_time</td></tr>
+    <tr><td>Schema mismatch</td><td><code>mergeSchema=True</code> for evolution; schema enforcement catches mismatches early</td></tr>
+  </table></div>
+</div><div class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">D2·3</span>
+    <span class="section-title">Streaming &amp; Real-Time Intelligence</span>
+    <button class="mark-done" onclick="markDone(this,'s7')">✓ Done</button>
+  </div>
+
+  <h3>Eventstream Sources &amp; Destinations</h3>
+  <div class="two-col">
+    <div><h4>Sources (ingest FROM)</h4>
+      <ul>
+        <li>Azure Event Hubs, IoT Hub</li>
+        <li>Custom App / Kafka / Confluent Cloud Kafka</li>
+        <li>Azure SQL CDC, PostgreSQL CDC, MySQL CDC, Cosmos DB CDC</li>
+        <li>Google Cloud Pub/Sub, Amazon Kinesis</li>
+        <li>Azure Blob Storage events, Fabric workspace/OneLake events</li>
+        <li>Sample data (built-in)</li>
+      </ul>
+    </div>
+    <div><h4>Destinations (route TO)</h4>
+      <ul>
+        <li>Eventhouse / KQL Database</li>
+        <li>Lakehouse</li>
+        <li>Custom endpoint</li>
+        <li>Fabric Activator (alerts/actions)</li>
+        <li>Derived Stream (branch the stream)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>"Propagate events from Azure SQL to an Eventstream"</strong> → Enable <strong>Change Data Capture (CDC)</strong> on the database. NOT Extended Events, NOT Stream Analytics, NOT a read-only replica.</div>
+  </div>
+
+  <h3>Eventhouse / KQL Database</h3>
+  <ul>
+    <li>Eventhouse = <strong>container</strong> for KQL databases (creating one auto-provisions a default KQL DB)</li>
+    <li>Data is auto-indexed and partitioned by ingestion time</li>
+    <li>Eventhouses auto-suspend when idle</li>
+    <li>T-SQL endpoint on KQL DB is <strong>read-only and extremely limited</strong> — use KQL for everything</li>
+    <li>Enable <strong>"One Logical Copy"</strong> to expose KQL data in OneLake as Delta Parquet</li>
+  </ul>
+
+  <h3>Fabric Activator (formerly Data Activator / Reflex)</h3>
+  <div class="card">
+    <div class="card-body">No-code event detection engine. Triggers actions (email, Teams message, Power Automate flow, run Pipeline, run Notebook) when conditions are met. Consumes from: <strong>eventstreams, Power BI reports, real-time dashboards</strong>. Evaluates rules per "business object" (identified by an Object ID column).<br><br>
+    <strong>Condition types:</strong> "Changes by amount/percentage" or "Becomes greater/less than threshold"</div>
+  </div>
+
+  <h3>Real-Time Hub</h3>
+  <p>A <strong>tenant-wide</strong> single logical place for all streaming data in motion (one per tenant, like OneLake). Discovery + management layer — lists all eventstream outputs and KQL tables you have access to.</p>
+
+  <h3>Windowing Functions (Streaming)</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Window type</th><th>Behavior</th><th>Use case</th></tr>
+    <tr><td><strong>Tumbling</strong></td><td>Fixed, non-overlapping intervals</td><td>Hourly totals, daily summaries</td></tr>
+    <tr><td><strong>Hopping</strong></td><td>Fixed size, overlapping (hop &lt; window size)</td><td>Rolling average every 5 min over last 1 hour</td></tr>
+    <tr><td><strong>Sliding</strong></td><td>Fires when event occurs within window</td><td>Detect patterns within any N-minute span</td></tr>
+    <tr><td><strong>Session</strong></td><td>Groups events with gaps ≤ timeout</td><td>User session analytics</td></tr>
+  </table></div>
+</div><div class="section" id="s8">
+  <div class="section-header">
+    <span class="section-num">D2·4</span>
+    <span class="section-title">Delta Lake Deep Dive</span>
+    <button class="mark-done" onclick="markDone(this,'s8')">✓ Done</button>
+  </div>
+
+  <h3>The Four Delta Commands You Must Know</h3>
+
+  <div class="code-block">
+    <div class="code-label">SQL — MERGE (upsert pattern) <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">MERGE INTO</span> target <span class="kw">USING</span> source <span class="kw">ON</span> target.id = source.id
+<span class="kw">WHEN MATCHED THEN</span>
+    <span class="kw">UPDATE SET</span> target.name = source.name
+<span class="kw">WHEN NOT MATCHED THEN</span>
+    <span class="kw">INSERT</span> (id, name) <span class="kw">VALUES</span> (source.id, source.name)
+<span class="kw">WHEN NOT MATCHED BY SOURCE THEN DELETE</span>;
+<span class="cmt">-- Note: Fabric enables Low Shuffle Merge by default — no code changes needed</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">SQL — OPTIMIZE (file compaction) <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">OPTIMIZE</span> table_name;                           <span class="cmt">-- bin-packing (compacts small files)</span>
+<span class="kw">OPTIMIZE</span> table_name <span class="kw">ZORDER BY</span> (customer_id);   <span class="cmt">-- co-locate related data for filter queries</span>
+<span class="kw">OPTIMIZE</span> table_name <span class="kw">VORDER</span>;                    <span class="cmt">-- apply V-Order encoding</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">SQL — VACUUM (cleanup old files) <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">VACUUM</span> table_name <span class="kw">RETAIN</span> 168 <span class="kw">HOURS</span>;  <span class="cmt">-- default 7 days = 168 hours</span>
+<span class="cmt">-- Removes data files no longer referenced older than retention period</span>
+<span class="cmt">-- Does NOT remove _delta_log</span>
+<span class="cmt">-- After VACUUM: time travel to vacuumed versions is IMPOSSIBLE</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">SQL — Time Travel <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> my_table <span class="kw">VERSION AS OF</span> 5;
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> my_table <span class="kw">TIMESTAMP AS OF</span> <span class="str">'2024-01-15T10:30:00Z'</span>;
+<span class="kw">DESCRIBE HISTORY</span> my_table;
+<span class="kw">RESTORE TABLE</span> my_table <span class="kw">TO VERSION AS OF</span> 3;
+
+<span class="cmt">-- Warehouse syntax:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> dbo.dim_customer
+<span class="kw">OPTION</span> (<span class="kw">FOR TIMESTAMP AS OF</span> <span class="str">'2024-05-23T08:00:00'</span>);</pre>
+  </div>
+
+  <div class="tbl-wrap"><table>
+    <tr><th>Feature</th><th>Lakehouse</th><th>Warehouse</th></tr>
+    <tr><td>File retention / time travel window</td><td>7 days (default)</td><td>30 days (max)</td></tr>
+    <tr><td>VACUUM minimum retention</td><td>7 days (portal enforces this)</td><td>N/A</td></tr>
+    <tr><td>OPTIMIZE ZORDER</td><td>✅</td><td>✅</td></tr>
+    <tr><td>V-Order default</td><td>✅ Enabled</td><td>✅ Enabled</td></tr>
+  </table></div>
+
+  <h3>V-Order vs. OPTIMIZE — Know the Difference</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>V-Order</th><th>OPTIMIZE</th></tr>
+    <tr><td>What it does</td><td>Optimizes file <strong>internal layout</strong> (encoding/compression within row groups)</td><td>Compacts <strong>many small files</strong> into fewer large ones</td></tr>
+    <tr><td>When applied</td><td><strong>Write time</strong> (automatic)</td><td><strong>On-demand</strong> manual command</td></tr>
+    <tr><td>Write penalty</td><td>~15% slower writes</td><td>No write penalty</td></tr>
+    <tr><td>Read benefit</td><td>Up to 50% faster reads (especially Direct Lake)</td><td>Fewer file reads, better partition pruning</td></tr>
+  </table></div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>V-Order exam traps:</strong><br>
+    • Write-intensive staging tables read once then dropped → <strong>Disable V-Order</strong> (write overhead wasted)<br>
+    • Read-heavy reporting tables → <strong>Enable V-Order</strong><br>
+    • V-Order is <strong>enabled by default across all Fabric compute engines</strong> (including Spark/Lakehouses and Warehouses).</div>
+  </div>
+
+  <h3>Schema Enforcement vs. Evolution</h3>
+  <div class="code-block">
+    <div class="code-label">PySpark — Schema Evolution <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt"># Schema evolution — opt-in per write operation</span>
+df.write.option(<span class="str">"mergeSchema"</span>, <span class="str">"true"</span>).mode(<span class="str">"append"</span>).saveAsTable(<span class="str">"target"</span>)
+
+<span class="cmt"># Complete schema replacement (use rarely)</span>
+df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"true"</span>).mode(<span class="str">"overwrite"</span>).saveAsTable(<span class="str">"target"</span>)
+
+<span class="cmt"># For MERGE with schema evolution:</span>
+<span class="cmt">-- MERGE WITH SCHEMA EVOLUTION INTO target USING source ON ...</span></pre>
+  </div>
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div>Avoid setting <code>spark.databricks.delta.schema.autoMerge.enabled = true</code> at session level in production — use per-operation <code>mergeSchema</code> instead for safety.</div>
+  </div>
+</div><div class="section" id="s9">
+  <div class="section-header">
+    <span class="section-num">D3·1</span>
+    <span class="section-title">Monitoring &amp; Capacity Management</span>
+    <button class="mark-done" onclick="markDone(this,'s9')">✓ Done</button>
+  </div>
+
+  <div class="callout warn"><span class="callout-icon">⚠️</span>
+    <div><strong>Capacity Constraint:</strong> Dataflows Gen2 and Eventhouses require an active Fabric capacity (F-SKU) or Premium capacity (P-SKU). They cannot run in a standard Power BI Pro workspace.</div>
+  </div>
+
+  <h3>Capacity Metrics App — 3 Pages</h3>
+  <div class="three-col">
+    <div class="card"><div class="card-title" style="color:var(--primary)">Compute Page</div><div class="card-body"><strong>14-day view.</strong> CU utilization %, throttling timeline, per-item CU consumption matrix. Data latency: <strong>10–15 minutes</strong>.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--purple)">Storage Page</div><div class="card-body"><strong>30-day view.</strong> Billable storage by workspace.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--cyan)">Health Page</div><div class="card-body">(Preview) High-level capacity overview, throttling/rejection identification.</div></div>
+  </div>
+
+  <h3>Monitoring Hub</h3>
+  <p>Select "Monitor" in nav pane. Shows active and recently completed jobs (<strong>up to 100 per item, 30-day history</strong>) across pipelines, notebooks, dataflows, Spark jobs, semantic model refreshes, eventstreams. You only see activities you have permission to view.</p>
+
+  <h3>CU Consumption Model</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Operation type</th><th>Smoothing window</th><th>Examples</th></tr>
+    <tr><td><strong>Interactive</strong> (user-triggered)</td><td><span class="badge yellow">5–64 minutes</span></td><td>Ad-hoc queries, notebook runs triggered by user</td></tr>
+    <tr><td><strong>Background</strong> (scheduled)</td><td><span class="badge blue">24 hours</span></td><td>Scheduled pipelines, Spark jobs, most warehouse operations</td></tr>
+  </table></div>
+
+  <h3>Throttling Escalation Order — Memorize This</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Stage</th><th>Effect</th></tr>
+    <tr><td><span class="badge green">1. No throttling</span></td><td>Normal operation</td></tr>
+    <tr><td><span class="badge yellow">2. Interactive Delay</span></td><td>20-second delay added to interactive operations</td></tr>
+    <tr><td><span class="badge orange">3. Interactive Rejection</span></td><td>Interactive requests rejected; background continues</td></tr>
+    <tr><td><span class="badge red">4. Background Rejection</span></td><td>Background jobs also rejected</td></tr>
+    <tr><td><span class="badge red">5. Full Rejection</span></td><td>Everything rejected</td></tr>
+  </table></div>
+  <p><strong>Recovery options:</strong> Wait for natural burndown, scale up SKU, or pause workloads. Spark capacity: each CU = 2 Spark VCores (F64 = 128 VCores). HTTP <strong>430 error</strong> = capacity fully consumed.</p>
+
+  <h3>Bursting</h3>
+  <p>Temporary use of more CUs than the SKU provides — jobs finish faster but consume more momentarily. Smoothing spreads the accounting so bursts don't immediately throttle.</p>
+</div><div class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">D3·2</span>
+    <span class="section-title">Troubleshooting &amp; Error Resolution</span>
+    <button class="mark-done" onclick="markDone(this,'s10')">✓ Done</button>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Item type</th><th>Where to look</th><th>Common errors</th></tr>
+    <tr><td><strong>Pipeline</strong></td><td>Pipeline run history → activity details → Error tab</td><td>Source/sink connectivity, schema mismatch, timeout, permission denied</td></tr>
+    <tr><td><strong>Dataflow Gen2</strong></td><td>Monitoring hub → Dataflow → refresh history → error details</td><td>Staging lakehouse issues, connector auth, output destination schema mismatch</td></tr>
+    <tr><td><strong>Notebook</strong></td><td>Spark job details → executor logs → event timeline</td><td>OOM errors (increase executor memory), SparkException, AnalysisException</td></tr>
+    <tr><td><strong>Eventhouse</strong></td><td>Diagnostics logs → ingestion errors; <code>.show ingestion failures</code> KQL command</td><td>Schema mismatch, mapping errors, bad data format</td></tr>
+    <tr><td><strong>Eventstream</strong></td><td>Monitoring metrics tab → error rate; stream health indicators</td><td>Source/destination connectivity loss, throughput limits</td></tr>
+    <tr><td><strong>T-SQL</strong></td><td><code>sys.dm_exec_sessions</code>, <code>sys.dm_exec_requests</code>, Query Insights views</td><td>Deadlocks, timeout, unsupported syntax, permission errors</td></tr>
+    <tr><td><strong>OneLake Shortcut</strong></td><td>Lakehouse explorer → shortcut → properties; check credential validity</td><td>Invalid credentials, source path changed, ADLS firewall blocking</td></tr>
+  </table></div>
+  <div class="callout tip"><span class="callout-icon">✅</span>
+    <div><strong>"Find active running queries in Warehouse"</strong> → Use <code>sys.dm_exec_sessions</code> filtered by session status = 'running'</div>
+  </div>
+</div><div class="section" id="s11">
+  <div class="section-header">
+    <span class="section-num">D3·3</span>
+    <span class="section-title">Performance Optimization</span>
+    <button class="mark-done" onclick="markDone(this,'s11')">✓ Done</button>
+  </div>
+  <div class="accordion" onclick="toggleAcc(this)">
+    <div class="acc-head">Optimize a Lakehouse Table <span class="acc-arrow">▶</span></div>
+    <div class="acc-body">
+      <ul>
+        <li>Run <code>OPTIMIZE</code> to compact small files (bin-packing)</li>
+        <li>Run <code>OPTIMIZE ZORDER BY (col)</code> to co-locate data for selective filter queries</li>
+        <li>Enable <strong>Optimize Write</strong> (default ON): auto-coalesces small writes at write time</li>
+        <li>Run <code>VACUUM</code> periodically to remove stale files</li>
+        <li>Use <strong>partitioning</strong> for very large tables (partition by date for time-series)</li>
+        <li>V-Order is enabled by default; disable for write-only staging tables to save compute.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion" onclick="toggleAcc(this)">
+    <div class="acc-head">Optimize a Data Warehouse <span class="acc-arrow">▶</span></div>
+    <div class="acc-body">
+      <ul>
+        <li>V-Order enabled by default — benefits Direct Lake and SQL queries</li>
+        <li>Use <code>CREATE TABLE AS CLONE OF</code> for zero-copy snapshots (testing, backups)</li>
+        <li>Use <code>sys.dm_exec_sessions</code> and Query Insights (DMVs) to find slow queries</li>
+        <li>Use views to abstract complex joins and pre-filter data</li>
+        <li>Statistics are auto-maintained — no manual <code>UPDATE STATISTICS</code> needed</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion" onclick="toggleAcc(this)">
+    <div class="acc-head">Optimize Spark Performance <span class="acc-arrow">▶</span></div>
+    <div class="acc-body">
+      <ul>
+        <li>Cache DataFrames used multiple times: <code>df.cache()</code> or <code>df.persist()</code></li>
+        <li>Use <strong>broadcast joins</strong> for small lookup tables: <code>broadcast(small_df)</code></li>
+        <li>Filter early before joins to reduce shuffle size</li>
+        <li>Avoid <code>collect()</code> on large datasets (brings all data to driver)</li>
+        <li>Use columnar formats (Delta/Parquet) — avoid CSV for large Spark jobs</li>
+        <li>Tune <code>spark.sql.shuffle.partitions</code> (default 200 — often too high or too low)</li>
+        <li>Enable <strong>Adaptive Query Execution (AQE)</strong>: <code>spark.sql.adaptive.enabled=true</code></li>
+        <li>High Concurrency mode: shares Spark cluster across multiple notebooks (reduces startup time)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion" onclick="toggleAcc(this)">
+    <div class="acc-head">Optimize Eventstreams &amp; Eventhouses <span class="acc-arrow">▶</span></div>
+    <div class="acc-body">
+      <ul>
+        <li>Use <strong>batching</strong> in eventstream to reduce ingestion overhead for high-volume streams</li>
+        <li>Apply <strong>update policies</strong> in KQL DB to transform data at ingestion time (instead of at query time)</li>
+        <li>Use <strong>materialized views</strong> in KQL DB for pre-aggregated data</li>
+        <li>Enable <strong>query acceleration</strong> on OneLake shortcuts used frequently in KQL</li>
+        <li>Filter in KQL using <code>where</code> as the <em>first</em> operator to leverage auto-indexing</li>
+      </ul>
+    </div>
+  </div>
+</div><div class="section" id="s12">
+  <div class="section-header">
+    <span class="section-num">REF</span>
+    <span class="section-title">KQL Syntax Reference</span>
+    <button class="mark-done" onclick="markDone(this,'s12')">✓ Done</button>
+  </div>
+  <div class="callout info"><span class="callout-icon">📌</span>
+    <div>KQL is <strong>pipe-based</strong> and <strong>read-only</strong>. Pattern: Filter early → transform → aggregate → render. <code>render</code> must ALWAYS be the LAST operator.</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">KQL — Core Operators <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">// where — filter rows (put FIRST for best performance)</span>
+StormEvents | <span class="kql-kw">where</span> State == <span class="kql-str">"FLORIDA"</span> | <span class="kql-kw">where</span> DamageProperty > 1000000
+
+<span class="cmt">// project — select columns (REDUCES output; more efficient than extend)</span>
+StormEvents | <span class="kql-kw">project</span> State, EventType, DamageProperty
+
+<span class="cmt">// extend — add computed columns (KEEPS all existing columns)</span>
+StormEvents | <span class="kql-kw">extend</span> TotalInjuries = InjuriesDirect + InjuriesIndirect
+
+<span class="cmt">// summarize — aggregation (replaces GROUP BY)</span>
+StormEvents | <span class="kql-kw">summarize</span> EventCount = <span class="kql-fn">count</span>(), AvgDamage = <span class="kql-fn">avg</span>(DamageProperty) <span class="kql-kw">by</span> State
+StormEvents | <span class="kql-kw">summarize</span> <span class="kql-fn">count</span>() <span class="kql-kw">by</span> <span class="kql-fn">bin</span>(StartTime, 1h)   <span class="cmt">// time-bucket (1 hour bins)</span>
+
+<span class="cmt">// join — combine datasets (filter BEFORE join for performance!)</span>
+Table1 | <span class="kql-kw">where</span> Region == <span class="kql-str">"US"</span>
+       | <span class="kql-kw">join</span> kind=inner (Table2) <span class="kql-kw">on</span> CommonColumn
+
+<span class="cmt">// sort by — ordering (default is DESCENDING)</span>
+StormEvents | <span class="kql-kw">sort by</span> DamageProperty <span class="kql-kw">desc</span> | <span class="kql-kw">take</span> 10
+
+<span class="cmt">// render — MUST BE LAST</span>
+StormEvents | <span class="kql-kw">summarize</span> <span class="kql-fn">count</span>() <span class="kql-kw">by</span> State
+            | <span class="kql-kw">render</span> barchart with (title=<span class="kql-str">"Events by State"</span>)</pre>
+  </div>
+
+  <h3>Key KQL Functions</h3>
+  <div class="tag-row">
+    <span class="badge blue">count()</span><span class="badge blue">sum()</span><span class="badge blue">avg()</span>
+    <span class="badge purple">dcount()</span><span class="badge purple">countif()</span><span class="badge purple">sumif()</span>
+    <span class="badge cyan">percentile()</span><span class="badge cyan">arg_max()</span><span class="badge cyan">arg_min()</span>
+    <span class="badge green">bin()</span><span class="badge green">ago()</span><span class="badge green">prev()</span><span class="badge green">next()</span>
+    <span class="badge yellow">parse_json()</span><span class="badge yellow">case()</span><span class="badge orange">strcat()</span>
+  </div>
+
+  <h3>Join Kinds</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Kind</th><th>Returns</th></tr>
+    <tr><td><code>inner</code></td><td>Only matching rows from both tables</td></tr>
+    <tr><td><code>leftouter</code></td><td>All left rows + matching right (NULLs for non-matches)</td></tr>
+    <tr><td><code>rightouter</code></td><td>All right rows + matching left</td></tr>
+    <tr><td><code>fullouter</code></td><td>All rows from both sides</td></tr>
+    <tr><td><code>anti / leftanti</code></td><td>Left rows with NO match in right</td></tr>
+    <tr><td><code>semi / leftsemi</code></td><td>Left rows that HAVE a match in right (no right columns returned)</td></tr>
+  </table></div>
+
+  <div class="callout trap"><span class="callout-icon">🔴</span>
+    <div><strong>KQL exam traps:</strong><br>
+    • <code>sort by</code> is valid KQL (<code>order by</code> also works but <code>sort by</code> is preferred KQL style)<br>
+    • <code>project</code> is more efficient than <code>extend</code> — use <code>project</code> when you don't need all columns<br>
+    • Moving a <code>where</code> filter BEFORE a <code>join</code> significantly improves performance<br>
+    • <code>kind=outer</code> join INCREASES dataset size and WORSENS performance — never the "optimization" answer</div>
+  </div>
+</div><div class="section" id="s13">
+  <div class="section-header">
+    <span class="section-num">REF</span>
+    <span class="section-title">PySpark &amp; T-SQL Snippets</span>
+    <button class="mark-done" onclick="markDone(this,'s13')">✓ Done</button>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">PySpark — Common DataFrame Operations <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> functions <span class="kw">as</span> F
+<span class="kw">from</span> pyspark.sql.window <span class="kw">import</span> Window
+
+<span class="cmt"># Read Delta table</span>
+df = spark.read.format(<span class="str">"delta"</span>).load(<span class="str">"Tables/sales"</span>)
+df = spark.table(<span class="str">"lakehouse.sales"</span>)
+
+<span class="cmt"># Common transforms</span>
+df = df.filter(F.col(<span class="str">"amount"</span>) > 100)
+df = df.withColumn(<span class="str">"year"</span>, F.year(F.col(<span class="str">"order_date"</span>)))
+df = df.groupBy(<span class="str">"category"</span>).agg(F.sum(<span class="str">"amount"</span>).alias(<span class="str">"total"</span>))
+df = df.dropDuplicates([<span class="str">"id"</span>, <span class="str">"date"</span>])
+df = df.fillna({<span class="str">"amount"</span>: 0, <span class="str">"category"</span>: <span class="str">"Unknown"</span>})
+
+<span class="cmt"># Window function (rank)</span>
+w = Window.partitionBy(<span class="str">"region"</span>).orderBy(F.desc(<span class="str">"sales"</span>))
+df = df.withColumn(<span class="str">"rank"</span>, F.dense_rank().over(w))
+
+<span class="cmt"># Write managed Delta table (visible in SQL endpoint)</span>
+df.write.mode(<span class="str">"overwrite"</span>).saveAsTable(<span class="str">"gold_sales"</span>)
+df.write.mode(<span class="str">"append"</span>).saveAsTable(<span class="str">"gold_sales"</span>)
+
+<span class="cmt"># Write with schema evolution</span>
+df.write.option(<span class="str">"mergeSchema"</span>, <span class="str">"true"</span>).mode(<span class="str">"append"</span>).saveAsTable(<span class="str">"gold_sales"</span>)</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">T-SQL — Warehouse Operations <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">-- COPY INTO (bulk load)</span>
+<span class="kw">COPY INTO</span> dbo.fact_sales
+<span class="kw">FROM</span> <span class="str">'https://storage.dfs.core.windows.net/container/data/*.parquet'</span>
+<span class="kw">WITH</span> (FILE_TYPE = <span class="str">'PARQUET'</span>);
+
+<span class="cmt">-- Zero-copy clone (snapshot for testing)</span>
+<span class="kw">CREATE TABLE</span> dbo.fact_sales_backup <span class="kw">AS CLONE OF</span> dbo.fact_sales;
+
+<span class="cmt">-- Column-level security</span>
+<span class="kw">GRANT SELECT ON</span> dbo.customers (CustomerName, Region) <span class="kw">TO</span> [analyst@contoso.com];
+
+<span class="cmt">-- Dynamic data masking</span>
+<span class="kw">ALTER TABLE</span> dbo.customers
+<span class="kw">ALTER COLUMN</span> Email <span class="kw">ADD MASKED WITH</span> (<span class="fn">FUNCTION</span> = <span class="str">'email()'</span>);
+
+<span class="cmt">-- Cross-database query (same workspace only)</span>
+<span class="kw">INSERT INTO</span> WarehouseA.dbo.Table
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> LakehouseB.dbo.Table;
+
+<span class="cmt">-- Time travel</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> dbo.dim_customer
+<span class="kw">OPTION</span> (<span class="kw">FOR TIMESTAMP AS OF</span> <span class="str">'2024-05-23T08:00:00'</span>);</pre>
+  </div>
+</div><div class="section" id="s14">
+  <div class="section-header">
+    <span class="section-num">🔴</span>
+    <span class="section-title">Exam Traps &amp; Gotchas — Memorize These</span>
+    <button class="mark-done" onclick="markDone(this,'s14')">✓ Done</button>
+  </div>
+  <div id="traps-list">
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>1. Parallel pipeline activities:</strong> Activities with <em>no dependency arrows</em> run <strong>simultaneously</strong>, not sequentially. Max 120 activities per pipeline.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>2. ReadAll bypasses security:</strong> Users with <code>ReadAll</code> permission bypass ALL warehouse-level security (RLS, CLS, DDM) because they access raw Parquet. Give only <code>ReadData</code> for SQL-only access.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>3. External tables invisible to SQL endpoint:</strong> Unmanaged Spark external tables with custom LOCATION (e.g., /Files) are NOT visible in the SQL analytics endpoint. Use managed tables or shortcuts.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>4. SQL analytics endpoint is READ-ONLY:</strong> Only SELECT, CREATE VIEW, CREATE FUNCTION, CREATE SECURITY POLICY are supported. No DML. Sync halts after 15 min of inactivity.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>5. V-Order is the standard:</strong> It is enabled by default across all Fabric compute engines (Warehouses and Lakehouses). Manually disable it only for write-heavy, read-rarely staging tables.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>6. After VACUUM, time travel is lost:</strong> VACUUM removes files older than retention — those versions can no longer be queried. Lakehouse default = 7 days. Warehouse max = 30 days.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>7. Dataflows Gen2 = append or replace only:</strong> No native MERGE/upsert. Staging is enabled by default for all destinations. For SCD Type 2 or upsert logic → use a Spark Notebook with MERGE.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>8. Admin/Member/Contributor bypass RLS:</strong> Row-level security only restricts Viewer-level and item-share users. Workspace contributors can see all data regardless of RLS policies.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>9. Cross-database queries = same workspace only:</strong> Three-part naming (DB.Schema.Table) works only within the same workspace. Cross-workspace and cross-region queries are NOT supported.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>10. Azure SQL → Eventstream requires CDC:</strong> Must enable Change Data Capture on the source database. NOT Extended Events, NOT Stream Analytics, NOT read-only replica.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>11. Git integration with Azure DevOps needs 4 things:</strong> Organization + Project + Git repository + Branch. All four required.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>12. Eventhouse deployment = Fabric deployment pipeline:</strong> NOT GitHub Actions, NOT Azure DevOps pipeline, NOT ARM templates.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>13. Shortcuts in /Tables = top-level only:</strong> Cannot create shortcuts in subdirectories of /Tables. In /Files, any folder level is allowed.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>14. KQL outer join worsens performance:</strong> <code>kind=outer</code> increases dataset size. It is NEVER the answer to "optimize a KQL query" questions.</div></div>
+    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>15. SCD Type 2 hash tip:</strong> For tables with many columns, use a hash function on source attributes to detect changes efficiently rather than comparing each column individually.</div></div>
+  </div>
+</div><div id="quiz-modal">
+  <div id="quiz-box">
+    <div class="quiz-progress" id="quiz-progress">Question 1 of 30</div>
+    <div class="quiz-q" id="quiz-q"></div>
+    <div class="quiz-options" id="quiz-opts"></div>
+    <div class="quiz-explain" id="quiz-explain" style="display:none"></div>
+    <div class="quiz-footer">
+      <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+      <div style="display:flex;gap:8px">
+        <button class="quiz-close" onclick="closeQuiz()">✕ Close</button>
+        <button class="quiz-next" id="quiz-next" onclick="nextQuestion()" style="display:none">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><script>
+/* ── TIMER ───────────────────────────────────────────────────── */
+let totalSeconds = 4 * 3600;
+const timerEl = document.getElementById('timer');
+const timerInterval = setInterval(() => {
+  if (totalSeconds <= 0) { clearInterval(timerInterval); timerEl.textContent = 'TIME UP'; return; }
+  totalSeconds--;
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  timerEl.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  timerEl.className = totalSeconds <= 3600 ? (totalSeconds <= 900 ? 'danger' : 'warn') : '';
+}, 1000);
+
+/* ── THEME ───────────────────────────────────────────────────── */
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+/* ── NAVIGATION ──────────────────────────────────────────────── */
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+/* ── MARK DONE ───────────────────────────────────────────────── */
+const done = {};
+function markDone(btn, id) {
+  done[id] = !done[id];
+  btn.classList.toggle('done', done[id]);
+  btn.textContent = done[id] ? '✅ Done' : '✓ Done';
+  const navItem = document.querySelector(`.nav-item[onclick*="${id}"]`);
+  if (navItem) { navItem.classList.toggle('done', done[id]); navItem.querySelector('.check') && (navItem.querySelector('.check').textContent = done[id] ? '✅' : ''); }
+  updateProgress();
+}
+function updateProgress() {
+  const total = Object.keys(done).length || 1;
+  const completed = Object.values(done).filter(Boolean).length;
+  const sections = document.querySelectorAll('.section').length;
+  document.getElementById('progress-fill').style.width = (completed / sections * 100) + '%';
+}
+
+/* ── COPY CODE ───────────────────────────────────────────────── */
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ── ACCORDION ───────────────────────────────────────────────── */
+function toggleAcc(el) { el.classList.toggle('open'); }
+
+/* ── SEARCH ──────────────────────────────────────────────────── */
+const searchEl = document.getElementById('search');
+let highlightTimeout;
+searchEl.addEventListener('input', () => {
+  clearTimeout(highlightTimeout);
+  highlightTimeout = setTimeout(() => {
+    const q = searchEl.value.trim().toLowerCase();
+    document.querySelectorAll('mark').forEach(m => { m.outerHTML = m.innerHTML; });
+    if (!q) return;
+    const walker = document.createTreeWalker(document.getElementById('main'), NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      if (!node.parentElement || ['SCRIPT','STYLE','CODE','PRE'].includes(node.parentElement.tagName)) return;
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      if (idx === -1) return;
+      const span = document.createElement('mark');
+      span.textContent = node.nodeValue.substring(idx, idx + q.length);
+      const after = node.splitText(idx);
+      after.nodeValue = after.nodeValue.substring(q.length);
+      after.parentNode.insertBefore(span, after);
+    });
+    const firstMark = document.querySelector('mark');
+    if (firstMark) firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 300);
+});
+
+/* ── QUIZ DATA ───────────────────────────────────────────────── */
+const quizData = [
+  { q: "A team needs to analyze IoT sensor data with sub-second latency using time-series queries. What Fabric item should they use?", opts: ["Fabric Warehouse", "Spark Lakehouse", "Eventhouse / KQL Database", "Dataflow Gen2"], ans: 2, exp: "Eventhouse / KQL Database is purpose-built for streaming, telemetry, IoT, and time-series data. It auto-indexes by ingestion time and uses KQL for sub-second query performance." },
+  { q: "You need to implement SCD Type 2 logic with complex multi-column joins on 500M rows. Which tool is most appropriate?", opts: ["Dataflow Gen2", "Pipeline Copy activity", "Spark Notebook", "T-SQL Stored Procedure in Warehouse"], ans: 2, exp: "Spark Notebooks handle large-scale transforms, SCD logic, and complex joins. Dataflow Gen2 only supports append/replace (no MERGE). Pipelines don't transform data." },
+  { q: "A Spark external table was created with a custom LOCATION pointing to /Files/raw/. Is it visible in the SQL analytics endpoint?", opts: ["Yes, all Delta tables are visible", "No, only managed Delta tables in /Tables are visible", "Yes, if it's in Delta format", "Only if you run OPTIMIZE first"], ans: 1, exp: "Only managed Delta tables in the /Tables folder are visible in the SQL analytics endpoint. External tables with custom LOCATION are not exposed there." },
+  { q: "Which workspace role can read data via Spark AND the SQL endpoint, but CANNOT share items with others?", opts: ["Admin", "Member", "Contributor", "Viewer"], ans: 2, exp: "Contributor can create/modify items and access data via Spark/SQL, but cannot share items. Only Admin and Member can share." },
+  { q: "After running VACUUM on a Lakehouse Delta table with 24-hour retention, what happens to time travel to earlier versions?", opts: ["Time travel still works for 7 days", "Time travel is impossible for vacuumed file versions", "Only warehouse time travel is affected", "VACUUM only removes the delta_log, not the data"], ans: 1, exp: "VACUUM removes data files no longer referenced and older than the retention period. After VACUUM, time travel to those versions becomes impossible. It does NOT remove the _delta_log." },
+  { q: "V-Order is enabled by default in which Fabric items?", opts: ["Lakehouse only", "Fabric Warehouse only", "All Fabric compute engines (Lakehouse, Warehouse, Pipelines)", "Eventhouse"], ans: 2, exp: "Microsoft updated V-Order to be enabled by default across all Fabric compute engines, including Spark (Lakehouses) and Warehouses." },
+  { q: "A user has ReadAll permission on a Fabric Warehouse. RLS and Column-Level Security are configured. Can the user see all data including RLS-protected rows?", opts: ["No, RLS applies to all users", "Yes, ReadAll bypasses all SQL-level security", "Only if they are also a workspace Admin", "No, only DDM is bypassed"], ans: 1, exp: "ReadAll permission gives direct access to raw Parquet files in OneLake, completely bypassing RLS, CLS, and DDM. To enforce SQL-level security, users should only have ReadData." },
+  { q: "Pipeline activities A and B have NO dependency arrows between them. How do they execute?", opts: ["Sequentially (A then B)", "Simultaneously (in parallel)", "B waits for A to succeed", "Only one runs based on conditions"], ans: 1, exp: "Pipeline activities with no dependency arrows run simultaneously (in parallel). Dependency arrows control the execution order and conditions (success, failure, completion)." },
+  { q: "What is the smoothing window for background operations (e.g., scheduled Spark jobs) in the Fabric CU consumption model?", opts: ["5–64 minutes", "1 hour", "24 hours", "7 days"], ans: 2, exp: "Background operations (scheduled jobs, Spark, most warehouse operations) are smoothed over 24 hours. Interactive operations are smoothed over 5–64 minutes." },
+  { q: "In KQL, what is the difference between 'project' and 'extend'?", opts: ["project adds columns; extend removes columns", "project selects/reduces columns; extend adds computed columns keeping all existing ones", "They are identical operators", "extend is for joins; project is for aggregation"], ans: 1, exp: "'project' selects specific columns (reduces output, more efficient). 'extend' adds new computed columns while KEEPING all existing columns. Use project when you don't need all columns." },
+  { q: "Where can shortcuts be created in /Tables in a Lakehouse?", opts: ["Any folder level", "Top level only", "Only in subdirectories", "Anywhere except root"], ans: 1, exp: "In /Tables, shortcuts can only be created at the TOP LEVEL. If the target contains Delta data, it's automatically recognized as a queryable table. In /Files, any folder level is allowed." },
+  { q: "To deploy a Fabric Eventhouse from Dev to Production, what tool should you use?", opts: ["GitHub Actions", "Azure DevOps pipeline (YAML)", "Fabric Deployment Pipeline", "ARM templates"], ans: 2, exp: "Fabric Deployment Pipeline is the correct Fabric-native CI/CD tool for promoting items (including Eventhouses) across Dev/Test/Prod stages. External CI/CD tools like GitHub Actions are not the answer." },
+  { q: "What does enabling 'One Logical Copy' on an Eventhouse do?", opts: ["Replicates data to a second region", "Makes KQL data available in OneLake as Delta Parquet", "Creates a backup of the KQL database", "Enables cross-workspace queries"], ans: 1, exp: "'One Logical Copy' in an Eventhouse exposes the KQL data in OneLake as Delta Parquet, making it available to Spark, SQL endpoints, and Direct Lake without data duplication." },
+  { q: "Dataflows Gen2 staging is enabled by default for which destinations?", opts: ["Azure SQL Database only", "Fabric Warehouse only", "Lakehouse only", "All destinations (including Lakehouses)"], ans: 3, exp: "By default, staging is enabled for all destinations in Dataflows Gen2, including Lakehouses. It uses a hidden staging lakehouse. You should manually disable it for simple lakehouse loads to avoid double-writes." },
+  { q: "What happens when you DROP a managed Delta table in a Lakehouse?", opts: ["Only metadata is removed; files persist", "Both data files and metadata are deleted", "Files are moved to /Files/archive", "Only the transaction log is removed"], ans: 1, exp: "Dropping a managed table deletes BOTH the data files AND the metadata. External tables only remove metadata (files persist). This is a critical difference to know." },
+  { q: "For Git integration with Azure DevOps, which four elements are required?", opts: ["Tenant, subscription, resource group, storage account", "Organization, project, Git repository, branch", "Workspace, capacity, domain, item", "Client ID, client secret, tenant ID, scope"], ans: 1, exp: "Azure DevOps Git integration in Fabric requires: Organization, Project, Git repository, and Branch — all four are required." },
+  { q: "What is the maximum number of activities in a single Fabric Data Pipeline?", opts: ["50", "80", "120", "Unlimited"], ans: 2, exp: "A Fabric Data Pipeline supports a maximum of 120 activities. This is a specific limit that has appeared on the exam." },
+  { q: "An engineer writes a Spark unmanaged external table using: CREATE TABLE t USING DELTA LOCATION 'Files/bronze/'. Will this appear in the SQL analytics endpoint?", opts: ["Yes, all Delta tables appear", "No, only managed tables in /Tables appear", "Yes, after running OPTIMIZE", "Yes, after a 15-minute sync"], ans: 1, exp: "Unmanaged external tables (created with a custom LOCATION) are NOT visible in the SQL analytics endpoint. Only managed Delta tables stored in the /Tables folder are auto-synced and visible." },
+  { q: "To detect changes efficiently in SCD Type 2 when a source table has 40 tracked columns, the best practice is:", opts: ["Compare each column individually with CASE statements", "Use a hash function on all source attributes and compare the hash", "Always do a full reload", "Use a timestamp column only"], ans: 1, exp: "Using a hash function (e.g., MD5 or SHA) on all tracked source columns generates a single comparison value. This is far more efficient than comparing 40 individual columns." },
+  { q: "A Lakehouse SQL analytics endpoint sync has paused. What most likely caused this?", opts: ["Too many Delta files", "15 minutes of inactivity", "A failed OPTIMIZE command", "Schema evolution was enabled"], ans: 1, exp: "The SQL analytics endpoint sync process halts after 15 minutes of inactivity on the lakehouse. It resumes automatically when the lakehouse is accessed again." },
+  { q: "Which throttling stage adds a 20-second delay to interactive operations but allows them to still complete?", opts: ["Interactive Rejection", "Background Rejection", "Interactive Delay", "Burst Overflow"], ans: 2, exp: "The 'Interactive Delay' stage (stage 2) adds a 20-second delay to interactive requests. They still complete. 'Interactive Rejection' (stage 3) actually rejects them." },
+  { q: "To find currently running queries in a Fabric Warehouse, what should you query?", opts: ["sys.dm_exec_query_stats", "sys.dm_exec_sessions filtered by status", "Monitoring hub job history", "Query Insights semantic model"], ans: 1, exp: "sys.dm_exec_sessions filtered by session status = 'running' shows actively running queries. This is the correct DMV for live query monitoring in Fabric Warehouse." },
+  { q: "In KQL, which join kind increases dataset size and is NEVER the answer to an optimization question?", opts: ["inner", "leftsemi", "fullouter / outer", "anti"], ans: 2, exp: "kind=outer (or fullouter) returns all rows from both tables, significantly increasing dataset size. It worsens performance and is never the 'optimization' answer in exam questions." },
+  { q: "A Dataflow Gen2 needs to perform an upsert (MERGE) into a target table. What is the correct approach?", opts: ["Enable staging and select MERGE output mode", "Use append mode with a primary key", "Dataflow Gen2 does not support MERGE — use a Spark Notebook instead", "Use the Lookup activity in Dataflow Gen2"], ans: 2, exp: "Dataflow Gen2 only supports Append and Replace output modes. There is no native MERGE/upsert. For SCD Type 2 or upsert logic, use a Spark Notebook with the MERGE INTO command." },
+  { q: "What is the write-time performance penalty for enabling V-Order on a Lakehouse table?", opts: ["No performance impact", "~5% slower writes", "~15% slower writes", "~50% slower writes"], ans: 2, exp: "V-Order introduces approximately a 15% write-time penalty due to the additional sorting and encoding within Parquet row groups. The benefit is up to 50% faster reads." },
+  { q: "An Eventstream needs to receive events from Azure SQL Server in near-real-time. What must be configured on the source?", opts: ["Extended Events (XE) sessions", "Azure SQL Read-Only Replica", "Change Data Capture (CDC)", "SQL Server Audit"], ans: 2, exp: "Eventstream's Azure SQL connector uses Change Data Capture (CDC). CDC must be enabled on the source database to capture row-level changes and stream them to Eventstream." },
+  { q: "Which Fabric item serves as the tenant-wide discovery layer for all streaming data in motion?", opts: ["Fabric Activator", "Real-Time Hub", "Eventstream", "Eventhouse"], ans: 1, exp: "Real-Time Hub is the tenant-wide, single logical place for all streaming data in motion (one per tenant, like OneLake). It lists all eventstream outputs and KQL tables you have access to." },
+  { q: "A shortcut pointing to Amazon S3 is created in a Lakehouse. What security model does it use?", opts: ["Passthrough (caller's identity)", "Service principal authentication only", "Delegated credentials (stored in the shortcut)", "Microsoft Entra token pass-through"], ans: 2, exp: "External shortcuts (ADLS Gen2, S3, GCS, etc.) use delegated credentials stored in the shortcut definition. Any user with Lakehouse access can read through using those stored credentials." },
+  { q: "Cross-database queries using three-part naming in Fabric Warehouse work across:", opts: ["Any workspace in the same capacity", "Any workspace in the same tenant", "Items within the same workspace only", "Any workspace with the same domain"], ans: 2, exp: "Three-part naming (DatabaseName.SchemaName.TableName) for cross-database queries works ONLY within the same workspace. Cross-workspace and cross-region queries are not supported." },
+  { q: "A user is a Workspace Viewer. They try to access Lakehouse data via the Lakehouse explorer (OneLake API). What happens?", opts: ["They get read-only access", "They can access if OneLake security roles allow it", "Access is denied — Viewers cannot access via Spark or OneLake APIs", "They need ReadAll permission on the specific item"], ans: 2, exp: "Workspace Viewers can query data via the SQL analytics endpoint (T-SQL), but CANNOT access data via Spark, the Lakehouse explorer, or OneLake APIs. Those require Contributor or higher." }
+];
+
+/* ── QUIZ ENGINE ─────────────────────────────────────────────── */
+let shuffled = [], current = 0, score = 0, answered = 0, answered_q = false;
+function openQuiz() {
+  shuffled = [...quizData].sort(() => Math.random() - 0.5);
+  current = 0; score = 0; answered = 0;
+  document.getElementById('quiz-modal').classList.add('open');
+  renderQuestion();
+}
+function closeQuiz() { document.getElementById('quiz-modal').classList.remove('open'); }
+function renderQuestion() {
+  const q = shuffled[current];
+  document.getElementById('quiz-progress').textContent = `Question ${current + 1} of ${shuffled.length}`;
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-explain').style.display = 'none';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-score').textContent = `Score: ${score} / ${answered}`;
+  answered_q = false;
+  const opts = document.getElementById('quiz-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
+    btn.onclick = () => selectAnswer(i, q.ans, q.exp);
+    opts.appendChild(btn);
+  });
+}
+function selectAnswer(selected, correct, explanation) {
+  if (answered_q) return;
+  answered_q = true; answered++;
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === selected && selected !== correct) btn.classList.add('wrong');
+  });
+  if (selected === correct) score++;
+  const exp = document.getElementById('quiz-explain');
+  exp.textContent = explanation;
+  exp.style.display = 'block';
+  document.getElementById('quiz-score').textContent = `Score: ${score} / ${answered}`;
+  const nextBtn = document.getElementById('quiz-next');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = current < shuffled.length - 1 ? 'Next →' : 'Finish';
+}
+function nextQuestion() {
+  current++;
+  if (current >= shuffled.length) {
+    document.getElementById('quiz-q').textContent = `🎯 Quiz Complete! Score: ${score} / ${shuffled.length} (${Math.round(score/shuffled.length*100)}%)`;
+    document.getElementById('quiz-opts').innerHTML = '';
+    document.getElementById('quiz-explain').style.display = 'none';
+    document.getElementById('quiz-next').style.display = 'none';
+    document.getElementById('quiz-progress').textContent = 'Complete';
+    const retry = document.createElement('button');
+    retry.className = 'quiz-next'; retry.textContent = '🔄 Restart Quiz';
+    retry.onclick = openQuiz;
+    document.getElementById('quiz-opts').appendChild(retry);
+    return;
+  }
+  renderQuestion();
+}
+/* Close modal on background click */
+document.getElementById('quiz-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeQuiz();
+});
+
+/* ── SCROLL SPY ──────────────────────────────────────────────── */
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  navItems.forEach(n => {
+    const onclick = n.getAttribute('onclick') || '';
+    n.classList.toggle('active', onclick.includes(`'${cur}'`));
+  });
+  const scrollPct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progress-fill').style.width = scrollPct + '%';
+}, { passive: true });
+</script>
+</body>
+</html>
