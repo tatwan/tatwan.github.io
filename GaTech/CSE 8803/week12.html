@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 – Topic Modeling: LSI & LDA | CSE 8803</title>
+<style>
+  :root {
+    --primary: #b45309; --primary-light: #fffbeb; --primary-dark: #92400e;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --red: #dc2626; --cyan: #0284c7;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #92400e; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #fbbf24; color: #92400e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #92400e 0%, #b45309 60%, #f59e0b 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #92400e; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.amber  { background: #fef3c7; }
+  .section-icon.blue   { background: #dbeafe; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.orange { background: #ffedd5; }
+  .section-icon.purple { background: #f3e8ff; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why  { color: #059669; }
+  .explainer-label.how  { color: #d97706; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 14px; margin: 16px 0; line-height: 1.8; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #94a3b8; }
+  .formula-box .highlight { color: #fcd34d; font-weight: bold; }
+  .formula-box .eq        { color: #86efac; }
+  .formula-box .key       { color: #f9a8d4; }
+  .formula-box .query     { color: #93c5fd; }
+  .formula-box .val       { color: #fcd34d; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #92400e; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 4px; }
+  .btn-outline:hover, .btn-outline.active { background: var(--primary); color: white; }
+  .output-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; margin-top: 12px; min-height: 50px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fff7ed; }
+  .callout.tip     { border-color: var(--green);  background: #d1fae5; }
+  .callout.danger  { border-color: var(--red);    background: #fee2e2; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+  .model-card { border-radius: 12px; padding: 18px; margin-bottom: 12px; border: 2px solid; }
+  .model-card.lsi  { border-color: #b45309; background: #fffbeb; }
+  .model-card.lda  { border-color: #7c3aed; background: #f5f3ff; }
+  .model-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .model-card.lsi h4 { color: #92400e; }
+  .model-card.lda h4 { color: #6d28d9; }
+  .model-card .badge { display: inline-block; border-radius: 6px; padding: 2px 10px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .badge-lsi { background: #fef3c7; color: #92400e; }
+  .badge-lda { background: #e9d5ff; color: #6d28d9; }
+  .svd-diagram { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+  .svd-block { border-radius: 10px; padding: 14px 18px; text-align: center; font-size: 13px; font-weight: 700; min-width: 90px; }
+  .svd-A   { background: #dbeafe; color: #1e40af; border: 2px solid #3b82f6; }
+  .svd-eq  { font-size: 22px; color: var(--muted); font-weight: 400; }
+  .svd-U   { background: #d1fae5; color: #065f46; border: 2px solid #10b981; }
+  .svd-S   { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
+  .svd-Vt  { background: #f3e8ff; color: #6d28d9; border: 2px solid #8b5cf6; }
+  .svd-block .sub { font-size: 11px; font-weight: 400; margin-top: 4px; color: inherit; opacity: 0.8; }
+  .matrix-viz { overflow-x: auto; margin: 16px 0; }
+  .matrix-table { border-collapse: collapse; font-size: 12px; margin: 0 auto; }
+  .matrix-table th { background: #374151; color: white; padding: 6px 12px; text-align: center; }
+  .matrix-table td { padding: 6px 12px; text-align: center; border: 1px solid #e2e8f0; }
+  .matrix-table .doc-label { background: #f1f5f9; font-weight: 700; color: #374151; }
+  .matrix-table td.val-1 { background: #bbf7d0; color: #065f46; font-weight: 700; }
+  .matrix-table td.val-0 { background: #f8fafc; color: #94a3b8; }
+  .lda-term { display: inline-flex; flex-direction: column; align-items: center; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; margin: 4px; font-size: 13px; }
+  .lda-term .term-word { font-weight: 700; color: #1e293b; }
+  .lda-term .term-prob { font-size: 11px; color: var(--muted); }
+  .topic-pill { display: inline-block; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; margin: 2px; }
+  .topic-1 { background: #dbeafe; color: #1e40af; }
+  .topic-2 { background: #d1fae5; color: #065f46; }
+  .topic-3 { background: #fee2e2; color: #991b1b; }
+  .prob-eq { background: #1e293b; color: #e2e8f0; border-radius: 10px; padding: 20px; font-size: 13px; line-height: 2.2; margin: 16px 0; overflow-x: auto; }
+  .prob-eq .term-theta { color: #fcd34d; font-weight: bold; }
+  .prob-eq .term-phi   { color: #86efac; font-weight: bold; }
+  .prob-eq .term-z     { color: #93c5fd; font-weight: bold; }
+  .prob-eq .term-w     { color: #f9a8d4; font-weight: bold; }
+  .prob-eq .term-alpha { color: #fbbf24; }
+  .prob-eq .term-beta  { color: #a78bfa; }
+  .prob-eq .comment    { color: #94a3b8; font-style: italic; display: block; margin-top: 4px; font-size: 12px; }
+  .duty-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  @media (max-width: 600px) { .duty-row { grid-template-columns: 1fr; } }
+  .duty-card { border-radius: 10px; padding: 14px; border: 2px solid; }
+  .duty-card.d1 { border-color: #fcd34d; background: #fffbeb; }
+  .duty-card.d2 { border-color: #a78bfa; background: #f5f3ff; }
+  .duty-card.d3 { border-color: #93c5fd; background: #eff6ff; }
+  .duty-card.d4 { border-color: #f9a8d4; background: #fdf2f8; }
+  .duty-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .duty-card.d1 h5 { color: #92400e; }
+  .duty-card.d2 h5 { color: #6d28d9; }
+  .duty-card.d3 h5 { color: #1e40af; }
+  .duty-card.d4 h5 { color: #9d174d; }
+  .duty-card p { font-size: 13px; color: #374151; line-height: 1.5; }
+  .duty-card .formula-inline { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 700; }
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week10.html">← Week 10</a>
+    <span class="you-are-here">Week 12 ← HERE</span>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 12 · Mar 30 – Apr 3</div>
+  <h1>Topic Modeling: LSI &amp; LDA</h1>
+  <p>Unsupervised techniques to discover hidden topics in documents — from SVD-based Latent Semantic Indexing to probabilistic Latent Dirichlet Allocation.</p>
+  <div class="header-chips">
+    <span class="chip">Module 11 · 2 Lectures</span>
+    <span class="chip">Unsupervised Learning</span>
+    <span class="chip">LSI / SVD</span>
+    <span class="chip">LDA / Dirichlet</span>
+    <span class="chip alert">⚠️ Quiz 10 · Due Apr 10</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- SECTION 1: WHAT IS TOPIC MODELING -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon amber">🗂️</div>
+    <div>
+      <h2>What is Topic Modeling?</h2>
+      <div class="sub">Unsupervised learning · No labels needed</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Core Idea &amp; Motivation</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label what">What</div>
+        <p>Topic modeling is an <strong>unsupervised learning technique</strong> (no labels needed) to extract topics from documents and find documents that potentially share a common context.</p>
+      </div>
+      <div class="explainer">
+        <div class="explainer-label why">Why</div>
+        <p>It enables <strong>semantic querying</strong> — we can retrieve documents that are related to a topic even if they don't contain the exact search keyword. For example, searching for "system" can retrieve a document that only contains "data" and "retrieval" because they share the same underlying database concept.</p>
+      </div>
+      <div class="callout">
+        <strong>💡 Key Example</strong>
+        We may retrieve documents that <em>don't</em> have the term "system", but they contain "data" and "retrieval" — because they share the same database concept. Topic modeling bridges this semantic gap.
+      </div>
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>📊 Outputs</h4>
+          <ul class="bullet">
+            <li><strong>Document-Concept/Topic matrix</strong> — which documents belong to which topic</li>
+            <li><strong>Term/Word-Concept/Topic matrix</strong> — which words define each topic</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🔑 Key Property</h4>
+          <p>Topics are <em>latent</em> (hidden). We don't know their labels in advance — we label them manually after seeing which words cluster together.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:16px">
+    <div class="model-card lsi">
+      <h4>LSI — Latent Semantic Indexing</h4>
+      <span class="badge badge-lsi">M11T1L1</span>
+      <p style="font-size:13px;color:#374151">Uses <strong>SVD</strong> (Singular Value Decomposition) to decompose the document-term matrix into concept matrices. Linear algebra approach — fast and efficient.</p>
+    </div>
+    <div class="model-card lda">
+      <h4>LDA — Latent Dirichlet Allocation</h4>
+      <span class="badge badge-lda">M11T1L2</span>
+      <p style="font-size:13px;color:#374151">Uses <strong>Dirichlet distributions</strong> and probabilistic sampling. Requires specifying number of topics K in advance. Gold standard for topic modeling.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: LSI -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon amber">🔢</div>
+    <div>
+      <h2>Latent Semantic Indexing (LSI)</h2>
+      <div class="sub">SVD-based topic modeling · M11T1L1</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Step 1: Build the Document-Term Matrix</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label how">How</div>
+        <p>Same as <strong>unigram Bag of Words</strong> — each row is a document, each column is a term. Cell value = 1 if term appears in document, 0 otherwise (or can use TF counts).</p>
+      </div>
+      <div class="matrix-viz">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th></th><th>data</th><th>system</th><th>retrieval</th><th>lung</th><th>ear</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="doc-label">doc1</td><td class="val-1">1</td><td class="val-1">1</td><td class="val-1">1</td><td class="val-0">0</td><td class="val-0">0</td></tr>
+            <tr><td class="doc-label">doc2</td><td class="val-1">1</td><td class="val-1">1</td><td class="val-1">1</td><td class="val-0">0</td><td class="val-0">0</td></tr>
+            <tr><td class="doc-label">doc3</td><td class="val-0">0</td><td class="val-0">0</td><td class="val-0">0</td><td class="val-1">1</td><td class="val-1">1</td></tr>
+            <tr><td class="doc-label">doc4</td><td class="val-0">0</td><td class="val-0">0</td><td class="val-0">0</td><td class="val-1">1</td><td class="val-1">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px">doc1&amp;doc2 = CS/database concept; doc3&amp;doc4 = medical concept</p>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Step 2: Apply SVD to Get Concept Matrices</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <p style="font-size:14px;color:#374151;margin-bottom:16px">We use SVD to decompose the document-term matrix <strong>A</strong> into three matrices representing concepts:</p>
+      <div class="svd-diagram">
+        <div class="svd-block svd-A">A<div class="sub">Doc-Term Matrix<br/>(n × d)</div></div>
+        <div class="svd-eq">=</div>
+        <div class="svd-block svd-U">U<div class="sub">Doc-Concept Matrix<br/>(n × k)</div></div>
+        <div class="svd-eq">×</div>
+        <div class="svd-block svd-S">Σ<div class="sub">Concept Strengths<br/>(k × k diagonal)</div></div>
+        <div class="svd-eq">×</div>
+        <div class="svd-block svd-Vt">Vᵀ<div class="sub">Term-Concept Matrix<br/>(k × d)</div></div>
+      </div>
+      <div class="callout">
+        <strong>📐 Dimensions</strong>
+        n = number of documents · d = number of terms · k = number of concepts (max k = d). The maximum value for k equals d (the number of unique terms).
+      </div>
+      <table class="compare-table">
+        <thead><tr><th>Matrix</th><th>Name</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>U</strong> (n × k)</td><td>Document-Concept Matrix</td><td>How strongly each document relates to each concept</td></tr>
+          <tr><td><strong>Σ</strong> (k × k)</td><td>Singular Values (diagonal)</td><td>Strength/confidence of each concept — <strong>sorted descending</strong>. Higher value = concept appears more in corpus.</td></tr>
+          <tr><td><strong>Vᵀ</strong> (k × d)</td><td>Term-Concept Matrix</td><td>How strongly each term relates to each concept</td></tr>
+        </tbody>
+      </table>
+      <div class="callout tip">
+        <strong>✅ Σ Interpretation</strong>
+        The diagonal values represent concept confidence. If the CS concept has a higher value than the medical concept, it means the corpus has more CS-related documents — which is reflected in the higher singular value.
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Step 3: Query Using Concepts</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label how">How to Query by Term</div>
+        <p>Convert the term into a <strong>one-hot vector</strong> of size d (1 at the term's position, 0 elsewhere). Then multiply by the <strong>term-concept matrix Vᵀ</strong> to get the concept representation of that term. Compare with document concept vectors from U.</p>
+      </div>
+      <div class="formula-box"><span class="highlight">query_vector</span> → one-hot (size d, value=1 at term position)
+<span class="highlight">concept_repr</span> = query_vector × <span class="eq">Vᵀ</span>
+<span class="comment">→ maps query to concept space
+→ find documents in U with similar concept coordinates
+→ returns semantically related docs even without exact keyword match</span></div>
+      <div class="callout">
+        <strong>🔍 Power of LSI</strong>
+        Document ("information", "retrieval") is retrieved by query ("data") even though it does NOT contain "data" — because both map to the same CS concept via SVD!
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>LSI Drawbacks</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <ul class="bullet">
+        <li><strong>Word order neglected</strong> — built on Bag of Words; word order (important for semantic meaning) is completely lost</li>
+        <li><strong>Information loss</strong> — converting documents to a document-term matrix then performing SVD with k &lt; d loses some information</li>
+        <li><strong>No probability</strong> — LSI gives geometric/algebraic similarity, not probabilistic topic distributions</li>
+        <li><strong>Fixed concepts</strong> — k must be chosen in advance; hard to interpret latent concepts</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Interactive: SVD Concept Explorer -->
+  <div class="interactive-box">
+    <h4>🔬 Interactive: LSI Concept Query</h4>
+    <div class="desc">Click a term to see which concept it maps to, and which documents are retrieved.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn-outline active" onclick="lsiQuery(this,'data')">data</button>
+      <button class="btn-outline" onclick="lsiQuery(this,'system')">system</button>
+      <button class="btn-outline" onclick="lsiQuery(this,'retrieval')">retrieval</button>
+      <button class="btn-outline" onclick="lsiQuery(this,'lung')">lung</button>
+      <button class="btn-outline" onclick="lsiQuery(this,'ear')">ear</button>
+    </div>
+    <div class="output-box" id="lsi-output">Term "data" → maps to CS/Database concept (Σ₁ = 2.16)
+Concept interpretation: {data: 0.8, system: 0.5, retrieval: 0.6}
+Retrieved documents: doc1, doc2
+✓ Works even if docs don't contain exact query term!</div>
+  </div>
+</div>
+
+<!-- SECTION 3: LDA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon purple">🎲</div>
+    <div>
+      <h2>Latent Dirichlet Allocation (LDA)</h2>
+      <div class="sub">Probabilistic topic modeling · M11T1L2</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Core Idea &amp; Setup</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label what">What</div>
+        <p>LDA is an <strong>unsupervised probabilistic model</strong>. You must specify the number of topics <strong>K</strong> in advance. LDA finds groups of words that occur together across documents, discovering the hidden topic structure.</p>
+      </div>
+      <div class="callout warning">
+        <strong>⚠️ Key Requirement</strong>
+        Unlike LSI, LDA requires you to specify K (number of topics) before training. The right K depends on your dataset and problem domain.
+      </div>
+      <div class="explainer">
+        <div class="explainer-label how">Core Assumption</div>
+        <p>Documents with <strong>similar topics share common words</strong>. Topics can be discovered by finding groups of words occurring together across all documents.</p>
+      </div>
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>📄 Document-Topic Matrix (θ)</h4>
+          <ul class="bullet">
+            <li>For each document, the <strong>probability of each topic</strong></li>
+            <li>e.g., Doc1: {Sports: 0.1, Food: 0.8, Economy: 0.1}</li>
+            <li>Rows = documents, Columns = topics</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>📝 Topic-Word Matrix (φ)</h4>
+          <ul class="bullet">
+            <li>For each topic, the <strong>probability of each word</strong></li>
+            <li>e.g., Sports topic: {football: 0.4, stadium: 0.4, price: 0.01}</li>
+            <li>Rows = topics, Columns = words</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>The LDA Probability Equation</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <p style="font-size:14px;color:#374151;margin-bottom:12px">LDA models the probability of generating a document as a product of four terms:</p>
+      <div class="prob-eq">
+p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <span class="term-alpha">α</span>, <span class="term-beta">β</span>) =
+
+  ∏<sub>j=1..M</sub> p(<span class="term-theta">θ_j</span> | <span class="term-alpha">α</span>)      <span class="comment">① Dirichlet: doc-topics distribution (α controls shape)</span>
+× ∏<sub>i=1..K</sub> p(<span class="term-phi">φ_i</span> | <span class="term-beta">β</span>)      <span class="comment">② Dirichlet: topic-words distribution (β controls shape)</span>
+× ∏<sub>t=1..N</span> p(<span class="term-z">z_{j,t}</span> | <span class="term-theta">θ_j</span>)   <span class="comment">③ Multinomial: randomly generate topic for each word</span>
+× p(<span class="term-w">w_{j,t}</span> | <span class="term-phi">φ</span>, <span class="term-z">z_{j,t}</span>)   <span class="comment">④ Multinomial: randomly assign word to chosen topic</span></div>
+      <div class="callout">
+        <strong>Variables</strong>
+        M = number of documents · K = number of topics · N = number of words in document j · α = Dirichlet param for doc-topics · β = Dirichlet param for topic-words · θ = doc-topic dist · φ = topic-word dist · z = topic assignment · w = actual word
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>The 4 Probability Terms — Each One's Role</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="duty-row">
+        <div class="duty-card d1">
+          <h5>① Topics Probability</h5>
+          <div class="formula-inline">p(θ_j | α)</div>
+          <p>Dirichlet distribution for <strong>document-topics</strong>. Imagine a triangle with K topics at the corners. Tells us the probability distribution over topics for each document. M = # documents.</p>
+        </div>
+        <div class="duty-card d2">
+          <h5>② Words Probability</h5>
+          <div class="formula-inline">p(φ_i | β)</div>
+          <p>Dirichlet distribution for <strong>topic-words</strong>. Imagine a triangle with words at corners. Tells us the probability distribution over words for each topic. K = # topics.</p>
+        </div>
+        <div class="duty-card d3">
+          <h5>③ Randomly Generate Topics</h5>
+          <div class="formula-inline">p(z_{j,t} | θ_j)</div>
+          <p>Multinomial: use the doc-topic Dirichlet to <strong>randomly assign a topic</strong> to each word in the document. e.g., if Doc1 is 80% Topic 2, each word has an 80% chance of being assigned Topic 2.</p>
+        </div>
+        <div class="duty-card d4">
+          <h5>④ Randomly Assign Words</h5>
+          <div class="formula-inline">p(w_{j,t} | φ, z_{j,t})</div>
+          <p>Multinomial: given the assigned topic from step ③, use the topic-word Dirichlet to <strong>randomly assign a word</strong>. e.g., if word is assigned Topic 1 (sports), "football" and "stadium" get highest probability.</p>
+        </div>
+      </div>
+      <div class="callout tip">
+        <strong>✅ Mnemonic</strong>
+        ① "What topics does this doc like?" → ② "What words does each topic like?" → ③ "Pick a topic for this word" → ④ "Given that topic, pick a word"
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Dirichlet Distribution &amp; α/β Parameters</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label what">What</div>
+        <p>The Dirichlet distribution generates probability distributions. For K=3 topics, it produces a point inside a triangle (simplex) where each corner represents 100% probability for that topic. For higher K, it becomes a higher-dimensional simplex.</p>
+      </div>
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>α — Doc-Topic Dirichlet</h4>
+          <ul class="bullet">
+            <li><strong>High α:</strong> documents tend to cover many topics (uniform distribution)</li>
+            <li><strong>Low α:</strong> documents focus on 1–2 specific topics (sparse distribution)</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>β — Topic-Word Dirichlet</h4>
+          <ul class="bullet">
+            <li><strong>High β:</strong> topics have many words with similar probability</li>
+            <li><strong>Low β:</strong> topics are defined by a few key words</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>LDA Training Algorithm (Gibbs Sampling)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <ol style="padding-left:20px;font-size:14px;color:#374151;line-height:2">
+        <li><strong>Initialize:</strong> Randomly assign each word in the corpus to one of K topics</li>
+        <li><strong>Iterate:</strong> For each word in each document, reassign it to a topic based on (a) how often the topic appears in the document and (b) how often the word appears in the topic</li>
+        <li><strong>Optimize α, β:</strong> Change Dirichlet parameters and generate M documents. Check which settings re-generate documents closest to the original ones.</li>
+        <li><strong>Gibbs Sampling:</strong> Used to maximize the probability that generated documents match the originals. This clusters similar words and similar documents for a specific topic.</li>
+        <li><strong>Convergence:</strong> Stop when topic assignments stabilize</li>
+      </ol>
+      <div class="callout">
+        <strong>🎯 Goal</strong>
+        Maximize the probability of generated documents being similar to the original ones → this effectively clusters similar words and similar documents for each topic.
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive: LDA Topic Explorer -->
+  <div class="interactive-box">
+    <h4>🎲 Interactive: LDA Topic Distribution</h4>
+    <div class="desc">Click a document to see its topic distribution and the top words in each topic.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn-outline active" onclick="ldaExplore(this,0)">Doc 1: Sports Article</button>
+      <button class="btn-outline" onclick="ldaExplore(this,1)">Doc 2: Mixed Article</button>
+      <button class="btn-outline" onclick="ldaExplore(this,2)">Doc 3: Food Article</button>
+      <button class="btn-outline" onclick="ldaExplore(this,3)">Doc 4: Economy Article</button>
+    </div>
+    <div class="output-box" id="lda-output"></div>
+  </div>
+</div>
+
+<!-- SECTION 4: LSI vs LDA COMPARISON -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon green">⚖️</div>
+    <div>
+      <h2>LSI vs LDA: Head-to-Head</h2>
+      <div class="sub">When to use which</div>
+    </div>
+  </div>
+
+  <table class="compare-table">
+    <thead>
+      <tr><th>Aspect</th><th>LSI (Latent Semantic Indexing)</th><th>LDA (Latent Dirichlet Allocation)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Approach</strong></td><td>Linear algebra (SVD)</td><td>Probabilistic (Bayesian)</td></tr>
+      <tr><td><strong>Output type</strong></td><td>Geometric similarity scores</td><td>Probability distributions</td></tr>
+      <tr><td><strong>Concept/topic representation</strong></td><td>Latent dimensions via SVD</td><td>Dirichlet distributions over words</td></tr>
+      <tr><td><strong>Requires K upfront?</strong></td><td class="good">No (k ≤ d, choose freely)</td><td class="bad">Yes — must specify K topics</td></tr>
+      <tr><td><strong>Interpretability</strong></td><td class="bad">Harder — no probability meaning</td><td class="good">Better — probabilistic topics</td></tr>
+      <tr><td><strong>Speed</strong></td><td class="good">Fast (SVD is efficient)</td><td class="bad">Slower (iterative sampling)</td></tr>
+      <tr><td><strong>Query mechanism</strong></td><td>Map query to concept space via Vᵀ</td><td>Infer topic distribution of new doc</td></tr>
+      <tr><td><strong>Handles polysemy?</strong></td><td>Partially — maps to concept space</td><td class="good">Better — words distributed across topics</td></tr>
+      <tr><td><strong>Word order</strong></td><td class="bad">Ignored (BoW-based)</td><td class="bad">Also ignored (BoW-based)</td></tr>
+      <tr><td><strong>Common use</strong></td><td>Information retrieval, search</td><td>Document classification, topic discovery</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <strong>✅ When to use each</strong>
+    Use <strong>LSI</strong> when you need fast semantic search/retrieval and want to find similar documents quickly. Use <strong>LDA</strong> when you want interpretable probabilistic topics and want to understand what each topic "means" in terms of word distributions.
+  </div>
+</div>
+
+<!-- SECTION 5: QUIZ 10 PREP -->
+<div class="quiz-section">
+  <h3>🎯 Quiz 10 Practice — Topic Modeling</h3>
+
+  <div class="quiz-q" id="q1">
+    <p>Q1. True or False: Topic modeling with LSI and LDA both require labeled training data (supervised learning).</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,'q1',false)">True</button>
+      <button class="quiz-opt" onclick="answer(this,'q1',true)">False</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb">Both LSI and LDA are <strong>unsupervised</strong> — no labels are needed. They discover hidden topic structure from raw documents.</div>
+  </div>
+
+  <div class="quiz-q" id="q2">
+    <p>Q2. In LSI, which matrix from the SVD decomposition represents the <em>document-concept</em> relationship?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">Σ (Sigma — the diagonal matrix)</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',true)">U (the left unitary matrix)</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">Vᵀ (the right unitary matrix transposed)</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">A (the original document-term matrix)</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"><strong>U</strong> = document-concept matrix. <strong>Σ</strong> = concept strengths (diagonal). <strong>Vᵀ</strong> = term-concept matrix. To query a term, you multiply its one-hot vector by Vᵀ.</div>
+  </div>
+
+  <div class="quiz-q" id="q3">
+    <p>Q3. Which of the following statements is <strong>FALSE</strong> about LDA?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">LDA uses Dirichlet distributions for both document-topic and topic-word distributions.</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">In LDA, the number of topics K must be specified in advance.</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',true)">LDA uses word order in documents to discover topics.</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">Gibbs sampling is used to optimize LDA parameters α and β.</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb">LDA does <strong>NOT</strong> use word order — it is based on Bag of Words (word frequencies). Topic discovery is based on word co-occurrence, not sequence.</div>
+  </div>
+
+  <div class="quiz-q" id="q4">
+    <p>Q4. In LSI, the singular values in the Σ matrix are sorted in descending order. What does a higher singular value for a concept indicate?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,'q4',false)">The concept has more unique words</button>
+      <button class="quiz-opt" onclick="answer(this,'q4',true)">The concept appears more strongly/frequently in the corpus (higher confidence)</button>
+      <button class="quiz-opt" onclick="answer(this,'q4',false)">The concept is more recent in the document collection</button>
+      <button class="quiz-opt" onclick="answer(this,'q4',false)">The concept maps to fewer documents</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb">Higher singular values indicate stronger, more prominent concepts. For example, if there are more CS documents than medical documents in the corpus, the CS concept will have a higher singular value in Σ.</div>
+  </div>
+
+  <div class="quiz-q" id="q5">
+    <p>Q5. In LDA, what is the role of the term p(z_{j,t} | θ_j) in the probability equation?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,'q5',false)">It defines the Dirichlet distribution over words for each topic</button>
+      <button class="quiz-opt" onclick="answer(this,'q5',false)">It assigns the final word to the document</button>
+      <button class="quiz-opt" onclick="answer(this,'q5',true)">It randomly generates (assigns) a topic for each word using the doc-topic distribution</button>
+      <button class="quiz-opt" onclick="answer(this,'q5',false)">It defines the Dirichlet distribution over topics for each document</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb">p(z_{j,t} | θ_j) is the <strong>multinomial distribution</strong> that randomly assigns a topic to word t in document j, based on the document's topic distribution θ_j. For example, if θ_j says 80% Topic 2, each word has an 80% chance of being assigned Topic 2.</div>
+  </div>
+</div>
+
+<!-- PAGE NAV -->
+<div class="page-nav">
+  <a href="week10.html">← Week 10: Sequence Labeling</a>
+  <a href="index.html">🏠 All Weeks</a>
+  <a href="#">Week 13 →</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+const lsiData = {
+  'data':      { concept: 'CS/Database', strength: '2.16', weights: 'data: 0.8, system: 0.5, retrieval: 0.6', docs: 'doc1, doc2' },
+  'system':    { concept: 'CS/Database', strength: '2.16', weights: 'data: 0.8, system: 0.5, retrieval: 0.6', docs: 'doc1, doc2' },
+  'retrieval': { concept: 'CS/Database', strength: '2.16', weights: 'data: 0.8, system: 0.5, retrieval: 0.6', docs: 'doc1, doc2' },
+  'lung':      { concept: 'Medical',     strength: '1.84', weights: 'lung: 0.7, ear: 0.7',                   docs: 'doc3, doc4' },
+  'ear':       { concept: 'Medical',     strength: '1.84', weights: 'lung: 0.7, ear: 0.7',                   docs: 'doc3, doc4' }
+};
+
+function lsiQuery(btn, term) {
+  document.querySelectorAll('.interactive-box .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = lsiData[term];
+  document.getElementById('lsi-output').textContent =
+    'Term "' + term + '" → maps to ' + d.concept + ' concept (Σ = ' + d.strength + ')\n' +
+    'Concept weights: {' + d.weights + '}\n' +
+    'Retrieved documents: ' + d.docs + '\n' +
+    '✓ Works even if docs don\'t contain exact query term!';
+}
+lsiQuery(document.querySelector('.interactive-box .btn-outline.active'), 'data');
+
+const ldaDocs = [
+  { name: 'Doc 1: Sports Article', dist: [{t:'Sports',p:0.80},{t:'Food',p:0.10},{t:'Economy',p:0.10}],
+    words: 'Top words in Sports topic: football (0.40), stadium (0.38), goal (0.30), match (0.28), player (0.25)' },
+  { name: 'Doc 2: Mixed Article',  dist: [{t:'Sports',p:0.40},{t:'Food',p:0.40},{t:'Economy',p:0.20}],
+    words: 'Mixed: football (0.35), burger (0.32), price (0.18)\nDoc covers multiple topics roughly equally.' },
+  { name: 'Doc 3: Food Article',   dist: [{t:'Sports',p:0.05},{t:'Food',p:0.90},{t:'Economy',p:0.05}],
+    words: 'Top words in Food topic: burger (0.50), recipe (0.42), cook (0.38), ingredient (0.30), meal (0.28)' },
+  { name: 'Doc 4: Economy Article',dist: [{t:'Sports',p:0.10},{t:'Food',p:0.15},{t:'Economy',p:0.75}],
+    words: 'Top words in Economy topic: price (0.45), market (0.40), stock (0.38), trade (0.32), growth (0.28)' }
+];
+
+function ldaExplore(btn, idx) {
+  document.querySelectorAll('.interactive-box:nth-of-type(2) .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = ldaDocs[idx];
+  let out = d.name + '\n\nDocument-Topic Distribution:\n';
+  d.dist.forEach(item => {
+    const bar = '█'.repeat(Math.round(item.p * 20));
+    out += '  ' + item.t.padEnd(10) + ' ' + bar + ' ' + (item.p*100).toFixed(0) + '%\n';
+  });
+  out += '\n' + d.words;
+  document.getElementById('lda-output').textContent = out;
+}
+ldaExplore(document.querySelector('.interactive-box:nth-of-type(2) .btn-outline.active'), 0);
+
+function answer(btn, qId, correct) {
+  const qDiv = document.getElementById(qId);
+  qDiv.querySelectorAll('.quiz-opt').forEach(b => { b.classList.remove('correct','wrong'); b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) {
+    qDiv.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  const fb = document.getElementById(qId + '-fb');
+  fb.classList.add('show', correct ? 'correct' : 'wrong');
+}
+</script>
+</body>
+</html>

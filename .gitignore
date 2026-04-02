@@ -14,3 +14,6 @@ sample_questions/*
 aws_content/*
 aws_docs/*
 in_class_quiz/*
+docs/*
+.superpowers/
+.gitignore
