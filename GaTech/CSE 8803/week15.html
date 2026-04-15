@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 15 – Multi-Agent Systems, Real-World Agentic NLP & Future | CSE 8803</title>
+<style>
+  :root {
+    --primary: #059669; --primary-light: #ecfdf5; --primary-dark: #065f46;
+    --blue: #2563eb; --purple: #7c3aed; --orange: #d97706; --red: #dc2626; --teal: #0d9488;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #065f46; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #34d399; color: #064e3b; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 700px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #78350f; font-weight: 700; }
+  .chip.hw { background: #f87171; color: #7f1d1d; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.blue   { background: #dbeafe; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.orange { background: #ffedd5; }
+  .section-icon.teal   { background: #ccfbf1; }
+  .section-icon.pink   { background: #fce7f3; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what  { color: #059669; }
+  .explainer-label.why   { color: #2563eb; }
+  .explainer-label.how   { color: #d97706; }
+  .explainer-label.when  { color: #7c3aed; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 13px; margin: 16px 0; line-height: 1.9; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #64748b; }
+  .formula-box .highlight { color: #fcd34d; font-weight: bold; }
+  .formula-box .step      { color: #93c5fd; }
+  .formula-box .agent     { color: #a78bfa; }
+  .formula-box .tool      { color: #6ee7b7; }
+  .formula-box .msg       { color: #fca5a5; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #065f46; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 4px; }
+  .btn-outline:hover, .btn-outline.active { background: var(--primary); color: white; }
+  .output-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; font-size: 13px; margin-top: 12px; min-height: 80px; white-space: pre-wrap; font-family: 'Courier New', monospace; color: #e2e8f0; line-height: 1.8; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fff7ed; }
+  .callout.tip     { border-color: #7c3aed; background: #f5f3ff; }
+  .callout.info    { border-color: var(--blue);  background: #eff6ff; }
+  .callout.danger  { border-color: var(--red);   background: #fee2e2; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 700px) { .three-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* Multi-agent topology diagrams */
+  .topo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  @media (max-width: 600px) { .topo-grid { grid-template-columns: 1fr; } }
+  .topo-card { border-radius: 12px; padding: 16px; border: 2px solid; }
+  .topo-star { border-color: #3b82f6; background: #eff6ff; } .topo-star h4 { color: #1e40af; }
+  .topo-chain { border-color: #8b5cf6; background: #f5f3ff; } .topo-chain h4 { color: #5b21b6; }
+  .topo-mesh { border-color: #10b981; background: #f0fdf4; } .topo-mesh h4 { color: #065f46; }
+  .topo-hier { border-color: #f59e0b; background: #fffbeb; } .topo-hier h4 { color: #92400e; }
+  .topo-card h4 { font-size: 14px; font-weight: 800; margin-bottom: 8px; }
+  .topo-card .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: rgba(0,0,0,0.05); border-radius: 6px; padding: 10px; margin: 8px 0; line-height: 1.8; }
+  .topo-card p { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* Framework comparison */
+  .fw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+  @media (max-width: 700px) { .fw-grid { grid-template-columns: 1fr; } }
+  .fw-card { border-radius: 12px; padding: 16px; border: 2px solid; }
+  .fw-lg { border-color: #2563eb; background: #eff6ff; } .fw-lg h4 { color: #1e40af; }
+  .fw-ag { border-color: #8b5cf6; background: #f5f3ff; } .fw-ag h4 { color: #5b21b6; }
+  .fw-crew { border-color: #f59e0b; background: #fffbeb; } .fw-crew h4 { color: #92400e; }
+  .fw-card h4 { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+  .fw-card .tag { display: inline-block; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .fw-lg .tag  { background: #dbeafe; color: #1e40af; }
+  .fw-ag .tag  { background: #ede9fe; color: #5b21b6; }
+  .fw-crew .tag { background: #fef3c7; color: #92400e; }
+  .fw-card ul { padding-left: 14px; }
+  .fw-card li { font-size: 12px; color: #374151; margin-bottom: 4px; line-height: 1.5; }
+
+  /* Future of NLP timeline */
+  .timeline { margin: 24px 0; }
+  .tl-item { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; border: 2px solid; }
+  .tl-done   { background: #059669; border-color: #059669; }
+  .tl-now    { background: #fbbf24; border-color: #d97706; }
+  .tl-soon   { background: white; border-color: #3b82f6; }
+  .tl-future { background: white; border-color: #8b5cf6; }
+  .tl-line { border-left: 2px solid var(--border); height: 100%; margin-left: 6px; }
+  .tl-content h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .tl-content p  { font-size: 13px; color: #374151; line-height: 1.5; }
+  .tl-year { font-size: 11px; font-weight: 700; background: #f1f5f9; border-radius: 6px; padding: 2px 8px; margin-left: 8px; color: var(--muted); }
+
+  /* Applications grid */
+  .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+  .app-card { border-radius: 10px; padding: 14px; border: 1px solid var(--border); background: var(--card); }
+  .app-card .icon { font-size: 24px; margin-bottom: 8px; }
+  .app-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .app-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Quiz */
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  .story-box { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 2px solid #6ee7b7; border-radius: 14px; padding: 20px 24px; margin: 20px 0; }
+  .story-box .story-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #059669; margin-bottom: 8px; }
+  .story-box p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .depth-badge { display: inline-block; background: #065f46; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
+  strong { color: #1e293b; }
+
+  /* Completion banner */
+  .completion-banner { background: linear-gradient(135deg, #065f46, #059669); color: white; border-radius: 16px; padding: 32px; text-align: center; margin: 48px 0 32px; }
+  .completion-banner h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+  .completion-banner p { font-size: 16px; opacity: 0.9; max-width: 600px; margin: 0 auto 20px; }
+  .completion-banner .stats { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+  .completion-banner .stat { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 20px; }
+  .completion-banner .stat .num { font-size: 28px; font-weight: 800; }
+  .completion-banner .stat .label { font-size: 12px; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week14.html">← Week 14</a>
+    <span class="you-are-here">Week 15 ← HERE</span>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 15 · Apr 20 – 24</div>
+  <h1>Multi-Agent Systems, Real-World NLP &amp; The Road Ahead</h1>
+  <p>How do multiple AI agents collaborate? What do the leading frameworks look like in practice? And where is NLP heading — from multimodal reasoning to AI scientists?</p>
+  <div class="header-chips">
+    <span class="chip">Module 13 · Lesson 3 + Toolbox</span>
+    <span class="chip">Multi-Agent Systems</span>
+    <span class="chip">LangGraph · AutoGen · CrewAI</span>
+    <span class="chip">Future of NLP</span>
+    <span class="chip hw">🏁 HW5 Due Apr 24</span>
+    <span class="chip alert">⚠️ Quiz 12 · Due Apr 24</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ SECTION 1: Multi-Agent -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon green">🤝</div>
+    <div>
+      <h2>Multi-Agent Systems: When One Agent Isn't Enough</h2>
+      <div class="sub">M13T1L3 · Collaboration, specialization, and emergence</div>
+    </div>
+  </div>
+
+  <div class="story-box">
+    <div class="story-label">📖 Story: The Consulting Firm Model</div>
+    <p>When McKinsey tackles a complex business problem, they don't send one person. They send a team: a project manager who coordinates, a financial analyst, a market researcher, a strategy consultant, and a technical expert — each contributing their specialty. The project manager ensures they're all working toward the same goal and their outputs fit together. That's exactly how multi-agent systems work. Specialization + coordination = capabilities that no single agent (or person) could achieve alone.</p>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Why Multi-Agent? The Limits of Single Agents</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <table class="compare-table">
+        <thead><tr><th>Challenge</th><th>Single Agent Limit</th><th>Multi-Agent Solution</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Context window</strong></td><td>One agent → one context → limited memory</td><td>Each agent has its own context → total effective memory scales with # agents</td></tr>
+          <tr><td><strong>Specialization</strong></td><td>Generalist = mediocre at everything</td><td>Specialist agents → each optimized for one sub-task</td></tr>
+          <tr><td><strong>Parallelism</strong></td><td>Single agent is sequential</td><td>Multiple agents work simultaneously on independent sub-tasks</td></tr>
+          <tr><td><strong>Error checking</strong></td><td>Single agent self-checks (biased)</td><td>Critic agent independently reviews generator agent's output</td></tr>
+          <tr><td><strong>Complex workflows</strong></td><td>Hard to manage >10 steps reliably</td><td>Orchestrator decomposes into sub-agents, each handles 3-5 steps</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Multi-Agent Topologies: How Agents Connect <span class="depth-badge">CORE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="topo-grid">
+        <div class="topo-card topo-star">
+          <h4>⭐ Hub-and-Spoke (Orchestrator)</h4>
+          <div class="diagram">     🧠 Orchestrator
+    ↗️   ↑   ↖️
+🔍Search 📊Data 💻Code
+  Agent  Agent  Agent</div>
+          <p>Central orchestrator delegates to specialist agents. Easiest to implement, easy to debug. Most common production pattern. Risk: orchestrator is a single point of failure.</p>
+        </div>
+        <div class="topo-card topo-chain">
+          <h4>🔗 Sequential Pipeline (Chain)</h4>
+          <div class="diagram">Researcher → Analyst → Writer → Editor
+    ↓          ↓         ↓        ↓
+  Sources   Summary    Draft   Final</div>
+          <p>Output of each agent feeds the next. Like an assembly line. Simple, predictable, good for document pipelines. Bad for tasks where early errors cascade.</p>
+        </div>
+        <div class="topo-card topo-mesh">
+          <h4>🕸️ Fully Connected (Debate)</h4>
+          <div class="diagram">Agent A ↔️ Agent B
+   ↕️            ↕️
+Agent C ↔️ Agent D</div>
+          <p>All agents communicate with all others. Used for "society of mind" debates or consensus-building. Expensive (O(n²) messages) but finds blind spots no single agent sees.</p>
+        </div>
+        <div class="topo-card topo-hier">
+          <h4>📊 Hierarchical (Recursive)</h4>
+          <div class="diagram">      🎯 Manager
+    ↙️         ↘️
+🧠 Sub-Mgr  🧠 Sub-Mgr
+↙️  ↘️      ↙️   ↘️
+Workers    Workers</div>
+          <p>Manager spawns sub-managers, who spawn workers. Enables extreme decomposition. Used in AutoGen and MetaGPT for complex software engineering tasks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive: Multi-Agent Simulation -->
+  <div class="interactive-box">
+    <h4>🔬 Interactive: Multi-Agent Pipeline Simulator</h4>
+    <div class="desc">Select a workflow to see how agents collaborate. Each agent has a specialized role. Watch how their outputs chain together.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn-outline active" onclick="showMAS('research', this)">Research Pipeline</button>
+      <button class="btn-outline" onclick="showMAS('code', this)">Code Review Pipeline</button>
+      <button class="btn-outline" onclick="showMAS('rag', this)">Agentic RAG Pipeline</button>
+    </div>
+    <div class="output-box" id="mas-output"></div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Agent Communication &amp; Message Protocols</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="explainer">
+        <div class="explainer-label how">How Agents Pass Messages</div>
+        <p>Multi-agent systems need a shared protocol for agents to communicate. The two dominant patterns are <strong>message passing</strong> (agents send structured messages to each other) and <strong>shared state</strong> (agents read/write to a central state object, typically via a graph framework like LangGraph).</p>
+      </div>
+      <div class="formula-box"><span class="comment"># AutoGen-style agent conversation example</span>
+
+<span class="agent">UserProxy</span> → <span class="agent">AssistantAgent</span>:
+  <span class="msg">"Write a Python function to detect email addresses in text"</span>
+
+<span class="agent">AssistantAgent</span> → <span class="agent">UserProxy</span>:
+  <span class="msg">```python
+  import re
+  def find_emails(text):
+      pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+      return re.findall(pattern, text)
+  ```</span>
+
+<span class="agent">UserProxy</span> [EXECUTES CODE]: run_code(function)
+<span class="tool">RESULT: Tests pass ✅</span>
+
+<span class="agent">UserProxy</span> → <span class="agent">AssistantAgent</span>:
+  <span class="msg">"Now add unit tests"</span>
+
+<span class="comment"># Conversation continues until task is complete or
+# max_turns is reached</span></div>
+      <div class="callout info">
+        <strong>💡 Key Design Decision: When to Terminate?</strong>
+        Multi-agent loops need explicit termination conditions: max turns, a "TERMINATE" signal in the agent's response, a human-in-the-loop check, or a goal-completion evaluator. Without this, agents can loop indefinitely and rack up API costs.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 2: Frameworks -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon blue">🛠️</div>
+    <div>
+      <h2>Leading Agent Frameworks in 2025–2026</h2>
+      <div class="sub">LangGraph, AutoGen, CrewAI — when to use each</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>LangGraph vs. AutoGen vs. CrewAI <span class="depth-badge">2026 LANDSCAPE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="fw-grid">
+        <div class="fw-card fw-lg">
+          <h4>🔷 LangGraph</h4>
+          <span class="tag">Graph-based · State-machine</span>
+          <ul>
+            <li><strong>Philosophy:</strong> Agents as nodes in a directed graph; edges define transitions</li>
+            <li><strong>State:</strong> Shared typed state object, updated by each node</li>
+            <li><strong>Strength:</strong> Stateful workflows, complex branching, checkpointing, human-in-loop</li>
+            <li><strong>Best for:</strong> Production systems needing reliability and observability</li>
+            <li><strong>Made by:</strong> LangChain team</li>
+          </ul>
+        </div>
+        <div class="fw-card fw-ag">
+          <h4>🔷 AutoGen</h4>
+          <span class="tag">Conversational · Role-playing</span>
+          <ul>
+            <li><strong>Philosophy:</strong> Agents as conversation participants with defined roles</li>
+            <li><strong>State:</strong> Conversation history, multi-turn dialogue</li>
+            <li><strong>Strength:</strong> Natural multi-agent conversations, code execution loop, human proxy</li>
+            <li><strong>Best for:</strong> Coding assistants, collaborative problem-solving, research tasks</li>
+            <li><strong>Made by:</strong> Microsoft Research</li>
+          </ul>
+        </div>
+        <div class="fw-card fw-crew">
+          <h4>🔷 CrewAI</h4>
+          <span class="tag">Role-based · Hierarchical</span>
+          <ul>
+            <li><strong>Philosophy:</strong> Agents as employees on a crew, with defined roles and tasks</li>
+            <li><strong>State:</strong> Task outputs, crew memory</li>
+            <li><strong>Strength:</strong> Intuitive role-based design, sequential/parallel task execution</li>
+            <li><strong>Best for:</strong> Content pipelines, research reports, workflow automation</li>
+            <li><strong>Made by:</strong> CrewAI Inc.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout tip">
+        <strong>🎯 Framework Selection Guide (2026)</strong>
+        Use <strong>LangGraph</strong> when you need fine-grained control, stateful workflows, and production reliability. Use <strong>AutoGen</strong> when the task naturally looks like a conversation between specialized agents (especially code-heavy tasks). Use <strong>CrewAI</strong> for quickly standing up role-based pipelines with clear agent personas and task flows. For maximum power, many teams use LangGraph as the orchestration layer with AutoGen-style agents as nodes.
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Real-World Architecture: A Production NLP Agent System</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="formula-box"><span class="comment"># Production multi-agent NLP pipeline example
+# Task: Automated customer support ticket resolution</span>
+
+<span class="step">Tier 1: TRIAGE AGENT</span>
+  Input: Raw customer email
+  Task: Classify intent (billing/technical/general), extract entities
+  Tools: entity_extractor, intent_classifier, ticket_db.create()
+  Output: Structured ticket + routing decision
+
+<span class="step">Tier 2: SPECIALIST AGENTS (parallel fork)</span>
+  <span class="agent">BillingAgent:</span>  query_billing_db(), apply_discount()
+  <span class="agent">TechAgent:</span>    search_knowledge_base(), run_diagnostics()
+  <span class="agent">EscalateAgent:</span> send_to_human() if confidence < 0.7
+
+<span class="step">Tier 3: RESPONSE AGENT</span>
+  Input: Specialist agent output + customer context
+  Task: Generate empathetic, accurate response in brand voice
+  Tools: email_formatter(), sentiment_checker(), send_email()
+
+<span class="step">Tier 4: QUALITY AGENT (critic)</span>
+  Input: Draft response
+  Task: Check: Is it accurate? Empathetic? Compliant? Under 200 words?
+  If fail → send back to Response Agent with specific feedback
+
+<span class="comment"># This 4-tier system can handle 80%+ of tickets automatically
+# with human escalation for edge cases</span></div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Evaluating Multi-Agent Systems <span class="depth-badge">DEEP DIVE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="three-col">
+        <div class="mini-card">
+          <h4>🎯 Task-Level Metrics</h4>
+          <ul class="bullet">
+            <li>Task completion rate</li>
+            <li>Accuracy vs. ground truth</li>
+            <li>Error rate per agent</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>⚡ System-Level Metrics</h4>
+          <ul class="bullet">
+            <li>Total latency end-to-end</li>
+            <li>Total cost (API tokens × agents)</li>
+            <li>Successful termination rate</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🔍 Agent-Level Metrics</h4>
+          <ul class="bullet">
+            <li>Tool call success rate</li>
+            <li>Hallucination rate per agent</li>
+            <li>Communication efficiency</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warning">
+        <strong>⚠️ The Evaluation Problem in Agentic Systems</strong>
+        Traditional NLP evaluation (BLEU, F1, accuracy) doesn't transfer to agents. An agent might reach the correct final answer via a buggy process — or reach the wrong answer due to bad luck despite correct reasoning. You need to evaluate both <em>process</em> (were the steps reasonable?) and <em>outcome</em> (was the final answer correct?). Benchmarks like AgentBench, MINT, and WebArena provide standardized environments for this.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 3: Real-World Applications -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon teal">🌍</div>
+    <div>
+      <h2>NLP &amp; Agentic AI in the Real World</h2>
+      <div class="sub">Where these techniques are being applied right now</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Industry Applications Landscape</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="icon">⚕️</div>
+          <h5>Healthcare</h5>
+          <p>Clinical note summarization, ICD coding, drug interaction detection, patient Q&A with RAG over medical literature</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">⚖️</div>
+          <h5>Legal</h5>
+          <p>Contract review agents, legal research (RAG over case law), document summarization, compliance checking</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">💰</div>
+          <h5>Finance</h5>
+          <p>Earnings call analysis, sentiment on financial news, fraud detection narratives, risk report generation</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">🛒</div>
+          <h5>E-Commerce</h5>
+          <p>Product description generation, review summarization, personalized recommendation explanations, CS ticket routing</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">🎓</div>
+          <h5>Education</h5>
+          <p>Personalized tutoring agents (like this study guide!), automated essay feedback, concept explanation generators</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">💻</div>
+          <h5>Software Dev</h5>
+          <p>Code generation (GitHub Copilot), bug finding agents, code review, documentation writing, test generation</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">🔬</div>
+          <h5>Scientific Research</h5>
+          <p>Literature review agents, hypothesis generation, experimental design assistants, paper writing support</p>
+        </div>
+        <div class="app-card">
+          <div class="icon">🗣️</div>
+          <h5>Customer Service</h5>
+          <p>Ticket triage, response generation, sentiment routing, multi-lingual support, knowledge base Q&A</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 4: NLP Roadmap 2026+ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon purple">🚀</div>
+    <div>
+      <h2>The Road Ahead: NLP in 2026 and Beyond</h2>
+      <div class="sub">Critical research frontiers every NLP practitioner should know</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>NLP Evolution Timeline</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="timeline">
+        <div class="tl-item">
+          <div><div class="tl-dot tl-done"></div></div>
+          <div class="tl-content">
+            <h5>Rule-Based → Statistical NLP <span class="tl-year">Pre-2012</span></h5>
+            <p>Hand-crafted rules, n-gram language models, SVMs, HMMs for sequence labeling. Brittle, domain-specific, required massive feature engineering.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-done"></div></div>
+          <div class="tl-content">
+            <h5>Deep Learning NLP <span class="tl-year">2012–2017</span></h5>
+            <p>Word2Vec, GloVe, LSTMs, CNNs for text. First time neural representations beat hand-crafted features at scale.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-done"></div></div>
+          <div class="tl-content">
+            <h5>The Transformer Revolution <span class="tl-year">2017–2020</span></h5>
+            <p>Attention is All You Need, BERT, GPT-2. Transfer learning made large-scale pre-training the new paradigm.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-done"></div></div>
+          <div class="tl-content">
+            <h5>Large Language Models + Alignment <span class="tl-year">2020–2023</span></h5>
+            <p>GPT-3, ChatGPT, Llama, Claude. RLHF alignment. Scale laws. In-context learning. Prompt engineering emerges as a discipline.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-now"></div></div>
+          <div class="tl-content">
+            <h5>Agentic AI + RAG + Reasoning Models <span class="tl-year">2024–2026 (NOW)</span></h5>
+            <p>LLM agents with tools and memory. Multi-agent frameworks. RAG as standard practice. o1/o3/R1 reasoning models. Function calling ubiquitous.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-soon"></div></div>
+          <div class="tl-content">
+            <h5>Multimodal Foundation Models <span class="tl-year">2025–2027</span></h5>
+            <p>GPT-4o, Gemini 2.0, and successors unify text, image, audio, video in one model. NLP becomes just one modality of general AI. Agents that see, hear, and act in the physical world.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-soon"></div></div>
+          <div class="tl-content">
+            <h5>Test-Time Compute Scaling + Efficient Models <span class="tl-year">2026–2028</span></h5>
+            <p>Models that "think longer" on hard problems (like o3). Simultaneously: efficient small models (3B parameters matching old 70B) via better architectures, data curation, and distillation.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div><div class="tl-dot tl-future"></div></div>
+          <div class="tl-content">
+            <h5>Autonomous AI Scientists &amp; Self-Improving Systems <span class="tl-year">2027+</span></h5>
+            <p>AI systems that formulate hypotheses, design experiments, run code, and publish papers. Systems that improve their own capabilities. The beginning of recursive self-improvement — the frontier everyone is watching.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Open Research Frontiers You Should Know <span class="depth-badge">2026 FORWARD</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <table class="compare-table">
+        <thead><tr><th>Research Area</th><th>Core Problem</th><th>Why It Matters</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Long-context understanding</strong></td><td>Do 128K+ token models actually use all context, or just the beginning/end?</td><td>Critical for document-length RAG and agent context management</td></tr>
+          <tr><td><strong>Hallucination elimination</strong></td><td>Why do factual LLMs still confabulate, and how to detect/prevent it at inference time?</td><td>Fundamental requirement for medical, legal, financial AI deployment</td></tr>
+          <tr><td><strong>Interpretability / Mechanistic Interp.</strong></td><td>What circuits and features inside transformers implement known behaviors?</td><td>Safety, debugging, alignment verification</td></tr>
+          <tr><td><strong>Compositional generalization</strong></td><td>Can LLMs combine known concepts in novel ways vs. just interpolating training data?</td><td>Separates genuine understanding from sophisticated pattern matching</td></tr>
+          <tr><td><strong>Continual learning</strong></td><td>How to update model knowledge without catastrophic forgetting of prior knowledge?</td><td>Enable models to stay current without full retraining</td></tr>
+          <tr><td><strong>Efficient architectures</strong></td><td>State space models (Mamba), linear attention: can they match transformers with O(n) complexity?</td><td>Enable long-context at reduced cost</td></tr>
+          <tr><td><strong>Multi-agent trust &amp; safety</strong></td><td>How to guarantee safety when agents make consequential decisions autonomously?</td><td>Prerequisite for deploying agents in high-stakes domains</td></tr>
+          <tr><td><strong>Low-resource NLP</strong></td><td>Most of the world's 7,000 languages have minimal training data</td><td>Equity in AI — most LLMs fail on non-English languages</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>What Skills Make You a Strong NLP Engineer in 2026?</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>📚 Theoretical Foundations</h4>
+          <ul class="bullet">
+            <li>Transformer architecture (attention, positional encoding, layer norms)</li>
+            <li>Language modeling objectives (CLM, MLM, instruction tuning)</li>
+            <li>Evaluation metrics for generation (BLEU, ROUGE, BERTScore, LLM-as-judge)</li>
+            <li>Probabilistic NLP: Bayesian methods, topic models</li>
+            <li>Sequence labeling: CRF, HMM, Viterbi</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🛠️ Practical Engineering</h4>
+          <ul class="bullet">
+            <li>Prompt engineering (all techniques from Week 13)</li>
+            <li>RAG pipeline implementation (chunking, embedding, vector search)</li>
+            <li>Fine-tuning with LoRA/QLoRA on HuggingFace</li>
+            <li>Agent frameworks: LangGraph, AutoGen, or CrewAI</li>
+            <li>LLM evaluation and observability (LangSmith, Weights &amp; Biases)</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🔬 Research Awareness</h4>
+          <ul class="bullet">
+            <li>Read arXiv papers: cs.CL, cs.AI sections</li>
+            <li>Know key venues: ACL, EMNLP, NAACL, NeurIPS, ICLR</li>
+            <li>Follow: Papers With Code, Hugging Face model releases</li>
+            <li>Track benchmarks: MMLU, HumanEval, MATH, AgentBench</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🧭 Critical Thinking</h4>
+          <ul class="bullet">
+            <li>Question benchmark leakage (are models trained on test sets?)</li>
+            <li>Understand when RAG is better than fine-tuning (and vice versa)</li>
+            <li>Know the alignment tax: safer models are often less capable</li>
+            <li>Think about deployment constraints: latency, cost, safety</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 5: QUIZ PREP -->
+<div class="quiz-section">
+  <h3>🧠 Quiz 12 Prep — Multi-Agent Systems &amp; Applications</h3>
+
+  <div class="quiz-q">
+    <p>1. In a hub-and-spoke multi-agent system, a central orchestrator decomposes a task and delegates to specialists. What is the PRIMARY advantage over a single-agent approach?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. Hub-and-spoke uses smaller LLMs, reducing cost</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">B. Each specialist agent can be optimized for one sub-task and work in parallel, enabling tasks too complex for one agent's context window</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. The orchestrator eliminates the need for RAG</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Hub-and-spoke prevents hallucination entirely</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! Specialization + parallelism are the core benefits. Each agent is prompt-engineered (or fine-tuned) for its specific role and can run simultaneously. The total effective context across all agents far exceeds any single agent's window. The orchestrator coordinates without needing to handle all sub-task details itself.</div>
+    <div class="quiz-feedback wrong">❌ The key benefits are specialization (each agent focused on one role) and the ability to parallelize work. This enables tackling tasks too complex for any single agent.</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>2. You're building a customer service agent system. 20% of complex cases should be escalated to human agents. Which architectural element handles this?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. Increase the LLM's temperature for uncertain cases</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">B. A Human-in-the-Loop (HITL) checkpoint — when confidence falls below a threshold, the system routes to a human before proceeding</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Add more training data to the model</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Use a larger base model for all queries</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! Human-in-the-Loop (HITL) checkpoints are a critical safety and quality mechanism in production agentic systems. The agent evaluates its own confidence (or a confidence evaluator is inserted), and below a threshold, a human is brought in. LangGraph has native support for breakpoints and human input nodes.</div>
+    <div class="quiz-feedback wrong">❌ Temperature affects diversity, not routing to humans. The right design pattern here is HITL — explicit checkpoints where low-confidence decisions are escalated to human review.</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>3. What is the key distinction between LangGraph and AutoGen that guides which one to choose?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. LangGraph only works with GPT models; AutoGen supports any LLM</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">B. LangGraph uses a graph-based state machine for stateful workflows; AutoGen uses a conversational architecture where agents communicate via natural language dialogue</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. AutoGen is open source; LangGraph is proprietary</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. LangGraph is for single agents; AutoGen is for multi-agent systems</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! This is the core architectural distinction. LangGraph is ideal when you need deterministic state transitions, checkpointing, and complex branching logic — think production workflows. AutoGen is ideal when the task naturally emerges from agents having a conversation, especially for code-heavy tasks where back-and-forth dialogue refines solutions.</div>
+    <div class="quiz-feedback wrong">❌ Both support multi-agent and work with various LLMs. The key difference is the interaction model: graph-based state machine (LangGraph) vs. conversational dialogue (AutoGen).</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>4. Why is evaluating multi-agent system performance harder than evaluating a traditional NLP classifier?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. Because agents are trained on proprietary data we can't access</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">B. Because you need to evaluate both the process (were individual steps and tool calls reasonable?) and the outcome (was the final answer correct?), and traditional metrics like F1 or accuracy don't capture multi-step reasoning quality</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Because agents are too slow to evaluate</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Because agents always produce the correct answer</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! An agent can reach a correct answer via faulty reasoning (lucky result) or reach a wrong answer despite good reasoning (bad luck). Evaluating only the final answer misses this. Process evaluation requires inspecting the full agent trace: were tool calls appropriate? Were observations correctly interpreted? Did the agent stay on goal? Benchmarks like AgentBench and WebArena were specifically designed for this.</div>
+    <div class="quiz-feedback wrong">❌ The challenge is the need for both process and outcome evaluation. Traditional NLP evaluates output quality; agent evaluation must also assess whether the path taken to reach the output was sound.</div>
+  </div>
+</div>
+
+<!-- Completion Banner -->
+<div class="completion-banner">
+  <h2>🎓 Course Complete!</h2>
+  <p>You've journeyed from tokenization and Bag-of-Words all the way to multi-agent AI systems operating at the frontier of what's possible. The field will keep evolving — but you now have the foundations to understand and evaluate whatever comes next.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">15</div><div class="label">Weeks Covered</div></div>
+    <div class="stat"><div class="num">13</div><div class="label">Core Modules</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">Homeworks</div></div>
+    <div class="stat"><div class="num">40+</div><div class="label">Topics Mastered</div></div>
+  </div>
+</div>
+
+<div class="page-nav">
+  <a href="week14.html">← Week 14: Agentic AI Foundations</a>
+  <a href="index.html">🏠 Back to Home</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.classList.toggle('open', !isOpen);
+}
+document.querySelectorAll('.concept-body.open').forEach(b => b.style.display = 'block');
+document.querySelectorAll('.concept-body:not(.open)').forEach(b => b.style.display = 'none');
+
+function checkQ(btn, result) {
+  const qDiv = btn.closest('.quiz-q');
+  qDiv.querySelectorAll('.quiz-opt').forEach(b => { b.classList.remove('correct','wrong'); b.disabled = true; });
+  btn.classList.add(result);
+  const fb = qDiv.querySelectorAll('.quiz-feedback');
+  fb.forEach(f => f.classList.remove('show'));
+  qDiv.querySelector('.quiz-feedback.' + result).classList.add('show');
+}
+
+const masOutputs = {
+  'research': `TASK: "Write a competitive analysis report on OpenAI vs. Anthropic"
+
+[ORCHESTRATOR] Decomposing task → 3 parallel agents...
+
+[RESEARCHER AGENT] → Running web_search("OpenAI latest products 2026")
+                  → web_search("Anthropic Claude latest 2026")
+                  → retrieve_docs("AI company competitive landscape")
+  Output: 847 words of raw research notes
+
+[ANALYST AGENT]   → analyze_sentiment(research_notes)
+                  → extract_key_metrics(notes)
+                  → compare_positions(openai_data, anthropic_data)
+  Output: Structured comparison table + key differentiators
+
+[ORCHESTRATOR] Merging outputs from both agents...
+
+[WRITER AGENT]    → synthesize(research_notes, analysis_table)
+                  → write_report(format="executive brief", length=800)
+  Output: Draft report
+
+[CRITIC AGENT]    → Checking: accuracy, completeness, neutrality...
+  Feedback: "Missing information on Anthropic's constitutional AI"
+  → send back to WRITER AGENT for revision
+
+[WRITER AGENT]    → revise(draft, feedback)
+  Output: Final report (862 words) ✅
+
+Total: 4 agents, 8 tool calls, 2m 14s, $0.23 in API costs`,
+
+  'code': `TASK: "Review this Python function for bugs and style issues"
+
+[ORCHESTRATOR] Splitting code review into parallel tasks...
+
+[STYLE AGENT]     → run_linter(code, config="PEP8")
+                  → check_naming_conventions(functions, variables)
+  Issues found: 3 style issues (line length, naming)
+
+[LOGIC AGENT]     → trace_execution(code, test_cases=["edge", "empty", "normal"])
+                  → identify_potential_exceptions(code)
+  Issues found: IndexError on empty input, O(n²) loop that should be O(n)
+
+[SECURITY AGENT]  → scan_dependencies(imports)
+                  → check_input_validation(user_inputs)
+  Issues found: No input sanitization on user-provided string
+
+[ORCHESTRATOR] Merging findings from 3 agents...
+
+[REPORT AGENT]    → generate_code_review(style_issues, logic_issues, security_issues)
+                  → prioritize_by_severity()
+  Output: Ranked issue list with fix suggestions + corrected code snippet
+
+Final: 3 agents worked in parallel → review complete in 45s
+vs. 2m30s if sequential. 3 critical issues found.`,
+
+  'rag': `TASK: "What are the latest updates to NVIDIA's H200 chip?"
+(Agentic RAG: agent decides retrieval strategy dynamically)
+
+[QUERY ANALYZER] → classify_query(type="factual_recent", domain="hardware")
+  Decision: Need recent web data + technical specs
+
+[ROUTER AGENT]   → route_to: [web_search, vector_db_tech_specs]
+                  → parallel retrieval
+
+[WEB AGENT]      → web_search("NVIDIA H200 updates 2026")
+  Retrieved: 5 recent articles from NVIDIA.com, Anandtech, Tom's Hardware
+
+[KB AGENT]       → vector_search("H200 specifications", top_k=3)
+  Retrieved: 3 chunks from technical documentation
+
+[RELEVANCE FILTER] → score_relevance(retrieved_chunks, query)
+  Kept: 4/8 chunks (threshold: cosine_sim > 0.72)
+
+[GENERATOR]      → augment_prompt(query, top_4_chunks)
+                  → generate_answer(cite_sources=True)
+
+Output: "The NVIDIA H200 features 141GB of HBM3e memory...
+[Source 1: NVIDIA.com/H200, Source 2: AnandTech review]"
+
+Key: Agentic RAG dynamically chose what to retrieve
+based on query type — no hardcoded retrieval strategy`
+};
+
+function showMAS(type, btn) {
+  document.querySelectorAll('.interactive-box .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mas-output').textContent = masOutputs[type];
+}
+
+// Initialize
+showMAS('research', document.querySelector('.interactive-box .btn-outline.active'));
+</script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card15{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card15 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card15 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col15{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col15{grid-template-columns:1fr}}
+.bts-table15{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table15 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table15 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table15 tr:hover td{background:#fafbff}
+.bts-formula15{background:#f0fdf4;border-left:4px solid #059669;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story15{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-left:4px solid #059669;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story15-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#15803d;margin-bottom:6px}
+.bts-depth15{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.bts-code15{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>Knowledge Graphs, GraphRAG &amp; Structured Knowledge in 2026</h2>
+  <p>Unstructured text retrieval (vector RAG) struggles with global questions, multi-hop reasoning, and relationship-heavy queries. Knowledge Graphs and GraphRAG represent the next frontier — combining symbolic structure with neural generation. This section covers KG fundamentals through Microsoft's GraphRAG system.</p>
+</div>
+
+<div class="bts-card15">
+  <h3>🕸️ Knowledge Graph Fundamentals <span class="bts-depth15">Foundations</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A Knowledge Graph (KG) represents world knowledge as a directed graph: nodes are entities, edges are relations. The triple (head, relation, tail) is the atomic unit:</p>
+  <div class="bts-2col15">
+    <div>
+      <h4>KG Construction Pipeline</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Entity Recognition:</strong> identify mentions (NER)</li>
+        <li><strong>Entity Linking:</strong> map mentions to canonical KG nodes (e.g., Wikidata QIDs)</li>
+        <li><strong>Relation Extraction:</strong> extract (h, r, t) triples from text</li>
+        <li><strong>Schema Mapping:</strong> align to ontology (RDF, OWL)</li>
+        <li><strong>Conflict Resolution:</strong> handle contradictory facts across sources</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Major Knowledge Bases</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Wikidata:</strong> 100M+ items, community-maintained, SPARQL queryable</li>
+        <li><strong>Freebase:</strong> deprecated (→ Wikidata), used in distant supervision RE</li>
+        <li><strong>NELL:</strong> never-ending learning from web text</li>
+        <li><strong>ConceptNet:</strong> commonsense knowledge (5M+ assertions)</li>
+        <li><strong>UMLS:</strong> biomedical/clinical concepts</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card15">
+  <h3>📐 TransE: Knowledge Graph Embeddings <span class="bts-depth15">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">TransE (Bordes et al., 2013) embeds KG entities and relations in vector space. Key idea: for a true triple (h, r, t), the relation vector r should approximate the translation from h to t.</p>
+  <div class="bts-2col15">
+    <div>
+      <div class="bts-formula15"><span style="color:#86efac"># TransE scoring function</span>
+score(h, r, t) = -||h + r - t||
+
+<span style="color:#86efac"># Training with margin ranking loss</span>
+L = Σ_{(h,r,t)∈S} Σ_{(h',r,t')∈S'} 
+    max(0, γ + score(h',r,t') - score(h,r,t))
+
+<span style="color:#86efac"># where S' = corrupted (negative) triples
+# γ = margin hyperparameter</span>
+
+<span style="color:#86efac"># Analogy with word2vec:</span>
+Berlin - Germany + France ≈ Paris
+leader(Germany) + France ≈ leader(France)
+= "President_of" relation as vector!</div>
+    </div>
+    <div>
+      <h4>TransE Limitations &amp; Successors</h4>
+      <table class="bts-table15">
+        <tr><th>Model</th><th>Handles</th><th>Key Innovation</th></tr>
+        <tr><td>TransE</td><td>1-to-1 relations</td><td>h + r ≈ t</td></tr>
+        <tr><td>TransR</td><td>1-to-N, N-to-1</td><td>Relation-specific spaces</td></tr>
+        <tr><td>RotatE</td><td>Symmetry, inversion</td><td>Rotation in complex plane</td></tr>
+        <tr><td>ComplEx</td><td>Asymmetric relations</td><td>Complex-valued embeddings</td></tr>
+        <tr><td>DistMult</td><td>Symmetric relations</td><td>Bilinear scoring</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card15">
+  <h3>🌐 GraphRAG (Microsoft, 2024) <span class="bts-depth15">2024 Breakthrough</span></h3>
+  <div class="bts-story15">
+    <div class="bts-story15-label">📖 The Problem with Naive RAG</div>
+    <p style="font-size:14px;line-height:1.8">Standard RAG retrieves semantically similar chunks. But for global questions ("What are the main themes across all our documents?", "Summarize the key risks mentioned in our corpus"), no single chunk contains the answer. GraphRAG builds a knowledge graph from the entire corpus, clusters it, and enables both local and global queries.</p>
+  </div>
+  <div class="bts-2col15">
+    <div>
+      <h4>GraphRAG Indexing Pipeline</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Extract entities &amp; relations from all documents (LLM-based)</li>
+        <li>Build knowledge graph: entities as nodes, relations as edges</li>
+        <li>Run Leiden community detection algorithm</li>
+        <li>Generate hierarchical community summaries (LLM)</li>
+        <li>Index: vector store + graph structure + community reports</li>
+      </ol>
+    </div>
+    <div>
+      <h4>GraphRAG Query Types</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Local search:</strong> entity-centric query → find relevant entities → retrieve neighbors + summaries → LLM answer</li>
+        <li><strong>Global search:</strong> query against community reports at all levels → parallel LLM map step → reduce step → final answer</li>
+        <li><strong>Drift search (2025):</strong> hybrid local+global for exploratory queries</li>
+      </ul>
+    </div>
+  </div>
+  <table class="bts-table15" style="margin-top:14px">
+    <tr><th>Dimension</th><th>Naive RAG</th><th>GraphRAG</th></tr>
+    <tr><td><strong>Retrieval unit</strong></td><td>Text chunks (flat)</td><td>Entities, relationships, community summaries</td></tr>
+    <tr><td><strong>Global queries</strong></td><td>❌ Poor (no single chunk has answer)</td><td>✅ Strong (community summaries)</td></tr>
+    <tr><td><strong>Multi-hop reasoning</strong></td><td>❌ Weak (individual chunks)</td><td>✅ Better (graph traversal)</td></tr>
+    <tr><td><strong>Indexing cost</strong></td><td>Low (embed &amp; chunk)</td><td>High (LLM entity extraction × corpus size)</td></tr>
+    <tr><td><strong>Query cost</strong></td><td>Low (single vector search)</td><td>Higher (graph traversal + parallel LLM calls)</td></tr>
+    <tr><td><strong>Best for</strong></td><td>Factoid QA, specific retrieval</td><td>Corpus summarization, theme extraction, relationship queries</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:8px">GraphRAG improves answer comprehensiveness by 50–70% over naive RAG on global questions (Microsoft, 2024). Actively used in enterprise document intelligence, scientific literature analysis, and legal discovery.</p>
+</div>
+
+</div></div>
+
+</body>
+</html>

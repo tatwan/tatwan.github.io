@@ -851,5 +851,155 @@ buildAttnViz();
 // Show first word by default
 showAttn(1);
 </script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card9{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card9 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card9 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col9{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col9{grid-template-columns:1fr}}
+.bts-code9{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table9{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table9 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table9 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table9 tr:hover td{background:#fafbff}
+.bts-formula9{background:#f0fdfa;border-left:4px solid #0d9488;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story9{background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);border-left:4px solid #0d9488;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story9-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0f766e;margin-bottom:6px}
+.bts-depth9{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>PEFT &amp; LoRA: Fine-Tuning LLMs Without Breaking the Bank</h2>
+  <p>Full fine-tuning a 70B parameter model requires 280+ GB of GPU memory. In 2026, virtually no research lab does this. LoRA and QLoRA are the dominant paradigm for adapting large models — and every NLP practitioner must understand the math and tradeoffs. This section covers what the slides skip.</p>
+</div>
+
+<div class="bts-card9">
+  <h3>🧠 Why Parameter-Efficient Fine-Tuning? <span class="bts-depth9">Critical</span></h3>
+  <div class="bts-story9">
+    <div class="bts-story9-label">📖 The Problem</div>
+    <p style="font-size:14px;line-height:1.8">Full fine-tuning updates all W parameters. For LLaMA-3 70B, that's ~70 billion floats × 4 bytes × 3 (weights + gradients + optimizer states) ≈ 840 GB GPU memory — well beyond any single GPU. PEFT methods update only a <em>tiny adapter</em> while freezing the pretrained weights, achieving near-full-finetune quality with 100–1000× fewer parameters.</p>
+  </div>
+  <div class="bts-2col9">
+    <div>
+      <h4>The PEFT Family</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Adapter Layers</strong> (Houlsby 2019): bottleneck FFN inserted between transformer sub-layers</li>
+        <li><strong>Prefix Tuning</strong> (Li &amp; Liang 2021): prepend trainable virtual tokens to K/V</li>
+        <li><strong>Prompt Tuning</strong> (Lester 2021): soft prompt at input layer only</li>
+        <li><strong>LoRA</strong> (Hu et al. 2021): low-rank weight decomposition <em>★ Dominant method</em></li>
+        <li><strong>QLoRA</strong> (Dettmers 2023): LoRA on 4-bit quantized base model</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Why LoRA Dominates</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>No inference latency — adapters merge into W at deployment</li>
+        <li>Works on any linear layer (Q, K, V, O, FFN)</li>
+        <li>80%+ of HuggingFace fine-tuning jobs use LoRA/QLoRA</li>
+        <li>Rank r as low as 4 often matches full fine-tune quality</li>
+        <li>Can train 70B model on a single A100 80GB with QLoRA</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3>📐 LoRA Mathematics <span class="bts-depth9">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">LoRA's key insight: the <em>weight update</em> ΔW from full fine-tuning has low intrinsic rank. So instead of updating the full d×k matrix W, decompose the update into two small matrices:</p>
+  <div class="bts-formula9">Pretrained weight: W ∈ ℝ^{d×k}  (frozen)
+LoRA update:      ΔW = B·A
+                  B ∈ ℝ^{d×r},  A ∈ ℝ^{r×k}
+                  rank r &lt;&lt; min(d, k)
+
+Forward pass:     h = Wx + BAx · (α/r)
+                  ↑ base   ↑ adapter (scaled)
+
+Parameters saved:  Full: d×k
+                   LoRA: d×r + r×k = r(d+k)
+Example: d=4096, k=4096, r=8
+  Full: 16.7M params
+  LoRA:   65K params  → 256× fewer!</div>
+  <div class="bts-2col9">
+    <div>
+      <h4>Initialization</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>A initialized with Gaussian noise (random)</li>
+        <li>B initialized to zero (so ΔW=0 at start)</li>
+        <li>Training starts from original pretrained behavior</li>
+        <li>Scaling factor α/r normalizes the adapter magnitude</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Hyperparameter Intuition</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>r=4</strong>: minimal, for tasks close to pretraining</li>
+        <li><strong>r=16</strong>: common default, good quality/cost balance</li>
+        <li><strong>r=64+</strong>: approaching full finetune for domain shift</li>
+        <li><strong>α</strong>: usually set to r (ratio α/r = 1.0)</li>
+        <li><strong>Layers</strong>: apply to Q,K,V,O or all linear layers</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3>🔬 QLoRA: 4-Bit Fine-Tuning <span class="bts-depth9">2023 Breakthrough</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">QLoRA (Dettmers et al., 2023) combines three innovations to fine-tune 65B models on a single 48GB GPU:</p>
+  <div class="bts-2col9">
+    <div>
+      <h4>The Three Innovations</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>4-bit NormalFloat (NF4):</strong> quantization format derived from Normal distribution — optimal for normally-distributed neural weights</li>
+        <li><strong>Double Quantization:</strong> quantize the quantization constants themselves — saves ~0.37 bits/param</li>
+        <li><strong>Paged Optimizers:</strong> use NVIDIA unified memory to page optimizer states from GPU to CPU RAM when GPU runs out</li>
+      </ol>
+    </div>
+    <div>
+      <h4>QLoRA in Practice</h4>
+      <div class="bts-code9"><span style="color:#94a3b8"># HuggingFace QLoRA setup</span>
+<span style="color:#93c5fd">from</span> transformers <span style="color:#93c5fd">import</span> BitsAndBytesConfig
+<span style="color:#93c5fd">from</span> peft <span style="color:#93c5fd">import</span> get_peft_model, LoraConfig
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type=<span style="color:#86efac">"nf4"</span>,
+    bnb_4bit_use_double_quant=True,
+)
+model = AutoModelForCausalLM.from_pretrained(
+    <span style="color:#86efac">"meta-llama/Llama-3-8b"</span>,
+    quantization_config=bnb_config
+)
+lora_cfg = LoraConfig(r=<span style="color:#fca5a5">16</span>, lora_alpha=<span style="color:#fca5a5">32</span>,
+    target_modules=[<span style="color:#86efac">"q_proj","v_proj"</span>])
+model = get_peft_model(model, lora_cfg)</div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3>📊 PEFT Methods Comparison</h3>
+  <table class="bts-table9">
+    <tr><th>Method</th><th>Trainable Params</th><th>GPU Memory (7B)</th><th>Quality vs. Full FT</th><th>Inference Overhead</th></tr>
+    <tr><td><strong>Full Fine-tuning</strong></td><td>100% (~7B)</td><td>~80GB (fp16)</td><td>Baseline</td><td>None</td></tr>
+    <tr><td><strong>LoRA (r=16)</strong></td><td>~0.1% (~7M)</td><td>~18GB (fp16)</td><td>95–99%</td><td>None (merge at deploy)</td></tr>
+    <tr><td><strong>QLoRA (r=16, 4-bit)</strong></td><td>~0.1% (~7M)</td><td>~6GB (int4)</td><td>93–97%</td><td>Small (dequantize)</td></tr>
+    <tr><td><strong>Prefix Tuning</strong></td><td>0.1–1%</td><td>~16GB</td><td>85–90%</td><td>Yes (longer KV)</td></tr>
+    <tr><td><strong>Adapter Layers</strong></td><td>0.5–3%</td><td>~20GB</td><td>88–94%</td><td>Yes (sequential)</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:6px">GPU memory figures are approximate for Llama-3 7B with typical batch sizes. Quality percentages relative to full fine-tuning on standard benchmarks.</p>
+</div>
+
+</div></div>
+
 </body>
 </html>

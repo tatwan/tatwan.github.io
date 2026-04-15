@@ -891,5 +891,165 @@ function showNER(idx, btn) {
 showNER(0, document.querySelector('#ner-display').closest('.interactive-box').querySelector('.btn-outline.active') || document.querySelectorAll('.interactive-box')[1].querySelector('.btn-outline'));
 </script>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card10{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card10 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card10 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col10{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col10{grid-template-columns:1fr}}
+.bts-code10{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table10{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table10 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table10 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table10 tr:hover td{background:#fafbff}
+.bts-formula10{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story10{background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);border-left:4px solid #7c3aed;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story10-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6d28d9;margin-bottom:6px}
+.bts-depth10{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.trellis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0;background:#f8fafc;border-radius:10px;padding:16px}
+.trellis-cell{background:white;border:2px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;font-size:12px;font-weight:700}
+.trellis-cell.header{background:#1e293b;color:white;border-color:#1e293b}
+.trellis-cell.best{background:#d1fae5;border-color:#059669;color:#065f46}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>HMM &amp; CRF Deep Dive: Derivations That Actually Explain Sequence Labeling</h2>
+  <p>The slides show you what HMMs and CRFs do. This section shows you <em>why</em> they work — deriving the Forward-Backward algorithm, Viterbi dynamic programming, and the CRF partition function from first principles. These derivations appear in every sequence modeling interview and in classic NLP papers.</p>
+</div>
+
+<div class="bts-card10">
+  <h3>🎲 HMM Fundamentals — The Three Problems <span class="bts-depth10">Mathematical</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Every HMM application reduces to one of three classic problems, each with a specialized algorithm:</p>
+  <table class="bts-table10">
+    <tr><th>Problem</th><th>Question</th><th>Algorithm</th><th>Complexity</th></tr>
+    <tr><td><strong>Evaluation</strong></td><td>P(observations | model)?</td><td>Forward Algorithm</td><td>O(N²T)</td></tr>
+    <tr><td><strong>Decoding</strong></td><td>Most likely state sequence given observations?</td><td>Viterbi</td><td>O(N²T)</td></tr>
+    <tr><td><strong>Learning</strong></td><td>Estimate HMM parameters from unlabeled data?</td><td>Baum-Welch (EM)</td><td>O(N²T) per iteration</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b">N = number of hidden states, T = sequence length</p>
+</div>
+
+<div class="bts-card10">
+  <h3>⏩ Forward-Backward Algorithm Derivation <span class="bts-depth10">PhD</span></h3>
+  <div class="bts-2col10">
+    <div>
+      <h4>Forward Variable α</h4>
+      <div class="bts-formula10"><span style="color:#94a3b8"># α_t(j) = P(o₁,...,oₜ, qₜ=j | λ)</span>
+<span style="color:#94a3b8"># Probability of observing o₁..oₜ and</span>
+<span style="color:#94a3b8"># being in state j at time t</span>
+
+<span style="color:#93c5fd">Initialization (t=1):</span>
+  α₁(j) = π_j · b_j(o₁)
+  <span style="color:#94a3b8"># π_j: initial probability of state j</span>
+  <span style="color:#94a3b8"># b_j(o₁): emission prob of obs o₁ in j</span>
+
+<span style="color:#93c5fd">Recursion (t=2..T):</span>
+  α_t(j) = b_j(oₜ) · Σᵢ [α_{t-1}(i) · aᵢⱼ]
+  <span style="color:#94a3b8"># Sum over all previous states i</span>
+  <span style="color:#94a3b8"># aᵢⱼ: transition prob i→j</span>
+
+<span style="color:#93c5fd">Termination:</span>
+  P(O | λ) = Σⱼ α_T(j)</div>
+    </div>
+    <div>
+      <h4>Backward Variable β</h4>
+      <div class="bts-formula10"><span style="color:#94a3b8"># β_t(i) = P(o_{t+1},...,o_T | qₜ=i, λ)</span>
+<span style="color:#94a3b8"># Probability of future observations</span>
+<span style="color:#94a3b8"># given we're in state i at time t</span>
+
+<span style="color:#93c5fd">Initialization (t=T):</span>
+  β_T(i) = 1  for all states i
+
+<span style="color:#93c5fd">Recursion (t=T-1..1):</span>
+  β_t(i) = Σⱼ [aᵢⱼ · b_j(o_{t+1}) · β_{t+1}(j)]
+  <span style="color:#94a3b8"># Sum over all next states j</span>
+
+<span style="color:#93c5fd">State posterior (used in Baum-Welch):</span>
+  γ_t(i) = α_t(i)·β_t(i) / P(O|λ)</div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card10">
+  <h3>🏹 Viterbi Algorithm — Finding the Best Path</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Viterbi is Forward algorithm with <code>sum</code> replaced by <code>max</code>. It finds the most probable hidden state sequence (e.g., POS tag sequence), not just the probability of observations.</p>
+  <div class="bts-formula10"><span style="color:#94a3b8"># Viterbi variable δ_t(j) = max probability of reaching state j at t</span>
+
+<span style="color:#93c5fd">Initialization:</span>
+  δ₁(j) = π_j · b_j(o₁)
+  ψ₁(j) = 0  <span style="color:#94a3b8"># backpointer</span>
+
+<span style="color:#93c5fd">Recursion:</span>
+  δ_t(j) = max_i [δ_{t-1}(i) · aᵢⱼ] · b_j(oₜ)
+  ψ_t(j) = argmax_i [δ_{t-1}(i) · aᵢⱼ]  <span style="color:#94a3b8"># store best predecessor</span>
+
+<span style="color:#93c5fd">Termination + Backtrack:</span>
+  q*_T = argmax_j δ_T(j)
+  q*_t = ψ_{t+1}(q*_{t+1})  <span style="color:#94a3b8"># follow backpointers</span></div>
+
+  <h4>Intuition: The Trellis (POS Tagging Example)</h4>
+  <div class="trellis">
+    <div class="trellis-cell header">State \ Time</div>
+    <div class="trellis-cell header">t=1: "Fed"</div>
+    <div class="trellis-cell header">t=2: "raises"</div>
+    <div class="trellis-cell header">t=3: "rates"</div>
+    <div class="trellis-cell header">Best</div>
+    <div class="trellis-cell">NOUN</div>
+    <div class="trellis-cell best">0.32 ←π</div>
+    <div class="trellis-cell">0.05</div>
+    <div class="trellis-cell best">0.18</div>
+    <div class="trellis-cell best">✓</div>
+    <div class="trellis-cell">VERB</div>
+    <div class="trellis-cell">0.08</div>
+    <div class="trellis-cell best">0.41</div>
+    <div class="trellis-cell">0.03</div>
+    <div class="trellis-cell">—</div>
+    <div class="trellis-cell">DET</div>
+    <div class="trellis-cell">0.10</div>
+    <div class="trellis-cell">0.02</div>
+    <div class="trellis-cell">0.01</div>
+    <div class="trellis-cell">—</div>
+  </div>
+  <p style="font-size:12px;color:#64748b">Best path: NOUN → VERB → NOUN (Fed/NNP raises/VBZ rates/NNS) — backtracking from max δ_T across all states.</p>
+</div>
+
+<div class="bts-card10">
+  <h3>🔗 CRF: The Partition Function &amp; Gradient <span class="bts-depth10">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A linear-chain CRF models P(y|x) directly (discriminative), avoiding the independence assumptions of HMMs (generative). The challenge: computing the normalization constant Z(x).</p>
+  <div class="bts-2col10">
+    <div>
+      <div class="bts-formula10"><span style="color:#94a3b8"># CRF probability of label sequence y given x</span>
+P(y|x) = (1/Z(x)) · exp(Σₜ score(yₜ₋₁, yₜ, x, t))
+
+<span style="color:#94a3b8"># Score = feature function dot weights</span>
+score(yₜ₋₁, yₜ, x, t) = w · f(yₜ₋₁, yₜ, x, t)
+
+<span style="color:#94a3b8"># Partition function (normalization)</span>
+Z(x) = Σ_{all y sequences} exp(Σₜ score(yₜ₋₁,yₜ,x,t))
+<span style="color:#94a3b8"># = exponentially many terms!
+# Computed efficiently with Forward algo:
+# Same as HMM forward, but in log space</span></div>
+    </div>
+    <div>
+      <h4>CRF Training</h4>
+      <p style="font-size:13px;line-height:1.7">Log-likelihood gradient requires computing Z(x) for each example — done with the Forward algorithm (O(T·|Y|²)). The Viterbi algorithm decodes the best label sequence at inference time.</p>
+      <h4>BERT + CRF for NER</h4>
+      <p style="font-size:13px;line-height:1.7">A linear-chain CRF on top of BERT's token embeddings captures inter-label dependencies (e.g., I-ORG must follow B-ORG) that a simple softmax cannot. Still used in production NER pipelines in 2026, especially where invalid tag sequences are costly.</p>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
 </body>
 </html>

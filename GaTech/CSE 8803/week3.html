@@ -565,5 +565,157 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card3{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card3 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card3 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col3{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col3{grid-template-columns:1fr}}
+.bts-3col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:700px){.bts-3col3{grid-template-columns:1fr}}
+.bts-table3{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table3 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table3 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table3 tr:hover td{background:#fafbff}
+.bts-story3{background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border-left:4px solid #d97706;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story3-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#b45309;margin-bottom:6px}
+.bts-task-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;font-size:13px;line-height:1.7}
+.bts-task-card h5{font-size:13px;font-weight:800;margin-bottom:8px;color:#1e293b}
+.bts-inline-code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;color:#7c3aed}
+.bts-depth3{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.bts-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin:2px}
+.bts-tag.entail{background:#d1fae5;color:#065f46}
+.bts-tag.neutral{background:#fef3c7;color:#92400e}
+.bts-tag.contra{background:#fee2e2;color:#dc2626}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>Core NLP Tasks: The Benchmarks Every NLP Researcher Must Know</h2>
+  <p>Classification is the entry point. But NLP research spans a rich ecosystem of structured tasks — NLI, SRL, coreference, MT, QA, relation extraction — that define the benchmarks used to evaluate every frontier model. Understanding them is essential for reading papers and doing research in 2026.</p>
+</div>
+
+<div class="bts-card3">
+  <h3>🔗 Natural Language Inference (NLI) <span class="bts-depth3">Core Benchmark</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Task:</strong> Given a premise and a hypothesis, classify the relationship as <span class="bts-tag entail">ENTAILMENT</span> <span class="bts-tag neutral">NEUTRAL</span> or <span class="bts-tag contra">CONTRADICTION</span>.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label">📖 Example (SNLI dataset)</div>
+    <p style="font-size:13px;line-height:1.8"><strong>Premise:</strong> "A woman is walking her dog in the park."<br>
+    <strong>H1:</strong> "Someone is outside with an animal." → <span class="bts-tag entail">ENTAILMENT</span><br>
+    <strong>H2:</strong> "The woman is a professional dog trainer." → <span class="bts-tag neutral">NEUTRAL</span><br>
+    <strong>H3:</strong> "There are no animals in the park." → <span class="bts-tag contra">CONTRADICTION</span></p>
+  </div>
+  <div class="bts-2col3">
+    <div>
+      <h4>Key Datasets</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>SNLI</strong> (2015): 570K pairs, crowd-sourced</li>
+        <li><strong>MultiNLI</strong> (2018): 433K pairs, 10 genres</li>
+        <li><strong>ANLI</strong> (2020): adversarially collected</li>
+        <li><strong>XNLI</strong>: multilingual extension, 15 languages</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Why NLI Matters in 2026</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Used as reward signal in RLHF (does response contradict context?)</li>
+        <li>Hallucination detection: does output entail source?</li>
+        <li>Fact-checking pipelines</li>
+        <li>GLUE/SuperGLUE include NLI tasks (RTE, MNLI)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card3">
+  <h3>🎭 Semantic Role Labeling (SRL) <span class="bts-depth3">Structure</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">SRL answers the question: <em>"Who did what to whom, where, when, and how?"</em> It identifies the predicate and labels its semantic arguments using PropBank frame schema.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label">📖 PropBank Example</div>
+    <p style="font-size:13px;line-height:2;font-family:monospace">Sentence: "<span style="background:#dbeafe;padding:2px 4px;border-radius:3px">The scientist</span> <span style="background:#fef3c7;padding:2px 4px;border-radius:3px;font-weight:800">published</span> <span style="background:#d1fae5;padding:2px 4px;border-radius:3px">a groundbreaking paper</span> <span style="background:#fce7f3;padding:2px 4px;border-radius:3px">in Nature</span>."<br>
+    ARG0 (Agent/Publisher): <em>The scientist</em><br>
+    V (Predicate): <em>published</em><br>
+    ARG1 (Theme/Published): <em>a groundbreaking paper</em><br>
+    ARGM-LOC (Locative): <em>in Nature</em></p>
+  </div>
+  <p style="font-size:13px;color:#475569;line-height:1.7"><strong>Dataset:</strong> OntoNotes 5.0, CoNLL-2009. <strong>Models:</strong> BERT + span-based SRL (Shi &amp; Lin 2019) achieves &gt;85 F1. <strong>Use in 2026:</strong> knowledge extraction pipelines, question answering, event detection, LLM evaluation for factual consistency.</p>
+</div>
+
+<div class="bts-card3">
+  <h3>🔄 Coreference Resolution</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Determines which mentions in a text refer to the same real-world entity. Critical for document understanding, summarization, and dialogue.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label">📖 Example</div>
+    <p style="font-size:13px;line-height:1.8">"<strong>Dr. Chen</strong> won the award. <strong>She</strong> had worked on <strong>the project</strong> for 10 years. <strong>It</strong> was finally recognized."<br><em>Clusters:</em> {Dr. Chen, She} · {the project, It}</p>
+  </div>
+  <div class="bts-2col3">
+    <div>
+      <h4>Pipeline Steps</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Mention detection (spans)</li>
+        <li>Mention representation (BERT embeddings)</li>
+        <li>Pairwise scoring (coref likelihood)</li>
+        <li>Clustering (greedy or global)</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Benchmarks &amp; Models</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>OntoNotes 5.0</strong>: gold standard, 1.6M tokens</li>
+        <li><strong>CoNLL-2012</strong>: shared task benchmark</li>
+        <li><strong>SpanBERT</strong>: span-based, state-of-the-art ~82 F1</li>
+        <li>LLMs: GPT-4 can resolve coref zero-shot, ~79 F1</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card3">
+  <h3>🗂️ Key NLP Tasks at a Glance</h3>
+  <table class="bts-table3">
+    <tr><th>Task</th><th>What It Does</th><th>Gold Dataset</th><th>SOTA Model (2024)</th><th>Metric</th></tr>
+    <tr><td><strong>NLI</strong></td><td>Premise → hypothesis relationship</td><td>MultiNLI, SNLI</td><td>DeBERTa-v3, GPT-4</td><td>Accuracy</td></tr>
+    <tr><td><strong>SRL</strong></td><td>Who did what to whom</td><td>OntoNotes, CoNLL-09</td><td>BERT + span predictor</td><td>F1</td></tr>
+    <tr><td><strong>Coreference</strong></td><td>Which mentions = same entity</td><td>OntoNotes 5.0</td><td>SpanBERT, LingMess</td><td>Avg F1 (MUC/B³/CEAF)</td></tr>
+    <tr><td><strong>RE</strong></td><td>Extract (entity, relation, entity)</td><td>TACRED, DocRED</td><td>REBEL (seq2seq)</td><td>F1</td></tr>
+    <tr><td><strong>MT</strong></td><td>Translate between languages</td><td>WMT, FLORES</td><td>NLLB-200, GPT-4</td><td>BLEU, chrF, COMET</td></tr>
+    <tr><td><strong>QA (Extractive)</strong></td><td>Find answer span in passage</td><td>SQuAD 2.0</td><td>BERT, DeBERTa</td><td>EM / F1</td></tr>
+    <tr><td><strong>QA (Abstractive)</strong></td><td>Generate answer from knowledge</td><td>NaturalQuestions, TriviaQA</td><td>RAG + LLM</td><td>EM / ROUGE</td></tr>
+    <tr><td><strong>Summarization</strong></td><td>Compress document to summary</td><td>CNN/DM, XSum</td><td>PEGASUS, GPT-4</td><td>ROUGE-1/2/L</td></tr>
+  </table>
+</div>
+
+<div class="bts-card3">
+  <h3>🏆 Relation Extraction: From Rules to LLMs <span class="bts-depth3">Research Frontier</span></h3>
+  <div class="bts-2col3">
+    <div>
+      <h4>Task Definition</h4>
+      <p style="font-size:13px;line-height:1.7">Given: "Elon Musk founded SpaceX in 2002."<br>
+      Extract: (Elon Musk, <em>founder_of</em>, SpaceX) and (SpaceX, <em>founded_in</em>, 2002)<br><br>
+      <strong>Datasets:</strong> TACRED (42 relation types), DocRED (96 types, document-level), Re-TACRED (revised, cleaner labels)</p>
+    </div>
+    <div>
+      <h4>Approaches</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Supervised:</strong> BERT → span classifier</li>
+        <li><strong>Distant supervision:</strong> align KB (Freebase) with text, noisy labels</li>
+        <li><strong>Seq2seq:</strong> REBEL generates (h, r, t) triples directly</li>
+        <li><strong>LLM prompting:</strong> GPT-4 with structured output</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
 </body>
 </html>

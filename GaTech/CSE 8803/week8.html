@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 8 – Multimodal NLP &amp; Multilingual Models | CSE 8803</title>
+<style>
+  :root {
+    --primary: #f97316; --primary-light: #fff7ed; --primary-dark: #c2410c;
+    --blue: #2563eb; --green: #059669; --purple: #7c3aed; --teal: #0d9488;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #c2410c; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #c2410c 0%, #f97316 60%, #fb923c 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.orange { background: #ffedd5; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.teal { background: #ccfbf1; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .pillbox { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pill { border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill.what { background: #dbeafe; color: #1d4ed8; }
+  .pill.why { background: #d1fae5; color: #065f46; }
+  .pill.how { background: #fef3c7; color: #92400e; }
+  .pill.phd { background: #ede9fe; color: #5b21b6; }
+  .formula-box { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 18px 22px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.8; margin: 14px 0; overflow-x: auto; white-space: pre; }
+  .story-box { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-left: 4px solid #f97316; border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 14px 0; }
+  .story-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #c2410c; margin-bottom: 6px; }
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 14px 0; }
+  .info-card { background: var(--primary-light); border: 1px solid #fed7aa; border-radius: 10px; padding: 16px; }
+  .info-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--primary-dark); }
+  .info-card p { font-size: 12px; color: var(--text); line-height: 1.6; }
+  .arch-diagram { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 22px; font-family: monospace; font-size: 13px; line-height: 2; margin: 16px 0; overflow-x: auto; white-space: pre; }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .cmp-table th { background: #f8fafc; padding: 9px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); font-size: 12px; }
+  .cmp-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
+  .cmp-table tr:hover td { background: #fafbff; }
+  .depth-badge { display: inline-block; background: var(--purple); color: white; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
+  .interactive-box { background: var(--primary-light); border: 1px solid #fed7aa; border-radius: 12px; padding: 22px; margin: 16px 0; }
+  .interactive-box h4 { font-weight: 700; margin-bottom: 12px; }
+  .quiz-section { background: #1e293b; color: white; border-radius: 16px; padding: 28px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 16px; font-size: 14px; cursor: pointer; text-align: left; color: white; transition: all 0.15s; }
+  .quiz-opt:hover { background: rgba(255,255,255,0.15); }
+  .quiz-opt.correct { background: rgba(5,150,105,0.35); border-color: #059669; }
+  .quiz-opt.wrong { background: rgba(220,38,38,0.25); border-color: #dc2626; }
+  .quiz-feedback { display: none; margin-top: 8px; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(5,150,105,0.2); color: #6ee7b7; }
+  .quiz-feedback.wrong { background: rgba(220,38,38,0.2); color: #fca5a5; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="week-title">Week 8 · Multimodal NLP &amp; Multilingual Models</span>
+  <div class="nav-links">
+    <a href="index.html">← Course Home</a>
+    <a href="week7.html">Week 7</a>
+    <a href="week9.html">Week 9 →</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="week-badge">Week 8 · Bonus Module</div>
+  <h1>Multimodal NLP &amp; Multilingual Models</h1>
+  <p>CLIP, LLaVA, Flamingo — bridging vision and language. mBERT, XLM-R — enabling NLP across 100+ languages. These are the architectures that extend NLP beyond English text.</p>
+  <div class="header-chips">
+    <span class="chip">🖼️ Vision-Language</span>
+    <span class="chip">🌍 Multilingual</span>
+    <span class="chip">🔬 Graduate Depth</span>
+    <span class="chip">📍 Beyond the Syllabus</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- SECTION 1: MULTIMODAL -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon orange">🖼️</div>
+    <div>
+      <h2>Multimodal NLP: Vision + Language</h2>
+      <div class="sub">CLIP · LLaVA · Flamingo · Contrastive Pretraining</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🔗 CLIP: Contrastive Language-Image Pretraining</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox">
+        <span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span><span class="pill phd">PhD Depth</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">CLIP (Radford et al., OpenAI 2021) trained on 400M image-text pairs from the web. The key insight: instead of predicting image labels, train a model to match images with their natural language descriptions using <em>contrastive loss</em>.</p>
+      <div class="story-box">
+        <div class="story-label">📖 Why CLIP Changed Everything</div>
+        <p style="font-size:14px;line-height:1.8">Before CLIP, you needed labeled training data for each vision task. CLIP enables <strong>zero-shot classification</strong>: given a new class "raccoon eating pizza," just encode the text "a photo of a raccoon eating pizza" and find the image whose embedding is closest. No raccoon-pizza training examples needed. This opened the door to general-purpose vision-language models.</p>
+      </div>
+      <h4>CLIP Architecture</h4>
+      <div class="arch-diagram">Input batch: N image-text pairs (I₁,T₁), ..., (Iₙ,Tₙ)
+
+Image Encoder (ViT or ResNet)     Text Encoder (Transformer)
+        ↓                                  ↓
+   image_emb ∈ ℝ^d              text_emb ∈ ℝ^d
+        ↓                                  ↓
+   L2 normalize                      L2 normalize
+        ↓_________________________↓
+         Cosine similarity matrix: [N × N]
+         diagonal = correct pairs
+         off-diagonal = negative pairs
+
+Loss: symmetric InfoNCE (cross-entropy on rows AND columns)
+  L_img = -log( exp(sim(Iᵢ,Tᵢ)/τ) / Σⱼ exp(sim(Iᵢ,Tⱼ)/τ) )
+  L_txt = -log( exp(sim(Iᵢ,Tᵢ)/τ) / Σⱼ exp(sim(Iⱼ,Tᵢ)/τ) )
+  L = (L_img + L_txt) / 2      τ = learned temperature</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Zero-Shot Classification</h4>
+          <p>Create text prompts for each class: "a photo of a {class}". Encode all prompts. Classify image by nearest text embedding. Matches ResNet-50 on ImageNet <em>with zero labeled examples</em>.</p>
+        </div>
+        <div class="info-card">
+          <h4>Training Scale</h4>
+          <p>400M image-text pairs (WIT dataset). ViT-L/14 encoder. 12 days on 256 V100 GPUs. Temperature τ learned from ~0.07 → ~0.01 during training.</p>
+        </div>
+        <div class="info-card">
+          <h4>Why InfoNCE?</h4>
+          <p>InfoNCE is a lower bound on mutual information between image and text embeddings. Maximizing it pulls correct pairs together while pushing N-1 incorrect pairs apart. Larger batches = stronger negatives = better training signal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🦙 LLaVA: Visual Instruction Tuning</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox">
+        <span class="pill what">What</span><span class="pill how">How</span><span class="pill phd">2024 Frontier</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">LLaVA (Liu et al., 2023) connects a CLIP vision encoder to an LLM (LLaMA/Vicuna) via a simple linear projection layer. It's fine-tuned on synthetic visual instruction following data generated by GPT-4.</p>
+      <div class="arch-diagram">Architecture:
+
+Image → [CLIP ViT encoder] → visual tokens (e.g. 256 tokens)
+                                     ↓
+                         Linear Projection Layer (W)
+                                     ↓
+                      language token space embeddings
+                                     ↓
+Text tokens: "Describe this image" → [Tokenizer] ──────────→ [LLM]
+                                                    Concat ↑
+
+Training Stage 1: Freeze CLIP + LLM, train projection W only
+                  (align visual features to text space)
+Training Stage 2: Freeze CLIP, fine-tune W + LLM jointly
+                  (visual instruction tuning on GPT-4 generated QA)</div>
+      <p style="font-size:14px;line-height:1.8;margin-top:12px">LLaVA-1.5 and LLaVA-NeXT (2024) improved the projection layer (MLP instead of linear), used higher resolution inputs, and trained on more diverse visual instruction data — achieving SOTA on multiple VQA benchmarks with a remarkably simple architecture.</p>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🦩 Flamingo: Cross-Attention Vision-Language Model</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="pillbox">
+        <span class="pill what">What</span><span class="pill phd">DeepMind 2022</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">Flamingo (Alayrac et al., DeepMind 2022) takes a different approach: keep both a frozen vision encoder (NFNet) and a frozen LLM (Chinchilla), and connect them via new <em>cross-attention layers</em> inserted between existing LLM layers.</p>
+      <div class="arch-diagram">Flamingo Architecture:
+
+Image(s) → Frozen Vision Encoder → Resampler → K visual tokens
+                                                        ↓
+Frozen LLM: [...] → [Gated Cross-Attn Layer] → [Standard LLM Layer] → [...]
+                              ↑ attends to visual tokens
+                    (only cross-attn + gate params trained)
+
+Key innovations:
+  1. Resampler: fixed number of output tokens regardless of image size
+  2. Gated cross-attention: tanh gate α·tanh(K)·v, α learned from 0
+  3. Supports interleaved image-text sequences: [img1][text1][img2][text2]
+  4. Few-shot in-context: 4-shot visual QA without gradient updates</div>
+      <p style="font-size:13px;color:#475569;margin-top:10px;line-height:1.7">Flamingo's design — freezing the backbone and training only cross-attention adapters — directly inspired modern efficient multimodal architectures. GPT-4V, Gemini Pro Vision, and Claude Vision all use variants of this cross-modal bridging approach.</p>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>📊 Multimodal Model Comparison</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <table class="cmp-table">
+        <tr><th>Model</th><th>Vision Encoder</th><th>Language Model</th><th>Connector</th><th>Training Strategy</th></tr>
+        <tr><td><strong>CLIP</strong></td><td>ViT (trained from scratch)</td><td>Transformer text encoder</td><td>Shared embedding space</td><td>Contrastive on 400M pairs</td></tr>
+        <tr><td><strong>LLaVA</strong></td><td>CLIP ViT (frozen)</td><td>LLaMA/Vicuna</td><td>Linear projection / MLP</td><td>2-stage: alignment then instruction tuning</td></tr>
+        <tr><td><strong>Flamingo</strong></td><td>NFNet (frozen)</td><td>Chinchilla (frozen)</td><td>Gated cross-attention</td><td>Cross-attn layers trained on interleaved data</td></tr>
+        <tr><td><strong>GPT-4V</strong></td><td>Unknown ViT</td><td>GPT-4</td><td>Unknown</td><td>RLHF + safety training</td></tr>
+        <tr><td><strong>Gemini</strong></td><td>Native multimodal</td><td>Gemini LLM</td><td>Native (trained jointly)</td><td>End-to-end multimodal pretraining</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: MULTILINGUAL -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon teal">🌍</div>
+    <div>
+      <h2>Multilingual NLP: Models for 100+ Languages</h2>
+      <div class="sub">mBERT · XLM-R · Cross-lingual Transfer · Low-Resource NLP</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🌐 mBERT: Multilingual BERT</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox">
+        <span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">mBERT (Google 2019) trains BERT on Wikipedia dumps from 104 languages simultaneously, using a shared WordPiece vocabulary of 110K tokens. No cross-lingual objective — just masked language modeling on multilingual text.</p>
+      <div class="story-box">
+        <div class="story-label">📖 The Surprising Result: Zero-Shot Cross-Lingual Transfer</div>
+        <p style="font-size:14px;line-height:1.8">The remarkable finding: fine-tune mBERT on English NER, then test it on German NER <em>with no German labeled data</em>. It works — achieving ~75% of the performance of a German-only model. The shared vocabulary and joint pretraining create a universal representation where analogous entities occupy similar positions across languages. This "cross-lingual transfer" emerged without explicit cross-lingual supervision.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Architecture</h4>
+          <p>Same as BERT-base: 12 layers, 768 hidden, 12 heads, 110M params. Shared 110K WordPiece vocabulary across all languages.</p>
+        </div>
+        <div class="info-card">
+          <h4>Limitations</h4>
+          <p>Curse of multilinguality: as languages increase, per-language capacity decreases. Low-resource languages get very few tokens. Vocabulary allocation biased toward high-resource languages.</p>
+        </div>
+        <div class="info-card">
+          <h4>Why It Works</h4>
+          <p>Shared vocabulary creates lexical bridges (cognates, code-switching). Structural similarities across languages create implicit alignment. Numbers, punctuation, and code tokens are universal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🚀 XLM-R: Cross-lingual Language Model — RoBERTa Scale</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox">
+        <span class="pill what">What</span><span class="pill phd">SOTA Multilingual</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">XLM-R (Conneau et al., Facebook AI 2020) applies RoBERTa-style training (no NSP, more data, larger batches, longer sequences) at multilingual scale — training on CC-100, a 2.5TB cleaned multilingual web corpus.</p>
+      <table class="cmp-table">
+        <tr><th>Aspect</th><th>mBERT</th><th>XLM-R Base</th><th>XLM-R Large</th></tr>
+        <tr><td>Languages</td><td>104</td><td>100</td><td>100</td></tr>
+        <tr><td>Parameters</td><td>110M</td><td>270M</td><td>560M</td></tr>
+        <tr><td>Vocabulary</td><td>110K WordPiece</td><td>250K SentencePiece</td><td>250K SentencePiece</td></tr>
+        <tr><td>Training data</td><td>Wikipedia only</td><td>CC-100 (2.5TB)</td><td>CC-100 (2.5TB)</td></tr>
+        <tr><td>XNLI avg accuracy</td><td>65.4%</td><td>79.2%</td><td>83.6%</td></tr>
+        <tr><td>Swahili NER F1 (zero-shot)</td><td>~50%</td><td>~65%</td><td>~70%</td></tr>
+      </table>
+      <p style="font-size:13px;color:#475569;margin-top:10px;line-height:1.7">XLM-R's 250K SentencePiece vocabulary (vs mBERT's 110K WordPiece) dramatically improves tokenization quality for non-Latin scripts. Arabic, Thai, and Chinese receive much more vocabulary budget — lower fertility, better representation.</p>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🌙 Arabic NLP: A Case Study in Morphological Richness</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="pillbox">
+        <span class="pill why">Why Difficult</span><span class="pill how">Solutions</span>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">Arabic presents unique challenges for NLP that make it a fascinating case study — and an important one given 350M+ native speakers and significant underrepresentation in most LLMs.</p>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Morphological Richness</h4>
+          <p>One Arabic root (e.g., k-t-b = writing) can generate 50+ derived words: كَتَبَ (kataba, "he wrote"), كِتَاب (kitāb, "book"), مَكْتُوب (maktūb, "written"). BPE on Arabic has very high fertility.</p>
+        </div>
+        <div class="info-card">
+          <h4>Diacritization Problem</h4>
+          <p>Arabic text is typically written without short vowels (diacritics). كتب can mean "he wrote" (kataba), "book" (kitāb), or "office" (maktab). Context determines pronunciation and meaning.</p>
+        </div>
+        <div class="info-card">
+          <h4>Diglossia</h4>
+          <p>Modern Standard Arabic (formal text) vs. 25+ dialectal varieties (Egyptian, Gulf, Levantine…). Models trained on MSA perform poorly on dialects. Most social media is dialectal.</p>
+        </div>
+        <div class="info-card">
+          <h4>Arabic-Specific Models</h4>
+          <p><strong>AraBERT</strong>: BERT pretrained on Arabic Wikipedia + news. <strong>CAMeL BERT</strong>: dialectal Arabic focus. <strong>AraGPT-2</strong>: Arabic GPT-2 variant. <strong>Jais</strong>: Arabic-English bilingual LLM (2023).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>📊 Cross-Lingual Transfer Strategies</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <table class="cmp-table">
+        <tr><th>Strategy</th><th>Data Required</th><th>Quality</th><th>When to Use</th></tr>
+        <tr><td><strong>Zero-shot XLT</strong></td><td>Source lang labeled only</td><td>Good (XLM-R)</td><td>No target labeled data available</td></tr>
+        <tr><td><strong>Few-shot XLT</strong></td><td>Source + few target examples</td><td>Better</td><td>Can collect 10–100 target examples</td></tr>
+        <tr><td><strong>Translate-Train</strong></td><td>MT system available</td><td>Variable</td><td>High-resource translation pairs exist</td></tr>
+        <tr><td><strong>Translate-Test</strong></td><td>MT at inference time</td><td>Good baseline</td><td>Quick baseline, MT errors propagate</td></tr>
+        <tr><td><strong>Native Training</strong></td><td>Large target labeled set</td><td>Best</td><td>High-resource target language</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section">
+  <h3>🧠 Knowledge Check: Multimodal &amp; Multilingual NLP</h3>
+
+  <div class="quiz-q">
+    <p>1. CLIP's training objective maximizes similarity between correct image-text pairs. What loss function does it use?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Close, but cross-entropy is applied within a contrastive framework. CLIP uses symmetric InfoNCE — cross-entropy applied to both image→text and text→image directions simultaneously.')">Binary cross-entropy on (image, text) pairs</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! InfoNCE (symmetric cross-entropy) treats each batch item as a classification problem — which of N texts matches this image? — and simultaneously does the reverse. This maximizes a lower bound on mutual information between image and text embeddings.')">Symmetric InfoNCE (contrastive cross-entropy)</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Triplet loss uses explicit anchor/positive/negative triples and a margin. CLIP uses InfoNCE which scales better with batch size — every other item in the batch is an implicit negative.')">Triplet loss with margin</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','MSE loss would measure distance between embeddings, but CLIP uses cosine similarity and InfoNCE — not L2 distance — because normalized embeddings on a hypersphere behave better with cosine similarity.')">Mean squared error on embeddings</button>
+    </div>
+    <div class="quiz-feedback" id="qf1"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>2. A researcher fine-tunes XLM-R on English NER, then tests it on Spanish NER with zero Spanish labeled data. This is called:</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Domain adaptation moves between domains within one language. Zero-shot cross-lingual transfer moves between languages — enabled by the shared multilingual representation learned during pretraining.')">Domain adaptation</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Zero-shot cross-lingual transfer (XLT) — the model never sees Spanish labels but generalizes through the shared multilingual representation. XLM-R achieves this strongly because its 250K SentencePiece vocabulary and CC-100 training create good cross-lingual alignment.')">Zero-shot cross-lingual transfer</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Multitask learning trains on multiple tasks simultaneously. This scenario is single-task (NER) but cross-lingual — a different axis of generalization.')">Multitask learning</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Transfer learning is the broader concept. The specific term for cross-language transfer with zero target-language labels is zero-shot cross-lingual transfer (XLT).')">Standard transfer learning</button>
+    </div>
+    <div class="quiz-feedback" id="qf2"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>3. In LLaVA's architecture, what is the primary role of the projection layer between the CLIP encoder and the LLM?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CLIP already performs the visual understanding — the projection layer does not do additional visual feature extraction. Its role is dimensional/semantic alignment.')">Extract visual features from images</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Contrastive alignment is what CLIP's training achieves. LLaVA's projection layer maps CLIP output into the LLM token space — no contrastive objective is used at this step.')">Apply contrastive loss between modalities</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The projection layer (linear or MLP) maps CLIP visual embeddings from vision feature space into the LLM text token embedding space. This allows the frozen LLM to "read" visual tokens as if they were word tokens. Stage 1 training specifically optimizes this layer while keeping both CLIP and LLM frozen.')">Map visual embeddings into the LLM token embedding space</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Compression does happen (CLIP outputs many patch tokens), but the primary purpose is space alignment — making visual embeddings interpretable by the text-trained LLM. The projection changes the dimensionality AND semantic space.')">Compress the image to reduce token count</button>
+    </div>
+    <div class="quiz-feedback" id="qf3"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>4. Which statement about the "curse of multilinguality" in mBERT is most accurate?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','mBERT has exactly the same architecture as BERT-base. The constraint is vocabulary and model capacity shared across 104 languages — not architectural complexity.')">mBERT requires a larger architecture than monolingual BERT</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','mBERT actually demonstrates impressive zero-shot cross-lingual transfer. The curse refers to capacity dilution, not inability to transfer.')">mBERT cannot transfer knowledge between languages</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! With a fixed model capacity (110M parameters) shared across 104 languages, each language gets less capacity than a dedicated monolingual model. High-resource languages (English, German) dominate vocabulary allocation. Low-resource languages get very few vocabulary tokens and limited representational capacity — their performance is lower than if they had a dedicated monolingual model.')">Fixed model capacity is diluted across many languages, reducing per-language performance</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','mBERT was designed to handle multiple scripts — Arabic, CJK, Cyrillic, Latin — using a single model. The curse is about capacity, not script handling.')">mBERT can only handle Latin-script languages</button>
+    </div>
+    <div class="quiz-feedback" id="qf4"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const feedbackEl = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  feedbackEl.textContent = explanation;
+  feedbackEl.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>

@@ -60,11 +60,44 @@
   .w7 .week-card-header { background: linear-gradient(120deg, #eef2ff, #e0e7ff); } .w7 .week-num { color: #4f46e5; }
   .w9 .week-card-header  { background: linear-gradient(120deg, #f0fdfa, #ccfbf1); } .w9 .week-num  { color: #0d9488; }
   .w10 .week-card-header { background: linear-gradient(120deg, #fdf4ff, #ede9fe); } .w10 .week-num { color: #7c3aed; }
+  .w12 .week-card-header { background: linear-gradient(120deg, #fffbeb, #fef3c7); } .w12 .week-num { color: #b45309; }
+  .w13 .week-card-header { background: linear-gradient(120deg, #f5f3ff, #ede9fe); } .w13 .week-num { color: #7c3aed; }
+  .w14 .week-card-header { background: linear-gradient(120deg, #f0f9ff, #dbeafe); } .w14 .week-num { color: #0284c7; }
+  .w15 .week-card-header { background: linear-gradient(120deg, #ecfdf5, #d1fae5); } .w15 .week-num { color: #059669; }
+  .w8  .week-card-header { background: linear-gradient(120deg, #fff7ed, #ffedd5); } .w8  .week-num { color: #c2410c; }
+  .w11 .week-card-header { background: linear-gradient(120deg, #f5f3ff, #ede9fe); } .w11 .week-num { color: #6d28d9; }
+  /* --- Content type indicators --- */
+  /* Card left-border accent for enriched weeks */
+  .has-bts  { border-left: 4px solid #4f46e5 !important; }
+  .is-new   { border-left: 4px solid #8b5cf6 !important; }
+
+  /* Strip between card header and body */
+  .content-strip {
+    padding: 7px 24px; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+    letter-spacing: 0.3px; border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+  }
+  .content-strip.depth {
+    background: #eef2ff; color: #3730a3;
+    border-color: #c7d2fe;
+  }
+  .content-strip.new-module {
+    background: #f5f3ff; color: #5b21b6;
+    border-color: #ddd6fe;
+  }
+  .content-strip.standard {
+    background: #f8fafc; color: #64748b;
+    border-color: #e2e8f0;
+  }
+  /* Tiny bts badge (kept for footer) */
+  .bts-badge { display: inline-block; background: #4f46e5; color: white; border-radius: 12px; padding: 2px 9px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
 
   .hw-badge.hw1 { background: #dbeafe; color: #1d4ed8; }
   .hw-badge.hw2 { background: #dcfce7; color: #15803d; }
   .hw-badge.hw3 { background: #fce7f3; color: #be185d; }
   .hw-badge.hw4 { background: #fef3c7; color: #b45309; }
+  .hw-badge.hw5 { background: #fce7f3; color: #be185d; }
   .hw-badge.none { background: #f1f5f9; color: #64748b; }
 
   /* Quiz schedule table */
@@ -102,16 +135,16 @@
 <header>
   <div class="badge">CSE 8803 &middot; Spring 2026</div>
   <h1>Applied NLP Study Guide</h1>
-  <p>Your interactive learning companion for Weeks 1&ndash;10. Built from <strong>slides, transcripts, and real quiz patterns</strong> — with visuals, demos, and quiz prep.</p>
+  <p>Your interactive learning companion for all 15 weeks. Built from <strong>slides, transcripts, and real quiz patterns</strong> — with visuals, demos, and quiz prep.</p>
   <div class="header-meta">
-    <span>&#128197; Current: Week 10 (Mar 16&ndash;20)</span>
-    <span>&#128218; 12 Weeks Covered</span>
-    <span>&#127919; Quiz 9 due Apr 3 &mdash; Quiz 10 covers Week 12</span>
+    <span>&#128197; Final: Week 15 (Apr 20&ndash;24)</span>
+    <span>&#128218; 15 Weeks + 2 Bonus Modules</span>
+    <span>&#127919; Quiz 12 due Apr 24 &mdash; HW5 due Apr 24</span>
   </div>
   <div class="progress-bar-wrap">
-    <div class="progress-bar-fill"></div>
+    <div class="progress-bar-fill" style="width:93.75%"></div>
   </div>
-  <div class="progress-label">Week 12 of 16 &mdash; 75% through the course</div>
+  <div class="progress-label">Week 15 of 16 &mdash; Course Complete! 🎓</div>
 </header>
 
 <main>
@@ -119,12 +152,13 @@
   <div class="section-title">&#128218; Weekly Study Notes</div>
   <div class="weeks-grid">
 
-    <a href="week1.html" class="week-card w1">
+    <a href="week1.html" class="week-card w1 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 1 &middot; Jan 12&ndash;16</div>
         <h2>Intro &amp; Text Preprocessing</h2>
         <div class="dates">Modules 1 &amp; 2 &mdash; Foundational NLP</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Course overview &amp; NLP problem types</li>
@@ -140,12 +174,13 @@
       </div>
     </a>
 
-    <a href="week2.html" class="week-card w2">
+    <a href="week2.html" class="week-card w2 ">
       <div class="week-card-header">
         <div class="week-num">Week 2 &middot; Jan 19&ndash;23</div>
         <h2>Na&iuml;ve Bayes &amp; Classification Evaluation</h2>
         <div class="dates">Module 3 &mdash; First Classifier</div>
       </div>
+      <div class="content-strip standard">📚 Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Bayes&rsquo; Rule: Prior, Likelihood, Posterior</li>
@@ -161,12 +196,13 @@
       </div>
     </a>
 
-    <a href="week3.html" class="week-card w3">
+    <a href="week3.html" class="week-card w3 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 3 &middot; Jan 26&ndash;30</div>
         <h2>Logistic Regression, SVM &amp; Perceptron</h2>
         <div class="dates">Module 4 &mdash; Linear Classifiers</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Sigmoid function &amp; soft classification</li>
@@ -182,12 +218,13 @@
       </div>
     </a>
 
-    <a href="week4.html" class="week-card w4">
+    <a href="week4.html" class="week-card w4 ">
       <div class="week-card-header">
         <div class="week-num">Week 4 &middot; Feb 2&ndash;6</div>
         <h2>SVD, Co-occurrence &amp; GloVe</h2>
         <div class="dates">Module 5 &mdash; Word Embeddings I</div>
       </div>
+      <div class="content-strip standard">📚 Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Why dimensionality reduction?</li>
@@ -203,12 +240,13 @@
       </div>
     </a>
 
-    <a href="week5.html" class="week-card w5">
+    <a href="week5.html" class="week-card w5 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 5 &middot; Feb 9&ndash;13</div>
         <h2>Neural Networks &amp; Word2Vec</h2>
         <div class="dates">Module 6 &mdash; Deep Learning Intro</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Activation functions: ReLU, Sigmoid, Tanh</li>
@@ -224,12 +262,13 @@
       </div>
     </a>
 
-    <a href="week6.html" class="week-card w6">
+    <a href="week6.html" class="week-card w6 ">
       <div class="week-card-header">
         <div class="week-num">Week 6 &middot; Feb 16&ndash;20</div>
         <h2>Convolutional &amp; Recurrent Neural Networks</h2>
         <div class="dates">Module 7 &mdash; Sequence &amp; Structure</div>
       </div>
+      <div class="content-strip standard">📚 Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>CNN: filters, convolution, feature maps</li>
@@ -245,12 +284,13 @@
       </div>
     </a>
 
-    <a href="week7.html" class="week-card w7">
+    <a href="week7.html" class="week-card w7 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 7 &middot; Feb 23&ndash;Mar 1</div>
         <h2>LSTM, GRU &amp; Attention</h2>
         <div class="dates">Module 8 &mdash; Long-Term Memory &amp; Focus</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>LSTM: cell state, forget / input / output gates</li>
@@ -266,12 +306,36 @@
       </div>
     </a>
 
-    <a href="week9.html" class="week-card w9">
+    <!-- Week 8: Multimodal + Multilingual NLP (Bonus Module) -->
+    <a href="week8.html" class="week-card w8 is-new">
+      <div class="week-card-header">
+        <div class="week-num">Week 8 &middot; Bonus Module</div>
+        <h2>Multimodal NLP &amp; Multilingual Models</h2>
+        <div class="dates">CLIP &middot; LLaVA &middot; Flamingo &middot; mBERT &middot; XLM-R</div>
+      </div>
+      <div class="content-strip new-module">⭐ New Bonus Module — Additional Graduate Content</div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>CLIP: contrastive image-text pretraining, InfoNCE loss, zero-shot</li>
+          <li>LLaVA: visual instruction tuning, projection layer</li>
+          <li>Flamingo: gated cross-attention, interleaved sequences</li>
+          <li>mBERT: 104 languages, cross-lingual transfer</li>
+          <li>XLM-R: CC-100, SentencePiece 250K, XNLI benchmarks</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge none" style="background:#ffedd5;color:#c2410c;">Bonus Module</span>
+        <span class="open-btn">Open &rarr;</span>
+      </div>
+    </a>
+
+        <a href="week9.html" class="week-card w9 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 9 &middot; Mar 9&ndash;13</div>
         <h2>Transformers, BERT &amp; GPT</h2>
         <div class="dates">Module 9 &mdash; The Architecture That Changed NLP</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Why Transformers? LSTM limitations &amp; pre-training benefits</li>
@@ -287,12 +351,13 @@
       </div>
     </a>
 
-    <a href="week10.html" class="week-card w10">
+    <a href="week10.html" class="week-card w10 has-bts">
       <div class="week-card-header">
         <div class="week-num">Week 10 &middot; Mar 16&ndash;20</div>
         <h2>Sequence Labeling: POS Tagging &amp; NER</h2>
         <div class="dates">Module 10 &mdash; Token-Level Classification</div>
       </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Sequence labeling: one label per token (input = output length)</li>
@@ -308,41 +373,121 @@
       </div>
     </a>
 
-    <!-- Week 11: Spring Break -->
-    <div class="week-card" style="opacity:0.55;cursor:default;border:2px dashed #cbd5e1;background:#f8fafc;pointer-events:none;">
-      <div class="week-card-header" style="background:linear-gradient(120deg,#f1f5f9,#e2e8f0);">
-        <div class="week-num" style="color:#94a3b8;">Week 11 &middot; Mar 23&ndash;27</div>
-        <h2 style="color:#64748b;">&#127796; Spring Break</h2>
-        <div class="dates" style="color:#94a3b8;">No lectures &middot; No quiz &middot; Recharge!</div>
+    <!-- Week 11: Post-Training Alignment Pipeline (Bonus Module) -->
+    <a href="week11.html" class="week-card w11 is-new">
+      <div class="week-card-header">
+        <div class="week-num">Week 11 &middot; Bonus Module</div>
+        <h2>Post-Training Alignment Pipeline</h2>
+        <div class="dates">SFT &rarr; RLHF &rarr; Constitutional AI &rarr; DPO</div>
       </div>
-      <div class="week-card-body" style="color:#94a3b8;font-size:14px;padding:16px 20px;">
-        No new content this week. Week 12 resumes with Unsupervised Models &amp; Topic Modeling.
-      </div>
-      <div class="week-card-footer">
-        <span class="hw-badge none">No content</span>
-      </div>
-    </div>
-
-
-    <!-- Week 12: Topic Modeling -->
-    <a href="week12.html" class="week-card" style="border-top:4px solid #b45309;background:#ffffff;">
-      <div class="week-card-header" style="background:linear-gradient(120deg,#92400e,#b45309,#f59e0b);">
-        <div class="week-num" style="color:rgba(255,255,255,0.85);">Week 12 &middot; Mar 30&ndash;Apr 3 &larr; YOU ARE HERE</div>
-        <h2 style="color:white;">Topic Modeling: LSI &amp; LDA</h2>
-        <div class="dates" style="color:rgba(255,255,255,0.8);">Module 11 &mdash; Unsupervised Learning</div>
-      </div>
+      <div class="content-strip new-module">⭐ New Bonus Module — Additional Graduate Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
-          <li>Topic modeling: unsupervised extraction of hidden topics from documents</li>
-          <li>LSI: SVD decomposition A = U &times; &Sigma; &times; V&sup1; — concept matrices</li>
-          <li>LSI querying: map term to concept space using V&sup1; matrix</li>
-          <li>LDA: Dirichlet distributions for doc-topic (&alpha;) and topic-word (&beta;)</li>
-          <li>LDA equation: 4 probability terms — Dirichlet + Multinomial distributions</li>
-          <li>Gibbs sampling optimization for LDA parameter tuning</li>
+          <li>Supervised Fine-Tuning (SFT): data, format, loss</li>
+          <li>RLHF with PPO: reward model, KL penalty, 4-model setup</li>
+          <li>Constitutional AI (RLAIF): Anthropic's approach</li>
+          <li>DPO: closed-form alignment without RL</li>
+          <li>KTO: preference optimization from binary labels</li>
         </ul>
       </div>
       <div class="week-card-footer">
-        <span class="hw-badge hw5">HW5 out &middot; Quiz 10 covers this</span>
+        <span class="hw-badge none" style="background:#ede9fe;color:#6d28d9;">Bonus Module</span>
+        <span class="open-btn">Open &rarr;</span>
+      </div>
+    </a>
+
+
+    <!-- Week 12: Topic Modeling -->
+    <a href="week12.html" class="week-card w12 ">
+      <div class="week-card-header">
+        <div class="week-num">Week 12 &middot; Mar 30&ndash;Apr 3</div>
+        <h2>Topic Modeling: LSI &amp; LDA</h2>
+        <div class="dates">Module 11 &mdash; Unsupervised Learning</div>
+      </div>
+      <div class="content-strip standard">📚 Course Content</div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Topic modeling: unsupervised extraction of hidden topics</li>
+          <li>LSI: SVD decomposition A = U &times; &Sigma; &times; V&sup1; &mdash; concept matrices</li>
+          <li>LSI querying: map term to concept space via V&sup1;</li>
+          <li>LDA: Dirichlet distributions for doc-topic (&alpha;) and topic-word (&beta;)</li>
+          <li>Gibbs sampling for LDA parameter tuning</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw5">HW5 out &middot; Quiz 10</span>
+        <span class="open-btn">Open &rarr;</span>
+      </div>
+    </a>
+
+    <!-- Week 13: Generative AI + Prompt Engineering + RAG -->
+    <a href="week13.html" class="week-card w13 has-bts">
+      <div class="week-card-header">
+        <div class="week-num">Week 13 &middot; Apr 6&ndash;10</div>
+        <h2>Generative AI, Prompt Engineering &amp; RAG</h2>
+        <div class="dates">Module 12 &mdash; Modern LLM Applications</div>
+      </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Generative AI: autoregressive decoding, LLM training pipeline</li>
+          <li>Temperature, Top-p sampling &mdash; controlling generation diversity</li>
+          <li>Prompt Engineering: Zero-shot, Few-shot, CoT, Self-Consistency, ReAct</li>
+          <li>Advanced prompts: Tree-of-Thought, prompt chaining, structured output</li>
+          <li>RAG: chunking, vector DB, semantic search, augmented generation</li>
+          <li>RAG vs. Fine-Tuning vs. Prompting: decision framework</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw5">HW5 &middot; Quiz 10 Due</span>
+        <span class="open-btn">Open &rarr;</span>
+      </div>
+    </a>
+
+    <!-- Week 14: Agentic AI -->
+    <a href="week14.html" class="week-card w14 has-bts">
+      <div class="week-card-header">
+        <div class="week-num">Week 14 &middot; Apr 13&ndash;17</div>
+        <h2>Foundations of Agentic AI &amp; Reasoning</h2>
+        <div class="dates">Module 13 L1&amp;L2 &mdash; Intelligent Agents</div>
+      </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Agent vs. chatbot: perceive &rarr; reason &rarr; act &rarr; observe loop</li>
+          <li>Memory systems: in-context, episodic, semantic, procedural</li>
+          <li>Tool use &amp; function calling: extending agents into the real world</li>
+          <li>ReAct framework: Thought &rarr; Action &rarr; Observation cycles</li>
+          <li>Reflexion, Tree-of-Thought, MCTS reasoning frameworks</li>
+          <li>Agent failure modes: goal drift, prompt injection, context overflow</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw5">HW5 &middot; Quiz 11 Due</span>
+        <span class="open-btn">Open &rarr;</span>
+      </div>
+    </a>
+
+    <!-- Week 15: Multi-Agent + Future of NLP -->
+    <a href="week15.html" class="week-card w15 has-bts" style="border-top:4px solid #059669;">
+      <div class="week-card-header">
+        <div class="week-num">Week 15 &middot; Apr 20&ndash;24 &larr; FINAL WEEK</div>
+        <h2>Multi-Agent Systems &amp; Future of NLP</h2>
+        <div class="dates">Module 13 L3 &mdash; Collaboration &amp; Frontiers</div>
+      </div>
+      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="week-card-body">
+        <ul class="topic-list">
+          <li>Multi-agent topologies: hub-spoke, chain, mesh, hierarchical</li>
+          <li>Frameworks: LangGraph (graph), AutoGen (conversational), CrewAI (roles)</li>
+          <li>Agent communication protocols &amp; termination conditions</li>
+          <li>Real-world applications: healthcare, legal, finance, software dev</li>
+          <li>NLP evolution timeline: 2012 &rarr; 2026 &rarr; beyond</li>
+          <li>Open research frontiers: hallucination, interpretability, continual learning</li>
+        </ul>
+      </div>
+      <div class="week-card-footer">
+        <span class="hw-badge hw5">HW5 Due &middot; Quiz 12 Due</span>
         <span class="open-btn">Open &rarr;</span>
       </div>
     </a>
@@ -363,10 +508,10 @@
       <tr><td><strong>Quiz 6</strong></td><td>Week 6</td><td>CNN &amp; RNN</td><td>Feb 27</td><td class="done">&#10003; Done</td></tr>
       <tr><td><strong>Quiz 7</strong></td><td>Week 7</td><td>LSTM, GRU &amp; Attention</td><td>Mar 6</td><td class="done">&#10003; Done</td></tr>
       <tr><td><strong>Quiz 8</strong></td><td>Week 9</td><td>Transformers, BERT &amp; GPT</td><td>Mar 20</td><td class="done">&#10003; Done</td></tr>
-      <tr><td><strong>Quiz 9</strong></td><td>Week 10</td><td>POS Tagging &amp; NER</td><td>Apr 3</td><td class="upcoming">&#9888; Due Apr 3!</td></tr>
-      <tr><td><strong>Quiz 10</strong></td><td>Week 12</td><td>Topic Modeling: LSI &amp; LDA</td><td>Apr 10</td><td class="upcoming">&#9654; Upcoming</td></tr>
-      <tr><td><strong>Quiz 11</strong></td><td>Week 13</td><td>LLMs &amp; Prompt Engineering</td><td>Apr 24</td><td class="future">&#8212; Future</td></tr>
-      <tr><td><strong>Quiz 12</strong></td><td>Week 14</td><td>AI Agents &amp; Applications</td><td>May 1</td><td class="future">&#8212; Future</td></tr>
+      <tr><td><strong>Quiz 9</strong></td><td>Week 10</td><td>POS Tagging &amp; NER</td><td>Apr 3</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 10</strong></td><td>Week 12</td><td>Topic Modeling: LSI &amp; LDA</td><td>Apr 10</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 11</strong></td><td>Week 13</td><td>GenAI, Prompt Engineering &amp; RAG</td><td>Apr 17</td><td class="done">&#10003; Done</td></tr>
+      <tr><td><strong>Quiz 12</strong></td><td>Weeks 14&amp;15</td><td>Agentic AI &amp; Multi-Agent Systems</td><td>Apr 24</td><td class="upcoming">&#9888; Due Apr 24!</td></tr>
     </table>
   </div>
 
@@ -391,7 +536,11 @@
       <div class="roadmap-arrow">&#8594;</div>
       <div class="roadmap-node active">Seq. Labeling<br><small style="font-weight:400;color:#64748b">W10</small></div>
       <div class="roadmap-arrow">&#8594;</div>
-      <div class="roadmap-node">LLMs / Agents<br><small style="font-weight:400;color:#64748b">W13&ndash;W14</small></div>
+      <div class="roadmap-node active">Topic Models<br><small style="font-weight:400;color:#64748b">W12</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node active">LLMs &amp; RAG<br><small style="font-weight:400;color:#64748b">W13</small></div>
+      <div class="roadmap-arrow">&#8594;</div>
+      <div class="roadmap-node active">AI Agents<br><small style="font-weight:400;color:#64748b">W14&ndash;W15</small></div>
     </div>
   </div>
 
@@ -422,7 +571,7 @@
 
 </main>
 
-<footer>CSE 8803 Applied NLP &middot; Spring 2026 &middot; Tarek's Personal Study Guide &middot; Week 10 of 16</footer>
+<footer>CSE 8803 Applied NLP &middot; Spring 2026 &middot; Tarek's Personal Study Guide &middot; All 15 Weeks Complete 🎓 &middot; Updated April 2026</footer>
 
 </body>
 </html>

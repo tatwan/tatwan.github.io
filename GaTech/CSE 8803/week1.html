@@ -667,5 +667,203 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col{grid-template-columns:1fr}}
+.bts-code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table tr:hover td{background:#fafbff}
+.bts-formula{background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0284c7;margin-bottom:6px}
+.bts-interactive{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin:16px 0}
+.bts-input{width:100%;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:15px;font-family:inherit;outline:none;box-sizing:border-box}
+.bts-input:focus{border-color:#6366f1}
+.bts-output{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-family:monospace;font-size:13px;margin-top:10px;min-height:50px;line-height:1.8}
+.tok-chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:13px;font-family:monospace;font-weight:600;margin:2px;border:1px solid transparent}
+.tok-chip.full{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}
+.tok-chip.sub{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.tok-chip.unk{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.bts-depth{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>Subword Tokenization: BPE, WordPiece &amp; Unigram LM</h2>
+  <p>Every modern LLM — GPT-4, LLaMA, BERT, Gemini — starts with subword tokenization. This section covers the algorithms that make these models work: why character and word tokenization both fail, how BPE and WordPiece solve the OOV problem, and why tokenizer choice shapes multilingual fairness in 2026.</p>
+</div>
+
+<div class="bts-card">
+  <h3>🤔 Why Not Words? Why Not Characters?</h3>
+  <div class="bts-story">
+    <div class="bts-story-label">📖 The Core Problem</div>
+    <p style="font-size:14px;line-height:1.8">Imagine training on English news. The word <code>tokenization</code> appears 10× but <code>detokenization</code> appears once. A word-level model marks it <span class="tok-chip unk">[UNK]</span> — the model is blind. A character model sees 16 individual characters with no semantic structure. Subword tokenization splits <code>detokenization</code> → <span class="tok-chip sub">de</span><span class="tok-chip sub">##token</span><span class="tok-chip sub">##ization</span> — meaningful pieces, each seen thousands of times.</p>
+  </div>
+  <div class="bts-2col">
+    <div>
+      <h4>Word-Level Problems</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Vocabulary explosion (millions of forms)</li>
+        <li>OOV for rare, new, or morphological variants</li>
+        <li>No cross-lingual sharing</li>
+        <li>"tokenization" ≠ "tokenize" + "ation" to the model</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Character-Level Problems</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Very long sequences → quadratic attention cost</li>
+        <li>No semantic units — model learns structure from scratch</li>
+        <li>English "play"= 4 tokens; Arabic equiv may be 2+</li>
+        <li>Works better for languages with small alphabets</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#475569;margin-top:4px"><strong>Subword sweet spot:</strong> fixed vocab (~32K–100K), common words stay whole, rare words split into known morphemes. Zero OOV.</p>
+</div>
+
+<div class="bts-card">
+  <h3>⚙️ Byte Pair Encoding (BPE) <span class="bts-depth">PhD</span></h3>
+  <p style="font-size:14px;color:#475569;margin-bottom:12px">Originally a data compression algorithm (1994), adapted for NLP by Sennrich et al. (2016). Used by: <strong>GPT-2, GPT-3, GPT-4, LLaMA, Mistral, Qwen, Falcon</strong>.</p>
+  <div class="bts-code"><span style="color:#94a3b8"># BPE Training — core loop</span>
+<span style="color:#93c5fd">def</span> train_bpe(corpus, target_vocab_size):
+    <span style="color:#94a3b8"># Step 1: Initialize with character vocabulary</span>
+    vocab = character_vocab(corpus)   <span style="color:#94a3b8"># {a, b, ..., z, &lt;/w&gt;}</span>
+    merge_rules = []
+
+    <span style="color:#93c5fd">while</span> len(vocab) &lt; target_vocab_size:
+        <span style="color:#94a3b8"># Step 2: Count all adjacent symbol pairs</span>
+        pairs = count_adjacent_pairs(corpus)    <span style="color:#94a3b8"># {'e s':9, 'es t':6, ...}</span>
+
+        <span style="color:#94a3b8"># Step 3: Merge the MOST FREQUENT pair</span>
+        best = max(pairs, key=pairs.get)        <span style="color:#94a3b8"># e.g. ('e','s') → count=9</span>
+        new_token = best[0] + best[1]           <span style="color:#94a3b8"># 'es'</span>
+        vocab.add(new_token)
+        merge_rules.append(best)
+        corpus = apply_merge(corpus, best)      <span style="color:#94a3b8"># Replace all 'e s' → 'es'</span>
+
+    <span style="color:#93c5fd">return</span> vocab, merge_rules</div>
+
+  <h4>Worked Example — Vocabulary from Scratch</h4>
+  <p style="font-size:13px;color:#475569;margin-bottom:10px">Corpus: <em>"low low low lower lower newest newest widest"</em></p>
+  <table class="bts-table">
+    <tr><th>Step</th><th>Most Frequent Pair</th><th>Count</th><th>New Token</th><th>Effect</th></tr>
+    <tr><td>Init</td><td>—</td><td>—</td><td>—</td><td>l o w &lt;/w&gt;, n e w e s t &lt;/w&gt;…</td></tr>
+    <tr><td>1</td><td>(e, s)</td><td>9</td><td><code>es</code></td><td>n e w <strong>es</strong> t &lt;/w&gt;</td></tr>
+    <tr><td>2</td><td>(es, t)</td><td>6</td><td><code>est</code></td><td>n e w <strong>est</strong> &lt;/w&gt;</td></tr>
+    <tr><td>3</td><td>(est, &lt;/w&gt;)</td><td>6</td><td><code>est&lt;/w&gt;</code></td><td>n e w <strong>est&lt;/w&gt;</strong></td></tr>
+    <tr><td>4</td><td>(l, o)</td><td>8</td><td><code>lo</code></td><td><strong>lo</strong> w &lt;/w&gt;</td></tr>
+    <tr><td>5</td><td>(lo, w)</td><td>8</td><td><code>low</code></td><td><strong>low</strong> &lt;/w&gt;</td></tr>
+    <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+  </table>
+  <p style="font-size:13px;color:#475569;margin-top:8px">At inference: <code>lower</code> → <span class="tok-chip sub">low</span><span class="tok-chip sub">er</span> | <code>newest</code> → <span class="tok-chip full">newest</span> | <code>unplayed</code> → <span class="tok-chip sub">un</span><span class="tok-chip sub">play</span><span class="tok-chip sub">ed</span></p>
+</div>
+
+<div class="bts-card">
+  <h3>📐 WordPiece vs. BPE vs. Unigram LM</h3>
+  <div class="bts-2col">
+    <div>
+      <h4>WordPiece (BERT)</h4>
+      <p style="font-size:13px;line-height:1.7">Merges based on <em>likelihood gain</em> rather than frequency:</p>
+      <div class="bts-formula">score(A,B) = freq(AB) / (freq(A) × freq(B))</div>
+      <p style="font-size:13px;line-height:1.7;margin-top:8px">Favors informative combinations. Continuation pieces marked with <code>##</code>: <code>playing</code> → <code>play</code> <code>##ing</code>. Used by: BERT, DistilBERT, MobileBERT.</p>
+    </div>
+    <div>
+      <h4>Unigram Language Model (T5, XLNet)</h4>
+      <p style="font-size:13px;line-height:1.7">Starts with a <em>large</em> vocabulary and prunes by minimizing likelihood loss. Uses EM algorithm — naturally probabilistic, enables multiple segmentations for data augmentation:</p>
+      <div class="bts-formula">L = Σᵢ log P(xᵢ) where P(x) = Σ_{seg} P(seg)</div>
+    </div>
+  </div>
+  <h4>SentencePiece — Language-Agnostic Wrapper</h4>
+  <p style="font-size:13px;line-height:1.7">SentencePiece is a <em>library</em> (not an algorithm) that runs BPE or Unigram LM without any language-specific preprocessing — no whitespace assumptions, works for Japanese/Chinese/Arabic/Thai. Treats the space character as a normal character. Word starts marked with ▁. Used by: <strong>LLaMA, T5, Gemma, mT5, NLLB</strong>.</p>
+
+  <table class="bts-table" style="margin-top:14px">
+    <tr><th>Algorithm</th><th>Criterion</th><th>Direction</th><th>Used By</th><th>Continuation Marker</th></tr>
+    <tr><td><strong>BPE</strong></td><td>Frequency</td><td>Bottom-up merge</td><td>GPT-4, LLaMA, Mistral</td><td>Ġ (space prefix)</td></tr>
+    <tr><td><strong>WordPiece</strong></td><td>Likelihood gain</td><td>Bottom-up merge</td><td>BERT, DistilBERT</td><td>## prefix</td></tr>
+    <tr><td><strong>Unigram LM</strong></td><td>Min likelihood loss</td><td>Top-down prune</td><td>T5, XLNet, mBART</td><td>▁ word start</td></tr>
+    <tr><td><strong>SentencePiece</strong></td><td>BPE or Unigram</td><td>Language-agnostic</td><td>LLaMA, Gemma, mT5</td><td>▁ word start</td></tr>
+  </table>
+</div>
+
+<div class="bts-card">
+  <h3>📏 Fertility — Why Tokenizer Choice Is an Equity Issue in 2026</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Fertility</strong> = average tokens per word. English BPE fertility ≈ 1.3–1.5. Arabic fertility ≈ 2.5–3.5 due to morphological richness. Thai/CJK even higher. This means an Arabic sentence uses 2× more tokens than English — fewer reasoning steps per context window, higher cost per task, lower effective quality.</p>
+  <div class="bts-story">
+    <div class="bts-story-label">🌍 Real Impact</div>
+    <p style="font-size:14px;line-height:1.7">GPT-3 and early LLaMA used English-dominant BPE vocabularies. A Turkish verb like <em>çevrimiçileştiremeyebileceklerinden</em> (one word meaning "because they may not be able to make [it] online") tokenizes into 20+ BPE tokens — forcing the model to "spend" its context budget on morphological decomposition. Models trained on larger multilingual vocabularies (XLM-R's 250K tokens) show much better parity. This is an active fairness research area in 2026.</p>
+  </div>
+</div>
+
+<div class="bts-card">
+  <h3>🔧 Interactive BPE Tokenizer Demo</h3>
+  <div class="bts-interactive">
+    <h4>Try BPE-style Tokenization</h4>
+    <p style="font-size:13px;color:#475569;margin-bottom:12px">Type any English word or phrase to see approximate BPE-style subword splits, token count, and fertility score.</p>
+    <input type="text" class="bts-input" id="btsIn" placeholder="e.g. tokenization, preprocessing, unbelievable" oninput="btsSplit()" />
+    <div id="btsOut" class="bts-output"></div>
+  </div>
+</div>
+
+</div></div>
+
+<script>
+(function(){
+const prefixes=['pre','un','re','dis','over','under','mis','out','sub','super','trans','auto','bio','geo','inter','micro','mid','multi','non','semi','ultra','de','in','im','ir','il'];
+const suffixes=['tion','ization','ising','ized','izing','ness','ment','er','est','ed','ing','ly','ful','less','able','ible','ical','ous','ive','ary','ory','ity','al','ance','ence','ant','ent','ic','ish','ize','ise'];
+const roots=['token','play','work','learn','process','train','fine','tune','model','embed','layer','head','atten','weight','param','optim','gradi','loss','batch','epoch','neural','network','deep','learn','class','label','input','output','hidden','latent','encod','decod','context','query','key','value','beam','search'];
+
+function splitWord(w){
+  w=w.toLowerCase().trim();
+  if(!w||w.length<2) return [w];
+  // Try prefix
+  for(const p of prefixes){
+    if(w.startsWith(p)&&w.length>p.length+2){
+      const rest=w.slice(p.length);
+      return [p,...splitWord(rest)];
+    }
+  }
+  // Try suffix
+  for(const s of suffixes){
+    if(w.endsWith(s)&&w.length>s.length+2){
+      const stem=w.slice(0,w.length-s.length);
+      if(stem.length>=2) return [...splitWord(stem),s];
+    }
+  }
+  return [w];
+}
+
+window.btsSplit=function(){
+  const raw=document.getElementById('btsIn').value.trim();
+  const out=document.getElementById('btsOut');
+  if(!raw){out.innerHTML='';return;}
+  const words=raw.toLowerCase().split(/\s+/).filter(Boolean);
+  let totalTokens=0;
+  const lines=words.map(w=>{
+    const toks=splitWord(w);
+    totalTokens+=toks.length;
+    const chips=toks.map((t,i)=>`<span class="tok-chip ${i===0?'full':'sub'}">${t}</span>`).join(' ');
+    return `<strong>${w}</strong> → ${chips} (${toks.length} token${toks.length>1?'s':''})`;
+  });
+  const fertility=(totalTokens/words.length).toFixed(2);
+  out.innerHTML=lines.join('<br>')+`<br><br><span style="color:#64748b;font-size:12px">📊 Total: ${totalTokens} token(s) for ${words.length} word(s) | Fertility: <strong>${fertility}</strong> | Note: Real BPE uses learned merge rules from billions of tokens — this demo approximates the concept.</span>`;
+};
+})();
+</script>
+
 </body>
 </html>

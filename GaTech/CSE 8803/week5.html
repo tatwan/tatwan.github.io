@@ -598,5 +598,145 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card5{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card5 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card5 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col5{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col5{grid-template-columns:1fr}}
+.bts-code5{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table5{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table5 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table5 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table5 tr:hover td{background:#fafbff}
+.bts-formula5{background:#fff1f2;border-left:4px solid #e11d48;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story5{background:linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%);border-left:4px solid #e11d48;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story5-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#be123c;margin-bottom:6px}
+.bts-depth5{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.scaling-viz{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:20px 24px;font-family:monospace;font-size:12px;line-height:1.9;margin:14px 0;overflow-x:auto;white-space:pre}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>Scaling Laws, Negative Sampling &amp; The Science of Scale</h2>
+  <p>Why do bigger models perform better? How do you know how much data to train on? What happens when you scale compute vs. parameters? These aren't intuitions — they're empirical laws with mathematical derivations. Every NLP researcher in 2026 must know Kaplan and Chinchilla.</p>
+</div>
+
+<div class="bts-card5">
+  <h3>📈 Kaplan Scaling Laws (2020) <span class="bts-depth5">PhD Foundational</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">OpenAI (Kaplan et al., 2020) showed that LM validation loss follows smooth <em>power laws</em> in model size N, dataset size D, and compute C, with diminishing returns for each dimension:</p>
+  <div class="bts-2col5">
+    <div>
+      <div class="bts-formula5">L(N) ≈ (N_c / N)^α_N   where α_N ≈ 0.076
+L(D) ≈ (D_c / D)^α_D   where α_D ≈ 0.095
+L(C) ≈ (C_c / C)^α_C   where α_C ≈ 0.057</div>
+      <p style="font-size:12px;color:#475569;line-height:1.7">N_c, D_c, C_c are critical threshold constants. Loss decreases as a power law — doubling model size from 1B→2B gives a smaller gain than going from 100M→200M.</p>
+    </div>
+    <div>
+      <h4>Key Findings from Kaplan 2020</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Model size matters <em>more</em> than dataset size (Kaplan's conclusion)</li>
+        <li>Larger models are more sample-efficient</li>
+        <li>Architecture (width vs. depth) matters less than N for fixed C</li>
+        <li>Motivated GPT-3 (175B) with relatively small training data (~300B tokens)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card5">
+  <h3>🦦 Chinchilla Scaling Laws (2022) — The Correction</h3>
+  <div class="bts-story5">
+    <div class="bts-story5-label">📖 The Paradigm Shift</div>
+    <p style="font-size:14px;line-height:1.8">DeepMind (Hoffmann et al., 2022) re-ran Kaplan's experiments more carefully — using proper learning rate schedules and a wider range of model/data combinations. Conclusion: Kaplan was wrong about the ratio. Both model size and dataset size should scale <em>equally</em>. The optimal model for a given compute budget is much smaller and trained on much more data than Kaplan suggested.</p>
+  </div>
+  <div class="bts-2col5">
+    <div>
+      <div class="bts-formula5">Optimal: N* ∝ C^0.50
+         D* ∝ C^0.50
+
+Chinchilla Rule of Thumb:
+  D* ≈ 20 × N*
+
+Example: 70B params → 1.4T tokens
+         7B  params →  140B tokens</div>
+    </div>
+    <div>
+      <h4>Real-World Impact</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>GPT-3 (175B, 300B tokens) was <em>under-trained</em></li>
+        <li>Chinchilla (70B, 1.4T tokens) matched GPT-3 quality</li>
+        <li>LLaMA-2 (7B, 2T tokens) beats GPT-3 on many benchmarks</li>
+        <li>Modern small models (Phi-3, Gemma) exploit this heavily</li>
+        <li><strong>Lesson:</strong> data quantity ≥ model size for fixed compute</li>
+      </ul>
+    </div>
+  </div>
+  <table class="bts-table5">
+    <tr><th>Model</th><th>Params</th><th>Training Tokens</th><th>Tokens/Param</th><th>Chinchilla-Optimal?</th></tr>
+    <tr><td>GPT-3 (2020)</td><td>175B</td><td>300B</td><td>1.7</td><td>❌ Under-trained</td></tr>
+    <tr><td>Chinchilla (2022)</td><td>70B</td><td>1.4T</td><td>20</td><td>✅ Optimal</td></tr>
+    <tr><td>LLaMA-2 (2023)</td><td>7B</td><td>2T</td><td>286</td><td>✅+ Over-trained (inference-efficient)</td></tr>
+    <tr><td>Phi-3-Mini (2024)</td><td>3.8B</td><td>3.3T</td><td>868</td><td>✅++ Heavily over-trained for deployment</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:6px">Note: "over-training" (beyond Chinchilla optimal) is desirable for small models deployed for inference — you spend compute once at training time, but the smaller model is cheaper to run for millions of queries.</p>
+</div>
+
+<div class="bts-card5">
+  <h3>⚡ Test-Time Compute Scaling (2024) <span class="bts-depth5">Frontier Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A new scaling axis emerged in 2024: spending <em>more compute at inference time</em> can substitute for a larger model. OpenAI o1/o3, Deepseek-R1 exploit this.</p>
+  <div class="bts-2col5">
+    <div>
+      <h4>Mechanisms</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Chain-of-Thought (CoT):</strong> more reasoning tokens → better answers</li>
+        <li><strong>Self-consistency:</strong> sample N completions, majority vote</li>
+        <li><strong>Process Reward Models (PRM):</strong> score intermediate steps</li>
+        <li><strong>Tree search (MCTS):</strong> explore reasoning branches</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Emerging Law</h4>
+      <p style="font-size:13px;line-height:1.8">Snell et al. (2024) showed: for math problems, a smaller model with 16× more inference compute matches a 14× larger model at standard inference. <strong>This opens a new efficiency frontier</strong> — train smaller, reason longer.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card5">
+  <h3>🎯 Word2Vec Negative Sampling — The Math <span class="bts-depth5">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">The slides show Word2Vec. Here's why negative sampling works — and the subtle trick in the noise distribution.</p>
+  <div class="bts-2col5">
+    <div>
+      <h4>Why Negative Sampling?</h4>
+      <p style="font-size:13px;line-height:1.7">Naive softmax over |V|~100K words per token is expensive. Negative sampling replaces the full softmax with a binary classification objective: does this (word, context) pair appear in real data?</p>
+      <div class="bts-formula5">J(θ) = log σ(v_c · v_w)
+       + Σₖ E[log σ(-v_n · v_w)]
+
+where k negative samples drawn from
+P_noise(w) ∝ f(w)^(3/4)</div>
+    </div>
+    <div>
+      <h4>The 3/4 Power Trick</h4>
+      <p style="font-size:13px;line-height:1.7">Uniform sampling over-represents common words ("the", "of"). Raw frequency over-represents them even more. The 3/4 power law is a middle ground — empirically found to work best:</p>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Rare words sampled more than their frequency suggests</li>
+        <li>Common words sampled less</li>
+        <li>Empirically beats both uniform and frequency-proportional</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
 </body>
 </html>

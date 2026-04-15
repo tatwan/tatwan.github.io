@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 – Foundations of Agentic AI | CSE 8803</title>
+<style>
+  :root {
+    --primary: #0284c7; --primary-light: #f0f9ff; --primary-dark: #0c4a6e;
+    --purple: #7c3aed; --green: #059669; --orange: #d97706; --red: #dc2626; --teal: #0d9488;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #0c4a6e; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .you-are-here { background: #38bdf8; color: #0c4a6e; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+  .page-header { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 60%, #38bdf8 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 700px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .chip.alert { background: #fbbf24; color: #78350f; font-weight: 700; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.blue   { background: #dbeafe; }
+  .section-icon.cyan   { background: #e0f2fe; }
+  .section-icon.green  { background: #d1fae5; }
+  .section-icon.orange { background: #ffedd5; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.teal   { background: #ccfbf1; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .explainer { margin-bottom: 14px; }
+  .explainer-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what  { color: #0284c7; }
+  .explainer-label.why   { color: #059669; }
+  .explainer-label.how   { color: #d97706; }
+  .explainer-label.when  { color: #7c3aed; }
+  .explainer-label.where { color: #db2777; }
+  .explainer p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .formula-box { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 13px; margin: 16px 0; line-height: 1.9; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .formula-box .comment   { color: #64748b; }
+  .formula-box .highlight { color: #fcd34d; font-weight: bold; }
+  .formula-box .eq        { color: #86efac; }
+  .formula-box .key       { color: #f9a8d4; }
+  .formula-box .step      { color: #93c5fd; }
+  .formula-box .action    { color: #a78bfa; }
+  .formula-box .obs       { color: #6ee7b7; }
+  .formula-box .thought   { color: #fcd34d; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .compare-table th { background: #0c4a6e; color: white; padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .good { color: #059669; font-weight: 600; }
+  .compare-table .bad  { color: #dc2626; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 4px; }
+  .btn-outline:hover, .btn-outline.active { background: var(--primary); color: white; }
+  .output-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; font-size: 13px; margin-top: 12px; min-height: 80px; white-space: pre-wrap; font-family: 'Courier New', monospace; color: #e2e8f0; line-height: 1.8; }
+  .callout { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+  .callout.warning { border-color: var(--orange); background: #fff7ed; }
+  .callout.tip     { border-color: var(--green);  background: #d1fae5; }
+  .callout.danger  { border-color: var(--red);    background: #fee2e2; }
+  .callout.purple  { border-color: var(--purple); background: #f5f3ff; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+  ul.bullet { padding-left: 20px; margin: 10px 0; }
+  ul.bullet li { font-size: 14px; color: #374151; margin-bottom: 6px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 700px) { .three-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* Agent Loop Diagram */
+  .agent-loop { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 24px 0; }
+  .loop-box { border-radius: 12px; padding: 12px 24px; font-size: 14px; font-weight: 700; text-align: center; width: 100%; max-width: 440px; border: 2px solid; }
+  .loop-box.perception { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+  .loop-box.brain      { background: #f5f3ff; border-color: #8b5cf6; color: #5b21b6; }
+  .loop-box.planning   { background: #fff7ed; border-color: #f97316; color: #9a3412; }
+  .loop-box.action     { background: #d1fae5; border-color: #10b981; color: #065f46; }
+  .loop-box.env        { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+  .loop-arrow { font-size: 20px; color: var(--muted); margin: 4px 0; }
+  .loop-back  { font-size: 13px; color: var(--muted); background: #f8fafc; border: 1px dashed var(--border); border-radius: 8px; padding: 6px 16px; margin: 4px 0; }
+
+  /* Memory type cards */
+  .memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .memory-grid { grid-template-columns: 1fr; } }
+  .mem-card { border-radius: 12px; padding: 16px; border: 2px solid; }
+  .mem-1 { border-color: #3b82f6; background: #eff6ff; } .mem-1 h4 { color: #1e40af; }
+  .mem-2 { border-color: #8b5cf6; background: #f5f3ff; } .mem-2 h4 { color: #5b21b6; }
+  .mem-3 { border-color: #10b981; background: #f0fdf4; } .mem-3 h4 { color: #065f46; }
+  .mem-4 { border-color: #f59e0b; background: #fffbeb; } .mem-4 h4 { color: #92400e; }
+  .mem-card p { font-size: 13px; color: #374151; line-height: 1.6; margin-top: 8px; }
+  .mem-card .ex { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+  /* Tool use */
+  .tool-badge { display: inline-block; background: #e0f2fe; color: #0c4a6e; border: 1px solid #7dd3fc; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; margin: 3px; }
+
+  /* ReAct diagram */
+  .react-flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 16px 0; justify-content: center; }
+  .react-node { border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 700; min-width: 100px; text-align: center; border: 2px solid; }
+  .rn-t { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
+  .rn-a { background: #ede9fe; border-color: #a78bfa; color: #5b21b6; }
+  .rn-o { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
+  .rn-arr { font-size: 18px; color: var(--muted); }
+  .rn-ans { background: #dcfce7; border-color: #4ade80; color: #14532d; font-size: 12px; }
+
+  /* Quiz */
+  .quiz-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 14px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .quiz-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .quiz-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .quiz-feedback.show    { display: block; }
+  .quiz-feedback.correct { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.wrong   { background: #fee2e2; color: #991b1b; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
+  .story-box { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #7dd3fc; border-radius: 14px; padding: 20px 24px; margin: 20px 0; }
+  .story-box .story-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #0284c7; margin-bottom: 8px; }
+  .story-box p { font-size: 14px; color: #374151; line-height: 1.7; }
+  .depth-badge { display: inline-block; background: #0c4a6e; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
+  strong { color: #1e293b; }
+
+  /* Reasoning frameworks */
+  .framework-card { border-radius: 12px; padding: 18px; border: 2px solid; margin-bottom: 16px; }
+  .fw-react { border-color: #8b5cf6; background: #f5f3ff; }
+  .fw-reflexion { border-color: #f97316; background: #fff7ed; }
+  .fw-mcts { border-color: #10b981; background: #f0fdf4; }
+  .fw-tot { border-color: #3b82f6; background: #eff6ff; }
+  .framework-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .fw-react h4 { color: #5b21b6; }
+  .fw-reflexion h4 { color: #9a3412; }
+  .fw-mcts h4 { color: #065f46; }
+  .fw-tot h4 { color: #1e40af; }
+  .framework-card .paper { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .framework-card p { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* Cognitive architecture comparison */
+  .cog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  @media (max-width: 600px) { .cog-grid { grid-template-columns: 1fr; } }
+  .cog-card { border-radius: 10px; padding: 14px; border: 1px solid var(--border); background: var(--card); }
+  .cog-card h5 { font-size: 13px; font-weight: 700; color: #0284c7; margin-bottom: 6px; }
+  .cog-card p  { font-size: 12px; color: #374151; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <span class="week-title">CSE 8803 — Applied NLP</span>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="week13.html">← Week 13</a>
+    <span class="you-are-here">Week 14 ← HERE</span>
+    <a href="week15.html">Week 15 →</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">Week 14 · Apr 13 – 17</div>
+  <h1>Foundations of Agentic AI &amp; Reasoning</h1>
+  <p>What makes an AI an "agent"? How do LLMs plan, use tools, maintain memory, and reason their way to goals? This week digs into the cognitive architecture of intelligent agents.</p>
+  <div class="header-chips">
+    <span class="chip">Module 13 · Lessons 1 &amp; 2</span>
+    <span class="chip">Agent Architecture</span>
+    <span class="chip">Reasoning &amp; Planning</span>
+    <span class="chip">Tool Use &amp; Memory</span>
+    <span class="chip alert">⚠️ Quiz 11 · Due Apr 17</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ SECTION 1: What is an Agent -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon blue">🤖</div>
+    <div>
+      <h2>What is an AI Agent? Definitions &amp; The Big Shift</h2>
+      <div class="sub">M13T1L1 · From chatbots to autonomous goal-pursuing systems</div>
+    </div>
+  </div>
+
+  <div class="story-box">
+    <div class="story-label">📖 Story: The Difference Between a Tool and an Agent</div>
+    <p>A hammer is a tool — it does exactly what you do with it, nothing more. A calculator is a tool too. But imagine an intern you give a task to: "Research our competitors and write a report." They break it down: <em>search Google, take notes, organize findings, write draft, review it, fix errors, deliver the final product</em>. They make decisions, use tools, handle unexpected obstacles, and persist toward a goal across many steps. That's an agent. The key insight: <strong>agents pursue goals autonomously over extended horizons, using tools and environment feedback to adapt</strong>.</p>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>What vs. Traditional NLP Models</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <table class="compare-table">
+        <thead><tr><th>Dimension</th><th>Traditional LLM (chatbot)</th><th>AI Agent</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Task duration</strong></td><td>Single turn: query → response</td><td>Multi-step: goal → plan → execute → reflect → deliver</td></tr>
+          <tr><td><strong>Tool use</strong></td><td>None (just text generation)</td><td>Actively calls APIs, runs code, searches web, reads files</td></tr>
+          <tr><td><strong>Memory</strong></td><td>Only current context window</td><td>Short-term context + long-term external memory</td></tr>
+          <tr><td><strong>Decision making</strong></td><td>One-shot: generate best response</td><td>Iterative: act → observe → reason → act again</td></tr>
+          <tr><td><strong>Error handling</strong></td><td>None — output is final</td><td>Detects failures, self-corrects via reflection</td></tr>
+          <tr><td><strong>Goal persistence</strong></td><td>Answers one question at a time</td><td>Maintains goal state across many steps/sessions</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>🔑 Core Definition</strong>
+        An <strong>AI Agent</strong> is a system that: (1) perceives its environment, (2) reasons about its state and goal, (3) plans and takes actions, (4) observes the results, and (5) adapts until the goal is achieved. The LLM is the "brain" — the cognitive engine — but the agent is the whole system including memory, tools, and feedback loop.
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>The Agent Loop: Perception → Brain → Action → Observation <span class="depth-badge">CORE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="agent-loop">
+        <div class="loop-box perception">👁️ PERCEPTION<div style="font-size:12px;font-weight:400;margin-top:4px">User goal + environment state + memory retrieval + tool outputs</div></div>
+        <div class="loop-arrow">↓</div>
+        <div class="loop-box brain">🧠 BRAIN (LLM)<div style="font-size:12px;font-weight:400;margin-top:4px">Reason, plan, decide: "What should I do next?"</div></div>
+        <div class="loop-arrow">↓</div>
+        <div class="loop-box planning">📋 PLANNING<div style="font-size:12px;font-weight:400;margin-top:4px">Decompose goal → sub-tasks → select next action</div></div>
+        <div class="loop-arrow">↓</div>
+        <div class="loop-box action">⚡ ACTION<div style="font-size:12px;font-weight:400;margin-top:4px">Execute: call tool / write code / call API / respond</div></div>
+        <div class="loop-arrow">↓</div>
+        <div class="loop-box env">🌍 ENVIRONMENT (Tool outputs, APIs, files)<div style="font-size:12px;font-weight:400;margin-top:4px">Result: success / error / new information</div></div>
+        <div class="loop-arrow">↓</div>
+        <div class="loop-back">🔁 Observation → back to Perception → loop until goal achieved or max steps</div>
+      </div>
+      <div class="callout tip">
+        <strong>✅ Why the Loop Matters</strong>
+        The loop is what gives agents their power. A single-turn LLM gets one shot. An agent can try, fail, observe the error, reason about why it failed, adjust its approach, try again — exactly like a human solving a complex problem. This enables handling of tasks with unpredictable intermediate states.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 2: Components -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon cyan">🧩</div>
+    <div>
+      <h2>Agent Architecture: The Five Core Components</h2>
+      <div class="sub">M13T1L1 · Building blocks of every AI agent</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>1. Memory Systems <span class="depth-badge">DEEP DIVE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label why">Why Agents Need Multiple Memory Types</div>
+        <p>The context window of an LLM is finite (even 128K tokens is limited for long tasks). Agents need different types of memory to operate over extended horizons. Cognitive science inspired the design: human memory has episodic, semantic, procedural, and working memory — agent memory systems mirror this.</p>
+      </div>
+      <div class="memory-grid">
+        <div class="mem-card mem-1">
+          <h4>📝 In-Context (Working Memory)</h4>
+          <p>What's currently in the LLM's context window: the prompt, conversation history, recent tool outputs, and partial results.</p>
+          <p class="ex">Analogy: RAM — fast, immediately accessible, but limited and lost when the session ends.</p>
+        </div>
+        <div class="mem-card mem-2">
+          <h4>📖 Episodic Memory</h4>
+          <p>Records of past agent runs, interactions, and experiences. Retrieved when relevant to a new task. Enables the agent to learn from past successes and failures.</p>
+          <p class="ex">Implementation: vector database of past task logs. Retrieve via semantic similarity.</p>
+        </div>
+        <div class="mem-card mem-3">
+          <h4>🧠 Semantic Memory</h4>
+          <p>General world knowledge, domain facts, product documentation — not tied to a specific episode. Queried via RAG to provide factual grounding.</p>
+          <p class="ex">Implementation: vector DB indexed with domain documents (same as RAG knowledge base).</p>
+        </div>
+        <div class="mem-card mem-4">
+          <h4>⚙️ Procedural Memory</h4>
+          <p>Learned skills, workflows, and action sequences that have worked before. Encoded in the agent's system prompt, fine-tuned weights, or tool definitions.</p>
+          <p class="ex">Implementation: system prompt with successful workflow patterns, or fine-tuned model weights.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>2. Tool Use &amp; Action Space</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label what">What Tools Enable</div>
+        <p>Without tools, an LLM can only manipulate text — it's trapped in language. Tools extend the agent into the real world: reading files, writing code, calling databases, fetching URLs, executing calculations. The agent selects tools via <strong>function calling</strong> — the LLM outputs a structured JSON specifying the tool and its arguments.</p>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:#374151">Common Tool Categories:</div>
+        <span class="tool-badge">🔍 Web Search</span>
+        <span class="tool-badge">🐍 Code Executor</span>
+        <span class="tool-badge">📂 File Reader/Writer</span>
+        <span class="tool-badge">🗄️ Database Query (SQL)</span>
+        <span class="tool-badge">🌐 HTTP/API calls</span>
+        <span class="tool-badge">📊 Data Visualization</span>
+        <span class="tool-badge">🧮 Calculator</span>
+        <span class="tool-badge">📧 Email/Calendar</span>
+        <span class="tool-badge">🔢 Vector DB Retrieval</span>
+        <span class="tool-badge">🤖 Sub-agent spawning</span>
+      </div>
+      <div class="formula-box"><span class="comment"># How Function/Tool Calling works (OpenAI-style):</span>
+
+<span class="step">1. Agent receives task:</span> "What's the current stock price of NVDA?"
+
+<span class="step">2. LLM outputs a tool call:</span>
+{
+  "tool": "web_search",
+  "arguments": {"query": "NVDA stock price today"}
+}
+
+<span class="step">3. Framework executes tool → result returned:</span>
+{"result": "NVDA: $875.40 (+2.3%) as of 10:30 AM EST"}
+
+<span class="step">4. Tool result added to context, LLM generates final answer:</span>
+"NVIDIA (NVDA) is currently trading at $875.40, up 2.3% today."</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>3. Planning &amp; Task Decomposition</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label how">How Agents Decompose Complex Goals</div>
+        <p>A capable agent doesn't tackle a complex goal in one step — it breaks it down into a <strong>plan</strong>: a sequence of sub-tasks, each with defined inputs, outputs, and tool requirements. This mirrors how humans solve complex problems by breaking them into manageable steps.</p>
+      </div>
+      <div class="formula-box"><span class="comment"># Example: Goal decomposition for a research task</span>
+
+<span class="highlight">GOAL:</span> "Write a research brief on the current state of AI regulation in the EU"
+
+<span class="step">PLAN (agent-generated):</span>
+Step 1: search_web("EU AI Act latest updates 2025") → article summaries
+Step 2: search_web("EU AI regulation enforcement 2025") → enforcement news
+Step 3: retrieve_docs("EU AI Act text", vector_db) → policy details
+Step 4: synthesize_findings(step1, step2, step3) → structured notes
+Step 5: write_draft(notes, format="executive brief") → draft text
+Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
+
+<span class="comment"># Agent executes each step, handles errors, and adapts if
+# a search returns insufficient info</span></div>
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>📋 Plan-and-Execute Pattern</h4>
+          <p>Generate the full plan upfront, then execute each step. Efficient but brittle — if early steps fail, the plan may be invalid.</p>
+        </div>
+        <div class="mini-card">
+          <h4>🔄 ReAct Pattern (Reactive Planning)</h4>
+          <p>Generate only the next action at each step, using current observations. More adaptive — the plan evolves based on what the agent discovers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>4. Perception &amp; Context Management</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="explainer">
+        <div class="explainer-label what">What Perception Means for LLM Agents</div>
+        <p>Perception = what information the agent has access to at each step. This includes: the original goal, conversation history, tool outputs, retrieved memories, and environmental state. Managing this context is crucial — context windows are finite, and irrelevant information degrades reasoning quality.</p>
+      </div>
+      <ul class="bullet">
+        <li><strong>Context compression:</strong> Summarize long histories to free up context window space while preserving key information</li>
+        <li><strong>Memory gating:</strong> Only retrieve memories relevant to the current step — don't flood context</li>
+        <li><strong>Structured prompting:</strong> Use clear sections (Goal / Memory / Tools / Last observation / Instruction) to organize what the LLM "sees"</li>
+        <li><strong>Multimodal perception:</strong> Modern agents can perceive images, audio, PDFs, code — not just text</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>5. Reflection &amp; Self-Correction</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="explainer">
+        <div class="explainer-label why">Why Self-Correction Matters</div>
+        <p>LLMs make errors. Agents that can <strong>reflect</strong> on their outputs, compare them against success criteria, and generate corrective actions dramatically outperform those that don't. Reflection is a meta-cognitive skill: reasoning about one's own reasoning.</p>
+      </div>
+      <div class="formula-box"><span class="comment"># Reflexion agent pattern (Shinn et al., 2023):</span>
+
+<span class="step">Step 1: GENERATE</span> → Agent attempts the task → produces output
+
+<span class="step">Step 2: EVALUATE</span> → Evaluator scores output (LLM judge or ground truth)
+  "Your code throws IndexError on line 7. Test case 3 fails."
+
+<span class="step">Step 3: REFLECT</span> → Agent writes self-reflection:
+  <span class="thought">"I forgot to check array bounds before accessing index.
+   I should add a bounds check before line 7."</span>
+
+<span class="step">Step 4: REFINE</span> → Store reflection in episodic memory →
+  use it to guide next attempt → regenerate
+
+<span class="step">Step 5: REPEAT</span> → until tests pass or max attempts reached
+
+<span class="obs"># Result: Reflexion agents solve significantly more
+# HumanEval coding tasks than non-reflective agents</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 3: Reasoning Frameworks -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon orange">💡</div>
+    <div>
+      <h2>Reasoning Frameworks for Agents <span class="depth-badge">M13T1L2</span></h2>
+      <div class="sub">ReAct, Reflexion, Tree-of-Thought, and MCTS</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>ReAct: Reasoning + Acting <span class="depth-badge">KEY FRAMEWORK</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="explainer">
+        <div class="explainer-label what">What</div>
+        <p>ReAct (Yao et al., 2022) is the foundational agent reasoning pattern. It interleaves <strong>Thought</strong> (LLM reasoning trace) with <strong>Action</strong> (tool call) with <strong>Observation</strong> (tool output). This tight coupling between reasoning and acting reduces hallucination because every factual claim is immediately grounded by a tool result.</p>
+      </div>
+      <div class="react-flow">
+        <div class="react-node rn-t">💭 Thought<br/><span style="font-size:10px;font-weight:400">Reason about state</span></div>
+        <div class="rn-arr">→</div>
+        <div class="react-node rn-a">⚡ Action<br/><span style="font-size:10px;font-weight:400">Call tool/API</span></div>
+        <div class="rn-arr">→</div>
+        <div class="react-node rn-o">👁️ Observation<br/><span style="font-size:10px;font-weight:400">Tool result</span></div>
+        <div class="rn-arr">→</div>
+        <div class="react-node rn-t">💭 Thought<br/><span style="font-size:10px;font-weight:400">Update reasoning</span></div>
+        <div class="rn-arr">→ ...</div>
+        <div class="react-node rn-ans">✅ Final Answer</div>
+      </div>
+      <div class="formula-box"><span class="comment"># ReAct trace example for a multi-hop factual question:
+# "Who founded the company that makes the A100 GPU?"</span>
+
+<span class="thought">Thought 1:</span> I need to find which company makes the A100 GPU.
+<span class="action">Action 1:</span> search("A100 GPU manufacturer")
+<span class="obs">Observation 1:</span> "NVIDIA A100 GPU is manufactured by NVIDIA Corporation"
+
+<span class="thought">Thought 2:</span> Now I need to find who founded NVIDIA Corporation.
+<span class="action">Action 2:</span> search("NVIDIA Corporation founders")
+<span class="obs">Observation 2:</span> "NVIDIA was co-founded by Jensen Huang, Chris Malachowsky,
+                and Curtis Priem in 1993"
+
+<span class="thought">Thought 3:</span> I have the complete answer.
+<span class="highlight">Answer:</span> NVIDIA, which makes the A100 GPU, was founded by
+         Jensen Huang, Chris Malachowsky, and Curtis Priem.</div>
+      <div class="callout tip">
+        <strong>✅ ReAct vs. Pure CoT</strong>
+        CoT reasons entirely in the model's "head" — no external verification. ReAct grounds each reasoning step with a real tool call. For factual tasks, ReAct reduces hallucination significantly because the model can't make up an observation — it comes from an actual tool.
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive: ReAct Simulator -->
+  <div class="interactive-box">
+    <h4>🔬 Interactive: ReAct Agent Trace Simulator</h4>
+    <div class="desc">Select a task to see how a ReAct agent breaks it down into thought-action-observation cycles.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn-outline active" onclick="showReact('factual', this)">Factual Q&amp;A</button>
+      <button class="btn-outline" onclick="showReact('math', this)">Math + Research</button>
+      <button class="btn-outline" onclick="showReact('code', this)">Code Debugging</button>
+    </div>
+    <div class="output-box" id="react-output"></div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Advanced Reasoning Frameworks Comparison <span class="depth-badge">BEYOND CLASS</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="framework-card fw-react">
+        <h4>ReAct (Reasoning + Acting)</h4>
+        <div class="paper">Yao et al., 2022 · Princeton / Google</div>
+        <p>Interleaves thought traces with tool actions. Linear chain: T→A→O→T→A→O... Best for: factual Q&amp;A, web research, API tasks where you need grounded, verifiable answers at each step.</p>
+      </div>
+      <div class="framework-card fw-reflexion">
+        <h4>Reflexion</h4>
+        <div class="paper">Shinn et al., 2023 · Northeastern University</div>
+        <p>Adds a reflection loop: after each failed attempt, the agent writes a verbal self-critique stored in episodic memory. Next attempt uses this reflection. Best for: coding challenges, multi-step reasoning where initial attempts often fail.</p>
+      </div>
+      <div class="framework-card fw-tot">
+        <h4>Tree-of-Thoughts (ToT)</h4>
+        <div class="paper">Yao et al., 2023 · Princeton / Google</div>
+        <p>Generates multiple candidate reasoning steps at each point, evaluates them, and explores the best via BFS/DFS/beam search. Best for: creative problem-solving, mathematical proofs, strategic planning — tasks with a combinatorial search space.</p>
+      </div>
+      <div class="framework-card fw-mcts">
+        <h4>MCTS for Agents (AlphaCode-style)</h4>
+        <div class="paper">Used in DeepMind's AlphaCode 2, o1/o3 reasoning</div>
+        <p>Monte Carlo Tree Search: expand a tree of possible action sequences, simulate outcomes, backpropagate scores, repeat. Enables superhuman performance on hard reasoning tasks. The basis of OpenAI's "thinking" models (o1, o3, o4-mini).</p>
+      </div>
+      <div class="callout purple">
+        <strong>🔬 Why "Reasoning Models" (o1/o3/DeepSeek-R1) Are Different</strong>
+        Traditional LLMs generate a single response. Reasoning models (using MCTS + RLHF) generate an extended internal "thinking" trace — exploring multiple reasoning paths, backtracking, verifying — before producing an answer. This is why they excel at math olympiad problems, PhD-level science, and complex code. The thinking tokens are a form of test-time compute scaling.
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Cognitive Architectures: Classical vs. Neural Agents <span class="depth-badge">DEEP DIVE</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="explainer">
+        <div class="explainer-label why">Why Study Classical Architecture</div>
+        <p>LLM agents didn't emerge in a vacuum — they were preceded by decades of AI research on cognitive architectures. Understanding the classical foundations helps you reason about <em>why</em> LLM agents work the way they do, and where they still fall short.</p>
+      </div>
+      <div class="cog-grid">
+        <div class="cog-card">
+          <h5>🏛️ SOAR (1983)</h5>
+          <p>Symbolic cognitive architecture. Uses production rules, working memory, and "chunking" to learn new rules from problem-solving. Foundation of rule-based AI agents.</p>
+        </div>
+        <div class="cog-card">
+          <h5>🧠 ACT-R (1993)</h5>
+          <p>Hybrid symbolic/neural. Modules for declarative memory, procedural memory, and perceptual/motor. Most empirically grounded cognitive architecture in psychology.</p>
+        </div>
+        <div class="cog-card">
+          <h5>🤖 BDI Agents</h5>
+          <p><strong>Belief-Desire-Intention</strong>. Agents have beliefs (world state), desires (goals), and intentions (committed plans). Still used in multi-agent systems and robotics.</p>
+        </div>
+        <div class="cog-card">
+          <h5>💬 LLM Agents (2022+)</h5>
+          <p>The LLM implicitly serves as all cognitive modules. Context window = working memory. Tool calls = perception/motor. System prompt = procedural knowledge. Emergent rather than designed.</p>
+        </div>
+        <div class="cog-card">
+          <h5>🔗 Hybrid Symbolic-Neural</h5>
+          <p>Combines LLM "intuition" with formal planners, theorem provers, or logic engines. Best for safety-critical domains where the neural component must be verifiably constrained.</p>
+        </div>
+        <div class="cog-card">
+          <h5>🌐 Embodied Agents</h5>
+          <p>Agents grounded in physical or virtual environments (robotics, game agents). Perception = visual/sensor input. The agent must ground language in physical reality — hardest open problem in agentic AI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 4: Agent Pitfalls -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon purple">⚠️</div>
+    <div>
+      <h2>Agent Failure Modes &amp; Safety</h2>
+      <div class="sub">Why agents fail — and how to make them safer</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggle(this)">
+      <h3>Common Agent Failure Modes</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <table class="compare-table">
+        <thead><tr><th>Failure Mode</th><th>Description</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hallucinated tool calls</strong></td><td>LLM invents tool arguments or tool names that don't exist</td><td>Strict function schemas, input validation, constrained generation</td></tr>
+          <tr><td><strong>Infinite loops</strong></td><td>Agent gets stuck in a loop (same action repeatedly)</td><td>Max step limits, loop detection, action deduplication</td></tr>
+          <tr><td><strong>Goal drift</strong></td><td>Agent pursues sub-goal instead of original goal</td><td>Persistent goal reminder in every prompt, goal-checking step</td></tr>
+          <tr><td><strong>Cascading errors</strong></td><td>Wrong result in step 2 propagates and corrupts all later steps</td><td>Error detection at each step, checkpointing, rollback</td></tr>
+          <tr><td><strong>Prompt injection</strong></td><td>Malicious content in environment overrides agent instructions</td><td>Input sanitization, privilege separation, human-in-the-loop</td></tr>
+          <tr><td><strong>Over-trust of tools</strong></td><td>Agent blindly trusts incorrect tool output</td><td>Cross-verification with multiple sources, confidence thresholds</td></tr>
+          <tr><td><strong>Context overflow</strong></td><td>Conversation grows beyond context window, losing key info</td><td>Context compression, sliding window, memory summarization</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">
+        <strong>⚠️ The Alignment Challenge in Agentic Systems</strong>
+        Alignment problems are amplified in agents: a slightly misspecified goal in a single-turn chatbot causes a bad response. The same misspecification in an agent running 100 steps and calling external APIs can cause significant real-world harm before anyone notices. Human-in-the-loop checkpoints and reversibility are critical engineering requirements for production agents.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECTION 5: QUIZ PREP -->
+<div class="quiz-section">
+  <h3>🧠 Quiz 11 Prep — Foundations of Agentic AI</h3>
+
+  <div class="quiz-q">
+    <p>1. What is the fundamental property that distinguishes an AI "agent" from a standard LLM chatbot?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. Agents use larger models with more parameters</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">B. Agents can only be used for code generation tasks</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">C. Agents operate in a perceive-reason-act loop, using tools and memory to pursue goals across multiple steps</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Agents are fine-tuned on task-specific data while chatbots are not</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! The agent loop is the defining characteristic. Unlike a chatbot that handles one query at a time, an agent perceives its environment, reasons about its state, takes actions (including tool calls), observes results, and loops — persisting toward a goal across many steps.</div>
+    <div class="quiz-feedback wrong">❌ The distinction is about the architecture and operational paradigm, not model size or training. The key is the perceive-reason-act loop with tool use and goal persistence.</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>2. In the ReAct framework, why does interleaving Thought-Action-Observation reduce hallucination compared to standard Chain-of-Thought?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">A. Because Observations come from real tools — the model can't fabricate them — grounding each reasoning step in verified reality</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">B. Because ReAct uses a higher temperature than CoT</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Because ReAct processes text faster, leaving less time for errors</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Because ReAct uses fine-tuned weights that reduce confabulation</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! In pure CoT, the model reasons entirely in its own head — it can hallucinate both the reasoning steps and the final answer. In ReAct, the Observation comes from an actual tool call, providing a verified anchor point. The model's subsequent thoughts are conditioned on real information, not confabulated context.</div>
+    <div class="quiz-feedback wrong">❌ The key insight is about grounding. Observations in ReAct are tool outputs — real, verified data from the world. This prevents the model from "making up" facts during its reasoning chain.</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>3. An agent working on a 30-step task starts "forgetting" its original goal by step 20 and begins pursuing a tangential sub-goal. This is called:</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. Context overflow — the agent's context window is full</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">B. Goal drift — the agent loses alignment with its original objective across many steps</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Hallucination — the agent is generating false information</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Prompt injection — an external source changed the agent's instructions</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! Goal drift is a well-documented agent failure mode. Over many steps, the context window fills up with tool outputs and observations, and the original high-level goal gets "washed out." The mitigation is to include an explicit goal reminder at every step of the prompt.</div>
+    <div class="quiz-feedback wrong">❌ While context overflow and hallucination can contribute, the specific phenomenon of losing the original goal in favor of a sub-goal across many steps is called goal drift.</div>
+  </div>
+
+  <div class="quiz-q">
+    <p>4. Which type of agent memory is analogous to a human writing notes to themselves after completing a task so they do it better next time?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">A. In-context (working) memory</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">B. Semantic memory</button>
+      <button class="quiz-opt" onclick="checkQ(this,'correct')">C. Episodic memory — records of specific past experiences, retrievable for future tasks</button>
+      <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Procedural memory</button>
+    </div>
+    <div class="quiz-feedback correct">✅ Correct! Episodic memory records past experiences — what happened, what worked, what failed. The Reflexion framework writes self-critiques (reflections on failed episodes) into episodic memory, which are retrieved when the agent faces a similar task again. This is exactly analogous to a human writing a "lessons learned" document.</div>
+    <div class="quiz-feedback wrong">❌ Semantic memory is general world knowledge. Procedural memory is about learned skills/workflows. Episodic memory is the record of specific events and experiences — the "diary" memory type.</div>
+  </div>
+</div>
+
+<div class="page-nav">
+  <a href="week13.html">← Week 13: GenAI &amp; RAG</a>
+  <a href="week15.html">Week 15: Multi-Agent Systems →</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.classList.toggle('open', !isOpen);
+}
+document.querySelectorAll('.concept-body.open').forEach(b => b.style.display = 'block');
+document.querySelectorAll('.concept-body:not(.open)').forEach(b => b.style.display = 'none');
+
+function checkQ(btn, result) {
+  const qDiv = btn.closest('.quiz-q');
+  qDiv.querySelectorAll('.quiz-opt').forEach(b => { b.classList.remove('correct','wrong'); b.disabled = true; });
+  btn.classList.add(result);
+  const fb = qDiv.querySelectorAll('.quiz-feedback');
+  fb.forEach(f => f.classList.remove('show'));
+  qDiv.querySelector('.quiz-feedback.' + result).classList.add('show');
+}
+
+const reactOutputs = {
+  'factual': `\x1b[33mThought 1:\x1b[0m I need to find who invented the transformer architecture.
+\x1b[35mAction 1:\x1b[0m search("Transformer architecture inventors NLP")
+\x1b[32mObservation 1:\x1b[0m "Attention Is All You Need" (Vaswani et al., 2017) introduced
+               the transformer. Authors: Ashish Vaswani, Noam Shazeer,
+               Niki Parmar, Jakob Uszkoreit + 4 others at Google Brain.
+
+\x1b[33mThought 2:\x1b[0m I have the answer. The paper had 8 authors. Let me confirm the year.
+\x1b[35mAction 2:\x1b[0m search("Attention Is All You Need paper year")
+\x1b[32mObservation 2:\x1b[0m Published at NeurIPS 2017.
+
+\x1b[33mThought 3:\x1b[0m Complete. I can now answer with high confidence.
+\x1b[32mAnswer:\x1b[0m The Transformer was introduced by Vaswani et al. (2017) at Google Brain
+        in "Attention Is All You Need" published at NeurIPS 2017.`,
+  'math': `\x1b[33mThought 1:\x1b[0m I need the GDP of Germany in 2024 and the US population.
+           Let me get Germany's GDP first.
+\x1b[35mAction 1:\x1b[0m search("Germany GDP 2024")
+\x1b[32mObservation 1:\x1b[0m Germany GDP 2024: approximately $4.5 trillion USD
+
+\x1b[33mThought 2:\x1b[0m Now I need US population.
+\x1b[35mAction 2:\x1b[0m search("US population 2024")
+\x1b[32mObservation 2:\x1b[0m US population 2024: approximately 335 million
+
+\x1b[33mThought 3:\x1b[0m Now calculate GDP per capita equivalent.
+\x1b[35mAction 3:\x1b[0m calculator("4500000000000 / 335000000")
+\x1b[32mObservation 3:\x1b[0m = $13,432.84
+
+\x1b[33mThought 4:\x1b[0m Germany's total GDP divided by US population ≈ $13,433.
+\x1b[32mAnswer:\x1b[0m Germany's 2024 GDP (~$4.5T) ÷ US population (~335M) = ~$13,433 per person.`,
+  'code': `\x1b[33mThought 1:\x1b[0m The user says their code fails with IndexError. Let me run it.
+\x1b[35mAction 1:\x1b[0m execute_code("""
+  data = [1, 2, 3]
+  for i in range(4):  # BUG: range(4) goes 0,1,2,3
+      print(data[i])  # data[3] doesn't exist!
+""")
+\x1b[32mObservation 1:\x1b[0m Output: 1 2 3
+               Error: IndexError: list index out of range at line 3
+
+\x1b[33mThought 2:\x1b[0m Found it. range(4) iterates i=0,1,2,3 but list has 3 elements (indices 0-2).
+           Fix: use range(len(data)) or range(3).
+\x1b[35mAction 2:\x1b[0m execute_code("""
+  data = [1, 2, 3]
+  for i in range(len(data)):  # FIXED
+      print(data[i])
+""")
+\x1b[32mObservation 2:\x1b[0m Output: 1 2 3  ← No error!
+
+\x1b[32mAnswer:\x1b[0m Bug: range(4) exceeds list bounds. Fix: change to range(len(data)).`
+};
+
+function showReact(type, btn) {
+  document.querySelectorAll('.interactive-box .btn-outline').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const raw = reactOutputs[type];
+  // Strip ANSI codes for display in plain output box
+  const clean = raw.replace(/\x1b\[\d+m/g, '');
+  document.getElementById('react-output').textContent = clean;
+}
+
+// Initialize
+showReact('factual', document.querySelector('.interactive-box .btn-outline.active'));
+</script>
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card14{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card14 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card14 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col14{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col14{grid-template-columns:1fr}}
+.bts-table14{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table14 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table14 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table14 tr:hover td{background:#fafbff}
+.bts-formula14{background:#f0f9ff;border-left:4px solid #0284c7;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story14{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story14-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0369a1;margin-bottom:6px}
+.bts-depth14{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.align-pipeline{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.align-step{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
+.align-step .step-num{background:#0284c7;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px}
+.align-step h5{font-weight:800;font-size:13px;margin-bottom:4px}
+.align-step p{font-size:12px;color:#475569;line-height:1.6;margin:0}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
+  <h2>Ethics, Alignment &amp; Responsible AI: The Science Behind Safe LLMs</h2>
+  <p>Deploying an LLM without understanding alignment is like shipping a self-driving car without safety testing. This section covers the technical reality of AI safety — from WEAT bias measurement and DPO alignment math, to EU AI Act compliance and LLM watermarking. Every AI/ML professional in 2026 needs this.</p>
+</div>
+
+<div class="bts-card14">
+  <h3>⚖️ Bias in Embeddings: WEAT &amp; Measurement <span class="bts-depth14">Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">WEAT (Word Embedding Association Test, Caliskan et al. 2017) measures implicit bias in word embeddings by testing whether target concepts associate more strongly with one attribute than another — mirroring the human IAT (Implicit Association Test).</p>
+  <div class="bts-2col14">
+    <div>
+      <div class="bts-formula14"><span style="color:#94a3b8"># WEAT test statistic</span>
+s(w, A, B) = mean_a cos(w,a) - mean_b cos(w,b)
+<span style="color:#94a3b8"># How much more similar is word w to
+# attribute set A vs. attribute set B?</span>
+
+S(X, Y, A, B) = Σ_{x∈X} s(x,A,B)
+              - Σ_{y∈Y} s(y,A,B)
+<span style="color:#94a3b8"># Positive = X associates more with A
+# (e.g., "male" names + "career" words)</span>
+
+Effect size d = S / std_dev(union_X_Y)</div>
+    </div>
+    <div>
+      <h4>Classic WEAT Findings</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>GloVe/Word2Vec: flowers/insects, pleasantness/unpleasantness</li>
+        <li>Male names → career; female names → family (strong effect)</li>
+        <li>European-American names → pleasant; African-American names → unpleasant</li>
+        <li>Science terms → male; arts terms → female</li>
+      </ul>
+      <h4>Debiasing Methods</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Hard debiasing</strong> (Bolukbasi 2016): project out gender subspace</li>
+        <li><strong>Counterfactual augmentation:</strong> swap gendered words in training data</li>
+        <li><strong>Limitation:</strong> debiasing embeddings often reduces downstream accuracy; bias can reappear in fine-tuning</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3>🎯 DPO: Direct Preference Optimization Deep Dive <span class="bts-depth14">PhD</span></h3>
+  <div class="bts-story14">
+    <div class="bts-story14-label">📖 Why DPO Over PPO?</div>
+    <p style="font-size:14px;line-height:1.8">RLHF with PPO requires 4 models simultaneously: reference policy π_ref, current policy π_θ, reward model r_φ, and value function V_φ. It's unstable, slow, and expensive. DPO (Rafailov et al., NeurIPS 2023) realizes that the optimal policy can be derived analytically — no RL needed.</p>
+  </div>
+  <div class="bts-2col14">
+    <div>
+      <div class="bts-formula14"><span style="color:#94a3b8"># RLHF objective (requires reward model)</span>
+max_π E[r(x,y)] - β·KL[π || π_ref]
+
+<span style="color:#94a3b8"># Optimal solution analytically:</span>
+π*(y|x) = π_ref(y|x)·exp(r(x,y)/β) / Z(x)
+
+<span style="color:#94a3b8"># Rearranging: reward can be expressed as:</span>
+r(x,y) = β·log(π*(y|x)/π_ref(y|x)) + β·log Z(x)
+
+<span style="color:#94a3b8"># DPO loss (no reward model needed!):</span>
+L_DPO = -log σ(β·log(π_θ(y_w|x)/π_ref(y_w|x))
+              - β·log(π_θ(y_l|x)/π_ref(y_l|x)))
+<span style="color:#94a3b8"># y_w = preferred, y_l = rejected output</span></div>
+    </div>
+    <div>
+      <h4>DPO vs PPO-RLHF</h4>
+      <table class="bts-table14">
+        <tr><th>Aspect</th><th>PPO-RLHF</th><th>DPO</th></tr>
+        <tr><td>Models needed</td><td>4 (policy, ref, reward, value)</td><td>2 (policy, ref)</td></tr>
+        <tr><td>Stability</td><td>Often unstable</td><td>Stable (SFT-like)</td></tr>
+        <tr><td>Compute cost</td><td>Very high</td><td>Moderate</td></tr>
+        <tr><td>Reward hacking</td><td>Yes (explicit RM)</td><td>Less (implicit)</td></tr>
+        <tr><td>Used by</td><td>GPT-4, Claude</td><td>LLaMA-2, Mistral, Zephyr</td></tr>
+      </table>
+      <p style="font-size:12px;color:#64748b;margin-top:6px">KTO (Kahneman-Tversky Optimization, 2024) extends DPO using prospect theory — doesn't require paired preferences, works with individual (x, y, label) examples.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3>🏛️ EU AI Act: What LLM Developers Must Know <span class="bts-depth14">2026 Compliance</span></h3>
+  <div class="align-pipeline">
+    <div class="align-step">
+      <div class="step-num">1</div>
+      <div>
+        <h5>Unacceptable Risk (Prohibited)</h5>
+        <p>Social scoring systems, real-time biometric surveillance in public, manipulation of vulnerable groups, exploitation of unconscious behaviors. Banned outright.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">2</div>
+      <div>
+        <h5>High Risk (Strict Requirements)</h5>
+        <p>LLMs used in hiring, credit scoring, education assessment, critical infrastructure, law enforcement, medical devices. Requires conformity assessment, transparency, human oversight, logging.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">3</div>
+      <div>
+        <h5>General Purpose AI (GPAI) Models</h5>
+        <p>Models like GPT-4, LLaMA, Claude with systemic risk (>10²³ FLOPs training compute) face additional obligations: red-teaming, adversarial testing, cybersecurity measures, incident reporting to EU AI Office.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">4</div>
+      <div>
+        <h5>Watermarking Requirements (2026)</h5>
+        <p>AI-generated content must be labeled. Technical approaches: token-level watermarking (Kirchenbauer 2023 — green/red token lists), metadata embedding, provenance certificates. EU Code of Practice requires multi-layered approach since no single method is sufficient.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3>🧮 Fairness Metrics: The Irreconcilable Trio <span class="bts-depth14">Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Three widely-used fairness criteria are mathematically incompatible (Chouldechova 2017, Kleinberg 2017) — satisfying one often violates the others. Understanding this is critical for any responsible AI deployment.</p>
+  <table class="bts-table14">
+    <tr><th>Criterion</th><th>Definition</th><th>Formula</th><th>Tradeoff</th></tr>
+    <tr><td><strong>Demographic Parity</strong></td><td>Equal positive prediction rates across groups</td><td>P(Ŷ=1|A=0) = P(Ŷ=1|A=1)</td><td>Ignores base rate differences</td></tr>
+    <tr><td><strong>Equalized Odds</strong></td><td>Equal TPR and FPR across groups</td><td>P(Ŷ=1|Y=y,A=a) equal for all a,y</td><td>Requires same accuracy per group</td></tr>
+    <tr><td><strong>Calibration</strong></td><td>Predicted probabilities match true frequencies in each group</td><td>P(Y=1|score=s,A=a) = s for all a</td><td>Conflicts with equalized odds when base rates differ</td></tr>
+  </table>
+  <div class="bts-story14">
+    <div class="bts-story14-label">💡 The Impossibility Theorem</div>
+    <p style="font-size:14px;line-height:1.7">Chouldechova (2017) proved: when base rates differ across groups, no classifier can simultaneously achieve demographic parity, equalized odds, AND calibration. This means <strong>choosing a fairness criterion is a policy decision</strong>, not a technical one. NLP researchers must make this explicit when building and deploying models.</p>
+  </div>
+</div>
+
+</div></div>
+
+</body>
+</html>

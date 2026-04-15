@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 11 – Post-Training Alignment Pipeline | CSE 8803</title>
+<style>
+  :root {
+    --primary: #8b5cf6; --primary-light: #f5f3ff; --primary-dark: #6d28d9;
+    --blue: #2563eb; --green: #059669; --orange: #d97706; --teal: #0d9488;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .topnav { background: #6d28d9; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .topnav a { color: white; text-decoration: none; font-size: 14px; opacity: 0.85; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .week-title { font-weight: 700; font-size: 15px; }
+  .nav-links { display: flex; gap: 16px; }
+  .page-header { background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 60%, #8b5cf6 100%); color: white; padding: 48px 32px 40px; }
+  .page-header .week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .page-header h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 10px; }
+  .page-header p { font-size: 17px; opacity: 0.88; max-width: 640px; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .chip { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 5px 14px; font-size: 13px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .section-icon.purple { background: #ede9fe; }
+  .section-icon.blue { background: #dbeafe; }
+  .section-icon.green { background: #d1fae5; }
+  .section-icon.orange { background: #fef3c7; }
+  .section-header h2 { font-size: 22px; font-weight: 800; }
+  .section-header .sub { font-size: 14px; color: var(--muted); }
+  .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .concept-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #f8fafc; }
+  .concept-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-body { padding: 0 20px 20px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: 12px; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+  .pillbox { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pill { border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill.what { background: #dbeafe; color: #1d4ed8; }
+  .pill.why { background: #d1fae5; color: #065f46; }
+  .pill.how { background: #fef3c7; color: #92400e; }
+  .pill.phd { background: #ede9fe; color: #5b21b6; }
+  .formula-box { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 18px 22px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.8; margin: 14px 0; overflow-x: auto; white-space: pre; }
+  .story-box { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-left: 4px solid #8b5cf6; border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 14px 0; }
+  .story-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #6d28d9; margin-bottom: 6px; }
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 14px 0; }
+  .info-card { background: var(--primary-light); border: 1px solid #ddd6fe; border-radius: 10px; padding: 16px; }
+  .info-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--primary-dark); }
+  .info-card p { font-size: 12px; color: var(--text); line-height: 1.6; }
+  .pipeline-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .pipeline-step { background: var(--primary-light); border: 2px solid #8b5cf6; border-radius: 10px; padding: 12px 16px; text-align: center; flex: 1; min-width: 120px; }
+  .pipeline-step h5 { font-weight: 800; font-size: 13px; color: var(--primary-dark); margin-bottom: 4px; }
+  .pipeline-step p { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .pipeline-arrow { font-size: 20px; color: #8b5cf6; flex-shrink: 0; }
+  .arch-diagram { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 22px; font-family: monospace; font-size: 13px; line-height: 2; margin: 16px 0; overflow-x: auto; white-space: pre; }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .cmp-table th { background: #f8fafc; padding: 9px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); font-size: 12px; }
+  .cmp-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
+  .cmp-table tr:hover td { background: #fafbff; }
+  .depth-badge { display: inline-block; background: var(--primary); color: white; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
+  .quiz-section { background: #1e293b; color: white; border-radius: 16px; padding: 28px; margin-top: 40px; }
+  .quiz-section h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+  .quiz-q { margin-bottom: 24px; }
+  .quiz-q p { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 16px; font-size: 14px; cursor: pointer; text-align: left; color: white; transition: all 0.15s; }
+  .quiz-opt:hover { background: rgba(255,255,255,0.15); }
+  .quiz-opt.correct { background: rgba(5,150,105,0.35); border-color: #059669; }
+  .quiz-opt.wrong { background: rgba(220,38,38,0.25); border-color: #dc2626; }
+  .quiz-feedback { display: none; margin-top: 8px; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(5,150,105,0.2); color: #6ee7b7; }
+  .quiz-feedback.wrong { background: rgba(220,38,38,0.2); color: #fca5a5; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="week-title">Week 11 · Post-Training Alignment Pipeline</span>
+  <div class="nav-links">
+    <a href="index.html">← Course Home</a>
+    <a href="week10.html">Week 10</a>
+    <a href="week12.html">Week 12 →</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="week-badge">Week 11 · Bonus Module</div>
+  <h1>Post-Training Alignment Pipeline</h1>
+  <p>SFT, RLHF, PPO, Constitutional AI, DPO, KTO — how a pretrained LLM becomes a helpful, harmless, honest assistant. The full pipeline that powers Claude, GPT-4, and LLaMA-chat.</p>
+  <div class="header-chips">
+    <span class="chip">🎯 SFT &amp; RLHF</span>
+    <span class="chip">⚖️ Constitutional AI</span>
+    <span class="chip">📐 DPO &amp; KTO Math</span>
+    <span class="chip">🚀 vLLM &amp; Serving</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- PIPELINE OVERVIEW -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon purple">🗺️</div>
+    <div>
+      <h2>The Post-Training Pipeline</h2>
+      <div class="sub">From raw pretraining → helpful assistant</div>
+    </div>
+  </div>
+
+  <div class="pipeline-flow">
+    <div class="pipeline-step"><h5>1. Pretraining</h5><p>Next-token prediction on trillions of tokens. Learns world knowledge, language structure.</p></div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step"><h5>2. SFT</h5><p>Supervised fine-tuning on (instruction, ideal response) pairs. Teaches instruction-following format.</p></div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step"><h5>3. Reward Modeling</h5><p>Train a model to score response quality from human preference rankings.</p></div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step"><h5>4. RL Fine-tuning</h5><p>Use PPO or DPO to optimize the policy toward high-reward, low-KL responses.</p></div>
+  </div>
+
+  <div class="story-box">
+    <div class="story-label">📖 Why Pretraining Isn't Enough</div>
+    <p style="font-size:14px;line-height:1.8">A pretrained LLM is a next-token predictor. Ask it "How do I make coffee?" and it might output "How do I make coffee? Let me explain the history of coffee cultivation…" — continuing the document, not answering you. SFT teaches the model the <em>format</em> of helpful conversation. RL fine-tuning teaches it to produce responses that humans actually prefer — truthful, safe, and helpful — not just statistically plausible.</p>
+  </div>
+</div>
+
+<!-- SFT -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon blue">📚</div>
+    <div>
+      <h2>Supervised Fine-Tuning (SFT)</h2>
+      <div class="sub">Teaching instruction-following format</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>📝 SFT: Mechanics &amp; Data</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox"><span class="pill what">What</span><span class="pill how">How</span></div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">SFT is standard supervised learning: given a prompt X, maximize P(Y|X) where Y is a high-quality demonstration response. The loss is computed only on the response tokens, not the prompt.</p>
+      <div class="formula-box"><span style="color:#94a3b8"># SFT objective: next-token prediction on response tokens only</span>
+L_SFT = -Σᵢ log P_θ(yᵢ | y₁,...,yᵢ₋₁, x)
+<span style="color:#94a3b8"># where x = system prompt + user message
+#       y = ideal assistant response
+# Loss NOT computed on prompt tokens</span>
+
+<span style="color:#94a3b8"># Data format (chat template)</span>
+<span style="color:#86efac">&lt;|system|&gt;</span>You are a helpful assistant.
+<span style="color:#86efac">&lt;|user|&gt;</span>Explain gradient descent in one sentence.
+<span style="color:#86efac">&lt;|assistant|&gt;</span>Gradient descent is an optimization algorithm...
+<span style="color:#94a3b8">                ^^ Loss computed only here</span></div>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>InstructGPT / Alpaca Style</h4>
+          <p>OpenAI hired contractors to write (instruction, ideal response) pairs. Alpaca used GPT-3.5 to generate 52K examples from 175 seed tasks — "self-instruct" for cheap SFT data.</p>
+        </div>
+        <div class="info-card">
+          <h4>Open Datasets (2024)</h4>
+          <p>OpenAssistant (OASST), Dolly-15K, FLAN Collection, ShareGPT, OpenHermes 2.5, Orca 2 (reasoning traces), Infinity-Instruct.</p>
+        </div>
+        <div class="info-card">
+          <h4>SFT Alone Isn't Enough</h4>
+          <p>SFT teaches format and average behavior, but doesn't optimize for nuanced human preferences — safety, helpfulness tradeoffs, tone, refusing harmful requests. That's what RL brings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RLHF -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon orange">🎯</div>
+    <div>
+      <h2>RLHF: Reinforcement Learning from Human Feedback</h2>
+      <div class="sub">PPO · Reward Modeling · KL Penalty</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🏆 Reward Model Training</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox"><span class="pill how">How</span><span class="pill phd">Critical</span></div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">Humans rank multiple responses to the same prompt. The reward model (RM) is trained to predict human preferences — effectively learning what makes a response good.</p>
+      <div class="formula-box"><span style="color:#94a3b8"># Reward model: LLM + linear head</span>
+r_φ(x, y) = linear(LLM_hidden(x,y))  <span style="color:#94a3b8"># scalar reward</span>
+
+<span style="color:#94a3b8"># Training: Bradley-Terry preference model
+# Given: human prefers y_w over y_l for prompt x</span>
+L_RM = -log σ(r_φ(x, y_w) - r_φ(x, y_l))
+<span style="color:#94a3b8"># Maximize: reward(preferred) - reward(rejected)</span>
+
+<span style="color:#94a3b8"># Reward hacking risk:
+# Model learns to game the RM, not truly be better
+# Mitigation: KL penalty, diverse RM ensemble, iterative RLHF</span></div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>⚙️ PPO for RLHF: The Full Objective <span class="depth-badge">PhD</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox"><span class="pill phd">PhD Depth</span></div>
+      <div class="formula-box"><span style="color:#94a3b8"># RLHF objective (per token y given prompt x)</span>
+max_π E_{x∼D, y∼π(·|x)} [ r_φ(x,y) - β·KL[π_θ(·|x) || π_ref(·|x)] ]
+
+<span style="color:#94a3b8"># Components:
+#  r_φ(x,y)  = reward model score (be good)
+#  -β·KL     = stay close to reference policy (don't deviate)
+#  β ≈ 0.2   = KL coefficient (typical)</span>
+
+<span style="color:#94a3b8"># PPO Clipped Objective (prevents large policy updates):</span>
+L_CLIP = E[min(rₜ·Aₜ, clip(rₜ, 1-ε, 1+ε)·Aₜ)]
+<span style="color:#94a3b8"># rₜ = π_θ(aₜ|sₜ)/π_old(aₜ|sₜ)  (policy ratio)
+# Aₜ = advantage estimate  (GAE)
+# ε  = 0.2  (clip range)</span>
+
+<span style="color:#94a3b8"># 4 models running simultaneously:
+# 1. Policy π_θ          (updated)
+# 2. Reference π_ref     (frozen SFT model)
+# 3. Reward model r_φ    (frozen)
+# 4. Value function V_φ  (updated for baseline)</span></div>
+      <p style="font-size:13px;color:#475569;margin-top:10px;line-height:1.7">The KL penalty is critical — without it, the model would optimize the reward function in degenerate ways (reward hacking), producing outputs that score high on r_φ but are bizarre or harmful. The KL term anchors the policy near the well-behaved SFT model.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONSTITUTIONAL AI -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon green">📜</div>
+    <div>
+      <h2>Constitutional AI (Anthropic, 2022)</h2>
+      <div class="sub">Scaling safety without human labelers</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>⚖️ Constitutional AI: RLAIF</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill phd">Anthropic</span></div>
+      <div class="story-box">
+        <div class="story-label">📖 The Insight</div>
+        <p style="font-size:14px;line-height:1.8">Human feedback is expensive and inconsistent. What if we could use an LLM to judge and improve another LLM — guided by explicit principles (a "constitution")? That's Constitutional AI (CAI) — the basis for Claude. It replaces human preference labelers with AI feedback (RLAIF), scaled by a written set of values.</p>
+      </div>
+      <div class="arch-diagram">Constitutional AI Pipeline:
+
+STAGE 1 — Supervised Learning (SL-CAI):
+  1. Red-team: generate harmful responses to test prompts
+  2. Self-critique: ask model to identify problems per constitution
+     Prompt: "Which of these responses violates principle {X}?"
+  3. Self-revision: generate better response
+  4. SFT on revised responses
+
+STAGE 2 — RLAIF (Reinforcement Learning from AI Feedback):
+  1. Generate response pairs (y_i, y_j) for prompts
+  2. Ask feedback model: "Which is more {helpful/harmless/honest}?
+     Consider principle: {constitutional principle}"
+  3. Use AI preference labels to train reward model
+  4. PPO on AI reward model
+
+Constitution examples (Anthropic's CAI paper):
+  "Choose the response that is least likely to contain
+   harmful or unethical content."
+  "Choose the response that is most supportive of
+   human autonomy and individual freedoms."</div>
+      <p style="font-size:13px;color:#475569;margin-top:10px;line-height:1.7">CAI scales much better than RLHF: AI preference labels cost ~$0.002 each vs ~$1–10 for human labels. The constitution makes the safety criteria explicit and auditable — much better than the implicit values learned from human raters.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DPO / KTO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon purple">📐</div>
+    <div>
+      <h2>DPO, KTO &amp; Alignment Without RL</h2>
+      <div class="sub">Preference optimization as supervised learning</div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🎯 DPO: Direct Preference Optimization <span class="depth-badge">PhD</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body open">
+      <div class="pillbox"><span class="pill phd">NeurIPS 2023</span></div>
+      <div class="formula-box"><span style="color:#94a3b8"># Key insight: RLHF optimal policy has closed form</span>
+π*(y|x) ∝ π_ref(y|x) · exp(r*(x,y) / β)
+
+<span style="color:#94a3b8"># Rearranging: reward = β · log policy ratio + constant</span>
+r*(x,y) = β · log(π*(y|x) / π_ref(y|x)) + β · log Z(x)
+
+<span style="color:#94a3b8"># Substitute into Bradley-Terry preference model:</span>
+<span style="color:#94a3b8"># P(y_w ≻ y_l | x) = σ(r*(x,y_w) - r*(x,y_l))</span>
+<span style="color:#94a3b8">#                 = σ(β·log(π*/π_ref)(y_w) - β·log(π*/π_ref)(y_l))</span>
+
+<span style="color:#94a3b8"># DPO loss: replace π* with π_θ and train directly</span>
+L_DPO(θ) = -E log σ(
+  β·log(π_θ(y_w|x)/π_ref(y_w|x)) -
+  β·log(π_θ(y_l|x)/π_ref(y_l|x))
+)
+<span style="color:#94a3b8"># ↑ Pure supervised objective on (prompt, chosen, rejected) triples
+# No reward model. No RL loop. Stable training.</span></div>
+      <p style="font-size:13px;color:#475569;margin-top:10px;line-height:1.7">DPO used in: Zephyr-7B, Tulu-2, LLaMA-2-Chat (partial), Mistral Instruct. LoRA + DPO fits on a single consumer GPU (8–24GB) — democratizing alignment fine-tuning.</p>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>🧠 KTO: Kahneman-Tversky Optimization <span class="depth-badge">2024</span></h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <div class="pillbox"><span class="pill phd">Prospect Theory</span></div>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:14px">DPO requires paired preferences (for each prompt, a preferred AND rejected response). KTO (Ethayarajh et al., 2024) relaxes this — it only needs individual labeled examples: (prompt, response, good/bad label).</p>
+      <div class="formula-box"><span style="color:#94a3b8"># Kahneman-Tversky: humans feel losses more than gains
+# Loss aversion: v(x) = x if x≥0, λx if x&lt;0 (λ&gt;1)</span>
+
+<span style="color:#94a3b8"># KTO "desirability" function (prospect theory)</span>
+L_KTO = E_{(x,y,z)} [
+  λ_D · σ(r_KTO(x,y) - z_ref)   if z=1 (desirable)
+  λ_U · σ(z_ref - r_KTO(x,y))   if z=0 (undesirable)
+]
+<span style="color:#94a3b8"># where r_KTO = β·log(π_θ(y|x)/π_ref(y|x))
+# and λ_D, λ_U weight desirable/undesirable losses
+# and z_ref = KL baseline (mean reward under current policy)</span>
+
+<span style="color:#94a3b8"># Advantage: works with binary labels, no paired preferences</span>
+<span style="color:#94a3b8"># 1 positive + 1 negative example is all you need per type</span></div>
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <div class="concept-header" onclick="toggleCard(this)">
+      <h3>📊 Alignment Methods Comparison</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="concept-body">
+      <table class="cmp-table">
+        <tr><th>Method</th><th>Data Needed</th><th>Models in Training</th><th>Stability</th><th>Used By</th></tr>
+        <tr><td><strong>SFT only</strong></td><td>Demonstration pairs</td><td>1</td><td>✅ Very stable</td><td>All models (base)</td></tr>
+        <tr><td><strong>PPO-RLHF</strong></td><td>Preference pairs + RM</td><td>4</td><td>⚠️ Unstable</td><td>GPT-4, Claude (early), InstructGPT</td></tr>
+        <tr><td><strong>DPO</strong></td><td>Paired preferences</td><td>2</td><td>✅ Stable</td><td>LLaMA-2, Zephyr, Mistral</td></tr>
+        <tr><td><strong>KTO</strong></td><td>Binary labels (no pairs needed)</td><td>2</td><td>✅ Stable</td><td>Mistral, newer open models</td></tr>
+        <tr><td><strong>Constitutional AI</strong></td><td>Constitution + AI labels</td><td>3–4</td><td>✅ Scalable</td><td>Claude 2/3</td></tr>
+        <tr><td><strong>RLAIF</strong></td><td>Prompts + AI judge</td><td>3–4</td><td>✅ Cheaper than RLHF</td><td>Gemini, Claude variants</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section">
+  <h3>🧠 Knowledge Check: Post-Training Alignment</h3>
+
+  <div class="quiz-q">
+    <p>1. In RLHF with PPO, why is the KL divergence penalty term essential?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Speeding up training is a nice side effect, but not the primary purpose. The KL penalty specifically addresses the risk of the policy diverging catastrophically from the base model.')">To speed up training convergence</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The KL penalty actually constrains how far the policy can move from the reference, which can reduce sample diversity. It is not designed to encourage exploration.')">To encourage exploration of diverse responses</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Without the KL penalty, the PPO policy would over-optimize the reward model, discovering degenerate high-reward responses that look nothing like natural language. The reward model is imperfect — gaming it produces gibberish that scores high. The KL term anchors π_θ near the well-behaved SFT reference policy π_ref, preventing reward hacking.')">To prevent reward hacking by constraining the policy near the SFT reference</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The KL penalty does not directly ensure safety — that is the reward model\'s job. The KL term prevents distributional collapse and reward hacking, not unsafe content specifically.')">To ensure the model produces safe responses</button>
+    </div>
+    <div class="quiz-feedback" id="qf1"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>2. What is the key mathematical insight that makes DPO work without a separate reward model?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','DPO does not use the full RLHF objective — it derives a simpler supervised classification objective from it. The simplification is the point.')">DPO directly optimizes the same RLHF objective as PPO</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The key insight (Rafailov et al.) is that the optimal RLHF policy has a closed-form solution: π*(y|x) ∝ π_ref(y|x)·exp(r*(x,y)/β). Rearranging, the optimal reward can be expressed as a log ratio of the policy to the reference — β·log(π*/π_ref). This allows the Bradley-Terry preference model to be written entirely in terms of π_θ and π_ref, eliminating the need for an explicit reward model. Training becomes a binary classification problem.')">The optimal RLHF policy can be expressed as a log-ratio of policy to reference, allowing reward to be implicit</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','DPO uses the same preference data as RLHF — ranked comparisons. The difference is how that data is used: DPO transforms it into a supervised loss rather than training a separate reward model.')">DPO uses a different type of preference data than RLHF</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','DPO uses exactly 2 models: the policy π_θ and the frozen reference π_ref. RLHF uses 4. DPO\'s advantage is the reduction from 4 to 2 models, not the number of forward passes.')">DPO eliminates the reference model, using only one model</button>
+    </div>
+    <div class="quiz-feedback" id="qf2"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>3. Constitutional AI (CAI) replaces human preference labelers with what?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CAI does use written principles (a constitution) but does not crowdsource feedback from users. The feedback in stage 2 (RLAIF) comes from an AI model judging pairs according to the constitution.')">Crowdsourced user feedback through the product</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Symbolic rule engines can\'t handle the nuance of free-text responses. CAI uses an LLM to judge, guided by explicit constitutional principles — not hard-coded rules.')">Rule-based symbolic AI systems</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Constitutional AI (Anthropic 2022) uses RLAIF — Reinforcement Learning from AI Feedback. A critique/revision model (the "feedback model") judges response pairs according to explicit constitutional principles. This scales much cheaper than human labelers: AI preference labels cost ~$0.002 vs $1–10 for human judgments. The written constitution also makes the safety criteria transparent and auditable.')">An AI model judging responses according to explicit written principles (RLAIF)</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Red-teaming is part of CAI Stage 1 (SL-CAI) — it generates harmful prompts to practice self-critique. But the RL stage (RLAIF) uses AI preference labels, not red-team experts.')">Red-team expert labelers who test edge cases</button>
+    </div>
+    <div class="quiz-feedback" id="qf3"></div>
+  </div>
+
+  <div class="quiz-q">
+    <p>4. What key advantage does KTO have over DPO in terms of data requirements?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','KTO does not require less total data — it requires different data. The advantage is the type of annotation needed, not the quantity.')">KTO requires less total training data</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! DPO requires paired preferences: for each prompt, you need one preferred AND one rejected response. Collecting pairs is costly. KTO only needs individual binary labels — (prompt, response, good/bad) — derived from prospect theory\'s desirability function. Any existing binary signal (thumbs up/down, error logs, helpfulness ratings) can be used directly without pairing.')">KTO works with individual binary labels (good/bad) rather than requiring paired preferences</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Both DPO and KTO use 2 models (policy + reference). The number of models is the same; the difference is the data format.')">KTO requires fewer model forward passes during training</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','KTO does not use reinforcement learning with an explicit reward signal. Like DPO, it is a supervised learning approach — the key contribution is handling unpaired preference data using prospect theory.')">KTO uses reinforcement learning with a stronger reward signal</button>
+    </div>
+    <div class="quiz-feedback" id="qf4"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function answerQuiz(btn, result, explanation) {
+  const parent = btn.closest('.quiz-q');
+  const opts = parent.querySelectorAll('.quiz-opt');
+  const feedbackEl = parent.querySelector('.quiz-feedback');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(result);
+  feedbackEl.textContent = explanation;
+  feedbackEl.className = `quiz-feedback show ${result}`;
+}
+</script>
+</body>
+</html>
