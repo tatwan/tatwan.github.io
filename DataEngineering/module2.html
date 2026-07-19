@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 – Sources &amp; Ingestion | Data Engineering</title>
+<meta name="description" content="Learn batch, incremental, CDC, and event-driven ingestion patterns. Understand schema drift, data contracts, and tools like Airbyte, Fivetran, and dlt.">
+<style>
+  :root{--primary:#059669;--primary-light:#f0fdf4;--primary-dark:#047857;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#047857 0%,#059669 60%,#34d399 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .pillbox{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.pill{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase}.pill.what{background:#dbeafe;color:#1d4ed8}.pill.why{background:#d1fae5;color:#065f46}.pill.how{background:#fef3c7;color:#92400e}.pill.key{background:#ede9fe;color:#5b21b6}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}.bad{color:#dc2626;font-weight:600}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .diagram-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}.diagram-card h4{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:18px}.flow-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.flow-box{min-width:100px;padding:14px 18px;border-radius:10px;text-align:center;font-weight:750;font-size:.88rem}.flow-box.source{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}.flow-box.process{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}.flow-box.target{background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd}.flow-arrow{color:#94a3b8;font-size:1.3rem;font-weight:900}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#065f46;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}.flow-row{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 2 of 10</span>
+  <div class="nav-links"><a href="module1.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module3.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 02 &middot; Movement</div>
+    <h1>Sources &amp; Ingestion</h1>
+    <p>Ingestion is the first engineering decision: how to move data from operational systems into your analytical platform without harming sources, losing change semantics, or breaking when schemas evolve.</p>
+    <div class="header-chips"><span class="chip">50 to 70 min</span><span class="chip">Foundation to Intermediate</span><span class="chip">6 concepts &middot; 1 interactive &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <!-- SECTION 1: Source Systems -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg></div>
+        <div><h2>Understanding Source Systems</h2><span class="sub">Data exists to run the business first</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Types of source systems</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">Common sources</div>
+            <ul>
+              <li><strong>OLTP databases</strong>: PostgreSQL, MySQL, SQL Server, Oracle (the primary operational backbone)</li>
+              <li><strong>SaaS applications</strong>: Salesforce, HubSpot, Stripe, Shopify (accessed via REST APIs)</li>
+              <li><strong>Files and object storage</strong>: CSV, JSON, XML, Parquet files dropped in S3/ADLS/GCS</li>
+              <li><strong>Event streams</strong>: Kafka topics, webhooks, IoT sensor data, application logs</li>
+              <li><strong>Third-party APIs</strong>: Weather data, financial feeds, social media, geolocation services</li>
+              <li><strong>Legacy systems</strong>: Mainframes, FTP drops, Excel files, email attachments</li>
+            </ul>
+          </div>
+          <div class="explainer"><div class="explainer-label how">Key questions about any source</div>
+            <ul>
+              <li><strong>Ownership</strong>: Who owns this data? Who approves access?</li>
+              <li><strong>Change pattern</strong>: Append-only, updates, deletes, or full snapshots?</li>
+              <li><strong>Volume and frequency</strong>: How much data, how often?</li>
+              <li><strong>Schema stability</strong>: How often does the schema change? Is there a contract?</li>
+              <li><strong>Extraction impact</strong>: Can the source handle extraction load?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Ingestion Patterns -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#d1fae5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-5-5m5 5l5-5"/><path d="M4 21h16"/></svg></div>
+        <div><h2>Ingestion Patterns</h2><span class="sub">Batch, incremental, CDC, and streaming</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Full load (snapshot)</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Extract the <strong>entire table</strong> on every run. Simple but expensive at scale. Common for initial loads, reference/lookup tables, or when no reliable change tracking exists.</p></div>
+          <div class="explainer"><div class="explainer-label why">When to use</div>
+            <ul>
+              <li>Initial migration or bootstrap load</li>
+              <li>Small reference tables (countries, currencies, product categories)</li>
+              <li>Sources with no reliable updated_at or change tracking</li>
+              <li>When simplicity outweighs efficiency</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Incremental load</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Extract only <strong>new or changed rows</strong> since the last extraction, typically using a watermark column (updated_at, created_at, or a sequence ID). Efficient but may miss deletes.</p></div>
+          <div class="explainer"><div class="explainer-label how">How it works</div>
+            <ul>
+              <li>Store a high-watermark (the max timestamp from the last successful run)</li>
+              <li>Query: <code>WHERE updated_at &gt; last_watermark</code></li>
+              <li>Append or merge the results into the target</li>
+              <li><strong>Limitation:</strong> Does not capture deletes unless soft-delete flags exist</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Change Data Capture (CDC)</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>CDC captures <strong>every insert, update, and delete</strong> as it happens in the source database, typically by reading the database transaction log (Write-Ahead Log in PostgreSQL, Binary Log in MySQL). This gives you a complete, ordered stream of all changes.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why it matters</div><p>CDC is the most accurate way to replicate data because it captures deletes (which incremental loads miss), preserves the order of changes, and has minimal impact on the source database since it reads the log rather than running queries.</p></div>
+          <div class="explainer"><div class="explainer-label how">Tools and implementation</div>
+            <ul>
+              <li><strong>Debezium</strong>: open-source CDC connector for PostgreSQL, MySQL, SQL Server, MongoDB</li>
+              <li><strong>AWS DMS</strong>: managed database migration and replication service</li>
+              <li><strong>Fivetran / Airbyte</strong>: managed CDC connectors for many databases</li>
+              <li><strong>Flow:</strong> Source DB log &rarr; Debezium &rarr; Kafka topic &rarr; Consumer (Spark, Flink, etc.)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Event-driven / streaming ingestion</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Data arrives as a continuous, unbounded stream of events: clickstream data, IoT sensors, application logs, transaction events. There is no "batch" boundary; events flow continuously and must be processed with awareness of time, ordering, and state.</p></div>
+          <div class="explainer"><div class="explainer-label how">Key components</div>
+            <ul>
+              <li><strong>Event producers</strong>: applications, sensors, user interactions</li>
+              <li><strong>Event broker</strong>: Kafka, Kinesis, Pub/Sub, Event Hubs (durable, replayable log)</li>
+              <li><strong>Stream processor</strong>: Flink, Kafka Streams, Spark Structured Streaming</li>
+              <li><strong>Sink</strong>: Data lake, warehouse, feature store, real-time dashboard</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Pattern</th><th>Captures deletes?</th><th>Latency</th><th>Source impact</th><th>Complexity</th></tr>
+        <tr><td><strong>Full load</strong></td><td class="good">Yes (implicit)</td><td>Hours</td><td class="bad">High (full scan)</td><td class="good">Low</td></tr>
+        <tr><td><strong>Incremental</strong></td><td class="bad">No</td><td>Minutes to hours</td><td>Moderate</td><td>Low</td></tr>
+        <tr><td><strong>CDC</strong></td><td class="good">Yes</td><td>Seconds to minutes</td><td class="good">Low (reads log)</td><td>Moderate</td></tr>
+        <tr><td><strong>Streaming</strong></td><td>N/A (events)</td><td class="good">Seconds</td><td class="good">Low</td><td class="bad">High</td></tr>
+      </table>
+    </div>
+
+    <!-- SECTION 3: Schema Drift & Contracts -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></div>
+        <div><h2>Schema Drift &amp; Data Contracts</h2><span class="sub">When the source changes without warning</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Schema drift: the silent pipeline killer</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Schema drift occurs when the source system changes its schema (a column is renamed, a new column is added, a data type changes, or a column is dropped) <strong>without coordination with the data team</strong>. This is one of the most common causes of pipeline failures in production.</p></div>
+          <div class="explainer"><div class="explainer-label how">Strategies for handling it</div>
+            <ul>
+              <li><strong>Schema evolution</strong>: Table formats like Iceberg and Delta support adding, renaming, and reordering columns without breaking existing readers</li>
+              <li><strong>Schema contracts</strong>: Formal agreements between producers and consumers about what changes are allowed</li>
+              <li><strong>Schema registry</strong>: Centralized service (Confluent Schema Registry) that validates event schemas before they reach the pipeline</li>
+              <li><strong>Defensive ingestion</strong>: Land raw data first (schema-on-read), then validate during transformation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Data contracts: the solution</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>A data contract is a <strong>formal agreement between a data producer and consumer</strong> that specifies the schema, semantics, quality expectations, SLAs, ownership, and change management process. It is like an API contract for data.</p></div>
+          <div class="explainer"><div class="explainer-label how">What a contract includes</div>
+            <ul>
+              <li><strong>Schema</strong>: column names, types, nullable constraints</li>
+              <li><strong>Semantics</strong>: what each field means (business glossary)</li>
+              <li><strong>Quality expectations</strong>: freshness, completeness, uniqueness</li>
+              <li><strong>SLA</strong>: delivery schedule, latency, availability</li>
+              <li><strong>Owner</strong>: who is responsible for maintaining the contract</li>
+              <li><strong>Change policy</strong>: how breaking changes are communicated and versioned</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Ingestion Tools -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+        <div><h2>Ingestion Tools</h2><span class="sub">The modern connector ecosystem</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Compare ingestion tools</h4>
+        <p class="desc">Select a tool to see its strengths, limitations, and best use case.</p>
+        <div class="toggle-group" id="toolToggle">
+          <button class="toggle-btn active" data-tool="airbyte">Airbyte</button>
+          <button class="toggle-btn" data-tool="fivetran">Fivetran</button>
+          <button class="toggle-btn" data-tool="dlt">dlt</button>
+          <button class="toggle-btn" data-tool="kafka">Kafka Connect</button>
+          <button class="toggle-btn" data-tool="custom">Custom Python</button>
+        </div>
+        <div class="result-panel" id="toolResult">
+          <h5>Airbyte: Open-source EL(T) platform</h5>
+          <p><strong>Type:</strong> Open-source, self-hosted or cloud. <strong>Strengths:</strong> 300+ pre-built connectors, UI-based configuration, supports CDC for databases, community-driven. <strong>Best for:</strong> Teams that want managed connectors without vendor lock-in. <strong>Limitation:</strong> Some connectors are community-maintained with varying quality. Not designed for real-time streaming.</p>
+        </div>
+      </div>
+
+      <div class="diagram-card">
+        <h4>Typical ingestion architecture</h4>
+        <div class="flow-row">
+          <div class="flow-box source">OLTP DB</div>
+          <div class="flow-box source">SaaS API</div>
+          <div class="flow-box source">Files</div>
+          <div class="flow-box source">Events</div>
+        </div>
+        <div class="flow-row"><span class="flow-arrow">&darr;</span></div>
+        <div class="flow-row">
+          <div class="flow-box process" style="min-width:260px;">Ingestion Layer<br><small style="font-weight:500;">Airbyte / Fivetran / dlt / Kafka Connect</small></div>
+        </div>
+        <div class="flow-row"><span class="flow-arrow">&darr;</span></div>
+        <div class="flow-row">
+          <div class="flow-box target" style="min-width:260px;">Bronze / Raw Landing Zone<br><small style="font-weight:500;">S3 / ADLS / GCS (Parquet, JSON)</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 2</h3>
+
+      <div class="quiz-q" data-answer="c">
+        <p>1. Which ingestion pattern captures deletes with minimal impact on the source database?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Full load (snapshot)</button>
+          <button class="quiz-opt" data-val="b">Incremental load with watermark</button>
+          <button class="quiz-opt" data-val="c">Change Data Capture (CDC) via transaction log</button>
+          <button class="quiz-opt" data-val="d">Manual CSV export</button>
+        </div>
+        <div class="quiz-explanation">CDC reads the database transaction log to capture all inserts, updates, and deletes. It has minimal source impact because it reads the log rather than running queries against the production database.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>2. What is the main limitation of incremental loading with a watermark?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">It cannot capture hard deletes from the source</button>
+          <button class="quiz-opt" data-val="b">It requires Kafka</button>
+          <button class="quiz-opt" data-val="c">It only works with PostgreSQL</button>
+          <button class="quiz-opt" data-val="d">It is always slower than full loads</button>
+        </div>
+        <div class="quiz-explanation">Incremental loads query WHERE updated_at > last_watermark. If a row is physically deleted from the source, there is no update to the watermark column, so the delete goes undetected unless the source uses soft deletes.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>3. A source team renames a column without telling the data team. What problem did this cause?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Data duplication in the warehouse</button>
+          <button class="quiz-opt" data-val="b">Schema drift, causing the pipeline to break or produce incorrect results</button>
+          <button class="quiz-opt" data-val="c">The data lake runs out of storage</button>
+          <button class="quiz-opt" data-val="d">The orchestrator stops scheduling all jobs</button>
+        </div>
+        <div class="quiz-explanation">An uncoordinated schema change is schema drift. It can cause pipeline failures (column not found), silent data loss (null values where data should exist), or incorrect transformations.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. What is the purpose of a data contract?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">To encrypt data in transit</button>
+          <button class="quiz-opt" data-val="b">To choose between AWS and GCP</button>
+          <button class="quiz-opt" data-val="c">To compress Parquet files</button>
+          <button class="quiz-opt" data-val="d">To formally agree on schema, quality, SLAs, and change management between producers and consumers</button>
+        </div>
+        <div class="quiz-explanation">A data contract is a formal agreement about what the data looks like, what quality it must meet, how often it arrives, who owns it, and how changes are communicated. It prevents schema drift and quality surprises.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>5. When is streaming ingestion the right choice over batch?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">When building a monthly financial report</button>
+          <button class="quiz-opt" data-val="b">When loading reference data like country codes</button>
+          <button class="quiz-opt" data-val="c">When processing unbounded events that require second-level latency</button>
+          <button class="quiz-opt" data-val="d">When the source is a single CSV file</button>
+        </div>
+        <div class="quiz-explanation">Streaming is warranted when data arrives continuously without a natural batch boundary and the use case demands low-latency processing (fraud detection, real-time dashboards, IoT). Monthly reports and reference data are perfectly served by batch.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module1.html" style="color:var(--primary);">&larr; Module 1: Foundations</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module3.html" style="color:var(--primary);">Module 3: Storage &amp; Formats &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const toolData = {
+    airbyte:{title:'Airbyte: Open-source EL(T) platform',desc:'<strong>Type:</strong> Open-source, self-hosted or cloud. <strong>Strengths:</strong> 300+ pre-built connectors, UI-based configuration, supports CDC for databases, community-driven. <strong>Best for:</strong> Teams that want managed connectors without vendor lock-in. <strong>Limitation:</strong> Some connectors are community-maintained with varying quality. Not designed for real-time streaming.'},
+    fivetran:{title:'Fivetran: Fully managed data movement',desc:'<strong>Type:</strong> SaaS (fully managed). <strong>Strengths:</strong> Zero-maintenance connectors, automatic schema handling, incremental updates, excellent reliability. <strong>Best for:</strong> Teams that want to eliminate connector maintenance entirely. <strong>Limitation:</strong> Usage-based pricing can get expensive at scale. Less customizable than open-source alternatives.'},
+    dlt:{title:'dlt (data load tool): Python-native ingestion',desc:'<strong>Type:</strong> Open-source Python library. <strong>Strengths:</strong> Python-first, lightweight, schema inference, automatic normalization, works anywhere Python runs. <strong>Best for:</strong> Engineers who prefer code over UI, custom API integrations. <strong>Limitation:</strong> Fewer pre-built connectors than Airbyte/Fivetran. Best for custom sources.'},
+    kafka:{title:'Kafka Connect: Distributed connector framework',desc:'<strong>Type:</strong> Part of Apache Kafka ecosystem. <strong>Strengths:</strong> Distributed, scalable, fault-tolerant, deep integration with Kafka. Source and sink connectors. <strong>Best for:</strong> Teams already running Kafka who need streaming-first data integration. <strong>Limitation:</strong> Requires Kafka infrastructure. Higher operational complexity.'},
+    custom:{title:'Custom Python scripts: Full control',desc:'<strong>Type:</strong> Custom code (requests, SQLAlchemy, boto3). <strong>Strengths:</strong> Maximum flexibility, handles any source, no vendor dependency. <strong>Best for:</strong> Unique sources with no available connector, complex transformation during extraction. <strong>Limitation:</strong> You own all maintenance, error handling, retry logic, and monitoring. The "undifferentiated heavy lifting" you should avoid when a connector exists.'}
+  };
+  document.querySelectorAll('[data-tool]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-tool]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = toolData[btn.dataset.tool];
+      document.getElementById('toolResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 3.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#059669'; o.style.background='#f0fdf4'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='ingestion',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

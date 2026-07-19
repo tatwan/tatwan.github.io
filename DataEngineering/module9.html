@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 9 – Tools &amp; Technology Landscape | Data Engineering</title>
+<meta name="description" content="Deep dive into Databricks, Snowflake, dbt, Airflow, Spark, PySpark, Kafka, cloud platforms, and decision frameworks for choosing the right tool.">
+<style>
+  :root{--primary:#b45309;--primary-light:#fffbeb;--primary-dark:#92400e;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#92400e 0%,#b45309 60%,#fbbf24 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary-dark)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#92400e;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 9 of 10</span>
+  <div class="nav-links"><a href="module8.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module10.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 09 &middot; Ecosystem</div>
+    <h1>Tools &amp; Technology Landscape</h1>
+    <p>The data engineering ecosystem has more tools than any team can adopt. This module provides deep dives into the most important platforms and decision frameworks for when to use each one.</p>
+    <div class="header-chips"><span class="chip">70 to 90 min</span><span class="chip">Intermediate</span><span class="chip">4 deep dives &middot; 2 interactives &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M4 15h16M6 11h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"/></svg></div>
+        <div><h2>Platform Deep Dives</h2><span class="sub">Databricks, Snowflake, and cloud services</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Compare platforms</h4>
+        <p class="desc">Select a platform to understand its architecture, strengths, and ideal use case.</p>
+        <div class="toggle-group" id="platToggle">
+          <button class="toggle-btn active" data-plat="databricks">Databricks</button>
+          <button class="toggle-btn" data-plat="snowflake">Snowflake</button>
+          <button class="toggle-btn" data-plat="bigquery">BigQuery</button>
+          <button class="toggle-btn" data-plat="redshift">Redshift</button>
+          <button class="toggle-btn" data-plat="fabric">Microsoft Fabric</button>
+        </div>
+        <div class="result-panel" id="platResult">
+          <h5>Databricks: The Lakehouse Platform</h5>
+          <p><strong>Architecture:</strong> Built on Apache Spark. Unified lakehouse platform with Delta Lake as the default table format. Runs on AWS, Azure, and GCP. <strong>Strengths:</strong> Excellent Spark performance (Photon engine), Unity Catalog for governance, integrated ML (MLflow), SQL analytics, streaming, and notebooks. <strong>Best for:</strong> Teams that need Spark at scale, ML pipelines, and a unified platform for data engineering + data science. <strong>Key feature:</strong> Delta Live Tables for declarative ETL, Unity Catalog for cross-workspace governance.</p>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Feature</th><th>Databricks</th><th>Snowflake</th><th>BigQuery</th><th>Redshift</th></tr>
+        <tr><td><strong>Architecture</strong></td><td>Lakehouse (Spark)</td><td>Cloud warehouse</td><td>Serverless warehouse</td><td>MPP warehouse</td></tr>
+        <tr><td><strong>Default format</strong></td><td>Delta Lake</td><td>Proprietary + Iceberg</td><td>Capacitor (internal)</td><td>Proprietary columnar</td></tr>
+        <tr><td><strong>Compute model</strong></td><td>Clusters</td><td>Virtual warehouses</td><td class="good">Serverless</td><td>Clusters</td></tr>
+        <tr><td><strong>Multi-cloud</strong></td><td class="good">Yes</td><td class="good">Yes</td><td>GCP only</td><td>AWS primary</td></tr>
+        <tr><td><strong>ML integration</strong></td><td class="good">Native (MLflow)</td><td>Snowpark ML</td><td>BigQuery ML</td><td>SageMaker</td></tr>
+        <tr><td><strong>Streaming</strong></td><td class="good">Structured Streaming</td><td>Snowpipe</td><td>Streaming inserts</td><td>Kinesis integration</td></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5L3 12l5 7"/><path d="M16 5l5 7-5 7"/></svg></div>
+        <div><h2>Key Tools Deep Dive</h2><span class="sub">Spark, dbt, Airflow, and more</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Apache Spark and PySpark</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Apache Spark is a <strong>distributed computing framework</strong> for processing large datasets across clusters. PySpark is its Python API. Spark supports batch processing (DataFrames, Spark SQL), streaming (Structured Streaming), machine learning (MLlib), and graph processing (GraphX).</p></div>
+          <div class="explainer"><div class="explainer-label how">Key concepts</div>
+            <ul>
+              <li><strong>Lazy evaluation</strong>: transformations build a plan; actions trigger execution</li>
+              <li><strong>Partitioning</strong>: data is distributed across executors for parallel processing</li>
+              <li><strong>Catalyst optimizer</strong>: optimizes query plans automatically</li>
+              <li><strong>DataFrame API</strong>: structured, SQL-like operations on distributed data</li>
+              <li><strong>Runs on</strong>: Databricks, EMR, Dataproc, standalone clusters, Kubernetes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>dbt (data build tool)</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>dbt transforms data inside the warehouse using <strong>SQL + Jinja templating</strong>. It brings software engineering practices to analytics: version control, modular SQL models, automated testing, and auto-generated documentation. dbt does not extract or load data; it only transforms.</p></div>
+          <div class="explainer"><div class="explainer-label how">Core features</div>
+            <ul>
+              <li><strong>Models</strong>: SQL SELECT statements that define transformations</li>
+              <li><strong>Tests</strong>: built-in (unique, not_null, accepted_values, relationships) and custom SQL tests</li>
+              <li><strong>Documentation</strong>: auto-generated data catalog with descriptions and lineage</li>
+              <li><strong>Materializations</strong>: table, view, incremental, ephemeral</li>
+              <li><strong>Packages</strong>: reusable macros and models (dbt_utils, dbt_expectations)</li>
+              <li><strong>Runs on</strong>: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, DuckDB</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Cloud platform comparison: AWS vs. Azure vs. GCP</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <table class="compare-table">
+            <tr><th>Service category</th><th>AWS</th><th>Azure</th><th>GCP</th></tr>
+            <tr><td><strong>Object storage</strong></td><td>S3</td><td>ADLS Gen2</td><td>Cloud Storage (GCS)</td></tr>
+            <tr><td><strong>Warehouse</strong></td><td>Redshift</td><td>Synapse / Fabric</td><td>BigQuery</td></tr>
+            <tr><td><strong>Spark</strong></td><td>EMR</td><td>HDInsight / Synapse Spark</td><td>Dataproc</td></tr>
+            <tr><td><strong>Streaming</strong></td><td>Kinesis / MSK</td><td>Event Hubs / HDInsight Kafka</td><td>Pub/Sub / Dataflow</td></tr>
+            <tr><td><strong>Orchestration</strong></td><td>MWAA (Airflow) / Step Functions</td><td>Data Factory / Synapse Pipelines</td><td>Cloud Composer (Airflow)</td></tr>
+            <tr><td><strong>Serverless functions</strong></td><td>Lambda</td><td>Azure Functions</td><td>Cloud Functions</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>
+        <div><h2>Decision Frameworks</h2><span class="sub">How to choose the right tool</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>When to use what: practical guidelines</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label how">Decision criteria</div>
+            <ul>
+              <li><strong>Data volume</strong>: GBs (Pandas/DuckDB) vs. TBs (Spark/warehouse) vs. PBs (Spark cluster)</li>
+              <li><strong>Latency requirement</strong>: Batch (Airflow+dbt), near-real-time (Spark Streaming), real-time (Flink+Kafka)</li>
+              <li><strong>Team skills</strong>: SQL-first teams (dbt+Snowflake), Python teams (Spark/Dagster), mixed (Databricks)</li>
+              <li><strong>Budget model</strong>: Pay-per-query (BigQuery), reserved capacity (Redshift), usage-based (Databricks/Snowflake credits)</li>
+              <li><strong>Vendor lock-in tolerance</strong>: Open-source stack (Iceberg+Spark+Airflow) vs. managed platform (Databricks/Snowflake)</li>
+              <li><strong>Existing infrastructure</strong>: Cloud-native services align with your primary cloud provider</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 9</h3>
+
+      <div class="quiz-q" data-answer="c">
+        <p>1. What is the primary purpose of dbt in a data pipeline?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Extract data from source systems</button>
+          <button class="quiz-opt" data-val="b">Orchestrate DAG execution schedules</button>
+          <button class="quiz-opt" data-val="c">SQL-based transformation with testing, docs, and version control inside the warehouse</button>
+          <button class="quiz-opt" data-val="d">Real-time stream processing</button>
+        </div>
+        <div class="quiz-explanation">dbt handles only the T in ELT: it transforms data already loaded into the warehouse using SQL models with testing, documentation, and version control. It does not extract, load, orchestrate, or stream.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>2. What differentiates Databricks from Snowflake architecturally?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Databricks is a lakehouse built on Spark; Snowflake is a cloud-native SQL warehouse</button>
+          <button class="quiz-opt" data-val="b">Snowflake supports Python; Databricks does not</button>
+          <button class="quiz-opt" data-val="c">Databricks only runs on AWS</button>
+          <button class="quiz-opt" data-val="d">Snowflake uses Delta Lake; Databricks uses Iceberg</button>
+        </div>
+        <div class="quiz-explanation">Databricks is built on Apache Spark with Delta Lake as its lakehouse format. Snowflake is a purpose-built cloud warehouse with a proprietary storage engine. Both are multi-cloud, both support Python (Databricks natively, Snowflake via Snowpark).</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>3. For a 2 GB CSV file that needs quick analysis, which tool is the best fit?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Deploy a Spark cluster on Databricks</button>
+          <button class="quiz-opt" data-val="b">DuckDB or Polars on your laptop</button>
+          <button class="quiz-opt" data-val="c">Set up Apache Flink</button>
+          <button class="quiz-opt" data-val="d">Build a Kafka pipeline</button>
+        </div>
+        <div class="quiz-explanation">DuckDB and Polars excel at fast, single-machine analytics on small to medium datasets. Deploying Spark, Flink, or Kafka for a 2 GB file adds unnecessary complexity and infrastructure cost.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. What does "lazy evaluation" mean in Apache Spark?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Spark processes data very slowly</button>
+          <button class="quiz-opt" data-val="b">Spark skips null values automatically</button>
+          <button class="quiz-opt" data-val="c">Spark only runs on weekends</button>
+          <button class="quiz-opt" data-val="d">Transformations build a plan; execution only happens when an action is triggered</button>
+        </div>
+        <div class="quiz-explanation">Spark's lazy evaluation means transformations (filter, map, join) are recorded as a plan but not executed until an action (count, collect, write) triggers it. This allows the Catalyst optimizer to optimize the entire plan before executing.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>5. Which factor should NOT drive your primary tool selection?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Data volume and latency requirements</button>
+          <button class="quiz-opt" data-val="b">Team skills and existing infrastructure</button>
+          <button class="quiz-opt" data-val="c">How many stars the tool has on GitHub</button>
+          <button class="quiz-opt" data-val="d">Budget model and vendor lock-in tolerance</button>
+        </div>
+        <div class="quiz-explanation">GitHub stars measure popularity, not fit. Tool selection should be driven by requirements (volume, latency), team capabilities, budget, existing infrastructure, and vendor lock-in tolerance.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module8.html" style="color:var(--primary);">&larr; Module 8: Govern &amp; Observe</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module10.html" style="color:var(--primary);">Module 10: Scale &amp; Architecture &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const platData = {
+    databricks:{title:'Databricks: The Lakehouse Platform',desc:'<strong>Architecture:</strong> Built on Apache Spark. Unified lakehouse platform with Delta Lake as the default table format. Runs on AWS, Azure, and GCP. <strong>Strengths:</strong> Excellent Spark performance (Photon engine), Unity Catalog for governance, integrated ML (MLflow), SQL analytics, streaming, and notebooks. <strong>Best for:</strong> Teams that need Spark at scale, ML pipelines, and a unified platform for data engineering + data science. <strong>Key feature:</strong> Delta Live Tables for declarative ETL, Unity Catalog for cross-workspace governance.'},
+    snowflake:{title:'Snowflake: The Cloud Data Warehouse',desc:'<strong>Architecture:</strong> Multi-cluster shared data architecture with separate compute and storage. Proprietary columnar format, now adding Iceberg support. <strong>Strengths:</strong> Easiest warehouse to operate, near-zero administration, instant scaling (virtual warehouses), time travel, data sharing across accounts, Snowpark for Python/Java/Scala. <strong>Best for:</strong> SQL-first analytics teams wanting operational simplicity and powerful BI. <strong>Key feature:</strong> Data sharing and marketplace for cross-organization collaboration.'},
+    bigquery:{title:'BigQuery: Serverless Analytics',desc:'<strong>Architecture:</strong> Fully serverless (no clusters to manage). Columnar storage (Capacitor format), slots-based compute. <strong>Strengths:</strong> Truly serverless (pay per query or flat-rate slots), petabyte-scale, built-in ML (BigQuery ML), federated queries across GCS and other sources. <strong>Best for:</strong> GCP-native teams wanting serverless simplicity and pay-per-query economics. <strong>Key feature:</strong> No infrastructure management at all.'},
+    redshift:{title:'Redshift: AWS MPP Warehouse',desc:'<strong>Architecture:</strong> Massively parallel processing (MPP) database, provisioned or serverless mode. <strong>Strengths:</strong> Deep AWS integration (S3, Glue, SageMaker), Redshift Spectrum for querying S3, cost-effective for steady workloads with reserved instances. <strong>Best for:</strong> AWS-native teams with predictable query workloads. <strong>Key feature:</strong> Redshift Spectrum extends queries to external S3 data without loading.'},
+    fabric:{title:'Microsoft Fabric: Unified Analytics',desc:'<strong>Architecture:</strong> Microsoft\'s unified analytics platform built on OneLake (a single data lake for the organization). Integrates Data Factory, Synapse, Power BI, and ML into one platform. <strong>Strengths:</strong> Tight Microsoft 365 and Teams integration, OneLake shared storage, Power BI native, Copilot AI assistance. <strong>Best for:</strong> Microsoft-centric organizations wanting a single integrated analytics experience. <strong>Key feature:</strong> OneLake eliminates data silos across business units.'}
+  };
+  document.querySelectorAll('[data-plat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-plat]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = platData[btn.dataset.plat];
+      document.getElementById('platResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 10.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#b45309'; o.style.background='#fffbeb'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='tools',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

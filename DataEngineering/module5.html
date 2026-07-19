@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 5 – Data Modeling | Data Engineering</title>
+<meta name="description" content="Bill Inmon 3NF top-down, Ralph Kimball star schema, Data Vault 2.0 hubs links satellites, ETL vs ELT, schema on read vs write, slowly changing dimensions.">
+<style>
+  :root{--primary:#e11d48;--primary-light:#fff1f2;--primary-dark:#be123c;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary-dark)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#be123c 0%,#e11d48 60%,#fb7185 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .pillbox{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.pill{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase}.pill.what{background:#dbeafe;color:#1d4ed8}.pill.why{background:#d1fae5;color:#065f46}.pill.how{background:#fef3c7;color:#92400e}.pill.key{background:#ede9fe;color:#5b21b6}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}.bad{color:#dc2626;font-weight:600}
+  .methodology-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.method-card{padding:24px;border-radius:14px;border:2px solid var(--line);background:var(--card)}.method-card h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--navy)}.method-card .pioneer{font-size:.82rem;color:var(--muted);margin-bottom:14px}.method-card .approach-tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}.method-card ul{padding-left:18px;font-size:.88rem;color:#374151}.method-card li{margin-bottom:4px}
+  .diagram-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}.diagram-card h4{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:18px}.flow-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.flow-box{min-width:100px;padding:14px 18px;border-radius:10px;text-align:center;font-weight:750;font-size:.88rem}.flow-arrow{color:#94a3b8;font-size:1.3rem;font-weight:900}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary-dark)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#9f1239;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}.methodology-cards{grid-template-columns:1fr}.flow-row{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 5 of 10</span>
+  <div class="nav-links"><a href="module4.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module6.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 05 &middot; Meaning</div>
+    <h1>Data Modeling</h1>
+    <p>Clean data is not yet business-ready data. Modeling organizes trusted data around decisions, metrics, and business questions. Three major methodologies have shaped the field, each with distinct trade-offs.</p>
+    <div class="header-chips"><span class="chip">70 to 90 min</span><span class="chip">Intermediate</span><span class="chip">6 concepts &middot; 1 interactive &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <!-- SECTION 1: Three Methodologies -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fff1f2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><h2>Three Modeling Methodologies</h2><span class="sub">Inmon, Kimball, and Data Vault 2.0</span></div>
+      </div>
+
+      <div class="methodology-cards">
+        <div class="method-card" style="border-color:#3b82f6;">
+          <h4>Bill Inmon</h4>
+          <div class="pioneer">The "Father of Data Warehousing"</div>
+          <div class="approach-tag" style="background:#dbeafe;color:#1d4ed8;">Top-Down &middot; 3NF</div>
+          <ul>
+            <li>Enterprise-wide normalized warehouse</li>
+            <li>Single source of truth (3NF)</li>
+            <li>Data marts derived from the warehouse</li>
+            <li>Long initial build, high consistency</li>
+            <li>Best for: large enterprises needing one governed model</li>
+          </ul>
+        </div>
+        <div class="method-card" style="border-color:#f59e0b;">
+          <h4>Ralph Kimball</h4>
+          <div class="pioneer">Dimensional Modeling Pioneer</div>
+          <div class="approach-tag" style="background:#fef3c7;color:#92400e;">Bottom-Up &middot; Star Schema</div>
+          <ul>
+            <li>Business-process-oriented data marts</li>
+            <li>Star schema: facts + dimensions</li>
+            <li>Conformed dimensions for integration</li>
+            <li>Fast delivery, BI-optimized</li>
+            <li>Best for: BI-first teams wanting quick value</li>
+          </ul>
+        </div>
+        <div class="method-card" style="border-color:#8b5cf6;">
+          <h4>Data Vault 2.0</h4>
+          <div class="pioneer">Dan Linstedt</div>
+          <div class="approach-tag" style="background:#ede9fe;color:#5b21b6;">Hub-Link-Satellite &middot; Agile</div>
+          <ul>
+            <li>Hubs (business keys), Links (relationships), Satellites (descriptive context)</li>
+            <li>History-preserving, fully auditable</li>
+            <li>Parallel loading from many sources</li>
+            <li>Agile and scalable for integration</li>
+            <li>Best for: complex multi-source environments</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Bill Inmon: Top-down enterprise warehouse</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Inmon advocates building a <strong>centralized, normalized (3NF) enterprise data warehouse</strong> first, then deriving dimensional data marts for specific business units. The warehouse is the single source of truth, and all downstream models inherit its consistency.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why choose this</div><p>When the organization needs a single, consistent, enterprise-wide view of data. 3NF minimizes redundancy and update anomalies. Ideal for heavily regulated industries (banking, healthcare) where a single governed truth is critical.</p></div>
+          <div class="explainer"><div class="explainer-label how">Trade-offs</div>
+            <ul>
+              <li><strong>Pro</strong>: Maximum consistency, minimal redundancy, strong governance</li>
+              <li><strong>Pro</strong>: Well-suited for complex, evolving business rules</li>
+              <li><strong>Con</strong>: Long initial build time (can take months before first value)</li>
+              <li><strong>Con</strong>: 3NF queries require many joins, which can be slow for BI</li>
+              <li><strong>Con</strong>: Requires strong upfront enterprise data modeling expertise</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Ralph Kimball: Bottom-up star schema</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Kimball advocates building <strong>dimensional data marts (star schemas)</strong> organized by business process. Facts tables hold measures (revenue, quantity, clicks). Dimension tables hold descriptive context (customer, product, date). Conformed dimensions link marts together into an integrated warehouse.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why choose this</div><p>Fastest path to BI value. Star schemas are intuitive, query-friendly, and optimized for the way analysts think. Build one mart at a time, deliver incremental value, and connect marts through shared dimensions.</p></div>
+          <div class="explainer"><div class="explainer-label how">Key concepts</div>
+            <ul>
+              <li><strong>Fact table</strong>: stores measurable events (sales, clicks, shipments). Contains foreign keys to dimensions and numeric measures.</li>
+              <li><strong>Dimension table</strong>: descriptive context (who, what, where, when). Customer, Product, Date, Geography.</li>
+              <li><strong>Star schema</strong>: one fact table surrounded by dimensions. Simple, fast joins.</li>
+              <li><strong>Snowflake schema</strong>: normalized dimensions (dimension references sub-dimensions). Saves space but adds joins.</li>
+              <li><strong>Conformed dimensions</strong>: shared dimensions across multiple fact tables for consistency.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Data Vault 2.0: Hubs, links, and satellites</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Data Vault 2.0 (Dan Linstedt) is a modeling methodology designed for <strong>agile, scalable data integration</strong> from many sources. It separates data into three entity types: Hubs (business keys), Links (relationships between hubs), and Satellites (descriptive and historical context).</p></div>
+          <div class="explainer"><div class="explainer-label why">Why choose this</div><p>When you need to integrate data from many disparate sources, preserve full history, and support agile development. Data Vault is uniquely suited for environments where sources change frequently and full auditability is required.</p></div>
+          <div class="explainer"><div class="explainer-label how">Components</div>
+            <ul>
+              <li><strong>Hub</strong>: contains only business keys (e.g., customer_id, product_sku). Immutable once loaded.</li>
+              <li><strong>Link</strong>: represents relationships between hubs (e.g., customer_order link). Also immutable.</li>
+              <li><strong>Satellite</strong>: holds descriptive attributes and their history (e.g., customer address history). Temporal, with load_date and record_source.</li>
+              <li><strong>Pattern</strong>: Sources load in parallel to hubs and satellites. No need to coordinate cross-source loading.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Dimension</th><th>Inmon (3NF)</th><th>Kimball (Star)</th><th>Data Vault 2.0</th></tr>
+        <tr><td><strong>Approach</strong></td><td>Top-down</td><td>Bottom-up</td><td>Hub-link-satellite</td></tr>
+        <tr><td><strong>Structure</strong></td><td>Normalized (3NF)</td><td>Denormalized (star/snowflake)</td><td>Hubs + Links + Satellites</td></tr>
+        <tr><td><strong>Primary goal</strong></td><td>Single source of truth</td><td>BI-optimized fast delivery</td><td>Scalable, auditable integration</td></tr>
+        <tr><td><strong>Time to first value</strong></td><td class="bad">Long (months)</td><td class="good">Short (weeks)</td><td>Medium</td></tr>
+        <tr><td><strong>History tracking</strong></td><td>Requires extra design</td><td>SCD types</td><td class="good">Built-in (satellites)</td></tr>
+        <tr><td><strong>Complexity</strong></td><td>High (modeling)</td><td>Low to moderate</td><td>High (many tables)</td></tr>
+        <tr><td><strong>Best for</strong></td><td>Large regulated enterprises</td><td>BI-first analytics teams</td><td>Multi-source integration at scale</td></tr>
+      </table>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Modern trend: hybrid approaches</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label key">What teams actually do</div><p>In practice, many modern data teams combine approaches: <strong>Data Vault for the integration layer</strong> (Silver, where multiple sources merge with full history) and <strong>Kimball star schemas for the consumption layer</strong> (Gold, optimized for BI and analytics). This gives you the scalability and auditability of Data Vault where sources land, plus the query performance and analyst friendliness of star schemas where dashboards connect.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: ETL vs ELT, Schema on Read/Write -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.42 3.58-8 8-8 2.76 0 5.15 1.4 6.58 3.53"/><path d="M20 12c0 4.42-3.58 8-8 8-2.76 0-5.15-1.4-6.58-3.53"/><path d="M16 4h4v4"/><path d="M8 20H4v-4"/></svg></div>
+        <div><h2>ETL vs. ELT and Schema Strategies</h2><span class="sub">Where and when to apply structure</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: ETL vs. ELT decision</h4>
+        <p class="desc">Select a scenario to see which approach fits.</p>
+        <div class="toggle-group" id="etlToggle">
+          <button class="toggle-btn active" data-etl="etl">Traditional ETL</button>
+          <button class="toggle-btn" data-etl="elt">Modern ELT</button>
+          <button class="toggle-btn" data-etl="read">Schema on Read</button>
+          <button class="toggle-btn" data-etl="write">Schema on Write</button>
+        </div>
+        <div class="result-panel" id="etlResult">
+          <h5>ETL: Extract, Transform, Load</h5>
+          <p><strong>How it works:</strong> Data is extracted from sources, transformed in a separate processing engine (Spark, Python, Informatica), then loaded into the target warehouse. <strong>Best for:</strong> Environments where the warehouse has limited compute, or when sensitive data must be masked/filtered before loading. <strong>Trade-off:</strong> Transformation logic lives outside the warehouse, making it harder to iterate and test with SQL.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: SCD -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#d1fae5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div><h2>Slowly Changing Dimensions (SCD)</h2><span class="sub">How to handle changes in dimensional data</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>SCD types: preserving or overwriting history</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <table class="compare-table">
+            <tr><th>Type</th><th>Strategy</th><th>History?</th><th>Example</th></tr>
+            <tr><td><strong>SCD Type 0</strong></td><td>Never change</td><td>N/A (immutable)</td><td>Date of birth, original signup date</td></tr>
+            <tr><td><strong>SCD Type 1</strong></td><td>Overwrite</td><td class="bad">No (lost)</td><td>Fix a typo in a customer name</td></tr>
+            <tr><td><strong>SCD Type 2</strong></td><td>Add new row with validity dates</td><td class="good">Yes (full history)</td><td>Customer changes address: old row gets end_date, new row gets start_date</td></tr>
+            <tr><td><strong>SCD Type 3</strong></td><td>Add column for previous value</td><td>Partial (one change)</td><td>current_city and previous_city columns</td></tr>
+          </table>
+          <div class="explainer"><div class="explainer-label key">Key insight</div><p><strong>SCD Type 2 is the most important for data engineers.</strong> It preserves full history by creating a new row for each change, with effective_from and effective_to dates plus a current_flag. This lets analysts answer "what was the customer's address when they placed this order?" rather than only "what is the customer's address now?"</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 5</h3>
+
+      <div class="quiz-q" data-answer="b">
+        <p>1. Which modeling methodology builds dimensional star schemas organized by business process?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Bill Inmon (3NF top-down)</button>
+          <button class="quiz-opt" data-val="b">Ralph Kimball (bottom-up dimensional)</button>
+          <button class="quiz-opt" data-val="c">Data Vault 2.0 (hub-link-satellite)</button>
+          <button class="quiz-opt" data-val="d">Entity-Relationship modeling</button>
+        </div>
+        <div class="quiz-explanation">Kimball's approach builds dimensional data marts (star schemas) organized by business process, with fact tables holding measures and dimension tables holding descriptive context. Conformed dimensions link marts together.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>2. What are the three entity types in Data Vault 2.0?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Tables, views, and indexes</button>
+          <button class="quiz-opt" data-val="b">Facts, dimensions, and bridges</button>
+          <button class="quiz-opt" data-val="c">Hubs, links, and satellites</button>
+          <button class="quiz-opt" data-val="d">Bronze, silver, and gold</button>
+        </div>
+        <div class="quiz-explanation">Data Vault 2.0 uses Hubs (business keys), Links (relationships), and Satellites (descriptive attributes with history). This separation enables parallel loading and full auditability.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>3. What is a fact table in dimensional modeling?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">A table that stores measurable business events with foreign keys to dimensions</button>
+          <button class="quiz-opt" data-val="b">A table that stores customer names and addresses</button>
+          <button class="quiz-opt" data-val="c">A lookup table for country codes</button>
+          <button class="quiz-opt" data-val="d">A staging table for raw data</button>
+        </div>
+        <div class="quiz-explanation">Fact tables hold numeric measures (revenue, quantity, clicks) and foreign keys to dimension tables. Each row represents a business event (a sale, a click, a shipment).</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. Which SCD type preserves full history by adding new rows with validity dates?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Type 0</button>
+          <button class="quiz-opt" data-val="b">Type 1</button>
+          <button class="quiz-opt" data-val="c">Type 3</button>
+          <button class="quiz-opt" data-val="d">Type 2</button>
+        </div>
+        <div class="quiz-explanation">SCD Type 2 creates a new row for each change, with effective_from and effective_to dates. This preserves the complete history of changes so you can answer point-in-time questions.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>5. What is the modern hybrid modeling approach many teams use?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Only use Inmon 3NF everywhere</button>
+          <button class="quiz-opt" data-val="b">Data Vault for integration (Silver) and Kimball star schemas for consumption (Gold)</button>
+          <button class="quiz-opt" data-val="c">Store everything as raw JSON</button>
+          <button class="quiz-opt" data-val="d">Skip modeling entirely and let analysts figure it out</button>
+        </div>
+        <div class="quiz-explanation">The hybrid approach uses Data Vault where sources merge (scalable, auditable integration) and Kimball star schemas where consumers query (fast, intuitive BI). This combines the strengths of both methodologies.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module4.html" style="color:var(--primary-dark);">&larr; Module 4: Transform &amp; Quality</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module6.html" style="color:var(--primary-dark);">Module 6: Streaming &amp; Real-Time &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const etlData = {
+    etl:{title:'ETL: Extract, Transform, Load',desc:'<strong>How it works:</strong> Data is extracted from sources, transformed in a separate processing engine (Spark, Python, Informatica), then loaded into the target warehouse. <strong>Best for:</strong> Environments where the warehouse has limited compute, or when sensitive data must be masked/filtered before loading. <strong>Trade-off:</strong> Transformation logic lives outside the warehouse, making it harder to iterate and test with SQL.'},
+    elt:{title:'ELT: Extract, Load, Transform',desc:'<strong>How it works:</strong> Data is extracted and loaded raw into the warehouse or lakehouse first, then transformed using the warehouse\'s own compute (SQL, dbt). <strong>Best for:</strong> Modern cloud warehouses (Snowflake, BigQuery, Databricks) where compute is elastic and SQL-based transformations are efficient. <strong>Trade-off:</strong> Raw data lands in the warehouse first, which requires governance to prevent unauthorized access to sensitive data before masking.'},
+    read:{title:'Schema on Read: apply structure when accessing',desc:'<strong>How it works:</strong> Data is stored without enforcing a schema (e.g., JSON or Parquet files in a data lake). Structure is applied when data is read by the consuming query or application. <strong>Best for:</strong> Exploratory analysis, data lakes where schema evolves frequently, or when you need to support multiple interpretations of the same data. <strong>Trade-off:</strong> Consumers must understand the data structure. Quality depends on reader discipline and shared documentation.'},
+    write:{title:'Schema on Write: validate before storing',desc:'<strong>How it works:</strong> Data is validated against a defined schema before it is written to the target table. Non-conforming records are rejected. <strong>Best for:</strong> Warehouses and Gold-layer tables where consumers expect consistent, reliable structure. <strong>Trade-off:</strong> Requires upfront schema design. Schema changes require migration planning. Provides the strongest guarantees for downstream consumers.'}
+  };
+  document.querySelectorAll('[data-etl]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-etl]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = etlData[btn.dataset.etl];
+      document.getElementById('etlResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 6.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#e11d48'; o.style.background='#fff1f2'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='modeling',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

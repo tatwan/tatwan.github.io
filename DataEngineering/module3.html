@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 – Storage &amp; Formats | Data Engineering</title>
+<meta name="description" content="Row vs columnar storage, Parquet, Avro, ORC, data lakes, lakehouses, warehouses, Delta Lake, Iceberg, Hudi, partitioning, and the small files problem.">
+<style>
+  :root{--primary:#d97706;--primary-light:#fffbeb;--primary-dark:#b45309;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary-dark)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#b45309 0%,#d97706 60%,#fbbf24 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .pillbox{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.pill{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase}.pill.what{background:#dbeafe;color:#1d4ed8}.pill.why{background:#d1fae5;color:#065f46}.pill.how{background:#fef3c7;color:#92400e}.pill.key{background:#ede9fe;color:#5b21b6}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}.bad{color:#dc2626;font-weight:600}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary-dark)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary-dark)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .diagram-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}.diagram-card h4{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:18px}
+  /* Storage visual */
+  .storage-visual{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}.storage-block{padding:22px;border-radius:14px;border:2px solid var(--line)}.storage-block h5{font-size:.95rem;font-weight:800;margin-bottom:14px;color:var(--navy)}.storage-block .grid-demo{display:grid;gap:3px;margin-bottom:14px}.row-demo{display:flex;gap:3px}.cell{padding:6px 10px;border-radius:4px;font-size:.72rem;font-weight:700;text-align:center;min-width:52px}.cell.header{background:var(--navy);color:#fff}.cell.id{background:#dbeafe;color:#1d4ed8}.cell.name{background:#d1fae5;color:#065f46}.cell.amount{background:#fef3c7;color:#92400e}.cell.date{background:#ede9fe;color:#5b21b6}.cell.highlight{outline:2px solid #f59e0b;outline-offset:1px}.storage-block .note{font-size:.82rem;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:12px}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#92400e;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:#d97706}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary-dark)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}.storage-visual{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 3 of 10</span>
+  <div class="nav-links"><a href="module2.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module4.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 03 &middot; Storage</div>
+    <h1>Storage &amp; Formats</h1>
+    <p>Where bytes live determines how fast engines read them, how much you pay, and how flexible your architecture can be. This module covers the fundamental storage decisions every data engineer makes.</p>
+    <div class="header-chips"><span class="chip">60 to 80 min</span><span class="chip">Foundation to Intermediate</span><span class="chip">6 concepts &middot; 2 interactives &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <!-- SECTION 1: Row vs Columnar -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></div>
+        <div><h2>Row-Based vs. Columnar Storage</h2><span class="sub">The most fundamental storage decision</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>How data is physically laid out on disk</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>The same logical table can be physically stored in two fundamentally different ways. <strong>Row-based storage</strong> keeps all columns of a single record together on disk. <strong>Columnar storage</strong> keeps all values of a single column together. This seemingly simple difference has massive implications for query performance, compression, and use case fit.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why it matters</div><p>Choosing the wrong layout for your workload means either reading far more data than needed (row store for analytics) or paying a heavy penalty for single-record mutations (column store for transactions). Understanding this trade-off is foundational to every storage and format decision you will make.</p></div>
+        </div>
+      </div>
+
+      <!-- Visual: Row vs Column layout -->
+      <div class="storage-visual">
+        <div class="storage-block" style="border-color:#93c5fd;">
+          <h5>Row-Based Layout (OLTP)</h5>
+          <div class="grid-demo">
+            <div class="row-demo"><span class="cell header">ID</span><span class="cell header">Name</span><span class="cell header">Amount</span><span class="cell header">Date</span></div>
+            <div class="row-demo" style="outline:2px solid #3b82f6;border-radius:4px;"><span class="cell id">1</span><span class="cell name">Alice</span><span class="cell amount">250</span><span class="cell date">Jan 5</span></div>
+            <div class="row-demo"><span class="cell id">2</span><span class="cell name">Bob</span><span class="cell amount">180</span><span class="cell date">Jan 6</span></div>
+            <div class="row-demo"><span class="cell id">3</span><span class="cell name">Carol</span><span class="cell amount">420</span><span class="cell date">Jan 7</span></div>
+          </div>
+          <div class="note"><strong>Reads entire rows together.</strong> Fetching one customer's full record is a single I/O operation. Ideal for CRUD operations and point lookups. Examples: PostgreSQL, MySQL, SQL Server.</div>
+        </div>
+        <div class="storage-block" style="border-color:#fbbf24;">
+          <h5>Columnar Layout (OLAP)</h5>
+          <div class="grid-demo">
+            <div class="row-demo"><span class="cell header">ID col</span><span class="cell id">1</span><span class="cell id">2</span><span class="cell id">3</span></div>
+            <div class="row-demo"><span class="cell header">Name col</span><span class="cell name">Alice</span><span class="cell name">Bob</span><span class="cell name">Carol</span></div>
+            <div class="row-demo" style="outline:2px solid #f59e0b;border-radius:4px;"><span class="cell header">Amount col</span><span class="cell amount">250</span><span class="cell amount">180</span><span class="cell amount">420</span></div>
+            <div class="row-demo"><span class="cell header">Date col</span><span class="cell date">Jan 5</span><span class="cell date">Jan 6</span><span class="cell date">Jan 7</span></div>
+          </div>
+          <div class="note"><strong>Reads only needed columns.</strong> SUM(Amount) scans just the Amount column, skipping Name, Date, etc. 5 to 30x compression on homogeneous data. Examples: Snowflake, BigQuery, Parquet files.</div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Property</th><th>Row-Based</th><th>Columnar</th></tr>
+        <tr><td><strong>Best for</strong></td><td>Transactions (OLTP), CRUD</td><td>Analytics (OLAP), aggregations</td></tr>
+        <tr><td><strong>I/O pattern</strong></td><td>Read/write full rows</td><td>Read only needed columns</td></tr>
+        <tr><td><strong>Compression</strong></td><td>1.5 to 3x</td><td class="good">5 to 30x</td></tr>
+        <tr><td><strong>Single-row update</strong></td><td class="good">Fast (localized)</td><td class="bad">Slow (scattered across files)</td></tr>
+        <tr><td><strong>Analytical scan</strong></td><td class="bad">Reads unused columns</td><td class="good">Reads only queried columns</td></tr>
+        <tr><td><strong>Concurrency</strong></td><td>High (thousands of users)</td><td>Lower (analyst workloads)</td></tr>
+        <tr><td><strong>Examples</strong></td><td>PostgreSQL, MySQL, Oracle</td><td>Snowflake, BigQuery, ClickHouse, Parquet</td></tr>
+      </table>
+    </div>
+
+    <!-- SECTION 2: File Formats -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/></svg></div>
+        <div><h2>File Formats</h2><span class="sub">Parquet, Avro, ORC, JSON, CSV</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Apache Parquet: the default analytical format</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Parquet is an open-source <strong>columnar file format</strong> designed for efficient analytical workloads. It stores data column-by-column, enabling engines to read only the columns needed for a query. It uses row groups (128 MB default) for parallelism and per-column statistics (min/max) for predicate pushdown.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why it dominates</div>
+            <ul>
+              <li><strong>Columnar</strong>: only reads columns needed by the query</li>
+              <li><strong>Compression</strong>: Snappy, ZSTD, or GZIP per column; 5 to 10x space savings</li>
+              <li><strong>Statistics</strong>: min/max per row group enable skipping irrelevant data</li>
+              <li><strong>Ecosystem</strong>: read by Spark, DuckDB, Polars, Pandas, BigQuery, Snowflake, and every major engine</li>
+              <li><strong>Schema embedded</strong>: the file carries its own schema (self-describing)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Format</th><th>Layout</th><th>Schema</th><th>Best for</th><th>Compression</th></tr>
+        <tr><td><strong>Parquet</strong></td><td>Columnar</td><td>Embedded</td><td>Analytics, data lakes</td><td class="good">Excellent</td></tr>
+        <tr><td><strong>Avro</strong></td><td>Row-based</td><td>Embedded (JSON)</td><td>Streaming, Kafka, schema evolution</td><td>Good</td></tr>
+        <tr><td><strong>ORC</strong></td><td>Columnar</td><td>Embedded</td><td>Hive ecosystem</td><td class="good">Excellent</td></tr>
+        <tr><td><strong>JSON</strong></td><td>Row-based</td><td>Implicit</td><td>APIs, logs, flexibility</td><td class="bad">Poor (verbose)</td></tr>
+        <tr><td><strong>CSV</strong></td><td>Row-based</td><td>None</td><td>Simple interchange</td><td class="bad">Poor</td></tr>
+      </table>
+    </div>
+
+    <!-- SECTION 3: Lake / Lakehouse / Warehouse -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#d1fae5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg></div>
+        <div><h2>Lake, Lakehouse, and Warehouse</h2><span class="sub">Three storage architectures, three trade-offs</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Compare storage architectures</h4>
+        <p class="desc">Select an architecture to understand its strengths and trade-offs.</p>
+        <div class="toggle-group" id="archToggle">
+          <button class="toggle-btn active" data-arch="lake">Data Lake</button>
+          <button class="toggle-btn" data-arch="warehouse">Data Warehouse</button>
+          <button class="toggle-btn" data-arch="lakehouse">Lakehouse</button>
+        </div>
+        <div class="result-panel" id="archResult">
+          <h5>Data Lake: Scalable, flexible, schema-on-read</h5>
+          <p><strong>What:</strong> Object storage (S3, ADLS, GCS) holding files in many formats (Parquet, JSON, CSV, images, video). No built-in table semantics or transaction support. <strong>Strengths:</strong> Cheapest storage option, supports any data type, decouples storage from compute. <strong>Limitation:</strong> No ACID transactions, no schema enforcement, quality depends entirely on discipline. Without governance, it becomes a "data swamp."</p>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Feature</th><th>Data Lake</th><th>Data Warehouse</th><th>Lakehouse</th></tr>
+        <tr><td><strong>Storage</strong></td><td>Object storage (cheap)</td><td>Proprietary (expensive)</td><td>Object storage (cheap)</td></tr>
+        <tr><td><strong>ACID</strong></td><td class="bad">No</td><td class="good">Yes</td><td class="good">Yes (via table format)</td></tr>
+        <tr><td><strong>Schema</strong></td><td>On read</td><td>On write</td><td>Both</td></tr>
+        <tr><td><strong>SQL performance</strong></td><td class="bad">Variable</td><td class="good">Optimized</td><td class="good">Good (improving)</td></tr>
+        <tr><td><strong>Data types</strong></td><td class="good">Any (structured, semi, unstructured)</td><td>Structured only</td><td class="good">Any</td></tr>
+        <tr><td><strong>Vendor lock-in</strong></td><td class="good">Low</td><td class="bad">High</td><td class="good">Low (open formats)</td></tr>
+      </table>
+    </div>
+
+    <!-- SECTION 4: Table Formats -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+        <div><h2>Table Formats</h2><span class="sub">Making files behave like tables</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Delta Lake, Apache Iceberg, and Apache Hudi</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What they solve</div><p>A table format is a metadata layer on top of files (usually Parquet) that adds <strong>ACID transactions, schema evolution, time travel, and partition management</strong> to plain object storage. This is what transforms a data lake into a lakehouse.</p></div>
+          <div class="explainer"><div class="explainer-label how">The three leading formats</div>
+            <ul>
+              <li><strong>Delta Lake</strong> (Databricks): Uses a JSON transaction log (_delta_log). Tight Spark integration. Supports MERGE, UPDATE, DELETE. Default on Databricks.</li>
+              <li><strong>Apache Iceberg</strong> (Netflix): Uses manifest files and snapshots. Strong partition evolution (change partition scheme without rewriting data). Growing multi-engine support. Default on Snowflake and AWS.</li>
+              <li><strong>Apache Hudi</strong> (Uber): Designed for streaming upserts. Copy-on-write and merge-on-read modes. Best for CDC and incremental pipelines.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Partitioning and the small files problem</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label what">Partitioning</div><p>Partitioning divides data into directories based on column values (e.g., date, region). When a query filters on the partition column, the engine skips irrelevant partitions entirely (partition pruning). Well-chosen partitions can reduce scan volume by 10 to 100x.</p></div>
+          <div class="explainer"><div class="explainer-label why">The small files problem</div><p>Frequent writes (especially streaming) create thousands of tiny files. Each file requires metadata overhead and a separate I/O operation. The result: queries slow down dramatically as the number of files grows, even if total data volume is small. Solutions include compaction (merge small files into larger ones), bin-packing, and auto-optimize features in Delta Lake and Iceberg.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 3</h3>
+
+      <div class="quiz-q" data-answer="b">
+        <p>1. Why is columnar storage better for analytical queries?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">It stores data faster than row-based systems</button>
+          <button class="quiz-opt" data-val="b">It reads only the columns needed by the query, reducing I/O and enabling better compression</button>
+          <button class="quiz-opt" data-val="c">It supports more concurrent users</button>
+          <button class="quiz-opt" data-val="d">It has built-in machine learning capabilities</button>
+        </div>
+        <div class="quiz-explanation">Columnar storage stores each column separately, so a query like SUM(amount) reads only the amount column, skipping all other columns. Homogeneous data within a column also compresses much better (5 to 30x).</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>2. Which file format is the de facto standard for analytical data in modern data lakes?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">CSV</button>
+          <button class="quiz-opt" data-val="b">JSON</button>
+          <button class="quiz-opt" data-val="c">Apache Parquet</button>
+          <button class="quiz-opt" data-val="d">XML</button>
+        </div>
+        <div class="quiz-explanation">Parquet is the standard columnar file format for data lakes. It offers excellent compression, column pruning, predicate pushdown via min/max statistics, and is supported by every major processing engine.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>3. What does a table format (Delta Lake, Iceberg, Hudi) add to plain files in object storage?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">ACID transactions, schema evolution, time travel, and partition management</button>
+          <button class="quiz-opt" data-val="b">Automatic machine learning model training</button>
+          <button class="quiz-opt" data-val="c">Built-in data visualization</button>
+          <button class="quiz-opt" data-val="d">Network encryption for data in transit</button>
+        </div>
+        <div class="quiz-explanation">Table formats add a metadata layer that gives files the behavior of database tables: ACID guarantees, schema evolution, time travel (query past snapshots), and intelligent partition management.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. What is the "small files problem" in data lakes?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Files are too small to fit on a single disk</button>
+          <button class="quiz-opt" data-val="b">The storage system runs out of space</button>
+          <button class="quiz-opt" data-val="c">Data cannot be compressed in small files</button>
+          <button class="quiz-opt" data-val="d">Too many tiny files cause excessive metadata overhead and slow queries</button>
+        </div>
+        <div class="quiz-explanation">Each file requires a separate I/O operation and metadata entry. Thousands of small files (common with streaming writes) overwhelm the metadata layer and degrade query performance, even if total data size is small. The fix is compaction.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>5. What distinguishes a lakehouse from a traditional data lake?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">It uses a different cloud provider</button>
+          <button class="quiz-opt" data-val="b">It adds table format metadata (ACID, schema, time travel) to cheap object storage</button>
+          <button class="quiz-opt" data-val="c">It only supports structured data</button>
+          <button class="quiz-opt" data-val="d">It replaces SQL with a proprietary query language</button>
+        </div>
+        <div class="quiz-explanation">A lakehouse combines the economics of object storage (data lake) with the reliability of a warehouse (ACID, schema enforcement) by using a table format like Delta Lake or Iceberg on top of files.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module2.html" style="color:var(--primary-dark);">&larr; Module 2: Sources &amp; Ingestion</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module4.html" style="color:var(--primary-dark);">Module 4: Transform &amp; Quality &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const archData = {
+    lake:{title:'Data Lake: Scalable, flexible, schema-on-read',desc:'<strong>What:</strong> Object storage (S3, ADLS, GCS) holding files in many formats (Parquet, JSON, CSV, images, video). No built-in table semantics or transaction support. <strong>Strengths:</strong> Cheapest storage option, supports any data type, decouples storage from compute. <strong>Limitation:</strong> No ACID transactions, no schema enforcement, quality depends entirely on discipline. Without governance, it becomes a "data swamp."'},
+    warehouse:{title:'Data Warehouse: Optimized, governed, SQL-first',desc:'<strong>What:</strong> A managed analytical database (Snowflake, BigQuery, Redshift) optimized for fast SQL queries. Stores data in a proprietary columnar format with built-in indexing, caching, and query optimization. <strong>Strengths:</strong> Best SQL performance, built-in governance, concurrency management, and workload isolation. <strong>Limitation:</strong> Higher cost per TB, vendor lock-in, limited to structured data only.'},
+    lakehouse:{title:'Lakehouse: The convergence of lake and warehouse',desc:'<strong>What:</strong> An architecture that adds table format metadata (Delta Lake, Iceberg, Hudi) on top of object storage files. This gives you ACID transactions, schema evolution, and time travel on cheap storage. <strong>Strengths:</strong> Lake economics + warehouse reliability. Supports all data types. Open formats reduce lock-in. <strong>Limitation:</strong> Query performance is improving but may still lag behind purpose-built warehouses for complex BI workloads. Requires more engineering maturity to operate.'}
+  };
+  document.querySelectorAll('[data-arch]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-arch]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = archData[btn.dataset.arch];
+      document.getElementById('archResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 4.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#d97706'; o.style.background='#fffbeb'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='storage',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

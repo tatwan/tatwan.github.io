@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 – Foundations & Requirements | Data Engineering</title>
+<meta name="description" content="Understand the data engineer's role, OLTP vs OLAP, SQL profiling, SLAs, and how to frame data engineering from requirements, not tools.">
+<style>
+  :root {
+    --primary: #246be8; --primary-light: #eff6ff; --primary-dark: #1556c5;
+    --navy: #071b3d; --teal: #087f73; --green: #059669; --orange: #d97706; --purple: #7c3aed;
+    --bg: #f4f7fb; --card: #ffffff; --ink: #10233f; --muted: #52637b; --line: #d7e1ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.65; }
+  a { color: var(--primary); }
+
+  /* NAV */
+  .topnav { background: var(--navy); color: white; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; min-height: 52px; }
+  .topnav a { color: white; text-decoration: none; font-size: .85rem; opacity: 0.85; font-weight: 600; }
+  .topnav a:hover { opacity: 1; }
+  .topnav .module-title { font-weight: 800; font-size: .88rem; opacity: 1; }
+  .nav-links { display: flex; gap: 18px; align-items: center; }
+  .nav-sep { opacity: 0.3; }
+
+  /* HEADER */
+  .page-header { background: linear-gradient(135deg, #1556c5 0%, #246be8 60%, #4a8af5 100%); color: white; padding: 56px 32px 48px; }
+  .page-header .module-badge { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 5px 16px; font-size: .75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; }
+  .page-header h1 { font-size: clamp(26px, 4.5vw, 44px); font-weight: 850; margin-bottom: 12px; line-height: 1.15; letter-spacing: -0.03em; }
+  .page-header > .container > p { font-size: 1.08rem; opacity: 0.88; max-width: 640px; line-height: 1.7; }
+  .header-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .chip { background: rgba(255,255,255,0.16); border-radius: 8px; padding: 6px 14px; font-size: .82rem; font-weight: 600; }
+  .container { max-width: 920px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+  /* CONTENT */
+  .content-area { padding: 48px 0 80px; }
+  .section { margin-bottom: 52px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .section-icon { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; color: var(--navy); }
+  .section-header h2 { font-size: 1.35rem; font-weight: 850; color: var(--navy); }
+  .section-header .sub { display: block; font-size: .82rem; color: var(--muted); font-weight: 600; }
+
+  /* CONCEPT CARDS */
+  .concept-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 18px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .concept-header { padding: 18px 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .concept-header:hover { background: #fafcff; }
+  .concept-header h3 { font-size: 1.05rem; font-weight: 780; }
+  .concept-body { padding: 0 22px 22px; display: none; }
+  .concept-body.open { display: block; }
+  .chevron { transition: transform 0.2s; font-size: .7rem; color: var(--muted); }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* PILLS */
+  .pillbox { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pill { border-radius: 6px; padding: 3px 11px; font-size: .7rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill.what { background: #dbeafe; color: #1d4ed8; }
+  .pill.why { background: #d1fae5; color: #065f46; }
+  .pill.how { background: #fef3c7; color: #92400e; }
+  .pill.key { background: #ede9fe; color: #5b21b6; }
+
+  .explainer { margin-bottom: 16px; }
+  .explainer-label { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .explainer-label.what { color: #2563eb; }
+  .explainer-label.why { color: #059669; }
+  .explainer-label.how { color: #d97706; }
+  .explainer p { font-size: .94rem; color: #374151; line-height: 1.75; }
+  .explainer ul { margin: 6px 0 0; padding-left: 20px; font-size: .92rem; color: #374151; }
+  .explainer li { margin-bottom: 4px; }
+
+  /* TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 18px 0; border-radius: 10px; overflow: hidden; }
+  .compare-table th { background: var(--navy); color: white; padding: 11px 14px; text-align: left; font-weight: 750; }
+  .compare-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .good { color: var(--green); font-weight: 700; }
+
+  /* INTERACTIVE */
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .interactive-box h4 { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; color: var(--primary); }
+  .interactive-box .desc { font-size: .85rem; color: var(--muted); margin-bottom: 16px; }
+  .toggle-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .toggle-btn { padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: white; color: var(--muted); font-size: .88rem; font-weight: 720; cursor: pointer; transition: .15s; }
+  .toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .toggle-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+  .result-panel { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-height: 80px; }
+  .result-panel h5 { font-size: .95rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .result-panel p { font-size: .9rem; color: var(--muted); margin: 0; }
+
+  /* DIAGRAMS */
+  .diagram-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px; margin: 20px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .diagram-card h4 { font-size: 1rem; font-weight: 800; color: var(--navy); margin-bottom: 18px; }
+  .flow-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .flow-box { min-width: 100px; padding: 14px 18px; border-radius: 10px; text-align: center; font-weight: 750; font-size: .88rem; }
+  .flow-box.producer { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+  .flow-box.engineer { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+  .flow-box.consumer { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+  .flow-arrow { color: #94a3b8; font-size: 1.3rem; font-weight: 900; }
+
+  /* QUIZ */
+  .quiz-section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px; margin-top: 44px; }
+  .quiz-section h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 22px; }
+  .quiz-q { margin-bottom: 26px; }
+  .quiz-q p { font-size: .94rem; font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 11px 16px; font-size: .88rem; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; font-weight: 600; }
+  .quiz-opt:hover { border-color: var(--primary); background: var(--primary-light); }
+  .quiz-opt.correct { background: #d1fae5; border-color: #34d399; color: #065f46; }
+  .quiz-opt.incorrect { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+  .quiz-opt.disabled { pointer-events: none; opacity: 0.7; }
+  .quiz-explanation { display: none; margin-top: 10px; padding: 12px 16px; border-radius: 8px; background: var(--primary-light); color: #1e40af; font-size: .88rem; line-height: 1.6; }
+  .quiz-explanation.show { display: block; }
+  .quiz-actions { display: flex; gap: 12px; margin-top: 20px; align-items: center; }
+  .btn { padding: 11px 22px; border: none; border-radius: 10px; font-size: .9rem; font-weight: 750; cursor: pointer; transition: .15s; }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-primary:hover { background: var(--primary); }
+  .btn-secondary { background: white; color: var(--navy); border: 1px solid var(--line); }
+  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* FOOTER */
+  .module-footer { padding: 32px 0; border-top: 1px solid var(--line); background: white; }
+  .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .footer-row a { text-decoration: none; font-weight: 750; font-size: .92rem; }
+  .mark-complete-btn { padding: 12px 24px; border: 2px solid var(--teal); border-radius: 10px; background: white; color: var(--teal); font-size: .92rem; font-weight: 800; cursor: pointer; transition: .15s; display: flex; align-items: center; gap: 8px; }
+  .mark-complete-btn:hover { background: #e7f7f4; }
+  .mark-complete-btn.completed { background: var(--teal); color: white; border-color: var(--teal); }
+
+  @media (max-width: 760px) {
+    .page-header { padding: 40px 20px 32px; }
+    .content-area { padding: 32px 0 60px; }
+    .topnav { padding: 0 16px; font-size: .82rem; }
+    .nav-links { gap: 10px; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 1 of 10</span>
+  <div class="nav-links"><a href="module2.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 01 &middot; Foundation</div>
+    <h1>Foundations &amp; Requirements</h1>
+    <p>Data engineering starts with the decision, not the tool. Before choosing a pipeline, warehouse, or orchestrator, understand the business context, data characteristics, constraints, and the people who depend on the output.</p>
+    <div class="header-chips">
+      <span class="chip">45 to 60 min</span>
+      <span class="chip">Foundation level</span>
+      <span class="chip">5 concepts &middot; 1 interactive &middot; 5 quiz questions</span>
+    </div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <!-- SECTION 1: The Role -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 6V4M8 6V4M16 6V4"/><path d="M2 12h20"/></svg></div>
+        <div><h2>The Data Engineer's Role</h2><span class="sub">Where you fit in the data team</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>What does a data engineer actually do?</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>A data engineer designs, builds, operates, and evolves the systems that move data from where it is created (operational sources) to where it is needed (analytics, ML, AI, products, and decisions). The role sits between <strong>data producers</strong> (software engineers, DevOps, external partners) and <strong>data consumers</strong> (analysts, data scientists, ML engineers, business leaders).</p></div>
+          <div class="explainer"><div class="explainer-label why">Why it matters</div><p>Without reliable data pipelines, analysts query stale or incorrect data, ML models train on garbage, dashboards show contradictory numbers, and leadership loses trust in data-driven decisions. The data engineer ensures <strong>dependable flow</strong>: not just movement, but quality, governance, timeliness, and cost control.</p></div>
+          <div class="explainer"><div class="explainer-label how">Core responsibilities</div>
+            <ul>
+              <li><strong>Ingestion</strong>: extract data from operational systems, APIs, files, streams</li>
+              <li><strong>Storage</strong>: choose and manage data lakes, lakehouses, and warehouses</li>
+              <li><strong>Transformation</strong>: clean, validate, conform, and model data for consumption</li>
+              <li><strong>Orchestration</strong>: schedule, monitor, retry, and evolve pipeline workflows</li>
+              <li><strong>Serving</strong>: publish data through APIs, BI tools, feature stores, and ML platforms</li>
+              <li><strong>Governance</strong>: enforce security, privacy, quality, lineage, and cost policies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-card">
+        <h4>Data engineer's place within the data team</h4>
+        <div class="flow-row">
+          <div class="flow-box producer">Software Engineers</div>
+          <div class="flow-box producer">DevOps Engineers</div>
+          <div class="flow-box producer">External Partners</div>
+        </div>
+        <div class="flow-row"><span class="flow-arrow">&darr;</span></div>
+        <div class="flow-row">
+          <div class="flow-box engineer" style="min-width:200px;">Data Engineers<br><small style="font-weight:500;opacity:0.8;">Build the trusted flow</small></div>
+        </div>
+        <div class="flow-row"><span class="flow-arrow">&darr;</span></div>
+        <div class="flow-row">
+          <div class="flow-box consumer">Data Analysts</div>
+          <div class="flow-box consumer">Data Scientists</div>
+          <div class="flow-box consumer">ML Engineers</div>
+          <div class="flow-box consumer">Business Leaders</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: OLTP vs OLAP -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#d1fae5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg></div>
+        <div><h2>OLTP vs. OLAP</h2><span class="sub">Two fundamentally different purposes</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>OLTP: Online Transaction Processing</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>OLTP systems are the <strong>operational backbone</strong> of applications. They handle day-to-day transactions: bank transfers, e-commerce orders, user registrations, inventory updates. Think PostgreSQL, MySQL, SQL Server, Oracle: systems optimized for fast, concurrent, small-transaction CRUD (Create, Read, Update, Delete) operations.</p></div>
+          <div class="explainer"><div class="explainer-label why">Key characteristics</div>
+            <ul>
+              <li><strong>Row-based storage</strong>: entire records stored together for fast single-row access</li>
+              <li><strong>Normalized schema</strong>: typically 3NF to minimize redundancy and ensure consistency</li>
+              <li><strong>High concurrency</strong>: hundreds or thousands of simultaneous small transactions</li>
+              <li><strong>Low latency</strong>: millisecond response times for point lookups</li>
+              <li><strong>ACID guarantees</strong>: transactions are atomic, consistent, isolated, and durable</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>OLAP: Online Analytical Processing</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>OLAP systems serve <strong>analytical workloads</strong>: aggregations, trends, comparisons, reports, and machine learning features. They process large volumes of historical data to answer questions like "What was total revenue by region last quarter?" Think Snowflake, BigQuery, Redshift, ClickHouse: systems optimized for scanning billions of rows across a few columns.</p></div>
+          <div class="explainer"><div class="explainer-label why">Key characteristics</div>
+            <ul>
+              <li><strong>Columnar storage</strong>: columns stored separately for efficient scans and compression</li>
+              <li><strong>Denormalized or star schema</strong>: fewer joins, faster analytical queries</li>
+              <li><strong>Large scan volume</strong>: queries touch millions or billions of rows</li>
+              <li><strong>Fewer concurrent users</strong>: analysts, not thousands of app users</li>
+              <li><strong>High compression</strong>: 5 to 30x compression ratios on homogeneous column data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Dimension</th><th>OLTP</th><th>OLAP</th></tr>
+        <tr><td><strong>Purpose</strong></td><td>Run the business</td><td>Analyze the business</td></tr>
+        <tr><td><strong>Storage layout</strong></td><td>Row-based</td><td>Columnar</td></tr>
+        <tr><td><strong>Schema</strong></td><td>Normalized (3NF)</td><td>Denormalized / Star</td></tr>
+        <tr><td><strong>Query pattern</strong></td><td>Point lookups, small transactions</td><td>Full-table scans, aggregations</td></tr>
+        <tr><td><strong>Latency</strong></td><td>Milliseconds</td><td>Seconds to minutes</td></tr>
+        <tr><td><strong>Data volume</strong></td><td>GBs (current state)</td><td>TBs to PBs (historical)</td></tr>
+        <tr><td><strong>Users</strong></td><td>Applications, microservices</td><td>Analysts, data scientists, BI tools</td></tr>
+        <tr><td><strong>Examples</strong></td><td>PostgreSQL, MySQL, SQL Server</td><td>Snowflake, BigQuery, Redshift, ClickHouse</td></tr>
+      </table>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>The OLTP to OLAP journey is the core of data engineering</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label key">Key insight</div><p>Data engineering is fundamentally about moving data from <strong>OLTP systems</strong> (where it is created) to <strong>OLAP systems</strong> (where it is analyzed). This is the core pipeline: extract from operational sources, transform to make it trustworthy, and load into analytical storage. Every tool, technique, and architecture decision serves this journey.</p></div>
+          <div class="diagram-card" style="margin:0;box-shadow:none;border:1px dashed var(--line);">
+            <div class="flow-row">
+              <div class="flow-box producer">OLTP<br><small style="font-weight:500;">PostgreSQL</small></div>
+              <span class="flow-arrow">&rarr;</span>
+              <div class="flow-box engineer">Extract<br><small style="font-weight:500;">CDC / Batch</small></div>
+              <span class="flow-arrow">&rarr;</span>
+              <div class="flow-box engineer">Transform<br><small style="font-weight:500;">Clean &amp; Model</small></div>
+              <span class="flow-arrow">&rarr;</span>
+              <div class="flow-box consumer">OLAP<br><small style="font-weight:500;">Snowflake</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: SQL & Data Profiling -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <div><h2>SQL &amp; Data Profiling</h2><span class="sub">The engineer's first diagnostic tool</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Why SQL is non-negotiable</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What you need</div><p>SQL is the universal language of data. Every database, warehouse, lakehouse, and most processing engines speak SQL. Data engineers use SQL for extraction, transformation (dbt is SQL-first), quality checks, profiling, and debugging. You need fluency in:</p>
+            <ul>
+              <li><strong>Window functions</strong>: ROW_NUMBER, RANK, LAG, LEAD, running totals</li>
+              <li><strong>CTEs</strong>: Common Table Expressions for readable, modular queries</li>
+              <li><strong>Aggregations</strong>: GROUP BY, HAVING, ROLLUP, CUBE</li>
+              <li><strong>Joins</strong>: INNER, LEFT, FULL OUTER, CROSS, self-joins, anti-joins</li>
+              <li><strong>Subqueries</strong>: correlated and uncorrelated</li>
+              <li><strong>Data types</strong>: dates, timestamps, strings, numerics, JSON</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Data profiling: know your data before building</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill how">How</span></div>
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Data profiling is the systematic examination of data to understand its structure, content, quality, and relationships. It is the diagnostic step before building any pipeline, like a doctor examining a patient before prescribing treatment.</p></div>
+          <div class="explainer"><div class="explainer-label why">Why it matters</div><p>Building a pipeline without profiling leads to silent failures: unexpected NULLs crash transformations, wrong data types cause casting errors, undiscovered duplicates inflate metrics, and missing values create misleading dashboards. <strong>Profile first. Always.</strong></p></div>
+          <div class="explainer"><div class="explainer-label how">What to check</div>
+            <ul>
+              <li><strong>Completeness</strong>: percentage of NULL values per column</li>
+              <li><strong>Uniqueness</strong>: duplicate counts, candidate keys</li>
+              <li><strong>Distribution</strong>: min, max, mean, median, standard deviation</li>
+              <li><strong>Cardinality</strong>: count of distinct values</li>
+              <li><strong>Patterns</strong>: date formats, email formats, phone numbers</li>
+              <li><strong>Referential integrity</strong>: orphaned foreign keys</li>
+              <li><strong>Freshness</strong>: latest timestamp, gaps in time series</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Requirements -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>
+        <div><h2>Framing Requirements</h2><span class="sub">Start with the decision, not the tool</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>The five questions every project starts with</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label key">Before choosing any tool, answer these</div>
+            <ul>
+              <li><strong>1. What decision does this data support?</strong> Know the end use case: dashboard, ML model, operational alert, or product feature.</li>
+              <li><strong>2. What is the latency requirement?</strong> Does the consumer need data within seconds (streaming), minutes (micro-batch), hours (scheduled batch), or next day?</li>
+              <li><strong>3. What is the data volume?</strong> GBs per day? TBs? This shapes storage format, compute engine, and cost model.</li>
+              <li><strong>4. Who owns the source data?</strong> Understanding ownership, contracts, and schema stability determines the ingestion approach.</li>
+              <li><strong>5. What are the compliance constraints?</strong> PII, GDPR, CCPA, data residency, retention policies, and audit requirements.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Match the requirement to the approach</h4>
+        <p class="desc">Select a scenario to see which data engineering approach fits best.</p>
+        <div class="toggle-group" id="reqToggle">
+          <button class="toggle-btn active" data-req="dashboard">Executive dashboard</button>
+          <button class="toggle-btn" data-req="fraud">Fraud detection</button>
+          <button class="toggle-btn" data-req="ml">ML training data</button>
+          <button class="toggle-btn" data-req="gdpr">GDPR compliance</button>
+        </div>
+        <div class="result-panel" id="reqResult">
+          <h5>Executive dashboard: "What happened last quarter?"</h5>
+          <p><strong>Latency:</strong> Next-day is fine (batch). <strong>Volume:</strong> Moderate, aggregated. <strong>Approach:</strong> Scheduled ELT into a warehouse with a star schema model and BI tool on top. Focus on data quality, freshness SLAs, and consistent metric definitions. dbt is ideal for the transformation layer.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Understanding Consumers -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fce7f3;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9d174d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div><h2>Understanding Data Consumers</h2><span class="sub">Design for who uses the data</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Different consumers, different needs</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <table class="compare-table">
+            <tr><th>Consumer</th><th>Needs</th><th>Data shape</th><th>Latency</th></tr>
+            <tr><td><strong>Business analyst</strong></td><td>Reports, KPIs, ad-hoc queries</td><td>Star schema, aggregates</td><td>Daily / hourly</td></tr>
+            <tr><td><strong>Data scientist</strong></td><td>Features, training data, experiments</td><td>Wide tables, history</td><td>Batch is often fine</td></tr>
+            <tr><td><strong>ML engineer</strong></td><td>Feature store, model serving</td><td>Key-value, versioned</td><td>Near real-time</td></tr>
+            <tr><td><strong>Product team</strong></td><td>Embedded analytics, recommendations</td><td>APIs, pre-computed</td><td>Low latency</td></tr>
+            <tr><td><strong>Data engineer</strong></td><td>Monitoring, lineage, quality</td><td>Metadata, logs</td><td>Real-time alerts</td></tr>
+          </table>
+          <div class="explainer"><div class="explainer-label key">Key insight</div><p>The same underlying data may need to be served in <strong>multiple shapes, at different latencies, through different interfaces</strong>. This is why the pipeline architecture matters: a well-designed system serves all consumers without building separate pipelines for each.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 1</h3>
+
+      <div class="quiz-q" data-answer="b">
+        <p>1. What is the primary purpose of an OLTP system?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Aggregate historical data for trend analysis</button>
+          <button class="quiz-opt" data-val="b">Handle concurrent transactional operations for applications</button>
+          <button class="quiz-opt" data-val="c">Store columnar data for efficient analytical scans</button>
+          <button class="quiz-opt" data-val="d">Train machine learning models on large datasets</button>
+        </div>
+        <div class="quiz-explanation">OLTP systems are designed for operational workloads: fast CRUD operations, high concurrency, and ACID guarantees. They run the business day-to-day (e.g., processing bank transfers, e-commerce orders).</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>2. Which is the best first question when starting a data engineering project?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Which cloud vendor has the most services?</button>
+          <button class="quiz-opt" data-val="b">Should we use Kafka or Airflow?</button>
+          <button class="quiz-opt" data-val="c">What decision does this data need to support?</button>
+          <button class="quiz-opt" data-val="d">Can we build everything in real-time?</button>
+        </div>
+        <div class="quiz-explanation">Architecture is a response to requirements. Start with the business decision, SLA, risk, and constraints. Tool selection comes after the job-to-be-done is understood.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>3. Why is data profiling done before building a pipeline?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">To discover nulls, duplicates, distributions, and quality issues that would cause silent failures</button>
+          <button class="quiz-opt" data-val="b">To make the pipeline run faster</button>
+          <button class="quiz-opt" data-val="c">Because it is required by GDPR regulations</button>
+          <button class="quiz-opt" data-val="d">To choose between AWS and Azure</button>
+        </div>
+        <div class="quiz-explanation">Profiling reveals data quality issues (nulls, duplicates, unexpected formats) before they become pipeline bugs. Building without profiling leads to silent failures and incorrect downstream data.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. Where does the data engineer sit within the data team?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Only between the database and the dashboard</button>
+          <button class="quiz-opt" data-val="b">Exclusively within the DevOps team</button>
+          <button class="quiz-opt" data-val="c">After the data scientist, cleaning up models</button>
+          <button class="quiz-opt" data-val="d">Between data producers (software/DevOps teams) and data consumers (analysts, scientists, leaders)</button>
+        </div>
+        <div class="quiz-explanation">Data engineers are the bridge between systems that create data and people/systems that consume it. They build the trusted flow that connects producers to consumers.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>5. An analyst needs last quarter's revenue by region on a Monday morning dashboard. What approach fits?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Real-time streaming with Apache Kafka and Flink</button>
+          <button class="quiz-opt" data-val="b">Scheduled batch ELT into a warehouse with a star schema model</button>
+          <button class="quiz-opt" data-val="c">Direct queries against the production OLTP database</button>
+          <button class="quiz-opt" data-val="d">A CSV file emailed every Friday</button>
+        </div>
+        <div class="quiz-explanation">Next-day aggregated metrics fit a scheduled batch pattern. ELT into a warehouse with star schema modeling gives the analyst fast queries and consistent metrics. Streaming is overkill; querying OLTP directly would harm production performance.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800; color:var(--navy); font-size:.95rem;"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="index.html" style="color:var(--primary);">&larr; All Modules</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()">
+      <span id="completeIcon">&#9744;</span>
+      <span id="completeText">Mark Complete</span>
+    </button>
+    <a href="module2.html" style="color:var(--primary);">Module 2: Sources &amp; Ingestion &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  window.toggleConcept = function(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    body.classList.toggle('open');
+    chevron.classList.toggle('open');
+  };
+
+  const reqData = {
+    dashboard: { title: 'Executive dashboard: "What happened last quarter?"', desc: '<strong>Latency:</strong> Next-day is fine (batch). <strong>Volume:</strong> Moderate, aggregated. <strong>Approach:</strong> Scheduled ELT into a warehouse with a star schema model and BI tool on top. Focus on data quality, freshness SLAs, and consistent metric definitions. dbt is ideal for the transformation layer.' },
+    fraud: { title: 'Fraud detection: "Is this transaction suspicious right now?"', desc: '<strong>Latency:</strong> Milliseconds to seconds (streaming). <strong>Volume:</strong> High event throughput. <strong>Approach:</strong> Event streaming (Kafka) into real-time processing (Flink) into a feature store and ML scoring API. Requires exactly-once semantics and idempotent writes. This is a Kappa architecture use case.' },
+    ml: { title: 'ML training data: "Build a churn prediction model"', desc: '<strong>Latency:</strong> Batch is fine. <strong>Volume:</strong> Large historical datasets. <strong>Approach:</strong> Wide, denormalized feature tables in a lakehouse. Version the training data. Use Spark or Polars for feature engineering at scale. Focus on reproducibility and data lineage.' },
+    gdpr: { title: 'GDPR compliance: "A user requested data deletion"', desc: '<strong>Latency:</strong> Within regulatory deadline (30 days). <strong>Volume:</strong> Individual records across systems. <strong>Approach:</strong> Requires comprehensive data catalog, lineage tracking, and the ability to identify and delete PII across all systems. Delta Lake or Iceberg MERGE operations enable targeted row-level deletes in the lakehouse.' }
+  };
+  document.querySelectorAll('[data-req]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-req]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = reqData[btn.dataset.req];
+      document.getElementById('reqResult').innerHTML = '<h5>' + d.title + '</h5><p>' + d.desc + '</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score = 0;
+    document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer = q.dataset.answer;
+      const opts = q.querySelectorAll('.quiz-opt');
+      const explanation = q.querySelector('.quiz-explanation');
+      opts.forEach(opt => {
+        opt.classList.add('disabled');
+        if (opt.dataset.val === answer) opt.classList.add('correct');
+        if (opt.classList.contains('selected')) {
+          if (opt.dataset.val === answer) score++;
+          else opt.classList.add('incorrect');
+        }
+      });
+      if (explanation) explanation.classList.add('show');
+    });
+    const total = document.querySelectorAll('.quiz-q').length;
+    document.getElementById('quizScore').textContent = 'Score: ' + score + ' / ' + total + (score === total ? '  Perfect! Ready for Module 2.' : '  Review the explanations and retry.');
+  });
+
+  document.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (opt.classList.contains('disabled')) return;
+      opt.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.style.borderColor = '#246be8';
+      opt.style.background = '#eff6ff';
+    });
+  });
+
+  document.getElementById('resetQuiz').addEventListener('click', () => {
+    document.querySelectorAll('.quiz-opt').forEach(opt => {
+      opt.classList.remove('correct', 'incorrect', 'disabled', 'selected');
+      opt.style.borderColor = '';
+      opt.style.background = '';
+    });
+    document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show'));
+    document.getElementById('quizScore').textContent = '';
+  });
+
+  const MODULE_KEY = 'foundations';
+  const STORAGE_KEY = 'de-modules-progress-v2';
+  function getProgress() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } }
+  function isComplete() { return getProgress().includes(MODULE_KEY); }
+  function renderComplete() {
+    const btn = document.getElementById('markComplete');
+    const icon = document.getElementById('completeIcon');
+    const text = document.getElementById('completeText');
+    if (isComplete()) { btn.classList.add('completed'); icon.innerHTML = '&#10003;'; text.textContent = 'Completed'; }
+    else { btn.classList.remove('completed'); icon.innerHTML = '&#9744;'; text.textContent = 'Mark Complete'; }
+  }
+  window.toggleComplete = function() {
+    let progress = getProgress();
+    if (progress.includes(MODULE_KEY)) progress = progress.filter(k => k !== MODULE_KEY);
+    else progress.push(MODULE_KEY);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch {}
+    renderComplete();
+  };
+  renderComplete();
+})();
+</script>
+</body>
+</html>

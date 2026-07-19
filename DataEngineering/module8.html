@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 8 – Govern, Secure &amp; Observe | Data Engineering</title>
+<meta name="description" content="Data governance, lineage, cataloging, access control, encryption, PII handling, GDPR, data observability, monitoring, and alerting for data pipelines.">
+<style>
+  :root{--primary:#065f46;--primary-light:#ecfdf5;--primary-dark:#064e3b;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#064e3b 0%,#065f46 60%,#34d399 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#064e3b;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 8 of 10</span>
+  <div class="nav-links"><a href="module7.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module9.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 08 &middot; Responsibility</div>
+    <h1>Govern, Secure &amp; Observe</h1>
+    <p>Trusted data requires more than correct transformations. It demands governance (who can access what), security (how data is protected), and observability (how you know when something is wrong before your stakeholders do).</p>
+    <div class="header-chips"><span class="chip">60 to 80 min</span><span class="chip">Intermediate to Advanced</span><span class="chip">5 concepts &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ecfdf5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>
+        <div><h2>Data Governance</h2><span class="sub">Policies, ownership, and accountability</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>What governance actually means in practice</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Data governance is the set of policies, processes, and accountabilities that ensure data is <strong>trustworthy, discoverable, secure, and compliant</strong>. It answers: Who owns this data? Who can access it? What does this field mean? How fresh is it?</p></div>
+          <div class="explainer"><div class="explainer-label how">Key components</div>
+            <ul>
+              <li><strong>Data catalog</strong>: a searchable inventory of all datasets, their schemas, owners, and descriptions (tools: DataHub, Atlan, OpenMetadata, Unity Catalog)</li>
+              <li><strong>Data lineage</strong>: visual map of how data flows from source through transformations to consumption (built into dbt, Dagster, or standalone tools like Marquez)</li>
+              <li><strong>Ownership</strong>: every dataset has a named owner responsible for quality and access decisions</li>
+              <li><strong>Business glossary</strong>: agreed-upon definitions for business terms (what exactly is "revenue"?)</li>
+              <li><strong>Access policies</strong>: role-based access control (RBAC), column-level security, row-level filtering</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div><h2>Security &amp; Privacy</h2><span class="sub">Protecting data at every layer</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Security layers for data engineering</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label how">Defense in depth</div>
+            <ul>
+              <li><strong>Encryption at rest</strong>: AES-256 for stored data (S3, ADLS default encryption, warehouse encryption)</li>
+              <li><strong>Encryption in transit</strong>: TLS/SSL for data moving between systems</li>
+              <li><strong>Access control</strong>: IAM roles, service accounts, least-privilege principle, RBAC</li>
+              <li><strong>Column masking</strong>: hide sensitive columns (SSN, credit card) from unauthorized roles</li>
+              <li><strong>Row-level security</strong>: filter rows based on user context (region, department)</li>
+              <li><strong>Audit logging</strong>: track who accessed what data and when</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>PII, GDPR, and CCPA compliance</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label what">What you need to know</div>
+            <ul>
+              <li><strong>PII (Personally Identifiable Information)</strong>: names, emails, phone numbers, IP addresses, social security numbers. Must be classified and protected.</li>
+              <li><strong>GDPR (EU)</strong>: right to be forgotten (deletion), data portability, consent management, 72-hour breach notification</li>
+              <li><strong>CCPA (California)</strong>: right to know what data is collected, right to delete, right to opt out of sale</li>
+              <li><strong>Data residency</strong>: some regulations require data to stay within geographic boundaries</li>
+              <li><strong>Techniques</strong>: tokenization, pseudonymization, hashing, dynamic masking</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div><h2>Data Observability</h2><span class="sub">Know when things break before stakeholders do</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>The five pillars of data observability</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What to monitor</div>
+            <ul>
+              <li><strong>Freshness</strong>: Is the data up to date? When was the last successful load?</li>
+              <li><strong>Volume</strong>: Did the expected number of rows arrive? Is it within normal range?</li>
+              <li><strong>Schema</strong>: Did columns change? Were columns added or removed?</li>
+              <li><strong>Distribution</strong>: Are value distributions within normal ranges? (null rates, value frequencies)</li>
+              <li><strong>Lineage</strong>: Which upstream change caused this downstream anomaly?</li>
+            </ul>
+          </div>
+          <div class="explainer"><div class="explainer-label how">Tools</div>
+            <ul>
+              <li><strong>Monte Carlo</strong>: automated anomaly detection across freshness, volume, distribution</li>
+              <li><strong>Elementary</strong>: open-source dbt-native data observability</li>
+              <li><strong>Great Expectations / Soda</strong>: programmatic quality checks integrated into pipelines</li>
+              <li><strong>Built-in warehouse monitoring</strong>: Snowflake, BigQuery, and Databricks all offer query and resource monitoring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 8</h3>
+
+      <div class="quiz-q" data-answer="b">
+        <p>1. What is data lineage?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">A backup copy of the database</button>
+          <button class="quiz-opt" data-val="b">A visual map showing how data flows from source through transformations to consumption</button>
+          <button class="quiz-opt" data-val="c">A type of encryption algorithm</button>
+          <button class="quiz-opt" data-val="d">A scheduling mechanism for DAGs</button>
+        </div>
+        <div class="quiz-explanation">Lineage traces the path of data from its origin through every transformation to its final destination. It is essential for debugging ("which upstream change broke this dashboard?") and compliance ("where does this PII data end up?").</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>2. What is the "right to be forgotten" under GDPR?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">The right for companies to forget about their data</button>
+          <button class="quiz-opt" data-val="b">The right to encrypt all data</button>
+          <button class="quiz-opt" data-val="c">A user's right to request deletion of their personal data from all systems</button>
+          <button class="quiz-opt" data-val="d">A data retention policy that automatically deletes data after 30 days</button>
+        </div>
+        <div class="quiz-explanation">GDPR Article 17 gives individuals the right to request erasure of their personal data. For data engineers, this requires knowing where PII exists across all systems (lineage + catalog) and the ability to delete it (MERGE/DELETE operations on lake tables).</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>3. Which observability pillar checks whether the expected number of rows arrived?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Volume</button>
+          <button class="quiz-opt" data-val="b">Freshness</button>
+          <button class="quiz-opt" data-val="c">Schema</button>
+          <button class="quiz-opt" data-val="d">Lineage</button>
+        </div>
+        <div class="quiz-explanation">Volume monitoring checks whether row counts are within expected ranges. A sudden drop to zero rows or an unexpected spike often indicates upstream issues.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. What security principle says users should only have the minimum access needed for their role?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Defense in depth</button>
+          <button class="quiz-opt" data-val="b">Zero trust</button>
+          <button class="quiz-opt" data-val="c">End-to-end encryption</button>
+          <button class="quiz-opt" data-val="d">Least privilege</button>
+        </div>
+        <div class="quiz-explanation">The principle of least privilege grants users only the minimum permissions required to perform their job. This limits the blast radius of compromised credentials and reduces accidental data exposure.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>5. What is a data catalog?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">A file system for storing Parquet files</button>
+          <button class="quiz-opt" data-val="b">A searchable inventory of datasets with schemas, owners, descriptions, and usage patterns</button>
+          <button class="quiz-opt" data-val="c">A machine learning model registry</button>
+          <button class="quiz-opt" data-val="d">A type of database index</button>
+        </div>
+        <div class="quiz-explanation">A data catalog is a centralized, searchable inventory that helps users discover, understand, and trust available datasets. Tools include DataHub, Atlan, OpenMetadata, and Unity Catalog.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module7.html" style="color:var(--primary);">&larr; Module 7: Orchestrate</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module9.html" style="color:var(--primary);">Module 9: Tools Landscape &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 9.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#065f46'; o.style.background='#ecfdf5'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+  const MK='governance',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 10 – Scale, Cost &amp; Architecture | Data Engineering</title>
+<meta name="description" content="Architecture patterns, cost optimization, data mesh, data fabric, scalability, cloud economics, FinOps, and building your first production pipeline.">
+<style>
+  :root{--primary:#1556c5;--primary-light:#eff6ff;--primary-dark:#0f3d8c;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#0f3d8c 0%,#1556c5 50%,#246be8 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary-dark)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#1e40af;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .congrats{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;border-radius:14px;padding:36px;margin-top:44px;text-align:center}.congrats h3{font-size:1.4rem;font-weight:850;margin-bottom:10px}.congrats p{font-size:1rem;opacity:.9;max-width:560px;margin:0 auto 20px;line-height:1.7}.congrats a{color:#34d399;font-weight:750}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 10 of 10</span>
+  <div class="nav-links"><a href="module9.html">&larr; Prev</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 10 &middot; Mastery</div>
+    <h1>Scale, Cost &amp; Architecture</h1>
+    <p>Architecture is the sum of all trade-offs you chose not to revisit. This final module synthesizes everything: architectural paradigms, cost optimization, emerging patterns like Data Mesh, and how to design systems that evolve with changing requirements.</p>
+    <div class="header-chips"><span class="chip">70 to 90 min</span><span class="chip">Advanced</span><span class="chip">5 concepts &middot; 1 interactive &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><h2>Architecture Paradigms</h2><span class="sub">Data Mesh, Data Fabric, and centralized patterns</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Compare architecture paradigms</h4>
+        <p class="desc">Select a paradigm to understand its philosophy, strengths, and when it fits.</p>
+        <div class="toggle-group" id="archToggle">
+          <button class="toggle-btn active" data-arch="central">Centralized</button>
+          <button class="toggle-btn" data-arch="mesh">Data Mesh</button>
+          <button class="toggle-btn" data-arch="fabric">Data Fabric</button>
+        </div>
+        <div class="result-panel" id="archResult">
+          <h5>Centralized: One team, one platform</h5>
+          <p><strong>Philosophy:</strong> A dedicated data team owns the entire data platform: ingestion, storage, transformation, and serving. <strong>Strengths:</strong> Consistent standards, economies of scale, clear ownership, simpler governance. <strong>Best for:</strong> Small to medium organizations, or companies in early data maturity stages. <strong>Challenge:</strong> The central team becomes a bottleneck as the number of data consumers and sources grows.</p>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Data Mesh: domain-oriented, decentralized ownership</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Proposed by Zhamak Dehghani, Data Mesh is an organizational and architectural paradigm that treats <strong>data as a product owned by domain teams</strong>, not a centralized data team. It has four principles:</p>
+            <ul>
+              <li><strong>Domain ownership</strong>: each business domain (sales, marketing, supply chain) owns and serves its own data products</li>
+              <li><strong>Data as a product</strong>: data is treated with the same rigor as software products (SLAs, documentation, discoverability)</li>
+              <li><strong>Self-serve platform</strong>: a central platform team provides infrastructure and tooling that domain teams use independently</li>
+              <li><strong>Federated computational governance</strong>: shared policies enforced through automation, not manual review</li>
+            </ul>
+          </div>
+          <div class="explainer"><div class="explainer-label how">Trade-offs</div>
+            <ul>
+              <li><strong>Pro</strong>: Eliminates central bottleneck, scales with organizational growth, domain expertise embedded in data products</li>
+              <li><strong>Con</strong>: Requires mature engineering culture across all domains, risk of inconsistency without strong governance automation</li>
+              <li><strong>Reality</strong>: Most organizations adopt hybrid approaches, centralizing infrastructure while distributing ownership</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fef3c7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div><h2>Cost Optimization &amp; FinOps</h2><span class="sub">Cloud costs are engineering decisions</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Where data engineering costs come from</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">Cost categories</div>
+            <ul>
+              <li><strong>Storage</strong>: object storage (cheap), warehouse storage (moderate), hot vs. cold tiers</li>
+              <li><strong>Compute</strong>: warehouse credits, Spark cluster hours, serverless function invocations</li>
+              <li><strong>Data transfer</strong>: egress fees between regions, zones, or cloud providers (often the hidden cost)</li>
+              <li><strong>Tooling</strong>: SaaS licenses (Fivetran, Monte Carlo, Atlan), managed services</li>
+              <li><strong>People</strong>: engineering time is usually the largest cost, not infrastructure</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Cost optimization strategies</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label how">Practical tactics</div>
+            <ul>
+              <li><strong>Right-size compute</strong>: auto-scaling clusters, suspend idle warehouses, use spot/preemptible instances</li>
+              <li><strong>Partition and prune</strong>: well-designed partitions reduce scanned data volume by 10 to 100x</li>
+              <li><strong>Compress effectively</strong>: Parquet + ZSTD compression reduces storage and scan costs</li>
+              <li><strong>Materialize wisely</strong>: pre-compute expensive joins as materialized views; avoid recomputing on every query</li>
+              <li><strong>Lifecycle policies</strong>: move cold data to cheaper storage tiers, set retention policies, delete unused tables</li>
+              <li><strong>Monitor and alert</strong>: set budget alerts, track cost per pipeline, identify expensive queries</li>
+              <li><strong>Choose the right tool</strong>: DuckDB for 5 GB is free; Spark for 5 GB is wasteful</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+        <div><h2>Designing Your First Production Pipeline</h2><span class="sub">Putting it all together</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>The checklist for production readiness</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label how">Before you ship, verify</div>
+            <ul>
+              <li><strong>Requirements documented</strong>: what decision does this data support? What is the SLA?</li>
+              <li><strong>Idempotent</strong>: safe to re-run without duplicates or corruption</li>
+              <li><strong>Tested</strong>: unit tests, data quality checks, integration tests with sample data</li>
+              <li><strong>Monitored</strong>: alerting on failures, freshness checks, volume anomaly detection</li>
+              <li><strong>Documented</strong>: schema descriptions, lineage, business logic, runbook for failures</li>
+              <li><strong>Governed</strong>: access controls, PII handling, retention policies defined</li>
+              <li><strong>Cost-aware</strong>: estimated monthly cost, cost monitoring in place</li>
+              <li><strong>Version controlled</strong>: all code in Git, CI/CD pipeline configured, deployment automated</li>
+              <li><strong>Recoverable</strong>: can backfill from Bronze, can roll back bad deployments</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 10</h3>
+
+      <div class="quiz-q" data-answer="b">
+        <p>1. What are the four principles of Data Mesh?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Volume, velocity, variety, veracity</button>
+          <button class="quiz-opt" data-val="b">Domain ownership, data as a product, self-serve platform, federated governance</button>
+          <button class="quiz-opt" data-val="c">Bronze, silver, gold, platinum</button>
+          <button class="quiz-opt" data-val="d">Extract, transform, load, serve</button>
+        </div>
+        <div class="quiz-explanation">Data Mesh (Zhamak Dehghani) has four principles: domain ownership of data, treating data as a product, a self-serve data platform, and federated computational governance.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>2. Which cloud cost is often underestimated by data engineers?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Object storage per GB</button>
+          <button class="quiz-opt" data-val="b">Lambda function invocations</button>
+          <button class="quiz-opt" data-val="c">Data transfer (egress) between regions and cloud providers</button>
+          <button class="quiz-opt" data-val="d">IDE license costs</button>
+        </div>
+        <div class="quiz-explanation">Data transfer (egress) costs are the most commonly overlooked expense. Moving data between regions, availability zones, or cloud providers can cost $0.01 to $0.09 per GB, which adds up quickly at scale.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>3. What is the most effective way to reduce query costs in a columnar warehouse?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Well-designed partitioning and selecting only needed columns</button>
+          <button class="quiz-opt" data-val="b">Upgrading to a larger warehouse size</button>
+          <button class="quiz-opt" data-val="c">Running queries more frequently</button>
+          <button class="quiz-opt" data-val="d">Storing data as CSV instead of Parquet</button>
+        </div>
+        <div class="quiz-explanation">Partitioning enables the engine to skip irrelevant data (partition pruning), and selecting only needed columns leverages columnar storage. Together, they can reduce scanned data by 10 to 100x, directly reducing cost in pay-per-scan warehouses.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. Why do most organizations adopt a hybrid approach rather than pure Data Mesh?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Data Mesh requires a specific cloud provider</button>
+          <button class="quiz-opt" data-val="b">Data Mesh only works with streaming data</button>
+          <button class="quiz-opt" data-val="c">Data Mesh is only for small teams</button>
+          <button class="quiz-opt" data-val="d">Pure Data Mesh requires high engineering maturity across all domains, which most organizations lack</button>
+        </div>
+        <div class="quiz-explanation">Data Mesh requires every domain team to have the engineering capability to own data products. Most organizations centralize infrastructure and tooling while distributing ownership gradually as teams mature.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>5. Which of these is NOT part of a production readiness checklist for data pipelines?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Idempotent writes</button>
+          <button class="quiz-opt" data-val="b">Maximum possible throughput regardless of cost</button>
+          <button class="quiz-opt" data-val="c">Monitoring and alerting</button>
+          <button class="quiz-opt" data-val="d">Version-controlled code with CI/CD</button>
+        </div>
+        <div class="quiz-explanation">Production readiness requires balancing performance with cost. "Maximum throughput regardless of cost" is the opposite of good engineering. Production pipelines should be right-sized, cost-aware, and optimized for the actual SLA requirements.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+
+    <!-- Completion card -->
+    <div class="congrats">
+      <h3>You have completed all 10 modules.</h3>
+      <p>You now have a comprehensive foundation in data engineering: from requirements and source systems, through storage, transformation, modeling, streaming, orchestration, governance, tools, and architecture. The next step is to build.</p>
+      <a href="index.html">&larr; Return to the module hub</a>
+    </div>
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module9.html" style="color:var(--primary);">&larr; Module 9: Tools Landscape</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="index.html" style="color:var(--primary);">Back to all modules &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const archData = {
+    central:{title:'Centralized: One team, one platform',desc:'<strong>Philosophy:</strong> A dedicated data team owns the entire data platform: ingestion, storage, transformation, and serving. <strong>Strengths:</strong> Consistent standards, economies of scale, clear ownership, simpler governance. <strong>Best for:</strong> Small to medium organizations, or companies in early data maturity stages. <strong>Challenge:</strong> The central team becomes a bottleneck as the number of data consumers and sources grows.'},
+    mesh:{title:'Data Mesh: Decentralized, domain-driven',desc:'<strong>Philosophy:</strong> Domains own their data as products. A central platform team provides self-serve tooling. Governance is federated through automation. <strong>Strengths:</strong> Eliminates central bottleneck, embeds domain expertise in data products, scales with organization. <strong>Best for:</strong> Large organizations with mature engineering culture across multiple business domains. <strong>Challenge:</strong> Requires high engineering maturity in every domain team. Risk of inconsistency without strong automated governance.'},
+    fabric:{title:'Data Fabric: AI-driven, metadata-first',desc:'<strong>Philosophy:</strong> A technology architecture (not organizational) that uses metadata, knowledge graphs, and AI/ML to automate data discovery, integration, and governance across distributed systems. <strong>Strengths:</strong> Automates routine integration tasks, works across existing tools and platforms, metadata-driven intelligence. <strong>Best for:</strong> Organizations with many heterogeneous systems that need automated integration and governance without full organizational restructuring. <strong>Challenge:</strong> Vendor-driven concept with varying definitions; "Data Fabric" products vary significantly in capabilities.'}
+  };
+  document.querySelectorAll('[data-arch]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-arch]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = archData[btn.dataset.arch];
+      document.getElementById('archResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Congratulations! You have completed the Data Engineering journey.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#1556c5'; o.style.background='#eff6ff'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='architecture',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>

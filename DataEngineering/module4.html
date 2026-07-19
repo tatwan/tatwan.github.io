@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 – Transform &amp; Quality | Data Engineering</title>
+<meta name="description" content="Bronze to Silver to Gold progression, data profiling, deduplication, validation, data quality frameworks, and processing libraries including Pandas, Polars, DuckDB, and PySpark.">
+<style>
+  :root{--primary:#7c3aed;--primary-light:#fdf4ff;--primary-dark:#6d28d9;--navy:#071b3d;--teal:#087f73;--ink:#10233f;--muted:#52637b;--line:#d7e1ee;--bg:#f4f7fb;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}a{color:var(--primary-dark)}
+  .topnav{background:var(--navy);color:#fff;padding:0 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;min-height:52px}.topnav a{color:#fff;text-decoration:none;font-size:.85rem;opacity:.85;font-weight:600}.topnav a:hover{opacity:1}.topnav .module-title{font-weight:800;font-size:.88rem;opacity:1}.nav-links{display:flex;gap:18px;align-items:center}.nav-sep{opacity:.3}
+  .page-header{background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 60%,#a78bfa 100%);color:#fff;padding:56px 32px 48px}.page-header .module-badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 16px;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}.page-header h1{font-size:clamp(26px,4.5vw,44px);font-weight:850;margin-bottom:12px;line-height:1.15;letter-spacing:-.03em}.page-header>.container>p{font-size:1.08rem;opacity:.88;max-width:640px;line-height:1.7}.header-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chip{background:rgba(255,255,255,.16);border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600}.container{max-width:920px;margin:0 auto;padding-left:24px;padding-right:24px}
+  .content-area{padding:48px 0 80px}.section{margin-bottom:52px}.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}.section-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}.section-header h2{font-size:1.35rem;font-weight:850;color:var(--navy)}.section-header .sub{display:block;font-size:.82rem;color:var(--muted);font-weight:600}
+  .concept-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}.concept-header{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}.concept-header:hover{background:#fafcff}.concept-header h3{font-size:1.05rem;font-weight:780}.concept-body{padding:0 22px 22px;display:none}.concept-body.open{display:block}.chevron{transition:transform .2s;font-size:.7rem;color:var(--muted)}.chevron.open{transform:rotate(180deg)}
+  .pillbox{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.pill{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase}.pill.what{background:#dbeafe;color:#1d4ed8}.pill.why{background:#d1fae5;color:#065f46}.pill.how{background:#fef3c7;color:#92400e}.pill.key{background:#ede9fe;color:#5b21b6}
+  .explainer{margin-bottom:16px}.explainer-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.explainer-label.what{color:#2563eb}.explainer-label.why{color:#059669}.explainer-label.how{color:#d97706}.explainer p{font-size:.94rem;color:#374151;line-height:1.75}.explainer ul{margin:6px 0 0;padding-left:20px;font-size:.92rem;color:#374151}.explainer li{margin-bottom:4px}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:18px 0;border-radius:10px;overflow:hidden}.compare-table th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-weight:750}.compare-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.compare-table tr:last-child td{border-bottom:none}.compare-table tr:nth-child(even) td{background:#f8fafc}.good{color:#059669;font-weight:700}.bad{color:#dc2626;font-weight:600}
+  .diagram-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}.diagram-card h4{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:18px}.flow-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.flow-box{min-width:100px;padding:14px 18px;border-radius:10px;text-align:center;font-weight:750;font-size:.88rem}.flow-arrow{color:#94a3b8;font-size:1.3rem;font-weight:900}
+  .interactive-box{background:var(--card);border:2px solid var(--primary);border-radius:14px;padding:24px;margin:24px 0}.interactive-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;color:var(--primary-dark)}.interactive-box .desc{font-size:.85rem;color:var(--muted);margin-bottom:16px}.toggle-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.toggle-btn{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.88rem;font-weight:720;cursor:pointer;transition:.15s}.toggle-btn:hover{border-color:var(--primary);color:var(--primary)}.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.result-panel{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:20px;min-height:80px}.result-panel h5{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:6px}.result-panel p{font-size:.9rem;color:var(--muted);margin:0}
+  .quiz-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:44px}.quiz-section h3{font-size:1.15rem;font-weight:800;margin-bottom:22px}.quiz-q{margin-bottom:26px}.quiz-q p{font-size:.94rem;font-weight:700;margin-bottom:12px;line-height:1.5}.quiz-options{display:flex;flex-direction:column;gap:8px}.quiz-opt{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:11px 16px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-weight:600}.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}.quiz-opt.correct{background:#d1fae5;border-color:#34d399;color:#065f46}.quiz-opt.incorrect{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.quiz-opt.disabled{pointer-events:none;opacity:.7}.quiz-explanation{display:none;margin-top:10px;padding:12px 16px;border-radius:8px;background:var(--primary-light);color:#5b21b6;font-size:.88rem;line-height:1.6}.quiz-explanation.show{display:block}.quiz-actions{display:flex;gap:12px;margin-top:20px;align-items:center}.btn{padding:11px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:750;cursor:pointer;transition:.15s}.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--primary)}.btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .module-footer{padding:32px 0;border-top:1px solid var(--line);background:#fff}.footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.footer-row a{text-decoration:none;font-weight:750;font-size:.92rem}.mark-complete-btn{padding:12px 24px;border:2px solid var(--teal);border-radius:10px;background:#fff;color:var(--teal);font-size:.92rem;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}.mark-complete-btn:hover{background:#e7f7f4}.mark-complete-btn.completed{background:var(--teal);color:#fff;border-color:var(--teal)}
+  @media(max-width:760px){.page-header{padding:40px 20px 32px}.content-area{padding:32px 0 60px}.topnav{padding:0 16px;font-size:.82rem}.nav-links{gap:10px}.flow-row{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&larr; All Modules</a>
+  <span class="module-title">Module 4 of 10</span>
+  <div class="nav-links"><a href="module3.html">&larr; Prev</a><span class="nav-sep">|</span><a href="module5.html">Next &rarr;</a></div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="module-badge">Module 04 &middot; Trust</div>
+    <h1>Transform &amp; Quality</h1>
+    <p>Raw data rarely arrives ready to trust. Transformation is the engineering discipline of progressively improving data from raw copies into reliable, business-ready assets that consumers can depend on.</p>
+    <div class="header-chips"><span class="chip">60 to 80 min</span><span class="chip">Intermediate</span><span class="chip">5 concepts &middot; 1 interactive &middot; 5 quiz questions</span></div>
+  </div>
+</header>
+
+<div class="content-area">
+  <div class="container">
+
+    <!-- SECTION 1: Medallion Architecture -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ede9fe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><h2>The Medallion Architecture</h2><span class="sub">Bronze, Silver, and Gold</span></div>
+      </div>
+
+      <div class="diagram-card">
+        <h4>Progressive data refinement</h4>
+        <div class="flow-row">
+          <div class="flow-box" style="background:#92400e;color:#fff;border:none;min-width:140px;">Bronze<br><small style="font-weight:500;opacity:.85;">Raw, as-landed</small></div>
+          <span class="flow-arrow">&rarr;</span>
+          <div class="flow-box" style="background:#6b7280;color:#fff;border:none;min-width:140px;">Silver<br><small style="font-weight:500;opacity:.85;">Conformed, trusted</small></div>
+          <span class="flow-arrow">&rarr;</span>
+          <div class="flow-box" style="background:#d97706;color:#fff;border:none;min-width:140px;">Gold<br><small style="font-weight:500;opacity:.85;">Business-ready</small></div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Bronze: the raw safety net</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Bronze stores an <strong>auditable copy of source data</strong> with minimal transformation. The goal is preserving original fidelity plus ingestion metadata (load timestamp, source system, batch ID). Bronze is your safety net: if anything downstream breaks, you can always rebuild from here.</p></div>
+          <div class="explainer"><div class="explainer-label how">What happens at Bronze</div>
+            <ul>
+              <li>Land data in its original structure (or close to it)</li>
+              <li>Add ingestion metadata: load_timestamp, source_system, file_name</li>
+              <li>Store as Parquet in object storage, partitioned by ingestion date</li>
+              <li>Quarantine corrupt or malformed records (don't silently drop them)</li>
+              <li>Keep history: append-only or versioned for replay capability</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Silver: conformed and trusted</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Silver is where engineering quality becomes organizational trust. Data is cleaned, deduplicated, validated, and conformed so that multiple teams can reuse it <strong>without relearning every source</strong>.</p></div>
+          <div class="explainer"><div class="explainer-label how">What happens at Silver</div>
+            <ul>
+              <li><strong>Deduplication</strong>: remove exact duplicates and resolve near-duplicates</li>
+              <li><strong>Validation</strong>: type checks, range checks, null constraints, referential integrity</li>
+              <li><strong>Standardization</strong>: unify date formats, currency codes, country names, casing</li>
+              <li><strong>Identity resolution</strong>: conform customer IDs, product codes across sources</li>
+              <li><strong>Schema enforcement</strong>: apply schema on write, reject non-conforming records</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Gold: business-ready models</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label what">What it is</div><p>Gold organizes data around <strong>decisions, KPIs, products, and business questions</strong>. It is not merely clean data; it carries shared analytical meaning. Gold tables are the ones analysts query, dashboards consume, and ML models train on.</p></div>
+          <div class="explainer"><div class="explainer-label how">What happens at Gold</div>
+            <ul>
+              <li>Build dimensional models (facts and dimensions)</li>
+              <li>Create domain-specific aggregates and metrics</li>
+              <li>Materialize joined views for query performance</li>
+              <li>Apply business logic: calculated fields, fiscal calendars, segments</li>
+              <li>Publish to consumption layer with clear documentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Processing Libraries -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#dbeafe;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><h2>Processing Libraries</h2><span class="sub">Choose the right engine for the data volume</span></div>
+      </div>
+
+      <div class="interactive-box">
+        <h4>Interactive: Compare processing libraries</h4>
+        <p class="desc">Select a library to understand when to use it and what it excels at.</p>
+        <div class="toggle-group" id="libToggle">
+          <button class="toggle-btn active" data-lib="pandas">Pandas</button>
+          <button class="toggle-btn" data-lib="polars">Polars</button>
+          <button class="toggle-btn" data-lib="duckdb">DuckDB</button>
+          <button class="toggle-btn" data-lib="pyspark">PySpark</button>
+          <button class="toggle-btn" data-lib="dbt">dbt</button>
+        </div>
+        <div class="result-panel" id="libResult">
+          <h5>Pandas: The Python data workhorse</h5>
+          <p><strong>Type:</strong> Single-machine DataFrame library. <strong>Best for:</strong> Data under ~10 GB, prototyping, ad-hoc analysis, data science workflows. <strong>Strengths:</strong> Huge ecosystem, familiar API, integrates with everything. <strong>Limitation:</strong> Single-threaded by default, loads everything into memory, does not scale to large datasets. For bigger data, consider Polars or PySpark.</p>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Library</th><th>Scale</th><th>Language</th><th>Best for</th><th>Key strength</th></tr>
+        <tr><td><strong>Pandas</strong></td><td>GBs</td><td>Python</td><td>Prototyping, small data</td><td>Ecosystem, familiarity</td></tr>
+        <tr><td><strong>Polars</strong></td><td>10s of GBs</td><td>Rust (Python API)</td><td>Fast single-machine work</td><td class="good">Speed, memory efficiency</td></tr>
+        <tr><td><strong>DuckDB</strong></td><td>10s of GBs</td><td>SQL (Python API)</td><td>Local OLAP, Parquet queries</td><td class="good">SQL on files, zero setup</td></tr>
+        <tr><td><strong>PySpark</strong></td><td>TBs to PBs</td><td>Python / Scala</td><td>Distributed processing</td><td class="good">Horizontal scale</td></tr>
+        <tr><td><strong>dbt</strong></td><td>Warehouse scale</td><td>SQL + Jinja</td><td>Warehouse transforms</td><td class="good">Testing, docs, modularity</td></tr>
+      </table>
+    </div>
+
+    <!-- SECTION 3: Data Quality -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:#d1fae5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 1.64L19 4a1 1 0 011 1v5.59a9 9 0 01-4.32 7.68L12 22l-3.68-3.73A9 9 0 014 10.59V5a1 1 0 011-1l3.91-.36z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><h2>Data Quality</h2><span class="sub">Measure trust, don't assume it</span></div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>The six dimensions of data quality</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body open">
+          <div class="explainer"><div class="explainer-label what">What to measure</div>
+            <ul>
+              <li><strong>Completeness</strong>: Are expected values present? What is the null rate per column?</li>
+              <li><strong>Uniqueness</strong>: Are primary keys actually unique? Are there duplicate records?</li>
+              <li><strong>Validity</strong>: Do values conform to defined rules? (e.g., age > 0, email matches pattern)</li>
+              <li><strong>Accuracy</strong>: Do values match reality? (hardest to measure without a reference source)</li>
+              <li><strong>Consistency</strong>: Do related datasets agree? (same customer count in orders and CRM?)</li>
+              <li><strong>Freshness</strong>: Is the data current enough for its intended use case?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <div class="concept-header" onclick="toggleConcept(this)"><h3>Quality tools: Great Expectations, Soda, dbt tests</h3><span class="chevron">&#9660;</span></div>
+        <div class="concept-body">
+          <div class="explainer"><div class="explainer-label how">Tools for enforcement</div>
+            <ul>
+              <li><strong>Great Expectations</strong>: Python framework for defining, running, and documenting data expectations. Write tests like "expect_column_values_to_not_be_null" and generate data docs.</li>
+              <li><strong>Soda</strong>: SodaCL language for checks like "row_count > 0", freshness checks, anomaly detection. Integrates with orchestrators.</li>
+              <li><strong>dbt tests</strong>: Built-in and custom SQL tests (unique, not_null, accepted_values, relationships). Run as part of the dbt build process.</li>
+              <li><strong>Monte Carlo / Elementary</strong>: Data observability platforms that detect anomalies automatically (schema changes, volume drops, distribution shifts).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <h3>Knowledge Check: Module 4</h3>
+
+      <div class="quiz-q" data-answer="c">
+        <p>1. What is the primary purpose of the Bronze layer?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Serve aggregated metrics to BI dashboards</button>
+          <button class="quiz-opt" data-val="b">Apply business logic and dimensional modeling</button>
+          <button class="quiz-opt" data-val="c">Preserve a raw, auditable copy of source data with minimal transformation</button>
+          <button class="quiz-opt" data-val="d">Train machine learning models</button>
+        </div>
+        <div class="quiz-explanation">Bronze is the safety net: it preserves source data in its original form plus ingestion metadata. If anything downstream breaks, you can always rebuild from Bronze.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <p>2. Which library would you choose for processing a 500 GB dataset distributed across a cluster?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">PySpark</button>
+          <button class="quiz-opt" data-val="b">Pandas</button>
+          <button class="quiz-opt" data-val="c">DuckDB</button>
+          <button class="quiz-opt" data-val="d">A shell script with awk</button>
+        </div>
+        <div class="quiz-explanation">PySpark is designed for distributed processing across clusters and can handle terabytes to petabytes. Pandas and DuckDB are single-machine tools and would struggle with 500 GB.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <p>3. What distinguishes Silver from Gold in the medallion architecture?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Silver uses Parquet and Gold uses CSV</button>
+          <button class="quiz-opt" data-val="b">Silver is conformed and trusted; Gold is modeled around business decisions</button>
+          <button class="quiz-opt" data-val="c">Silver is faster to query than Gold</button>
+          <button class="quiz-opt" data-val="d">Gold is raw data and Silver is aggregated</button>
+        </div>
+        <div class="quiz-explanation">Silver makes data trustworthy (deduplicated, validated, standardized). Gold shapes that trusted data into business models (facts, dimensions, metrics) designed for specific consumption use cases.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <p>4. Which of these is NOT one of the six dimensions of data quality?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Completeness</button>
+          <button class="quiz-opt" data-val="b">Freshness</button>
+          <button class="quiz-opt" data-val="c">Validity</button>
+          <button class="quiz-opt" data-val="d">Velocity</button>
+        </div>
+        <div class="quiz-explanation">The six dimensions are: Completeness, Uniqueness, Validity, Accuracy, Consistency, and Freshness. Velocity is a big data concept (volume, velocity, variety) but not a quality dimension.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <p>5. What is dbt primarily used for in a data pipeline?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-val="a">Ingesting data from APIs into object storage</button>
+          <button class="quiz-opt" data-val="b">Orchestrating DAGs and scheduling jobs</button>
+          <button class="quiz-opt" data-val="c">SQL-based transformation with testing, documentation, and version control</button>
+          <button class="quiz-opt" data-val="d">Real-time stream processing</button>
+        </div>
+        <div class="quiz-explanation">dbt (data build tool) is a SQL-first transformation framework. It brings software engineering practices (testing, documentation, version control, modularity) to warehouse transformations. It does not handle ingestion, orchestration, or streaming.</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="checkQuiz">Check Answers</button>
+        <button class="btn btn-secondary" id="resetQuiz">Try Again</button>
+        <span id="quizScore" style="font-weight:800;color:var(--navy);font-size:.95rem;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="module-footer">
+  <div class="container footer-row">
+    <a href="module3.html" style="color:var(--primary-dark);">&larr; Module 3: Storage &amp; Formats</a>
+    <button class="mark-complete-btn" id="markComplete" onclick="toggleComplete()"><span id="completeIcon">&#9744;</span><span id="completeText">Mark Complete</span></button>
+    <a href="module5.html" style="color:var(--primary-dark);">Module 5: Data Modeling &rarr;</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  window.toggleConcept = function(h) { const b=h.nextElementSibling,c=h.querySelector('.chevron'); b.classList.toggle('open'); c.classList.toggle('open'); };
+
+  const libData = {
+    pandas:{title:'Pandas: The Python data workhorse',desc:'<strong>Type:</strong> Single-machine DataFrame library. <strong>Best for:</strong> Data under ~10 GB, prototyping, ad-hoc analysis, data science workflows. <strong>Strengths:</strong> Huge ecosystem, familiar API, integrates with everything. <strong>Limitation:</strong> Single-threaded by default, loads everything into memory, does not scale to large datasets. For bigger data, consider Polars or PySpark.'},
+    polars:{title:'Polars: Speed and memory efficiency',desc:'<strong>Type:</strong> Single-machine DataFrame library written in Rust with a Python API. <strong>Best for:</strong> Datasets from 1 to 100 GB where Pandas is too slow. <strong>Strengths:</strong> Lazy evaluation, multithreaded, Apache Arrow memory format, 5 to 10x faster than Pandas on common operations. <strong>Limitation:</strong> Smaller ecosystem than Pandas. Learning curve if you rely heavily on Pandas idioms.'},
+    duckdb:{title:'DuckDB: SQL analytics on your laptop',desc:'<strong>Type:</strong> In-process analytical database (like SQLite but for OLAP). <strong>Best for:</strong> Running SQL directly on Parquet files, CSVs, and DataFrames without a server. <strong>Strengths:</strong> Zero setup, blazing fast for local OLAP, reads Parquet/CSV/JSON directly, integrates with Pandas and Polars. <strong>Limitation:</strong> Single-machine only. Not designed for production serving or distributed workloads.'},
+    pyspark:{title:'PySpark: Distributed processing at scale',desc:'<strong>Type:</strong> Python API for Apache Spark. Distributed computing framework. <strong>Best for:</strong> Datasets from 100 GB to petabytes across a cluster. <strong>Strengths:</strong> Horizontal scaling, fault tolerance, rich ecosystem (Spark SQL, MLlib, Structured Streaming). Runs on Databricks, EMR, Dataproc. <strong>Limitation:</strong> Requires cluster infrastructure. Overhead makes it slower than single-machine tools for small datasets.'},
+    dbt:{title:'dbt: Software engineering for SQL transforms',desc:'<strong>Type:</strong> SQL-first transformation framework. <strong>Best for:</strong> Warehouse-based transformations (Snowflake, BigQuery, Redshift, Databricks). <strong>Strengths:</strong> Modular SQL models, built-in testing (unique, not_null, custom), auto-generated documentation, version control, dependency management. <strong>Limitation:</strong> SQL only (Jinja for templating). Requires a warehouse or lakehouse as the compute engine. Does not handle ingestion or orchestration.'}
+  };
+  document.querySelectorAll('[data-lib]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-lib]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = libData[btn.dataset.lib];
+      document.getElementById('libResult').innerHTML = '<h5>'+d.title+'</h5><p>'+d.desc+'</p>';
+    });
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score=0; document.querySelectorAll('.quiz-q').forEach(q => {
+      const answer=q.dataset.answer, opts=q.querySelectorAll('.quiz-opt'), exp=q.querySelector('.quiz-explanation');
+      opts.forEach(o => { o.classList.add('disabled'); if(o.dataset.val===answer) o.classList.add('correct'); if(o.classList.contains('selected')){ if(o.dataset.val===answer) score++; else o.classList.add('incorrect'); } });
+      if(exp) exp.classList.add('show');
+    });
+    document.getElementById('quizScore').textContent='Score: '+score+'/5'+(score===5?' Perfect! Ready for Module 5.':' Review explanations and retry.');
+  });
+  document.querySelectorAll('.quiz-opt').forEach(o => { o.addEventListener('click', () => { if(o.classList.contains('disabled')) return; o.parentElement.querySelectorAll('.quiz-opt').forEach(s => s.classList.remove('selected')); o.classList.add('selected'); o.style.borderColor='#7c3aed'; o.style.background='#fdf4ff'; }); });
+  document.getElementById('resetQuiz').addEventListener('click', () => { document.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','incorrect','disabled','selected'); o.style.borderColor=''; o.style.background=''; }); document.querySelectorAll('.quiz-explanation').forEach(e => e.classList.remove('show')); document.getElementById('quizScore').textContent=''; });
+
+  const MK='transform',SK='de-modules-progress-v2';
+  function gp(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+  function ic(){return gp().includes(MK)}
+  function rc(){const b=document.getElementById('markComplete'),i=document.getElementById('completeIcon'),t=document.getElementById('completeText');if(ic()){b.classList.add('completed');i.innerHTML='&#10003;';t.textContent='Completed'}else{b.classList.remove('completed');i.innerHTML='&#9744;';t.textContent='Mark Complete'}}
+  window.toggleComplete=function(){let p=gp();if(p.includes(MK))p=p.filter(k=>k!==MK);else p.push(MK);try{localStorage.setItem(SK,JSON.stringify(p))}catch{}rc()};
+  rc();
+})();
+</script>
+</body>
+</html>
