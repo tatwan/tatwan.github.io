@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive, vendor-neutral learning journey through modern data engineering—from source systems to trusted decisions.">
+  <meta name="theme-color" content="#071b3d">
+  <meta property="og:title" content="The Data Engineering System">
+  <meta property="og:description" content="From source data to trusted decisions—an interactive learning map for data engineering students.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og.png">
+  <title>The Data Engineering System | Interactive Learning Journey</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy:#071b3d; --navy-2:#0c2d5c; --blue:#246be8; --blue-2:#1556c5;
+      --teal:#087f73; --amber:#b76605; --ink:#10233f; --muted:#52637b;
+      --line:#d7e1ee; --paper:#f4f7fb; --blue-soft:#eaf2ff; --teal-soft:#e7f7f4;
+      --white:#fff; --shadow:0 18px 46px rgba(16,45,84,.10); --radius:18px;
+      --content:min(1180px, calc(100vw - 40px));
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:108px; }
+    body { margin:0; color:var(--ink); background:var(--white); font:17px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, input, select { font:inherit; }
+    button, select, input[type="checkbox"], input[type="radio"] { cursor:pointer; }
+    button, a, input, select, summary { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:3px solid #ffb84d; outline-offset:3px; }
+    a { color:var(--blue-2); }
+    h1, h2, h3 { color:var(--navy); line-height:1.12; text-wrap:balance; }
+    h1 { margin:.25em 0; font-size:clamp(2.8rem, 7vw, 5.7rem); letter-spacing:-.055em; }
+    h2 { margin:.3em 0 .45em; font-size:clamp(2.15rem, 4.2vw, 4rem); letter-spacing:-.045em; }
+    h3 { margin:.35em 0 .45em; font-size:1.35rem; }
+    p { max-width:72ch; }
+    section { padding:96px 0; }
+    .container { width:var(--content); margin-inline:auto; }
+    .skip-link { position:fixed; z-index:200; left:12px; top:10px; padding:12px 16px; border-radius:8px; color:white; background:var(--navy); transform:translateY(-150%); }
+    .skip-link:focus { transform:none; }
+    .eyebrow { margin:0 0 10px; color:var(--blue-2); font-size:.78rem; font-weight:850; letter-spacing:.14em; text-transform:uppercase; }
+    .lede { color:var(--muted); font-size:1.12rem; line-height:1.75; }
+    .muted { color:var(--muted); }
+    .visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    .tag { display:inline-flex; align-items:center; gap:7px; min-height:30px; padding:4px 10px; border:1px solid #bfd2ee; border-radius:999px; color:#244c82; background:#f6f9ff; font-size:.78rem; font-weight:750; }
+    .tag::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--blue); }
+
+    .site-header { position:sticky; z-index:100; top:0; border-bottom:1px solid rgba(7,27,61,.12); background:rgba(255,255,255,.96); backdrop-filter:blur(18px); }
+    .header-row { width:var(--content); min-height:74px; margin:auto; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:24px; }
+    .brand { display:flex; align-items:center; gap:11px; color:var(--navy); font-weight:900; text-decoration:none; letter-spacing:.06em; white-space:nowrap; }
+    .brand-mark { width:39px; height:39px; display:grid; place-items:center; border-radius:12px; color:white; background:linear-gradient(140deg,var(--blue),#0b9d8a); box-shadow:0 8px 20px rgba(36,107,232,.22); }
+    .brand small { display:block; color:var(--muted); font-size:.68rem; font-weight:650; letter-spacing:0; }
+    .desktop-nav { display:flex; justify-content:center; gap:2px; overflow-x:auto; scrollbar-width:none; }
+    .desktop-nav a { min-height:44px; display:grid; place-items:center; padding:8px 10px; border-radius:9px; color:#52637b; font-size:.82rem; font-weight:700; text-decoration:none; white-space:nowrap; }
+    .desktop-nav a:hover, .desktop-nav a.active { color:var(--blue-2); background:var(--blue-soft); }
+    .resume { min-height:44px; padding:9px 14px; border:0; border-radius:10px; color:white; background:var(--navy); font-size:.82rem; font-weight:800; }
+    .resume:hover { background:var(--blue-2); }
+    .mobile-menu { display:none; position:relative; }
+    .mobile-menu summary { min-width:48px; min-height:48px; display:grid; place-items:center; border:1px solid var(--line); border-radius:10px; list-style:none; font-weight:900; }
+    .mobile-menu summary::-webkit-details-marker { display:none; }
+    .mobile-menu nav { position:absolute; right:0; top:55px; width:min(310px, calc(100vw - 32px)); padding:10px; display:grid; border:1px solid var(--line); border-radius:14px; background:white; box-shadow:var(--shadow); }
+    .mobile-menu nav a { min-height:48px; display:flex; align-items:center; padding:8px 12px; border-radius:8px; color:var(--ink); text-decoration:none; font-weight:700; }
+    .mobile-menu nav a:hover { background:var(--blue-soft); color:var(--blue-2); }
+    .reading-progress { height:4px; background:#e5edf7; }
+    .reading-progress span { display:block; width:0; height:100%; background:linear-gradient(90deg,var(--blue),var(--teal)); transition:width .15s linear; }
+
+    .hero { padding:90px 0 72px; overflow:hidden; background:radial-gradient(circle at 78% 34%,#eaf3ff 0,transparent 33%), linear-gradient(180deg,#fff,#f8fbff); }
+    .hero-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:6vw; align-items:center; }
+    .hero h1 em, h2 em { color:var(--blue); font-family:Georgia, "Times New Roman", serif; font-weight:500; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin:30px 0; }
+    .button { min-height:48px; display:inline-flex; align-items:center; justify-content:center; gap:12px; padding:12px 19px; border:1px solid var(--navy); border-radius:11px; color:var(--navy); background:white; font-weight:820; text-decoration:none; transition:.18s ease; }
+    .button.primary { color:white; background:var(--navy); box-shadow:0 12px 28px rgba(7,27,61,.16); }
+    .button:hover { transform:translateY(-2px); border-color:var(--blue); }
+    .button.primary:hover { background:var(--blue); }
+    .lesson-meta { display:flex; flex-wrap:wrap; gap:18px; margin-top:30px; color:var(--muted); font-size:.9rem; }
+    .lesson-meta span { display:flex; align-items:center; gap:8px; }
+    .lesson-meta b { color:var(--navy); }
+    .system-map { position:relative; min-height:530px; display:grid; place-items:center; }
+    .map-ring { position:absolute; width:470px; max-width:92%; aspect-ratio:1; border:1px dashed #a8c2e8; border-radius:50%; }
+    .map-ring.small { width:335px; border-color:#d3e0f1; }
+    .map-core { z-index:2; width:220px; aspect-ratio:1; display:grid; place-content:center; text-align:center; border-radius:50%; color:white; background:radial-gradient(circle at 35% 30%,#24599f,var(--navy) 70%); box-shadow:0 25px 55px rgba(7,27,61,.24), inset 0 0 0 9px rgba(255,255,255,.08); }
+    .map-core small { color:#a7c8f7; font-size:.74rem; letter-spacing:.14em; }
+    .map-core strong { margin:8px 0; font-size:1.55rem; line-height:1.1; }
+    .map-core span { color:#b8cae2; font-size:.78rem; }
+    .map-node { position:absolute; z-index:3; width:126px; min-height:92px; padding:12px; display:grid; place-content:center; text-align:center; border:1px solid #bfd0e6; border-radius:16px; color:var(--navy); background:white; box-shadow:0 12px 28px rgba(27,60,104,.11); font-weight:850; }
+    .map-node small { color:var(--muted); font-size:.74rem; font-weight:650; }
+    .map-node.n1 { left:0; top:17%; } .map-node.n2 { right:1%; top:9%; } .map-node.n3 { right:0; bottom:17%; } .map-node.n4 { left:13%; bottom:3%; }
+    .cross-tags { position:absolute; inset:0; pointer-events:none; }
+    .cross-tags span { position:absolute; z-index:4; padding:6px 9px; border:1px solid var(--line); border-radius:999px; color:#526b8b; background:white; font-size:.72rem; font-weight:750; }
+    .cross-tags span:nth-child(1){left:4%;top:50%}.cross-tags span:nth-child(2){right:5%;top:48%}.cross-tags span:nth-child(3){left:38%;top:2%}.cross-tags span:nth-child(4){right:22%;bottom:5%}
+
+    .outcomes { padding:0 0 88px; background:#f8fbff; }
+    .outcome-card { display:grid; grid-template-columns:.8fr 1.2fr; gap:48px; padding:34px; border:1px solid #cddbeb; border-radius:var(--radius); background:white; box-shadow:var(--shadow); }
+    .outcome-card h2 { font-size:clamp(1.9rem,3vw,2.7rem); }
+    .check-list { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0; padding:0; list-style:none; }
+    .check-list li { padding:14px 15px 14px 45px; position:relative; border-radius:12px; background:var(--paper); color:#334a68; }
+    .check-list li::before { content:"✓"; position:absolute; left:14px; top:13px; width:24px; height:24px; display:grid; place-items:center; border-radius:50%; color:white; background:var(--teal); font-size:.78rem; font-weight:900; }
+
+    .section-head { display:grid; grid-template-columns:1.15fr .85fr; gap:7vw; align-items:end; margin-bottom:40px; }
+    .section-head > p { color:var(--muted); }
+    .pipeline-section { background:white; }
+    .platform-picker { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+    .platform-picker button, .filter-row button { min-height:44px; padding:9px 15px; border:1px solid var(--line); border-radius:999px; color:#4d6078; background:white; font-size:.88rem; font-weight:780; }
+    .platform-picker button[aria-pressed="true"], .filter-row button[aria-pressed="true"] { color:white; border-color:var(--navy); background:var(--navy); }
+    .pipeline-board { padding:22px; border:1px solid #c9d8ea; border-radius:22px; background:linear-gradient(180deg,#f8fbff,#fff); box-shadow:var(--shadow); }
+    .pipeline-context { display:flex; align-items:center; gap:11px; margin-bottom:18px; color:var(--muted); font-size:.88rem; }
+    .pipeline-context b { color:var(--navy); }
+    .pipeline-flow { display:grid; grid-template-columns:repeat(6,1fr); gap:9px; }
+    .layer-button { min-height:150px; padding:15px; display:flex; flex-direction:column; align-items:flex-start; border:1px solid #cad8e9; border-radius:14px; text-align:left; color:var(--ink); background:white; }
+    .layer-button small { color:var(--blue-2); font-size:.74rem; font-weight:850; letter-spacing:.07em; text-transform:uppercase; }
+    .layer-button strong { margin:11px 0 5px; color:var(--navy); font-size:1.02rem; }
+    .layer-button span { color:var(--muted); font-size:.8rem; line-height:1.45; }
+    .layer-button[aria-selected="true"] { color:white; border-color:var(--blue); background:linear-gradient(145deg,#1557c7,#2774f2); box-shadow:0 12px 26px rgba(36,107,232,.25); }
+    .layer-button[aria-selected="true"] small, .layer-button[aria-selected="true"] strong, .layer-button[aria-selected="true"] span { color:white; }
+    .layer-detail { margin-top:16px; padding:23px; display:grid; grid-template-columns:.8fr 1fr; gap:30px; border-radius:15px; color:white; background:var(--navy); }
+    .layer-detail h3 { color:white; font-size:1.65rem; }
+    .layer-detail p { color:#c4d2e4; }
+    .layer-detail ul { margin:0; padding-left:22px; color:#d7e3f1; }
+    .layer-detail blockquote { margin:17px 0 0; padding:13px 15px; border-left:3px solid #66d9c4; color:#bdeee5; background:rgba(255,255,255,.06); }
+    .cross-cutting { display:flex; flex-wrap:wrap; gap:9px; margin:16px 3px 0; color:var(--muted); font-size:.82rem; }
+    .cross-cutting b { padding:5px 9px; border-radius:999px; color:#2b537f; background:#eaf2ff; }
+
+    .storage-section { background:var(--paper); }
+    .concept-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+    .concept-tabs button, .tiny-toggle button { min-height:44px; padding:9px 15px; border:1px solid var(--line); border-radius:10px; color:#52637b; background:white; font-weight:800; }
+    .concept-tabs button[aria-selected="true"], .tiny-toggle button[aria-pressed="true"] { color:white; border-color:var(--navy); background:var(--navy); }
+    .storage-stage { min-height:400px; padding:30px; display:grid; grid-template-columns:.85fr 1.15fr; gap:40px; align-items:center; border:1px solid #c9d8ea; border-radius:20px; background:white; box-shadow:var(--shadow); }
+    .storage-visual { min-height:285px; padding:28px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:17px; color:white; background:linear-gradient(145deg,#0b2d5a,#071b3d); text-align:center; }
+    .storage-visual > b { margin-top:22px; font-size:1.05rem; letter-spacing:.08em; }
+    .storage-visual > small { color:#a9c1df; }
+    .object-files { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; }
+    .object-files span { min-width:76px; padding:13px 10px; border:1px solid #4774a9; border-radius:9px; color:#cae0fb; background:#123c70; font-weight:850; }
+    .table-stack { width:min(330px,100%); display:grid; gap:7px; }
+    .table-stack span { min-height:43px; padding:9px 13px; display:flex; justify-content:space-between; align-items:center; border:1px solid #4173ad; border-radius:8px; color:#cfe3fb; background:#123d70; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .table-stack span:first-child { color:#72e0ce; border-color:#259a8a; background:#0e4a58; }
+    .warehouse-block { width:min(330px,100%); display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .warehouse-block span { min-height:54px; display:grid; place-items:center; border:1px solid #4774a9; border-radius:7px; color:#cae0fb; background:#123c70; font-size:.8rem; font-weight:800; }
+    .storage-copy .eyebrow { color:var(--teal); }
+    .storage-copy h3 { font-size:1.85rem; }
+    .storage-copy > p { color:var(--muted); }
+    .property-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:20px; }
+    .property-grid span { padding:11px 12px; border-radius:9px; color:#335575; background:var(--paper); font-size:.88rem; }
+    .format-equation { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:10px; align-items:center; margin-top:18px; padding:20px; border:1px solid var(--line); border-radius:15px; background:white; }
+    .format-equation div { min-height:112px; padding:15px; display:flex; flex-direction:column; justify-content:center; border-radius:10px; background:var(--paper); }
+    .format-equation .result { color:white; background:var(--navy); }
+    .format-equation small { color:#73849a; font-weight:850; letter-spacing:.08em; }
+    .format-equation .result small { color:#a7c5e9; }
+    .format-equation b { color:var(--navy); }
+    .format-equation .result b { color:white; }
+    .format-equation p { margin:3px 0 0; color:var(--muted); font-size:.84rem; }
+    .format-equation .result p { color:#bfd0e3; }
+    .format-equation > i { color:#7c91ad; font-size:1.35rem; font-style:normal; }
+
+    .roadmap-section { background:var(--paper); }
+    .roadmap-summary { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:18px; padding:15px 18px; border:1px solid var(--line); border-radius:13px; background:white; }
+    .roadmap-summary strong { color:var(--navy); }
+    .module-progress { width:min(340px,45vw); height:10px; overflow:hidden; border-radius:99px; background:#e1e9f3; }
+    .module-progress span { display:block; width:0; height:100%; background:linear-gradient(90deg,var(--blue),var(--teal)); transition:width .25s; }
+    .roadmap-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .module-card { min-height:310px; padding:22px; display:flex; flex-direction:column; border:1px solid var(--line); border-top:4px solid var(--module-color,var(--blue)); border-radius:15px; background:white; box-shadow:0 8px 24px rgba(18,52,94,.05); }
+    .module-card .module-number { color:#8ca0b8; font-size:1.6rem; font-weight:900; }
+    .module-card h3 { font-size:1.22rem; }
+    .module-card p { margin-top:0; color:var(--muted); font-size:.92rem; }
+    .module-card ul { margin:0; padding-left:19px; color:#425774; font-size:.88rem; }
+    .complete-label { min-height:46px; margin-top:auto; padding-top:18px; display:flex; align-items:center; gap:10px; color:#2d4a6c; font-size:.88rem; font-weight:800; }
+    .complete-label input { width:22px; height:22px; accent-color:var(--teal); }
+    .module-card.completed { border-color:#80cbbf; background:#f8fffd; }
+
+    .lab-section { color:white; background:linear-gradient(145deg,#061733,#0b2e5e); }
+    .lab-section h2, .lab-section h3 { color:white; }
+    .lab-section .eyebrow { color:#62d5c1; }
+    .lab-section .section-head > p { color:#adc0d7; }
+    .transform-lab { display:grid; grid-template-columns:.9fr 1.1fr; gap:18px; }
+    .record-panel, .transform-steps { padding:24px; border:1px solid #2c4d75; border-radius:16px; background:#0a2449; }
+    .lab-progress-row { display:flex; justify-content:space-between; gap:12px; color:#b9cbe0; font-size:.83rem; font-weight:800; }
+    .lab-meter { height:8px; margin:12px 0 22px; overflow:hidden; border-radius:99px; background:#19385e; }
+    .lab-meter span { display:block; width:0; height:100%; background:linear-gradient(90deg,#3f83ef,#56d2bd); transition:width .25s; }
+    .record-grid { display:grid; grid-template-columns:90px 1fr 1fr; gap:0 12px; }
+    .record-grid > * { min-width:0; padding:11px 0; border-bottom:1px solid #1d3b61; overflow-wrap:anywhere; }
+    .record-grid small { color:#85a1c2; font-size:.75rem; font-weight:800; }
+    .raw { color:#f1a3a3; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .clean { color:#6ee0cd; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .transform-steps { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .transform-step { min-height:86px; padding:13px; display:flex; align-items:flex-start; gap:11px; border:1px solid #31547d; border-radius:11px; color:#d8e4f1; background:#102e56; text-align:left; }
+    .transform-step:hover { border-color:#75a9ea; }
+    .transform-step[aria-pressed="true"] { border-color:#31a895; background:#0c4050; }
+    .step-index { flex:0 0 32px; width:32px; height:32px; display:grid; place-items:center; border-radius:50%; color:#a6c7f0; background:#173e6e; font-size:.78rem; font-weight:900; }
+    .transform-step[aria-pressed="true"] .step-index { color:white; background:var(--teal); }
+    .transform-step b { display:block; }
+    .transform-step small { display:block; margin-top:2px; color:#a8bdd5; line-height:1.4; }
+    .tool-band { margin-top:18px; padding:18px 20px; display:flex; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid #31547c; border-radius:13px; background:#0a2449; }
+    .tool-band > span { color:#7f9bbc; font-size:.78rem; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
+    .tool-band > b { margin-right:auto; }
+    .tool-band i { padding:6px 10px; border:1px solid #3d6088; border-radius:999px; color:#c7d6e8; font-size:.8rem; font-style:normal; }
+
+    .model-section { background:white; }
+    .model-journey { display:grid; grid-template-columns:1fr 62px 1fr 62px 1fr; gap:12px; align-items:stretch; }
+    .model-card { padding:23px; border:1px solid var(--line); border-top:5px solid var(--model-color,var(--blue)); border-radius:16px; background:white; box-shadow:var(--shadow); }
+    .model-card header { display:flex; justify-content:space-between; gap:10px; padding-bottom:12px; border-bottom:1px solid var(--line); color:var(--muted); font-size:.8rem; font-weight:850; }
+    .model-card header span { color:var(--model-color,var(--blue)); }
+    .model-card p, .model-card li { color:var(--muted); font-size:.9rem; }
+    .model-card ul { padding-left:19px; }
+    .model-card blockquote { margin:18px 0 0; padding:13px; border-left:3px solid var(--model-color,var(--blue)); color:#3b5877; background:var(--paper); }
+    .model-arrow { display:grid; place-content:center; text-align:center; color:#7890ae; }
+    .model-arrow i { font-size:1.9rem; font-style:normal; }
+    .model-arrow small { font-size:.72rem; font-weight:800; text-transform:uppercase; }
+    .mini-model { min-height:104px; margin-top:17px; padding:13px; display:grid; place-items:center; border-radius:10px; background:var(--paper); }
+    .vault-row, .star-model { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:7px; }
+    .vault-row span, .star-model span, .star-model b { min-width:50px; min-height:36px; display:grid; place-items:center; border:1px solid #aebed1; border-radius:6px; color:#506985; background:white; font-size:.72rem; }
+    .star-model b { color:#806016; border-color:#d6b450; background:#fff7d9; }
+    .serve-options { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:16px; }
+    .serve-options span { padding:9px; border-radius:8px; color:#2f5a8e; background:var(--blue-soft); text-align:center; font-size:.82rem; font-weight:800; }
+    .pattern-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
+    .pattern-card { padding:22px; border:1px solid var(--line); border-radius:15px; background:var(--paper); }
+    .pattern-head { display:flex; justify-content:space-between; gap:16px; align-items:start; }
+    .pattern-head h3 { margin-top:4px; }
+    .tiny-toggle { display:flex; gap:4px; }
+    .pattern-viz { min-height:82px; display:flex; align-items:center; justify-content:center; gap:10px; margin:18px 0; }
+    .pattern-viz span, .pattern-viz strong { padding:11px 13px; border:1px solid #c2d1e3; border-radius:8px; background:white; }
+    .pattern-viz strong { color:var(--blue-2); border-color:#8fb3e7; background:var(--blue-soft); }
+    .pattern-viz i { color:#7f93ad; font-style:normal; }
+    .pattern-card > p { color:var(--muted); }
+
+    .operations-section { background:white; }
+    .ops-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:18px; }
+    .dag-card, .failure-card { padding:25px; border:1px solid var(--line); border-radius:var(--radius); background:white; box-shadow:var(--shadow); }
+    .dag-flow { display:grid; grid-template-columns:1fr 44px 1fr 44px 1fr; align-items:center; margin:25px 0; }
+    .dag-node { min-height:92px; padding:12px; display:grid; place-content:center; text-align:center; border:1px solid #bcd0e8; border-radius:12px; background:#f8fbff; }
+    .dag-node b { color:var(--navy); }
+    .dag-node small { color:var(--muted); }
+    .dag-arrow { text-align:center; color:#8099ba; font-size:1.5rem; }
+    .ops-principles { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:0; list-style:none; }
+    .ops-principles li { padding:11px 12px; border-radius:9px; color:#355373; background:var(--paper); font-size:.88rem; }
+    .failure-choices { display:grid; gap:9px; margin-top:16px; }
+    .failure-choices button { min-height:52px; padding:10px 13px; border:1px solid var(--line); border-radius:10px; text-align:left; color:var(--ink); background:white; font-weight:720; }
+    .failure-choices button:hover, .failure-choices button[aria-pressed="true"] { border-color:var(--blue); background:var(--blue-soft); }
+    .failure-feedback { min-height:118px; margin-top:14px; padding:15px; border-left:4px solid var(--amber); border-radius:8px; color:#4a5668; background:#fff8eb; }
+
+    .governance-section { background:linear-gradient(145deg,#f1f7ff,#fbfdff); }
+    .govern-grid { display:grid; grid-template-columns:1.05fr 1fr 1fr; gap:14px; }
+    .govern-card { min-height:300px; padding:23px; border:1px solid var(--line); border-radius:16px; background:white; box-shadow:0 10px 28px rgba(18,52,94,.06); }
+    .govern-card.primary { color:white; border-color:#173b67; background:var(--navy); }
+    .govern-card.primary h3 { color:white; }
+    .govern-card.primary p { color:#b9c9dc; }
+    .govern-index { color:#9bb8dc; font-size:1.8rem; font-weight:900; }
+    .govern-card p { color:var(--muted); }
+    .govern-card small { color:var(--teal); font-weight:850; }
+    .identity-flow { display:flex; flex-wrap:wrap; gap:7px; margin-top:20px; }
+    .identity-flow span { padding:7px 9px; border-radius:7px; color:#536a84; background:var(--paper); font-size:.8rem; }
+    .identity-flow b { flex-basis:100%; padding:10px; border-radius:8px; color:#08766b; background:var(--teal-soft); }
+    .encrypt-list { display:grid; gap:8px; margin-top:18px; }
+    .encrypt-list div { padding:11px 12px; display:flex; justify-content:space-between; gap:10px; border-radius:8px; color:#566a83; background:var(--paper); }
+    .encrypt-list b { color:var(--navy); }
+    .govern-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:18px; }
+    .govern-tags span { padding:7px 10px; border:1px solid #bcd0e8; border-radius:999px; color:#315d8d; font-size:.8rem; font-weight:750; }
+
+    .decision-section { background:var(--paper); }
+    .decision-lab { overflow:hidden; display:grid; grid-template-columns:.85fr 1.15fr; border-radius:20px; color:white; background:var(--navy); box-shadow:var(--shadow); }
+    .decision-inputs { padding:32px; background:#0c2b57; }
+    .field { display:grid; gap:7px; margin-bottom:18px; }
+    .field label { color:#b7cae0; font-size:.82rem; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
+    .field select { min-height:48px; width:100%; padding:9px 12px; border:1px solid #49698e; border-radius:9px; color:white; background:#113761; }
+    .decision-result { padding:34px; }
+    .decision-result .eyebrow { color:#62d5c1; }
+    .decision-result h3 { color:white; font-size:1.8rem; }
+    .decision-result p { color:#b7c7db; }
+    .decision-table { margin-top:18px; }
+    .decision-table div { padding:12px 0; display:grid; grid-template-columns:100px 1fr; gap:12px; border-top:1px solid #23466e; }
+    .decision-table span { color:#86a3c4; }
+    .scale-dimensions { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+    .scale-dimensions article { min-height:145px; padding:17px; border:1px solid var(--line); border-radius:13px; background:white; }
+    .scale-dimensions span { color:#94a5ba; font-size:1.4rem; font-weight:900; }
+    .scale-dimensions h3 { margin:.15em 0; font-size:1.05rem; }
+    .scale-dimensions p { margin:0; color:var(--muted); font-size:.84rem; }
+    .cost-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+    .cost-grid article { padding:20px; border:1px solid var(--line); border-radius:14px; background:white; }
+    .cost-grid b { color:var(--blue-2); }
+    .cost-grid p { margin-bottom:0; color:var(--muted); font-size:.9rem; }
+
+    .assessment-section { background:white; }
+    .quiz-grid { display:grid; gap:14px; }
+    .quiz-card { padding:22px; border:1px solid var(--line); border-radius:15px; background:#fbfdff; }
+    .quiz-card legend { padding:0 6px; color:var(--navy); font-size:1.08rem; font-weight:850; }
+    .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:14px; }
+    .quiz-options label { min-height:50px; padding:11px 13px; display:flex; align-items:center; gap:10px; border:1px solid #ccd9e9; border-radius:10px; background:white; }
+    .quiz-options label:hover { border-color:var(--blue); }
+    .quiz-options input { width:20px; height:20px; accent-color:var(--blue); }
+    .explanation { display:none; margin:13px 0 0; padding:12px 14px; border-radius:9px; background:var(--blue-soft); color:#2d507b; }
+    .quiz-card.revealed .explanation { display:block; }
+    .quiz-card.correct { border-color:#63baad; background:#f5fffc; }
+    .quiz-card.incorrect { border-color:#e2a24c; background:#fffaf1; }
+    .quiz-actions { display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:20px; }
+    .quiz-score { font-weight:850; color:var(--navy); }
+
+    .glossary-section { background:var(--paper); }
+    .glossary-tools { display:flex; gap:10px; margin-bottom:13px; }
+    .glossary-search { flex:1; min-height:52px; padding:10px 15px; border:1px solid #bdcde0; border-radius:11px; color:var(--ink); background:white; }
+    .filter-row { display:flex; gap:8px; overflow-x:auto; padding:4px 0 18px; }
+    .glossary-count { margin:0 0 12px; color:var(--muted); }
+    .glossary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .term-card { min-height:210px; padding:20px; display:flex; flex-direction:column; border:1px solid var(--line); border-radius:14px; background:white; }
+    .term-card header { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:.76rem; font-weight:800; }
+    .term-card header span { color:var(--blue-2); }
+    .term-card h3 { font-size:1.25rem; }
+    .term-card p { margin-top:0; color:var(--muted); font-size:.9rem; }
+    .term-card footer { margin-top:auto; padding-top:12px; border-top:1px solid #e9eef5; color:var(--teal); font-size:.8rem; font-weight:800; }
+    .empty-state { grid-column:1/-1; padding:40px; text-align:center; border:1px dashed #aebed2; border-radius:14px; background:white; }
+
+    .purpose-section { color:white; background:radial-gradient(circle at 82% 22%,#174a86 0,#071b3d 46%,#05142f 100%); }
+    .purpose-section h2, .purpose-section h3 { color:white; }
+    .purpose-section .eyebrow { color:#67d9c5; }
+    .purpose-section .lede { color:#b7c7da; }
+    .analytics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin:36px 0; overflow:hidden; border:1px solid #2d4c72; border-radius:15px; background:#2d4c72; }
+    .analytics-grid article { min-height:210px; padding:22px; background:#0b2850; }
+    .analytics-grid span { color:#5ed5c1; font-size:.76rem; font-weight:850; letter-spacing:.1em; }
+    .analytics-grid b { display:block; margin-top:18px; color:#57789f; font-size:1.8rem; }
+    .analytics-grid p { color:#9fb2c9; font-size:.9rem; }
+    .people-bridge { display:grid; grid-template-columns:1fr 70px 1.2fr 70px 1fr; gap:12px; align-items:center; margin:34px 0; }
+    .people-bridge > div { display:grid; gap:7px; }
+    .people-bridge > div span { padding:9px 11px; border:1px solid #315177; border-radius:8px; color:#aec0d6; background:#0b284d; }
+    .people-bridge > i { color:#5e7da3; text-align:center; font-size:1.6rem; font-style:normal; }
+    .people-bridge > strong { min-height:180px; padding:20px; display:grid; place-content:center; border:1px solid #4c83c8; border-radius:50%; text-align:center; background:radial-gradient(circle,#174b8b,#0a2a55); box-shadow:0 0 0 12px rgba(72,126,194,.08); }
+    .people-bridge > strong small { display:block; color:#74a7e8; font-size:.72rem; letter-spacing:.1em; }
+    .ai-foundation { padding:28px; display:grid; grid-template-columns:130px 1fr; gap:28px; align-items:center; border:1px solid #35577e; border-radius:17px; background:rgba(12,42,80,.78); }
+    .ai-mark { width:118px; aspect-ratio:1; display:grid; place-items:center; border-radius:50%; background:radial-gradient(circle at 35% 30%,#6fc8ff,#386ce3 46%,#6d3fd1); box-shadow:0 0 40px rgba(75,124,238,.35); font-size:1.8rem; font-weight:900; }
+    .ai-foundation p { color:#aebfd3; }
+
+    .teaching-section { color:white; background:linear-gradient(135deg,#061530,#0b2b57); }
+    .teaching-section h2, .teaching-section h3 { color:white; }
+    .teaching-section .lede { color:#b9c9dd; }
+    .teaching-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:32px; }
+    .teaching-grid article { padding:20px; border:1px solid #2b4c74; border-radius:14px; background:#0c2a50; }
+    .teaching-grid span { color:#63d8c4; font-size:.78rem; font-weight:850; letter-spacing:.08em; }
+    .teaching-grid p { color:#aebfd4; font-size:.9rem; }
+    .instructor-notes { margin-top:22px; border:1px solid #31557f; border-radius:14px; background:#0a2447; }
+    .instructor-notes summary { min-height:52px; padding:14px 18px; display:flex; align-items:center; color:white; font-weight:850; cursor:pointer; }
+    .instructor-notes > div { padding:0 20px 20px; color:#bdcde0; }
+
+    .site-footer { padding:34px 0; border-top:1px solid var(--line); background:white; }
+    .footer-row { display:flex; justify-content:space-between; align-items:center; gap:24px; color:var(--muted); font-size:.88rem; }
+    .footer-row strong { color:var(--navy); }
+
+    @media (max-width:1000px) {
+      .desktop-nav { justify-content:flex-start; }
+      .hero-grid, .section-head { grid-template-columns:1fr; }
+      .system-map { min-height:500px; }
+      .pipeline-flow { grid-template-columns:repeat(3,1fr); }
+      .roadmap-grid { grid-template-columns:1fr 1fr; }
+      .teaching-grid { grid-template-columns:1fr 1fr; }
+      .glossary-grid { grid-template-columns:1fr 1fr; }
+      .outcome-card, .transform-lab, .ops-grid, .storage-stage { grid-template-columns:1fr; }
+      .model-journey { grid-template-columns:1fr 48px 1fr; }
+      .model-card:last-child { grid-column:1/4; }
+      .model-arrow:nth-of-type(2) { display:none; }
+      .govern-grid { grid-template-columns:1fr 1fr; }
+      .govern-card.primary { grid-column:1/3; }
+      .scale-dimensions { grid-template-columns:1fr 1fr; }
+      .people-bridge { grid-template-columns:1fr 55px 1.15fr 55px 1fr; }
+    }
+    @media (max-width:760px) {
+      :root { --content:min(100% - 28px, 680px); }
+      html { scroll-padding-top:78px; }
+      body { font-size:16px; }
+      section { padding:72px 0; }
+      .header-row { min-height:66px; grid-template-columns:1fr auto; gap:12px; }
+      .brand small, .desktop-nav, .resume { display:none; }
+      .mobile-menu { display:block; }
+      .hero { padding:68px 0 48px; }
+      .hero-grid { gap:32px; }
+      .lesson-meta { gap:10px 18px; }
+      .system-map { min-height:410px; margin-inline:-4px; }
+      .map-ring { width:330px; }
+      .map-ring.small { width:250px; }
+      .map-core { width:160px; }
+      .map-core strong { font-size:1.18rem; }
+      .map-node { width:102px; min-height:77px; padding:8px; font-size:.86rem; }
+      .map-node.n1 { left:0; top:12%; } .map-node.n2 { right:0; top:7%; } .map-node.n3 { right:0; bottom:14%; } .map-node.n4 { left:5%; bottom:4%; }
+      .cross-tags { display:none; }
+      .outcome-card { padding:24px; gap:20px; }
+      .check-list { grid-template-columns:1fr; }
+      .pipeline-board { padding:14px; }
+      .pipeline-flow { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:8px; }
+      .layer-button { flex:0 0 190px; scroll-snap-align:start; }
+      .layer-detail { grid-template-columns:1fr; gap:8px; padding:20px; }
+      .format-equation { grid-template-columns:1fr; }
+      .format-equation > i { text-align:center; transform:rotate(90deg); }
+      .roadmap-summary { align-items:flex-start; flex-direction:column; }
+      .module-progress { width:100%; }
+      .roadmap-grid, .transform-steps, .quiz-options, .glossary-grid, .teaching-grid, .pattern-grid, .govern-grid, .scale-dimensions, .cost-grid, .analytics-grid { grid-template-columns:1fr; }
+      .record-panel, .transform-steps { padding:18px; }
+      .record-grid { grid-template-columns:70px 1fr; }
+      .record-grid .clean { grid-column:2; }
+      .tool-band { align-items:flex-start; }
+      .tool-band > b { flex-basis:100%; }
+      .model-journey { grid-template-columns:1fr; }
+      .model-card:last-child { grid-column:auto; }
+      .model-arrow { min-height:55px; transform:rotate(90deg); }
+      .model-arrow:nth-of-type(2) { display:grid; }
+      .govern-card.primary { grid-column:auto; }
+      .dag-flow { grid-template-columns:1fr; gap:6px; }
+      .dag-arrow { transform:rotate(90deg); }
+      .ops-principles { grid-template-columns:1fr; }
+      .decision-lab { grid-template-columns:1fr; }
+      .people-bridge { grid-template-columns:1fr; }
+      .people-bridge > i { transform:rotate(90deg); }
+      .people-bridge > strong { width:min(190px,70vw); min-height:auto; aspect-ratio:1; margin:auto; }
+      .ai-foundation { grid-template-columns:1fr; }
+      .ai-mark { margin:auto; }
+      .glossary-tools { flex-direction:column; }
+      .footer-row { align-items:flex-start; flex-direction:column; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { animation:none!important; transition:none!important; }
+    }
+    @media print {
+      .site-header, .hero-actions, .platform-picker, .transform-steps, .decision-inputs, .quiz-actions, .glossary-tools, .filter-row, .mobile-menu { display:none!important; }
+      body { color:#111; font-size:11pt; }
+      section { padding:24px 0; break-inside:avoid; }
+      .hero, .roadmap-section, .glossary-section { background:white; }
+      .lab-section, .teaching-section, .decision-lab { color:#111; background:white; }
+      .lab-section h2, .lab-section h3, .teaching-section h2, .teaching-section h3, .decision-result h3 { color:#111; }
+      .module-card, .term-card { break-inside:avoid; box-shadow:none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to lesson content</a>
+  <header class="site-header">
+    <div class="header-row">
+      <a class="brand" href="#system"><span class="brand-mark">DE</span><span>DATA ENGINEERING<small>The big picture, always in reach</small></span></a>
+      <nav class="desktop-nav" aria-label="Lesson modules">
+        <a href="../index.html" style="color:var(--blue-2); font-weight:800;">← ML_LAB</a><a href="#system" class="active">System</a><a href="#pipeline">Pipeline</a><a href="#storage">Storage</a><a href="#transform">Transform</a><a href="#model">Model</a><a href="#operate">Operate</a><a href="#govern">Govern</a><a href="#decide">Scale</a><a href="#purpose">Purpose</a><a href="#assess">Check</a><a href="#glossary">Glossary</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="../index.html" class="button" style="min-height:40px; padding:6px 12px; font-size:0.8rem; text-decoration:none;">← ML_LAB</a>
+        <button class="resume" type="button" data-jump="roadmap">My progress</button>
+      </div>
+      <details class="mobile-menu"><summary aria-label="Open lesson menu">☰</summary><nav aria-label="Mobile lesson modules"><a href="../index.html" style="color:var(--blue-2); font-weight:800;">← ML_LAB</a><a href="#system">System map</a><a href="#pipeline">Pipeline</a><a href="#storage">Lake, lakehouse & warehouse</a><a href="#roadmap">Learning roadmap</a><a href="#transform">Transformation lab</a><a href="#model">Model & serve</a><a href="#operate">Operate reliably</a><a href="#govern">Govern & secure</a><a href="#decide">Scale & cost</a><a href="#purpose">Purpose & people</a><a href="#assess">Knowledge check</a><a href="#glossary">Glossary</a></nav></details>
+    </div>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="system">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Interactive learning journey</p>
+          <h1>One system.<br><em>Many moving parts.</em></h1>
+          <p class="lede">Data engineering moves data from operational reality to trusted decisions—securely, reliably, and at a sustainable cost. Tools change; the responsibilities endure.</p>
+          <div class="hero-actions"><a class="button primary" href="#pipeline">Explore the system <span aria-hidden="true">→</span></a><a class="button" href="#assess">Test what you know</a><a class="button" href="../index.html">← ML_LAB</a></div>
+          <div class="lesson-meta"><span><b>Level</b> Foundation → Intermediate</span><span><b>Study time</b> 45–75 minutes</span><span><b>Format</b> Read · interact · reflect</span><span><b>Author</b> Created by Tarek Atwan @ ML_LAB</span></div>
+        </div>
+        <div class="system-map" aria-label="Data engineering system map: sources move through pipelines into trusted data and serving layers, with governance, security, observability, and cost across the system.">
+          <div class="map-ring"></div><div class="map-ring small"></div>
+          <div class="map-core"><small>THE SYSTEM</small><strong>DATA<br>ENGINEERING</strong><span>connect · transform · trust</span></div>
+          <a class="map-node n1" href="#pipeline">01 · Sources<small>Operational reality</small></a>
+          <a class="map-node n2" href="#pipeline">02 · Pipelines<small>Reliable movement</small></a>
+          <a class="map-node n3" href="#storage">03 · Data<small>Storage, trust & meaning</small></a>
+          <a class="map-node n4" href="#purpose">04 · Decisions<small>People, products & AI</small></a>
+          <div class="cross-tags"><span>Governance</span><span>Security</span><span>Observability</span><span>Cost</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="outcomes" aria-labelledby="outcomes-title">
+      <div class="container outcome-card">
+        <div><p class="eyebrow">Your learning contract</p><h2 id="outcomes-title">By the end, you can explain the system—not just name tools.</h2><p class="muted">Prerequisites: basic SQL, familiarity with files and databases, and curiosity about how data reaches a dashboard.</p></div>
+        <ul class="check-list"><li>Trace a record from source to consumption.</li><li>Compare batch, CDC, and streaming patterns.</li><li>Separate storage, file, and table formats.</li><li>Explain Bronze, Silver, and Gold by purpose.</li><li>Design for reruns, late data, and failures.</li><li>Choose an architecture from requirements and trade-offs.</li></ul>
+      </div>
+    </section>
+
+    <section class="pipeline-section" id="pipeline" aria-labelledby="pipeline-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">01 · The constant pattern</p><h2 id="pipeline-title">Tools change.<br><em>The data journey does not.</em></h2></div><p>Switch platforms to see the same responsibilities expressed through different services. Select a layer to zoom from the architecture down to engineering decisions.</p></div>
+        <div class="platform-picker" role="group" aria-label="Choose a technology platform">
+          <button type="button" data-platform="conceptual" aria-pressed="true">Conceptual</button><button type="button" data-platform="aws" aria-pressed="false">AWS</button><button type="button" data-platform="azure" aria-pressed="false">Azure</button><button type="button" data-platform="gcp" aria-pressed="false">GCP</button><button type="button" data-platform="onprem" aria-pressed="false">On-prem</button>
+        </div>
+        <div class="pipeline-board">
+          <div class="pipeline-context"><span class="tag">Active view</span><b id="platformLabel">Conceptual</b><span>Same responsibilities · different implementation</span></div>
+          <div class="pipeline-flow" role="tablist" aria-label="Data pipeline layers">
+            <button class="layer-button" type="button" role="tab" data-layer="source" aria-selected="false"><small>01 · Origin</small><strong>Sources</strong><span data-stack="0">OLTP · APIs · files</span></button>
+            <button class="layer-button" type="button" role="tab" data-layer="ingest" aria-selected="false"><small>02 · Movement</small><strong>Ingest</strong><span data-stack="1">Python · Airbyte · Kafka</span></button>
+            <button class="layer-button" type="button" role="tab" data-layer="bronze" aria-selected="false"><small>03 · Preserve</small><strong>Bronze</strong><span data-stack="2">Object storage</span></button>
+            <button class="layer-button" type="button" role="tab" data-layer="silver" aria-selected="true"><small>04 · Trust</small><strong>Silver</strong><span data-stack="3">SQL · Spark · dbt</span></button>
+            <button class="layer-button" type="button" role="tab" data-layer="gold" aria-selected="false"><small>05 · Meaning</small><strong>Gold</strong><span data-stack="4">Lakehouse · warehouse</span></button>
+            <button class="layer-button" type="button" role="tab" data-layer="serve" aria-selected="false"><small>06 · Use</small><strong>Serve</strong><span data-stack="5">BI · ML · APIs</span></button>
+          </div>
+          <div class="layer-detail" id="layerDetail" role="tabpanel" aria-live="polite">
+            <div><p class="eyebrow" id="layerKicker">04 · Trust</p><h3 id="layerTitle">Silver · Conformed</h3><p id="layerCopy">Make data consistent, valid, and reusable across domains. Silver is where engineering quality becomes organizational trust.</p></div>
+            <div><ul id="layerPoints"><li>Deduplicate, validate, and quarantine</li><li>Standardize dates, currencies, units, and codes</li><li>Resolve identities and conform shared entities</li></ul><blockquote id="layerQuestion">Architect’s question: Is this data trustworthy enough to reuse without relearning every source?</blockquote></div>
+          </div>
+          <div class="cross-cutting"><span>Across every layer:</span><b>Security</b><b>Governance</b><b>Quality</b><b>Lineage</b><b>Observability</b><b>FinOps</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="storage-section" id="storage" aria-labelledby="storage-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">02 · Storage semantics</p><h2 id="storage-title">Files are not tables.<br><em>A lakehouse connects the two.</em></h2></div><p>Storage location, file format, and table format answer different questions. Select each architecture to see what it provides—and what it does not.</p></div>
+        <div class="concept-tabs" role="tablist" aria-label="Compare analytical storage architectures">
+          <button type="button" role="tab" data-store="lake" aria-selected="false">Data Lake</button><button type="button" role="tab" data-store="lakehouse" aria-selected="true">Lakehouse</button><button type="button" role="tab" data-store="warehouse" aria-selected="false">Data Warehouse</button>
+        </div>
+        <div class="storage-stage" data-store-panel="lakehouse" role="tabpanel" aria-live="polite">
+          <div class="storage-visual" id="storageVisual"><div class="table-stack"><span>_delta_log / metadata <b>TABLE STATE</b></span><span>part-0001.parquet <b>DATA</b></span><span>part-0002.parquet <b>DATA</b></span><span>part-0003.parquet <b>DATA</b></span></div><b>PARQUET + TABLE METADATA</b><small>Delta Lake · Apache Iceberg · Apache Hudi</small></div>
+          <div class="storage-copy"><p class="eyebrow" id="storageKicker">LAKEHOUSE · DATABASE BEHAVIOR ON OBJECT STORAGE</p><h3 id="storageHeading">Files underneath. Reliable tables above.</h3><p id="storageDescription">An open table format adds transaction logs, manifests, snapshots, and metadata. Multiple engines can agree on a consistent table state while data remains in economical object storage.</p><div class="property-grid" id="storageProperties"><span>✓ ACID transactions</span><span>✓ MERGE and upserts</span><span>✓ Time travel</span><span>✓ Schema enforcement and evolution</span></div></div>
+        </div>
+        <div class="format-equation" aria-label="Storage concepts equation"><div><small>STORAGE</small><b>Object store / disk</b><p>Where the bytes live</p></div><i>+</i><div><small>FILE FORMAT</small><b>Parquet · JSON · CSV</b><p>How bytes are encoded</p></div><i>+</i><div><small>TABLE FORMAT</small><b>Delta · Iceberg · Hudi</b><p>How files behave as tables</p></div><i>=</i><div class="result"><small>ARCHITECTURE</small><b>Lake or lakehouse</b><p>How teams work with the data</p></div></div>
+      </div>
+    </section>
+
+    <section class="roadmap-section" id="roadmap" aria-labelledby="roadmap-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">Learning companion · Complete roadmap</p><h2 id="roadmap-title">Architecture is the map.<br><em>Practice makes the engineer.</em></h2></div><p>Use this roadmap to track how the detailed modules connect to the operational, distributed-systems, software-engineering, and reliability work students meet on real teams.</p></div>
+        <div class="roadmap-summary"><strong><span id="modulesDone">0</span> of 8 modules marked complete</strong><div class="module-progress" aria-label="Module completion"><span id="moduleProgress"></span></div><button class="button" type="button" id="resetProgress">Reset progress</button></div>
+        <div class="roadmap-grid">
+          <article class="module-card" style="--module-color:#246be8"><span class="module-number">01</span><h3>Foundations & requirements</h3><p>Start with the decision, SLA, data shape, risk, and constraints.</p><ul><li>SQL and data profiling</li><li>OLTP vs. OLAP</li><li>Latency, volume, ownership</li></ul><label class="complete-label"><input type="checkbox" data-module="foundations"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#2a86d1"><span class="module-number">02</span><h3>Sources & ingestion</h3><p>Extract without harming sources or losing change semantics.</p><ul><li>Batch and incremental</li><li>CDC, events, replay</li><li>Schema drift and contracts</li></ul><label class="complete-label"><input type="checkbox" data-module="ingestion"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#0b9d8a"><span class="module-number">03</span><h3>Storage & table design</h3><p>Know where bytes live and how engines interpret them.</p><ul><li>Parquet, JSON, Avro</li><li>Partitions and small files</li><li>Delta, Iceberg, Hudi</li></ul><label class="complete-label"><input type="checkbox" data-module="storage"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#15a171"><span class="module-number">04</span><h3>Transform & quality</h3><p>Build explicit, testable transformations that preserve meaning.</p><ul><li>SQL, Python, Spark</li><li>Tests and expectations</li><li>Quarantine and reconciliation</li></ul><label class="complete-label"><input type="checkbox" data-module="transform"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#d99b00"><span class="module-number">05</span><h3>Model & serve</h3><p>Turn clean records into shared business meaning.</p><ul><li>Facts, dimensions, SCD</li><li>Marts and semantic metrics</li><li>BI, ML, APIs, reverse ETL</li></ul><label class="complete-label"><input type="checkbox" data-module="model"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#e57817"><span class="module-number">06</span><h3>Distributed & streaming</h3><p>Reason about time, state, partitions, shuffle, and skew.</p><ul><li>Event time and watermarks</li><li>Delivery semantics</li><li>Joins, shuffle, and skew</li></ul><label class="complete-label"><input type="checkbox" data-module="distributed"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#7c5ce7"><span class="module-number">07</span><h3>Orchestrate & operate</h3><p>Production pipelines must recover, rerun, alert, and evolve.</p><ul><li>DAGs, retries, backfills</li><li>Idempotency and SLIs</li><li>Git, CI/CD, IaC</li></ul><label class="complete-label"><input type="checkbox" data-module="operate"> Mark complete</label></article>
+          <article class="module-card" style="--module-color:#b1496b"><span class="module-number">08</span><h3>Govern, secure & optimize</h3><p>Trust includes policy, privacy, access, audit, and cost.</p><ul><li>Catalog, lineage, ownership</li><li>Least privilege and retention</li><li>FinOps and sustainability</li></ul><label class="complete-label"><input type="checkbox" data-module="govern"> Mark complete</label></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab-section" id="transform" aria-labelledby="transform-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">03 · Transformation lab</p><h2 id="transform-title">Raw data rarely arrives<br><em>ready to trust.</em></h2></div><p>Select engineering steps and watch one messy record become usable. Quality is not silently “fixing everything”; it is applying explicit rules and preserving what happened.</p></div>
+        <div class="transform-lab">
+          <div class="record-panel"><div class="lab-progress-row"><span>RECORD · CUSTOMER_1042</span><b id="transformPercent">0% refined</b></div><div class="lab-meter"><span id="transformMeter"></span></div><div class="record-grid"><small>NAME</small><span class="raw">tareK&nbsp;&nbsp;atwan</span><strong class="clean" data-output="standardize">—</strong><small>DATE</small><span class="raw">18/7/26</span><strong class="clean" data-output="standardize">—</strong><small>EMAIL</small><span class="raw">NULL</span><strong class="clean" data-output="gaps">—</strong><small>ENTITY</small><span class="raw">cust-1042 / CRM-88</span><strong class="clean" data-output="conform">—</strong><small>QUALITY</small><span class="raw">unknown</span><strong class="clean" data-output="validate">—</strong></div></div>
+          <div class="transform-steps" role="group" aria-label="Transformation steps">
+            <button class="transform-step" type="button" data-transform="profile" aria-pressed="false"><span class="step-index">01</span><span><b>Profile</b><small>Reveal nulls, distributions, and anomalies.</small></span></button>
+            <button class="transform-step" type="button" data-transform="deduplicate" aria-pressed="false"><span class="step-index">02</span><span><b>Deduplicate</b><small>Choose the surviving record using explicit rules.</small></span></button>
+            <button class="transform-step" type="button" data-transform="validate" aria-pressed="false"><span class="step-index">03</span><span><b>Validate</b><small>Test types, ranges, relationships, and contracts.</small></span></button>
+            <button class="transform-step" type="button" data-transform="outliers" aria-pressed="false"><span class="step-index">04</span><span><b>Handle outliers</b><small>Investigate, cap, flag, quarantine, or retain.</small></span></button>
+            <button class="transform-step" type="button" data-transform="standardize" aria-pressed="false"><span class="step-index">05</span><span><b>Standardize</b><small>Align dates, currencies, units, names, and codes.</small></span></button>
+            <button class="transform-step" type="button" data-transform="gaps" aria-pressed="false"><span class="step-index">06</span><span><b>Handle gaps</b><small>Flag, quarantine, impute, or preserve missing values.</small></span></button>
+            <button class="transform-step" type="button" data-transform="conform" aria-pressed="false"><span class="step-index">07</span><span><b>Conform & enrich</b><small>Resolve shared entities and add trusted context.</small></span></button>
+            <button class="transform-step" type="button" data-transform="observe" aria-pressed="false"><span class="step-index">08</span><span><b>Observe</b><small>Track freshness, lineage, volume, quality, and failures.</small></span></button>
+          </div>
+        </div>
+        <div class="tool-band"><span>The responsibility</span><b>Transform reliably</b><span>The tools of choice</span><i>SQL</i><i>Python</i><i>Pandas</i><i>Polars</i><i>DuckDB</i><i>Databricks</i><i>AWS Glue</i></div>
+      </div>
+    </section>
+
+    <section class="model-section" id="model" aria-labelledby="model-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">04 · Architecture & serving</p><h2 id="model-title">Clean data is not yet<br><em>business-ready data.</em></h2></div><p>Silver and Gold answer different design questions. The serving layer becomes useful through deliberate modeling, consistent metrics, and a destination optimized for its consumers.</p></div>
+        <div class="model-journey">
+          <article class="model-card" style="--model-color:#8795a8"><header><span>SILVER</span><b>Trust & integration</b></header><h3>Conformed enterprise data</h3><p>Preserve useful detail while integrating sources, histories, identities, and quality rules.</p><ul><li>Standardized and validated entities</li><li>Reusable across multiple domains</li><li>May use Inmon-style 3NF, Data Vault, or domain tables</li></ul><div class="mini-model"><div class="vault-row"><span>HUB</span><span>SAT</span><span>LINK</span><span>SAT</span></div></div><blockquote>Design for traceability, history, integration, and reuse.</blockquote></article>
+          <div class="model-arrow"><small>model</small><i>→</i></div>
+          <article class="model-card" style="--model-color:#c78a00"><header><span>GOLD</span><b>Meaning & consumption</b></header><h3>Question-oriented data</h3><p>Shape data around measures, dimensions, KPIs, products, and specific analytical use cases.</p><ul><li>Facts, dimensions, marts, and aggregates</li><li>Shared metric definitions and semantic meaning</li><li>Often dimensional or star-schema design</li></ul><div class="mini-model"><div class="star-model"><span>DIM</span><span>DIM</span><b>FACT</b><span>DIM</span><span>DIM</span></div></div><blockquote>Design for the questions, decisions, and access patterns.</blockquote></article>
+          <div class="model-arrow"><small>serve</small><i>→</i></div>
+          <article class="model-card" style="--model-color:#246be8"><header><span>TARGET</span><b>Performance & governed access</b></header><h3>Gold, warehouse, or data mart</h3><p>Gold may already be the final destination—or it can publish into a dedicated analytical system when workload and organizational needs justify it.</p><div class="serve-options"><span>BigQuery</span><span>Snowflake</span><span>Redshift</span><span>Fabric</span><span>Data Mart</span><span>Semantic Layer</span></div><blockquote>A separate warehouse is an architectural choice, not a mandatory extra box.</blockquote></article>
+        </div>
+        <div class="pattern-grid">
+          <article class="pattern-card"><div class="pattern-head"><div><p class="eyebrow">Order of operations</p><h3>ETL vs. ELT</h3></div><div class="tiny-toggle" role="group" aria-label="Choose ETL or ELT"><button type="button" data-flow="etl" aria-pressed="false">ETL</button><button type="button" data-flow="elt" aria-pressed="true">ELT</button></div></div><div class="pattern-viz" id="flowViz"><span>Extract</span><i>→</i><span>Load</span><i>→</i><strong>Transform</strong></div><p id="flowCopy">Load first, then use destination compute to transform. Common in modern cloud analytics, but not automatically the right choice for every workload.</p></article>
+          <article class="pattern-card"><div class="pattern-head"><div><p class="eyebrow">When structure is applied</p><h3>Schema on read vs. write</h3></div><div class="tiny-toggle" role="group" aria-label="Choose schema timing"><button type="button" data-schema="read" aria-pressed="true">On read</button><button type="button" data-schema="write" aria-pressed="false">On write</button></div></div><div class="pattern-viz" id="schemaViz"><span>{ raw data }</span><i>→</i><strong>Apply shape when queried</strong></div><p id="schemaCopy">Flexible for diverse lake data, but every reader needs reliable shared metadata, contracts, and discipline.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="operations-section" id="operate" aria-labelledby="operate-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">05 · Production reality</p><h2 id="operate-title">A pipeline is not finished<br><em>when it works once.</em></h2></div><p>Production engineering means scheduling dependent work, designing safe reruns, restoring missed history, monitoring service levels, and responding when the world changes.</p></div>
+        <div class="ops-grid">
+          <article class="dag-card"><span class="tag">Daily order pipeline</span><h3>Orchestration connects tasks, time, and recovery.</h3><div class="dag-flow"><div class="dag-node"><b>Extract</b><small>source watermark</small></div><div class="dag-arrow">→</div><div class="dag-node"><b>Transform</b><small>idempotent partition</small></div><div class="dag-arrow">→</div><div class="dag-node"><b>Publish</b><small>quality gate</small></div></div><ul class="ops-principles"><li><b>Retry</b> transient failure safely</li><li><b>Backfill</b> missing time intervals</li><li><b>Reconcile</b> source and target counts</li><li><b>Alert</b> on user-impacting SLIs</li><li><b>Version</b> code and schemas</li><li><b>Rollback</b> or roll forward deliberately</li></ul></article>
+          <article class="failure-card"><span class="tag">Failure drill</span><h3>Yesterday’s partition failed after writing half its rows. What first?</h3><p class="muted">Choose the response you would defend in a production review.</p><div class="failure-choices"><button type="button" data-failure="append" aria-pressed="false">Run the same append job again immediately</button><button type="button" data-failure="replace" aria-pressed="false">Inspect the run, then replace that partition idempotently</button><button type="button" data-failure="ignore" aria-pressed="false">Ignore it; today’s run will probably fill the gap</button></div><div class="failure-feedback" id="failureFeedback" aria-live="polite">Select an answer to reveal the reasoning.</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="governance-section" id="govern" aria-labelledby="govern-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">06 · Trust by design</p><h2 id="govern-title">Governance is not a gate<br><em>at the end.</em></h2></div><p>Security, privacy, ownership, quality, and lineage travel with the data from source to consumer. A weakness in one part makes the whole system less trustworthy.</p></div>
+        <div class="govern-grid">
+          <article class="govern-card primary"><span class="govern-index">PII</span><h3>Protect sensitive data throughout its lifecycle</h3><p>Find and classify personal data. Minimize collection, mask or tokenize where appropriate, enforce least privilege, define retention and deletion, and preserve audit evidence.</p><small>Architect’s question: Who truly needs this field—and for how long?</small><div class="govern-tags"><span>Classification</span><span>Least privilege</span><span>Masking</span><span>Retention</span><span>Audit</span></div></article>
+          <article class="govern-card"><span class="govern-index">01</span><h3>Master Data Management</h3><p>MDM establishes trusted identities and shared definitions for core entities such as Customer, Product, Employee, and Supplier.</p><div class="identity-flow"><span>CRM-88</span><span>ERP-142</span><span>WEB-77</span><b>→ GOLDEN CUSTOMER 1042</b></div></article>
+          <article class="govern-card"><span class="govern-index">02</span><h3>Encryption everywhere</h3><p>Protect confidentiality across the full data lifecycle—not only when data sits in storage.</p><div class="encrypt-list"><div><b>At rest</b><span>Storage & backups</span></div><div><b>In transit</b><span>Network movement</span></div><div><b>In use</b><span>Active processing</span></div></div></article>
+          <article class="govern-card"><span class="govern-index">03</span><h3>Governed & discoverable</h3><p>Make data findable, understandable, owned, and safe to use.</p><div class="govern-tags"><span>Catalog</span><span>Business glossary</span><span>Ownership</span><span>Contracts</span><span>RBAC / ABAC</span></div></article>
+          <article class="govern-card"><span class="govern-index">04</span><h3>Observable & accountable</h3><p>Know where data came from, how it changed, whether it is fresh, and who is responsible when expectations are missed.</p><div class="govern-tags"><span>Lineage</span><span>Quality</span><span>Freshness</span><span>SLIs / SLOs</span><span>Runbooks</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="decision-section" id="decide" aria-labelledby="decide-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">07 · Scale, cost & architecture</p><h2 id="decide-title">Start with requirements.<br><em>Earn the complexity.</em></h2></div><p>Change the workload constraints. The recommendation is a discussion starter, not an automatic architecture: validate recovery, security, team skills, lock-in, and total cost.</p></div>
+        <div class="decision-lab">
+          <form class="decision-inputs" id="decisionForm"><div class="field"><label for="volume">Daily data volume</label><select id="volume"><option value="small">Under 10 GB</option><option value="medium" selected>10 GB–1 TB</option><option value="large">Over 1 TB</option></select></div><div class="field"><label for="latency">Decision latency</label><select id="latency"><option value="batch">Next day is fine</option><option value="near" selected>Within minutes</option><option value="stream">Within seconds</option></select></div><div class="field"><label for="change">Source change pattern</label><select id="change"><option value="snapshot">Daily snapshots</option><option value="cdc" selected>Frequent inserts and updates</option><option value="events">Unbounded events</option></select></div><div class="field"><label for="risk">Governance risk</label><select id="risk"><option value="standard">Standard internal data</option><option value="regulated">Regulated or sensitive data</option></select></div></form>
+          <div class="decision-result" aria-live="polite"><p class="eyebrow">Design direction</p><h3 id="recommendation">Incremental ingestion + managed lakehouse or warehouse</h3><p id="recommendationWhy">Frequent change and minute-level latency favor incremental processing without requiring a full streaming platform.</p><div class="decision-table"><div><span>Movement</span><b id="recMovement">CDC or frequent incremental loads</b></div><div><span>Storage</span><b id="recStorage">Columnar tables with scalable managed compute</b></div><div><span>Controls</span><b id="recControls">Contracts, quality gates, lineage, and freshness alerts</b></div></div></div>
+        </div>
+        <div class="scale-dimensions" aria-label="Dimensions that shape data architecture"><article><span>01</span><h3>Volume</h3><p>How much data arrives, accumulates, and must be scanned?</p></article><article><span>02</span><h3>Velocity</h3><p>Batch, near real-time, or streaming—and why?</p></article><article><span>03</span><h3>Variety</h3><p>Structured tables, events, logs, documents, or media?</p></article><article><span>04</span><h3>Quality</h3><p>How accurate, complete, timely, and consistent must it be?</p></article><article><span>05</span><h3>Reliability</h3><p>What recovery time, replay, and availability are required?</p></article><article><span>06</span><h3>Security</h3><p>Which sensitivity, residency, and access constraints apply?</p></article><article><span>07</span><h3>Team capability</h3><p>What can this team build, operate, and troubleshoot well?</p></article><article><span>08</span><h3>Total cost</h3><p>Storage, compute, movement, licensing, people, and operations.</p></article></div>
+        <div class="cost-grid"><article><b>STORE DELIBERATELY</b><h3>Store once, use many times</h3><p>Avoid uncontrolled copies. Use compressed, columnar, and open formats where appropriate, with deliberate retention tiers.</p></article><article><b>COMPUTE DELIBERATELY</b><h3>Process only what changed</h3><p>Prefer incremental work, partition pruning, right-sized compute, workload isolation, and schedules tied to real SLAs.</p></article><article><b>DESIGN FOR CHANGE</b><h3>Decouple the responsibilities</h3><p>Automate, observe, version, and isolate components so one tool can evolve without rebuilding the entire idea.</p></article></div>
+      </div>
+    </section>
+
+    <section class="purpose-section" id="purpose" aria-labelledby="purpose-title">
+      <div class="container">
+        <p class="eyebrow">08 · The reason it exists</p><h2 id="purpose-title">The pipeline succeeds when people make <em>better decisions.</em></h2><p class="lede">Data engineers connect operational reality to analysts, scientists, products, leaders, and AI systems. We are not moving bytes for technology’s sake; we are creating dependable flow between people who own systems and people who need answers.</p>
+        <div class="analytics-grid" aria-label="The four types of analytics"><article><span>DESCRIPTIVE</span><b>01</b><h3>What happened?</h3><p>Trusted metrics, historical reporting, and a shared record of performance.</p></article><article><span>DIAGNOSTIC</span><b>02</b><h3>Why did it happen?</h3><p>Drill-down, relationships, context, and evidence that supports root-cause analysis.</p></article><article><span>PREDICTIVE</span><b>03</b><h3>What may happen?</h3><p>Reliable features, training data, and histories for statistical and machine-learning models.</p></article><article><span>PRESCRIPTIVE</span><b>04</b><h3>What should we do?</h3><p>Decisions, recommended actions, optimization, and feedback into operational systems.</p></article></div>
+        <div class="people-bridge"><div><span>System owners</span><span>Backend teams</span><span>External partners</span><span>Data producers</span></div><i>→</i><strong><small>DATA ENGINEERS</small>Build the trusted flow</strong><i>→</i><div><span>Business users & BI</span><span>Data analysts</span><span>Data scientists</span><span>AI & applications</span><span>Leaders</span></div></div>
+        <div class="ai-foundation"><div class="ai-mark">AI</div><div><p class="eyebrow">AI transformation starts below the model</p><h3>No trusted data foundation, no trusted AI.</h3><p>AI systems inherit the quality, context, permissions, lineage, privacy risk, and bias of the pipelines beneath them. Internal data, responsibly enriched with external data where needed, becomes dependable AI infrastructure only when the whole system is engineered for trust.</p></div></div>
+      </div>
+    </section>
+
+    <section class="assessment-section" id="assess" aria-labelledby="assess-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">Knowledge check · Retrieval practice</p><h2 id="assess-title">Can you reason about it<br><em>without the diagram?</em></h2></div><p>Answer all five questions, then reveal the explanations. A wrong answer is useful evidence about what to revisit.</p></div>
+        <form id="quizForm" class="quiz-grid">
+          <fieldset class="quiz-card" data-answer="b"><legend>1. What makes a Bronze layer valuable?</legend><div class="quiz-options"><label><input type="radio" name="q1" value="a"> It contains only dimensional models.</label><label><input type="radio" name="q1" value="b"> It preserves replayable source history and ingestion metadata.</label><label><input type="radio" name="q1" value="c"> It guarantees every value is business-approved.</label><label><input type="radio" name="q1" value="d"> It is always a separate warehouse.</label></div><p class="explanation">Bronze is the auditable safety net: close to what arrived, lightly transformed, and sufficient to rebuild downstream layers.</p></fieldset>
+          <fieldset class="quiz-card" data-answer="c"><legend>2. An event arrives after its reporting window was first emitted. Which concepts matter?</legend><div class="quiz-options"><label><input type="radio" name="q2" value="a"> Star schemas and MDM</label><label><input type="radio" name="q2" value="b"> File compression and caching</label><label><input type="radio" name="q2" value="c"> Event time, watermarks, triggers, and late-data policy</label><label><input type="radio" name="q2" value="d"> Only network bandwidth</label></div><p class="explanation">Streaming correctness depends on when events occurred, when the system believes a window is complete, and what to do with late arrivals.</p></fieldset>
+          <fieldset class="quiz-card" data-answer="d"><legend>3. Why should a partitioned pipeline be idempotent?</legend><div class="quiz-options"><label><input type="radio" name="q3" value="a"> To make dashboards more colorful</label><label><input type="radio" name="q3" value="b"> To avoid all schema changes</label><label><input type="radio" name="q3" value="c"> To eliminate the need for monitoring</label><label><input type="radio" name="q3" value="d"> So rerunning the same input reaches the same correct state.</label></div><p class="explanation">Retries and backfills are normal. Idempotency makes them safe by preventing accidental duplicates or compounding changes.</p></fieldset>
+          <fieldset class="quiz-card" data-answer="a"><legend>4. A large Spark join has one task that runs far longer than all others. What is a likely cause?</legend><div class="quiz-options"><label><input type="radio" name="q4" value="a"> Data skew created an oversized partition.</label><label><input type="radio" name="q4" value="b"> The Gold layer has too many business questions.</label><label><input type="radio" name="q4" value="c"> The table uses a catalog.</label><label><input type="radio" name="q4" value="d"> The source is OLTP.</label></div><p class="explanation">Uneven key distribution can overload one shuffle partition. Inspect partition sizes and the query plan before changing compute.</p></fieldset>
+          <fieldset class="quiz-card" data-answer="b"><legend>5. Which is the best first architecture question?</legend><div class="quiz-options"><label><input type="radio" name="q5" value="a"> Which vendor has the most services?</label><label><input type="radio" name="q5" value="b"> Which decision, SLA, risk, and scale must the system support?</label><label><input type="radio" name="q5" value="c"> Can every workload use streaming?</label><label><input type="radio" name="q5" value="d"> Can we add more layers?</label></div><p class="explanation">Architecture is a response to requirements and constraints. Tool selection comes after the job to be done is understood.</p></fieldset>
+          <div class="quiz-actions"><button class="button primary" type="submit">Check my answers</button><button class="button" type="button" id="resetQuiz">Try again</button><output class="quiz-score" id="quizScore" aria-live="polite"></output></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="glossary-section" id="glossary" aria-labelledby="glossary-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">Learning companion · Connected glossary</p><h2 id="glossary-title">Find the term.<br><em>Reconnect it to the system.</em></h2></div><p>Definitions are more useful when students can place a concept in the architecture and explain what breaks when it fails.</p></div>
+        <div class="glossary-tools"><label for="glossarySearch" class="visually-hidden">Search glossary</label><input class="glossary-search" id="glossarySearch" type="search" placeholder="Search CDC, watermark, lineage, skew…"><button class="button" type="button" id="clearSearch">Clear</button></div>
+        <div class="filter-row" id="glossaryFilters" aria-label="Glossary category filters"></div>
+        <p class="glossary-count" id="glossaryCount" aria-live="polite"></p><div class="glossary-grid" id="glossaryGrid"></div>
+      </div>
+    </section>
+
+    <section class="teaching-section" aria-labelledby="teaching-title">
+      <div class="container"><p class="eyebrow">A reusable lesson pattern</p><h2 id="teaching-title">Teach the system in four moves.</h2><p class="lede">A concept map creates orientation. Learning deepens when students predict, practice, explain, and revisit the system under a new constraint.</p><div class="teaching-grid"><article><span>01 · ORIENT</span><h3>Trace the flow</h3><p>Follow one order from the source database to the executive metric.</p></article><article><span>02 · PREDICT</span><h3>Make a choice</h3><p>Ask students to select batch, CDC, or streaming before revealing the trade-off.</p></article><article><span>03 · PRACTICE</span><h3>Handle failure</h3><p>Rerun a partition, reconcile counts, and explain why the result is safe.</p></article><article><span>04 · EXPLAIN</span><h3>Defend the design</h3><p>State the decision, constraints, alternatives, and evidence.</p></article></div><details class="instructor-notes"><summary>Instructor notes: suggested 90-minute session</summary><div><p><b>10 min:</b> begin with the system map and one business question. <b>15 min:</b> compare the cloud mappings and ingestion choices. <b>15 min:</b> contrast lake, lakehouse, and warehouse. <b>15 min:</b> run the transformation lab and connect tools to responsibilities. <b>15 min:</b> compare Silver, Gold, and serving targets. <b>10 min:</b> discuss the failure and architecture scenarios. <b>10 min:</b> synthesize governance, people, analytics, and AI, then complete the knowledge check.</p></div></details></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-row"><div><strong>The Data Engineering System</strong><br>One pattern. Many tools. A reason for every choice.<br><small style="color:var(--muted); font-size:0.82rem;">Created by Tarek Atwan @ ML_LAB</small></div><div>Built as a self-contained learning page for GitHub Pages.<br><a href="../index.html" style="font-weight:700; text-decoration:underline;">← Return to Main Blog</a> &nbsp;|&nbsp; <a href="#system">Return to the big picture ↑</a></div></div></footer>
+
+  <script>
+    (() => {
+      "use strict";
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+      const platforms = {
+        conceptual:{label:"Conceptual",stack:["OLTP · APIs · files","Python · Airbyte · Kafka","Object storage","SQL · Spark · dbt","Lakehouse · warehouse","BI · ML · APIs"]},
+        aws:{label:"AWS",stack:["RDS · SaaS · APIs","DMS · Kinesis · Glue","Amazon S3","Glue · EMR · Databricks","Redshift · Athena","QuickSight · SageMaker"]},
+        azure:{label:"Azure",stack:["Azure SQL · SaaS · APIs","ADF · Event Hubs","ADLS Gen2","Fabric · Databricks · Synapse","Fabric DW · Synapse","Power BI · Azure ML"]},
+        gcp:{label:"GCP",stack:["Cloud SQL · SaaS · APIs","Dataflow · Pub/Sub · Datastream","Cloud Storage","Dataform · Dataproc · BigQuery","BigQuery","Looker · Vertex AI"]},
+        onprem:{label:"On-prem",stack:["Oracle · SAP · files","Informatica · Talend · Kafka","HDFS · NAS · MinIO","Spark · dbt · Python","Teradata · SQL Server","Tableau · SAS · apps"]}
+      };
+      const layers = {
+        source:{kicker:"01 · Origin",title:"Source systems",copy:"Operational systems exist to run the business. Begin by understanding ownership, change patterns, extraction limits, and the business process that created the data.",points:["OLTP databases and enterprise applications","APIs, partner feeds, files, sensors, and logs","Data ownership, contracts, and safe extraction"],question:"Who owns this data, and what business process created it?"},
+        ingest:{kicker:"02 · Movement",title:"Ingestion",copy:"Move data reliably without losing meaning. Choose batch, incremental, CDC, or streaming from latency, source impact, replay, and recovery requirements.",points:["Bulk load for initial history","Scheduled incremental loads for bounded change","CDC and events when latency or deletes matter"],question:"How quickly must change arrive, and can the source tolerate the load?"},
+        bronze:{kicker:"03 · Preserve",title:"Bronze · Raw",copy:"Land an auditable copy close to what arrived. Bronze is the safety net: inexpensive, replayable, and intentionally light on business logic.",points:["Original fidelity plus ingestion metadata","Immutable or versioned history for replay and audit","Quarantine corrupt records without hiding them"],question:"Could we rebuild every downstream layer from here?"},
+        silver:{kicker:"04 · Trust",title:"Silver · Conformed",copy:"Make data consistent, valid, and reusable across domains. Silver is where engineering quality becomes organizational trust.",points:["Deduplicate, validate, and quarantine","Standardize dates, currencies, units, and codes","Resolve identities and conform shared entities"],question:"Is this data trustworthy enough to reuse without relearning every source?"},
+        gold:{kicker:"05 · Meaning",title:"Gold · Business-ready",copy:"Model data around decisions, KPIs, products, and business questions. Gold is not merely clean; it carries shared analytical meaning.",points:["Facts, dimensions, slowly changing history","Metric definitions, aggregates, and marts","Models optimized for intended consumers"],question:"Which decision or question is this model designed to support?"},
+        serve:{kicker:"06 · Use",title:"Serve & consume",copy:"Publish data through the interface and performance profile each consumer needs, with access, discoverability, and feedback built in.",points:["Warehouses, query engines, APIs, and feature stores","Dashboards, notebooks, models, products, and AI","Usage and feedback inform the next pipeline iteration"],question:"Can the intended consumer find, understand, trust, and use it?"}
+      };
+
+      function selectPlatform(key) {
+        $$("[data-platform]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.platform === key)));
+        $("#platformLabel").textContent = platforms[key].label;
+        $$('[data-stack]').forEach((item, index) => item.textContent = platforms[key].stack[index]);
+      }
+      $$("[data-platform]").forEach(button => button.addEventListener("click", () => selectPlatform(button.dataset.platform)));
+
+      function selectLayer(key) {
+        const data = layers[key];
+        $$("[data-layer]").forEach(button => button.setAttribute("aria-selected", String(button.dataset.layer === key)));
+        $("#layerKicker").textContent = data.kicker; $("#layerTitle").textContent = data.title; $("#layerCopy").textContent = data.copy;
+        $("#layerPoints").innerHTML = data.points.map(point => `<li>${point}</li>`).join("");
+        $("#layerQuestion").textContent = `Architect’s question: ${data.question}`;
+      }
+      $$("[data-layer]").forEach(button => button.addEventListener("click", () => selectLayer(button.dataset.layer)));
+
+      const stores = {
+        lake:{kicker:"DATA LAKE · FLEXIBLE OBJECT STORAGE",title:"Low-cost storage for many kinds of objects.",description:"A lake stores files at large scale. It is flexible and economical, but plain files do not automatically provide transactions, row-level updates, or a consistent table view across readers.",properties:["✓ Open file formats","✓ Economical scale","! Readers manage consistency","! Updates may rewrite files"],visual:'<div class="object-files"><span>CSV</span><span>JSON</span><span>PARQUET</span><span>AVRO</span></div><b>OBJECT STORAGE</b><small>S3 · ADLS · GCS · MinIO</small>'},
+        lakehouse:{kicker:"LAKEHOUSE · DATABASE BEHAVIOR ON OBJECT STORAGE",title:"Files underneath. Reliable tables above.",description:"An open table format adds transaction logs, manifests, snapshots, and metadata. Multiple engines can agree on a consistent table state while data remains in economical object storage.",properties:["✓ ACID transactions","✓ MERGE and upserts","✓ Time travel","✓ Schema enforcement and evolution"],visual:'<div class="table-stack"><span>_delta_log / metadata <b>TABLE STATE</b></span><span>part-0001.parquet <b>DATA</b></span><span>part-0002.parquet <b>DATA</b></span><span>part-0003.parquet <b>DATA</b></span></div><b>PARQUET + TABLE METADATA</b><small>Delta Lake · Apache Iceberg · Apache Hudi</small>'},
+        warehouse:{kicker:"DATA WAREHOUSE · ANALYTICAL DATABASE",title:"Purpose-built for governed analytics.",description:"A warehouse organizes structured, modeled data for fast SQL, concurrency, BI, and controlled access. It can be the Gold layer—or receive curated data published from Gold.",properties:["✓ BI performance","✓ Mature governance","✓ Dimensional models","$ Manage compute and storage cost"],visual:'<div class="warehouse-block"><span>FACT</span><span>DIM</span><span>DIM</span><span>MART</span><span>SQL</span><span>BI</span></div><b>ANALYTICAL DATABASE</b><small>Snowflake · BigQuery · Redshift · Fabric</small>'}
+      };
+      function selectStore(key) {
+        const data = stores[key];
+        $$("[data-store]").forEach(button => button.setAttribute("aria-selected", String(button.dataset.store === key)));
+        $("[data-store-panel]").dataset.storePanel = key; $("#storageKicker").textContent = data.kicker; $("#storageHeading").textContent = data.title; $("#storageDescription").textContent = data.description;
+        $("#storageProperties").innerHTML = data.properties.map(item => `<span>${item}</span>`).join(""); $("#storageVisual").innerHTML = data.visual;
+      }
+      $$("[data-store]").forEach(button => button.addEventListener("click", () => selectStore(button.dataset.store)));
+
+      const storageKey = "de-system-progress-v1";
+      const moduleChecks = $$("[data-module]");
+      function savedModules() { try { return JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch { return []; } }
+      function updateModules(save = true) {
+        const complete = moduleChecks.filter(input => input.checked).map(input => input.dataset.module);
+        moduleChecks.forEach(input => input.closest(".module-card").classList.toggle("completed", input.checked));
+        $("#modulesDone").textContent = complete.length; $("#moduleProgress").style.width = `${complete.length / moduleChecks.length * 100}%`;
+        if (save) { try { localStorage.setItem(storageKey, JSON.stringify(complete)); } catch {} }
+      }
+      const restored = savedModules(); moduleChecks.forEach(input => input.checked = restored.includes(input.dataset.module)); updateModules(false);
+      moduleChecks.forEach(input => input.addEventListener("change", () => updateModules()));
+      $("#resetProgress").addEventListener("click", () => { moduleChecks.forEach(input => input.checked = false); updateModules(); });
+
+      const transformOutputs = {standardize:["Tarek Atwan","2026-07-18"],gaps:["missing_flag = true"],conform:["MDM: C0001042"],validate:["passed · 4 rules"]};
+      function updateTransform() {
+        const active = $$("[data-transform][aria-pressed='true']");
+        const keys = active.map(button => button.dataset.transform);
+        const count = active.length, total = $$("[data-transform]").length; $("#transformPercent").textContent = `${Math.round(count / total * 100)}% refined`; $("#transformMeter").style.width = `${count / total * 100}%`;
+        const counters = {};
+        $$("[data-output]").forEach(output => { const key = output.dataset.output; counters[key] = counters[key] || 0; output.textContent = keys.includes(key) ? transformOutputs[key][counters[key]++] : "—"; });
+      }
+      $$("[data-transform]").forEach(button => button.addEventListener("click", () => { button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true")); updateTransform(); }));
+
+      function selectFlow(key) {
+        $$("[data-flow]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.flow === key)));
+        $("#flowViz").innerHTML = key === "etl" ? "<span>Extract</span><i>→</i><strong>Transform</strong><i>→</i><span>Load</span>" : "<span>Extract</span><i>→</i><span>Load</span><i>→</i><strong>Transform</strong>";
+        $("#flowCopy").textContent = key === "etl" ? "Transform before loading when the destination must receive controlled, pre-shaped data, or when sensitive fields must be removed earlier." : "Load first, then use destination compute to transform. Common in modern cloud analytics, but not automatically the right choice for every workload.";
+      }
+      $$("[data-flow]").forEach(button => button.addEventListener("click", () => selectFlow(button.dataset.flow)));
+      function selectSchema(key) {
+        $$("[data-schema]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.schema === key)));
+        $("#schemaViz").innerHTML = key === "read" ? "<span>{ raw data }</span><i>→</i><strong>Apply shape when queried</strong>" : "<span>{ incoming data }</span><i>→</i><strong>Validate shape before storing</strong>";
+        $("#schemaCopy").textContent = key === "read" ? "Flexible for diverse lake data, but every reader needs reliable shared metadata, contracts, and discipline." : "Consistent and query-ready, but model and pipeline changes must be planned when the expected structure evolves.";
+      }
+      $$("[data-schema]").forEach(button => button.addEventListener("click", () => selectSchema(button.dataset.schema)));
+
+      const failureText = {
+        append:"Risky. If the first attempt wrote partial rows, another append can duplicate data. First inspect the run and understand the write contract.",
+        replace:"Best response. Verify the failed interval, then rerun with a transaction, merge key, or replace-partition pattern so the same input reaches one correct state.",
+        ignore:"Unsafe. Missing history rarely heals itself. The gap can silently corrupt downstream totals until someone notices."
+      };
+      $$("[data-failure]").forEach(button => button.addEventListener("click", () => { $$("[data-failure]").forEach(item => item.setAttribute("aria-pressed", String(item === button))); $("#failureFeedback").textContent = failureText[button.dataset.failure]; }));
+
+      function updateRecommendation() {
+        const volume = $("#volume").value, latency = $("#latency").value, change = $("#change").value, risk = $("#risk").value;
+        let title, why, movement, storage;
+        if (latency === "stream" || change === "events") { title = "Replayable event stream + stateful processing + real-time serving"; why = "Second-level decisions or unbounded events require explicit time, ordering, replay, state, and late-data policies."; movement = "Durable event log with schema contracts"; storage = volume === "large" ? "Object storage + open table format + streaming sink" : "Managed stream store plus analytical tables"; }
+        else if (volume === "small" && latency === "batch") { title = "Keep it simple: managed warehouse-first ELT"; why = "Small, bounded workloads with relaxed latency usually do not earn a distributed streaming platform."; movement = "Scheduled incremental batch"; storage = "Managed warehouse tables"; }
+        else if (volume === "large") { title = "Object storage + open table format + elastic compute"; why = "Large scans benefit from separating economical storage from scalable compute and from deliberate partition design."; movement = change === "snapshot" ? "Partitioned batch with reconciliation" : "CDC or incremental micro-batches"; storage = "Columnar files with transactional table metadata"; }
+        else { title = "Incremental ingestion + managed lakehouse or warehouse"; why = "Frequent change and minute-level latency favor incremental processing without requiring a full streaming platform."; movement = change === "snapshot" ? "Frequent incremental batches" : "CDC or frequent incremental loads"; storage = "Columnar tables with scalable managed compute"; }
+        const controls = risk === "regulated" ? "Least privilege, classification, retention, audit, lineage, and quality gates" : "Contracts, quality gates, lineage, and freshness alerts";
+        $("#recommendation").textContent = title; $("#recommendationWhy").textContent = why; $("#recMovement").textContent = movement; $("#recStorage").textContent = storage; $("#recControls").textContent = controls;
+      }
+      $$("#decisionForm select").forEach(select => select.addEventListener("change", updateRecommendation));
+
+      $("#quizForm").addEventListener("submit", event => {
+        event.preventDefault(); let score = 0; const cards = $$(".quiz-card");
+        cards.forEach((card, index) => { const chosen = $(`input[name='q${index + 1}']:checked`, card); const correct = chosen && chosen.value === card.dataset.answer; score += correct ? 1 : 0; card.classList.add("revealed"); card.classList.toggle("correct", Boolean(correct)); card.classList.toggle("incorrect", !correct); });
+        $("#quizScore").textContent = `Score: ${score} / ${cards.length} · ${score === cards.length ? "Ready to apply it." : "Review the explanations and retry."}`;
+      });
+      $("#resetQuiz").addEventListener("click", () => { $("#quizForm").reset(); $$(".quiz-card").forEach(card => card.classList.remove("revealed","correct","incorrect")); $("#quizScore").textContent = ""; });
+
+      const terms = [
+        ["ACID","Reliability","Transaction guarantees: Atomicity, Consistency, Isolation, and Durability.","Storage"],
+        ["Backfill","Operations","Reprocess one or more historical data intervals after code, data, or availability changes.","Orchestration"],
+        ["Batch","Movement","Process a bounded collection of records on a schedule or trigger.","Ingestion"],
+        ["CDC","Movement","Change Data Capture moves inserts, updates, and deletes instead of recopying everything.","Ingestion"],
+        ["Data contract","Governance","An agreement about schema, semantics, quality, ownership, and change expectations.","Across layers"],
+        ["Data lake","Storage","Scalable object storage for files in many formats; database behavior is not automatic.","Storage"],
+        ["Data mart","Serving","A focused analytical model or store for one domain, team, or business use case.","Gold / serve"],
+        ["Data Vault","Modeling","A history-preserving integration model using hubs, links, and satellites; one possible Silver design.","Silver"],
+        ["Data warehouse","Serving","An analytical database designed for governed, performant SQL and BI workloads.","Serve"],
+        ["Delta Lake","Table format","A table format that adds a transaction log and table semantics to files on object storage.","Lakehouse"],
+        ["Dimensional model","Modeling","A consumption design organizing measures in facts and context in dimensions.","Gold"],
+        ["Encryption","Security","Cryptographic protection for data at rest, in transit, and—using specialized techniques—in use.","Across layers"],
+        ["ETL / ELT","Processing","Transform before loading, or load then transform using destination compute; choose from constraints.","Transform"],
+        ["Event time","Streaming","The time an event happened in the source domain, distinct from processing time.","Processing"],
+        ["Iceberg","Table format","An open table format using metadata and manifests for snapshots, schema change, and partition evolution.","Lakehouse"],
+        ["Idempotency","Reliability","The same input can be processed again without changing the correct final result.","Operations"],
+        ["Lakehouse","Architecture","An architecture combining object storage economics with reliable table semantics.","Storage"],
+        ["Lineage","Governance","The traceable path from source through transformations to downstream consumers.","Across layers"],
+        ["MDM","Governance","Master Data Management establishes trusted identities and definitions for shared entities.","Across layers"],
+        ["Medallion","Architecture","A pattern that progressively improves data from Bronze to Silver to Gold.","Pipeline"],
+        ["OLTP","Source","Systems optimized for day-to-day transactions and concurrent operational work.","Source"],
+        ["Orchestration","Operations","Coordinate schedules, dependencies, retries, parameters, and pipeline state.","Operations"],
+        ["Parquet","Storage","An open columnar file format optimized for analytical scans and compression.","Storage"],
+        ["Partitioning","Performance","Divide data by keys or ranges so work and reads can be distributed or pruned.","Storage / compute"],
+        ["PII","Security","Data that can identify or relate to a person and needs appropriate protection.","Across layers"],
+        ["Schema evolution","Reliability","Controlled change to a table or event structure while managing compatibility.","Across layers"],
+        ["Schema on read","Architecture","Apply structure when data is accessed: flexible, but dependent on shared metadata and reader discipline.","Lake"],
+        ["Schema on write","Architecture","Validate and shape data before storage in the target model: consistent, but changes require planning.","Warehouse"],
+        ["SCD","Modeling","Slowly Changing Dimension techniques preserve or overwrite changes to dimensional attributes.","Gold"],
+        ["Shuffle","Distributed","Redistribute data between workers, often for joins and aggregations; potentially expensive.","Processing"],
+        ["Skew","Distributed","Uneven key distribution that overloads a small number of partitions or tasks.","Processing"],
+        ["Streaming","Movement","Continuously process an unbounded event collection with time, state, and replay concerns.","Ingestion"],
+        ["Table format","Storage","Metadata and protocols that make files behave as consistent, evolving tables.","Storage"],
+        ["Time travel","Reliability","Query or restore an earlier table snapshot using versioned metadata and retained files.","Lakehouse"],
+        ["Watermark","Streaming","An estimate of event-time completeness used to reason about windows and late data.","Processing"]
+      ];
+      let activeCategory = "All";
+      const categories = ["All", ...new Set(terms.map(term => term[1]))];
+      function renderFilters() { $("#glossaryFilters").innerHTML = categories.map(category => `<button type="button" data-category="${category}" aria-pressed="${category === activeCategory}">${category}</button>`).join(""); $$("[data-category]").forEach(button => button.addEventListener("click", () => { activeCategory = button.dataset.category; renderFilters(); renderTerms(); })); }
+      function renderTerms() {
+        const query = $("#glossarySearch").value.trim().toLowerCase();
+        const filtered = terms.filter(term => (activeCategory === "All" || term[1] === activeCategory) && term.join(" ").toLowerCase().includes(query));
+        $("#glossaryCount").textContent = `${filtered.length} connected concept${filtered.length === 1 ? "" : "s"}`;
+        $("#glossaryGrid").innerHTML = filtered.length ? filtered.map(term => `<article class="term-card"><header><span>${term[1]}</span><b>${term[3]}</b></header><h3>${term[0]}</h3><p>${term[2]}</p><footer>System location · ${term[3]}</footer></article>`).join("") : `<div class="empty-state"><h3>No matching term</h3><p>Try a broader word such as “table”, “quality”, “time”, or “security”.</p></div>`;
+      }
+      renderFilters(); renderTerms(); $("#glossarySearch").addEventListener("input", renderTerms); $("#clearSearch").addEventListener("click", () => { $("#glossarySearch").value = ""; activeCategory = "All"; renderFilters(); renderTerms(); $("#glossarySearch").focus(); });
+
+      $("[data-jump]").addEventListener("click", event => document.getElementById(event.currentTarget.dataset.jump).scrollIntoView({behavior:"smooth"}));
+      $$(".mobile-menu a").forEach(link => link.addEventListener("click", () => $(".mobile-menu").removeAttribute("open")));
+      const sections = $$("main section[id]");
+      const navLinks = $$(".desktop-nav a");
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const targetLink = navLinks.find(link => link.getAttribute("href") === `#${visible.target.id}`);
+        if (!targetLink) return;
+        navLinks.forEach(link => link.classList.toggle("active", link === targetLink));
+      }, {rootMargin:"-22% 0px -65%",threshold:[0,.15,.35]});
+      sections.forEach(section => observer.observe(section));
+      function updateReadingProgress() { const max = document.documentElement.scrollHeight - innerHeight; $("#readingProgress").style.width = `${max > 0 ? scrollY / max * 100 : 0}%`; }
+      addEventListener("scroll", updateReadingProgress, {passive:true}); addEventListener("resize", updateReadingProgress); updateReadingProgress();
+    })();
+  </script>
+</body>
+</html>
