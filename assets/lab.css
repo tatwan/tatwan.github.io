@@ -1,0 +1,502 @@
+/* =====================================================================
+   ML_LAB — shared design system
+   ---------------------------------------------------------------------
+   One source of truth for the chrome that wraps every page: the header,
+   the footer, and the command palette. Tool pages keep their own canvas
+   (some are light, some dark); this file only styles the frame around
+   them, so nothing here may leak into a page's own markup.
+
+   Every selector is namespaced `lab-`. Do not add bare element selectors.
+   ===================================================================== */
+
+:root {
+  /* Ground */
+  --lab-ink-950: #050810;
+  --lab-ink-900: #080c16;
+  --lab-ink-850: #0a0f1b;
+  --lab-ink-800: #0c1220;
+  --lab-ink-750: #121b2c;
+  --lab-ink-700: #162034;
+
+  /* Lines */
+  --lab-line: #1b2334;
+  --lab-line-strong: #253048;
+  --lab-line-loud: #2b3853;
+
+  /* Text */
+  --lab-text: #e9eef6;
+  --lab-text-2: #94a3b8;
+  --lab-text-3: #64748b;
+  --lab-text-4: #4d5a73;
+
+  /* Accent */
+  --lab-amber: #f5a623;
+  --lab-amber-hi: #ffc868;
+  --lab-amber-ink: #060912;
+  --lab-amber-wash: rgba(245, 166, 35, 0.12);
+
+  /* Type */
+  --lab-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --lab-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+
+  /* Shape */
+  --lab-r-sm: 6px;
+  --lab-r: 10px;
+  --lab-r-lg: 14px;
+
+  --lab-header-h: 62px;
+}
+
+/* ---------------------------------------------------------------- *
+ * Reset, scoped
+ * ---------------------------------------------------------------- */
+.lab-chrome *,
+.lab-chrome *::before,
+.lab-chrome *::after { box-sizing: border-box; }
+
+.lab-chrome button,
+.lab-chrome input {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+.lab-chrome :focus-visible {
+  outline: 2px solid var(--lab-amber);
+  outline-offset: 2px;
+  border-radius: var(--lab-r-sm);
+}
+
+/* Skip link — keyboard users land here first */
+.lab-skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 10001;
+  background: var(--lab-amber);
+  color: var(--lab-amber-ink);
+  font-family: var(--lab-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: var(--lab-r-sm);
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.lab-skip:focus { top: 12px; }
+
+/* ---------------------------------------------------------------- *
+ * Header
+ * ---------------------------------------------------------------- */
+.lab-header {
+  position: sticky;
+  top: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: var(--lab-header-h);
+  padding: 0 24px;
+  background: var(--lab-ink-900);
+  border-bottom: 1px solid var(--lab-line);
+  font-family: var(--lab-mono);
+  color: var(--lab-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.lab-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: var(--lab-text);
+  flex-shrink: 0;
+}
+.lab-brand:hover .lab-brand__name { color: var(--lab-amber); }
+
+.lab-brand__mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  background: var(--lab-amber);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.lab-brand__name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: color 0.15s ease;
+}
+.lab-brand__by {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--lab-text-4);
+  white-space: nowrap;
+}
+
+.lab-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-left: auto;
+}
+.lab-nav a {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lab-text-2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+.lab-nav a:hover,
+.lab-nav a[aria-current="page"] { color: var(--lab-amber); }
+
+/* Search trigger */
+.lab-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  min-width: 220px;
+  background: var(--lab-ink-800);
+  border: 1px solid var(--lab-line-strong);
+  border-radius: var(--lab-r-sm);
+  color: var(--lab-text-3);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.lab-search:hover {
+  border-color: var(--lab-line-loud);
+  color: var(--lab-text-2);
+}
+.lab-search__label { flex: 1 1 auto; text-align: left; }
+
+.lab-kbd {
+  font-family: var(--lab-mono);
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 5px;
+  border: 1px solid var(--lab-line-loud);
+  border-radius: 3px;
+  color: var(--lab-text-2);
+  background: var(--lab-ink-750);
+  white-space: nowrap;
+}
+
+/* Breadcrumb strip on tool pages */
+.lab-crumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 24px;
+  background: var(--lab-ink-950);
+  border-bottom: 1px solid var(--lab-line);
+  font-family: var(--lab-mono);
+  font-size: 11px;
+  color: var(--lab-text-3);
+}
+.lab-crumb a { color: var(--lab-text-2); text-decoration: none; }
+.lab-crumb a:hover { color: var(--lab-amber); text-decoration: underline; text-underline-offset: 3px; }
+.lab-crumb__sep { color: var(--lab-text-4); }
+.lab-crumb__here { color: var(--lab-text); }
+
+/* ---------------------------------------------------------------- *
+ * Footer
+ * ---------------------------------------------------------------- */
+.lab-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 20px 24px;
+  background: var(--lab-ink-900);
+  border-top: 1px solid var(--lab-line);
+  font-family: var(--lab-mono);
+  font-size: 10.5px;
+  color: var(--lab-text-3);
+}
+.lab-footer a { color: var(--lab-text-3); text-decoration: none; }
+.lab-footer a:hover { color: var(--lab-amber); }
+.lab-footer__links { display: flex; gap: 18px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ---------------------------------------------------------------- *
+ * "About this playbook" band
+ * Sits between a tool's own canvas and the footer. Gives every page
+ * real, indexable prose — the interactive apps render nothing a
+ * crawler can read.
+ * ---------------------------------------------------------------- */
+.lab-about {
+  background: var(--lab-ink-950);
+  border-top: 1px solid var(--lab-line);
+  padding: 44px 24px 48px;
+  font-family: var(--lab-mono);
+  color: var(--lab-text-2);
+}
+
+.lab-about__inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.lab-about__label {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lab-text-4);
+  margin-bottom: 14px;
+}
+
+.lab-about h2 {
+  font-family: var(--lab-serif);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.18;
+  margin: 0 0 14px;
+  color: var(--lab-text);
+}
+
+.lab-about p {
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 0 0 12px;
+  max-width: 620px;
+  color: var(--lab-text-2);
+}
+
+.lab-about__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.lab-about__fact {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lab-text-3);
+  border: 1px solid var(--lab-line-strong);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.lab-about__side h3 {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lab-text-4);
+  margin: 0 0 12px;
+}
+
+.lab-about__list { list-style: none; margin: 0 0 26px; padding: 0; }
+.lab-about__list li { margin-bottom: 9px; line-height: 1.5; }
+.lab-about__list a {
+  font-size: 12.5px;
+  color: var(--lab-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--lab-line-strong);
+  padding-bottom: 1px;
+}
+.lab-about__list a:hover { color: var(--lab-amber); border-bottom-color: var(--lab-amber); }
+.lab-about__list span { display: block; font-size: 11px; color: var(--lab-text-4); margin-top: 2px; }
+
+.lab-about__by { font-size: 11.5px; line-height: 1.7; color: var(--lab-text-3); }
+.lab-about__by a { color: var(--lab-text-2); text-decoration: underline; text-underline-offset: 3px; }
+.lab-about__by a:hover { color: var(--lab-amber); }
+
+@media (max-width: 860px) {
+  .lab-about__inner { grid-template-columns: 1fr; gap: 32px; }
+  .lab-about { padding: 34px 16px 38px; }
+}
+
+/* ---------------------------------------------------------------- *
+ * Command palette
+ * ---------------------------------------------------------------- */
+.lab-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(4, 7, 14, 0.76);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10vh 20px 20px;
+  font-family: var(--lab-mono);
+}
+.lab-palette-backdrop[hidden] { display: none; }
+
+.lab-palette {
+  width: min(660px, 100%);
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--lab-ink-800);
+  border: 1px solid var(--lab-line-loud);
+  border-radius: 12px;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  color: var(--lab-text);
+}
+
+.lab-palette__search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--lab-line);
+  flex-shrink: 0;
+}
+.lab-palette__input {
+  flex: 1 1 auto;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 14px;
+  color: var(--lab-text);
+}
+.lab-palette__input::placeholder { color: var(--lab-text-4); }
+
+.lab-palette__filters {
+  display: flex;
+  gap: 6px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--lab-line);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.lab-chip {
+  font-family: var(--lab-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--lab-line-strong);
+  background: transparent;
+  color: var(--lab-text-2);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.lab-chip:hover { border-color: var(--lab-line-loud); color: var(--lab-text); }
+.lab-chip[aria-pressed="true"] {
+  background: var(--lab-amber);
+  border-color: var(--lab-amber);
+  color: var(--lab-amber-ink);
+}
+
+.lab-palette__results {
+  overflow-y: auto;
+  padding: 8px 0;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.lab-palette__group {
+  padding: 10px 18px 6px;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lab-text-4);
+}
+
+.lab-hit {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: inherit;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+.lab-hit:hover { background: rgba(255, 255, 255, 0.03); }
+.lab-hit[data-active="true"] {
+  background: var(--lab-ink-700);
+  border-left-color: var(--lab-amber);
+}
+.lab-hit__kind {
+  flex: 0 0 76px;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lab-text-4);
+}
+.lab-hit[data-active="true"] .lab-hit__kind { color: var(--lab-amber); }
+.lab-hit__body { flex: 1 1 auto; min-width: 0; }
+.lab-hit__title {
+  display: block;
+  font-size: 13px;
+  color: var(--lab-text);
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lab-hit__path {
+  display: block;
+  font-size: 11px;
+  color: var(--lab-text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lab-hit mark {
+  background: var(--lab-amber-wash);
+  color: var(--lab-amber-hi);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.lab-hit__chevron { flex: 0 0 auto; color: var(--lab-text-4); }
+
+.lab-palette__empty {
+  padding: 34px 18px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--lab-text-3);
+  line-height: 1.7;
+}
+
+.lab-palette__hints {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 10px 18px;
+  border-top: 1px solid var(--lab-line);
+  font-size: 10px;
+  color: var(--lab-text-4);
+  flex-shrink: 0;
+}
+.lab-palette__hints .lab-kbd { font-size: 9px; padding: 1px 4px; }
+
+/* ---------------------------------------------------------------- *
+ * Narrow screens
+ * ---------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .lab-nav { display: none; }
+  .lab-search { min-width: 0; flex: 1 1 auto; }
+  .lab-search__label { display: none; }
+  .lab-brand__by { display: none; }
+}
+
+@media (max-width: 560px) {
+  .lab-header { padding: 0 14px; gap: 12px; }
+  .lab-crumb { padding: 9px 14px; }
+  .lab-footer { padding: 18px 14px; }
+  .lab-palette-backdrop { padding: 6vh 12px 12px; }
+  .lab-hit__kind { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-chrome * { transition: none !important; animation: none !important; }
+}
