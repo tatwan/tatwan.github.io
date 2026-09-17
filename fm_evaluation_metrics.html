@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Foundation Model Evaluation Metrics - Interactive Decision Tree</title>
+  <title>FM Evaluation Metrics — ML_LAB | Tarek Atwan</title>
   <meta name="description"
     content="Interactive decision tree for choosing the right evaluation metrics for LLMs and Foundation Models: Perplexity, ROUGE, BERTScore, LLM-as-Judge, RAGAS, and more.">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +31,56 @@
       background: #64748b;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Pick metrics for foundation-model evaluation — perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge — and understand what each one quietly fails to measure.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/fm_evaluation_metrics.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/fm_evaluation_metrics.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="FM Evaluation Metrics — ML_LAB">
+  <meta property="og:description" content="Choose LLM evaluation metrics: perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="FM Evaluation Metrics — ML_LAB">
+  <meta name="twitter:description" content="Choose LLM evaluation metrics: perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="FM Evaluation Metrics"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "FM Evaluation Metrics",
+  "description": "Pick metrics for foundation-model evaluation — perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge — and understand what each one quietly fails to measure.",
+  "url": "https://tatwan.github.io/fm_evaluation_metrics.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Advanced",
+  "about": "LLM metrics",
+  "timeRequired": "20 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -79,6 +129,16 @@
     const FMEvaluationMetrics = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
       const [showQuickRef, setShowQuickRef] = useState(false);
 
       // Decision tree structure
@@ -1798,6 +1858,44 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<FMEvaluationMetrics />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">FM Evaluation Metrics</h2>
+        <p>Pick metrics for foundation-model evaluation — perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge — and understand what each one quietly fails to measure.</p>
+        <p>It covers perplexity, ROUGE, BLEU, BERTScore, RAGAS, LLM-as-judge and human evaluation, including what each one quietly fails to capture. It is written for teams who need to prove an LLM feature improved, not just that it shipped.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">LLM metrics</span>
+          <span class="lab-about__fact">20 min</span>
+          <span class="lab-about__fact">Advanced</span>
+          <span class="lab-about__fact">Measure whether it works</span>
+          <span class="lab-about__fact">Build with LLMs</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/genai_foundations_navigator.html">GenAI Foundations Navigator</a><span>GenAI basics &middot; 10–15 min</span></li>
+          <li><a href="/model_evaluation_interactive.html">Metric Decision Tree</a><span>Evaluation &middot; 20 min</span></li>
+          <li><a href="/genai_techniques_selector.html">GenAI Technique Selector</a><span>LLM optimization &middot; 25 min</span></li>
+          <li><a href="/rag-academy/">RAG Academy</a><span>RAG &middot; Course</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>

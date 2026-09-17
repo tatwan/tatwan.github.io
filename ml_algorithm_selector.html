@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML Algorithm Selector - Interactive Decision Tree</title>
+  <title>Algorithm Selector — ML_LAB | Tarek Atwan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -68,6 +68,56 @@
       background-clip: text;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Work from your problem type and data characteristics to a shortlist of algorithms, with the trade-off that decided each branch stated in the open.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/ml_algorithm_selector.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/ml_algorithm_selector.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="Algorithm Selector — ML_LAB">
+  <meta property="og:description" content="Interactive decision tree for finding the right ML algorithm for your problem and data.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="Algorithm Selector — ML_LAB">
+  <meta name="twitter:description" content="Interactive decision tree for finding the right ML algorithm for your problem and data.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="Algorithm Selector"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Algorithm Selector",
+  "description": "Work from your problem type and data characteristics to a shortlist of algorithms, with the trade-off that decided each branch stated in the open.",
+  "url": "https://tatwan.github.io/ml_algorithm_selector.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Intermediate",
+  "about": "Modeling",
+  "timeRequired": "15 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -122,6 +172,16 @@
     const MLAlgorithmSelector = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
       const [showQuickRef, setShowQuickRef] = useState(false);
       const [expandedAlgo, setExpandedAlgo] = useState(null);
 
@@ -1872,6 +1932,42 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<MLAlgorithmSelector />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">Algorithm Selector</h2>
+        <p>Work from your problem type and data characteristics to a shortlist of algorithms, with the trade-off that decided each branch stated in the open.</p>
+        <p>It covers supervised and unsupervised learning, classification, regression, ranking, forecasting, anomaly detection and the semi-supervised middle ground. It is written for data scientists choosing a first model, and engineers sanity-checking one someone else chose.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">Modeling</span>
+          <span class="lab-about__fact">15 min</span>
+          <span class="lab-about__fact">Intermediate</span>
+          <span class="lab-about__fact">Pick the model and the method</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/feature_engineering_playbook.html">Feature Engineering Playbook</a><span>Features &middot; 20 min</span></li>
+          <li><a href="/DataEngineering/index.html">Data Engineering Foundations</a><span>Data platform &middot; 10 modules</span></li>
+          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 7 weeks</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>

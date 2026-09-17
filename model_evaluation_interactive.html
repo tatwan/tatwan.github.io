@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML Metric Decision Tree - Interactive Guide</title>
+  <title>Metric Decision Tree — ML_LAB | Tarek Atwan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -29,6 +29,56 @@
       background: #64748b;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Navigate the landscape of evaluation metrics for classification, regression and ranking, including what to do when your classes are badly imbalanced.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/model_evaluation_interactive.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/model_evaluation_interactive.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="Metric Decision Tree — ML_LAB">
+  <meta property="og:description" content="Choose the right evaluation metric for classification, regression and beyond.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="Metric Decision Tree — ML_LAB">
+  <meta name="twitter:description" content="Choose the right evaluation metric for classification, regression and beyond.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="Metric Decision Tree"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Metric Decision Tree",
+  "description": "Navigate the landscape of evaluation metrics for classification, regression and ranking, including what to do when your classes are badly imbalanced.",
+  "url": "https://tatwan.github.io/model_evaluation_interactive.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Intermediate",
+  "about": "Evaluation",
+  "timeRequired": "20 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -77,6 +127,16 @@
     const MLMetricDecisionTree = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
       const [showQuickRef, setShowQuickRef] = useState(false);
 
       // Decision tree structure
@@ -1092,6 +1152,40 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<MLMetricDecisionTree />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">Metric Decision Tree</h2>
+        <p>Navigate the landscape of evaluation metrics for classification, regression and ranking, including what to do when your classes are badly imbalanced.</p>
+        <p>It covers accuracy, precision, recall, F1, ROC-AUC, PR-AUC, MAE, RMSE, MAPE and the ranking metrics, with explicit handling of class imbalance. It is written for anyone about to report a number to a stakeholder who will act on it.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">Evaluation</span>
+          <span class="lab-about__fact">20 min</span>
+          <span class="lab-about__fact">Intermediate</span>
+          <span class="lab-about__fact">Measure whether it works</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/fm_evaluation_metrics.html">FM Evaluation Metrics</a><span>LLM metrics &middot; 20 min</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>

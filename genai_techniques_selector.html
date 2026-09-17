@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GenAI Technique Selector - Interactive Decision Tree</title>
+  <title>GenAI Technique Selector — ML_LAB | Tarek Atwan</title>
   <meta name="description"
     content="Interactive decision tree to choose the right LLM optimization technique: RAG, Fine-tuning, LoRA, Quantization, Distillation, and more.">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +31,56 @@
       background: #64748b;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Choose the right LLM optimization for your constraint: RAG, fine-tuning, LoRA, quantization, distillation, and the cases where prompt engineering was already enough.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/genai_techniques_selector.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/genai_techniques_selector.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="GenAI Technique Selector — ML_LAB">
+  <meta property="og:description" content="Choose the right LLM optimization: RAG, fine-tuning, LoRA, quantization and more.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="GenAI Technique Selector — ML_LAB">
+  <meta name="twitter:description" content="Choose the right LLM optimization: RAG, fine-tuning, LoRA, quantization and more.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="GenAI Technique Selector"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "GenAI Technique Selector",
+  "description": "Choose the right LLM optimization for your constraint: RAG, fine-tuning, LoRA, quantization, distillation, and the cases where prompt engineering was already enough.",
+  "url": "https://tatwan.github.io/genai_techniques_selector.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Advanced",
+  "about": "LLM optimization",
+  "timeRequired": "25 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -79,6 +129,16 @@
     const GenAITechniqueSelector = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
       const [showQuickRef, setShowQuickRef] = useState(false);
 
       // Decision tree structure
@@ -1481,6 +1541,42 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<GenAITechniqueSelector />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">GenAI Technique Selector</h2>
+        <p>Choose the right LLM optimization for your constraint: RAG, fine-tuning, LoRA, quantization, distillation, and the cases where prompt engineering was already enough.</p>
+        <p>It covers prompt engineering, retrieval-augmented generation, full fine-tuning, LoRA and QLoRA, quantization, distillation and model routing. It is written for engineers whose LLM is too slow, too expensive, or too wrong, and who need to know which of those to fix first.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">LLM optimization</span>
+          <span class="lab-about__fact">25 min</span>
+          <span class="lab-about__fact">Advanced</span>
+          <span class="lab-about__fact">Build with LLMs</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/genai_foundations_navigator.html">GenAI Foundations Navigator</a><span>GenAI basics &middot; 10–15 min</span></li>
+          <li><a href="/fm_evaluation_metrics.html">FM Evaluation Metrics</a><span>LLM metrics &middot; 20 min</span></li>
+          <li><a href="/rag-academy/">RAG Academy</a><span>RAG &middot; Course</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>

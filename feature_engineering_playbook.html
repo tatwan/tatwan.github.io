@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feature Engineering Playbook - Interactive Decision Tree</title>
+  <title>Feature Engineering Playbook — ML_LAB | Tarek Atwan</title>
   <meta name="description"
     content="Interactive decision tree to guide feature engineering choices: encoding, scaling, feature creation, and selection strategies for any data type.">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +31,56 @@
       background: #64748b;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Encoding, scaling, outlier handling, feature creation and selection — branched separately for tabular, text, time-series and image data instead of averaged into one rule of thumb.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/feature_engineering_playbook.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/feature_engineering_playbook.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="Feature Engineering Playbook — ML_LAB">
+  <meta property="og:description" content="Encoding, scaling, outliers, feature creation and selection across tabular, text, time-series and image data.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="Feature Engineering Playbook — ML_LAB">
+  <meta name="twitter:description" content="Encoding, scaling, outliers, feature creation and selection across tabular, text, time-series and image data.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="Feature Engineering Playbook"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Feature Engineering Playbook",
+  "description": "Encoding, scaling, outlier handling, feature creation and selection — branched separately for tabular, text, time-series and image data instead of averaged into one rule of thumb.",
+  "url": "https://tatwan.github.io/feature_engineering_playbook.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Intermediate",
+  "about": "Features",
+  "timeRequired": "20 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -80,6 +130,16 @@
     const FeatureEngineeringPlaybook = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
       const [showQuickRef, setShowQuickRef] = useState(false);
 
       const tree = {
@@ -1595,6 +1655,42 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<FeatureEngineeringPlaybook />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">Feature Engineering Playbook</h2>
+        <p>Encoding, scaling, outlier handling, feature creation and selection — branched separately for tabular, text, time-series and image data instead of averaged into one rule of thumb.</p>
+        <p>It covers categorical encoding, scaling, outlier treatment, missing values, feature creation and selection, branched separately for tabular, text, time-series and image data. It is written for practitioners whose model is underperforming for reasons that are probably not the model.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">Features</span>
+          <span class="lab-about__fact">20 min</span>
+          <span class="lab-about__fact">Intermediate</span>
+          <span class="lab-about__fact">Pick the model and the method</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/ml_algorithm_selector.html">Algorithm Selector</a><span>Modeling &middot; 15 min</span></li>
+          <li><a href="/DataEngineering/index.html">Data Engineering Foundations</a><span>Data platform &middot; 10 modules</span></li>
+          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 7 weeks</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>

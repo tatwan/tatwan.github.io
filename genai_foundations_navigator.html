@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GenAI Foundations Navigator - Beginner Guide</title>
+  <title>GenAI Foundations Navigator — ML_LAB | Tarek Atwan</title>
   <meta name="description"
     content="Beginner-friendly interactive tree to decide between prompt engineering, RAG, fine-tuning, and model optimization for GenAI systems.">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +31,56 @@
       background: #64748b;
     }
   </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="A guided tour of the vocabulary everything else assumes: grounding, retrieval components, prompt structure, core parameters, and the point at which fine-tuning starts to make sense.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/genai_foundations_navigator.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/genai_foundations_navigator.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="GenAI Foundations Navigator — ML_LAB">
+  <meta property="og:description" content="Beginner-friendly tour of GenAI basics: grounding, RAG components, prompt engineering and core parameters.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="GenAI Foundations Navigator — ML_LAB">
+  <meta name="twitter:description" content="Beginner-friendly tour of GenAI basics: grounding, RAG components, prompt engineering and core parameters.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="GenAI Foundations Navigator"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "GenAI Foundations Navigator",
+  "description": "A guided tour of the vocabulary everything else assumes: grounding, retrieval components, prompt structure, core parameters, and the point at which fine-tuning starts to make sense.",
+  "url": "https://tatwan.github.io/genai_foundations_navigator.html",
+  "learningResourceType": "Decision tool",
+  "educationalLevel": "Beginner",
+  "about": "GenAI basics",
+  "timeRequired": "10–15 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
 </head>
 
 <body>
@@ -74,6 +124,16 @@
     const GenaiFoundationsNavigator = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
+      // LAB: deep link — /page.html#node_id opens that decision node.
+      React.useEffect(() => {
+        const jump = () => {
+          const h = decodeURIComponent((window.location.hash || '').slice(1));
+          if (h && tree[h]) setCurrentNode(h);
+        };
+        jump();
+        window.addEventListener('hashchange', jump);
+        return () => window.removeEventListener('hashchange', jump);
+      }, []);
 
       // A deliberately small, guided tree focused on decision order:
       // 1) Prompting first, 2) then RAG for external knowledge, 3) then training, 4) then optimization.
@@ -504,6 +564,42 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<GenaiFoundationsNavigator />);
   </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">GenAI Foundations Navigator</h2>
+        <p>A guided tour of the vocabulary everything else assumes: grounding, retrieval components, prompt structure, core parameters, and the point at which fine-tuning starts to make sense.</p>
+        <p>It covers grounding and hallucination, the parts of a RAG pipeline, prompt structure, temperature and top-p, and the threshold where fine-tuning starts to pay for itself. It is written for anyone who keeps nodding along in GenAI conversations and would rather actually follow them.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Decision tool</span>
+          <span class="lab-about__fact">GenAI basics</span>
+          <span class="lab-about__fact">10–15 min</span>
+          <span class="lab-about__fact">Beginner</span>
+          <span class="lab-about__fact">Build with LLMs</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/genai_techniques_selector.html">GenAI Technique Selector</a><span>LLM optimization &middot; 25 min</span></li>
+          <li><a href="/fm_evaluation_metrics.html">FM Evaluation Metrics</a><span>LLM metrics &middot; 20 min</span></li>
+          <li><a href="/rag-academy/">RAG Academy</a><span>RAG &middot; Course</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
 </body>
 
 </html>
