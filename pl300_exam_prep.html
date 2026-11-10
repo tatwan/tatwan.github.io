@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PL-300 Exam Prep — ML_LAB | Tarek Atwan</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.26.10/babel.min.js"></script>
+  <style>
+    .pl { --bg:#f7f4ec; --card:#fffdf8; --ink:#1d1b16; --mute:#6b6557; --line:#e2dccb; --line2:#cfc7b0;
+      --gold:#f2c811; --gold-d:#8a6d00; --gold-bg:#fdf6d3; --ok:#1f7a4d; --ok-bg:#e3f4ea; --bad:#b3261e; --bad-bg:#fbe9e7; --blue:#2b6cb0;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace; --serif: "Instrument Serif", Georgia, serif;
+      background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55; min-height:80vh; }
+    .pl *, .pl *::before, .pl *::after { box-sizing:border-box; }
+    body { margin:0; background:#f7f4ec; }
+    .pl .wrap { max-width:1040px; margin:0 auto; padding:0 20px 72px; }
+    .pl h1, .pl h2, .pl h3 { font-family:var(--serif); font-weight:400; line-height:1.15; margin:0; letter-spacing:-0.01em; }
+    .pl h1 { font-size:clamp(2.3rem, 6vw, 3.6rem); }
+    .pl h2 { font-size:clamp(1.6rem, 4vw, 2.1rem); margin:44px 0 14px; }
+    .pl h3 { font-size:1.35rem; }
+    .pl p { margin:0 0 12px; }
+    .pl .eyebrow { font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-d); }
+    .pl .mute { color:var(--mute); }
+    .pl .small { font-size:.875rem; }
+    .pl .hero { padding:44px 0 26px; }
+    .pl .hero p.lead { font-size:1.12rem; max-width:62ch; color:#3d392f; margin-top:14px; }
+    .pl .hero h1 mark { background:linear-gradient(transparent 62%, var(--gold) 62%); color:inherit; padding:0 2px; }
+
+    .pl .tabs { position:sticky; top:0; z-index:20; background:rgba(247,244,236,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
+    .pl .tabs .in { max-width:1040px; margin:0 auto; padding:0 12px; display:flex; gap:2px; overflow-x:auto; }
+    .pl .tab { font:500 .8rem var(--mono); padding:14px 12px; border:0; background:none; color:var(--mute); cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; }
+    .pl .tab:hover { color:var(--ink); }
+    .pl .tab[aria-current="page"] { color:var(--ink); border-bottom-color:var(--gold); }
+
+    .pl .btn { font:600 .82rem var(--mono); padding:11px 18px; border-radius:8px; border:1.5px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; min-height:44px; }
+    .pl .btn:hover { background:#000; }
+    .pl .btn.alt { background:transparent; color:var(--ink); }
+    .pl .btn.alt:hover { background:#efeada; }
+    .pl .btn.gold { background:var(--gold); border-color:var(--gold); color:#1d1b16; }
+    .pl .btn.gold:hover { background:#e5bb00; }
+    .pl .btn.sm { padding:7px 12px; min-height:36px; font-size:.76rem; }
+    .pl .btn:disabled { opacity:.4; cursor:not-allowed; }
+    .pl button:focus-visible, .pl select:focus-visible, .pl summary:focus-visible, .pl a:focus-visible, .pl input:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+    .pl .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .pl .grow { flex:1; }
+
+    .pl .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
+    .pl .grid { display:grid; gap:14px; }
+    .pl .g4 { grid-template-columns:repeat(4, 1fr); }
+    .pl .g3 { grid-template-columns:repeat(3, 1fr); }
+    .pl .g2 { grid-template-columns:repeat(2, 1fr); }
+    @media (max-width:820px) { .pl .g4 { grid-template-columns:repeat(2, 1fr); } .pl .g3, .pl .g2 { grid-template-columns:1fr; } }
+    .pl .stat b { display:block; font:400 2rem/1.1 var(--serif); }
+    .pl .stat span { font:500 .7rem var(--mono); text-transform:uppercase; letter-spacing:.1em; color:var(--mute); }
+
+    .pl .bar { height:8px; background:#ebe5d3; border-radius:99px; overflow:hidden; }
+    .pl .bar i { display:block; height:100%; border-radius:99px; }
+    .pl .skillrow { display:grid; grid-template-columns:minmax(0, 1fr) 120px 76px; gap:12px; align-items:center; padding:9px 0; border-top:1px solid var(--line); font-size:.92rem; }
+    .pl .skillrow:first-child { border-top:0; }
+    .pl .skillrow .pct { font:600 .8rem var(--mono); text-align:right; }
+    @media (max-width:560px) { .pl .skillrow { grid-template-columns:minmax(0, 1fr) 64px; } .pl .skillrow .bar { grid-column:1 / -1; order:3; } }
+    .pl .tag { display:inline-block; font:600 .68rem var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:99px; background:#ece6d4; color:#4a4538; }
+    .pl .tag.weak { background:var(--bad-bg); color:var(--bad); }
+    .pl .tag.good { background:var(--ok-bg); color:var(--ok); }
+    .pl .tag.gold { background:var(--gold-bg); color:var(--gold-d); }
+
+    .pl ul.pts { margin:10px 0 0; padding-left:20px; }
+    .pl ul.pts li { margin-bottom:7px; }
+    .pl .traps { margin-top:16px; background:var(--gold-bg); border-left:4px solid var(--gold); border-radius:0 10px 10px 0; padding:14px 16px; }
+    .pl .traps strong { font:600 .72rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--gold-d); }
+    .pl .domhead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; border-bottom:2px solid var(--ink); padding-bottom:8px; }
+    .pl .domhead .w { font:600 .8rem var(--mono); color:var(--mute); }
+
+    .pl .qhead { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font:500 .78rem var(--mono); color:var(--mute); margin-bottom:14px; }
+    .pl .timer { font:700 .95rem var(--mono); color:var(--ink); padding:4px 10px; border:1.5px solid var(--line2); border-radius:8px; }
+    .pl .timer.low { color:var(--bad); border-color:var(--bad); }
+    .pl .ctx { border:1px solid var(--line2); border-radius:10px; background:#f3eedd; margin-bottom:16px; }
+    .pl .ctx summary { cursor:pointer; padding:11px 14px; font:600 .8rem var(--mono); }
+    .pl .ctx .b { padding:0 14px 6px; font-size:.93rem; }
+    .pl .qtext { font-size:1.08rem; white-space:pre-wrap; margin-bottom:14px; }
+    .pl pre.code { font:500 .86rem/1.6 var(--mono); background:#1d1b16; color:#f4eed8; padding:14px 16px; border-radius:10px; overflow-x:auto; margin:0 0 14px; white-space:pre; }
+    .pl .hint { font:500 .76rem var(--mono); color:var(--mute); margin-bottom:10px; }
+    .pl .opt { display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; font:inherit; color:inherit; background:var(--card); border:1.5px solid var(--line2); border-radius:10px; padding:12px 14px; margin-bottom:9px; cursor:pointer; min-height:48px; }
+    .pl .opt:hover:not(:disabled) { border-color:var(--ink); }
+    .pl .opt:disabled { cursor:default; }
+    .pl .opt .k { flex:none; width:24px; height:24px; border-radius:6px; border:1.5px solid var(--line2); font:700 .72rem/21px var(--mono); text-align:center; }
+    .pl .opt.sel { border-color:var(--ink); background:#f1ecdb; }
+    .pl .opt.sel .k { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .pl .opt.ok { border-color:var(--ok); background:var(--ok-bg); }
+    .pl .opt.ok .k { background:var(--ok); border-color:var(--ok); color:#fff; }
+    .pl .opt.bad { border-color:var(--bad); background:var(--bad-bg); }
+    .pl .opt.bad .k { background:var(--bad); border-color:var(--bad); color:#fff; }
+    .pl .blank { display:grid; grid-template-columns:minmax(0, 1fr) minmax(170px, 260px); gap:10px; align-items:center; padding:10px 0; border-top:1px solid var(--line); }
+    @media (max-width:640px) { .pl .blank { grid-template-columns:1fr; } }
+    .pl select { font:500 .88rem var(--mono); padding:10px; border-radius:8px; border:1.5px solid var(--line2); background:#fff; color:var(--ink); width:100%; min-height:44px; }
+    .pl select.ok { border-color:var(--ok); background:var(--ok-bg); }
+    .pl select.bad { border-color:var(--bad); background:var(--bad-bg); }
+    .pl .fix { font:500 .78rem var(--mono); color:var(--ok); margin-top:4px; }
+    .pl .ord { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media (max-width:720px) { .pl .ord { grid-template-columns:1fr; } }
+    .pl .ord .col { border:1.5px dashed var(--line2); border-radius:10px; padding:10px; min-height:120px; }
+    .pl .ord .col > b { display:block; font:600 .7rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-bottom:8px; }
+    .pl .chip { display:flex; gap:8px; align-items:center; background:var(--card); border:1.5px solid var(--line2); border-radius:8px; padding:8px 10px; margin-bottom:7px; font-size:.93rem; }
+    .pl .chip.ok { border-color:var(--ok); background:var(--ok-bg); }
+    .pl .chip.bad { border-color:var(--bad); background:var(--bad-bg); }
+    .pl button.chip { width:100%; text-align:left; font:inherit; color:inherit; cursor:pointer; min-height:44px; }
+    .pl button.chip:hover { border-color:var(--ink); }
+    .pl .chip .n { font:700 .75rem var(--mono); color:var(--mute); }
+    .pl .mini { border:1px solid var(--line2); background:#fff; border-radius:6px; width:32px; height:32px; cursor:pointer; font-size:.85rem; flex:none; color:var(--ink); }
+    .pl .mini:disabled { opacity:.3; cursor:default; }
+    .pl .explain { margin-top:16px; border-radius:10px; padding:14px 16px; border-left:4px solid var(--ok); background:var(--ok-bg); }
+    .pl .explain.bad { border-left-color:var(--bad); background:var(--bad-bg); }
+    .pl .explain strong { font:700 .74rem var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+    .pl .nav { display:grid; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:6px; margin-top:16px; }
+    .pl .nav button { height:38px; border-radius:7px; border:1.5px solid var(--line2); background:var(--card); font:600 .76rem var(--mono); cursor:pointer; color:var(--ink); position:relative; }
+    .pl .nav button.done { background:#e9e3d0; }
+    .pl .nav button.cur { border-color:var(--ink); box-shadow:0 0 0 2px var(--gold); }
+    .pl .nav button.flag::after { content:""; position:absolute; top:3px; right:3px; width:7px; height:7px; border-radius:50%; background:var(--gold-d); }
+    .pl .nav button.ok { background:var(--ok-bg); border-color:var(--ok); }
+    .pl .nav button.bad { background:var(--bad-bg); border-color:var(--bad); }
+
+    .pl .score { display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
+    .pl .score .big { font:400 4.6rem/1 var(--serif); }
+    .pl .verdict { font:700 .8rem var(--mono); letter-spacing:.12em; text-transform:uppercase; padding:6px 12px; border-radius:99px; }
+    .pl .verdict.pass { background:var(--ok-bg); color:var(--ok); }
+    .pl .verdict.fail { background:var(--bad-bg); color:var(--bad); }
+    .pl details.rev { border:1px solid var(--line); border-radius:10px; background:var(--card); margin-bottom:8px; }
+    .pl details.rev > summary { cursor:pointer; padding:12px 14px; display:flex; gap:10px; align-items:flex-start; font-size:.94rem; list-style:none; }
+    .pl details.rev > summary::-webkit-details-marker { display:none; }
+    .pl details.rev .mk { flex:none; font:700 .72rem var(--mono); padding:2px 7px; border-radius:5px; }
+    .pl details.rev .mk.ok { background:var(--ok-bg); color:var(--ok); }
+    .pl details.rev .mk.bad { background:var(--bad-bg); color:var(--bad); }
+    .pl details.rev .in { padding:4px 16px 18px; border-top:1px solid var(--line); }
+    .pl .chk { display:flex; gap:9px; align-items:center; padding:6px 0; font-size:.94rem; cursor:pointer; }
+    .pl .chk input { width:18px; height:18px; accent-color:#1d1b16; }
+    .pl .seg { display:inline-flex; border:1.5px solid var(--ink); border-radius:8px; overflow:hidden; flex-wrap:wrap; }
+    .pl .seg button { font:600 .78rem var(--mono); padding:9px 14px; border:0; background:transparent; cursor:pointer; color:var(--ink); min-height:40px; }
+    .pl .seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
+    .pl .tblwrap { overflow-x:auto; }
+    .pl table { border-collapse:collapse; width:100%; font-size:.9rem; }
+    .pl th { text-align:left; font:600 .7rem var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--mute); padding:8px 10px; border-bottom:2px solid var(--ink); white-space:nowrap; }
+    .pl td { padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+    .pl td:first-child { font-weight:600; }
+    .pl ol.steps { counter-reset:s; list-style:none; padding:0; margin:0; }
+    .pl ol.steps li { counter-increment:s; position:relative; padding:0 0 14px 44px; }
+    .pl ol.steps li::before { content:counter(s); position:absolute; left:0; top:0; width:30px; height:30px; border-radius:50%; background:var(--gold); font:700 .85rem/30px var(--mono); text-align:center; }
+    @media (prefers-reduced-motion:no-preference) { .pl .fade { animation:plfade .25s ease-out both; } }
+    @keyframes plfade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+  </style>
+  <!-- LAB:HEAD:START -->
+  <meta name="description" content="Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.">
+  <meta name="author" content="Tarek Atwan">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tatwan.github.io/pl300_exam_prep.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tatwan.github.io/pl300_exam_prep.html">
+  <meta property="og:site_name" content="ML_LAB">
+  <meta property="og:title" content="PL-300 Exam Prep — ML_LAB">
+  <meta property="og:description" content="133 practice questions, timed exams, study guide and final review for Power BI PL-300.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@tarekatwan">
+  <meta name="twitter:title" content="PL-300 Exam Prep — ML_LAB">
+  <meta name="twitter:description" content="133 practice questions, timed exams, study guide and final review for Power BI PL-300.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <script defer src="/assets/lab.js" data-lab-page="PL-300 Exam Prep"></script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "PL-300 Exam Prep",
+  "description": "Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.",
+  "url": "https://tatwan.github.io/pl300_exam_prep.html",
+  "learningResourceType": "Exam prep",
+  "educationalLevel": "Certification",
+  "about": "Power BI PL-300",
+  "timeRequired": "30–100 min",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Tarek Atwan",
+    "url": "https://www.tarekatwan.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ML_LAB",
+    "url": "https://tatwan.github.io/"
+  }
+}
+  </script>
+  <!-- LAB:HEAD:END -->
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    // ── Exam blueprint (Microsoft skills measured, as of April 20, 2026) ──
+    const DOMAINS = {
+      1: { name: "Prepare the data", short: "Prepare", weight: 0.28, range: "25–30%", color: "#b7791f", description: "Get or connect to data, profile and clean it, then transform and load it with Power Query." },
+      2: { name: "Model the data", short: "Model", weight: 0.28, range: "25–30%", color: "#2b6cb0", description: "Design the semantic model, write DAX calculations and optimize model performance." },
+      3: { name: "Visualize and analyze the data", short: "Visualize", weight: 0.27, range: "25–30%", color: "#2f855a", description: "Create reports, enhance them for usability and storytelling, and identify patterns and trends." },
+      4: { name: "Manage and secure Power BI", short: "Manage", weight: 0.17, range: "15–20%", color: "#9b2c2c", description: "Workspaces, apps, refresh, gateways, row-level security, permissions and sensitivity labels." }
+    };
+
+    // ── Study guide: one entry per skill area on the official outline ──
+    const SKILLS = [
+      { id: "1.1", name: "Get or connect to data",
+        points: [
+          "Import copies data into the model: fastest queries, full DAX and Power Query, but data is only as fresh as the last refresh.",
+          "DirectQuery leaves data in the source and queries it live: near real-time and no size limit in the model, but slower visuals and some modeling limits.",
+          "Direct Lake reads Delta tables in Microsoft Fabric OneLake straight into memory: Import-like speed without a scheduled data copy. It needs a Fabric capacity.",
+          "Dual storage mode lets a table act as Import or DirectQuery depending on the query. Use it for dimension tables shared by Import and DirectQuery fact tables.",
+          "Connecting to a shared (published) semantic model creates a live connection: you reuse the existing model and measures instead of rebuilding them.",
+          "Data source settings (File > Options and settings) is where you change the source, edit credentials and set privacy levels: Private, Organizational or Public.",
+          "Parameters (Manage Parameters) replace hard-coded values such as server or folder path, so you can switch dev, test and prod without editing each query."
+        ],
+        traps: [
+          "A 'Formula.Firewall' error when combining sources is a privacy level problem, not a credentials problem.",
+          "If the question says 'minimize development effort' and a certified semantic model already exists, connect to it. Do not rebuild it.",
+          "Incremental refresh needs two Date/Time parameters named exactly RangeStart and RangeEnd."
+        ] },
+      { id: "1.2", name: "Profile and clean the data",
+        points: [
+          "Column quality shows the percentage of Valid, Error and Empty values.",
+          "Column distribution shows counts of distinct values (how many different values) and unique values (values that appear exactly once).",
+          "Column profile shows statistics for the selected column: count, min, max, average, standard deviation, plus a value distribution chart.",
+          "Profiling runs on the top 1,000 rows by default. Switch to 'Column profiling based on entire data set' in the status bar.",
+          "Replace Values fixes known bad values; Replace Errors swaps error cells for a value such as null; Remove Errors deletes the whole row.",
+          "Trim removes leading and trailing spaces, Clean removes non-printable characters, and the Format options fix casing.",
+          "Fill Down copies a value into the null cells below it, which repairs report-style exports."
+        ],
+        traps: [
+          "Distinct is not unique. A key column should have distinct count equal to unique count equal to row count.",
+          "Remove Errors drops rows. If the requirement says to keep every row, use Replace Errors.",
+          "Most load errors come from a Changed Type step meeting text such as 'N/A' in a number column."
+        ] },
+      { id: "1.3", name: "Transform and load the data",
+        points: [
+          "Unpivot turns columns into attribute and value rows (wide to long). Pivot does the opposite. Transpose swaps rows and columns.",
+          "Prefer 'Unpivot other columns': new month columns that arrive later are unpivoted automatically.",
+          "Merge joins two queries side by side on a key (like a SQL join). Append stacks queries with the same columns (like UNION ALL).",
+          "Join kinds: Left Outer keeps all rows of the first table, Inner keeps matches only, Left Anti keeps rows of the first table with no match.",
+          "Reference creates a new query that starts from the output of another, so changes flow through. Duplicate copies all the steps and is independent.",
+          "Clear 'Enable load' on staging queries so they are not loaded into the model. Clear 'Include in report refresh' for static data.",
+          "Star schema: fact tables hold keys and numeric values at one grain; dimension tables hold one row per entity with descriptive attributes.",
+          "Data types matter: Text for codes with leading zeros, Fixed decimal number for currency, Whole number for keys, Date instead of Date/Time when time is not needed."
+        ],
+        traps: [
+          "A relationship needs a single column on each side. For a composite key, build one combined key column in both tables.",
+          "A referenced query breaks if the source query's output columns change. A duplicate does not.",
+          "Group By in Power Query reduces rows before load. It is a model-size tool, not only a summary tool."
+        ] },
+      { id: "2.1", name: "Design and implement a data model",
+        points: [
+          "Most relationships are one-to-many from a dimension to a fact table, with single cross-filter direction (dimension filters fact).",
+          "Use 'Both' cross-filter direction only when you need it, for example to filter through a bridge table. It can create ambiguity and slow queries.",
+          "Role-playing dimension: one Date table related to several date columns. Only one relationship can be active; use USERELATIONSHIP in a measure for the others, or load a copy of the dimension per role.",
+          "A common date table needs one row per day, no gaps, unique values and a Date column. Then use 'Mark as date table'.",
+          "Column properties: Sort by column (month name by month number), Data category (City, Web URL), Default summarization (Don't summarize for years and keys), Format, Hide in report view.",
+          "Calculated columns are computed at refresh and stored per row: use them when you need the value on a slicer, axis or filter. Measures are computed at query time: use them for aggregations.",
+          "Calculated tables are built with DAX at refresh: date tables (CALENDAR, CALENDARAUTO), role-playing copies, summary tables."
+        ],
+        traps: [
+          "If an answer says 'create a measure' but the value must be used in a slicer, it is wrong. You need a column.",
+          "Many-to-many and bidirectional relationships are rarely the intended answer when a star schema option exists.",
+          "Month names sort alphabetically until you set Sort by column."
+        ] },
+      { id: "2.2", name: "Create model calculations by using DAX",
+        points: [
+          "Aggregations: SUM, AVERAGE, MIN, MAX, COUNT, COUNTROWS, DISTINCTCOUNT, MEDIAN. Iterators (SUMX, AVERAGEX) evaluate an expression row by row and then aggregate.",
+          "CALCULATE evaluates an expression in a modified filter context. A filter argument on a column replaces any existing filter on that column.",
+          "ALL and REMOVEFILTERS remove filters; ALLSELECTED keeps the filters that come from slicers and outside the visual; KEEPFILTERS intersects rather than replaces.",
+          "Time intelligence: TOTALYTD, DATESYTD, SAMEPERIODLASTYEAR, DATEADD, DATESINPERIOD, PREVIOUSMONTH. They need a proper date table.",
+          "Semi-additive measures (stock levels, account balances) add across products but not across time. Use LASTDATE, LASTNONBLANK or CLOSINGBALANCEMONTH with CALCULATE.",
+          "DIVIDE(numerator, denominator, alternate) handles division by zero safely.",
+          "Quick measures generate DAX for common patterns (running total, rolling average, year-over-year) without writing it by hand.",
+          "Calculation groups apply one calculation (YTD, PY, YoY) to any measure by using SELECTEDMEASURE(), so you avoid writing a variant of every measure.",
+          "RELATED fetches a value from the one side of a relationship into a row on the many side; RELATEDTABLE goes the other way."
+        ],
+        traps: [
+          "TOTALYTD takes an optional year-end date as its last argument, for example \"6/30\" for a fiscal year that ends on June 30.",
+          "Creating a calculation group turns on 'Discourage implicit measures', so fields dragged onto visuals no longer auto-sum.",
+          "SUM takes a column. If the calculation multiplies two columns row by row, you need SUMX."
+        ] },
+      { id: "2.3", name: "Optimize model performance",
+        points: [
+          "Remove columns and rows you do not need, in Power Query, before the data loads. Hiding a column does not make the model smaller.",
+          "High-cardinality columns (date-times to the second, GUIDs, free text) compress poorly. Split date and time, or drop them.",
+          "Turn off Auto date/time: it creates a hidden date table for every date column.",
+          "Reduce granularity: if reports only need monthly totals, aggregate to month before loading.",
+          "Performance Analyzer records each visual's time as DAX query, Visual display and Other. A high 'Other' means the visual was waiting for other visuals.",
+          "Copy a visual's query from Performance Analyzer and run it in DAX query view to test and tune measures."
+        ],
+        traps: [
+          "High 'DAX query' time means fix the measure or the model. High 'Visual display' time means simplify the visual.",
+          "Fewer visuals per page is a real optimization answer.",
+          "Filtering in the report does not shrink the model; filtering in Power Query does."
+        ] },
+      { id: "3.1", name: "Create reports",
+        points: [
+          "Pick the visual from the question's verb: compare (bar or column), trend (line), part of whole (stacked, treemap), relationship (scatter), running contribution (waterfall), value against target (gauge or KPI), detail (table or matrix).",
+          "Conditional formatting can use a color scale, rules, or 'Field value', where a measure returns the color.",
+          "Filters apply at three scopes: this visual, this page, all pages. Top N and measure filters are visual-level.",
+          "Themes change colors and fonts for the whole report. Import a JSON theme file to apply a corporate standard.",
+          "Paginated reports (Power BI Report Builder, .rdl) are for pixel-perfect, printable, multi-page output such as invoices and long tables.",
+          "Visual calculations are DAX stored on the visual, not in the model. They use functions such as RUNNINGSUM, MOVINGAVERAGE and PREVIOUS and can only see fields on that visual.",
+          "Copilot can create a report page, suggest content for a page, and power the narrative visual that summarizes a page in text."
+        ],
+        traps: [
+          "Copilot needs the workspace on a paid Fabric or Premium capacity and the tenant setting turned on.",
+          "'Print every row across many pages' or 'export to PDF exactly as designed' points to a paginated report.",
+          "A KPI visual needs a trend axis; a gauge does not."
+        ] },
+      { id: "3.2", name: "Enhance reports for usability and storytelling",
+        points: [
+          "Bookmarks capture Data (filters, slicers, sort), Display (visibility, spotlight) and Current page. Clear 'Data' when a bookmark should only show or hide visuals.",
+          "The Selection pane controls visibility, layer order, grouping and tab order.",
+          "Edit interactions sets how one visual affects another: Filter, Highlight or None.",
+          "Sync slicers controls which pages a slicer applies to and where it is visible.",
+          "Drillthrough: put the field in the Drill through well of the target page. Users right-click a data point, or use a drillthrough button.",
+          "Custom tooltip: build a page, turn on 'Allow use as tooltip', set the canvas to Tooltip size, then pick that page on the visual.",
+          "Navigation: page navigator and bookmark navigator buttons build themselves from the pages and bookmarks.",
+          "Mobile layout view arranges visuals for phones. Personalize visuals lets readers change a visual without editing the report.",
+          "Accessibility: alt text, tab order, good contrast, markers on lines, titles on every visual.",
+          "Automatic page refresh works with DirectQuery sources. Change detection needs a Premium or Fabric capacity."
+        ],
+        traps: [
+          "If slicers reset when users click a bookmark, the bookmark is storing Data.",
+          "Export options (summarized, underlying, none) are set in the report's settings.",
+          "Automatic page refresh does nothing for an Import table."
+        ] },
+      { id: "3.3", name: "Identify patterns and trends",
+        points: [
+          "Analyze (right-click a data point): 'Explain the increase/decrease' and 'Find where this distribution is different'.",
+          "Key influencers ranks the factors that drive a metric. Decomposition tree breaks a measure down across dimensions, with AI splits for the highest or lowest value.",
+          "The Analytics pane adds reference lines (constant, min, max, average, median, percentile), trend lines, forecasts, error bars and anomaly detection.",
+          "Forecasting and anomaly detection work on a line chart with a continuous date axis.",
+          "Grouping combines categories into your own groups. Binning splits a numeric or date field into equal ranges.",
+          "Clustering ('Automatically find clusters') finds groups of similar points on a scatter chart.",
+          "Copilot can summarize the semantic model so you can see what data is available before building."
+        ],
+        traps: [
+          "Analyze insights are not available on DirectQuery or live-connected models.",
+          "Groups and bins create a new field in the model; they are not just a visual setting.",
+          "'Which factors influence...' is Key influencers. 'Let users explore down any path' is the Decomposition tree."
+        ] },
+      { id: "4.1", name: "Create and manage workspaces and assets",
+        points: [
+          "Workspaces are for collaboration between creators. Apps are for distributing a curated, read-only set of content to many consumers, with audiences for different groups.",
+          "After changing reports in the workspace, select 'Update app' so consumers see the changes.",
+          "Dashboards exist only in the Power BI service: one page of tiles pinned from one or more reports.",
+          "Data alerts work only on dashboard tiles that are cards, KPIs or gauges. Subscriptions email a snapshot of a report or dashboard on a schedule.",
+          "Endorsement: anyone with write permission can Promote. Only people authorized by the Fabric admin can Certify.",
+          "An on-premises data gateway is needed to refresh or query sources inside a private network. Cloud sources such as Azure SQL Database do not need one.",
+          "Standard mode gateways serve many users and support DirectQuery. Personal mode is for one person and Import refresh only.",
+          "Scheduled refresh: up to 8 times a day on shared capacity (Pro), up to 48 on Premium or Fabric capacity."
+        ],
+        traps: [
+          "An alert question that mentions a report page is a trick. Pin the visual to a dashboard first.",
+          "Publishing from Desktop creates or overwrites both the report and its semantic model.",
+          "A gateway is about network location, not about the type of database."
+        ] },
+      { id: "4.2", name: "Secure and govern Power BI items",
+        points: [
+          "Workspace roles from most to least access: Admin, Member, Contributor, Viewer.",
+          "Member can add users and publish or update the app. Contributor can create and edit content but cannot update the app by default. Viewer can only read.",
+          "Row-level security (RLS): define roles and DAX filters in Power BI Desktop (Manage roles), then assign users or security groups to the roles in the service.",
+          "Dynamic RLS uses USERPRINCIPALNAME() to compare the signed-in user with a column in the model.",
+          "RLS restricts only users with Viewer access (and app consumers). Admins, Members and Contributors see all data.",
+          "Build permission on a semantic model lets people create their own reports from it without workspace access.",
+          "Item-level sharing: share a single report or dashboard by link or direct access, with optional reshare and Build rights.",
+          "Sensitivity labels come from Microsoft Purview Information Protection and stay with the data when it is exported to Excel, PowerPoint or PDF."
+        ],
+        traps: [
+          "'RLS is not working for one user' usually means that user has Contributor or higher on the workspace.",
+          "Microsoft 365 groups cannot be added to RLS roles. Use security groups.",
+          "Always pick the least-privileged role that meets the requirement."
+        ] }
+    ];
+
+    // ── Shared scenarios: series questions and the case study ──
+    const CONTEXTS = {
+      S1: { kind: "series", title: "Scenario: storage mode",
+        body: [
+          "You are building a semantic model on an Azure SQL database. The Sales fact table has 2 billion rows and receives new rows continuously. The Product, Store and Date dimension tables are small and change about once a month.",
+          "Reports must show sales that are no more than a few minutes old. Slicers built on the dimension tables must respond quickly and should avoid querying the source whenever possible."
+        ] },
+      S2: { kind: "series", title: "Scenario: revenue notification",
+        body: [
+          "A report page contains a card that shows Total Daily Revenue. The report is published to a workspace in the Power BI service.",
+          "Sales managers must be notified automatically when Total Daily Revenue falls below 10,000."
+        ] },
+      C1: { kind: "case", title: "Case study: Northgate Outdoor",
+        body: [
+          "OVERVIEW. Northgate Outdoor is a retailer with 140 stores in five regions. The analytics team is replacing a set of Excel workbooks with Power BI.",
+          "EXISTING DATA. An Azure SQL database holds Orders (80 million rows, loaded nightly), Products, Stores and a StoreRegion table that maps each store to a region and to the email address of its regional manager. Orders contains OrderDate, DeliveryDate, an OrderTimestamp column accurate to the second, and 14 audit columns that no report uses. The finance team saves one budget workbook per month to a SharePoint folder. Every workbook has the same layout: one row per store and one column per product category.",
+          "REPORT REQUIREMENTS. Most analysis is by order date, but two visuals must analyze the same sales amounts by delivery date. Year-over-year comparisons are required. Reports need only daily totals, never the time of day.",
+          "SECURITY AND DISTRIBUTION REQUIREMENTS. Regional managers must see only the stores in their own region, and the solution must not need a change when a manager is replaced. About 60 executives need a curated, read-only set of reports. A group of analysts must be able to build their own reports from the central semantic model, but must not be able to change the model or the central reports.",
+          "TECHNICAL REQUIREMENTS. The model size must be minimized. The data is refreshed once a night. Development and maintenance effort must be minimized."
+        ] }
+    };
+
+    // ── Question bank ──
+    // type: single | multi | dropdown | order.  ctx links a question to a shared scenario.
+    const QUESTIONS = [
+      // ═════════ 1.1 Get or connect to data ═════════
+      { id: 1, skill: "1.1", type: "single",
+        question: "You need to build a report on a 500 GB table in an Azure SQL database. The data changes constantly and the report must reflect changes within a few minutes. Company policy does not allow the data to be copied out of the database. Which storage mode should you use?",
+        options: ["Import", "DirectQuery", "Dual", "Import with incremental refresh"],
+        correct: 1,
+        explanation: "DirectQuery leaves the data in the source and queries it when a visual renders, so it meets both the freshness and the no-copy requirements. Import, including incremental refresh, copies data into the model. Dual keeps an imported copy too." },
+      { id: 2, skill: "1.1", type: "single",
+        question: "Your company stores sales data as Delta tables in a Microsoft Fabric lakehouse. You need a semantic model that gives Import-like query performance on very large tables without scheduling a refresh that copies the data. Which storage mode should you choose?",
+        options: ["DirectQuery", "Import", "Direct Lake", "Live connection"],
+        correct: 2,
+        explanation: "Direct Lake loads column data straight from Delta tables in OneLake into memory, so queries are fast and there is no import copy to refresh. DirectQuery would be slower. Import would duplicate the data. A live connection is how a report connects to an existing model, not a storage mode for tables." },
+      { id: 3, skill: "1.1", type: "single",
+        question: "A certified semantic model named Corporate Sales is already published to the Power BI service. It contains all the tables and measures you need. You must create a new report and minimize development effort. What should you do in Power BI Desktop?",
+        options: ["Get data from the original SQL Server database and rebuild the measures", "Connect to the Corporate Sales semantic model from the OneLake catalog", "Export the model data to Excel and import the workbook", "Create a dataflow that copies the tables"],
+        correct: 1,
+        explanation: "Connecting to the shared semantic model gives you its tables, relationships and measures at once, with one version of the truth. Every other option rebuilds or copies what already exists." },
+      { id: 4, skill: "1.1", type: "single",
+        question: "A query merges an on-premises SQL Server table with a table from a public website. Refresh fails with this message: 'Formula.Firewall: Query references other queries or steps, so it may not directly access a data source.' What should you configure?",
+        options: ["The credentials for the SQL Server source", "The privacy levels of the data sources", "The storage mode of both tables", "An on-premises data gateway in personal mode"],
+        correct: 1,
+        explanation: "The Formula.Firewall error is raised by the data privacy check when sources with incompatible or unset privacy levels are combined. Set the levels in Data source settings. Credentials errors and gateway errors produce different messages." },
+      { id: 5, skill: "1.1", type: "single",
+        question: "A model has 15 queries that all read from the same SQL Server. The team has separate development, test and production servers. You need to be able to switch all queries to another server with the least effort. What should you do?",
+        options: ["Create a parameter for the server name and use it in the source step of each query", "Duplicate the .pbix file once for each environment", "Change the privacy level of the source to Organizational", "Create a calculated table for each environment"],
+        correct: 0,
+        explanation: "A Power Query parameter replaces the hard-coded server name. Changing one parameter value repoints every query, and the parameter can also be changed in the service after publishing." },
+      { id: 6, skill: "1.1", type: "single",
+        question: "The password of the database account that Power BI Desktop uses to connect to a source has been changed. Where do you update the stored credentials?",
+        options: ["Home > Transform data > Manage Parameters", "View > Query Dependencies", "File > Options and settings > Data source settings > Edit Permissions", "Modeling > Manage roles"],
+        correct: 2,
+        explanation: "Data source settings lists every source used by the file. Edit Permissions is where you change credentials and the privacy level. Manage roles is for row-level security." },
+      { id: 7, skill: "1.1", type: "multi",
+        question: "Which two statements about DirectQuery are true? Each correct answer presents a complete solution.",
+        options: ["The data is cached in the model and updated only by scheduled refresh", "Each visual sends queries to the source when it renders", "Report performance depends on the performance of the source system", "All Power Query transformations are supported without restriction", "It cannot be used with SQL Server"],
+        correct: [1, 2],
+        explanation: "With DirectQuery, visuals query the source at render time, so the speed of the source drives report speed. Data is not cached by a scheduled refresh, and only transformations that fold to the source are allowed." },
+      { id: 8, skill: "1.1", type: "single", ctx: "S1",
+        question: "Solution: You set every table to Import and schedule eight refreshes a day. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 1,
+        explanation: "No. Eight refreshes a day leaves data up to three hours old, and importing 2 billion rows is impractical. The freshness requirement needs DirectQuery on the fact table." },
+      { id: 9, skill: "1.1", type: "single", ctx: "S1",
+        question: "Solution: You set the Sales table to DirectQuery and the Product, Store and Date tables to Dual. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 0,
+        explanation: "Yes. Sales is queried live, so it is current. Dual tables answer slicer queries from the in-memory cache and still join at the source when they are used together with Sales." },
+      { id: 10, skill: "1.1", type: "single", ctx: "S1",
+        question: "Solution: You set every table to DirectQuery. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 1,
+        explanation: "No. The data would be current, but every slicer would query the source. The goal says slicers should avoid the source where possible, which is what Dual mode is for." },
+      { id: 11, skill: "1.1", type: "dropdown",
+        question: "You combine three data sources in Power Query. Select the appropriate privacy level for each source.",
+        blanks: [
+          { label: "A payroll database that contains salaries. Its data must never be sent to another source.", options: ["Public", "Organizational", "Private"], correct: 2 },
+          { label: "A product list on the company SharePoint site, visible to all employees.", options: ["Public", "Organizational", "Private"], correct: 1 },
+          { label: "Census figures downloaded from a government open-data website.", options: ["Public", "Organizational", "Private"], correct: 0 }
+        ],
+        explanation: "Private isolates sensitive data from every other source. Organizational data can be combined with other organizational sources. Public data can be combined with anything." },
+
+      // ═════════ 1.2 Profile and clean the data ═════════
+      { id: 12, skill: "1.2", type: "single",
+        question: "In Power Query Editor you need to see the minimum, maximum, average and standard deviation of the UnitPrice column. Which option on the View tab should you turn on?",
+        options: ["Column quality", "Column distribution", "Column profile", "Formula bar"],
+        correct: 2,
+        explanation: "Column profile shows column statistics and a value distribution for the selected column. Column quality shows valid, error and empty percentages. Column distribution shows distinct and unique counts." },
+      { id: 13, skill: "1.2", type: "single",
+        question: "Column quality shows 0% errors for a column, but the load into the model fails with errors in that column. The table has 3 million rows. What is the most likely reason the errors were not shown?",
+        options: ["Column quality never reports errors for numeric columns", "Profiling is based on the top 1,000 rows only", "The query has Enable load turned off", "The column data type is set to Any"],
+        correct: 1,
+        explanation: "By default the profiling tools sample the first 1,000 rows. Use the status bar to switch to 'Column profiling based on entire data set' and the errors will appear." },
+      { id: 14, skill: "1.2", type: "single",
+        question: "You need to know what percentage of the values in the Email column are empty. Which data preview option gives you this most directly?",
+        options: ["Column quality", "Column distribution", "Query Dependencies", "Monospaced"],
+        correct: 0,
+        explanation: "Column quality shows three percentages for each column: Valid, Error and Empty." },
+      { id: 15, skill: "1.2", type: "single",
+        question: "Column distribution for the CustomerID column of a 1,000-row table shows '1,000 distinct, 1,000 unique'. What does this tell you?",
+        options: ["The column contains 1,000 null values", "Every value appears exactly once, so the column can be used as a key", "The column has 1,000 errors", "Half of the values are duplicated"],
+        correct: 1,
+        explanation: "Distinct counts different values. Unique counts values that occur exactly once. When both equal the row count, there are no duplicates, which is what the one side of a relationship needs." },
+      { id: 16, skill: "1.2", type: "single",
+        question: "After you set the Quantity column to Whole Number, a few cells show Error because the source contains the text 'N/A'. You must keep every row and show those cells as blank. What should you do?",
+        options: ["Select the column and choose Remove Errors", "Select the column and choose Replace Errors, then enter null", "Change the data type to Decimal Number", "Select the column and choose Remove Duplicates"],
+        correct: 1,
+        explanation: "Replace Errors swaps each error cell for the value you give, here null, and keeps the row. Remove Errors would delete the rows. Changing to Decimal Number fails on 'N/A' in the same way." },
+      { id: 17, skill: "1.2", type: "single",
+        question: "A City column contains values such as 'Dallas', 'dallas ' and ' DALLAS'. They appear as three different cities in a slicer. Which transformations fix this?",
+        options: ["Trim, then Capitalize Each Word", "Clean, then Remove Duplicates", "Fill Down, then Replace Errors", "Unpivot Columns, then Group By"],
+        correct: 0,
+        explanation: "Trim removes the leading and trailing spaces and Capitalize Each Word makes the casing consistent, so all three become 'Dallas'. Remove Duplicates would delete rows instead of fixing values." },
+      { id: 18, skill: "1.2", type: "multi",
+        question: "You need to find the rows that contain errors in an imported table so that you can investigate them. Which two actions help you do this? Each correct answer presents part of the solution.",
+        options: ["Turn on Column quality and base profiling on the entire data set", "Select the columns and choose Keep Errors", "Select the columns and choose Remove Errors", "Turn off Enable load for the query", "Change the storage mode to DirectQuery"],
+        correct: [0, 1],
+        explanation: "Column quality shows which columns have errors and how many. Keep Errors filters the query down to the rows that have them. Remove Errors hides the problem instead of showing it." },
+      { id: 19, skill: "1.2", type: "single",
+        question: "An exported report lists a Region value only on the first row of each group. The cells below it are null until the next region begins. You need Region on every row. Which transformation should you use?",
+        options: ["Replace Values", "Fill Down", "Pivot Column", "Transpose"],
+        correct: 1,
+        explanation: "Fill Down copies each non-null value into the null cells beneath it. It is the standard fix for report-style exports with merged or blank group cells." },
+
+      // ═════════ 1.3 Transform and load the data ═════════
+      { id: 20, skill: "1.3", type: "single",
+        question: "A table has a Product column followed by one column per month (Jan, Feb, Mar and so on). A new month column is added to the source every month. You need Product, Month and Amount columns, and new months must be handled automatically. What should you do?",
+        options: ["Select the month columns and choose Unpivot Only Selected Columns", "Select the Product column and choose Unpivot Other Columns", "Select the Product column and choose Pivot Column", "Choose Transpose"],
+        correct: 1,
+        explanation: "Unpivot Other Columns unpivots everything except Product, so a new month column is included on the next refresh. Unpivot Only Selected Columns hard-codes today's list of months." },
+      { id: 21, skill: "1.3", type: "single",
+        question: "A table has the columns OrderID, Attribute and Value. Attribute contains 'Color', 'Size' and 'Weight'. You need one row per OrderID, with Color, Size and Weight as columns. Which transformation should you use?",
+        options: ["Unpivot Columns", "Group By", "Pivot Column", "Split Column"],
+        correct: 2,
+        explanation: "Pivot Column turns the distinct values of Attribute into column headers and fills them from Value. It is the reverse of unpivot." },
+      { id: 22, skill: "1.3", type: "single",
+        question: "A query named Sales Clean applies 12 cleaning steps. You need two more queries, Sales by Store and Sales by Product, that both start from the cleaned data. Later changes to the cleaning steps must apply to both automatically. What should you do?",
+        options: ["Duplicate Sales Clean twice", "Reference Sales Clean twice", "Append Sales Clean to itself", "Copy the steps in the Advanced Editor into two blank queries"],
+        correct: 1,
+        explanation: "A referenced query starts from the output of Sales Clean, so any later change there flows into both. A duplicate copies the 12 steps, which you would then have to maintain in three places." },
+      { id: 23, skill: "1.3", type: "single",
+        question: "A staging query is used only as the input to two other queries. It should not appear as a table in the model. What should you do?",
+        options: ["Delete the staging query", "Clear Enable load for the staging query", "Clear Include in report refresh for the staging query", "Hide the table in Report view"],
+        correct: 1,
+        explanation: "Clearing Enable load keeps the query available to other queries but stops it loading as a table. Hiding the table still loads it. Deleting it breaks the queries that depend on it." },
+      { id: 24, skill: "1.3", type: "single",
+        question: "You have a Customers query and an Orders query. You need a list of the customers who have never placed an order. Which join kind should you use when you merge Customers with Orders?",
+        options: ["Inner", "Left Outer", "Left Anti", "Full Outer"],
+        correct: 2,
+        explanation: "Left Anti returns only the rows of the first table that have no match in the second: customers without orders. Inner returns only customers who do have orders." },
+      { id: 25, skill: "1.3", type: "single",
+        question: "You have three queries, Sales2023, Sales2024 and Sales2025, with identical columns. You need a single Sales table that contains all the rows. What should you use?",
+        options: ["Merge Queries", "Append Queries", "Group By", "Pivot Column"],
+        correct: 1,
+        explanation: "Append stacks the rows of queries that share a column layout. Merge joins queries side by side on a key and adds columns." },
+      { id: 26, skill: "1.3", type: "single",
+        question: "A column named Payload contains JSON text such as {\"sku\":\"A12\",\"qty\":3} in every row. You need sku and qty as separate columns. What should you do first?",
+        options: ["Split Column by Delimiter using the comma", "Transform > Parse > JSON, then expand the resulting record column", "Unpivot Columns", "Change the data type to Whole Number"],
+        correct: 1,
+        explanation: "Parse > JSON converts the text into a record. Expanding the record then produces a typed column for each field. Splitting by comma breaks as soon as a value contains a comma or a field is missing." },
+      { id: 27, skill: "1.3", type: "order",
+        question: "A flat Sales query contains order columns and also repeats ProductID, ProductName and Category on every row. You need a Product dimension table with one row per product. Which three actions should you perform in sequence?",
+        steps: ["Reference the Sales query and name the new query Product", "Remove all columns except ProductID, ProductName and Category", "Remove duplicates on ProductID"],
+        extra: ["Unpivot the product columns", "Change the join kind to Full Outer"],
+        explanation: "Reference the source, keep only the dimension's attributes, then remove duplicates so that ProductID is unique. The result is a dimension that can sit on the one side of a relationship to Sales." },
+      { id: 28, skill: "1.3", type: "single",
+        question: "A PostalCode column contains values such as 02134 and 00501. After loading, the leading zeros are missing. Which data type should the column have?",
+        options: ["Whole Number", "Decimal Number", "Text", "Fixed decimal number"],
+        correct: 2,
+        explanation: "Postal codes are identifiers, not quantities. Text keeps the leading zeros. Any numeric type drops them." },
+      { id: 29, skill: "1.3", type: "single",
+        question: "An Amount column holds currency values. Finance requires exact results to four decimal places with no floating-point rounding differences. Which data type should you choose?",
+        options: ["Decimal Number", "Fixed decimal number", "Whole Number", "Percentage"],
+        correct: 1,
+        explanation: "Fixed decimal number (Currency) stores exactly four decimal places, so it avoids the tiny rounding differences that can appear with the floating-point Decimal Number type." },
+      { id: 30, skill: "1.3", type: "single",
+        question: "A Transactions query has one row per order line. The model needs one row per customer with the total sales amount and the number of order lines. Which transformation should you use?",
+        options: ["Group By, using the Advanced option with two aggregations", "Pivot Column on CustomerID", "Remove Duplicates on CustomerID", "Append Queries"],
+        correct: 0,
+        explanation: "Group By in Advanced mode groups on CustomerID and adds several aggregations, here a Sum and a Count Rows. Remove Duplicates would keep one arbitrary row per customer and lose the totals." },
+      { id: 31, skill: "1.3", type: "single",
+        question: "A Stores table and a Sales table are related by the combination of CountryCode and StoreNumber. StoreNumber repeats across countries. You need to create a relationship between the tables in the model. What should you do?",
+        options: ["Create two active relationships, one on each column", "In both queries, add a column that combines CountryCode and StoreNumber, and relate the tables on it", "Set the cross-filter direction to Both", "Change the cardinality to many-to-many on StoreNumber"],
+        correct: 1,
+        explanation: "A model relationship uses one column on each side. Build a single combined key in both tables. Two tables cannot have two active relationships, and a many-to-many relationship on StoreNumber would mix up stores from different countries." },
+      { id: 32, skill: "1.3", type: "dropdown",
+        question: "You need to add a column named Size that returns \"Bulk\" when Qty is 100 or more and \"Standard\" otherwise. Complete the M expression.",
+        code: `= [ A ](Source, "Size", [ B ] if [Qty] >= 100 then "Bulk" else "Standard")`,
+        blanks: [
+          { label: "A", options: ["Table.AddColumn", "Table.TransformColumns", "Table.Group", "Table.SelectRows"], correct: 0 },
+          { label: "B", options: ["let", "each", "in", "try"], correct: 1 }
+        ],
+        explanation: "Table.AddColumn adds a new column, and 'each' turns the expression into a function that is evaluated for every row. This is the code the Conditional Column dialog writes for you." },
+      { id: 33, skill: "1.3", type: "single",
+        question: "An Excel sheet lists the field names down the first column and one record in each following column. You need the field names as column headers and one row per record. What should you do?",
+        options: ["Unpivot Columns, then Remove Duplicates", "Transpose, then Use First Row as Headers", "Pivot Column, then Fill Down", "Reverse Rows, then Use First Row as Headers"],
+        correct: 1,
+        explanation: "Transpose swaps rows and columns, which moves the field names into the first row. Use First Row as Headers then promotes them to column names." },
+      { id: 34, skill: "1.3", type: "single",
+        question: "A model contains a History query with five years of closed transactions that never change, and a Current query that changes daily. You need to shorten refresh time. What should you do?",
+        options: ["Clear Include in report refresh for the History query", "Clear Enable load for the History query", "Set the History query's privacy level to Private", "Duplicate the History query"],
+        correct: 0,
+        explanation: "With Include in report refresh cleared, the History table stays in the model with the data it already has and is skipped on refresh. Clearing Enable load would remove the table from the model." },
+
+      // ═════════ 2.1 Design and implement a data model ═════════
+      { id: 35, skill: "2.1", type: "single",
+        question: "The Sales table has OrderDate and ShipDate columns. Both are related to the Date table, and the OrderDate relationship is active. You need one measure that returns sales by ship date. Other measures must keep using the order date. What should you use?",
+        options: ["Set the cross-filter direction of both relationships to Both", "A measure that uses CALCULATE with USERELATIONSHIP", "A second active relationship on ShipDate", "A calculated column that uses RELATED"],
+        correct: 1,
+        explanation: "USERELATIONSHIP activates the inactive ShipDate relationship for one CALCULATE only. Two relationships between the same pair of tables cannot both be active." },
+      { id: 36, skill: "2.1", type: "single",
+        question: "Report users must place Order Year and Ship Year together on the same matrix, one on rows and one on columns, without using any special measures. How should you model the dates?",
+        options: ["One Date table with an active and an inactive relationship", "Two date tables, Order Date and Ship Date, each with an active relationship to Sales", "One Date table with a bidirectional relationship", "No date table; use Auto date/time"],
+        correct: 1,
+        explanation: "To use both roles at the same time in one visual, each role needs its own dimension table with an active relationship. An inactive relationship only works inside a measure that calls USERELATIONSHIP." },
+      { id: 37, skill: "2.1", type: "single",
+        question: "You create a relationship between Product (one row per product) and Sales (many rows per product). Which configuration follows star schema best practice?",
+        options: ["One-to-many from Product to Sales, cross-filter direction Single", "Many-to-many, cross-filter direction Both", "One-to-one, cross-filter direction Both", "Many-to-one from Product to Sales, cross-filter direction Single"],
+        correct: 0,
+        explanation: "The dimension is on the one side and filters the fact table in a single direction. This is the fastest and least ambiguous design." },
+      { id: 38, skill: "2.1", type: "single",
+        question: "Customers can hold several accounts and an account can belong to several customers. A CustomerAccount bridge table sits between the Customer and Account dimensions. Selecting a customer in a slicer must filter the Account table. What should you change?",
+        options: ["Set the relationship between CustomerAccount and Account to filter in both directions", "Mark the bridge table as a date table", "Delete the bridge table and relate Customer directly to Account", "Set all relationships to inactive"],
+        correct: 0,
+        explanation: "Filters reach the bridge from Customer, but by default they do not travel from the bridge up to Account. Setting that one relationship to Both lets the filter pass through. This is the standard use of bidirectional filtering." },
+      { id: 39, skill: "2.1", type: "single",
+        question: "A column chart uses the MonthName column on its axis. The months appear in alphabetical order: April, August, December. The Date table also has a MonthNumber column. What is the correct fix?",
+        options: ["Sort the visual by the sales value", "Select MonthName and set Sort by column to MonthNumber", "Change the data type of MonthName to Date", "Create a hierarchy that contains MonthName"],
+        correct: 1,
+        explanation: "Sort by column makes MonthName order itself by MonthNumber in every visual that uses it. It is a model property, so you fix it once." },
+      { id: 40, skill: "2.1", type: "single",
+        question: "When users add the Year column to a table visual, Power BI shows the sum of the years instead of each year. What should you change?",
+        options: ["Set the column's Summarization to Don't summarize", "Set the column's Data category to Web URL", "Hide the column in Report view", "Change the cross-filter direction"],
+        correct: 0,
+        explanation: "Numeric columns default to Sum. Setting Summarization to Don't summarize makes Year behave as a category wherever it is used." },
+      { id: 41, skill: "2.1", type: "multi",
+        question: "You plan to use Mark as date table on a table named Calendar. Which two conditions must the date column meet? Each correct answer presents part of the solution.",
+        options: ["It contains unique values with no blanks", "It contains contiguous dates with no gaps", "It is stored as Text in the format YYYYMMDD", "It contains only the dates on which sales occurred", "It has a bidirectional relationship to every fact table"],
+        correct: [0, 1],
+        explanation: "The date column must have a Date data type, unique values, no blanks and no missing days across its range. A table that has only the dates with sales has gaps and breaks time intelligence." },
+      { id: 42, skill: "2.1", type: "single",
+        question: "You need to classify each customer as 'High', 'Medium' or 'Low' by lifetime sales, and report users must be able to choose the class in a slicer. What should you create?",
+        options: ["A measure", "A calculated column", "A visual calculation", "A quick measure"],
+        correct: 1,
+        explanation: "Slicers, axes and legends need a column. A calculated column stores a value for each customer row. Measures and visual calculations return values at query time and cannot be placed on a slicer." },
+      { id: 43, skill: "2.1", type: "single",
+        question: "A model has no date table. You need to create one in DAX that automatically covers every full year for which the model contains dates. Which expression should you use for the calculated table?",
+        options: ["CALENDARAUTO()", "TODAY()", "DATESYTD('Sales'[OrderDate])", "VALUES('Sales'[OrderDate])"],
+        correct: 0,
+        explanation: "CALENDARAUTO returns a one-column table of contiguous dates that spans all the date values in the model, extended to whole years. VALUES would return only the dates that have sales, with gaps." },
+      { id: 44, skill: "2.1", type: "single",
+        question: "A map visual places some cities in the wrong country. The Geography table has City, State and Country columns. What should you do first?",
+        options: ["Set the Data category of each column to City, State or Province, and Country", "Change the columns to the Whole Number data type", "Create a relationship between City and Country", "Turn on Auto date/time"],
+        correct: 0,
+        explanation: "The Data category tells the map service how to read each column, which removes most geocoding ambiguity. Building a hierarchy of Country, State and City helps further." },
+
+      // ═════════ 2.2 Create model calculations by using DAX ═════════
+      { id: 45, skill: "2.2", type: "dropdown",
+        question: "You need a measure that returns total sales for the same period in the previous year. Complete the DAX.",
+        code: `Sales LY =
+[ A ](
+    [Total Sales],
+    [ B ]( 'Date'[Date] )
+)`,
+        blanks: [
+          { label: "A", options: ["CALCULATE", "SUMX", "FILTER", "RELATED"], correct: 0 },
+          { label: "B", options: ["DATESYTD", "SAMEPERIODLASTYEAR", "LASTDATE", "ALLSELECTED"], correct: 1 }
+        ],
+        explanation: "CALCULATE changes the filter context of [Total Sales]. SAMEPERIODLASTYEAR returns the dates in the current context shifted back one year." },
+      { id: 46, skill: "2.2", type: "dropdown",
+        question: "The fiscal year ends on June 30. You need a fiscal year-to-date sales measure. Complete the DAX.",
+        code: `Sales FYTD =
+[ A ](
+    [Total Sales],
+    'Date'[Date],
+    [ B ]
+)`,
+        blanks: [
+          { label: "A", options: ["TOTALYTD", "TOTALQTD", "DATEADD", "CALENDAR"], correct: 0 },
+          { label: "B", options: ['"6/30"', '"7/1"', "ALL('Date')", "-1"], correct: 0 }
+        ],
+        explanation: "TOTALYTD accepts an optional year-end date as its last argument. \"6/30\" tells it that the year ends on June 30, so the running total restarts on July 1." },
+      { id: 47, skill: "2.2", type: "single",
+        question: "You need a measure that shows each product's sales as a percentage of the sales of all products, regardless of any filter or slicer on the Product table. Which denominator should you use?",
+        options: ["CALCULATE([Total Sales], ALL('Product'))", "CALCULATE([Total Sales], ALLSELECTED('Product'))", "CALCULATE([Total Sales], VALUES('Product'[ProductID]))", "SUMX('Product', [Total Sales])"],
+        correct: 0,
+        explanation: "ALL('Product') removes every filter on the Product table, including slicers, so the denominator is always the grand total. ALLSELECTED would keep slicer selections." },
+      { id: 48, skill: "2.2", type: "single",
+        question: "A matrix lists products. A slicer lets users pick several product categories. Each row must show the product's share of the total for the categories currently selected in the slicer, so that the visible rows add up to 100%. Which function should the denominator use?",
+        options: ["ALL", "ALLSELECTED", "ALLEXCEPT", "REMOVEFILTERS"],
+        correct: 1,
+        explanation: "ALLSELECTED removes the filter that comes from the matrix rows but keeps the filters that come from slicers and other outside selections. That gives the visual total. ALL and REMOVEFILTERS would ignore the slicer." },
+      { id: 49, skill: "2.2", type: "single",
+        question: "An Inventory table stores the units in stock for each product on each day. A measure that uses SUM(Inventory[Units]) gives correct results for a single day, but far too high a number for a month. Which measure returns the stock level at the end of the selected period?",
+        options: ["CALCULATE(SUM(Inventory[Units]), LASTDATE('Date'[Date]))", "TOTALMTD(SUM(Inventory[Units]), 'Date'[Date])", "SUMX(Inventory, Inventory[Units])", "CALCULATE(SUM(Inventory[Units]), ALL('Date'))"],
+        correct: 0,
+        explanation: "Stock is semi-additive: it adds up across products but not across days. LASTDATE limits the sum to the last day in the current period. TOTALMTD would add every day's stock together." },
+      { id: 50, skill: "2.2", type: "single",
+        question: "You need a measure that returns the number of different customers who placed at least one order. The Sales table has one row per order line. Which expression should you use?",
+        options: ["COUNT(Sales[CustomerID])", "COUNTROWS(Sales)", "DISTINCTCOUNT(Sales[CustomerID])", "COUNTA(Sales[CustomerID])"],
+        correct: 2,
+        explanation: "DISTINCTCOUNT counts each customer once. COUNT, COUNTA and COUNTROWS count order lines, so a customer with ten lines would be counted ten times." },
+      { id: 51, skill: "2.2", type: "single",
+        question: "The Sales table has Quantity and UnitPrice columns and no line total. Which measure correctly returns revenue?",
+        options: ["SUM(Sales[Quantity]) * SUM(Sales[UnitPrice])", "SUMX(Sales, Sales[Quantity] * Sales[UnitPrice])", "SUM(Sales[Quantity] * Sales[UnitPrice])", "AVERAGE(Sales[UnitPrice]) * COUNTROWS(Sales)"],
+        correct: 1,
+        explanation: "SUMX multiplies quantity by price on each row and then adds the results. Multiplying two sums gives a wrong, inflated number. SUM accepts only a column reference, so the third option is a syntax error." },
+      { id: 52, skill: "2.2", type: "single",
+        question: "A Margin % measure is defined as [Profit] / [Total Sales]. For products with no sales, visuals show Infinity or NaN. What is the recommended fix?",
+        options: ["Wrap the expression in IFERROR and return 0", "Use DIVIDE([Profit], [Total Sales])", "Change the format of the measure to Percentage", "Add a visual-level filter"],
+        correct: 1,
+        explanation: "DIVIDE returns blank, or an alternate result you choose, when the denominator is zero or blank. It is the purpose-built and faster option compared with IFERROR." },
+      { id: 53, skill: "2.2", type: "single",
+        question: "A report author who has never written DAX needs a rolling three-month average of sales. What is the fastest way for the author to create it?",
+        options: ["Create a calculated table", "Use a quick measure", "Group the data in Power Query", "Create a calculation group"],
+        correct: 1,
+        explanation: "Quick measures provide a dialog for common calculations, including rolling averages. The author picks the fields and Power BI writes the DAX, which can be read and edited afterwards." },
+      { id: 54, skill: "2.2", type: "single",
+        question: "A model has 25 base measures. For each one, the business wants current value, year-to-date, prior year and year-over-year %. You need to deliver this without creating 75 extra measures. What should you create?",
+        options: ["A calculation group with one calculation item per time calculation", "A calculated column per time calculation", "A what-if parameter", "One bookmark per time calculation"],
+        correct: 0,
+        explanation: "A calculation group defines each time calculation once with SELECTEDMEASURE(). The item then applies to whichever measure is on the visual, so 4 items cover all 25 measures." },
+      { id: 55, skill: "2.2", type: "multi",
+        question: "Which two statements about calculation groups in Power BI Desktop are true? Each correct answer presents a complete solution.",
+        options: ["They are created in Model view", "Creating one turns on the 'Discourage implicit measures' option for the model", "They can only be created in Power Query Editor", "They work with implicit measures created by dragging a numeric column onto a visual", "They require DirectQuery storage mode"],
+        correct: [0, 1],
+        explanation: "Calculation groups are authored in Model view. Because calculation items apply only to explicit measures, creating one enables 'Discourage implicit measures', so dragged numeric columns no longer auto-aggregate." },
+      { id: 56, skill: "2.2", type: "single",
+        question: "A matrix has Product[Color] on rows and this measure in values:\n\nRed Sales = CALCULATE([Total Sales], 'Product'[Color] = \"Red\")\n\nWhat does the matrix show?",
+        options: ["The Red total on the Red row and blank on every other row", "The Red total repeated on every color row", "An error, because Color is already on rows", "The grand total of all colors on every row"],
+        correct: 1,
+        explanation: "A column filter argument in CALCULATE replaces the existing filter on that column. Each row's own color filter is overwritten with Red, so every row shows the Red total. Wrapping the filter in KEEPFILTERS would give the first behavior." },
+      { id: 57, skill: "2.2", type: "single",
+        question: "You need the average sales per customer, where each customer's total is calculated first and the totals are then averaged. Which expression should you use?",
+        options: ["AVERAGE(Sales[Amount])", "AVERAGEX(VALUES(Customer[CustomerID]), [Total Sales])", "DIVIDE(COUNTROWS(Sales), [Total Sales])", "MEDIAN(Sales[Amount])"],
+        correct: 1,
+        explanation: "AVERAGEX iterates over the list of customers, evaluates [Total Sales] for each one, and averages those totals. AVERAGE(Sales[Amount]) returns the average order line, which is a different number." },
+      { id: 58, skill: "2.2", type: "dropdown",
+        question: "The Sales table is on the many side of a relationship to Product. You need a calculated column in Sales that returns the cost of each line. Complete the DAX.",
+        code: `Line Cost = Sales[Quantity] * [ A ]( 'Product'[UnitCost] )`,
+        blanks: [
+          { label: "A", options: ["RELATED", "RELATEDTABLE", "SUM", "ALL"], correct: 0 }
+        ],
+        explanation: "RELATED follows the relationship from the many side to the one side and returns the single matching value for the current row. RELATEDTABLE goes the other way and returns a table." },
+      { id: 59, skill: "2.2", type: "single",
+        question: "You need a measure that returns sales for the three months ending on the last date in the current filter context. Which filter should you pass to CALCULATE?",
+        options: ["DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -3, MONTH)", "DATESYTD('Date'[Date])", "PREVIOUSMONTH('Date'[Date])", "SAMEPERIODLASTYEAR('Date'[Date])"],
+        correct: 0,
+        explanation: "DATESINPERIOD returns a set of dates that starts at a given date and extends by a number of intervals, here three months back from the last visible date. That is the rolling-window pattern." },
+
+      // ═════════ 2.3 Optimize model performance ═════════
+      { id: 60, skill: "2.3", type: "single",
+        question: "A report page takes 20 seconds to load. You need to find out which visual is slow and whether the time is spent in the query or in rendering. What should you use?",
+        options: ["Performance Analyzer", "Query Dependencies", "Column profile", "The Selection pane"],
+        correct: 0,
+        explanation: "Performance Analyzer records the time each visual spends on its DAX query, on visual display and on other work. It is the first tool to open for a slow page." },
+      { id: 61, skill: "2.3", type: "single",
+        question: "Performance Analyzer shows short 'DAX query' and 'Visual display' times for most visuals on a page, but a large 'Other' value. What is the most effective improvement?",
+        options: ["Rewrite the measures with variables", "Reduce the number of visuals on the page", "Change the theme", "Increase the scheduled refresh frequency"],
+        correct: 1,
+        explanation: "'Other' is mostly time spent waiting for other visuals to finish. Fewer visuals on the page means less waiting. The measures themselves are already fast." },
+      { id: 62, skill: "2.3", type: "single",
+        question: "A fact table has an EventDateTime column with values to the second. It accounts for most of the model size. Reports only filter by date and by hour. What should you do?",
+        options: ["Hide the column in Report view", "Split it into a Date column and an Hour column and remove the original", "Change the column data type to Text", "Add an index column"],
+        correct: 1,
+        explanation: "Model size is driven by column cardinality. A date-time to the second has millions of distinct values, while a date column and an hour column have a few thousand and 24. Hiding a column does not reduce its size." },
+      { id: 63, skill: "2.3", type: "single",
+        question: "A model has a proper date table marked as a date table, plus 18 other date columns across its tables. The file is larger than expected. Which setting should you change to reduce the size?",
+        options: ["Turn off Auto date/time", "Turn on Background data", "Set every relationship to Both", "Turn on Allow data preview to download in the background"],
+        correct: 0,
+        explanation: "Auto date/time builds a hidden date table for every date column in the model. With your own date table in place, turning it off removes all of those hidden tables." },
+      { id: 64, skill: "2.3", type: "multi",
+        question: "You need to reduce the size of an Import model. Which two actions achieve this? Each correct answer presents part of the solution.",
+        options: ["Remove unused columns in Power Query Editor", "Filter out years that are not needed in Power Query Editor", "Hide unused columns in Model view", "Add a report-level filter for the needed years", "Rename the columns with shorter names"],
+        correct: [0, 1],
+        explanation: "Only data that is loaded takes space, so remove columns and rows before load. Hiding columns and filtering in the report change what users see but leave the data in the model." },
+      { id: 65, skill: "2.3", type: "single",
+        question: "A Transactions table has 600 million rows, one per till receipt line. Every report shows sales by month, store and product category only. Which approach improves performance the most?",
+        options: ["Group the data by month, store and category before loading it", "Create a calculated table that summarizes Transactions", "Set the table to Dual storage mode", "Add more visuals to spread the load"],
+        correct: 0,
+        explanation: "Loading the data at the grain the reports need removes most of the rows. A calculated summary table would add to the model, because the 600 million detail rows would still be loaded." },
+      { id: 66, skill: "2.3", type: "single",
+        question: "You identified a slow visual in Performance Analyzer. You want to run the exact query that the visual sends, change the measure logic, and compare timings without altering the report. What should you do?",
+        options: ["Select Copy query in Performance Analyzer and run it in DAX query view", "Open Power Query Editor and view the native query", "Export the visual's data to Excel", "Use the Q&A visual"],
+        correct: 0,
+        explanation: "DAX query view runs EVALUATE queries against the model. The query copied from Performance Analyzer is exactly what the visual sent, so you can test changes to the measure safely." },
+
+      // ═════════ 3.1 Create reports ═════════
+      { id: 67, skill: "3.1", type: "single",
+        question: "Finance wants to show how last year's profit became this year's profit, with the positive and negative contribution of each department shown as steps between the two totals. Which visual should you use?",
+        options: ["Waterfall chart", "Funnel chart", "Ribbon chart", "Treemap"],
+        correct: 0,
+        explanation: "A waterfall chart shows a starting value, a series of increases and decreases, and the ending value. A funnel shows stages of a process, and a treemap shows parts of a whole." },
+      { id: 68, skill: "3.1", type: "single",
+        question: "You need to show whether there is a relationship between advertising spend and revenue across 200 stores. Which visual should you use?",
+        options: ["Stacked column chart", "Scatter chart", "Donut chart", "Gauge"],
+        correct: 1,
+        explanation: "A scatter chart plots two numeric measures against each other, one point per store, so correlation and outliers are easy to see." },
+      { id: 69, skill: "3.1", type: "single",
+        question: "You need a single visual that shows the current month's revenue, its target, whether it is above or below the target, and the trend over recent months. Which visual should you use?",
+        options: ["Card", "Gauge", "KPI", "Slicer"],
+        correct: 2,
+        explanation: "The KPI visual takes a value, a target and a trend axis. It shows the value, the distance to the goal with color, and a trend in the background. A gauge shows value against target but no trend." },
+      { id: 70, skill: "3.1", type: "single",
+        question: "A measure named Status Color returns a hex color code such as \"#D64550\" based on business rules. You need the background of a table column to use this color. Which conditional formatting format style should you choose?",
+        options: ["Gradient", "Rules", "Field value", "Data bars"],
+        correct: 2,
+        explanation: "Field value applies the color that a field or measure returns. Gradient and Rules calculate the color from numbers inside the dialog." },
+      { id: 71, skill: "3.1", type: "single",
+        question: "The accounts team needs customer statements that run to several pages per customer, print exactly as designed with headers and footers on every page, and export to PDF. What should you create?",
+        options: ["A Power BI report with a table visual", "A paginated report in Power BI Report Builder", "A dashboard", "A report with a custom tooltip page"],
+        correct: 1,
+        explanation: "Paginated reports are designed for pixel-perfect, multi-page, printable output and show every row. A table visual in a Power BI report scrolls and is not built for printing." },
+      { id: 72, skill: "3.1", type: "single",
+        question: "You add a visual calculation to a matrix. Which statement is true?",
+        options: ["It is stored in the model and can be reused in any report", "It is stored on the visual and can refer only to fields that are on that visual", "It is evaluated in Power Query during refresh", "It can only be created in the Power BI service"],
+        correct: 1,
+        explanation: "Visual calculations live on the visual and work on the data already in it. This makes running totals and moving averages simple to write, but they are not reusable model measures." },
+      { id: 73, skill: "3.1", type: "dropdown",
+        question: "A table visual shows Month and Sales. You add two visual calculations: a running total, and the change from the previous month. Complete the expressions.",
+        code: `Running Sales = [ A ]( [Sales] )
+Change vs Prior = [Sales] - [ B ]( [Sales] )`,
+        blanks: [
+          { label: "A", options: ["RUNNINGSUM", "TOTALYTD", "SUMX", "CALCULATE"], correct: 0 },
+          { label: "B", options: ["PREVIOUS", "PREVIOUSMONTH", "EARLIER", "LASTDATE"], correct: 0 }
+        ],
+        explanation: "RUNNINGSUM and PREVIOUS are visual calculation functions that work along the rows of the visual. TOTALYTD and PREVIOUSMONTH are model time intelligence functions and need a date table." },
+      { id: 74, skill: "3.1", type: "single",
+        question: "You want a text summary of the insights on a report page. Readers must be able to adjust the summary with their own prompt. What should you add to the page?",
+        options: ["A Q&A visual", "A narrative visual with Copilot", "A text box", "A multi-row card"],
+        correct: 1,
+        explanation: "The narrative visual with Copilot writes a summary of the page or of selected visuals, and the prompt can be customized. A text box is static." },
+      { id: 75, skill: "3.1", type: "single",
+        question: "The Copilot button is unavailable when you edit a report in a workspace. Other users in another workspace can use it. What is the most likely cause?",
+        options: ["The report uses Import storage mode", "The workspace is not assigned to a paid Fabric or Premium capacity", "The report has more than one page", "You have the Member role instead of Admin"],
+        correct: 1,
+        explanation: "Copilot in Power BI needs the workspace to be on a paid Fabric or Power BI Premium capacity, with Copilot enabled by the tenant admin. Storage mode and page count do not matter." },
+      { id: 76, skill: "3.1", type: "single",
+        question: "Your company has standard colors and fonts. You must apply them to every visual in a report, and other authors must be able to reuse them in their reports. What should you do?",
+        options: ["Format each visual and use Format Painter", "Create a JSON theme file and import it from View > Themes", "Create a bookmark for the formatted state", "Set conditional formatting on each visual"],
+        correct: 1,
+        explanation: "A theme sets colors, fonts and visual defaults for the whole report in one step. The JSON file can be shared and imported into other reports." },
+      { id: 77, skill: "3.1", type: "single",
+        question: "A report has six pages. Every page must show data for the Europe region only, and report readers must not have to set this themselves. Where should you add the Region filter?",
+        options: ["Filters on this visual", "Filters on this page", "Filters on all pages", "A slicer on the first page"],
+        correct: 2,
+        explanation: "A filter in 'Filters on all pages' is a report-level filter and applies to every page. You can also lock or hide it so readers cannot change it." },
+      { id: 78, skill: "3.1", type: "single",
+        question: "A bar chart lists 400 products. You need it to show only the 10 products with the highest sales, and the list must update as slicers change. What should you use?",
+        options: ["A Top N filter on the visual", "A page-level Basic filter with 10 products ticked", "A calculated table with 10 rows", "A group that contains the 10 products"],
+        correct: 0,
+        explanation: "A Top N filter is a visual-level filter that ranks items by a value and is re-evaluated in the current filter context. A hand-picked list or a group is static." },
+      { id: 79, skill: "3.1", type: "single",
+        question: "You are starting a new report on an unfamiliar semantic model and do not know which pages would be useful. Which Copilot capability helps most at this point?",
+        options: ["Suggest content for a new report page", "Create a narrative visual", "Write a DAX query", "Generate measure descriptions"],
+        correct: 0,
+        explanation: "Copilot can look at the semantic model and suggest an outline of pages and topics. You can then ask it to create the page you choose." },
+
+      // ═════════ 3.2 Enhance reports for usability and storytelling ═════════
+      { id: 80, skill: "3.2", type: "single",
+        question: "A button uses a bookmark to show a help panel. When users select the button, their slicer selections are reset to the state they had when the bookmark was created. How do you fix this?",
+        options: ["Clear the Data option on the bookmark", "Clear the Display option on the bookmark", "Clear the Current page option on the bookmark", "Delete the slicers and use filters instead"],
+        correct: 0,
+        explanation: "The Data property of a bookmark stores filters, slicers and sort order. With Data cleared, the bookmark changes only what is visible and leaves the user's selections alone." },
+      { id: 81, skill: "3.2", type: "order",
+        question: "A page has a chart and a table placed in the same position. You need two buttons that switch between them. Which four actions should you perform in sequence?",
+        steps: ["In the Selection pane, hide the table so only the chart is visible", "Add a bookmark named Show Chart", "Hide the chart, show the table, and add a bookmark named Show Table", "Set the action of each button to the matching bookmark"],
+        extra: ["Turn on Allow use as tooltip for the page"],
+        explanation: "Each bookmark captures a visibility state set in the Selection pane. The buttons then call the bookmarks. Tooltip pages are unrelated to this." },
+      { id: 82, skill: "3.2", type: "single",
+        question: "You build a small report page that will appear when users hover over a bar in a chart. Which page settings are required?",
+        options: ["Turn on Allow use as tooltip and set the canvas type to Tooltip", "Turn on Drill through and Keep all filters", "Turn on Allow Q&A", "Set the page as hidden only"],
+        correct: 0,
+        explanation: "A report page tooltip needs 'Allow use as tooltip' turned on. Setting the canvas to the Tooltip size makes it small enough to float. You then select the page in the visual's Tooltip settings." },
+      { id: 83, skill: "3.2", type: "single",
+        question: "A page has a Year slicer, a sales chart and a card that must always show the all-time total. The card currently changes when a year is selected. What should you do?",
+        options: ["Select the slicer, choose Edit interactions, and set the card to None", "Move the card to another page", "Use Sync slicers to hide the slicer", "Add a visual-level filter for all years to the card"],
+        correct: 0,
+        explanation: "Edit interactions controls how the selected visual affects each of the others. Setting the card to None stops the slicer from filtering it, while the chart keeps responding." },
+      { id: 84, skill: "3.2", type: "single",
+        question: "When users select a bar in a column chart, a second chart on the page dims the unrelated data. You want the second chart to show only the related data instead. Which interaction should you set?",
+        options: ["Highlight", "Filter", "None", "Drill down"],
+        correct: 1,
+        explanation: "Highlight keeps all the data and dims the unrelated part. Filter removes the unrelated data. None switches the interaction off." },
+      { id: 85, skill: "3.2", type: "single",
+        question: "A Region slicer on page 1 must also filter pages 2 and 3, but not page 4. The slicer should be visible only on page 1. What should you use?",
+        options: ["A report-level filter", "The Sync slicers pane", "A bookmark for each page", "Edit interactions"],
+        correct: 1,
+        explanation: "The Sync slicers pane has two columns of check boxes for each page: one for whether the slicer applies there and one for whether it is visible. Edit interactions only works within one page." },
+      { id: 86, skill: "3.2", type: "single",
+        question: "Users must be able to right-click a customer in any visual and jump to a Customer Details page that is filtered to that customer. What should you configure?",
+        options: ["Add Customer Name to the Drill through well of the Customer Details page", "Add Customer Name as a slicer on every page", "Create one bookmark per customer", "Turn on Personalize visuals"],
+        correct: 0,
+        explanation: "Placing a field in the Drill through well makes the page a drillthrough target for that field. Power BI adds a back button, and the page opens filtered to the selected customer." },
+      { id: 87, skill: "3.2", type: "single",
+        question: "Sales staff open a report in the Power BI mobile app on their phones and must scroll sideways to read it. What should you do?",
+        options: ["Create a mobile layout for each page in Mobile layout view", "Change the page size to Letter", "Publish the report as a dashboard", "Turn on Automatic page refresh"],
+        correct: 0,
+        explanation: "Mobile layout view lets you rearrange and resize the same visuals on a phone-shaped canvas. The mobile app uses that layout in portrait mode." },
+      { id: 88, skill: "3.2", type: "single",
+        question: "Report readers want to change a chart's type and swap its measure for their own analysis, without edit permission and without changing the report for others. What should you enable?",
+        options: ["Personalize visuals", "Allow use as tooltip", "Sync slicers", "Publish to web"],
+        correct: 0,
+        explanation: "With Personalize visuals turned on in the report settings, readers can change a visual for themselves and save the result as a personal bookmark. The published report is not changed." },
+      { id: 89, skill: "3.2", type: "multi",
+        question: "You need to make a report easier to use with a screen reader and a keyboard. Which two actions should you take? Each correct answer presents part of the solution.",
+        options: ["Add alt text to every visual", "Set the tab order in the Selection pane", "Use red and green as the only way to tell good from bad", "Remove all visual titles", "Place text inside images"],
+        correct: [0, 1],
+        explanation: "Alt text is what a screen reader announces for a visual, and tab order controls the sequence when moving by keyboard. Color alone must not carry meaning, and titles help everyone." },
+      { id: 90, skill: "3.2", type: "single",
+        question: "A production monitoring page must update its visuals every 10 seconds without user action. The model is on a Fabric capacity. Which combination is required?",
+        options: ["An Import model with eight scheduled refreshes a day", "A DirectQuery source with Automatic page refresh turned on for the page", "A dashboard with a subscription", "A paginated report"],
+        correct: 1,
+        explanation: "Automatic page refresh re-queries the source at a fixed interval, or when a change is detected, and it works with DirectQuery sources. An Import model shows new data only after a refresh of the semantic model." },
+      { id: 91, skill: "3.2", type: "single",
+        question: "Auditors may export the summarized data behind a visual, but nobody may export the underlying detail rows. Where do you set this for one report?",
+        options: ["The Export data options in the report's settings", "The row-level security role", "The data source privacy level", "The Selection pane"],
+        correct: 0,
+        explanation: "The report settings include Export data options: summarized data only, summarized and underlying data, or none. A tenant setting can restrict this further for the whole organization." },
+      { id: 92, skill: "3.2", type: "single",
+        question: "A report has eight pages, and pages are added often. You need navigation buttons at the top of each page that update automatically when pages are added or renamed. What should you insert?",
+        options: ["One blank button per page, each with a page navigation action", "A page navigator", "A bookmark navigator", "A slicer that lists page names"],
+        correct: 1,
+        explanation: "The page navigator (Insert > Buttons > Navigator) builds one button for each visible page and stays in sync with the report's pages. A bookmark navigator does the same for bookmarks." },
+
+      // ═════════ 3.3 Identify patterns and trends ═════════
+      { id: 93, skill: "3.3", type: "single",
+        question: "A line chart shows that revenue fell sharply between March and April. You want Power BI to suggest which categories or segments account for the fall. What should you do?",
+        options: ["Right-click the April data point and select Analyze > Explain the decrease", "Add a constant line at the March value", "Turn on data labels", "Create a group of March and April"],
+        correct: 0,
+        explanation: "The Analyze feature runs machine learning over the model and returns visuals that show which fields contributed most to the change." },
+      { id: 94, skill: "3.3", type: "single",
+        question: "The retention team asks: 'Which customer attributes most increase the chance that a customer cancels?' Which visual answers this directly?",
+        options: ["Decomposition tree", "Key influencers", "Ribbon chart", "Scatter chart"],
+        correct: 1,
+        explanation: "Key influencers analyzes a metric, here Cancelled being Yes, and ranks the factors that make it more likely. It also shows segments of customers that have a high rate." },
+      { id: 95, skill: "3.3", type: "single",
+        question: "Managers want to start from total cost and break it down by any dimension they choose, in any order, and to have Power BI find the dimension with the highest value at each level. Which visual should you use?",
+        options: ["Key influencers", "Decomposition tree", "Waterfall chart", "Matrix"],
+        correct: 1,
+        explanation: "The decomposition tree supports ad hoc drill-down across many dimensions. Its AI splits, 'High value' and 'Low value', pick the next dimension for you." },
+      { id: 96, skill: "3.3", type: "single",
+        question: "You want to add a forecast of the next six months to a visual. Which setup do you need?",
+        options: ["A line chart with a continuous date axis, then Forecast in the Analytics pane", "A clustered bar chart with a legend, then the Format pane", "A table visual with conditional formatting", "A scatter chart with Play axis"],
+        correct: 0,
+        explanation: "Forecasting is an Analytics pane option for line charts that have a continuous date or numeric axis. It is not offered for categorical axes or other chart types." },
+      { id: 97, skill: "3.3", type: "single",
+        question: "A line chart shows daily website visits for two years. You need Power BI to flag the days when visits were unexpectedly high or low, and to give possible explanations. What should you turn on?",
+        options: ["Find anomalies in the Analytics pane", "A trend line", "Data labels", "Small multiples"],
+        correct: 0,
+        explanation: "Anomaly detection marks points that fall outside the expected range on a time series line chart. Selecting a marked point opens possible explanations. You can adjust the sensitivity." },
+      { id: 98, skill: "3.3", type: "single",
+        question: "You need a column chart that shows the number of customers in 10-year age bands (20–29, 30–39 and so on). The model has a numeric Age column. What is the quickest approach?",
+        options: ["Right-click Age, select New group, and create bins with a bin size of 10", "Write a measure with a SWITCH statement", "Create a clustering field on a scatter chart", "Add a percentile line"],
+        correct: 0,
+        explanation: "Binning creates a new field that puts a numeric or date column into equal-sized ranges. No DAX is needed." },
+      { id: 99, skill: "3.3", type: "single",
+        question: "A scatter chart plots customers by annual spend and number of visits. You want Power BI to find natural groups of similar customers and color them. What should you use?",
+        options: ["Automatically find clusters", "Binning", "Error bars", "Sync slicers"],
+        correct: 0,
+        explanation: "Clustering, found under More options on a scatter chart, groups points that are similar across the fields in the visual and adds the result as a new cluster field." },
+      { id: 100, skill: "3.3", type: "single",
+        question: "A column chart shows monthly sales. You need a horizontal line across the chart at the average of the months shown, and it must recalculate when filters change. What should you add?",
+        options: ["An Average line from the Analytics pane", "A text box with the average typed in", "A constant line set to last year's average", "A second Y axis"],
+        correct: 0,
+        explanation: "The Analytics pane adds dynamic reference lines such as average, median, min, max and percentile, which respond to the current filters. A constant line stays at a fixed value." },
+      { id: 101, skill: "3.3", type: "single",
+        question: "A line chart shows a forecast measure. The model also has Lower Bound and Upper Bound measures. You need to show the range of uncertainty around each point. What should you use?",
+        options: ["Error bars", "Data bars", "A trend line", "Drill down"],
+        correct: 0,
+        explanation: "Error bars in the Analytics pane take upper and lower bound fields, or a percentage, and draw the range around each data point as bars or a shaded band." },
+      { id: 102, skill: "3.3", type: "single",
+        question: "The 'Explain the increase' option under Analyze is missing when you right-click a data point. Which is a likely reason?",
+        options: ["The model uses DirectQuery", "The report has a theme applied", "The visual has a title", "The page has a slicer"],
+        correct: 0,
+        explanation: "Analyze insights are not supported for DirectQuery or live-connected models, or for certain filters such as Top N. Themes, titles and slicers do not affect it." },
+      { id: 103, skill: "3.3", type: "single",
+        question: "You have Build permission on a large semantic model that you did not create. Before designing a report you want a quick overview, in plain language, of the tables, measures and what the data covers. What should you use?",
+        options: ["Ask Copilot to summarize the semantic model", "Open Performance Analyzer", "Use Analyze in Excel", "Export every table to CSV"],
+        correct: 0,
+        explanation: "Copilot can produce a summary of a semantic model: what it contains and what kinds of questions it can answer. It is a faster orientation than reading every table." },
+
+      // ═════════ 4.1 Create and manage workspaces and assets ═════════
+      { id: 104, skill: "4.1", type: "single",
+        question: "A semantic model imports data from a SQL Server database in your company's data center. Several team members maintain the model, and it must refresh on a schedule in the Power BI service. What is required?",
+        options: ["An on-premises data gateway in standard mode", "An on-premises data gateway in personal mode on each person's laptop", "No gateway, because SQL Server is a Microsoft product", "A sensitivity label"],
+        correct: 0,
+        explanation: "The service cannot reach a source inside a private network without a gateway. Standard mode runs as a shared service on a server and can be used by many people. Personal mode is tied to one user's machine." },
+      { id: 105, skill: "4.1", type: "single",
+        question: "A semantic model imports data from an Azure SQL database with a public endpoint and from an Excel file in SharePoint Online. What do you need to configure for scheduled refresh?",
+        options: ["An on-premises data gateway in standard mode", "An on-premises data gateway in personal mode", "Data source credentials only; no gateway is needed", "A virtual machine in Azure"],
+        correct: 2,
+        explanation: "Both sources are cloud services that the Power BI service can reach directly. You only supply credentials in the semantic model settings. A gateway is for sources in a private network." },
+      { id: 106, skill: "4.1", type: "single",
+        question: "You plan to use DirectQuery against an on-premises database from a report that the whole department will use. A colleague suggests installing a gateway in personal mode. Why is this not suitable?",
+        options: ["Personal mode does not support DirectQuery and cannot be shared with other users", "Personal mode works only with Excel files", "Personal mode needs a Premium capacity", "Personal mode cannot refresh more than once a week"],
+        correct: 0,
+        explanation: "Personal mode supports scheduled refresh of Import models for a single user. DirectQuery, live connections and shared use need standard mode." },
+      { id: 107, skill: "4.1", type: "single",
+        question: "You need to give 500 employees read-only access to a curated set of reports. Sales and Finance must each see a different subset. Report authors must be able to keep working on drafts without affecting consumers. What should you do?",
+        options: ["Add all 500 users to the workspace as Viewers", "Publish a workspace app with a separate audience for each department", "Share each report individually with each user", "Email .pbix files to each department"],
+        correct: 1,
+        explanation: "An app is the distribution method for many consumers. Audiences show different content to different groups, and consumers see the published version, not work in progress in the workspace." },
+      { id: 108, skill: "4.1", type: "single",
+        question: "You change a report in a workspace that has a published app. App users report that they still see the old version. What should you do?",
+        options: ["Select Update app", "Republish the .pbix file with a new name", "Refresh the semantic model", "Ask users to clear their browser cache"],
+        correct: 0,
+        explanation: "Changes to reports in the workspace reach app consumers only when the app is updated. Refreshed data flows through on its own, but changes to report design do not." },
+      { id: 109, skill: "4.1", type: "multi",
+        question: "You plan to set data alerts on a dashboard. Which three tile types support data alerts? Each correct answer presents a complete solution.",
+        options: ["Card", "KPI", "Gauge", "Line chart", "Table", "Slicer"],
+        correct: [0, 1, 2],
+        explanation: "Data alerts are available only on dashboard tiles that show a single number: cards, KPIs and gauges." },
+      { id: 110, skill: "4.1", type: "single", ctx: "S2",
+        question: "Solution: You create an email subscription to the report page for the sales managers. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 1,
+        explanation: "No. A subscription sends a snapshot on a schedule whatever the value is. It does not notify people when a threshold is crossed." },
+      { id: 111, skill: "4.1", type: "single", ctx: "S2",
+        question: "Solution: You pin the card to a dashboard and set a data alert on the tile with the condition Below 10,000. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 0,
+        explanation: "Yes. Data alerts are set on dashboard tiles of type card, KPI or gauge. They send a notification, and optionally an email, when the value crosses the threshold." },
+      { id: 112, skill: "4.1", type: "single", ctx: "S2",
+        question: "Solution: You apply conditional formatting so that the card turns red when the value is below 10,000. Does this meet the goal?",
+        options: ["Yes", "No"],
+        correct: 1,
+        explanation: "No. Conditional formatting changes how the card looks, but a manager has to open the report to see it. Nothing is sent." },
+      { id: 113, skill: "4.1", type: "single",
+        question: "A team wants an email every Monday at 8:00 with an image of a report page and a link to the report. What should each team member, or an owner on their behalf, set up?",
+        options: ["A data alert", "A subscription", "A sensitivity label", "A bookmark"],
+        correct: 1,
+        explanation: "Subscriptions deliver a snapshot of a report page, dashboard or paginated report by email on a schedule that you define." },
+      { id: 114, skill: "4.1", type: "single",
+        question: "You own a semantic model that is ready for wider use. You want to signal this to others, but you have not been authorized by the Fabric administrator to certify content. Which endorsement can you apply yourself?",
+        options: ["Certified", "Promoted", "Master data", "Confidential"],
+        correct: 1,
+        explanation: "Anyone with write permission on an item can promote it. Certification is reserved for people or groups that the Fabric administrator has authorized. 'Confidential' would be a sensitivity label, not an endorsement." },
+      { id: 115, skill: "4.1", type: "single",
+        question: "A semantic model in a workspace on shared capacity (Pro licenses) must be refreshed every hour during a 12-hour business day. The schedule cannot be saved with 12 times. What is the cause?",
+        options: ["Shared capacity allows a maximum of eight scheduled refreshes a day", "The gateway is offline", "Scheduled refresh requires DirectQuery", "The semantic model is certified"],
+        correct: 0,
+        explanation: "Semantic models on shared capacity can be scheduled up to 8 times a day. On a Premium or Fabric capacity the limit is 48 a day." },
+      { id: 116, skill: "4.1", type: "single",
+        question: "Executives want one screen that shows key visuals taken from three different reports in the same workspace. What should you create?",
+        options: ["A dashboard with tiles pinned from each report", "A fourth report that imports the other three", "A paginated report", "A bookmark group"],
+        correct: 0,
+        explanation: "A dashboard is a single canvas in the Power BI service that can hold tiles pinned from several reports. Selecting a tile opens the report it came from." },
+      { id: 117, skill: "4.1", type: "single",
+        question: "You publish Sales.pbix from Power BI Desktop to a workspace that already contains a report and a semantic model named Sales. What happens when you confirm the replace prompt?",
+        options: ["Both the existing report and the existing semantic model are replaced", "Only the report is replaced; the semantic model keeps its old definition", "A second report named Sales (1) is always created", "The publish fails until you delete the existing items"],
+        correct: 0,
+        explanation: "Publishing a .pbix file creates, or after confirmation replaces, both the report and its semantic model of the same name in the workspace." },
+
+      // ═════════ 4.2 Secure and govern Power BI items ═════════
+      { id: 118, skill: "4.2", type: "single",
+        question: "A team lead must be able to add colleagues to a workspace and publish and update the workspace app. The lead must not be able to delete the workspace or remove its administrators. Which role should you assign?",
+        options: ["Admin", "Member", "Contributor", "Viewer"],
+        correct: 1,
+        explanation: "Member is the least-privileged role that can add users and publish or update the app. Only Admins can delete the workspace or change other Admins." },
+      { id: 119, skill: "4.2", type: "single",
+        question: "A report developer must create, edit and delete reports and semantic models in a workspace. The developer must not be able to add users or update the app. Which role should you assign?",
+        options: ["Member", "Contributor", "Viewer", "Admin"],
+        correct: 1,
+        explanation: "Contributors can create and edit all content in the workspace. By default they cannot manage access or update the app. Viewer is read-only and Member has more rights than needed." },
+      { id: 120, skill: "4.2", type: "single",
+        question: "Row-level security limits each salesperson to their own customers. One salesperson reports seeing every customer. She is a member of the correct RLS role. What is the most likely cause?",
+        options: ["She has the Contributor role on the workspace", "She opened the report in a different browser", "The semantic model uses Import mode", "The report uses a custom theme"],
+        correct: 0,
+        explanation: "RLS applies only to users with read-level access, such as Viewers and app consumers. Admins, Members and Contributors can edit the semantic model, so RLS does not restrict them." },
+      { id: 121, skill: "4.2", type: "dropdown",
+        question: "The Salesperson table has an Email column that holds each person's sign-in address. You need a dynamic RLS role so that users see only their own rows. Complete the DAX filter on the Salesperson table.",
+        code: `[Email] = [ A ]`,
+        blanks: [
+          { label: "A", options: ["USERPRINCIPALNAME()", "SELECTEDVALUE(Salesperson[Email])", "USERELATIONSHIP()", "TODAY()"], correct: 0 }
+        ],
+        explanation: "USERPRINCIPALNAME() returns the sign-in name of the person viewing the report, so one role works for everyone. The filter then flows through relationships to the fact tables." },
+      { id: 122, skill: "4.2", type: "order",
+        question: "You need to implement row-level security for a new semantic model. Which four actions should you perform in sequence?",
+        steps: ["In Power BI Desktop, use Manage roles to create a role with a DAX filter", "Use View as to test the role in Power BI Desktop", "Publish the file to the Power BI service", "In the service, open the semantic model's Security page and add members to the role"],
+        extra: ["Assign the users the Contributor role on the workspace"],
+        explanation: "Roles and their filters are defined in the model in Desktop. People are assigned to roles in the service after publishing. Giving users Contributor would bypass RLS." },
+      { id: 123, skill: "4.2", type: "single",
+        question: "You try to add a Microsoft 365 group to an RLS role on the semantic model's Security page, but it cannot be added. What should you use instead?",
+        options: ["A security group", "The workspace Viewer role", "A sensitivity label", "A Power BI app audience"],
+        correct: 0,
+        explanation: "RLS role members can be users, security groups, mail-enabled security groups and distribution lists. Microsoft 365 groups are not supported in RLS roles." },
+      { id: 124, skill: "4.2", type: "single",
+        question: "Business analysts in another department must create their own reports from your semantic model. They must not get access to your workspace or be able to edit the model. What should you grant?",
+        options: ["The Contributor role on the workspace", "Build permission on the semantic model", "The Member role on the workspace", "Write permission on the semantic model"],
+        correct: 1,
+        explanation: "Build permission lets people discover the semantic model and create new content from it, in their own workspace, without any workspace role on yours." },
+      { id: 125, skill: "4.2", type: "single",
+        question: "A file labeled Highly Confidential in Power BI is exported to Excel. What happens to the label, and which service provides it?",
+        options: ["The label and its protection are kept on the Excel file; labels come from Microsoft Purview Information Protection", "The label is removed on export; labels are stored only in Power BI", "The export is always blocked", "The label changes to Public"],
+        correct: 0,
+        explanation: "Sensitivity labels are defined in Microsoft Purview Information Protection. When data is exported to Excel, PowerPoint or PDF, the label and any encryption settings go with the file." },
+      { id: 126, skill: "4.2", type: "single",
+        question: "One external auditor needs to view a single report for a month. The auditor must not see anything else in the workspace and must not be able to pass the access on. What should you do?",
+        options: ["Add the auditor to the workspace as a Viewer", "Share the report with the auditor directly and clear the option that allows resharing", "Add the auditor to the workspace as a Contributor", "Publish to web"],
+        correct: 1,
+        explanation: "Item-level sharing gives access to one report only. Clearing the reshare option stops the recipient from sharing it further. A Viewer sees everything in the workspace, and Publish to web makes the report public." },
+      { id: 127, skill: "4.2", type: "single",
+        question: "After publishing a model with RLS, you want to confirm in the Power BI service what a member of the 'West Region' role sees. What should you use?",
+        options: ["Test as role on the semantic model's Security page", "Performance Analyzer", "The lineage view", "Usage metrics"],
+        correct: 0,
+        explanation: "The Security page in the service has a 'Test as role' option that opens the report with that role applied. It is the service counterpart of 'View as' in Desktop." },
+
+      // ═════════ Case study: Northgate Outdoor ═════════
+      { id: 128, skill: "1.3", type: "single", ctx: "C1",
+        question: "You need to load the finance budget workbooks so that the model receives one row per store, month and product category, and so that next month's file is included automatically. What should you do?",
+        options: ["Connect to each workbook with the Excel connector and append the queries by hand", "Use the SharePoint folder connector, combine the files, then unpivot the product category columns", "Use the SharePoint folder connector, combine the files, then pivot the Store column", "Copy the workbooks into Enter Data tables"],
+        correct: 1,
+        explanation: "The folder connector combines every file in the folder, including new ones, which keeps maintenance low. Unpivoting turns the product category columns into rows, which is the shape a fact table needs." },
+      { id: 129, skill: "2.1", type: "single", ctx: "C1",
+        question: "You need to model dates so that the reporting requirements are met with the least development and maintenance effort. What should you do?",
+        options: ["Use Auto date/time on OrderDate and DeliveryDate", "Create one Date table with an active relationship to OrderDate and an inactive relationship to DeliveryDate, and use USERELATIONSHIP in the delivery measures", "Create a bidirectional relationship from Date to both columns", "Merge OrderDate and DeliveryDate into a single column"],
+        correct: 1,
+        explanation: "Most analysis is by order date, so that relationship is the active one. Only two visuals need delivery date, so an inactive relationship with USERELATIONSHIP is the smallest solution. A marked date table also supports the year-over-year measures." },
+      { id: 130, skill: "2.3", type: "multi", ctx: "C1",
+        question: "You need to minimize the size of the model. Which two actions should you take in Power Query? Each correct answer presents part of the solution.",
+        options: ["Remove the 14 audit columns from Orders", "Remove OrderTimestamp, because OrderDate already gives the daily grain", "Hide the audit columns in Model view", "Change OrderTimestamp to the Text data type", "Duplicate the Orders query"],
+        correct: [0, 1],
+        explanation: "Unused columns should be removed before load. OrderTimestamp is very high cardinality and reports never need the time of day, so it is the most expensive column to keep. Hiding columns saves nothing." },
+      { id: 131, skill: "4.2", type: "single", ctx: "C1",
+        question: "You need to implement security for the regional managers. What should you do?",
+        options: ["Create one workspace per region", "Create a single RLS role that filters StoreRegion with [ManagerEmail] = USERPRINCIPALNAME()", "Create one RLS role per manager with the manager's name typed into the filter", "Add a Region slicer to each report and ask managers to select their region"],
+        correct: 1,
+        explanation: "Dynamic RLS compares the signed-in user with the ManagerEmail column, so a change of manager is only a data change in StoreRegion. Hard-coded roles would need editing, and a slicer is not security." },
+      { id: 132, skill: "4.2", type: "single", ctx: "C1",
+        question: "You need to give the analysts the access they require. What should you do?",
+        options: ["Assign the analysts the Contributor role on the central workspace", "Grant the analysts Build permission on the semantic model", "Assign the analysts the Member role on the central workspace", "Send the analysts the .pbix file"],
+        correct: 1,
+        explanation: "Build permission lets analysts create their own reports from the model in their own workspaces. Contributor or Member would let them change the model and the central reports, which the requirements forbid." },
+      { id: 133, skill: "4.1", type: "single", ctx: "C1",
+        question: "You need to distribute content to the executives. What should you do?",
+        options: ["Add the executives to the workspace as Contributors", "Publish a workspace app and give the executives access to it", "Email the executives a link to Power BI Desktop", "Give the executives Build permission on the semantic model"],
+        correct: 1,
+        explanation: "An app delivers a curated, read-only experience to a group of consumers and keeps them out of the workspace where development happens." }
+    ];
+
+    // ── Final review: comparison tables for the last read before the exam ──
+    const REVIEW = [
+      { title: "Storage modes", cols: ["Mode", "Where the data lives", "Choose it when"], rows: [
+        ["Import", "Copied into the model", "Best performance and full features; data can be as old as the last refresh"],
+        ["DirectQuery", "Stays in the source", "Near real-time data, very large tables, or data that must not be copied"],
+        ["Dual", "Both", "Dimension tables shared by Import and DirectQuery fact tables"],
+        ["Direct Lake", "Delta tables in Fabric OneLake", "Large Fabric data with Import-like speed and no data copy"],
+        ["Live connection", "A published semantic model", "Reusing an existing model with the least effort"]
+      ] },
+      { title: "Power Query: which transformation", cols: ["You need to", "Use"], rows: [
+        ["Turn month columns into rows", "Unpivot (prefer Unpivot other columns)"],
+        ["Turn attribute rows into columns", "Pivot column"],
+        ["Swap rows and columns", "Transpose"],
+        ["Add columns from another table by key", "Merge"],
+        ["Stack tables with the same columns", "Append"],
+        ["Find rows with no match", "Merge with Left Anti"],
+        ["Reuse cleaned data in a second query and stay in sync", "Reference"],
+        ["Make an independent copy of a query", "Duplicate"],
+        ["Keep a helper query out of the model", "Clear Enable load"],
+        ["Summarize before loading", "Group By"]
+      ] },
+      { title: "DAX you should recognize on sight", cols: ["Need", "Function"], rows: [
+        ["Change the filter context", "CALCULATE"],
+        ["Ignore filters on a table or column", "ALL, REMOVEFILTERS"],
+        ["Keep slicer filters, ignore the visual's own rows", "ALLSELECTED"],
+        ["Row-by-row calculation, then total", "SUMX, AVERAGEX"],
+        ["Safe division", "DIVIDE"],
+        ["Count different values", "DISTINCTCOUNT"],
+        ["Same period last year", "SAMEPERIODLASTYEAR, DATEADD"],
+        ["Year to date (optional fiscal year end)", "TOTALYTD, DATESYTD"],
+        ["Rolling window", "DATESINPERIOD"],
+        ["Balance at end of period (semi-additive)", "LASTDATE, LASTNONBLANK, CLOSINGBALANCEMONTH"],
+        ["Use an inactive relationship", "USERELATIONSHIP"],
+        ["Value from the one side into the many side", "RELATED"],
+        ["Signed-in user for RLS", "USERPRINCIPALNAME"],
+        ["Apply one calculation to any measure", "Calculation group with SELECTEDMEASURE"]
+      ] },
+      { title: "Report features: what solves what", cols: ["Requirement", "Feature"], rows: [
+        ["Show or hide visuals with buttons", "Bookmarks with the Selection pane"],
+        ["Stop a slicer affecting one visual", "Edit interactions: None"],
+        ["One slicer across some pages", "Sync slicers"],
+        ["Right-click to a detail page", "Drillthrough"],
+        ["Rich hover content", "Report page tooltip"],
+        ["Phone-friendly layout", "Mobile layout view"],
+        ["Readers adjust visuals themselves", "Personalize visuals"],
+        ["Pixel-perfect printing, every row", "Paginated report"],
+        ["Why did this value change?", "Analyze: Explain the increase or decrease"],
+        ["What drives this outcome?", "Key influencers"],
+        ["Explore a measure down any path", "Decomposition tree"],
+        ["Forecast, anomalies, reference lines, error bars", "Analytics pane on a line chart"],
+        ["Age bands or price ranges", "Binning"],
+        ["Similar points on a scatter chart", "Clustering"]
+      ] },
+      { title: "Workspace roles", cols: ["Role", "Can do", "Cannot do"], rows: [
+        ["Admin", "Everything, including deleting the workspace and managing other admins", ""],
+        ["Member", "Add users, publish and update the app, share items, edit all content", "Delete the workspace, change admins"],
+        ["Contributor", "Create, edit and delete content, schedule refresh", "Manage access, update the app (by default)"],
+        ["Viewer", "View and interact with content", "Edit anything. RLS applies to this role"]
+      ] },
+      { title: "Service: what solves what", cols: ["Requirement", "Feature"], rows: [
+        ["Distribute read-only content to many people", "App (with audiences)"],
+        ["Notify when a number crosses a threshold", "Data alert on a dashboard card, KPI or gauge"],
+        ["Send a snapshot on a schedule", "Subscription"],
+        ["Refresh from a private network", "On-premises data gateway, standard mode"],
+        ["Mark content as trusted", "Promoted (any writer) or Certified (authorized users)"],
+        ["Let others build reports from a model", "Build permission"],
+        ["Restrict rows per user", "Row-level security: roles in Desktop, members in the service"],
+        ["Classify and protect data on export", "Sensitivity labels from Microsoft Purview"]
+      ] }
+    ];
+
+    const FORMATS = [
+      ["Single answer", "One correct option. Most of the exam."],
+      ["Multiple answer", "The question tells you how many to choose, for example 'Which two actions'."],
+      ["Drop-down completion", "Complete a DAX or M expression, or match a setting to each requirement. Each selection is usually worth one point."],
+      ["Sequence", "Pick the right actions from a list and put them in order."],
+      ["Yes/No series", "The same scenario repeated with a different proposed solution each time. More than one can be correct, or none. On the real exam you cannot go back to these."],
+      ["Case study", "A long business description with requirements, followed by several questions. Read the requirements first, then answer."]
+    ];
+
+    // ── Helpers ──
+    const domainOf = (q) => Number(q.skill[0]);
+    const skillName = (id) => (SKILLS.find(s => s.id === id) || {}).name || id;
+    const shuffle = (a) => { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+    const fmtTime = (s) => { const m = Math.floor(s / 60), x = s % 60; return (m < 10 ? "0" : "") + m + ":" + (x < 10 ? "0" : "") + x; };
+    const STORE = "pl300.v1";
+    const loadStore = () => { try { return JSON.parse(localStorage.getItem(STORE)) || { stats: {}, exams: [] }; } catch (e) { return { stats: {}, exams: [] }; } };
+    const saveStore = (s) => { try { localStorage.setItem(STORE, JSON.stringify(s)); } catch (e) {} };
+
+    // Each session gets its own option order so positions cannot be memorized.
+    function prepare(q) {
+      const p = { ...q };
+      if (q.type === "single" || q.type === "multi") {
+        const idx = q.options.map((_, i) => i);
+        p.perm = q.options.length === 2 ? idx : shuffle(idx);
+      }
+      if (q.type === "order") p.pool = shuffle(q.steps.concat(q.extra || []));
+      return p;
+    }
+    function isAnswered(q, a) {
+      if (a === undefined || a === null) return false;
+      if (q.type === "single") return true;
+      if (q.type === "multi") return a.length > 0;
+      if (q.type === "dropdown") return q.blanks.every((_, i) => a[i] !== undefined && a[i] !== -1);
+      return a.length > 0;
+    }
+    function isCorrect(q, a) {
+      if (!isAnswered(q, a)) return false;
+      if (q.type === "single") return a === q.correct;
+      if (q.type === "multi") return a.length === q.correct.length && q.correct.every(c => a.includes(c));
+      if (q.type === "dropdown") return q.blanks.every((b, i) => a[i] === b.correct);
+      return a.length === q.steps.length && q.steps.every((s, i) => a[i] === s);
+    }
+    // Keep questions that share a scenario next to each other.
+    function groupByContext(list) {
+      const out = [], seen = {};
+      list.forEach(q => {
+        if (!q.ctx) { out.push(q); return; }
+        if (seen[q.ctx]) return;
+        seen[q.ctx] = true;
+        list.filter(x => x.ctx === q.ctx).sort((a, b) => a.id - b.id).forEach(x => out.push(x));
+      });
+      return out;
+    }
+    function buildExam(n) {
+      const ids = [1, 2, 3, 4];
+      const counts = {}; let total = 0;
+      ids.forEach(d => { counts[d] = Math.round(n * DOMAINS[d].weight); total += counts[d]; });
+      counts[1] += n - total;
+      let picked = [];
+      ids.forEach(d => { picked = picked.concat(shuffle(QUESTIONS.filter(q => domainOf(q) === d)).slice(0, counts[d])); });
+      return groupByContext(shuffle(picked)).map(prepare);
+    }
+    function skillStats(stats) {
+      const out = {};
+      SKILLS.forEach(s => {
+        const qs = QUESTIONS.filter(q => q.skill === s.id);
+        const tried = qs.filter(q => stats[q.id]);
+        const right = tried.filter(q => stats[q.id].last);
+        out[s.id] = { total: qs.length, tried: tried.length, right: right.length, pct: tried.length ? Math.round(100 * right.length / tried.length) : null };
+      });
+      return out;
+    }
+
+    // ── Question renderer (used while answering and in review) ──
+    function QuestionBody({ q, answer, onAnswer, reveal }) {
+      const ctx = q.ctx ? CONTEXTS[q.ctx] : null;
+      const lock = reveal;
+      const letters = "ABCDEFGH";
+      let body = null;
+
+      if (q.type === "single" || q.type === "multi") {
+        const multi = q.type === "multi";
+        const sel = multi ? (answer || []) : answer;
+        const right = multi ? q.correct : [q.correct];
+        const toggle = (i) => {
+          if (!multi) return onAnswer(i);
+          const cur = answer || [];
+          onAnswer(cur.includes(i) ? cur.filter(x => x !== i) : cur.concat(i));
+        };
+        body = (
+          <div role="group" aria-label="Answer options">
+            {multi && <div className="hint">Choose {q.correct.length}.</div>}
+            {q.perm.map((oi, pos) => {
+              const chosen = multi ? sel.includes(oi) : sel === oi;
+              let cls = "opt" + (chosen ? " sel" : "");
+              if (reveal) { if (right.includes(oi)) cls = "opt ok"; else if (chosen) cls = "opt bad"; }
+              return (
+                <button key={oi} type="button" className={cls} disabled={lock} aria-pressed={chosen} onClick={() => toggle(oi)}>
+                  <span className="k">{letters[pos]}</span><span>{q.options[oi]}</span>
+                </button>
+              );
+            })}
+          </div>
+        );
+      } else if (q.type === "dropdown") {
+        const a = answer || [];
+        body = (
+          <div>
+            <div className="hint">Select one option for each item.</div>
+            {q.blanks.map((b, i) => {
+              const v = a[i] === undefined ? -1 : a[i];
+              const good = v === b.correct;
+              return (
+                <div className="blank" key={i}>
+                  <label htmlFor={"b" + q.id + "_" + i}>{q.code ? <b>Blank [ {b.label} ]</b> : b.label}</label>
+                  <div>
+                    <select id={"b" + q.id + "_" + i} value={v} disabled={lock} className={reveal ? (good ? "ok" : "bad") : ""}
+                      onChange={(e) => { const n = q.blanks.map((_, k) => a[k] === undefined ? -1 : a[k]); n[i] = Number(e.target.value); onAnswer(n); }}>
+                      <option value={-1}>Select…</option>
+                      {b.options.map((o, k) => <option key={k} value={k}>{o}</option>)}
+                    </select>
+                    {reveal && !good && <div className="fix">Correct: {b.options[b.correct]}</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      } else {
+        const a = answer || [];
+        const avail = q.pool.filter(s => !a.includes(s));
+        const move = (i, d) => { const n = a.slice(); const t = n[i]; n[i] = n[i + d]; n[i + d] = t; onAnswer(n); };
+        body = (
+          <div>
+            <div className="hint">Select actions to move them to the answer area, then arrange them in order. Not every action is needed.</div>
+            <div className="ord">
+              <div className="col">
+                <b>Actions</b>
+                {avail.map(s => <button type="button" key={s} className="chip" disabled={lock} onClick={() => onAnswer(a.concat(s))}>{s}</button>)}
+                {!avail.length && <span className="mute small">All actions used.</span>}
+              </div>
+              <div className="col">
+                <b>Answer area</b>
+                {a.map((s, i) => (
+                  <div key={s} className={"chip" + (reveal ? (q.steps[i] === s ? " ok" : " bad") : "")}>
+                    <span className="n">{i + 1}</span><span className="grow">{s}</span>
+                    {!lock && <button type="button" className="mini" aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}>↑</button>}
+                    {!lock && <button type="button" className="mini" aria-label="Move down" disabled={i === a.length - 1} onClick={() => move(i, 1)}>↓</button>}
+                    {!lock && <button type="button" className="mini" aria-label="Remove" onClick={() => onAnswer(a.filter(x => x !== s))}>✕</button>}
+                  </div>
+                ))}
+                {!a.length && <span className="mute small">Nothing selected yet.</span>}
+              </div>
+            </div>
+            {reveal && (
+              <div className="fix" style={{ marginTop: 12 }}>
+                Correct sequence:
+                <ol style={{ margin: "6px 0 0", paddingLeft: 20 }}>{q.steps.map(s => <li key={s}>{s}</li>)}</ol>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          {ctx && (
+            <details className="ctx" open>
+              <summary>{ctx.title}</summary>
+              <div className="b">
+                {ctx.body.map((p, i) => <p key={i}>{p}</p>)}
+                {ctx.kind === "series" && <p className="mute small">This question is part of a series that presents the same scenario. Each question has a different solution. More than one solution may meet the goal, or none.</p>}
+              </div>
+            </details>
+          )}
+          <div className="qtext">{q.question}</div>
+          {q.code && <pre className="code">{q.code}</pre>}
+          {body}
+        </div>
+      );
+    }
+
+    function Explanation({ q, ok, onStudy }) {
+      return (
+        <div className={"explain" + (ok ? "" : " bad")} role="status">
+          <strong>{ok ? "Correct" : "Not quite"}</strong>
+          <p style={{ margin: "6px 0 8px" }}>{q.explanation}</p>
+          <span className="small mute">Skill {q.skill}: {skillName(q.skill)}. </span>
+          {onStudy && <button type="button" className="btn alt sm" onClick={() => onStudy(q.skill)}>Read the notes</button>}
+        </div>
+      );
+    }
+
+    // ── Session runner: practice (feedback after each question) or exam (feedback at the end) ──
+    function Runner({ qs, mode, limit, onDone, onQuit, onStudy }) {
+      const [idx, setIdx] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [checked, setChecked] = useState({});
+      const [flags, setFlags] = useState({});
+      const [elapsed, setElapsed] = useState(0);
+      const top = useRef(null);
+      const q = qs[idx];
+      const practice = mode === "practice";
+      const a = answers[q.id];
+      const shown = practice && checked[q.id];
+      const state = useRef({});
+      state.current = { answers, elapsed };
+
+      useEffect(() => { const t = setInterval(() => setElapsed(e => e + 1), 1000); return () => clearInterval(t); }, []);
+      useEffect(() => { if (limit && elapsed >= limit) onDone(state.current.answers, limit, flags); }, [elapsed]);
+      const go = (i) => { setIdx(i); if (top.current) top.current.scrollIntoView({ block: "start" }); };
+      const finish = () => {
+        const open = qs.filter(x => !isAnswered(x, answers[x.id])).length;
+        if (!practice && open && !window.confirm(open + " question" + (open > 1 ? "s are" : " is") + " unanswered. Finish anyway?")) return;
+        onDone(answers, elapsed, flags);
+      };
+      const left = limit ? Math.max(0, limit - elapsed) : null;
+      const last = idx === qs.length - 1;
+
+      return (
+        <div className="wrap fade" ref={top} style={{ paddingTop: 24, scrollMarginTop: 60 }}>
+          <div className="qhead">
+            <span><b style={{ color: "var(--ink)" }}>Question {idx + 1}</b> of {qs.length}</span>
+            <span className="tag">{DOMAINS[domainOf(q)].short}</span>
+            <span className="grow"></span>
+            {limit ? <span className={"timer" + (left < 300 ? " low" : "")} aria-label="Time remaining">{fmtTime(left)}</span> : <span className="timer">{fmtTime(elapsed)}</span>}
+            <button type="button" className="btn alt sm" onClick={() => { if (window.confirm("Leave this session? Your answers will not be saved.")) onQuit(); }}>Quit</button>
+          </div>
+          <div className="bar" style={{ marginBottom: 18 }}><i style={{ width: (100 * (idx + 1) / qs.length) + "%", background: "var(--gold)" }}></i></div>
+
+          <div className="card" key={q.id}>
+            <QuestionBody q={q} answer={a} reveal={shown} onAnswer={(v) => setAnswers({ ...answers, [q.id]: v })} />
+            {shown && <Explanation q={q} ok={isCorrect(q, a)} onStudy={null} />}
+          </div>
+
+          <div className="row" style={{ marginTop: 16 }}>
+            <button type="button" className="btn alt" disabled={idx === 0} onClick={() => go(idx - 1)}>Previous</button>
+            {!practice && <button type="button" className="btn alt" aria-pressed={!!flags[q.id]} onClick={() => setFlags({ ...flags, [q.id]: !flags[q.id] })}>{flags[q.id] ? "Flagged" : "Flag for review"}</button>}
+            <span className="grow"></span>
+            {practice && !shown && <button type="button" className="btn gold" disabled={!isAnswered(q, a)} onClick={() => setChecked({ ...checked, [q.id]: true })}>Check answer</button>}
+            {(!practice || shown) && !last && <button type="button" className="btn" onClick={() => go(idx + 1)}>Next</button>}
+            {(!practice || shown) && last && <button type="button" className="btn gold" onClick={finish}>Finish and see results</button>}
+          </div>
+
+          <div className="nav" aria-label="Question navigator">
+            {qs.map((x, i) => {
+              let c = isAnswered(x, answers[x.id]) ? "done" : "";
+              if (practice && checked[x.id]) c = isCorrect(x, answers[x.id]) ? "ok" : "bad";
+              if (flags[x.id]) c += " flag";
+              if (i === idx) c += " cur";
+              return <button key={x.id} type="button" className={c} aria-label={"Go to question " + (i + 1)} onClick={() => go(i)}>{i + 1}</button>;
+            })}
+          </div>
+          {!practice && !last && <div className="row" style={{ marginTop: 16 }}><span className="grow"></span><button type="button" className="btn alt sm" onClick={finish}>Finish exam</button></div>}
+        </div>
+      );
+    }
+
+    // ── Results ──
+    function Results({ run, onPractice, onHome, onStudy, onExam }) {
+      const { qs, answers, elapsed, mode, flags } = run;
+      const [filter, setFilter] = useState("wrong");
+      const marks = qs.map(q => isCorrect(q, answers[q.id]));
+      const right = marks.filter(Boolean).length;
+      const pct = right / qs.length;
+      const scaled = Math.round(pct * 1000);
+      const pass = scaled >= 700;
+      const bySkill = SKILLS.map(s => {
+        const list = qs.filter(q => q.skill === s.id);
+        const ok = list.filter(q => isCorrect(q, answers[q.id])).length;
+        return { s, n: list.length, ok, pct: list.length ? ok / list.length : null };
+      }).filter(r => r.n);
+      const weak = bySkill.filter(r => r.pct < 0.7).sort((x, y) => x.pct - y.pct);
+      const wrongIds = qs.filter((q, i) => !marks[i]).map(q => q.id);
+      const list = qs.map((q, i) => ({ q, i, ok: marks[i] })).filter(r => filter === "all" || (filter === "wrong" && !r.ok) || (filter === "flag" && flags[r.q.id]));
+
+      return (
+        <div className="wrap fade" style={{ paddingTop: 32 }}>
+          <div className="eyebrow">{mode === "exam" ? "Exam simulation results" : "Practice results"}</div>
+          <div className="card" style={{ marginTop: 12 }}>
+            <div className="score">
+              <div><div className="big">{mode === "exam" ? scaled : Math.round(pct * 100) + "%"}</div><div className="small mute">{mode === "exam" ? "estimated score out of 1000" : "correct"}</div></div>
+              <div className="grow">
+                {mode === "exam" && <span className={"verdict " + (pass ? "pass" : "fail")}>{pass ? "Above the 700 pass mark" : "Below the 700 pass mark"}</span>}
+                <p style={{ marginTop: 12 }}>{right} of {qs.length} correct in {fmtTime(elapsed)}.</p>
+                {mode === "exam" && <p className="small mute">The real exam uses scaled scoring and gives part marks on some questions, so treat this number as a guide. Aim for 800 or more here before you book.</p>}
+              </div>
+            </div>
+          </div>
+
+          <h2>Where you stand</h2>
+          <div className="card">
+            {bySkill.map(r => (
+              <div className="skillrow" key={r.s.id}>
+                <div><span className="mute small">{r.s.id}</span> {r.s.name} {r.pct < 0.7 && <span className="tag weak">Review</span>}</div>
+                <div className="bar"><i style={{ width: (r.pct * 100) + "%", background: r.pct < 0.7 ? "var(--bad)" : "var(--ok)" }}></i></div>
+                <div className="pct">{r.ok}/{r.n}</div>
+              </div>
+            ))}
+          </div>
+
+          {weak.length > 0 && (
+            <div className="traps" style={{ marginTop: 16 }}>
+              <strong>What to do next</strong>
+              <p style={{ margin: "8px 0" }}>Your weakest {weak.length > 1 ? "areas are" : "area is"} {weak.slice(0, 3).map(r => r.s.name).join(", ")}. Read the notes for {weak.length > 1 ? "them" : "it"}, then practice those questions again.</p>
+              <div className="row">
+                <button type="button" className="btn sm" onClick={() => onStudy(weak[0].s.id)}>Read the notes</button>
+                <button type="button" className="btn alt sm" onClick={() => onPractice(QUESTIONS.filter(q => weak.slice(0, 3).some(r => r.s.id === q.skill)))}>Practice weak areas</button>
+                {wrongIds.length > 0 && <button type="button" className="btn alt sm" onClick={() => onPractice(QUESTIONS.filter(q => wrongIds.includes(q.id)))}>Retry the {wrongIds.length} I missed</button>}
+              </div>
+            </div>
+          )}
+
+          <h2>Review the questions</h2>
+          <div className="seg" style={{ marginBottom: 14 }}>
+            <button type="button" aria-pressed={filter === "wrong"} onClick={() => setFilter("wrong")}>Missed ({qs.length - right})</button>
+            <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({qs.length})</button>
+            {mode === "exam" && <button type="button" aria-pressed={filter === "flag"} onClick={() => setFilter("flag")}>Flagged</button>}
+          </div>
+          {!list.length && <p className="mute">Nothing to show here.</p>}
+          {list.map(r => (
+            <details className="rev" key={r.q.id}>
+              <summary><span className={"mk " + (r.ok ? "ok" : "bad")}>{r.i + 1}</span><span>{r.q.question}</span></summary>
+              <div className="in">
+                <QuestionBody q={r.q} answer={answers[r.q.id]} reveal={true} onAnswer={() => {}} />
+                <Explanation q={r.q} ok={r.ok} onStudy={onStudy} />
+              </div>
+            </details>
+          ))}
+
+          <div className="row" style={{ marginTop: 28 }}>
+            <button type="button" className="btn gold" onClick={onExam}>Take another exam</button>
+            <button type="button" className="btn alt" onClick={onHome}>Back to overview</button>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Pages ──
+    function Readiness({ stats, onPracticeSkill }) {
+      const st = skillStats(stats);
+      const tried = Object.keys(stats).length;
+      if (!tried) return <div className="card"><p style={{ margin: 0 }} className="mute">No answers yet. Your accuracy for each of the 11 skill areas will appear here after your first practice set, and it is saved in this browser only.</p></div>;
+      return (
+        <div className="card">
+          {SKILLS.map(s => {
+            const r = st[s.id];
+            return (
+              <div className="skillrow" key={s.id}>
+                <div>
+                  <span className="mute small">{s.id}</span> {s.name}{" "}
+                  {r.pct === null ? <span className="tag">Not started</span> : r.pct < 70 ? <span className="tag weak">Weak</span> : r.tried === r.total && r.pct >= 85 ? <span className="tag good">Ready</span> : null}
+                  <div><button type="button" className="btn alt sm" style={{ marginTop: 6 }} onClick={() => onPracticeSkill(s.id)}>Practice ({r.total})</button></div>
+                </div>
+                <div className="bar"><i style={{ width: (r.pct || 0) + "%", background: r.pct !== null && r.pct < 70 ? "var(--bad)" : "var(--ok)" }}></i></div>
+                <div className="pct">{r.pct === null ? "–" : r.pct + "%"}<div className="mute" style={{ fontWeight: 400 }}>{r.tried}/{r.total} seen</div></div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function Home({ store, go, onPracticeSkill, onReset }) {
+      const best = store.exams.length ? Math.max.apply(null, store.exams.map(e => e.score)) : null;
+      return (
+        <div className="wrap fade">
+          <div className="hero">
+            <div className="eyebrow">Microsoft Power BI Data Analyst · Exam PL-300</div>
+            <h1 style={{ marginTop: 10 }}>Walk into PL-300 <mark>knowing you are ready.</mark></h1>
+            <p className="lead">{QUESTIONS.length} original practice questions in the formats the real exam uses, a study guide for every skill on the official outline, and a final review sheet for the night before. Every answer is explained, and your weak areas are tracked as you go.</p>
+            <div className="row" style={{ marginTop: 20 }}>
+              <button type="button" className="btn gold" onClick={() => go("practice")}>Start practicing</button>
+              <button type="button" className="btn alt" onClick={() => go("exam")}>Take a timed exam</button>
+            </div>
+          </div>
+
+          <div className="grid g4">
+            <div className="card stat"><b>100 min</b><span>Exam time</span></div>
+            <div className="card stat"><b>40–60</b><span>Questions (typical)</span></div>
+            <div className="card stat"><b>700</b><span>Pass mark out of 1000</span></div>
+            <div className="card stat"><b>{best === null ? "–" : best}</b><span>Your best simulation</span></div>
+          </div>
+          <p className="small mute" style={{ marginTop: 10 }}>Aligned to the skills measured as of April 20, 2026. Check the <a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300" target="_blank" rel="noopener">official study guide</a> for changes before you book. This page is independent and is not affiliated with Microsoft.</p>
+
+          <h2>What the exam covers</h2>
+          <div className="grid g2">
+            {[1, 2, 3, 4].map(d => (
+              <div className="card" key={d} style={{ borderTop: "4px solid " + DOMAINS[d].color }}>
+                <div className="row"><h3 className="grow">{DOMAINS[d].name}</h3><span className="tag gold">{DOMAINS[d].range}</span></div>
+                <p className="small mute" style={{ margin: "8px 0 10px" }}>{DOMAINS[d].description}</p>
+                <div className="small">{SKILLS.filter(s => Number(s.id[0]) === d).map(s => s.name).join(" · ")}</div>
+              </div>
+            ))}
+          </div>
+
+          <h2>How to use this page</h2>
+          <div className="card">
+            <ol className="steps">
+              <li><b>Read the study guide</b> for one domain. Each skill has the facts to know and the traps that catch people.</li>
+              <li><b>Practice that domain.</b> You get the explanation straight after each answer, so mistakes are corrected while the question is fresh.</li>
+              <li><b>Check your readiness below.</b> Anything under 70% is marked weak. Practice those skills until the mark clears.</li>
+              <li><b>Take a timed exam simulation.</b> No feedback until the end, like the real thing. Aim for 800 or more twice in a row.</li>
+              <li style={{ paddingBottom: 0 }}><b>Read the final review</b> the day before the exam.</li>
+            </ol>
+          </div>
+
+          <div className="row" style={{ marginTop: 44 }}>
+            <h2 style={{ margin: 0 }} className="grow">Your readiness by skill</h2>
+            {Object.keys(store.stats).length > 0 && <button type="button" className="btn alt sm" onClick={onReset}>Reset progress</button>}
+          </div>
+          <div style={{ marginTop: 14 }}><Readiness stats={store.stats} onPracticeSkill={onPracticeSkill} /></div>
+
+          {store.exams.length > 0 && (
+            <div>
+              <h2>Exam simulation history</h2>
+              <div className="card tblwrap">
+                <table>
+                  <thead><tr><th>Date</th><th>Questions</th><th>Score</th><th>Result</th></tr></thead>
+                  <tbody>{store.exams.slice().reverse().slice(0, 8).map((e, i) => (
+                    <tr key={i}><td>{e.date}</td><td>{e.n}</td><td>{e.score}</td><td>{e.score >= 700 ? <span className="tag good">Pass</span> : <span className="tag weak">Below 700</span>}</td></tr>
+                  ))}</tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function Guide({ focus, onPracticeSkill }) {
+      useEffect(() => {
+        if (!focus) return;
+        const el = document.getElementById("skill-" + focus.replace(".", "-"));
+        if (el) el.scrollIntoView({ block: "start" });
+      }, [focus]);
+      return (
+        <div className="wrap fade" style={{ paddingTop: 32 }}>
+          <div className="eyebrow">Study guide</div>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Every skill on the outline, in plain words</h1>
+          <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>The headings follow Microsoft's skills measured list. Under each one are the points you need to know and the traps that exam questions are built around.</p>
+          {[1, 2, 3, 4].map(d => (
+            <section key={d}>
+              <h2 className="domhead"><span>{d}. {DOMAINS[d].name}</span><span className="w">{DOMAINS[d].range} of the exam</span></h2>
+              <div className="grid">
+                {SKILLS.filter(s => Number(s.id[0]) === d).map(s => (
+                  <article className="card" key={s.id} id={"skill-" + s.id.replace(".", "-")} style={{ scrollMarginTop: 64 }}>
+                    <div className="row">
+                      <h3 className="grow"><span className="mute" style={{ fontFamily: "var(--mono)", fontSize: ".8rem" }}>{s.id}</span> {s.name}</h3>
+                      <button type="button" className="btn alt sm" onClick={() => onPracticeSkill(s.id)}>Practice ({QUESTIONS.filter(q => q.skill === s.id).length})</button>
+                    </div>
+                    <ul className="pts">{s.points.map((p, i) => <li key={i}>{p}</li>)}</ul>
+                    <div className="traps"><strong>Exam traps</strong><ul className="pts">{s.traps.map((p, i) => <li key={i}>{p}</li>)}</ul></div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      );
+    }
+
+    function PracticeSetup({ store, onStart }) {
+      const [doms, setDoms] = useState({ 1: true, 2: true, 3: true, 4: true });
+      const [pick, setPick] = useState("all");
+      const [count, setCount] = useState(10);
+      const st = skillStats(store.stats);
+      const weakSkills = SKILLS.filter(s => st[s.id].pct !== null && st[s.id].pct < 70).map(s => s.id);
+      const pool = QUESTIONS.filter(q => doms[domainOf(q)]).filter(q => {
+        const r = store.stats[q.id];
+        if (pick === "new") return !r;
+        if (pick === "missed") return r && !r.last;
+        if (pick === "weak") return weakSkills.includes(q.skill);
+        return true;
+      });
+      const n = count === 0 ? pool.length : Math.min(count, pool.length);
+      return (
+        <div className="wrap fade" style={{ paddingTop: 32 }}>
+          <div className="eyebrow">Practice mode</div>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Learn from every answer</h1>
+          <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>Untimed. You see whether you were right, and why, straight after each question.</p>
+          <div className="grid g2" style={{ marginTop: 22 }}>
+            <div className="card">
+              <h3>Domains</h3>
+              <div style={{ marginTop: 10 }}>
+                {[1, 2, 3, 4].map(d => (
+                  <label className="chk" key={d}><input type="checkbox" checked={doms[d]} onChange={() => setDoms({ ...doms, [d]: !doms[d] })} />{DOMAINS[d].name} <span className="mute small">({QUESTIONS.filter(q => domainOf(q) === d).length})</span></label>
+                ))}
+              </div>
+            </div>
+            <div className="card">
+              <h3>Which questions</h3>
+              <div className="seg" style={{ marginTop: 12 }}>
+                {[["all", "All"], ["new", "Not seen"], ["missed", "Missed"], ["weak", "Weak skills"]].map(o => <button key={o[0]} type="button" aria-pressed={pick === o[0]} onClick={() => setPick(o[0])}>{o[1]}</button>)}
+              </div>
+              <h3 style={{ marginTop: 20 }}>How many</h3>
+              <div className="seg" style={{ marginTop: 12 }}>
+                {[[10, "10"], [20, "20"], [0, "All"]].map(o => <button key={o[0]} type="button" aria-pressed={count === o[0]} onClick={() => setCount(o[0])}>{o[1]}</button>)}
+              </div>
+            </div>
+          </div>
+          <div className="row" style={{ marginTop: 20 }}>
+            <button type="button" className="btn gold" disabled={!n} onClick={() => onStart(shuffle(pool).slice(0, n))}>Start {n} question{n === 1 ? "" : "s"}</button>
+            <span className="mute small">{pool.length} question{pool.length === 1 ? "" : "s"} match{pool.length === 1 ? "es" : ""} your choices.</span>
+          </div>
+        </div>
+      );
+    }
+
+    function ExamSetup({ onStart }) {
+      const sizes = [[20, 36, "Quick check"], [40, 72, "Half length"], [55, 100, "Full length"]];
+      const [n, setN] = useState(55);
+      const cur = sizes.find(s => s[0] === n);
+      return (
+        <div className="wrap fade" style={{ paddingTop: 32 }}>
+          <div className="eyebrow">Exam simulation</div>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Sit it like the real thing</h1>
+          <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>Timed, weighted across the four domains in the official proportions, and no feedback until you finish. You get an estimated score out of 1000 and a breakdown by skill.</p>
+          <div className="grid g3" style={{ marginTop: 22 }}>
+            {sizes.map(s => (
+              <button key={s[0]} type="button" className="card" aria-pressed={n === s[0]} onClick={() => setN(s[0])}
+                style={{ textAlign: "left", cursor: "pointer", font: "inherit", color: "inherit", borderColor: n === s[0] ? "var(--ink)" : "var(--line)", boxShadow: n === s[0] ? "0 0 0 3px var(--gold)" : "none" }}>
+                <div className="eyebrow">{s[2]}</div>
+                <div className="stat" style={{ marginTop: 8 }}><b>{s[0]} questions</b><span>{s[1]} minutes</span></div>
+              </button>
+            ))}
+          </div>
+          <div className="card" style={{ marginTop: 16 }}>
+            <h3>Before you start</h3>
+            <ul className="pts">
+              <li>Set aside {cur[1]} uninterrupted minutes. The timer does not pause.</li>
+              <li>Flag questions you are unsure of and come back to them. Unanswered questions score zero, so answer everything.</li>
+              <li>Read the last sentence of each question first. It tells you what is being asked.</li>
+              <li>Questions are marked right or wrong as a whole here. The real exam gives part marks on some multi-part questions.</li>
+            </ul>
+          </div>
+          <div className="row" style={{ marginTop: 20 }}><button type="button" className="btn gold" onClick={() => onStart(n, cur[1] * 60)}>Begin exam</button></div>
+        </div>
+      );
+    }
+
+    function FinalReview() {
+      return (
+        <div className="wrap fade" style={{ paddingTop: 32 }}>
+          <div className="eyebrow">Final review</div>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>The night-before sheet</h1>
+          <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>The comparisons the exam returns to most often, in one place. If every row here makes sense to you, you are in good shape.</p>
+
+          <h2>Question formats you will meet</h2>
+          <div className="card tblwrap"><table><tbody>{FORMATS.map(f => <tr key={f[0]}><td style={{ whiteSpace: "nowrap" }}>{f[0]}</td><td>{f[1]}</td></tr>)}</tbody></table></div>
+
+          {REVIEW.map(t => (
+            <section key={t.title}>
+              <h2>{t.title}</h2>
+              <div className="card tblwrap">
+                <table>
+                  <thead><tr>{t.cols.map(c => <th key={c}>{c}</th>)}</tr></thead>
+                  <tbody>{t.rows.map((r, i) => <tr key={i}>{r.map((c, k) => <td key={k}>{c}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+
+          <h2>How to read an exam question</h2>
+          <div className="card">
+            <ul className="pts" style={{ marginTop: 0 }}>
+              <li><b>Find the constraint.</b> Phrases such as "minimize development effort", "least privilege", "near real-time" and "reduce model size" decide between two answers that would both work.</li>
+              <li><b>Decide where the work happens.</b> Shape and reduce data in Power Query, calculate in DAX, format in the report, secure and distribute in the service.</li>
+              <li><b>Prefer the built-in feature.</b> If a setting does the job, the answer is rarely a custom DAX workaround.</li>
+              <li><b>Rule out answers that only look right.</b> Hiding a column does not shrink a model. A slicer is not security. A subscription is not an alert.</li>
+              <li><b>For yes/no series, judge each solution on its own.</b> Do not assume exactly one of them is a yes.</li>
+            </ul>
+          </div>
+
+          <h2>On the day</h2>
+          <div className="card">
+            <ul className="pts" style={{ marginTop: 0 }}>
+              <li>You have about two minutes a question. If one takes longer, choose your best answer, flag it and move on.</li>
+              <li>Case studies come as a separate section. Read the requirements, then each question, then look up the detail you need.</li>
+              <li>Some sections cannot be reopened once you leave them. The exam tells you before you move on.</li>
+              <li>There is no penalty for a wrong answer. Never leave a question blank.</li>
+              <li>Microsoft Learn is available during the exam, but searching is slow. Use it for a function name you have forgotten, not to learn a topic.</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
+
+    // ── App ──
+    function App() {
+      const [view, setView] = useState("home");
+      const [store, setStore] = useState(loadStore);
+      const [run, setRun] = useState(null);
+      const [focus, setFocus] = useState(null);
+      const TABS = [["home", "Overview"], ["guide", "Study guide"], ["practice", "Practice"], ["exam", "Exam simulation"], ["review", "Final review"]];
+
+      const go = (v) => { setView(v); setFocus(null); window.scrollTo(0, 0); };
+      const startPractice = (list) => { if (!list.length) return; setRun({ qs: groupByContext(list).map(prepare), mode: "practice", limit: 0 }); setView("run"); window.scrollTo(0, 0); };
+      const startExam = (n, limit) => { setRun({ qs: buildExam(n), mode: "exam", limit }); setView("run"); window.scrollTo(0, 0); };
+      const practiceSkill = (id) => startPractice(shuffle(QUESTIONS.filter(q => q.skill === id)));
+      const study = (id) => { setView("guide"); setFocus(id); };
+      const done = (answers, elapsed, flags) => {
+        const stats = { ...store.stats };
+        let right = 0;
+        run.qs.forEach(q => {
+          if (!isAnswered(q, answers[q.id]) && run.mode === "practice") return;
+          const ok = isCorrect(q, answers[q.id]);
+          if (ok) right++;
+          const prev = stats[q.id] || { n: 0, c: 0 };
+          stats[q.id] = { n: prev.n + 1, c: prev.c + (ok ? 1 : 0), last: ok };
+        });
+        const exams = run.mode === "exam" ? store.exams.concat({ date: new Date().toISOString().slice(0, 10), n: run.qs.length, score: Math.round(1000 * right / run.qs.length) }) : store.exams;
+        const next = { stats, exams };
+        setStore(next); saveStore(next);
+        setRun({ ...run, answers, elapsed, flags: flags || {} });
+        setView("results"); window.scrollTo(0, 0);
+      };
+      const reset = () => { if (window.confirm("Clear your saved progress and exam history on this device?")) { const s = { stats: {}, exams: [] }; setStore(s); saveStore(s); } };
+      const inSession = view === "run";
+
+      return (
+        <div className="pl">
+          {!inSession && (
+            <nav className="tabs" aria-label="PL-300 sections">
+              <div className="in">
+                {TABS.map(t => <button key={t[0]} type="button" className="tab" aria-current={(view === t[0] || (view === "results" && t[0] === run.mode)) ? "page" : undefined} onClick={() => go(t[0])}>{t[1]}</button>)}
+              </div>
+            </nav>
+          )}
+          <main id="main">
+            {view === "home" && <Home store={store} go={go} onPracticeSkill={practiceSkill} onReset={reset} />}
+            {view === "guide" && <Guide focus={focus} onPracticeSkill={practiceSkill} />}
+            {view === "practice" && <PracticeSetup store={store} onStart={startPractice} />}
+            {view === "exam" && <ExamSetup onStart={startExam} />}
+            {view === "review" && <FinalReview />}
+            {view === "run" && <Runner key={run.qs.map(q => q.id).join("-")} qs={run.qs} mode={run.mode} limit={run.limit} onDone={done} onQuit={() => go(run.mode)} onStudy={study} />}
+            {view === "results" && <Results run={run} onPractice={startPractice} onHome={() => go("home")} onStudy={study} onExam={() => go("exam")} />}
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+  <!-- LAB:ABOUT:START -->
+  <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
+    <div class="lab-about__inner">
+      <div>
+        <div class="lab-about__label">// About this playbook</div>
+        <h2 id="lab-about-h">PL-300 Exam Prep</h2>
+        <p>Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.</p>
+        <p>It covers 133 original questions across the four PL-300 domains in single-answer, multiple-answer, drop-down, sequence, yes/no series and case study formats, with study notes on Power Query, data modeling, DAX, report design, workspaces and row-level security. It is written for candidates for the Microsoft Power BI Data Analyst Associate certification who want to practice, find their weak areas and do a last review.</p>
+        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
+          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <div class="lab-about__facts">
+          <span class="lab-about__fact">Exam prep</span>
+          <span class="lab-about__fact">Power BI PL-300</span>
+          <span class="lab-about__fact">30–100 min</span>
+          <span class="lab-about__fact">Certification</span>
+          <span class="lab-about__fact">Pass a certification</span>
+        </div>
+      </div>
+      <div class="lab-about__side">
+        <h3>Related playbooks</h3>
+        <ul class="lab-about__list">
+          <li><a href="/aws_ai_practitioner.html">AWS AI Practitioner Guide</a><span>AWS AIF-C01 &middot; 30–45 min</span></li>
+          <li><a href="/aws_ai_practitioner_exam.html">AIF-C01 Practice Exam</a><span>AWS AIF-C01 &middot; 30–60 min</span></li>
+          <li><a href="/aws_visual_references.html">Visual References</a><span>Diagrams &middot; 10 min</span></li>
+          <li><a href="/aip/index.html">AIP-C01 Prep Hub</a><span>AWS AIP-C01 &middot; 6 tools</span></li>
+        </ul>
+        <h3>Who made this</h3>
+        <p class="lab-about__by">
+          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data and
+          AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
+          Consulting through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
+          Source <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- LAB:ABOUT:END -->
+</body>
+</html>

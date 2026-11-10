@@ -8,7 +8,7 @@
 
 ## About
 
-Sixteen short, self-contained playbooks. Each one answers a question you are actually stuck on —
+Seventeen short, self-contained playbooks. Each one answers a question you are actually stuck on —
 which algorithm, which metric, whether to fine-tune or retrieve — and leaves you with a decision you
 can defend in a design review. No sign-up, no install, everything runs in the browser.
 
@@ -88,7 +88,7 @@ re-run, and the home page, the sitemap and the search index all follow.
 
 | Path | Role |
 | --- | --- |
-| `assets/modules.json` | The catalogue: 16 playbooks, 5 routes |
+| `assets/modules.json` | The catalogue: 17 playbooks, 5 routes |
 | `assets/lab.css` / `assets/lab.js` | Shared shell — header, breadcrumb, footer, ⌘K palette |
 | `assets/search-index.json` | Generated; lazy-loaded on first search |
 | `tools/*.mjs` | The build scripts |
