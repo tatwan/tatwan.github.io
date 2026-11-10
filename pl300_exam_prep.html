@@ -8,147 +8,214 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone@7.26.10/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    .pl { --bg:#f7f4ec; --card:#fffdf8; --ink:#1d1b16; --mute:#6b6557; --line:#e2dccb; --line2:#cfc7b0;
-      --gold:#f2c811; --gold-d:#8a6d00; --gold-bg:#fdf6d3; --ok:#1f7a4d; --ok-bg:#e3f4ea; --bad:#b3261e; --bad-bg:#fbe9e7; --blue:#2b6cb0;
-      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace; --serif: "Instrument Serif", Georgia, serif;
+    /* Palette and shapes follow the Power BI report canvas: grey canvas, white square panels, default theme data colours. */
+    .pl { --bg:#f3f2f1; --card:#ffffff; --ink:#201f1e; --mute:#605e5c; --line:#e1dfdd; --line2:#c8c6c4;
+      --gold:#f2c811; --gold-d:#6b5600; --gold-bg:#fff8d6; --ok:#107c41; --ok-bg:#e7f4ec; --bad:#c4314b; --bad-bg:#fceaed; --blue:#0f6cbd;
+      --sans:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --display:"Bricolage Grotesque", "IBM Plex Sans", sans-serif;
+      --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
       background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55; min-height:80vh; }
     .pl *, .pl *::before, .pl *::after { box-sizing:border-box; }
-    body { margin:0; background:#f7f4ec; }
-    .pl .wrap { max-width:1040px; margin:0 auto; padding:0 20px 72px; }
-    .pl h1, .pl h2, .pl h3 { font-family:var(--serif); font-weight:400; line-height:1.15; margin:0; letter-spacing:-0.01em; }
-    .pl h1 { font-size:clamp(2.3rem, 6vw, 3.6rem); }
-    .pl h2 { font-size:clamp(1.6rem, 4vw, 2.1rem); margin:44px 0 14px; }
-    .pl h3 { font-size:1.35rem; }
+    body { margin:0; background:#f3f2f1; }
+    .pl .wrap { max-width:1080px; margin:0 auto; padding:0 24px 80px; }
+    .pl h1, .pl h2, .pl h3 { font-family:var(--display); font-weight:700; margin:0; letter-spacing:-0.02em; }
+    .pl h1 { font-size:clamp(2.4rem, 6.4vw, 4.4rem); line-height:1.02; letter-spacing:-0.035em; max-width:16ch; }
+    .pl h2 { font-size:clamp(1.4rem, 3vw, 1.75rem); line-height:1.2; margin:56px 0 16px; }
+    .pl h3 { font-size:1.12rem; line-height:1.3; letter-spacing:-0.01em; }
     .pl p { margin:0 0 12px; }
-    .pl .eyebrow { font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-d); }
+    .pl a { color:var(--blue); }
+    .pl .eyebrow { font-size:.95rem; font-weight:500; color:var(--mute); }
     .pl .mute { color:var(--mute); }
     .pl .small { font-size:.875rem; }
-    .pl .hero { padding:44px 0 26px; }
-    .pl .hero p.lead { font-size:1.12rem; max-width:62ch; color:#3d392f; margin-top:14px; }
-    .pl .hero h1 mark { background:linear-gradient(transparent 62%, var(--gold) 62%); color:inherit; padding:0 2px; }
+    .pl .hero { padding:56px 0 8px; }
+    .pl .hero p.lead { font-size:1.15rem; max-width:58ch; color:#3b3a39; margin-top:20px; }
 
-    .pl .tabs { position:sticky; top:0; z-index:20; background:rgba(247,244,236,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
-    .pl .tabs .in { max-width:1040px; margin:0 auto; padding:0 12px; display:flex; gap:2px; overflow-x:auto; }
-    .pl .tab { font:500 .8rem var(--mono); padding:14px 12px; border:0; background:none; color:var(--mute); cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; }
-    .pl .tab:hover { color:var(--ink); }
-    .pl .tab[aria-current="page"] { color:var(--ink); border-bottom-color:var(--gold); }
+    .pl .facts { display:flex; flex-wrap:wrap; margin:36px 0 0; border-top:1px solid var(--line2); border-bottom:1px solid var(--line2); }
+    .pl .facts div { flex:1 1 150px; padding:14px 18px 14px 0; margin-right:18px; border-right:1px solid var(--line); }
+    .pl .facts div:last-child { border-right:0; margin-right:0; }
+    .pl .facts dt { font-size:.82rem; color:var(--mute); }
+    .pl .facts dd { margin:2px 0 0; font:700 1.5rem/1.2 var(--display); letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
 
-    .pl .btn { font:600 .82rem var(--mono); padding:11px 18px; border-radius:8px; border:1.5px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; min-height:44px; }
+    .pl .tabs { position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line2); }
+    .pl .tabs .in { max-width:1080px; margin:0 auto; padding:0 12px; display:flex; overflow-x:auto; }
+    .pl .tab { font:500 .92rem var(--sans); padding:13px 14px 10px; border:0; background:none; color:var(--mute); cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; }
+    .pl .tab:hover { color:var(--ink); background:var(--bg); }
+    .pl .tab[aria-current="page"] { color:var(--ink); font-weight:600; border-bottom-color:var(--gold); }
+
+    .pl .btn { font:600 .92rem var(--sans); padding:10px 18px; border-radius:3px; border:1px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; min-height:44px; }
     .pl .btn:hover { background:#000; }
-    .pl .btn.alt { background:transparent; color:var(--ink); }
-    .pl .btn.alt:hover { background:#efeada; }
-    .pl .btn.gold { background:var(--gold); border-color:var(--gold); color:#1d1b16; }
-    .pl .btn.gold:hover { background:#e5bb00; }
-    .pl .btn.sm { padding:7px 12px; min-height:36px; font-size:.76rem; }
+    .pl .btn.alt { background:#fff; color:var(--ink); border-color:var(--line2); }
+    .pl .btn.alt:hover { border-color:var(--ink); background:#fff; }
+    .pl .btn.gold { background:var(--gold); border-color:var(--gold); color:var(--ink); }
+    .pl .btn.gold:hover { background:#e0b800; border-color:#e0b800; }
+    .pl .btn.sm { padding:5px 11px; min-height:34px; font-size:.84rem; font-weight:500; }
     .pl .btn:disabled { opacity:.4; cursor:not-allowed; }
-    .pl button:focus-visible, .pl select:focus-visible, .pl summary:focus-visible, .pl a:focus-visible, .pl input:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+    .pl button:focus-visible, .pl select:focus-visible, .pl summary:focus-visible, .pl a:focus-visible, .pl input:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
     .pl .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
     .pl .grow { flex:1; }
 
-    .pl .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
-    .pl .grid { display:grid; gap:14px; }
-    .pl .g4 { grid-template-columns:repeat(4, 1fr); }
+    .pl .card { background:var(--card); border:1px solid var(--line); border-radius:4px; padding:24px; }
+    .pl .grid { display:grid; gap:16px; }
     .pl .g3 { grid-template-columns:repeat(3, 1fr); }
     .pl .g2 { grid-template-columns:repeat(2, 1fr); }
-    @media (max-width:820px) { .pl .g4 { grid-template-columns:repeat(2, 1fr); } .pl .g3, .pl .g2 { grid-template-columns:1fr; } }
-    .pl .stat b { display:block; font:400 2rem/1.1 var(--serif); }
-    .pl .stat span { font:500 .7rem var(--mono); text-transform:uppercase; letter-spacing:.1em; color:var(--mute); }
+    @media (max-width:820px) { .pl .g3, .pl .g2 { grid-template-columns:1fr; } }
 
-    .pl .bar { height:8px; background:#ebe5d3; border-radius:99px; overflow:hidden; }
-    .pl .bar i { display:block; height:100%; border-radius:99px; }
-    .pl .skillrow { display:grid; grid-template-columns:minmax(0, 1fr) 120px 76px; gap:12px; align-items:center; padding:9px 0; border-top:1px solid var(--line); font-size:.92rem; }
+    /* The skills chart: blueprint and readiness in one visual */
+    .pl .viz { background:#fff; border:1px solid var(--line); border-radius:4px; padding:24px 24px 16px; margin-top:40px; }
+    .pl .viz .vh { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:baseline; }
+    .pl .viz .vh h2 { margin:0; font-size:1.25rem; }
+    .pl .mix { display:flex; height:14px; margin:20px 0 8px; gap:2px; }
+    .pl .mix i { display:block; height:100%; }
+    .pl .mixkey { display:flex; gap:2px; margin-bottom:8px; }
+    .pl .mixkey div { font-size:.84rem; line-height:1.3; padding-right:8px; min-width:0; }
+    .pl .mixkey b { display:block; font-weight:600; }
+    @media (max-width:640px) { .pl .mixkey { display:grid; grid-template-columns:1fr 1fr; gap:10px; } .pl .mixkey div { width:auto !important; padding-left:10px; border-left:4px solid; } }
+    .pl .vgroup { margin-top:22px; }
+    .pl .vgroup > h3 { font:600 .9rem var(--sans); letter-spacing:0; display:flex; gap:8px; align-items:center; margin-bottom:4px; }
+    .pl .vgroup > h3 i { width:10px; height:10px; display:block; }
+    .pl .vrow { display:grid; grid-template-columns:minmax(0, 250px) minmax(80px, 1fr) 92px 84px; gap:14px; align-items:center; padding:5px 0; font-size:.93rem; }
+    .pl .track { position:relative; height:20px; background:var(--bg); }
+    .pl .track i { display:block; height:100%; transition:width .5s ease; }
+    .pl .track::after { content:""; position:absolute; left:70%; top:-5px; bottom:-5px; border-left:1.5px dashed var(--ink); }
+    .pl .vrow .val { font-variant-numeric:tabular-nums; font-size:.86rem; white-space:nowrap; }
+    .pl .vrow .val b { font-weight:600; font-size:.95rem; }
+    .pl .vrow .val.weak b { color:var(--bad); }
+    .pl .axis { display:grid; grid-template-columns:minmax(0, 250px) minmax(80px, 1fr) 92px 84px; gap:14px; margin-top:6px; font-size:.78rem; color:var(--mute); }
+    .pl .axis div { position:relative; height:18px; grid-column:2; }
+    .pl .axis span { position:absolute; top:0; transform:translateX(-50%); white-space:nowrap; }
+    .pl .axis span:first-child { transform:none; }
+    .pl .axis span:last-child { transform:translateX(-100%); }
+    @media (max-width:700px) {
+      .pl .vrow { grid-template-columns:minmax(0, 1fr) auto auto; gap:4px 10px; padding:8px 0; }
+      .pl .vrow .track { grid-column:1 / -1; grid-row:2; height:14px; }
+      .pl .axis { display:none; }
+    }
+
+    .pl .bar { height:6px; background:var(--line); overflow:hidden; }
+    .pl .bar i { display:block; height:100%; }
+    .pl .skillrow { display:grid; grid-template-columns:minmax(0, 1fr) 160px 56px; gap:14px; align-items:center; padding:9px 0; border-top:1px solid var(--line); font-size:.93rem; }
     .pl .skillrow:first-child { border-top:0; }
-    .pl .skillrow .pct { font:600 .8rem var(--mono); text-align:right; }
-    @media (max-width:560px) { .pl .skillrow { grid-template-columns:minmax(0, 1fr) 64px; } .pl .skillrow .bar { grid-column:1 / -1; order:3; } }
-    .pl .tag { display:inline-block; font:600 .68rem var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:99px; background:#ece6d4; color:#4a4538; }
+    .pl .skillrow .bar { height:14px; background:var(--bg); }
+    .pl .skillrow .pct { font-weight:600; font-size:.88rem; text-align:right; font-variant-numeric:tabular-nums; }
+    @media (max-width:560px) { .pl .skillrow { grid-template-columns:minmax(0, 1fr) 56px; } .pl .skillrow .bar { grid-column:1 / -1; order:3; } }
+    .pl .tag { display:inline-block; font-size:.78rem; font-weight:500; padding:1px 8px; border-radius:2px; background:var(--bg); color:#3b3a39; }
     .pl .tag.weak { background:var(--bad-bg); color:var(--bad); }
     .pl .tag.good { background:var(--ok-bg); color:var(--ok); }
     .pl .tag.gold { background:var(--gold-bg); color:var(--gold-d); }
 
-    .pl ul.pts { margin:10px 0 0; padding-left:20px; }
+    .pl ul.pts { margin:10px 0 0; padding-left:20px; max-width:74ch; }
     .pl ul.pts li { margin-bottom:7px; }
-    .pl .traps { margin-top:16px; background:var(--gold-bg); border-left:4px solid var(--gold); border-radius:0 10px 10px 0; padding:14px 16px; }
-    .pl .traps strong { font:600 .72rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--gold-d); }
-    .pl .domhead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; border-bottom:2px solid var(--ink); padding-bottom:8px; }
-    .pl .domhead .w { font:600 .8rem var(--mono); color:var(--mute); }
+    .pl .traps { margin-top:18px; background:var(--gold-bg); border-left:4px solid var(--gold); padding:14px 18px; max-width:78ch; }
+    .pl .traps strong { font-weight:600; }
+    .pl .traps ul.pts { margin-top:6px; }
 
-    .pl .qhead { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font:500 .78rem var(--mono); color:var(--mute); margin-bottom:14px; }
-    .pl .timer { font:700 .95rem var(--mono); color:var(--ink); padding:4px 10px; border:1.5px solid var(--line2); border-radius:8px; }
+    /* Study guide: side list + document, no cards */
+    .pl .guide { display:grid; grid-template-columns:220px minmax(0, 1fr); gap:48px; align-items:start; margin-top:32px; }
+    .pl .toc { position:sticky; top:64px; font-size:.88rem; max-height:calc(100vh - 80px); overflow:auto; }
+    .pl .toc b { display:flex; gap:8px; align-items:center; margin:0 0 6px; font-weight:600; }
+    .pl .toc div + div { margin-top:18px; }
+    .pl .toc b i { width:10px; height:10px; display:block; flex:none; }
+    .pl .toc button { display:block; width:100%; text-align:left; font:inherit; color:var(--mute); background:none; border:0; border-left:2px solid var(--line2); padding:4px 0 4px 12px; cursor:pointer; }
+    .pl .toc button:hover { color:var(--ink); border-left-color:var(--ink); }
+    @media (max-width:860px) { .pl .guide { grid-template-columns:1fr; gap:0; } .pl .toc { display:none; } }
+    .pl .domhead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:0; padding-top:14px; border-top:4px solid; }
+    .pl section + section > .domhead { margin-top:64px; }
+    .pl .domhead .w { font:400 .9rem var(--sans); letter-spacing:0; color:var(--mute); }
+    .pl .skill { padding:26px 0; border-top:1px solid var(--line2); scroll-margin-top:64px; }
+    .pl .domhead + .skill { border-top:0; padding-top:8px; }
+    .pl .skill h3 { font-size:1.3rem; }
+    .pl .skill h3 span { font:500 .9rem var(--sans); color:var(--mute); margin-right:6px; letter-spacing:0; }
+
+    .pl .qhead { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:.9rem; color:var(--mute); margin-bottom:12px; }
+    .pl .timer { font:600 1rem var(--sans); font-variant-numeric:tabular-nums; color:var(--ink); padding:4px 10px; background:#fff; border:1px solid var(--line2); border-radius:3px; }
     .pl .timer.low { color:var(--bad); border-color:var(--bad); }
-    .pl .ctx { border:1px solid var(--line2); border-radius:10px; background:#f3eedd; margin-bottom:16px; }
-    .pl .ctx summary { cursor:pointer; padding:11px 14px; font:600 .8rem var(--mono); }
-    .pl .ctx .b { padding:0 14px 6px; font-size:.93rem; }
-    .pl .qtext { font-size:1.08rem; white-space:pre-wrap; margin-bottom:14px; }
-    .pl pre.code { font:500 .86rem/1.6 var(--mono); background:#1d1b16; color:#f4eed8; padding:14px 16px; border-radius:10px; overflow-x:auto; margin:0 0 14px; white-space:pre; }
-    .pl .hint { font:500 .76rem var(--mono); color:var(--mute); margin-bottom:10px; }
-    .pl .opt { display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; font:inherit; color:inherit; background:var(--card); border:1.5px solid var(--line2); border-radius:10px; padding:12px 14px; margin-bottom:9px; cursor:pointer; min-height:48px; }
+    .pl .ctx { border:1px solid var(--line2); border-left:4px solid var(--ink); background:var(--bg); margin-bottom:18px; }
+    .pl .ctx summary { cursor:pointer; padding:10px 14px; font-weight:600; font-size:.92rem; }
+    .pl .ctx .b { padding:0 14px 6px; font-size:.93rem; max-width:80ch; }
+    .pl .qtext { font-size:1.12rem; line-height:1.5; white-space:pre-wrap; margin-bottom:16px; max-width:76ch; }
+    .pl pre.code { font:400 .88rem/1.65 var(--mono); background:#252423; color:#f3f2f1; padding:14px 16px; border-radius:3px; overflow-x:auto; margin:0 0 16px; white-space:pre; }
+    .pl .hint { font-size:.86rem; color:var(--mute); margin-bottom:10px; }
+    .pl .opt { display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; font:inherit; color:inherit; background:#fff; border:1px solid var(--line2); border-radius:3px; padding:11px 14px; margin-bottom:8px; cursor:pointer; min-height:48px; }
     .pl .opt:hover:not(:disabled) { border-color:var(--ink); }
     .pl .opt:disabled { cursor:default; }
-    .pl .opt .k { flex:none; width:24px; height:24px; border-radius:6px; border:1.5px solid var(--line2); font:700 .72rem/21px var(--mono); text-align:center; }
-    .pl .opt.sel { border-color:var(--ink); background:#f1ecdb; }
+    .pl .opt .k { flex:none; width:24px; height:24px; border:1px solid var(--line2); font:600 .8rem/22px var(--sans); text-align:center; }
+    .pl .opt.sel { border-color:var(--ink); box-shadow:inset 4px 0 0 var(--gold); }
     .pl .opt.sel .k { background:var(--ink); color:#fff; border-color:var(--ink); }
     .pl .opt.ok { border-color:var(--ok); background:var(--ok-bg); }
     .pl .opt.ok .k { background:var(--ok); border-color:var(--ok); color:#fff; }
     .pl .opt.bad { border-color:var(--bad); background:var(--bad-bg); }
     .pl .opt.bad .k { background:var(--bad); border-color:var(--bad); color:#fff; }
-    .pl .blank { display:grid; grid-template-columns:minmax(0, 1fr) minmax(170px, 260px); gap:10px; align-items:center; padding:10px 0; border-top:1px solid var(--line); }
+    .pl .blank { display:grid; grid-template-columns:minmax(0, 1fr) minmax(170px, 280px); gap:10px; align-items:center; padding:10px 0; border-top:1px solid var(--line); }
     @media (max-width:640px) { .pl .blank { grid-template-columns:1fr; } }
-    .pl select { font:500 .88rem var(--mono); padding:10px; border-radius:8px; border:1.5px solid var(--line2); background:#fff; color:var(--ink); width:100%; min-height:44px; }
+    .pl select { font:400 .88rem var(--mono); padding:10px; border-radius:3px; border:1px solid var(--line2); background:#fff; color:var(--ink); width:100%; min-height:44px; }
     .pl select.ok { border-color:var(--ok); background:var(--ok-bg); }
     .pl select.bad { border-color:var(--bad); background:var(--bad-bg); }
-    .pl .fix { font:500 .78rem var(--mono); color:var(--ok); margin-top:4px; }
+    .pl .fix { font-size:.86rem; font-weight:500; color:var(--ok); margin-top:4px; }
     .pl .ord { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     @media (max-width:720px) { .pl .ord { grid-template-columns:1fr; } }
-    .pl .ord .col { border:1.5px dashed var(--line2); border-radius:10px; padding:10px; min-height:120px; }
-    .pl .ord .col > b { display:block; font:600 .7rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-bottom:8px; }
-    .pl .chip { display:flex; gap:8px; align-items:center; background:var(--card); border:1.5px solid var(--line2); border-radius:8px; padding:8px 10px; margin-bottom:7px; font-size:.93rem; }
+    .pl .ord .col { background:var(--bg); padding:12px; min-height:120px; }
+    .pl .ord .col > b { display:block; font-size:.84rem; font-weight:600; color:var(--mute); margin-bottom:8px; }
+    .pl .chip { display:flex; gap:8px; align-items:center; background:#fff; border:1px solid var(--line2); border-radius:3px; padding:8px 10px; margin-bottom:6px; font-size:.93rem; }
     .pl .chip.ok { border-color:var(--ok); background:var(--ok-bg); }
     .pl .chip.bad { border-color:var(--bad); background:var(--bad-bg); }
     .pl button.chip { width:100%; text-align:left; font:inherit; color:inherit; cursor:pointer; min-height:44px; }
     .pl button.chip:hover { border-color:var(--ink); }
-    .pl .chip .n { font:700 .75rem var(--mono); color:var(--mute); }
-    .pl .mini { border:1px solid var(--line2); background:#fff; border-radius:6px; width:32px; height:32px; cursor:pointer; font-size:.85rem; flex:none; color:var(--ink); }
+    .pl .chip .n { font-weight:600; color:var(--mute); font-variant-numeric:tabular-nums; }
+    .pl .mini { border:1px solid var(--line2); background:#fff; border-radius:3px; width:32px; height:32px; cursor:pointer; font-size:.85rem; flex:none; color:var(--ink); }
     .pl .mini:disabled { opacity:.3; cursor:default; }
-    .pl .explain { margin-top:16px; border-radius:10px; padding:14px 16px; border-left:4px solid var(--ok); background:var(--ok-bg); }
+    .pl .explain { margin-top:18px; padding:14px 18px; border-left:4px solid var(--ok); background:var(--ok-bg); max-width:80ch; }
     .pl .explain.bad { border-left-color:var(--bad); background:var(--bad-bg); }
-    .pl .explain strong { font:700 .74rem var(--mono); letter-spacing:.1em; text-transform:uppercase; }
-    .pl .nav { display:grid; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:6px; margin-top:16px; }
-    .pl .nav button { height:38px; border-radius:7px; border:1.5px solid var(--line2); background:var(--card); font:600 .76rem var(--mono); cursor:pointer; color:var(--ink); position:relative; }
-    .pl .nav button.done { background:#e9e3d0; }
-    .pl .nav button.cur { border-color:var(--ink); box-shadow:0 0 0 2px var(--gold); }
-    .pl .nav button.flag::after { content:""; position:absolute; top:3px; right:3px; width:7px; height:7px; border-radius:50%; background:var(--gold-d); }
-    .pl .nav button.ok { background:var(--ok-bg); border-color:var(--ok); }
-    .pl .nav button.bad { background:var(--bad-bg); border-color:var(--bad); }
+    .pl .explain strong { font-weight:600; }
+    /* Navigator reads like a conditionally formatted matrix */
+    .pl .nav { display:grid; grid-template-columns:repeat(auto-fill, minmax(36px, 1fr)); gap:3px; margin-top:20px; }
+    .pl .nav button { height:36px; border:0; background:#fff; font:500 .82rem var(--sans); font-variant-numeric:tabular-nums; cursor:pointer; color:var(--mute); position:relative; }
+    .pl .nav button.done { background:var(--line2); color:var(--ink); }
+    .pl .nav button.cur { outline:2px solid var(--ink); outline-offset:-2px; color:var(--ink); font-weight:600; }
+    .pl .nav button.flag::after { content:""; position:absolute; top:0; right:0; border:5px solid var(--gold); border-left-color:transparent; border-bottom-color:transparent; }
+    .pl .nav button.ok { background:#bfe3cd; color:var(--ink); }
+    .pl .nav button.bad { background:#f3c0c9; color:var(--ink); }
 
-    .pl .score { display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
-    .pl .score .big { font:400 4.6rem/1 var(--serif); }
-    .pl .verdict { font:700 .8rem var(--mono); letter-spacing:.12em; text-transform:uppercase; padding:6px 12px; border-radius:99px; }
-    .pl .verdict.pass { background:var(--ok-bg); color:var(--ok); }
-    .pl .verdict.fail { background:var(--bad-bg); color:var(--bad); }
-    .pl details.rev { border:1px solid var(--line); border-radius:10px; background:var(--card); margin-bottom:8px; }
-    .pl details.rev > summary { cursor:pointer; padding:12px 14px; display:flex; gap:10px; align-items:flex-start; font-size:.94rem; list-style:none; }
+    .pl .score .big { font:700 clamp(3rem, 9vw, 4.6rem)/1 var(--display); letter-spacing:-0.04em; font-variant-numeric:tabular-nums; }
+    .pl .bullet { position:relative; height:26px; background:var(--bg); margin:18px 0 26px; }
+    .pl .bullet i { display:block; height:100%; }
+    .pl .bullet::after { content:"700 to pass"; position:absolute; left:70%; top:-6px; bottom:-6px; border-left:2px solid var(--ink); padding:34px 0 0 6px; font-size:.78rem; color:var(--mute); white-space:nowrap; }
+    .pl .verdict { font-weight:600; font-size:.95rem; }
+    .pl .verdict.pass { color:var(--ok); }
+    .pl .verdict.fail { color:var(--bad); }
+    .pl details.rev { border-top:1px solid var(--line); background:#fff; }
+    .pl details.rev:last-of-type { border-bottom:1px solid var(--line); }
+    .pl details.rev > summary { cursor:pointer; padding:12px 14px; display:flex; gap:12px; align-items:flex-start; font-size:.94rem; list-style:none; }
+    .pl details.rev > summary:hover { background:#faf9f8; }
     .pl details.rev > summary::-webkit-details-marker { display:none; }
-    .pl details.rev .mk { flex:none; font:700 .72rem var(--mono); padding:2px 7px; border-radius:5px; }
-    .pl details.rev .mk.ok { background:var(--ok-bg); color:var(--ok); }
-    .pl details.rev .mk.bad { background:var(--bad-bg); color:var(--bad); }
-    .pl details.rev .in { padding:4px 16px 18px; border-top:1px solid var(--line); }
-    .pl .chk { display:flex; gap:9px; align-items:center; padding:6px 0; font-size:.94rem; cursor:pointer; }
-    .pl .chk input { width:18px; height:18px; accent-color:#1d1b16; }
-    .pl .seg { display:inline-flex; border:1.5px solid var(--ink); border-radius:8px; overflow:hidden; flex-wrap:wrap; }
-    .pl .seg button { font:600 .78rem var(--mono); padding:9px 14px; border:0; background:transparent; cursor:pointer; color:var(--ink); min-height:40px; }
+    .pl details.rev .mk { flex:none; width:30px; text-align:center; font-weight:600; font-size:.82rem; padding:1px 0; font-variant-numeric:tabular-nums; }
+    .pl details.rev .mk.ok { background:#bfe3cd; }
+    .pl details.rev .mk.bad { background:#f3c0c9; }
+    .pl details.rev .in { padding:8px 20px 22px 56px; }
+    @media (max-width:640px) { .pl details.rev .in { padding-left:16px; } }
+    .pl .chk { display:flex; gap:9px; align-items:center; padding:6px 0; font-size:.95rem; cursor:pointer; }
+    .pl .chk input { width:18px; height:18px; accent-color:#201f1e; }
+    .pl .seg { display:inline-flex; border:1px solid var(--line2); border-radius:3px; overflow:hidden; flex-wrap:wrap; background:#fff; }
+    .pl .seg button { font:500 .88rem var(--sans); padding:8px 14px; border:0; border-right:1px solid var(--line); background:transparent; cursor:pointer; color:var(--ink); min-height:40px; }
+    .pl .seg button:last-child { border-right:0; }
     .pl .seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
-    .pl .tblwrap { overflow-x:auto; }
-    .pl table { border-collapse:collapse; width:100%; font-size:.9rem; }
-    .pl th { text-align:left; font:600 .7rem var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--mute); padding:8px 10px; border-bottom:2px solid var(--ink); white-space:nowrap; }
-    .pl td { padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
-    .pl td:first-child { font-weight:600; }
-    .pl ol.steps { counter-reset:s; list-style:none; padding:0; margin:0; }
-    .pl ol.steps li { counter-increment:s; position:relative; padding:0 0 14px 44px; }
-    .pl ol.steps li::before { content:counter(s); position:absolute; left:0; top:0; width:30px; height:30px; border-radius:50%; background:var(--gold); font:700 .85rem/30px var(--mono); text-align:center; }
-    @media (prefers-reduced-motion:no-preference) { .pl .fade { animation:plfade .25s ease-out both; } }
-    @keyframes plfade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .pl .sizes { display:grid; grid-template-columns:repeat(3, 1fr); gap:0; margin-top:24px; border:1px solid var(--line2); background:#fff; border-radius:4px; overflow:hidden; }
+    .pl .sizes button { text-align:left; font:inherit; color:inherit; background:none; border:0; border-right:1px solid var(--line); padding:18px 20px; cursor:pointer; }
+    .pl .sizes button:last-child { border-right:0; }
+    .pl .sizes button b { display:block; font:700 1.5rem/1.2 var(--display); letter-spacing:-0.02em; }
+    .pl .sizes button[aria-pressed="true"] { background:var(--gold-bg); box-shadow:inset 0 -4px 0 var(--gold); }
+    @media (max-width:640px) { .pl .sizes { grid-template-columns:1fr; } .pl .sizes button { border-right:0; border-bottom:1px solid var(--line); } }
+    .pl .tblwrap { overflow-x:auto; padding:8px 20px 12px; }
+    .pl table { border-collapse:collapse; width:100%; font-size:.92rem; }
+    .pl th { text-align:left; font-size:.82rem; font-weight:600; color:var(--mute); padding:10px 12px 8px 0; border-bottom:1px solid var(--ink); white-space:nowrap; }
+    .pl td { padding:9px 12px 9px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+    .pl tr:last-child td { border-bottom:0; }
+    .pl td:first-child { font-weight:500; }
+    .pl ol.steps { margin:0; padding-left:22px; max-width:72ch; }
+    .pl ol.steps li { padding:0 0 10px 6px; }
+    .pl ol.steps li::marker { font-weight:600; }
   </style>
   <!-- LAB:HEAD:START -->
   <meta name="description" content="Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.">
@@ -210,10 +277,10 @@
 
     // ── Exam blueprint (Microsoft skills measured, as of April 20, 2026) ──
     const DOMAINS = {
-      1: { name: "Prepare the data", short: "Prepare", weight: 0.28, range: "25–30%", color: "#b7791f", description: "Get or connect to data, profile and clean it, then transform and load it with Power Query." },
-      2: { name: "Model the data", short: "Model", weight: 0.28, range: "25–30%", color: "#2b6cb0", description: "Design the semantic model, write DAX calculations and optimize model performance." },
-      3: { name: "Visualize and analyze the data", short: "Visualize", weight: 0.27, range: "25–30%", color: "#2f855a", description: "Create reports, enhance them for usability and storytelling, and identify patterns and trends." },
-      4: { name: "Manage and secure Power BI", short: "Manage", weight: 0.17, range: "15–20%", color: "#9b2c2c", description: "Workspaces, apps, refresh, gateways, row-level security, permissions and sensitivity labels." }
+      1: { name: "Prepare the data", short: "Prepare", weight: 0.28, range: "25–30%", color: "#118dff", description: "Get or connect to data, profile and clean it, then transform and load it with Power Query." },
+      2: { name: "Model the data", short: "Model", weight: 0.28, range: "25–30%", color: "#12239e", description: "Design the semantic model, write DAX calculations and optimize model performance." },
+      3: { name: "Visualize and analyze the data", short: "Visualize", weight: 0.27, range: "25–30%", color: "#e66c37", description: "Create reports, enhance them for usability and storytelling, and identify patterns and trends." },
+      4: { name: "Manage and secure Power BI", short: "Manage", weight: 0.17, range: "15–20%", color: "#6b007b", description: "Workspaces, apps, refresh, gateways, row-level security, permissions and sensitivity labels." }
     };
 
     // ── Study guide: one entry per skill area on the official outline ──
@@ -1427,7 +1494,7 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       const last = idx === qs.length - 1;
 
       return (
-        <div className="wrap fade" ref={top} style={{ paddingTop: 24, scrollMarginTop: 60 }}>
+        <div className="wrap " ref={top} style={{ paddingTop: 24, scrollMarginTop: 60 }}>
           <div className="qhead">
             <span><b style={{ color: "var(--ink)" }}>Question {idx + 1}</b> of {qs.length}</span>
             <span className="tag">{DOMAINS[domainOf(q)].short}</span>
@@ -1484,24 +1551,25 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       const list = qs.map((q, i) => ({ q, i, ok: marks[i] })).filter(r => filter === "all" || (filter === "wrong" && !r.ok) || (filter === "flag" && flags[r.q.id]));
 
       return (
-        <div className="wrap fade" style={{ paddingTop: 32 }}>
-          <div className="eyebrow">{mode === "exam" ? "Exam simulation results" : "Practice results"}</div>
-          <div className="card" style={{ marginTop: 12 }}>
-            <div className="score">
-              <div><div className="big">{mode === "exam" ? scaled : Math.round(pct * 100) + "%"}</div><div className="small mute">{mode === "exam" ? "estimated score out of 1000" : "correct"}</div></div>
-              <div className="grow">
-                {mode === "exam" && <span className={"verdict " + (pass ? "pass" : "fail")}>{pass ? "Above the 700 pass mark" : "Below the 700 pass mark"}</span>}
-                <p style={{ marginTop: 12 }}>{right} of {qs.length} correct in {fmtTime(elapsed)}.</p>
-                {mode === "exam" && <p className="small mute">The real exam uses scaled scoring and gives part marks on some questions, so treat this number as a guide. Aim for 800 or more here before you book.</p>}
+        <div className="wrap" style={{ paddingTop: 44 }}>
+          <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.4rem)", maxWidth: "none" }}>{mode === "exam" ? "Exam simulation results" : "Practice results"}</h1>
+          <div className="card score" style={{ marginTop: 12 }}>
+            <div className="row" style={{ alignItems: "baseline", gap: 16 }}>
+              <div className="big">{mode === "exam" ? scaled : Math.round(pct * 100) + "%"}</div>
+              <div>
+                {mode === "exam" && <div className={"verdict " + (pass ? "pass" : "fail")}>{pass ? "Above the pass mark" : "Below the pass mark"}</div>}
+                <div className="mute">{right} of {qs.length} correct in {fmtTime(elapsed)}</div>
               </div>
             </div>
+            <div className="bullet" role="img" aria-label={"Score " + scaled + " of 1000, pass mark 700"}><i style={{ width: (pct * 100) + "%", background: pass ? "var(--ok)" : "var(--bad)" }}></i></div>
+            {mode === "exam" && <p className="small mute" style={{ margin: 0, maxWidth: "76ch" }}>An estimate out of 1000. The real exam uses scaled scoring and gives part marks on some questions. Aim for 800 or more here before you book.</p>}
           </div>
 
           <h2>Where you stand</h2>
           <div className="card">
             {bySkill.map(r => (
               <div className="skillrow" key={r.s.id}>
-                <div><span className="mute small">{r.s.id}</span> {r.s.name} {r.pct < 0.7 && <span className="tag weak">Review</span>}</div>
+                <div>{r.s.name} {r.pct < 0.7 && <span className="tag weak">Review</span>}</div>
                 <div className="bar"><i style={{ width: (r.pct * 100) + "%", background: r.pct < 0.7 ? "var(--bad)" : "var(--ok)" }}></i></div>
                 <div className="pct">{r.ok}/{r.n}</div>
               </div>
@@ -1546,26 +1614,42 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
     }
 
     // ── Pages ──
-    function Readiness({ stats, onPracticeSkill }) {
-      const st = skillStats(stats);
-      const tried = Object.keys(stats).length;
-      if (!tried) return <div className="card"><p style={{ margin: 0 }} className="mute">No answers yet. Your accuracy for each of the 11 skill areas will appear here after your first practice set, and it is saved in this browser only.</p></div>;
+    function SkillsChart({ store, onPracticeSkill, onReset }) {
+      const st = skillStats(store.stats);
+      const started = Object.keys(store.stats).length > 0;
       return (
-        <div className="card">
-          {SKILLS.map(s => {
-            const r = st[s.id];
-            return (
-              <div className="skillrow" key={s.id}>
-                <div>
-                  <span className="mute small">{s.id}</span> {s.name}{" "}
-                  {r.pct === null ? <span className="tag">Not started</span> : r.pct < 70 ? <span className="tag weak">Weak</span> : r.tried === r.total && r.pct >= 85 ? <span className="tag good">Ready</span> : null}
-                  <div><button type="button" className="btn alt sm" style={{ marginTop: 6 }} onClick={() => onPracticeSkill(s.id)}>Practice ({r.total})</button></div>
-                </div>
-                <div className="bar"><i style={{ width: (r.pct || 0) + "%", background: r.pct !== null && r.pct < 70 ? "var(--bad)" : "var(--ok)" }}></i></div>
-                <div className="pct">{r.pct === null ? "–" : r.pct + "%"}<div className="mute" style={{ fontWeight: 400 }}>{r.tried}/{r.total} seen</div></div>
-              </div>
-            );
-          })}
+        <div className="viz">
+          <div className="vh">
+            <h2 className="grow">{started ? "Your accuracy by skill" : "What the exam covers"}</h2>
+            {started && <button type="button" className="btn alt sm" onClick={onReset}>Reset progress</button>}
+          </div>
+          <p className="small mute" style={{ margin: "6px 0 0", maxWidth: "70ch" }}>
+            {started ? "Each bar is your accuracy on the questions you have answered in that skill. Get every bar past the dashed 70% line. Progress is saved in this browser only."
+              : "Four domains, eleven skills. The bars are empty until you answer questions, then each one shows your accuracy. The dashed line is 70%, the pass mark."}
+          </p>
+          <div className="mix" role="img" aria-label="Share of the exam by domain">
+            {[1, 2, 3, 4].map(d => <i key={d} style={{ width: (DOMAINS[d].weight * 100) + "%", background: DOMAINS[d].color }}></i>)}
+          </div>
+          <div className="mixkey">
+            {[1, 2, 3, 4].map(d => <div key={d} style={{ width: (DOMAINS[d].weight * 100) + "%", borderColor: DOMAINS[d].color }}><b>{DOMAINS[d].name}</b><span className="mute">{DOMAINS[d].range}</span></div>)}
+          </div>
+          {[1, 2, 3, 4].map(d => (
+            <div className="vgroup" key={d}>
+              <h3><i style={{ background: DOMAINS[d].color }}></i>{DOMAINS[d].name}</h3>
+              {SKILLS.filter(s => Number(s.id[0]) === d).map(s => {
+                const r = st[s.id];
+                return (
+                  <div className="vrow" key={s.id}>
+                    <div>{s.name}</div>
+                    <div className="track"><i style={{ width: (r.pct || 0) + "%", background: DOMAINS[d].color }}></i></div>
+                    <div className={"val" + (r.pct !== null && r.pct < 70 ? " weak" : "")}>{r.pct === null ? <span className="mute">{r.total} questions</span> : <span><b>{r.pct}%</b> <span className="mute">{r.tried}/{r.total}</span></span>}</div>
+                    <button type="button" className="btn alt sm" aria-label={"Practice " + s.name} onClick={() => onPracticeSkill(s.id)}>Practice</button>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+          <div className="axis" aria-hidden="true"><div><span style={{ left: 0 }}>0%</span><span style={{ left: "70%" }}>70% pass line</span><span style={{ left: "100%" }}>100%</span></div></div>
         </div>
       );
     }
@@ -1573,52 +1657,34 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
     function Home({ store, go, onPracticeSkill, onReset }) {
       const best = store.exams.length ? Math.max.apply(null, store.exams.map(e => e.score)) : null;
       return (
-        <div className="wrap fade">
+        <div className="wrap ">
           <div className="hero">
-            <div className="eyebrow">Microsoft Power BI Data Analyst · Exam PL-300</div>
-            <h1 style={{ marginTop: 10 }}>Walk into PL-300 <mark>knowing you are ready.</mark></h1>
-            <p className="lead">{QUESTIONS.length} original practice questions in the formats the real exam uses, a study guide for every skill on the official outline, and a final review sheet for the night before. Every answer is explained, and your weak areas are tracked as you go.</p>
-            <div className="row" style={{ marginTop: 20 }}>
+            <div className="eyebrow">Exam PL-300, Microsoft Power BI Data Analyst</div>
+            <h1 style={{ marginTop: 14 }}>Practice until the pass line is behind you.</h1>
+            <p className="lead">{QUESTIONS.length} original questions in the formats the real exam uses, each with an explanation. Study notes for every skill on the official outline. Timed simulations that show you exactly where you are weak.</p>
+            <div className="row" style={{ marginTop: 24 }}>
               <button type="button" className="btn gold" onClick={() => go("practice")}>Start practicing</button>
               <button type="button" className="btn alt" onClick={() => go("exam")}>Take a timed exam</button>
             </div>
+            <dl className="facts">
+              <div><dt>Exam time</dt><dd>100 minutes</dd></div>
+              <div><dt>Questions</dt><dd>40 to 60</dd></div>
+              <div><dt>Pass mark</dt><dd>700 of 1000</dd></div>
+              <div><dt>Your best simulation</dt><dd>{best === null ? "Not taken" : best}</dd></div>
+            </dl>
           </div>
 
-          <div className="grid g4">
-            <div className="card stat"><b>100 min</b><span>Exam time</span></div>
-            <div className="card stat"><b>40–60</b><span>Questions (typical)</span></div>
-            <div className="card stat"><b>700</b><span>Pass mark out of 1000</span></div>
-            <div className="card stat"><b>{best === null ? "–" : best}</b><span>Your best simulation</span></div>
-          </div>
-          <p className="small mute" style={{ marginTop: 10 }}>Aligned to the skills measured as of April 20, 2026. Check the <a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300" target="_blank" rel="noopener">official study guide</a> for changes before you book. This page is independent and is not affiliated with Microsoft.</p>
-
-          <h2>What the exam covers</h2>
-          <div className="grid g2">
-            {[1, 2, 3, 4].map(d => (
-              <div className="card" key={d} style={{ borderTop: "4px solid " + DOMAINS[d].color }}>
-                <div className="row"><h3 className="grow">{DOMAINS[d].name}</h3><span className="tag gold">{DOMAINS[d].range}</span></div>
-                <p className="small mute" style={{ margin: "8px 0 10px" }}>{DOMAINS[d].description}</p>
-                <div className="small">{SKILLS.filter(s => Number(s.id[0]) === d).map(s => s.name).join(" · ")}</div>
-              </div>
-            ))}
-          </div>
+          <SkillsChart store={store} onPracticeSkill={onPracticeSkill} onReset={onReset} />
 
           <h2>How to use this page</h2>
-          <div className="card">
-            <ol className="steps">
-              <li><b>Read the study guide</b> for one domain. Each skill has the facts to know and the traps that catch people.</li>
-              <li><b>Practice that domain.</b> You get the explanation straight after each answer, so mistakes are corrected while the question is fresh.</li>
-              <li><b>Check your readiness below.</b> Anything under 70% is marked weak. Practice those skills until the mark clears.</li>
-              <li><b>Take a timed exam simulation.</b> No feedback until the end, like the real thing. Aim for 800 or more twice in a row.</li>
-              <li style={{ paddingBottom: 0 }}><b>Read the final review</b> the day before the exam.</li>
-            </ol>
-          </div>
-
-          <div className="row" style={{ marginTop: 44 }}>
-            <h2 style={{ margin: 0 }} className="grow">Your readiness by skill</h2>
-            {Object.keys(store.stats).length > 0 && <button type="button" className="btn alt sm" onClick={onReset}>Reset progress</button>}
-          </div>
-          <div style={{ marginTop: 14 }}><Readiness stats={store.stats} onPracticeSkill={onPracticeSkill} /></div>
+          <ol className="steps">
+            <li><b>Read the study guide</b> for one domain. Each skill has the facts to know and the traps that catch people.</li>
+            <li><b>Practice that domain.</b> The explanation comes straight after each answer, while the question is fresh.</li>
+            <li><b>Check the chart above.</b> Any bar short of the 70% line is a weak skill. Practice it until it clears.</li>
+            <li><b>Take a timed exam simulation.</b> No feedback until the end, like the real thing. Aim for 800 or more twice in a row.</li>
+            <li><b>Read the final review</b> the day before the exam.</li>
+          </ol>
+          <p className="small mute" style={{ marginTop: 28, maxWidth: "76ch" }}>Aligned to the skills measured as of April 20, 2026. Check the <a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300" target="_blank" rel="noopener">official study guide</a> for changes before you book. This page is independent and is not affiliated with Microsoft.</p>
 
           {store.exams.length > 0 && (
             <div>
@@ -1644,27 +1710,36 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
         if (el) el.scrollIntoView({ block: "start" });
       }, [focus]);
       return (
-        <div className="wrap fade" style={{ paddingTop: 32 }}>
-          <div className="eyebrow">Study guide</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Every skill on the outline, in plain words</h1>
+        <div className="wrap" style={{ paddingTop: 44 }}>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", maxWidth: "20ch" }}>Every skill on the outline, in plain words</h1>
           <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>The headings follow Microsoft's skills measured list. Under each one are the points you need to know and the traps that exam questions are built around.</p>
-          {[1, 2, 3, 4].map(d => (
-            <section key={d}>
-              <h2 className="domhead"><span>{d}. {DOMAINS[d].name}</span><span className="w">{DOMAINS[d].range} of the exam</span></h2>
-              <div className="grid">
-                {SKILLS.filter(s => Number(s.id[0]) === d).map(s => (
-                  <article className="card" key={s.id} id={"skill-" + s.id.replace(".", "-")} style={{ scrollMarginTop: 64 }}>
-                    <div className="row">
-                      <h3 className="grow"><span className="mute" style={{ fontFamily: "var(--mono)", fontSize: ".8rem" }}>{s.id}</span> {s.name}</h3>
-                      <button type="button" className="btn alt sm" onClick={() => onPracticeSkill(s.id)}>Practice ({QUESTIONS.filter(q => q.skill === s.id).length})</button>
-                    </div>
-                    <ul className="pts">{s.points.map((p, i) => <li key={i}>{p}</li>)}</ul>
-                    <div className="traps"><strong>Exam traps</strong><ul className="pts">{s.traps.map((p, i) => <li key={i}>{p}</li>)}</ul></div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          ))}
+          <div className="guide">
+            <nav className="toc" aria-label="Skills">
+              {[1, 2, 3, 4].map(d => (
+                <div key={d}>
+                  <b><i style={{ background: DOMAINS[d].color }}></i>{DOMAINS[d].name}</b>
+                  {SKILLS.filter(s => Number(s.id[0]) === d).map(s => <button key={s.id} type="button" onClick={() => document.getElementById("skill-" + s.id.replace(".", "-")).scrollIntoView({ block: "start" })}>{s.name}</button>)}
+                </div>
+              ))}
+            </nav>
+            <div>
+              {[1, 2, 3, 4].map(d => (
+                <section key={d}>
+                  <h2 className="domhead" style={{ borderColor: DOMAINS[d].color }}><span>{DOMAINS[d].name}</span><span className="w">{DOMAINS[d].range} of the exam</span></h2>
+                  {SKILLS.filter(s => Number(s.id[0]) === d).map(s => (
+                    <article className="skill" key={s.id} id={"skill-" + s.id.replace(".", "-")}>
+                      <div className="row">
+                        <h3 className="grow"><span>{s.id}</span>{s.name}</h3>
+                        <button type="button" className="btn alt sm" onClick={() => onPracticeSkill(s.id)}>Practice {QUESTIONS.filter(q => q.skill === s.id).length} questions</button>
+                      </div>
+                      <ul className="pts">{s.points.map((x, i) => <li key={i}>{x}</li>)}</ul>
+                      <div className="traps"><strong>Exam traps</strong><ul className="pts">{s.traps.map((x, i) => <li key={i}>{x}</li>)}</ul></div>
+                    </article>
+                  ))}
+                </section>
+              ))}
+            </div>
+          </div>
         </div>
       );
     }
@@ -1684,9 +1759,8 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       });
       const n = count === 0 ? pool.length : Math.min(count, pool.length);
       return (
-        <div className="wrap fade" style={{ paddingTop: 32 }}>
-          <div className="eyebrow">Practice mode</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Learn from every answer</h1>
+        <div className="wrap" style={{ paddingTop: 44 }}>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", maxWidth: "20ch" }}>Learn from every answer</h1>
           <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>Untimed. You see whether you were right, and why, straight after each question.</p>
           <div className="grid g2" style={{ marginTop: 22 }}>
             <div className="card">
@@ -1721,16 +1795,13 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       const [n, setN] = useState(55);
       const cur = sizes.find(s => s[0] === n);
       return (
-        <div className="wrap fade" style={{ paddingTop: 32 }}>
-          <div className="eyebrow">Exam simulation</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>Sit it like the real thing</h1>
+        <div className="wrap" style={{ paddingTop: 44 }}>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", maxWidth: "20ch" }}>Sit it like the real thing</h1>
           <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>Timed, weighted across the four domains in the official proportions, and no feedback until you finish. You get an estimated score out of 1000 and a breakdown by skill.</p>
-          <div className="grid g3" style={{ marginTop: 22 }}>
+          <div className="sizes" role="group" aria-label="Exam length">
             {sizes.map(s => (
-              <button key={s[0]} type="button" className="card" aria-pressed={n === s[0]} onClick={() => setN(s[0])}
-                style={{ textAlign: "left", cursor: "pointer", font: "inherit", color: "inherit", borderColor: n === s[0] ? "var(--ink)" : "var(--line)", boxShadow: n === s[0] ? "0 0 0 3px var(--gold)" : "none" }}>
-                <div className="eyebrow">{s[2]}</div>
-                <div className="stat" style={{ marginTop: 8 }}><b>{s[0]} questions</b><span>{s[1]} minutes</span></div>
+              <button key={s[0]} type="button" aria-pressed={n === s[0]} onClick={() => setN(s[0])}>
+                <span className="mute small">{s[2]}</span><b>{s[0]} questions</b><span>{s[1]} minutes</span>
               </button>
             ))}
           </div>
@@ -1750,9 +1821,8 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
 
     function FinalReview() {
       return (
-        <div className="wrap fade" style={{ paddingTop: 32 }}>
-          <div className="eyebrow">Final review</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", marginTop: 8 }}>The night-before sheet</h1>
+        <div className="wrap" style={{ paddingTop: 44 }}>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", maxWidth: "20ch" }}>The night-before sheet</h1>
           <p className="mute" style={{ marginTop: 10, maxWidth: "64ch" }}>The comparisons the exam returns to most often, in one place. If every row here makes sense to you, you are in good shape.</p>
 
           <h2>Question formats you will meet</h2>
