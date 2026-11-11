@@ -218,7 +218,7 @@
     .pl ol.steps li::marker { font-weight:600; }
   </style>
   <!-- LAB:HEAD:START -->
-  <meta name="description" content="Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.">
+  <meta name="description" content="Practice for the Microsoft Power BI Data Analyst exam: 140 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/pl300_exam_prep.html">
@@ -227,12 +227,12 @@
   <meta property="og:url" content="https://tatwan.github.io/pl300_exam_prep.html">
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="PL-300 Exam Prep — ML_LAB">
-  <meta property="og:description" content="133 practice questions, timed exams, study guide and final review for Power BI PL-300.">
+  <meta property="og:description" content="140 practice questions, timed exams, study guide and final review for Power BI PL-300.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="PL-300 Exam Prep — ML_LAB">
-  <meta name="twitter:description" content="133 practice questions, timed exams, study guide and final review for Power BI PL-300.">
+  <meta name="twitter:description" content="140 practice questions, timed exams, study guide and final review for Power BI PL-300.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -246,7 +246,7 @@
   "@context": "https://schema.org",
   "@type": "LearningResource",
   "name": "PL-300 Exam Prep",
-  "description": "Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.",
+  "description": "Practice for the Microsoft Power BI Data Analyst exam: 140 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.",
   "url": "https://tatwan.github.io/pl300_exam_prep.html",
   "learningResourceType": "Exam prep",
   "educationalLevel": "Certification",
@@ -293,12 +293,14 @@
           "Dual storage mode lets a table act as Import or DirectQuery depending on the query. Use it for dimension tables shared by Import and DirectQuery fact tables.",
           "Connecting to a shared (published) semantic model creates a live connection: you reuse the existing model and measures instead of rebuilding them.",
           "Data source settings (File > Options and settings) is where you change the source, edit credentials and set privacy levels: Private, Organizational or Public.",
-          "Parameters (Manage Parameters) replace hard-coded values such as server or folder path, so you can switch dev, test and prod without editing each query."
+          "Parameters (Manage Parameters) replace hard-coded values such as server or folder path, so you can switch dev, test and prod without editing each query.",
+          "A Power BI Data Source (.pbids) file pre-configures the server, database and connection mode for report authors. A Power BI Template (.pbit) file exports the report layout, queries and model schema without any data."
         ],
         traps: [
           "A 'Formula.Firewall' error when combining sources is a privacy level problem, not a credentials problem.",
           "If the question says 'minimize development effort' and a certified semantic model already exists, connect to it. Do not rebuild it.",
-          "Incremental refresh needs two Date/Time parameters named exactly RangeStart and RangeEnd."
+          "Incremental refresh needs two case-sensitive Date/Time parameters named exactly RangeStart and RangeEnd, plus a query step that filters the date column with them.",
+          "Use .pbids to share a data source connection shortcut; use .pbit to share a report and model skeleton without rows."
         ] },
       { id: "1.2", name: "Profile and clean the data",
         points: [
@@ -324,12 +326,14 @@
           "Reference creates a new query that starts from the output of another, so changes flow through. Duplicate copies all the steps and is independent.",
           "Clear 'Enable load' on staging queries so they are not loaded into the model. Clear 'Include in report refresh' for static data.",
           "Star schema: fact tables hold keys and numeric values at one grain; dimension tables hold one row per entity with descriptive attributes.",
-          "Data types matter: Text for codes with leading zeros, Fixed decimal number for currency, Whole number for keys, Date instead of Date/Time when time is not needed."
+          "Data types matter: Text for codes with leading zeros, Fixed decimal number for currency, Whole number for keys, Date instead of Date/Time when time is not needed.",
+          "Query folding pushes Power Query steps back to the source database as native SQL. Right-click a step and check 'View Native Query' to verify folding is active; it is critical for DirectQuery performance and required for Incremental Refresh."
         ],
         traps: [
           "A relationship needs a single column on each side. For a composite key, build one combined key column in both tables.",
           "A referenced query breaks if the source query's output columns change. A duplicate does not.",
-          "Group By in Power Query reduces rows before load. It is a model-size tool, not only a summary tool."
+          "Group By in Power Query reduces rows before load. It is a model-size tool, not only a summary tool.",
+          "'View Native Query' being grayed out means query folding broke. Adding an Index column, buffering or using non-foldable custom M functions forces Power Query to evaluate subsequent steps locally in memory."
         ] },
       { id: "2.1", name: "Design and implement a data model",
         points: [
@@ -339,12 +343,14 @@
           "A common date table needs one row per day, no gaps, unique values and a Date column. Then use 'Mark as date table'.",
           "Column properties: Sort by column (month name by month number), Data category (City, Web URL), Default summarization (Don't summarize for years and keys), Format, Hide in report view.",
           "Calculated columns are computed at refresh and stored per row: use them when you need the value on a slicer, axis or filter. Measures are computed at query time: use them for aggregations.",
-          "Calculated tables are built with DAX at refresh: date tables (CALENDAR, CALENDARAUTO), role-playing copies, summary tables."
+          "Calculated tables are built with DAX at refresh: date tables (CALENDAR, CALENDARAUTO), role-playing copies, summary tables.",
+          "Numeric range (what-if) parameters generate a table with GENERATESERIES and a SELECTEDVALUE measure so users can test scenarios with a slicer. Field parameters let users dynamically switch which measures or dimensions appear in a visual."
         ],
         traps: [
           "If an answer says 'create a measure' but the value must be used in a slicer, it is wrong. You need a column.",
           "Many-to-many and bidirectional relationships are rarely the intended answer when a star schema option exists.",
-          "Month names sort alphabetically until you set Sort by column."
+          "Month names sort alphabetically until you set Sort by column.",
+          "Don't confuse the three parameter types: Power Query parameters switch sources/environments, Numeric range parameters model 'what-if' numbers, and Field parameters swap visual axes or measures."
         ] },
       { id: "2.2", name: "Create model calculations by using DAX",
         points: [
@@ -396,6 +402,7 @@
         points: [
           "Bookmarks capture Data (filters, slicers, sort), Display (visibility, spotlight) and Current page. Clear 'Data' when a bookmark should only show or hide visuals.",
           "The Selection pane controls visibility, layer order, grouping and tab order.",
+          "Field parameters let readers use a slicer to dynamically swap the dimension or measure shown in a visual without maintaining overlapping visuals and bookmarks.",
           "Edit interactions sets how one visual affects another: Filter, Highlight or None.",
           "Sync slicers controls which pages a slicer applies to and where it is visible.",
           "Drillthrough: put the field in the Drill through well of the target page. Users right-click a data point, or use a drillthrough button.",
@@ -434,12 +441,15 @@
           "Endorsement: anyone with write permission can Promote. Only people authorized by the Fabric admin can Certify.",
           "An on-premises data gateway is needed to refresh or query sources inside a private network. Cloud sources such as Azure SQL Database do not need one.",
           "Standard mode gateways serve many users and support DirectQuery. Personal mode is for one person and Import refresh only.",
-          "Scheduled refresh: up to 8 times a day on shared capacity (Pro), up to 48 on Premium or Fabric capacity."
+          "Scheduled refresh: up to 8 times a day on shared capacity (Pro), up to 48 on Premium or Fabric capacity.",
+          "Deployment pipelines manage content across Development, Test and Production workspaces. Deployment parameter rules switch database connection strings or server parameters automatically between stages.",
+          "Workspace Lineage view displays upstream data sources and gateways and lets you run downstream impact analysis across workspaces before changing a semantic model."
         ],
         traps: [
           "An alert question that mentions a report page is a trick. Pin the visual to a dashboard first.",
           "Publishing from Desktop creates or overwrites both the report and its semantic model.",
-          "A gateway is about network location, not about the type of database."
+          "A gateway is about network location, not about the type of database.",
+          "Deploying a semantic model in a deployment pipeline does not overwrite target data source credentials when deployment rules are used."
         ] },
       { id: "4.2", name: "Secure and govern Power BI items",
         points: [
@@ -448,6 +458,7 @@
           "Row-level security (RLS): define roles and DAX filters in Power BI Desktop (Manage roles), then assign users or security groups to the roles in the service.",
           "Dynamic RLS uses USERPRINCIPALNAME() to compare the signed-in user with a column in the model.",
           "RLS restricts only users with Viewer access (and app consumers). Admins, Members and Contributors see all data.",
+          "Object-level security (OLS) restricts access to sensitive tables or columns and hides their metadata completely so unauthorized users cannot see those fields in the Fields list. OLS is configured in model roles using Tabular Editor or TMDL.",
           "Build permission on a semantic model lets people create their own reports from it without workspace access.",
           "Item-level sharing: share a single report or dashboard by link or direct access, with optional reshare and Build rights.",
           "Sensitivity labels come from Microsoft Purview Information Protection and stay with the data when it is exported to Excel, PowerPoint or PDF."
@@ -455,6 +466,7 @@
         traps: [
           "'RLS is not working for one user' usually means that user has Contributor or higher on the workspace.",
           "Microsoft 365 groups cannot be added to RLS roles. Use security groups.",
+          "Hiding a column in Report or Model view is only a cosmetic convenience, not security—users with Build access or Analyze in Excel can still see it. True column protection requires OLS.",
           "Always pick the least-privileged role that meets the requirement."
         ] }
     ];
@@ -516,7 +528,7 @@
         correct: 2,
         explanation: "Data source settings lists every source used by the file. Edit Permissions is where you change credentials and the privacy level. Manage roles is for row-level security." },
       { id: 7, skill: "1.1", type: "multi",
-        question: "Which two statements about DirectQuery are true? Each correct answer presents a complete solution.",
+        question: "Which two statements about DirectQuery are true? Each correct answer presents part of the solution.",
         options: ["The data is cached in the model and updated only by scheduled refresh", "Each visual sends queries to the source when it renders", "Report performance depends on the performance of the source system", "All Power Query transformations are supported without restriction", "It cannot be used with SQL Server"],
         correct: [1, 2],
         explanation: "With DirectQuery, visuals query the source at render time, so the speed of the source drives report speed. Data is not cached by a scheduled refresh, and only transformations that fold to the source are allowed." },
@@ -785,7 +797,7 @@
         correct: 0,
         explanation: "A calculation group defines each time calculation once with SELECTEDMEASURE(). The item then applies to whichever measure is on the visual, so 4 items cover all 25 measures." },
       { id: 55, skill: "2.2", type: "multi",
-        question: "Which two statements about calculation groups in Power BI Desktop are true? Each correct answer presents a complete solution.",
+        question: "Which two statements about calculation groups in Power BI Desktop are true? Each correct answer presents part of the solution.",
         options: ["They are created in Model view", "Creating one turns on the 'Discourage implicit measures' option for the model", "They can only be created in Power Query Editor", "They work with implicit measures created by dragging a numeric column onto a visual", "They require DirectQuery storage mode"],
         correct: [0, 1],
         explanation: "Calculation groups are authored in Model view. Because calculation items apply only to explicit measures, creating one enables 'Discourage implicit measures', so dragged numeric columns no longer auto-aggregate." },
@@ -1071,7 +1083,7 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
         correct: 0,
         explanation: "Changes to reports in the workspace reach app consumers only when the app is updated. Refreshed data flows through on its own, but changes to report design do not." },
       { id: 109, skill: "4.1", type: "multi",
-        question: "You plan to set data alerts on a dashboard. Which three tile types support data alerts? Each correct answer presents a complete solution.",
+        question: "You plan to set data alerts on a dashboard. Which three tile types support data alerts? Each correct answer presents part of the solution.",
         options: ["Card", "KPI", "Gauge", "Line chart", "Table", "Slicer"],
         correct: [0, 1, 2],
         explanation: "Data alerts are available only on dashboard tiles that show a single number: cards, KPIs and gauges." },
@@ -1200,17 +1212,61 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
         question: "You need to distribute content to the executives. What should you do?",
         options: ["Add the executives to the workspace as Contributors", "Publish a workspace app and give the executives access to it", "Email the executives a link to Power BI Desktop", "Give the executives Build permission on the semantic model"],
         correct: 1,
-        explanation: "An app delivers a curated, read-only experience to a group of consumers and keeps them out of the workspace where development happens." }
+        explanation: "An app delivers a curated, read-only experience to a group of consumers and keeps them out of the workspace where development happens." },
+
+      // ═════════ High-yield blueprint additions (Q134–Q140) ═════════
+      { id: 134, skill: "1.3", type: "single",
+        question: "You configure incremental refresh for a large SQL Server table. In Power Query Editor, you notice that 'View Native Query' is active on early steps, but becomes grayed out after a certain step. Which transformation caused query folding to break?",
+        options: ["Filtered Rows based on a Date column", "Removed Columns", "Added Index Column", "Renamed Columns"],
+        correct: 2,
+        explanation: "Adding an index column requires evaluating the entire table sequentially in memory, so Power Query cannot fold it back into a single SQL query. Filters, column removals and column renames fold back to SQL Server." },
+      { id: 135, skill: "4.2", type: "single",
+        question: "A Human Resources semantic model contains an Employee table with a Salary column. General managers should see employee job titles and departments, but must not be able to see the Salary column or even know that the column exists in the field list. What should you configure?",
+        options: ["Row-level security (RLS) with a filter on Salary", "Object-level security (OLS) to restrict the Salary column", "Hide the Salary column in Model view", "Set the column summarization to Don't summarize"],
+        correct: 1,
+        explanation: "Object-level security (OLS) secures both the data and the metadata of the column. Unauthorized users cannot see the column in visual field pickers or query it via XMLA or Analyze in Excel. RLS filters rows rather than columns, and hiding a column is cosmetic only." },
+      { id: 136, skill: "4.1", type: "single",
+        question: "Your company uses Microsoft Fabric deployment pipelines with Development, Test and Production stages. When deploying a semantic model from Test to Production, you must ensure that it automatically connects to the Production SQL database instead of the Test database. What should you configure in the pipeline?",
+        options: ["A sensitivity label", "Deployment parameter rules", "Workspace Viewer permissions", "An on-premises data gateway in personal mode"],
+        correct: 1,
+        explanation: "Deployment rules in a deployment pipeline allow you to specify parameter or data source replacements (such as server or database name) that apply automatically when an item is deployed to the target stage." },
+      { id: 137, skill: "1.1", type: "single",
+        question: "You want to make it easy for 30 report authors to connect to the company's Azure SQL data warehouse. They should be able to open a small file that launches Power BI Desktop with the server address, database name and DirectQuery mode already filled in, without containing any tables or visuals yet. What file type should you distribute?",
+        options: ["A Power BI Data Source (.pbids) file", "A Power BI Template (.pbit) file", "A Power BI Desktop (.pbix) file", "A theme (.json) file"],
+        correct: 0,
+        explanation: "A .pbids file stores only the data source connection definition so authors skip typing server and database names. A .pbit template stores a full report layout, queries and model schema without data rows. A .pbix file includes the data as well." },
+      { id: 138, skill: "1.1", type: "dropdown",
+        question: "You need to configure incremental refresh on an Orders query in Power Query Editor before defining the policy on the table. Complete the parameter setup.",
+        blanks: [
+          { label: "Exact names required for the two parameters (case-sensitive):", options: ["RangeStart and RangeEnd", "StartDate and EndDate", "MinDate and MaxDate", "FromDate and ToDate"], correct: 0 },
+          { label: "Required data type for both parameters:", options: ["Date/Time", "Date", "Text", "Whole Number"], correct: 0 }
+        ],
+        explanation: "Incremental refresh requires two parameters named exactly RangeStart and RangeEnd (case-sensitive) with the Date/Time data type, even if the table's column is a Date." },
+      { id: 139, skill: "2.1", type: "dropdown",
+        question: "Match each reporting or modeling requirement to the appropriate type of parameter in Power BI Desktop.",
+        blanks: [
+          { label: "Let report readers use a slicer to switch a bar chart's axis between Region, Category and Brand.", options: ["Field parameter", "Numeric range (what-if) parameter", "Power Query parameter"], correct: 0 },
+          { label: "Let report readers move a slider from 0% to 25% to simulate how a price discount affects a profit measure.", options: ["Field parameter", "Numeric range (what-if) parameter", "Power Query parameter"], correct: 1 },
+          { label: "Let a model author switch the source SQL Server hostname from Dev to Test across 12 queries in one step.", options: ["Field parameter", "Numeric range (what-if) parameter", "Power Query parameter"], correct: 2 }
+        ],
+        explanation: "Field parameters swap which columns or measures appear in a visual. Numeric range (what-if) parameters create a GENERATESERIES table and SELECTEDVALUE measure for scenario sliders. Power Query parameters replace values inside M queries such as server names or file paths." },
+      { id: 140, skill: "4.1", type: "single",
+        question: "You plan to rename several measures in a shared semantic model. First, you need to see every report and dashboard across all workspaces that depends on the model, and send a notification to the contacts of those downstream items. Which feature in the Power BI service should you use?",
+        options: ["Lineage view and semantic model impact analysis", "Performance Analyzer", "Deployment pipelines", "Test as role on the Security page"],
+        correct: 0,
+        explanation: "Switching a workspace to Lineage view shows the upstream data sources and gateways and the downstream reports and dashboards. Selecting Impact analysis on a semantic model lists all affected workspaces and items and lets you notify their contacts." }
     ];
 
     // ── Final review: comparison tables for the last read before the exam ──
     const REVIEW = [
-      { title: "Storage modes", cols: ["Mode", "Where the data lives", "Choose it when"], rows: [
+      { title: "Storage modes & file types", cols: ["Option", "Where the data lives", "Choose it when"], rows: [
         ["Import", "Copied into the model", "Best performance and full features; data can be as old as the last refresh"],
         ["DirectQuery", "Stays in the source", "Near real-time data, very large tables, or data that must not be copied"],
         ["Dual", "Both", "Dimension tables shared by Import and DirectQuery fact tables"],
         ["Direct Lake", "Delta tables in Fabric OneLake", "Large Fabric data with Import-like speed and no data copy"],
-        ["Live connection", "A published semantic model", "Reusing an existing model with the least effort"]
+        ["Live connection", "A published semantic model", "Reusing an existing model with the least effort"],
+        [".pbids file", "Connection shortcut only", "Pre-configuring server, database and mode for report authors"],
+        [".pbit file", "Schema, queries & visuals (no data)", "Sharing a reusable report and model template without rows"]
       ] },
       { title: "Power Query: which transformation", cols: ["You need to", "Use"], rows: [
         ["Turn month columns into rows", "Unpivot (prefer Unpivot other columns)"],
@@ -1222,7 +1278,9 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
         ["Reuse cleaned data in a second query and stay in sync", "Reference"],
         ["Make an independent copy of a query", "Duplicate"],
         ["Keep a helper query out of the model", "Clear Enable load"],
-        ["Summarize before loading", "Group By"]
+        ["Summarize before loading", "Group By"],
+        ["Confirm transformations push SQL to the source (query folding)", "Right-click step > View Native Query (avoid Index columns before filters)"],
+        ["Partition refresh for a large table", "Incremental refresh with Date/Time parameters RangeStart and RangeEnd"]
       ] },
       { title: "DAX you should recognize on sight", cols: ["Need", "Function"], rows: [
         ["Change the filter context", "CALCULATE"],
@@ -1242,6 +1300,8 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       ] },
       { title: "Report features: what solves what", cols: ["Requirement", "Feature"], rows: [
         ["Show or hide visuals with buttons", "Bookmarks with the Selection pane"],
+        ["Swap a visual's axis or measure with a slicer", "Field parameter"],
+        ["Simulate a numeric slider (e.g. discount %) in a measure", "Numeric range (what-if) parameter"],
         ["Stop a slicer affecting one visual", "Edit interactions: None"],
         ["One slicer across some pages", "Sync slicers"],
         ["Right-click to a detail page", "Drillthrough"],
@@ -1267,9 +1327,12 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
         ["Notify when a number crosses a threshold", "Data alert on a dashboard card, KPI or gauge"],
         ["Send a snapshot on a schedule", "Subscription"],
         ["Refresh from a private network", "On-premises data gateway, standard mode"],
+        ["Promote content across Dev, Test and Prod", "Deployment pipeline with deployment parameter rules"],
+        ["See upstream sources and downstream report dependencies", "Workspace Lineage view & impact analysis"],
         ["Mark content as trusted", "Promoted (any writer) or Certified (authorized users)"],
         ["Let others build reports from a model", "Build permission"],
         ["Restrict rows per user", "Row-level security: roles in Desktop, members in the service"],
+        ["Hide sensitive column and its metadata from the field list", "Object-level security (OLS) configured via Tabular Editor or TMDL"],
         ["Classify and protect data on export", "Sensitivity labels from Microsoft Purview"]
       ] }
     ];
@@ -1927,10 +1990,9 @@ Change vs Prior = [Sales] - [ B ]( [Sales] )`,
       <div>
         <div class="lab-about__label">// About this playbook</div>
         <h2 id="lab-about-h">PL-300 Exam Prep</h2>
-        <p>Practice for the Microsoft Power BI Data Analyst exam: 133 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.</p>
-        <p>It covers 133 original questions across the four PL-300 domains in single-answer, multiple-answer, drop-down, sequence, yes/no series and case study formats, with study notes on Power Query, data modeling, DAX, report design, workspaces and row-level security. It is written for candidates for the Microsoft Power BI Data Analyst Associate certification who want to practice, find their weak areas and do a last review.</p>
-        <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
-          attached &mdash; something you can paste into a design note or defend in a review.</p>
+        <p>Practice for the Microsoft Power BI Data Analyst exam: 140 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.</p>
+        <p>It covers 140 original questions across the four PL-300 domains in single-answer, multiple-answer, drop-down, sequence, yes/no series and case study formats, with study notes on Power Query, data modeling, DAX, report design, workspaces and row-level and object-level security. It is written for candidates for the Microsoft Power BI Data Analyst Associate certification who want to practice, find their weak areas and do a last review.</p>
+        <p>Every question explains both why the correct answer works and why each distractor falls short, linking directly back to the skill notes on the official exam outline.</p>
         <div class="lab-about__facts">
           <span class="lab-about__fact">Exam prep</span>
           <span class="lab-about__fact">Power BI PL-300</span>
