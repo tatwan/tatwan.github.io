@@ -25,16 +25,15 @@
   var ROOT = (script && script.getAttribute('data-lab-root')) || '/';
 
   var NAV = [
-    { label: 'Decide', href: ROOT + '#routes' },
-    { label: 'Playbooks', href: ROOT + '#index' },
-    { label: 'Paths', href: ROOT + '#paths' },
-    { label: 'About', href: ROOT + '#about' }
+    { label: 'The collection', href: ROOT + '#index' },
+    { label: 'Learning paths', href: ROOT + '#paths' },
+    { label: 'About Tarek', href: ROOT + '#about' }
   ];
 
   var LINKS = [
     { label: 'GitHub', href: 'https://github.com/tatwan' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tarekatwan' },
-    { label: 'Site', href: 'https://www.tarekatwan.com' }
+    { label: 'Ensemble Methods', href: 'https://www.ensemblemethods.com' }
   ];
 
   /* ---------------------------------------------------------------- *
@@ -55,7 +54,6 @@
     return node;
   }
 
-  var ICON_MARK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#060912" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 19h14M7 19V9m5 10V5m5 14v-7"/></svg>';
   var ICON_SEARCH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/></svg>';
   var ICON_CHEVRON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
 
@@ -67,9 +65,8 @@
    * ---------------------------------------------------------------- */
   function buildHeader() {
     var brand = el('a', { class: 'lab-brand', href: ROOT, 'aria-label': 'ML_LAB home' }, [
-      el('span', { class: 'lab-brand__mark', html: ICON_MARK, 'aria-hidden': 'true' }),
       el('span', { class: 'lab-brand__name', text: 'ML_LAB' }),
-      el('span', { class: 'lab-brand__by', text: '/ TAREK ATWAN' })
+      el('span', { class: 'lab-brand__by', text: 'A field guide to data & AI' })
     ]);
 
     var nav = el('nav', { class: 'lab-nav', 'aria-label': 'Sections' },
@@ -82,7 +79,7 @@
       'aria-label': 'Search all playbooks (' + HOTKEY + ')'
     }, [
       el('span', { html: ICON_SEARCH, 'aria-hidden': 'true' }),
-      el('span', { class: 'lab-search__label', text: 'Search everything' }),
+      el('span', { class: 'lab-search__label', text: 'Search' }),
       el('kbd', { class: 'lab-kbd', text: HOTKEY })
     ]);
 
@@ -92,7 +89,7 @@
   function buildCrumb() {
     if (!PAGE) return null;
     return el('div', { class: 'lab-crumb lab-chrome' }, [
-      el('a', { href: ROOT, text: '← All playbooks' }),
+      el('a', { href: ROOT + '#index', text: 'All resources' }),
       el('span', { class: 'lab-crumb__sep', text: '/' }),
       el('span', { class: 'lab-crumb__here', text: PAGE })
     ]);
@@ -102,7 +99,7 @@
     return el('footer', { class: 'lab-footer lab-chrome' }, [
       el('span', {
         text: '© ' + new Date().getFullYear() +
-          ' ML_LAB · built by Tarek Atwan · browser-based, no sign-up'
+          ' Tarek Atwan · An independent collection.'
       }),
       el('span', { class: 'lab-footer__links' },
         LINKS.map(function (l) {

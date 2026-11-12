@@ -5,7 +5,7 @@
     { "id": "model", "label": "Pick the model and the method", "blurb": "Which algorithm, which features, which data foundation." },
     { "id": "measure", "label": "Measure whether it works", "blurb": "The right metric for classical models and for LLMs." },
     { "id": "llm", "label": "Build with LLMs", "blurb": "RAG, fine-tuning, LoRA, quantization — and when not to." },
-    { "id": "exam", "label": "Pass a certification", "blurb": "AWS AIF-C01, AIP-C01 and Microsoft DP-700." }
+    { "id": "exam", "label": "Pass a certification", "blurb": "AWS AIF-C01, AIP-C01, Microsoft DP-700 and PL-300." }
   ],
   "modules": [
     {
@@ -215,6 +215,19 @@
       "time": "7 weeks",
       "level": "Graduate",
       "routes": ["model"]
+    },
+    {
+      "num": "16",
+      "id": "pl300",
+      "title": "PL-300 Exam Prep",
+      "href": "pl300_exam_prep.html",
+      "blurb": "Practice for the Microsoft Power BI Data Analyst exam: 140 questions in the real exam formats with an explanation behind every answer, timed simulations, a study guide for every skill on the outline, weak-area tracking and a final review sheet.",
+      "short": "140 practice questions, timed exams, study guide and final review for Power BI PL-300.",
+      "type": "Exam prep",
+      "topic": "Power BI PL-300",
+      "time": "30–100 min",
+      "level": "Certification",
+      "routes": ["exam"]
     }
   ]
 }

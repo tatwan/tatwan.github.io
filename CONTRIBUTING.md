@@ -48,27 +48,16 @@ tatwan.github.io/
 ### 1. Create HTML File
 Follow the naming convention above and place in the root directory.
 
-### 2. Update index.html
-Add a new card in the resources grid section:
+### 2. Update the catalogue
+Add an entry to `assets/modules.json`, including its type, topic, and routes. This is the source for the full homepage collection and goal filter.
 
-```html
-<!-- Card N: Your New Tool -->
-<a href="your_new_tool.html" class="resource-card rounded-lg p-6 block fade-up delay-N">
-  <!-- Card content -->
-</a>
+### 3. Regenerate the site
+```bash
+node tools/build-site.mjs
+node tools/retrofit-pages.mjs
 ```
 
-### 3. Update sitemap.xml
-Add the new page:
-
-```xml
-<url>
-  <loc>https://tatwan.github.io/your_new_tool.html</loc>
-  <lastmod>YYYY-MM-DD</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.8</priority>
-</url>
-```
+The first command updates the catalogue, featured resources, learning paths, structured data, sitemap, and search index. The second adds the shared shell and page metadata. Do not edit content inside `LAB:*:START/END` markers by hand. Curated resource IDs and learning paths are selected in `tools/build-site.mjs`.
 
 ### 4. Test Locally
 ```bash
@@ -99,9 +88,9 @@ tatwan.github.io/
 
 ## Design Guidelines
 
-- **Consistency**: Match the dark theme aesthetic (slate background, amber accents)
-- **Typography**: Use JetBrains Mono for code/technical content
-- **Interactivity**: Include hover effects and micro-animations
+- **Consistency**: Use the Editorial Lab shell (navy, cream, and restrained gold accents); keep each interactive tool’s own canvas theme
+- **Typography**: Use readable sans-serif body text and serif editorial headings; reserve monospace for code
+- **Interactivity**: Use subtle hover underlines and visible keyboard focus; avoid repeated decorative arrows
 - **Mobile-first**: Ensure responsive design
 - **SEO**: Include proper meta tags, title, and description
 

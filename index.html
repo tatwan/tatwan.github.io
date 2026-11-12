@@ -7,7 +7,7 @@
 
   <title>ML_LAB — Decision playbooks for ML and GenAI practitioners | Tarek Atwan</title>
   <meta name="description"
-    content="Seventeen interactive decision playbooks for data scientists and ML engineers: choose an algorithm, pick an evaluation metric, decide between RAG and fine-tuning, and prepare for AWS and Microsoft AI certifications. Free, browser-based, no sign-up.">
+    content="Interactive decision playbooks for data scientists and ML engineers: choose an algorithm, pick an evaluation metric, decide between RAG and fine-tuning, and prepare for AWS and Microsoft AI certifications. Free, browser-based, no sign-up.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/">
@@ -17,244 +17,19 @@
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="ML_LAB — Decision playbooks for ML and GenAI practitioners">
   <meta property="og:description"
-    content="Seventeen interactive playbooks that take you from a question you are stuck on to a decision you can defend. Algorithms, features, metrics, LLM techniques and certification prep.">
+    content="Interactive playbooks that take you from a question you are stuck on to a decision you can defend. Algorithms, features, metrics, LLM techniques and certification prep.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="ML_LAB — Decision playbooks for ML and GenAI practitioners">
   <meta name="twitter:description"
-    content="Seventeen interactive playbooks that take you from a question you are stuck on to a decision you can defend.">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+    content="Interactive playbooks that take you from a question you are stuck on to a decision you can defend.">
 
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
   <script defer src="/assets/lab.js"></script>
-
-  <style>
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background: var(--lab-ink-950);
-      color: var(--lab-text);
-      font-family: var(--lab-mono);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-
-    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-
-    a { color: var(--lab-amber); }
-
-    /* ---------- hero ---------- */
-    .hero { padding: 64px 0 44px; border-bottom: 1px solid var(--lab-line); }
-
-    .eyebrow {
-      font-size: 10.5px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--lab-amber);
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-family: var(--lab-serif);
-      font-weight: 400;
-      font-size: clamp(38px, 6.4vw, 66px);
-      line-height: 1.06;
-      letter-spacing: -0.01em;
-      margin: 0 0 18px;
-      color: #f8fafc;
-    }
-
-    .hero h1 em { font-style: italic; color: var(--lab-amber); }
-
-    .hero p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: var(--lab-text-2);
-      max-width: 620px;
-      margin: 0 0 12px;
-    }
-
-    .hero .byline { font-size: 12px; color: var(--lab-text-3); max-width: 620px; }
-    .hero .byline a { color: var(--lab-text-2); text-decoration: underline; text-underline-offset: 3px; }
-    .hero .byline a:hover { color: var(--lab-amber); }
-
-    /* ---------- section furniture ---------- */
-    section { padding: 48px 0; border-bottom: 1px solid var(--lab-line); }
-
-    .sec-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 26px;
-    }
-
-    .sec-label {
-      font-size: 10.5px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--lab-text-3);
-    }
-
-    .sec-note { font-size: 11.5px; color: var(--lab-text-4); }
-
-    /* ---------- route tiles ---------- */
-    .routes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(198px, 1fr));
-      gap: 14px;
-    }
-
-    .route {
-      display: flex;
-      flex-direction: column;
-      padding: 20px 18px 18px;
-      border: 1px solid var(--lab-line-strong);
-      border-radius: var(--lab-r);
-      background: linear-gradient(180deg, #0e1524 0%, #0a101c 100%);
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.16s ease, transform 0.16s ease;
-    }
-
-    .route:hover { border-color: var(--lab-amber); transform: translateY(-2px); }
-    .route:hover .route__title { color: var(--lab-amber); }
-
-    .route__top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      color: var(--lab-amber);
-    }
-
-    .route__count { font-size: 10px; letter-spacing: 0.14em; color: var(--lab-text-4); }
-
-    .route__title {
-      font-family: var(--lab-serif);
-      font-size: 21px;
-      line-height: 1.2;
-      color: #f1f5f9;
-      margin-bottom: 7px;
-      transition: color 0.16s ease;
-    }
-
-    .route__blurb { font-size: 11.5px; line-height: 1.6; color: var(--lab-text-2); }
-
-    /* ---------- index table ---------- */
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .filter {
-      font-family: var(--lab-mono);
-      font-size: 10.5px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 13px;
-      border-radius: 999px;
-      border: 1px solid var(--lab-line-strong);
-      background: transparent;
-      color: var(--lab-text-2);
-      cursor: pointer;
-      transition: all 0.14s ease;
-    }
-
-    .filter:hover { border-color: var(--lab-line-loud); color: var(--lab-text); }
-
-    .filter[aria-pressed="true"] {
-      background: var(--lab-amber);
-      border-color: var(--lab-amber);
-      color: var(--lab-amber-ink);
-    }
-
-    .table {
-      border: 1px solid var(--lab-line);
-      border-radius: var(--lab-r);
-      overflow: hidden;
-      background: var(--lab-ink-850);
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 44px 1fr 132px 128px 92px;
-      gap: 12px;
-      align-items: center;
-      padding: 13px 18px;
-      border-bottom: 1px solid var(--lab-line);
-      font-size: 12.5px;
-    }
-
-    .row:last-child { border-bottom: 0; }
-    .row[hidden] { display: none; }
-
-    .row--head {
-      background: #0d1422;
-      font-size: 9.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #566275;
-    }
-
-    .row__num { color: var(--lab-text-4); font-size: 11.5px; }
-    .row__title { color: #e9eef6; text-decoration: none; font-weight: 500; }
-    .row__title:hover { color: var(--lab-amber); text-decoration: underline; text-underline-offset: 3px; }
-    .row__blurb { display: block; font-size: 11px; color: var(--lab-text-3); margin-top: 3px; line-height: 1.5; }
-    .row__meta { font-size: 11.5px; color: var(--lab-text-2); }
-    .row__time { font-size: 11.5px; color: var(--lab-text-3); }
-
-    /* ---------- paths ---------- */
-    .paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-
-    .path {
-      border: 1px solid var(--lab-line);
-      border-radius: var(--lab-r);
-      padding: 20px;
-      background: var(--lab-ink-850);
-    }
-
-    .path h3 {
-      font-family: var(--lab-serif);
-      font-size: 19px;
-      font-weight: 400;
-      margin: 0 0 4px;
-      color: var(--lab-amber);
-    }
-
-    .path > p { font-size: 11.5px; color: var(--lab-text-3); margin: 0 0 14px; line-height: 1.6; }
-    .path ol { margin: 0; padding-left: 18px; }
-    .path li { font-size: 12.5px; color: var(--lab-text-2); margin-bottom: 7px; line-height: 1.5; }
-    .path li a { color: var(--lab-text); text-decoration: none; }
-    .path li a:hover { color: var(--lab-amber); text-decoration: underline; text-underline-offset: 3px; }
-
-    /* ---------- about ---------- */
-    .about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }
-
-    .about p { font-size: 13.5px; line-height: 1.8; color: var(--lab-text-2); margin: 0 0 14px; max-width: 560px; }
-    .about p a { text-decoration: underline; text-underline-offset: 3px; }
-
-    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 16px; }
-    .stat__n { font-family: var(--lab-serif); font-size: 32px; color: var(--lab-amber); line-height: 1; }
-    .stat__l { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lab-text-3); margin-top: 6px; }
-
-    .whatsnew { font-size: 11.5px; line-height: 1.9; color: var(--lab-text-3); }
-    .whatsnew strong { color: var(--lab-text-2); font-weight: 600; }
-
-    @media (max-width: 860px) {
-      .row { grid-template-columns: 34px 1fr; }
-      .row__meta, .row__time, .row--head .row__meta, .row--head .row__time { display: none; }
-      .about { grid-template-columns: 1fr; gap: 32px; }
-    }
-  </style>
+  <link rel="stylesheet" href="/assets/home.css">
+  <script defer src="/assets/home.js"></script>
 
   <!-- LAB:JSONLD:START -->
   <script type="application/ld+json">
@@ -428,377 +203,68 @@
   </script>
         <!-- LAB:JSONLD:END -->
 </head>
-
-<body>
-  <main id="main">
-
-    <div class="wrap">
-      <div class="hero">
-        <div class="eyebrow">// 17 playbooks &middot; updated <!-- LAB:DATE:START -->2026-11<!-- LAB:DATE:END --></div>
-        <h1>What are you trying<br>to <em>decide</em>?</h1>
-        <p>
-          Pick the question you are stuck on. Every route ends in a defensible decision, a checklist, or a
-          passed exam &mdash; not a reading list. Nothing to install, nothing to sign up for.
-        </p>
-        <p class="byline">
-          Built by <a href="https://www.tarekatwan.com" rel="noopener">Tarek Atwan</a> &mdash; twenty years in data
-          and AI, four books, four-time Pluralsight Elite instructor, Fortune 500 engagements across eight countries.
-          These are the calls that came up often enough to be worth writing down.
-        </p>
-      </div>
-    </div>
-
-    <section id="routes">
-      <div class="wrap">
-        <div class="sec-head">
-          <span class="sec-label">// Start from a question</span>
-          <span class="sec-note">Or press <kbd class="lab-kbd">/</kbd> to search every decision inside every playbook</span>
-        </div>
-        <!-- LAB:ROUTES:START -->
-        <div class="routes">
-          <a class="route" href="ai_opportunity_scorer.html">
-            <span class="route__top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7z"/><path d="M12 8v4m0 3h.01"/></svg>
-              <span class="route__count">02</span>
-            </span>
-            <span class="route__title">Decide if it is worth building</span>
-            <span class="route__blurb">Is this a real AI problem, and should you build, buy, or kill it?</span>
-          </a>
-          <a class="route" href="ml_algorithm_selector.html">
-            <span class="route__top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v6M12 9l-6 6M12 9l6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="17" r="2.2"/><circle cx="18" cy="17" r="2.2"/></svg>
-              <span class="route__count">04</span>
-            </span>
-            <span class="route__title">Pick the model and the method</span>
-            <span class="route__blurb">Which algorithm, which features, which data foundation.</span>
-          </a>
-          <a class="route" href="model_evaluation_interactive.html">
-            <span class="route__top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M6 20V11M11 20V6M16 20v-6M21 20V9"/></svg>
-              <span class="route__count">02</span>
-            </span>
-            <span class="route__title">Measure whether it works</span>
-            <span class="route__blurb">The right metric for classical models and for LLMs.</span>
-          </a>
-          <a class="route" href="genai_foundations_navigator.html">
-            <span class="route__top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="18" cy="7" r="2.4"/><circle cx="15" cy="17" r="2.4"/></svg>
-              <span class="route__count">04</span>
-            </span>
-            <span class="route__title">Build with LLMs</span>
-            <span class="route__blurb">RAG, fine-tuning, LoRA, quantization — and when not to.</span>
-          </a>
-          <a class="route" href="aws_ai_practitioner.html">
-            <span class="route__top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
-              <span class="route__count">06</span>
-            </span>
-            <span class="route__title">Pass a certification</span>
-            <span class="route__blurb">AWS AIF-C01, AIP-C01, Microsoft DP-700 and PL-300.</span>
-          </a>
-        </div>
+<body class="lab-home">
+<main id="main">
+<div id="editorial-refined">
+ <div class="masthead">
+  <section class="hero inner" aria-labelledby="home-title">
+   <div class="hero-copy"><div class="eyebrow">Practical knowledge, thoughtfully collected</div><h1 id="home-title">From “it depends”<br>to <em>what comes next.</em></h1><p>Interactive guides, courses, and decision tools for making sense of data and AI—and putting it to work.</p><div class="hero-actions"><a class="primary" href="#index">Explore the collection</a><a class="text-link" href="#paths">Find a learning path</a></div></div>
+   <aside class="path" aria-labelledby="hero-path-title">
+<!-- LAB:HERO-PATH:START -->
+<div class="eyebrow">A place to begin</div><h2 id="hero-path-title">Building with LLMs</h2><ol><li><a href="genai_foundations_navigator.html">GenAI Foundations Navigator</a></li><li><a href="genai_techniques_selector.html">GenAI Technique Selector</a></li><li><a href="rag-academy/">RAG Academy</a></li><li><a href="fm_evaluation_metrics.html">FM Evaluation Metrics</a></li></ol>
+        <!-- LAB:HERO-PATH:END -->
+   </aside>
+  </section>
+  <div class="author-line inner"><strong>Collected by Tarek Atwan</strong><span class="divider" aria-hidden="true"></span><span>Author, educator &amp; data and AI consultant</span></div>
+ </div>
+ <section class="curated inner" aria-labelledby="featured-title"><div class="section-heading"><h2 id="featured-title">A few good starting points</h2><p>Selected from the collection</p></div>
+<!-- LAB:FEATURED:START -->
+<div class="feature-layout"><a class="feature" href="ai_solution_navigator.html"><div><div class="eyebrow">In focus · AI strategy</div><h3>Does this problem<br>actually need AI?</h3><p>Start with the problem. Explore when rules, machine learning, or generative AI make the most sense.</p></div><div class="feature-foot"><b>AI Solution Navigator</b><span>Decision tool · 10 min</span></div></a><div class="reading-list"><a href="feature_engineering_playbook.html"><div class="eyebrow">Features · Decision tool</div><h3>Feature Engineering Playbook</h3><p>Encoding, scaling, outliers, feature creation and selection across tabular, text, time-series and image data.</p></a><a href="DataEngineering/index.html"><div class="eyebrow">Data platform · Course</div><h3>Data Engineering Foundations</h3><p>Vendor-neutral course through modern data engineering, from source systems to trusted decisions.</p></a><a href="pl300_exam_prep.html"><div class="eyebrow">Power BI PL-300 · Exam prep</div><h3>PL-300 Exam Prep</h3><p>140 practice questions, timed exams, study guide and final review for Power BI PL-300.</p></a></div></div>
+        <!-- LAB:FEATURED:END -->
+ </section>
+ <section class="collection inner" id="index" aria-labelledby="collection-title"><div class="section-heading"><h2 id="collection-title">The collection</h2><label class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg><input id="collection-search" type="search" aria-label="Search the collection" placeholder="Find a topic or resource"></label></div>
+  <div id="routes" class="collection-controls"><div class="filters" id="filters" aria-label="Filter resources"><button type="button" data-kind="" aria-pressed="true">All resources</button><button type="button" data-kind="Decision tool" aria-pressed="false">Decision tools</button><button type="button" data-kind="Course" aria-pressed="false">Courses</button><button type="button" data-kind="Exam prep" aria-pressed="false">Exam prep</button></div>
+  <label class="topic-select">Browse by goal<select id="collection-goal">
+<!-- LAB:ROUTES:START -->
+<option value="">All goals</option>
+<option value="scope">Decide if it is worth building</option>
+<option value="model">Pick the model and the method</option>
+<option value="measure">Measure whether it works</option>
+<option value="llm">Build with LLMs</option>
+<option value="exam">Pass a certification</option>
         <!-- LAB:ROUTES:END -->
-      </div>
-    </section>
-
-    <section id="index">
-      <div class="wrap">
-        <div class="sec-head">
-          <span class="sec-label">// The index &mdash; all 17</span>
-          <div class="filters" id="filters">
-            <button class="filter" type="button" aria-pressed="true" data-filter="">All</button>
-            <button class="filter" type="button" aria-pressed="false" data-filter="Decision tool">Decision tools</button>
-            <button class="filter" type="button" aria-pressed="false" data-filter="Course">Courses</button>
-            <button class="filter" type="button" aria-pressed="false" data-filter="Exam prep">Exam prep</button>
-          </div>
-        </div>
-        <!-- LAB:INDEX:START -->
-        <div class="table">
-          <div class="row row--head">
-            <span>ID</span><span>Playbook</span><span class="row__meta">Type</span><span class="row__meta">Topic</span><span class="row__time">Time</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Beginner">
-            <span class="row__num">00</span>
-            <span>
-              <a class="row__title" href="genai_foundations_navigator.html">GenAI Foundations Navigator</a>
-              <span class="row__blurb">Beginner-friendly tour of GenAI basics: grounding, RAG components, prompt engineering and core parameters.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">GenAI basics</span>
-            <span class="row__time">10–15 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Intermediate">
-            <span class="row__num">01</span>
-            <span>
-              <a class="row__title" href="ml_algorithm_selector.html">Algorithm Selector</a>
-              <span class="row__blurb">Interactive decision tree for finding the right ML algorithm for your problem and data.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">Modeling</span>
-            <span class="row__time">15 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Intermediate">
-            <span class="row__num">02</span>
-            <span>
-              <a class="row__title" href="feature_engineering_playbook.html">Feature Engineering Playbook</a>
-              <span class="row__blurb">Encoding, scaling, outliers, feature creation and selection across tabular, text, time-series and image data.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">Features</span>
-            <span class="row__time">20 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Intermediate">
-            <span class="row__num">03</span>
-            <span>
-              <a class="row__title" href="model_evaluation_interactive.html">Metric Decision Tree</a>
-              <span class="row__blurb">Choose the right evaluation metric for classification, regression and beyond.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">Evaluation</span>
-            <span class="row__time">20 min</span>
-          </div>
-          <div class="row" data-type="Course" data-level="Intermediate">
-            <span class="row__num">04</span>
-            <span>
-              <a class="row__title" href="DataEngineering/index.html">Data Engineering Foundations</a>
-              <span class="row__blurb">Vendor-neutral course through modern data engineering, from source systems to trusted decisions.</span>
-            </span>
-            <span class="row__meta">Course</span>
-            <span class="row__meta">Data platform</span>
-            <span class="row__time">10 modules</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">05</span>
-            <span>
-              <a class="row__title" href="aws_ai_practitioner.html">AWS AI Practitioner Guide</a>
-              <span class="row__blurb">Study guide with flashcards and quizzes for the AWS Certified AI Practitioner exam.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">AWS AIF-C01</span>
-            <span class="row__time">30–45 min</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">06</span>
-            <span>
-              <a class="row__title" href="aws_ai_practitioner_exam.html">AIF-C01 Practice Exam</a>
-              <span class="row__blurb">Timed practice exams, 114 questions across all 5 AIF-C01 domains.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">AWS AIF-C01</span>
-            <span class="row__time">30–60 min</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">07</span>
-            <span>
-              <a class="row__title" href="aws_visual_references.html">Visual References</a>
-              <span class="row__blurb">Diagrams for confusion matrices, RAG pipelines and the LLM lifecycle.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">Diagrams</span>
-            <span class="row__time">10 min</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">08</span>
-            <span>
-              <a class="row__title" href="aip/index.html">AIP-C01 Prep Hub</a>
-              <span class="row__blurb">6 interactive tools for the AWS AI Practitioner (Generative AI) exam.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">AWS AIP-C01</span>
-            <span class="row__time">6 tools</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">09</span>
-            <span>
-              <a class="row__title" href="DP-700-InteractiveStudy.html">DP-700 Study Guide</a>
-              <span class="row__blurb">Study guide for the Microsoft Fabric Data Engineering Associate exam.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">Microsoft Fabric</span>
-            <span class="row__time">45 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Advanced">
-            <span class="row__num">10</span>
-            <span>
-              <a class="row__title" href="ai_opportunity_scorer.html">AI Opportunity Scorer</a>
-              <span class="row__blurb">Evaluate AI opportunities across 6 value dimensions for a Build, Buy, Experiment or Kill verdict.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">Product strategy</span>
-            <span class="row__time">10 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Advanced">
-            <span class="row__num">11</span>
-            <span>
-              <a class="row__title" href="ai_solution_navigator.html">AI Solution Navigator</a>
-              <span class="row__blurb">Navigate from business problem to solution across rules, ML, deep learning, GenAI, agents and OR.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">AI landscape</span>
-            <span class="row__time">10 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Advanced">
-            <span class="row__num">12</span>
-            <span>
-              <a class="row__title" href="genai_techniques_selector.html">GenAI Technique Selector</a>
-              <span class="row__blurb">Choose the right LLM optimization: RAG, fine-tuning, LoRA, quantization and more.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">LLM optimization</span>
-            <span class="row__time">25 min</span>
-          </div>
-          <div class="row" data-type="Decision tool" data-level="Advanced">
-            <span class="row__num">13</span>
-            <span>
-              <a class="row__title" href="fm_evaluation_metrics.html">FM Evaluation Metrics</a>
-              <span class="row__blurb">Choose LLM evaluation metrics: perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge.</span>
-            </span>
-            <span class="row__meta">Decision tool</span>
-            <span class="row__meta">LLM metrics</span>
-            <span class="row__time">20 min</span>
-          </div>
-          <div class="row" data-type="Course" data-level="Advanced">
-            <span class="row__num">14</span>
-            <span>
-              <a class="row__title" href="rag-academy/">RAG Academy</a>
-              <span class="row__blurb">Interactive course on Retrieval-Augmented Generation concepts, architectures and deployment.</span>
-            </span>
-            <span class="row__meta">Course</span>
-            <span class="row__meta">RAG</span>
-            <span class="row__time">Course</span>
-          </div>
-          <div class="row" data-type="Course" data-level="Graduate">
-            <span class="row__num">15</span>
-            <span>
-              <a class="row__title" href="GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a>
-              <span class="row__blurb">Weekly study notes on NLP fundamentals from Georgia Tech OMSA, with live demos.</span>
-            </span>
-            <span class="row__meta">Course</span>
-            <span class="row__meta">NLP</span>
-            <span class="row__time">7 weeks</span>
-          </div>
-          <div class="row" data-type="Exam prep" data-level="Certification">
-            <span class="row__num">16</span>
-            <span>
-              <a class="row__title" href="pl300_exam_prep.html">PL-300 Exam Prep</a>
-              <span class="row__blurb">140 practice questions, timed exams, study guide and final review for Power BI PL-300.</span>
-            </span>
-            <span class="row__meta">Exam prep</span>
-            <span class="row__meta">Power BI PL-300</span>
-            <span class="row__time">30–100 min</span>
-          </div>
-        </div>
+  </select></label></div>
+<!-- LAB:INDEX:START -->
+<div class="resources">
+<a class="resource" data-type="Decision tool" data-routes="llm" href="genai_foundations_navigator.html"><div class="eyebrow">GenAI basics · Decision tool</div><h3>GenAI Foundations Navigator</h3><p>Beginner-friendly tour of GenAI basics: grounding, RAG components, prompt engineering and core parameters.</p><span class="resource-time">10–15 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="model" href="ml_algorithm_selector.html"><div class="eyebrow">Modeling · Decision tool</div><h3>Algorithm Selector</h3><p>Interactive decision tree for finding the right ML algorithm for your problem and data.</p><span class="resource-time">15 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="model" href="feature_engineering_playbook.html"><div class="eyebrow">Features · Decision tool</div><h3>Feature Engineering Playbook</h3><p>Encoding, scaling, outliers, feature creation and selection across tabular, text, time-series and image data.</p><span class="resource-time">20 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="measure" href="model_evaluation_interactive.html"><div class="eyebrow">Evaluation · Decision tool</div><h3>Metric Decision Tree</h3><p>Choose the right evaluation metric for classification, regression and beyond.</p><span class="resource-time">20 min</span></a>
+<a class="resource" data-type="Course" data-routes="model" href="DataEngineering/index.html"><div class="eyebrow">Data platform · Course</div><h3>Data Engineering Foundations</h3><p>Vendor-neutral course through modern data engineering, from source systems to trusted decisions.</p><span class="resource-time">10 modules</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="aws_ai_practitioner.html"><div class="eyebrow">AWS AIF-C01 · Exam prep</div><h3>AWS AI Practitioner Guide</h3><p>Study guide with flashcards and quizzes for the AWS Certified AI Practitioner exam.</p><span class="resource-time">30–45 min</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="aws_ai_practitioner_exam.html"><div class="eyebrow">AWS AIF-C01 · Exam prep</div><h3>AIF-C01 Practice Exam</h3><p>Timed practice exams, 114 questions across all 5 AIF-C01 domains.</p><span class="resource-time">30–60 min</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="aws_visual_references.html"><div class="eyebrow">Diagrams · Exam prep</div><h3>Visual References</h3><p>Diagrams for confusion matrices, RAG pipelines and the LLM lifecycle.</p><span class="resource-time">10 min</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="aip/index.html"><div class="eyebrow">AWS AIP-C01 · Exam prep</div><h3>AIP-C01 Prep Hub</h3><p>6 interactive tools for the AWS AI Practitioner (Generative AI) exam.</p><span class="resource-time">6 tools</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="DP-700-InteractiveStudy.html"><div class="eyebrow">Microsoft Fabric · Exam prep</div><h3>DP-700 Study Guide</h3><p>Study guide for the Microsoft Fabric Data Engineering Associate exam.</p><span class="resource-time">45 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="scope" href="ai_opportunity_scorer.html"><div class="eyebrow">Product strategy · Decision tool</div><h3>AI Opportunity Scorer</h3><p>Evaluate AI opportunities across 6 value dimensions for a Build, Buy, Experiment or Kill verdict.</p><span class="resource-time">10 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="scope" href="ai_solution_navigator.html"><div class="eyebrow">AI landscape · Decision tool</div><h3>AI Solution Navigator</h3><p>Navigate from business problem to solution across rules, ML, deep learning, GenAI, agents and OR.</p><span class="resource-time">10 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="llm" href="genai_techniques_selector.html"><div class="eyebrow">LLM optimization · Decision tool</div><h3>GenAI Technique Selector</h3><p>Choose the right LLM optimization: RAG, fine-tuning, LoRA, quantization and more.</p><span class="resource-time">25 min</span></a>
+<a class="resource" data-type="Decision tool" data-routes="measure llm" href="fm_evaluation_metrics.html"><div class="eyebrow">LLM metrics · Decision tool</div><h3>FM Evaluation Metrics</h3><p>Choose LLM evaluation metrics: perplexity, ROUGE, BERTScore, RAGAS, LLM-as-judge.</p><span class="resource-time">20 min</span></a>
+<a class="resource" data-type="Course" data-routes="llm" href="rag-academy/"><div class="eyebrow">RAG · Course</div><h3>RAG Academy</h3><p>Interactive course on Retrieval-Augmented Generation concepts, architectures and deployment.</p><span class="resource-time">Course</span></a>
+<a class="resource" data-type="Course" data-routes="model" href="GaTech/CSE%208803/index.html"><div class="eyebrow">NLP · Course</div><h3>Applied NLP — CSE 8803</h3><p>Weekly study notes on NLP fundamentals from Georgia Tech OMSA, with live demos.</p><span class="resource-time">7 weeks</span></a>
+<a class="resource" data-type="Exam prep" data-routes="exam" href="pl300_exam_prep.html"><div class="eyebrow">Power BI PL-300 · Exam prep</div><h3>PL-300 Exam Prep</h3><p>140 practice questions, timed exams, study guide and final review for Power BI PL-300.</p><span class="resource-time">30–100 min</span></a>
+</div>
         <!-- LAB:INDEX:END -->
-      </div>
-    </section>
-
-    <section id="paths">
-      <div class="wrap">
-        <div class="sec-head">
-          <span class="sec-label">// Suggested paths</span>
-          <span class="sec-note">Three routes that pair the playbooks into a sequence</span>
-        </div>
-        <div class="paths">
-          <div class="path">
-            <h3>New to ML</h3>
-            <p>Build the vocabulary, then make your first real modelling decisions.</p>
-            <ol>
-              <li><a href="genai_foundations_navigator.html">GenAI Foundations Navigator</a></li>
-              <li><a href="ml_algorithm_selector.html">Algorithm Selector</a></li>
-              <li><a href="feature_engineering_playbook.html">Feature Engineering Playbook</a></li>
-              <li><a href="model_evaluation_interactive.html">Metric Decision Tree</a></li>
-            </ol>
-          </div>
-          <div class="path">
-            <h3>Building with LLMs</h3>
-            <p>Work out what to optimize, then how to know whether it worked.</p>
-            <ol>
-              <li><a href="genai_foundations_navigator.html">GenAI Foundations Navigator</a></li>
-              <li><a href="genai_techniques_selector.html">GenAI Technique Selector</a></li>
-              <li><a href="rag-academy/">RAG Academy</a></li>
-              <li><a href="fm_evaluation_metrics.html">FM Evaluation Metrics</a></li>
-            </ol>
-          </div>
-          <div class="path">
-            <h3>Sitting a certification</h3>
-            <p>Study, then sit timed practice under real exam distribution.</p>
-            <ol>
-              <li><a href="aws_ai_practitioner.html">AWS AI Practitioner Guide</a></li>
-              <li><a href="aws_ai_practitioner_exam.html">AIF-C01 Practice Exam</a></li>
-              <li><a href="aws_visual_references.html">Visual References</a></li>
-              <li><a href="aip/index.html">AIP-C01 Prep Hub</a></li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" style="border-bottom:0">
-      <div class="wrap">
-        <div class="sec-head"><span class="sec-label">// About this lab</span></div>
-        <div class="about">
-          <div>
-            <p>
-              Every playbook here started as a question someone asked me in a workshop, a design review, or a
-              consulting engagement &mdash; the kind where the honest answer is &ldquo;it depends,&rdquo; and the
-              useful answer is knowing exactly <em>what</em> it depends on. Each one is a guided decision flow that
-              makes those dependencies explicit and hands you back a recommendation with its reasoning attached.
-            </p>
-            <p>
-              They are deliberately small. Drop in for ten to thirty minutes, answer a few focused questions, and
-              leave with something you can put in a design note, a study plan, or a team decision record.
-            </p>
-            <p>
-              I write and teach at <a href="https://www.tarekatwan.com" rel="noopener">tarekatwan.com</a> and
-              consult through <a href="https://www.ensemblemethods.com" rel="noopener">Ensemble Methods</a>.
-              The source for everything here is
-              <a href="https://github.com/tatwan/tatwan.github.io" rel="noopener">on GitHub</a>.
-            </p>
-          </div>
-          <div>
-            <div class="stats">
-              <div class="stat"><div class="stat__n">17</div><div class="stat__l">Playbooks</div></div>
-              <div class="stat"><div class="stat__n">500+</div><div class="stat__l">Decision nodes</div></div>
-              <div class="stat"><div class="stat__n">100%</div><div class="stat__l">Browser based</div></div>
-              <div class="stat"><div class="stat__n">$0</div><div class="stat__l">No sign-up</div></div>
-            </div>
-            <div style="margin-top:28px">
-              <div class="sec-label" style="margin-bottom:10px">// What&rsquo;s new</div>
-              <div class="whatsnew">
-                <strong>Site-wide search</strong> across every decision node &middot;
-                <strong>Data Engineering Foundations</strong> &middot;
-                <strong>RAG Academy</strong> &middot;
-                <strong>CSE 8803 Applied NLP</strong> study notes &middot;
-                <strong>DP-700</strong> study guide &middot;
-                <strong>AI Opportunity Scorer</strong> &middot;
-                <strong>AI Solution Navigator</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <script>
-    // Type filter on the index. Content is in the DOM either way; this only hides rows.
-    (function () {
-      var bar = document.getElementById('filters');
-      if (!bar) return;
-      bar.addEventListener('click', function (e) {
-        var btn = e.target.closest('.filter');
-        if (!btn) return;
-        var want = btn.getAttribute('data-filter');
-        Array.prototype.forEach.call(bar.children, function (c) {
-          c.setAttribute('aria-pressed', c === btn ? 'true' : 'false');
-        });
-        Array.prototype.forEach.call(document.querySelectorAll('.row[data-type]'), function (row) {
-          row.hidden = !!want && row.getAttribute('data-type') !== want;
-        });
-      });
-    })();
-  </script>
+  <div class="collection-status"><p id="collection-count" role="status" aria-live="polite"></p><button type="button" id="collection-reset" hidden>Clear filters</button></div><p class="empty" id="collection-empty" hidden>No resources match. Try a broader search or clear the filters.</p>
+  <button class="deep-search" type="button" id="deep-search">Search inside every playbook</button>
+ </section>
+ <section class="learning-paths inner" id="paths" aria-labelledby="paths-title"><div class="section-heading"><h2 id="paths-title">Follow a learning path</h2><p>A little structure for the next step</p></div>
+<!-- LAB:PATHS:START -->
+<div class="paths-grid"><article class="learning-path"><h3>New to machine learning</h3><p>Build a foundation, then work through your first modeling decisions.</p><ol><li><a href="ml_algorithm_selector.html">Algorithm Selector</a></li><li><a href="feature_engineering_playbook.html">Feature Engineering Playbook</a></li><li><a href="model_evaluation_interactive.html">Metric Decision Tree</a></li></ol></article><article class="learning-path"><h3>Building with LLMs</h3><p>Understand the foundations, choose an approach, and evaluate the results.</p><ol><li><a href="genai_foundations_navigator.html">GenAI Foundations Navigator</a></li><li><a href="genai_techniques_selector.html">GenAI Technique Selector</a></li><li><a href="rag-academy/">RAG Academy</a></li><li><a href="fm_evaluation_metrics.html">FM Evaluation Metrics</a></li></ol></article><article class="learning-path"><h3>Preparing for certification</h3><p>Choose your exam and build a focused study plan.</p><ol><li><a href="aws_ai_practitioner.html">AWS AI Practitioner Guide</a></li><li><a href="aip/index.html">AIP-C01 Prep Hub</a></li><li><a href="DP-700-InteractiveStudy.html">DP-700 Study Guide</a></li><li><a href="pl300_exam_prep.html">PL-300 Exam Prep</a></li></ol></article></div>
+        <!-- LAB:PATHS:END -->
+ </section>
+ <section class="about-lab inner" id="about" aria-labelledby="about-title"><div><div class="eyebrow">Behind the collection</div><h2 id="about-title">Knowledge shaped by practice.</h2></div><div><p>These resources grew out of questions from workshops, classrooms, and consulting engagements—the kind where the useful answer is understanding exactly what a decision depends on.</p><p>I’m Tarek Atwan, an author, educator, and data and AI consultant. I write and teach at <a href="https://www.tarekatwan.com">tarekatwan.com</a> and consult through <a href="https://www.ensemblemethods.com">Ensemble Methods</a>.</p><p class="updated">Collection updated <!-- LAB:DATE:START -->2026-11<!-- LAB:DATE:END --></p></div></section>
+</div>
+</main>
 </body>
-
 </html>

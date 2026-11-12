@@ -81,6 +81,8 @@ node tools/build-site.mjs        # home page sections, sitemap.xml, search index
 node tools/retrofit-pages.mjs    # shared shell + SEO on every playbook page
 ```
 
+The homepage uses the Editorial Lab design: navy and cream, serif headings, restrained gold accents, and a searchable collection. Catalogue search combines resource type, goal, and text filters; the shared search palette also searches inside playbooks.
+
 Both are idempotent. `assets/modules.json` is the single source of truth for the catalogue — edit it,
 re-run, and the home page, the sitemap and the search index all follow.
 
@@ -89,6 +91,7 @@ re-run, and the home page, the sitemap and the search index all follow.
 | Path | Role |
 | --- | --- |
 | `assets/modules.json` | The catalogue: 17 playbooks, 5 routes |
+| `assets/home.css` / `assets/home.js` | Homepage layout and catalogue filters |
 | `assets/lab.css` / `assets/lab.js` | Shared shell — header, breadcrumb, footer, ⌘K palette |
 | `assets/search-index.json` | Generated; lazy-loaded on first search |
 | `tools/*.mjs` | The build scripts |
