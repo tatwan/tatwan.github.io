@@ -22,6 +22,8 @@
   var script = document.currentScript ||
     document.querySelector('script[src*="lab.js"]');
   var PAGE = script ? script.getAttribute('data-lab-page') : null;
+  var PARENT = script ? script.getAttribute('data-lab-parent') : null;
+  var PARENT_HREF = script ? script.getAttribute('data-lab-parent-href') : null;
   var ROOT = (script && script.getAttribute('data-lab-root')) || '/';
 
   var NAV = [
@@ -88,11 +90,16 @@
 
   function buildCrumb() {
     if (!PAGE) return null;
-    return el('div', { class: 'lab-crumb lab-chrome' }, [
+    var items = [
       el('a', { href: ROOT + '#index', text: 'All resources' }),
-      el('span', { class: 'lab-crumb__sep', text: '/' }),
-      el('span', { class: 'lab-crumb__here', text: PAGE })
-    ]);
+      el('span', { class: 'lab-crumb__sep', text: '/' })
+    ];
+    if (PARENT && PARENT_HREF) {
+      items.push(el('a', { href: PARENT_HREF, text: PARENT }));
+      items.push(el('span', { class: 'lab-crumb__sep', text: '/' }));
+    }
+    items.push(el('span', { class: 'lab-crumb__here', text: PAGE }));
+    return el('div', { class: 'lab-crumb lab-chrome' }, items);
   }
 
   function buildFooter() {
@@ -214,7 +221,7 @@
   var active = 0;
   var rows = [];
   var kindFilter = null;
-  var KINDS = ['Playbook', 'Foundations', 'Modeling', 'Features', 'Evaluation', 'GenAI', 'Product', 'Certification'];
+  var KINDS = ['Playbook', 'Course', 'Foundations', 'Modeling', 'Features', 'Evaluation', 'GenAI', 'Product', 'Certification'];
 
   function buildPalette() {
     input = el('input', {
@@ -331,8 +338,30 @@
         el('span', { class: 'lab-hit__chevron', html: ICON_CHEVRON, 'aria-hidden': 'true' })
       ]);
       hit.addEventListener('mouseenter', function () { setActive(i); });
+      hit.addEventListener('click', function (e) {
+        if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && e.button === 0 &&
+            row.u.indexOf('/rag-academy/') === 0 && row.u !== '/rag-academy/' && row.u !== '/rag-academy/index.html') {
+          e.preventDefault();
+          navigateTo(row.u);
+        }
+      });
       results.appendChild(hit);
     });
+  }
+
+  function navigateTo(url) {
+    if (url && url.indexOf('/rag-academy/') === 0 && url !== '/rag-academy/' && url !== '/rag-academy/index.html') {
+      if (window.location.pathname.indexOf('/rag-academy/') === 0) {
+        window.history.pushState(null, '', url);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        close();
+        return;
+      }
+      try { sessionStorage.setItem('rag-academy-redirect', url); } catch (e) {}
+      window.location.href = '/rag-academy/';
+      return;
+    }
+    window.location.href = url;
   }
 
   function setActive(i) {
@@ -359,7 +388,7 @@
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
     else if (e.key === 'Tab') { e.preventDefault(); cycleFilter(e.shiftKey); }
     else if (e.key === 'Enter') {
-      if (rows[active]) { e.preventDefault(); window.location.href = rows[active].u; }
+      if (rows[active]) { e.preventDefault(); navigateTo(rows[active].u); }
     } else if (e.key === 'Escape') { e.preventDefault(); close(); }
   }
 

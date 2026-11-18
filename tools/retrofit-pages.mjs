@@ -2,14 +2,16 @@
 /**
  * retrofit-pages.mjs
  *
- * Gives every playbook page the shared shell and the SEO it was missing:
+ * Gives every page in the ML_LAB site (all 17 top-level playbooks, all 38
+ * course/exam sub-pages, and 404.html) the shared shell, archetype styles,
+ * hierarchical breadcrumbs, and SEO metadata:
  *
- *   - the ML_LAB header, breadcrumb, footer and Cmd+K palette (lab.css + lab.js)
- *   - a consistent <title>
- *   - description, canonical, Open Graph, Twitter and JSON-LD
- *   - an "About this playbook" band of real prose, because the interactive
- *     apps render everything client-side and ship zero indexable text
- *   - deep-link support: /page.html#node_id opens that decision node
+ *   - the ML_LAB header, hierarchical breadcrumb, footer and Cmd+K palette (lab.css + lab.js)
+ *   - unified Google Fonts (Bricolage Grotesque, IBM Plex Sans, IBM Plex Mono, JetBrains Mono)
+ *   - archetype-specific CSS/JS (archetype-decision, archetype-aip, archetype-course)
+ *   - description, canonical, Open Graph, Twitter and JSON-LD (top-level playbooks)
+ *   - an "About this playbook" band of real prose (top-level playbooks)
+ *   - strips redundant inline <- ML_LAB backlinks and redundant page-level footers
  *
  * Every injected block is fenced by LAB:* markers, so re-running this
  * updates in place rather than stacking duplicates.
@@ -33,14 +35,26 @@ const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Tools whose decision tree we can deep-link into. */
-const TREE_TOOLS = new Set([
-  'ml_algorithm_selector.html',
-  'model_evaluation_interactive.html',
-  'feature_engineering_playbook.html',
-  'genai_techniques_selector.html',
-  'fm_evaluation_metrics.html',
-  'genai_foundations_navigator.html',
+const FONTS_LINK =
+  '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+  '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+  '  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">';
+
+const DECISION_IDS = new Set([
+  'genai-foundations',
+  'algorithm-selector',
+  'feature-engineering',
+  'metric-tree',
+  'opportunity-scorer',
+  'solution-navigator',
+  'genai-techniques',
+  'fm-metrics',
+]);
+
+const AIF_IDS = new Set([
+  'aws-aip-guide',
+  'aws-aip-exam',
+  'aws-visual',
 ]);
 
 /** Extra context per playbook: what it decides, and who should use it. */
@@ -70,7 +84,7 @@ const CONTEXT = {
     who: 'candidates preparing for the AWS Certified AI Practitioner exam',
   },
   'aws-aip-exam': {
-    covers: '114 questions distributed across the five exam domains in the same proportions as the real paper, each with a written explanation',
+    covers: '189 questions distributed across the five exam domains in the same proportions as the real paper, each with a written explanation',
     who: 'candidates who have studied and now need to find out what they actually retained',
   },
   'aws-visual': {
@@ -78,12 +92,16 @@ const CONTEXT = {
     who: 'visual learners, and anyone who needs a diagram to put in a slide',
   },
   'aip-hub': {
-    covers: 'a study guide, flashcards, a gap cheatsheet, domain drills, a full practice exam and a timed simulator for the generative AI practitioner exam',
+    covers: 'deep and visual study guides, 65 flashcards, a gap cheatsheet, 4 domain deep-dives, implementation and troubleshooting guides, and 242 practice questions across three exam simulators for the AWS Certified Generative AI Developer – Professional (AIP-C01) exam',
     who: 'candidates who want a complete preparation track rather than a single resource',
   },
   'dp700': {
     covers: 'Fabric architecture, ingestion, Delta Lake, KQL, PySpark, security boundaries, CI/CD and the specific limits that appear as exam questions',
     who: 'candidates for the Microsoft Fabric Data Engineering Associate certification',
+  },
+  'pl300': {
+    covers: '140 original questions across the four PL-300 domains in single-answer, multiple-answer, drop-down, sequence, yes/no series and case study formats, with study notes on Power Query, data modeling, DAX, report design, workspaces and row-level security',
+    who: 'candidates for the Microsoft Power BI Data Analyst Associate certification who want to practice, find their weak areas and do a last review',
   },
   'opportunity-scorer': {
     covers: 'value, feasibility, data readiness, risk, differentiation and time-to-value, scored to a build, buy, experiment or kill verdict',
@@ -102,11 +120,11 @@ const CONTEXT = {
     who: 'teams who need to prove an LLM feature improved, not just that it shipped',
   },
   'rag-academy': {
-    covers: 'chunking, embeddings, vector stores, retrieval strategies, reranking, evaluation and the failure modes that only appear in production',
+    covers: '12 RAG architectures (Classic, Hybrid, HyDE, Self-RAG, Corrective, Adaptive, GraphRAG, KAG, Agentic, Modular, Multimodal, Speculative), chunking strategies, query understanding, vector indexing, mathematical foundations and an interactive playground',
     who: 'engineers building or debugging a retrieval-augmented system',
   },
   'cse8803': {
-    covers: 'text preprocessing, classical classifiers, word embeddings, neural networks, RNNs, LSTMs and attention mechanisms',
+    covers: 'all 15 weeks of graduate NLP: text preprocessing, classical classifiers, SVD/GloVe/Word2Vec embeddings, CNNs/RNNs/LSTMs, Transformers (BERT, GPT, T5, RoPE, GQA, MoE), sequence labeling (HMM/CRF), post-training alignment (SFT, RLHF, DPO, KTO), topic modeling, RAG, Agentic AI and multi-agent systems',
     who: 'students on the Georgia Tech OMSA programme, and anyone rebuilding NLP fundamentals from the ground up',
   },
 };
@@ -133,6 +151,19 @@ function headBlock(m) {
     isPartOf: { '@type': 'WebSite', name: 'ML_LAB', url: SITE + '/' },
   };
 
+  const extraAssets = [];
+  if (DECISION_IDS.has(m.id)) {
+    extraAssets.push('  <link rel="stylesheet" href="/assets/archetype-decision.css">');
+    extraAssets.push('  <script defer src="/assets/decision-workbench.js"></script>');
+  }
+  if (AIF_IDS.has(m.id)) {
+    extraAssets.push('  <link rel="stylesheet" href="/assets/archetype-aip.css">');
+    extraAssets.push('  <script defer src="/assets/aif-studio.js"></script>');
+  }
+  if (m.id === 'aip-hub') {
+    extraAssets.push('  <link rel="stylesheet" href="/assets/archetype-aip.css">');
+  }
+
   return `  <!-- LAB:HEAD:START -->
   <meta name="description" content="${esc(m.blurb)}">
   <meta name="author" content="Tarek Atwan">
@@ -150,16 +181,26 @@ function headBlock(m) {
   <meta name="twitter:title" content="${esc(m.title)} — ML_LAB">
   <meta name="twitter:description" content="${esc(m.short)}">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+${FONTS_LINK}
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
-  <script defer src="/assets/lab.js" data-lab-page="${esc(m.title)}"></script>
+${extraAssets.length ? extraAssets.join('\n') + '\n' : ''}  <script defer src="/assets/lab.js" data-lab-page="${esc(m.title)}"></script>
 
   <script type="application/ld+json">
 ${JSON.stringify(ld, null, 2)}
   </script>
+  <!-- LAB:HEAD:END -->`;
+}
+
+function subHeadBlock({ pageTitle, parentTitle, parentHref, extraTags = [] }) {
+  const parentAttrs = parentTitle && parentHref
+    ? ` data-lab-parent="${esc(parentTitle)}" data-lab-parent-href="${esc(parentHref)}"`
+    : '';
+  return `  <!-- LAB:HEAD:START -->
+${FONTS_LINK}
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+${extraTags.length ? extraTags.join('\n') + '\n' : ''}  <script defer src="/assets/lab.js" data-lab-page="${esc(pageTitle)}"${parentAttrs}></script>
   <!-- LAB:HEAD:END -->`;
 }
 
@@ -215,7 +256,7 @@ ${related}
 }
 
 /* ------------------------------------------------------------------ *
- * Injection helpers
+ * Injection & Cleanup helpers
  * ------------------------------------------------------------------ */
 
 function upsert(html, mark, block, anchor) {
@@ -234,28 +275,79 @@ function setTitle(html, m) {
   return html.replace('</head>', `  <title>${esc(want)}</title>\n</head>`);
 }
 
-/** Jump straight to a decision node when the URL carries #node_id. */
-const DEEPLINK = `
-      // LAB: deep link — /page.html#node_id opens that decision node.
-      React.useEffect(() => {
-        const jump = () => {
-          const h = decodeURIComponent((window.location.hash || '').slice(1));
-          if (h && tree[h]) setCurrentNode(h);
-        };
-        jump();
-        window.addEventListener('hashchange', jump);
-        return () => window.removeEventListener('hashchange', jump);
-      }, []);`;
+function stripDuplicateChrome(rel, html) {
+  let out = html;
 
-function addDeepLink(html) {
-  if (html.includes('LAB: deep link')) return html;
-  const needle = "const [currentNode, setCurrentNode] = useState('start');";
-  if (!html.includes(needle)) return null;
-  return html.replace(needle, needle + DEEPLINK);
+  if (rel === 'rag-academy/index.html') {
+    out = out.replace(
+      /[ \t]*<a\s+href="\.\.\/index\.html"\s+style="position:fixed;[^>]*>&larr;\s*ML_LAB<\/a>\s*\n/,
+      ''
+    );
+  }
+
+  // Strip duplicate inline <- ML_LAB backlinks on React decision tools & AIF-C01 pages
+  out = out.replace(
+    /[ \t]*<a\s+href="index\.html"\s+className="[^"]*">&larr;\s*ML_LAB<\/a>\s*\n?/g,
+    ''
+  );
+
+  // Strip duplicate Created by Tarek Atwan @ ML_LAB paragraphs inside page canvases
+  out = out.replace(
+    /[ \t]*<p\s+className="(?:mt-2 text-xs|text-slate-600 text-xs mt-2|mt-1)">[\s\S]*?Created by Tarek Atwan[\s\S]*?ML_LAB[\s\S]*?<\/p>\s*\n?/g,
+    ''
+  );
+
+  if (rel === 'aws_visual_references.html') {
+    out = out.replace(
+      /[ \t]*<a\s+href="index\.html"[\s\S]*?&larr;\s*ML_LAB[\s\S]*?<\/a>\s*\n?/,
+      ''
+    );
+    out = out.replace(
+      /[ \t]*<!-- Footer -->\s*\n?[ \t]*<footer class="border-t[\s\S]*?<\/footer>\s*\n?/,
+      ''
+    );
+  }
+
+  if (rel === 'DP-700-InteractiveStudy.html') {
+    out = out.replace(
+      /[ \t]*<a\s+href="index\.html"\s+class="hbtn"[^>]*>←\s*ML_LAB<\/a>\s*\n?/,
+      ''
+    );
+  }
+
+  if (rel === 'DataEngineering/index.html') {
+    out = out.replace(/[ \t]*<a href="\.\.\/index\.html" class="btn-back">← ML_LAB<\/a>\s*/g, '');
+    out = out.replace(/<a href="\.\.\/index\.html"[^>]*>← ML_LAB<\/a>/g, '');
+    out = out.replace(/[ \t]*<footer class="site-footer">[\s\S]*?<\/footer>\s*\n?/, '');
+  }
+
+  if (rel === 'GaTech/CSE 8803/index.html') {
+    out = out.replace(
+      /[ \t]*<div style="margin-bottom:\s*12px;"><a href="\.\.\/\.\.\/index\.html"[^>]*>&larr;\s*ML_LAB<\/a><\/div>\s*\n?/,
+      ''
+    );
+    out = out.replace(
+      /[ \t]*<footer>CSE 8803 Applied NLP[\s\S]*?<\/footer>\s*\n?/,
+      ''
+    );
+  }
+
+  return out;
 }
 
+const decodeHtmlText = (s) => String(s)
+  .replace(/&amp;/g, '&')
+  .replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"')
+  .replace(/&#39;/g, "'")
+  .replace(/&ndash;/g, '–')
+  .replace(/&mdash;/g, '—')
+  .replace(/\s+/g, ' ')
+  .trim();
+
 /* ------------------------------------------------------------------ *
- * Run
+ * Run Top-Level Playbooks (17)
  * ------------------------------------------------------------------ */
 
 let changed = 0;
@@ -282,16 +374,111 @@ for (const m of modules) {
   if (withAbout) { if (withAbout !== html) steps.push('about'); html = withAbout; }
   else notes.push(`  no </body>  ${rel}`);
 
-  if (TREE_TOOLS.has(rel)) {
-    const linked = addDeepLink(html);
-    if (linked) { if (linked !== html) steps.push('deeplink'); html = linked; }
-    else notes.push(`  no useState anchor  ${rel}`);
-  }
+  const cleaned = stripDuplicateChrome(rel, html);
+  if (cleaned !== html) { steps.push('strip-dup-chrome'); html = cleaned; }
 
   if (html === before) { console.log(`  =  ${rel}`); continue; }
   if (!DRY) fs.writeFileSync(abs, html);
   changed++;
   console.log(`  ${DRY ? '~' : '+'}  ${rel}  [${steps.join(', ')}]`);
+}
+
+/* ------------------------------------------------------------------ *
+ * Run Sub-Pages (38) + 404.html (1)
+ * ------------------------------------------------------------------ */
+
+const subTargets = [];
+
+// 10 Data Engineering modules
+for (let i = 1; i <= 10; i++) {
+  const rel = `DataEngineering/module${i}.html`;
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) continue;
+  const raw = fs.readFileSync(abs, 'utf8');
+  const h1 = (raw.match(/<h1>([\s\S]*?)<\/h1>/) || [])[1] || `Module ${i}`;
+  subTargets.push({
+    rel,
+    pageTitle: `Module ${i}: ${decodeHtmlText(h1.replace(/<[^>]+>/g, ''))}`,
+    parentTitle: 'Data Engineering Foundations',
+    parentHref: '/DataEngineering/index.html',
+    extraTags: [
+      '  <link rel="stylesheet" href="/assets/archetype-course.css">',
+      `  <script defer src="/assets/course-subbar.js" data-course="de" data-index="${i}"></script>`,
+    ],
+  });
+}
+
+// 15 GaTech CSE 8803 weeks
+for (let i = 1; i <= 15; i++) {
+  const rel = `GaTech/CSE 8803/week${i}.html`;
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) continue;
+  const raw = fs.readFileSync(abs, 'utf8');
+  const h1 = (raw.match(/<h1>([\s\S]*?)<\/h1>/) || [])[1] || `Week ${i}`;
+  subTargets.push({
+    rel,
+    pageTitle: `Week ${i}: ${decodeHtmlText(h1.replace(/<[^>]+>/g, ''))}`,
+    parentTitle: 'Applied NLP — CSE 8803',
+    parentHref: '/GaTech/CSE%208803/index.html',
+    extraTags: [
+      '  <link rel="stylesheet" href="/assets/archetype-course.css">',
+      `  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="${i}"></script>`,
+    ],
+  });
+}
+
+// 13 AIP-C01 sub-pages
+const AIP_TITLES = {
+  'study-guide.html': 'Deep Study Guide',
+  'aip-c01-studyguide.html': 'Visual Study Guide',
+  'flashcards.html': 'Flashcards & Drills',
+  'practice-exam.html': 'Practice Exam (85 Qs)',
+  'quick-drill.html': 'Quick Drill Simulator',
+  'final-practice.html': 'Final Practice (72 Qs)',
+  'gap-cheatsheet.html': 'Gap Cheatsheet',
+  'advanced-impl.html': 'Advanced Implementation',
+  'troubleshooting-eval.html': 'Troubleshooting & Evaluation',
+  'study-d1.html': 'Domain 1: Foundation Models, Data & RAG',
+  'study-d2.html': 'Domain 2: Implementation & Integration',
+  'study-d3.html': 'Domain 3: Safety, Security & Governance',
+  'study-d45.html': 'Domains 4 & 5: Ops, Eval & Troubleshooting',
+};
+
+for (const [file, pageTitle] of Object.entries(AIP_TITLES)) {
+  const rel = `aip/${file}`;
+  if (!fs.existsSync(path.join(ROOT, rel))) continue;
+  subTargets.push({
+    rel,
+    pageTitle,
+    parentTitle: 'AIP-C01 Prep Hub',
+    parentHref: '/aip/index.html',
+    extraTags: [
+      '  <link rel="stylesheet" href="/assets/archetype-aip.css">',
+    ],
+  });
+}
+
+// 404.html
+subTargets.push({
+  rel: '404.html',
+  pageTitle: '404 — Page Not Found',
+  parentTitle: null,
+  parentHref: null,
+  extraTags: [],
+});
+
+for (const t of subTargets) {
+  const abs = path.join(ROOT, t.rel);
+  let html = fs.readFileSync(abs, 'utf8');
+  const before = html;
+  const withHead = upsert(html, 'LAB:HEAD', subHeadBlock(t), '</head>');
+  if (withHead) html = withHead;
+  else notes.push(`  no </head>  ${t.rel}`);
+
+  if (html === before) { console.log(`  =  ${t.rel}`); continue; }
+  if (!DRY) fs.writeFileSync(abs, html);
+  changed++;
+  console.log(`  ${DRY ? '~' : '+'}  ${t.rel}  [sub-head]`);
 }
 
 if (notes.length) console.log('\n' + notes.join('\n'));

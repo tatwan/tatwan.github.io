@@ -36,6 +36,11 @@ const PAGES = [
   { id: 'aws-aip-guide', file: 'aws_ai_practitioner.html', title: 'AWS AI Practitioner Guide', kind: 'Certification', vars: ['servicesData', 'quickFireQuestions'] },
   { id: 'aws-aip-exam', file: 'aws_ai_practitioner_exam.html', title: 'AIF-C01 Practice Exam', kind: 'Certification', vars: ['QUESTIONS', 'DOMAINS'] },
   { id: 'dp700', file: 'DP-700-InteractiveStudy.html', title: 'DP-700 Study Guide', kind: 'Certification', vars: ['quizData'] },
+  { id: 'pl300', file: 'pl300_exam_prep.html', title: 'PL-300 Exam Prep', kind: 'Certification', vars: ['QUESTIONS', 'SKILLS', 'DOMAINS'] },
+  { id: 'aip-practice', file: 'aip/practice-exam.html', title: 'AIP-C01 Practice Exam', kind: 'Certification', vars: ['QUESTIONS'] },
+  { id: 'aip-quick-drill', file: 'aip/quick-drill.html', title: 'AIP-C01 Quick Drill', kind: 'Certification', vars: ['QUESTIONS_DB'] },
+  { id: 'aip-final', file: 'aip/final-practice.html', title: 'AIP-C01 Final Practice', kind: 'Certification', vars: ['QUESTIONS'] },
+  { id: 'aip-flashcards', file: 'aip/flashcards.html', title: 'AIP-C01 Flashcards & Drills', kind: 'Certification', vars: ['FLASHCARDS', 'QUESTIONS', 'DRILLS'] },
 ];
 
 /* ------------------------------------------------------------------ *
@@ -105,19 +110,23 @@ function evalLiteral(literalSrc) {
  * Turning data into search entries
  * ------------------------------------------------------------------ */
 
-const TITLE_KEYS = ['question', 'title', 'name', 'term', 'heading', 'label', 'q'];
+const TITLE_KEYS = ['question', 'title', 'name', 'term', 'heading', 'label', 'q', 'scenario', 'prompt', 'front'];
 const BODY_KEYS = [
   'info', 'goal', 'desc', 'description', 'definition', 'explanation', 'exp',
   'summary', 'text', 'why', 'when', 'detail', 'details', 'answer', 'content',
-  'useCase', 'tradeoff', 'note', 'rationale', 'takeaway',
+  'useCase', 'tradeoff', 'note', 'rationale', 'takeaway', 'back', 'whyWrong',
 ];
 
 /** Raw literal names are meaningless to a reader; label them for the breadcrumb. */
 const VAR_LABELS = {
   QUESTIONS: 'Practice questions',
+  QUESTIONS_DB: 'Quick drill',
+  FLASHCARDS: 'Flashcards',
+  DRILLS: 'Drills',
   quizData: 'Practice questions',
   quickFireQuestions: 'Quick-fire questions',
   DOMAINS: 'Exam domains',
+  SKILLS: 'Study guide',
   servicesData: 'AWS services',
   GLOSSARY: 'Glossary',
   DECISIONS: 'Verdicts',
@@ -130,8 +139,22 @@ const VAR_LABELS = {
   quickReference: 'Quick reference',
 };
 
-const clean = (s) => String(s).replace(/\s+/g, ' ').trim();
+const ENTITIES = {
+  '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&apos;': "'",
+  '&ndash;': '–', '&mdash;': '—', '&rarr;': '→', '&larr;': '←', '&harr;': '↔',
+  '&rsquo;': '’', '&lsquo;': '‘', '&rdquo;': '”', '&ldquo;': '“', '&middot;': '·',
+  '&times;': '×', '&nbsp;': ' ', '&sup1;': '¹', '&sup2;': '²', '&radic;': '√',
+};
+const decodeEntities = (s) =>
+  String(s).replace(/&[a-zA-Z0-9#]+;/g, (m) => {
+    if (ENTITIES[m]) return ENTITIES[m];
+    if (m.startsWith('&#x')) return String.fromCodePoint(parseInt(m.slice(3, -1), 16));
+    if (m.startsWith('&#')) return String.fromCodePoint(parseInt(m.slice(2, -1), 10));
+    return m;
+  });
+const clean = (s) => decodeEntities(String(s)).replace(/\s+/g, ' ').trim();
 const truncate = (s, n = 190) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
+const stripHtml = (s) => clean(String(s).replace(/<[^>]+>/g, ' '));
 
 function titleOf(obj) {
   for (const k of TITLE_KEYS) {
@@ -150,7 +173,7 @@ function bodyOf(obj) {
       if (strs.length) parts.push(clean(strs.join('. ')));
     }
   }
-  for (const key of ['options', 'opts']) {
+  for (const key of ['options', 'opts', 'continueOptions']) {
     if (!Array.isArray(obj[key])) continue;
     const labels = obj[key]
       .map((o) => {
@@ -163,9 +186,15 @@ function bodyOf(obj) {
       .filter(Boolean);
     if (labels.length) parts.push(clean(labels.join(' · ')));
   }
-  if (Array.isArray(obj.algorithms)) {
-    const names = obj.algorithms.map((a) => (a && a.name) || null).filter(Boolean);
-    if (names.length) parts.push(clean(names.join(' · ')));
+  for (const arrKey of ['algorithms', 'metrics', 'techniques', 'sections']) {
+    if (!Array.isArray(obj[arrKey])) continue;
+    const items = obj[arrKey]
+      .map((a) => {
+        if (!a || typeof a !== 'object') return null;
+        return [a.name || a.title, a.description || a.body || a.when || a.formula].filter(Boolean).join(': ');
+      })
+      .filter(Boolean);
+    if (items.length) parts.push(clean(items.join(' · ')));
   }
   return truncate(parts.join(' — '));
 }
@@ -178,8 +207,12 @@ function treePaths(tree) {
   while (queue.length) {
     const key = queue.shift();
     const node = tree[key];
-    if (!node || !Array.isArray(node.options)) continue;
-    for (const opt of node.options) {
+    if (!node) continue;
+    const opts = [
+      ...(Array.isArray(node.options) ? node.options : []),
+      ...(Array.isArray(node.continueOptions) ? node.continueOptions : []),
+    ];
+    for (const opt of opts) {
       if (!opt || !opt.next || paths[opt.next]) continue;
       paths[opt.next] = [...paths[key], clean(opt.label || opt.next)];
       queue.push(opt.next);
@@ -204,6 +237,38 @@ function entriesFromTree(tree, page) {
       k: page.kind,
       s: page.id,
     });
+
+    for (const arrKey of ['algorithms', 'metrics', 'techniques', 'sections']) {
+      if (!Array.isArray(node[arrKey])) continue;
+      for (const item of node[arrKey]) {
+        if (!item || typeof item !== 'object') continue;
+        const name = clean(item.name || item.title || '');
+        if (!name) continue;
+        const desc = truncate(
+          clean(
+            [
+              item.priority,
+              item.description || item.body,
+              item.when ? 'When: ' + item.when : '',
+              item.bestFor ? 'Best for: ' + item.bestFor : '',
+              item.formula ? 'Formula: ' + item.formula : '',
+              item.sklearn ? 'Library: ' + item.sklearn : '',
+              item.tools ? 'Tools: ' + item.tools : '',
+            ]
+              .filter(Boolean)
+              .join(' — ')
+          )
+        );
+        out.push({
+          t: name,
+          d: desc,
+          p: [page.title, ...trail, t].join(' › '),
+          u: `${page.href}#${key}`,
+          k: page.kind,
+          s: page.id,
+        });
+      }
+    }
   }
   return out;
 }
@@ -248,10 +313,208 @@ function entriesFromGeneric(value, page, varName) {
 }
 
 /* ------------------------------------------------------------------ *
+ * HTML courses, study guides & SPA route indexing
+ * ------------------------------------------------------------------ */
+
+function extractNextSnippet(html, afterIndex) {
+  const slice = html.slice(afterIndex, afterIndex + 1200);
+  const descMatch = slice.match(/<(?:p|div)\s+class="desc"[^>]*>([\s\S]*?)<\/(?:p|div)>/i);
+  if (descMatch) {
+    const txt = stripHtml(descMatch[1]);
+    if (txt.length >= 12) return truncate(txt);
+  }
+  const pMatch = slice.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+  if (pMatch) {
+    const txt = stripHtml(pMatch[1]);
+    if (txt.length >= 12) return truncate(txt);
+  }
+  const tdMatches = [...slice.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)]
+    .map((m) => stripHtml(m[1]))
+    .filter((s) => s.length >= 3);
+  if (tdMatches.length) return truncate(tdMatches.slice(0, 4).join(' · '));
+  return '';
+}
+
+function stripAboutBand(html) {
+  const at = html.indexOf('<!-- LAB:ABOUT:START -->');
+  return at > -1 ? html.slice(0, at) : html;
+}
+
+function extractHeadings(html, re, pageTitle, url, kind, id, trailPrefix) {
+  const cleanHtml = stripAboutBand(html);
+  const out = [];
+  for (const m of cleanHtml.matchAll(re)) {
+    const t = stripHtml(m[1]);
+    if (!t || t.length < 4 || /^\d+(\.\d+)?$/.test(t)) continue;
+    const after = m.index + m[0].length;
+    const d = extractNextSnippet(cleanHtml, after) || pageTitle;
+    out.push({
+      t,
+      d,
+      p: trailPrefix ? `${trailPrefix} › ${pageTitle}` : pageTitle,
+      u: url,
+      k: kind,
+      s: id,
+    });
+  }
+  return out;
+}
+
+function entriesFromHtmlCourses(report) {
+  const out = [];
+
+  // 1. Data Engineering glossary + 10 modules
+  let deCount = 0;
+  const deIdxPath = path.join(ROOT, 'DataEngineering/index.html');
+  if (fs.existsSync(deIdxPath)) {
+    const src = fs.readFileSync(deIdxPath, 'utf8');
+    const lit = extractLiteral(src, 'terms');
+    const terms = lit ? evalLiteral(lit) : null;
+    if (Array.isArray(terms)) {
+      for (const row of terms) {
+        if (!Array.isArray(row) || row.length < 3) continue;
+        out.push({
+          t: clean(row[0]),
+          d: truncate(clean(`${row[1]} (${row[3] || 'Data Engineering'}) — ${row[2]}`)),
+          p: 'Data Engineering Foundations › Glossary',
+          u: '/DataEngineering/index.html#glossary',
+          k: 'Course',
+          s: 'data-engineering',
+        });
+        deCount++;
+      }
+    }
+  }
+  for (let i = 1; i <= 10; i++) {
+    const rel = `DataEngineering/module${i}.html`;
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) continue;
+    const src = fs.readFileSync(abs, 'utf8');
+    const url = '/' + rel;
+    const rawTitle = (src.match(/<title>([^<]+)<\/title>/i) || [])[1] || `Module ${i}`;
+    const modTitle = stripHtml(rawTitle.split('|')[0]);
+    const metaDesc = stripHtml((src.match(/<meta\s+name="description"\s+content="([^"]+)"/i) || [])[1] || '');
+    out.push({
+      t: modTitle,
+      d: truncate(metaDesc || extractNextSnippet(src, src.indexOf('<header'))),
+      p: 'Data Engineering Foundations',
+      u: url,
+      k: 'Course',
+      s: 'data-engineering',
+    });
+    deCount++;
+    const h2s = extractHeadings(src, /<h2[^>]*>([\s\S]*?)<\/h2>/gi, modTitle, url, 'Course', 'data-engineering', 'Data Engineering Foundations');
+    const h3s = extractHeadings(src, /<div class="concept-header"[^>]*>\s*<h3[^>]*>([\s\S]*?)<\/h3>/gi, modTitle, url, 'Course', 'data-engineering', 'Data Engineering Foundations');
+    const interactives = extractHeadings(src, /<div class="interactive-box"[^>]*>\s*<h4[^>]*>([\s\S]*?)<\/h4>/gi, modTitle, url, 'Course', 'data-engineering', 'Data Engineering Foundations');
+    out.push(...h2s, ...h3s, ...interactives);
+    deCount += h2s.length + h3s.length + interactives.length;
+  }
+  report.push(`  ${String(deCount).padStart(4)}  DataEngineering/ (glossary + 10 modules)`);
+
+  // 2. GaTech CSE 8803 Applied NLP — 15 weeks
+  let cseCount = 0;
+  for (let i = 1; i <= 15; i++) {
+    const rel = `GaTech/CSE 8803/week${i}.html`;
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) continue;
+    const src = fs.readFileSync(abs, 'utf8');
+    const url = `/GaTech/CSE%208803/week${i}.html`;
+    const rawTitle = (src.match(/<title>([^<]+)<\/title>/i) || [])[1] || `Week ${i}`;
+    const weekTitle = stripHtml(rawTitle.split('|')[0]);
+    const headerIdx = src.indexOf('class="page-header"');
+    const leadDesc = headerIdx > -1 ? extractNextSnippet(src, headerIdx) : '';
+    out.push({
+      t: weekTitle,
+      d: truncate(leadDesc || `Week ${i} study notes and interactive demos for Applied NLP (CSE 8803).`),
+      p: 'Applied NLP — CSE 8803',
+      u: url,
+      k: 'Course',
+      s: 'cse8803',
+    });
+    cseCount++;
+    const h2s = extractHeadings(src, /<h2[^>]*>([\s\S]*?)<\/h2>/gi, weekTitle, url, 'Course', 'cse8803', 'Applied NLP — CSE 8803');
+    const h3s = extractHeadings(src, /<div class="concept-header"[^>]*>\s*<h3[^>]*>([\s\S]*?)<\/h3>/gi, weekTitle, url, 'Course', 'cse8803', 'Applied NLP — CSE 8803');
+    const bts = extractHeadings(src, /<div class="bts-card"[^>]*>\s*<h3[^>]*>([\s\S]*?)<\/h3>/gi, `${weekTitle} › Beyond the Slides`, url, 'Course', 'cse8803', 'Applied NLP — CSE 8803');
+    const interactives = extractHeadings(src, /<div class="interactive-box"[^>]*>\s*<h4[^>]*>([\s\S]*?)<\/h4>/gi, weekTitle, url, 'Course', 'cse8803', 'Applied NLP — CSE 8803');
+    out.push(...h2s, ...h3s, ...bts, ...interactives);
+    cseCount += h2s.length + h3s.length + bts.length + interactives.length;
+  }
+  report.push(`  ${String(cseCount).padStart(4)}  GaTech/CSE 8803/ (15 weeks)`);
+
+  // 3. AIP-C01 HTML study guides & domain deep dives
+  const aipGuides = [
+    'study-guide.html',
+    'aip-c01-studyguide.html',
+    'study-d1.html',
+    'study-d2.html',
+    'study-d3.html',
+    'study-d45.html',
+    'advanced-impl.html',
+    'troubleshooting-eval.html',
+    'gap-cheatsheet.html',
+  ];
+  let aipGuideCount = 0;
+  for (const file of aipGuides) {
+    const rel = `aip/${file}`;
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) continue;
+    const src = fs.readFileSync(abs, 'utf8');
+    const url = '/' + rel;
+    const h1 = stripHtml((src.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i) || [])[1] || (src.match(/<title>([^<]+)<\/title>/i) || [])[1] || file);
+    out.push({
+      t: h1,
+      d: truncate(extractNextSnippet(src, Math.max(0, src.indexOf('<h1'))) || `AIP-C01 study guide: ${h1}`),
+      p: 'AIP-C01 Prep Hub',
+      u: url,
+      k: 'Certification',
+      s: 'aip-hub',
+    });
+    aipGuideCount++;
+    const h2s = extractHeadings(src, /<h2[^>]*>([\s\S]*?)<\/h2>/gi, h1, url, 'Certification', 'aip-hub', 'AIP-C01 Prep Hub');
+    const h3s = extractHeadings(src, /<h3[^>]*>([\s\S]*?)<\/h3>/gi, h1, url, 'Certification', 'aip-hub', 'AIP-C01 Prep Hub');
+    out.push(...h2s, ...h3s);
+    aipGuideCount += h2s.length + h3s.length;
+  }
+  report.push(`  ${String(aipGuideCount).padStart(4)}  aip/ (9 study guides)`);
+
+  // 4. Visual References (3 AWS AIF-C01 diagrams)
+  const visPath = path.join(ROOT, 'aws_visual_references.html');
+  let visCount = 0;
+  if (fs.existsSync(visPath)) {
+    const src = fs.readFileSync(visPath, 'utf8');
+    const h2s = extractHeadings(src, /<h2[^>]*>([\s\S]*?)<\/h2>/gi, 'Diagrams', '/aws_visual_references.html', 'Certification', 'aws-visual', 'Visual References');
+    out.push(...h2s);
+    visCount = h2s.length;
+  }
+  report.push(`  ${String(visCount).padStart(4)}  aws_visual_references.html`);
+
+  // 5. RAG Academy (19 SPA routes)
+  let ragCount = 0;
+  const ragBundlePath = path.join(ROOT, 'rag-academy/assets/index-BZdBW4KA.js');
+  if (fs.existsSync(ragBundlePath)) {
+    const js = fs.readFileSync(ragBundlePath, 'utf8');
+    for (const m of js.matchAll(/\{path:"(\/[a-z-]+)",title:"([^"]+)",description:"([^"]+)"\}/g)) {
+      out.push({
+        t: clean(m[2]),
+        d: clean(m[3]),
+        p: 'RAG Academy › Interactive Module',
+        u: `/rag-academy${m[1]}`,
+        k: 'Course',
+        s: 'rag-academy',
+      });
+      ragCount++;
+    }
+  }
+  report.push(`  ${String(ragCount).padStart(4)}  rag-academy/ (SPA routes)`);
+
+  return out;
+}
+
+/* ------------------------------------------------------------------ *
  * Main
  * ------------------------------------------------------------------ */
 
-/** The 16 playbooks themselves, so a page-level query always lands. */
+/** The playbooks themselves, so a page-level query always lands. */
 function moduleEntries() {
   const file = path.join(ROOT, 'assets/modules.json');
   if (!fs.existsSync(file)) return [];
@@ -292,6 +555,8 @@ function main() {
     }
     report.push(`  ${String(pageCount).padStart(4)}  ${page.file}`);
   }
+
+  entries.push(...entriesFromHtmlCourses(report));
 
   // De-duplicate on title + page
   const uniq = [];

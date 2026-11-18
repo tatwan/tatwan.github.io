@@ -36,9 +36,10 @@
   --lab-amber-wash: rgba(233, 207, 140, 0.12);
 
   /* Type */
-  --lab-sans: Arial, Helvetica, sans-serif;
-  --lab-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --lab-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --lab-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --lab-display: "Bricolage Grotesque", "IBM Plex Sans", sans-serif;
+  --lab-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --lab-serif: "Bricolage Grotesque", "Instrument Serif", Georgia, serif;
 
   /* Shape */
   --lab-r-sm: 6px;
@@ -127,9 +128,10 @@
   flex-shrink: 0;
 }
 .lab-brand__name {
+  font-family: var(--lab-display);
   font-size: 23px;
-  font-weight: 600;
-  letter-spacing: -1px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
   transition: color 0.15s ease;
 }
 .lab-brand__by {

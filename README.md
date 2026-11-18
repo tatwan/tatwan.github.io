@@ -33,7 +33,7 @@ decision node inside them** — around 530 indexed entries. Results deep-link st
 | 01 | [Algorithm Selector](https://tatwan.github.io/ml_algorithm_selector.html) | The right algorithm for your problem type and data |
 | 02 | [Feature Engineering Playbook](https://tatwan.github.io/feature_engineering_playbook.html) | Encoding, scaling, outliers and selection, per data type |
 | 04 | [Data Engineering Foundations](https://tatwan.github.io/DataEngineering/) | A ten-module, vendor-neutral course |
-| 15 | [Applied NLP — CSE 8803](https://tatwan.github.io/GaTech/CSE%208803/) | Weekly study notes from the Georgia Tech OMSA course |
+| 15 | [Applied NLP — CSE 8803](https://tatwan.github.io/GaTech/CSE%208803/) | 15 weeks of graduate NLP study notes from Georgia Tech OMSA, with 24 live demos |
 
 ### Measurement
 
@@ -48,17 +48,18 @@ decision node inside them** — around 530 indexed entries. Results deep-link st
 | --- | --- | --- |
 | 00 | [GenAI Foundations Navigator](https://tatwan.github.io/genai_foundations_navigator.html) | The vocabulary everything else assumes |
 | 12 | [GenAI Technique Selector](https://tatwan.github.io/genai_techniques_selector.html) | RAG, fine-tuning, LoRA, quantization, distillation |
-| 14 | [RAG Academy](https://tatwan.github.io/rag-academy/) | Retrieval architectures that survive production |
+| 14 | [RAG Academy](https://tatwan.github.io/rag-academy/) | 19-module course on 12 RAG architectures, formal math and deployment |
 
 ### Certification
 
 | | Playbook | Exam |
 | --- | --- | --- |
 | 05 | [AWS AI Practitioner Guide](https://tatwan.github.io/aws_ai_practitioner.html) | AWS AIF-C01 |
-| 06 | [AIF-C01 Practice Exam](https://tatwan.github.io/aws_ai_practitioner_exam.html) | AWS AIF-C01 — 114 timed questions |
+| 06 | [AIF-C01 Practice Exam](https://tatwan.github.io/aws_ai_practitioner_exam.html) | AWS AIF-C01 — 189 timed questions |
 | 07 | [Visual References](https://tatwan.github.io/aws_visual_references.html) | AWS AIF-C01 — diagrams |
-| 08 | [AIP-C01 Prep Hub](https://tatwan.github.io/aip/) | AWS AI Practitioner (Generative AI) — 6 tools |
+| 08 | [AIP-C01 Prep Hub](https://tatwan.github.io/aip/) | AWS Certified Generative AI Developer – Professional (AIP-C01) — 13 tools |
 | 09 | [DP-700 Study Guide](https://tatwan.github.io/DP-700-InteractiveStudy.html) | Microsoft Fabric Data Engineering Associate |
+| 16 | [PL-300 Exam Prep](https://tatwan.github.io/pl300_exam_prep.html) | Microsoft Power BI Data Analyst — 140 questions & study guide |
 
 ---
 
