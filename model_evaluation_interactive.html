@@ -48,9 +48,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-decision.css">
+  <script defer src="/assets/decision-workbench.js"></script>
   <script defer src="/assets/lab.js" data-lab-page="Metric Decision Tree"></script>
 
   <script type="application/ld+json">
@@ -81,7 +83,7 @@
   <!-- LAB:HEAD:END -->
 </head>
 
-<body>
+<body class="archetype-tree">
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
@@ -118,20 +120,24 @@
       </svg>
     );
 
-    const Download = ({ className }) => (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-      </svg>
-    );
-
     const MLMetricDecisionTree = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
-      // LAB: deep link — /page.html#node_id opens that decision node.
+      const [copiedAdr, setCopiedAdr] = useState(false);
+      // LAB: deep link — /page.html#node_id opens that decision node with full trail reconstruction.
       React.useEffect(() => {
         const jump = () => {
           const h = decodeURIComponent((window.location.hash || '').slice(1));
-          if (h && tree[h]) setCurrentNode(h);
+          if (h && tree[h]) {
+            setCurrentNode(h);
+            if (window.MLDecisionWorkbench) {
+              setPath(window.MLDecisionWorkbench.buildPathToNode(tree, h));
+            }
+          } else if (!h) {
+            setCurrentNode('start');
+            setPath([]);
+          }
+          setCopiedAdr(false);
         };
         jump();
         window.addEventListener('hashchange', jump);
@@ -866,6 +872,8 @@
       const handleChoice = (nextNode, label) => {
         setPath([...path, { node: currentNode, choice: label }]);
         setCurrentNode(nextNode);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(nextNode);
       };
 
       const goBack = () => {
@@ -874,27 +882,73 @@
           const lastStep = newPath.pop();
           setPath(newPath);
           setCurrentNode(lastStep.node);
+          setCopiedAdr(false);
+          if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(lastStep.node);
         }
+      };
+
+      const jumpToStep = (idx) => {
+        const target = path[idx]?.node || 'start';
+        setPath(path.slice(0, idx));
+        setCurrentNode(target);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(target);
       };
 
       const reset = () => {
         setPath([]);
         setCurrentNode('start');
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash('start');
+      };
+
+      const copyDecisionRecord = () => {
+        if (!window.MLDecisionWorkbench) return;
+        const md = window.MLDecisionWorkbench.buildMarkdownRecord({
+          title: 'ML Metric Decision Tree',
+          nodeId: currentNode,
+          nodeData: currentData,
+          path,
+          tree
+        });
+        window.MLDecisionWorkbench.copyText(md).then(() => {
+          setCopiedAdr(true);
+          setTimeout(() => setCopiedAdr(false), 2200);
+        });
       };
 
       const currentData = tree[currentNode];
 
       const PathBreadcrumb = () => (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-6 border border-blue-200">
-          <div className="flex items-center gap-2 flex-wrap text-sm">
-            <Home className="w-4 h-4 text-blue-600" />
+        <div className="wb-tree-crumb">
+          <div className="wb-crumb-steps">
+            <button type="button" onClick={reset} className="wb-crumb-btn" title="Return to start">
+              <Home className="w-3.5 h-3.5" />
+              <span>Start</span>
+            </button>
             {path.map((step, idx) => (
               <React.Fragment key={idx}>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <span className="text-blue-700 font-medium">{step.choice}</span>
+                <button
+                  type="button"
+                  onClick={() => jumpToStep(idx)}
+                  className="wb-crumb-btn"
+                  title={`Jump back to: ${step.choice}`}
+                >
+                  {step.choice}
+                </button>
               </React.Fragment>
             ))}
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="wb-crumb-btn wb-crumb-btn--active">{currentNode}</span>
           </div>
+          <button
+            type="button"
+            onClick={copyDecisionRecord}
+            className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+          >
+            {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+          </button>
         </div>
       );
 
@@ -1003,24 +1057,24 @@
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-              <a href="index.html" className="inline-block text-xs tracking-widest uppercase text-blue-600 hover:text-blue-700 font-semibold transition-colors mb-4">&larr; ML_LAB</a>
-              <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
-                ML Metric Decision Tree
-              </h1>
-              <p className="text-gray-600">Interactive guide to choosing the right evaluation metric</p>
+            <div className="wb-tree-header">
+              <div>
+                <div className="wb-tree-header__eyebrow">Decision Workbench · Evaluation &amp; Metrics</div>
+                <h1>ML Metric Decision Tree</h1>
+                <p>Interactive guide to choosing the right evaluation metric</p>
+              </div>
 
-              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+              <div className="wb-tree-actions">
                 <button
                   onClick={reset}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:shadow-md transition-all text-gray-700"
+                  className="wb-btn-secondary"
                 >
                   <Home className="w-4 h-4" />
                   Start Over
                 </button>
                 <button
                   onClick={() => setShowQuickRef(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
+                  className="wb-btn-primary"
                 >
                   <List className="w-4 h-4" />
                   Quick Reference
@@ -1032,7 +1086,7 @@
             {path.length > 0 && <PathBreadcrumb />}
 
             {/* Main Content */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+            <div className="wb-main-panel">
               {currentData.info && (
                 <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                   <div className="flex items-start gap-2">
@@ -1122,25 +1176,32 @@
                 </div>
               )}
 
-              {/* Back Button */}
-              {path.length > 0 && (
-                <button
-                  onClick={goBack}
-                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                  Go Back
-                </button>
+              {/* Back & ADR Toolbar */}
+              {(path.length > 0 || currentData.type !== 'decision') && (
+                <div className="wb-node-toolbar">
+                  {path.length > 0 ? (
+                    <button onClick={goBack} className="wb-back-btn">
+                      <ChevronLeft className="w-4 h-4" />
+                      Go Back
+                    </button>
+                  ) : <span />}
+                  {currentData.type !== 'decision' && (
+                    <button
+                      type="button"
+                      onClick={copyDecisionRecord}
+                      className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+                    >
+                      {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Footer */}
             <div className="text-center mt-8 text-gray-500 text-sm">
               <p>Version 5 - Complete Edition | Comprehensive ML Metric Selection Guide</p>
-              <p className="mt-2 text-xs">
-                Created by Tarek Atwan @ <a href="index.html" className="text-blue-600 hover:text-blue-700 hover:underline font-semibold">ML_LAB</a>
-              </p>
-            </div>
+</div>
           </div>
 
           {/* Quick Reference Modal */}

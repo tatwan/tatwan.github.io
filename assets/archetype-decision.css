@@ -1,0 +1,461 @@
+/* =====================================================================
+   ML_LAB — Archetype 1: Interactive Decision Workbenches
+   ---------------------------------------------------------------------
+   Unifies the 6 Decision Trees (00, 01, 02, 03, 12, 13) into the clean
+   Architectural Workbench aesthetic matching pl300_exam_prep.html and
+   the Option B landing page, and adds Light/Dark Theme Toggle styling
+   for the 2 Strategy Workbenches (10, 11).
+   ===================================================================== */
+
+:root {
+  --wb-bg: #f3f2f1;
+  --wb-surface: #ffffff;
+  --wb-surface-alt: #f8fafc;
+  --wb-ink: #0f172a;
+  --wb-ink-2: #334155;
+  --wb-muted: #64748b;
+  --wb-border: #d2d0ce;
+  --wb-border-strong: #94a3b8;
+  --wb-accent: #1e3a8a;
+  --wb-accent-hi: #0066cc;
+  --wb-accent-soft: #eff6ff;
+  --wb-amber: #b45309;
+  --wb-amber-soft: #fffbeb;
+  --wb-emerald: #047857;
+  --wb-emerald-soft: #ecfdf5;
+}
+
+/* --------------------------------------------------------------------- *
+ * 1. Decision Trees (00, 01, 02, 03, 12, 13) — Architectural Light
+ * --------------------------------------------------------------------- */
+body.archetype-tree {
+  background: var(--wb-bg) !important;
+  color: var(--wb-ink);
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.archetype-tree #root > .min-h-screen {
+  background: var(--wb-bg) !important;
+  background-image: none !important;
+  min-height: auto !important;
+  padding: 28px 16px 56px !important;
+}
+
+/* Architectural Header Strip */
+body.archetype-tree .wb-tree-header {
+  background: var(--wb-surface);
+  border: 1px solid var(--wb-border);
+  border-top: 3px solid var(--wb-accent);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  text-align: left !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+body.archetype-tree .wb-tree-header__eyebrow {
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wb-accent-hi);
+  margin-bottom: 6px;
+}
+
+body.archetype-tree .wb-tree-header h1 {
+  font-family: "Bricolage Grotesque", "IBM Plex Sans", sans-serif !important;
+  font-size: clamp(1.6rem, 3vw, 2.2rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--wb-ink) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--wb-ink) !important;
+  margin: 0 0 6px !important;
+}
+
+body.archetype-tree .wb-tree-header p {
+  color: var(--wb-ink-2) !important;
+  font-size: 0.94rem;
+  line-height: 1.5;
+  max-width: 68ch;
+  margin: 0;
+}
+
+body.archetype-tree .wb-tree-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0 !important;
+}
+
+body.archetype-tree .wb-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  background: var(--wb-surface);
+  border: 1px solid var(--wb-border);
+  border-radius: 7px;
+  color: var(--wb-ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+body.archetype-tree .wb-btn-secondary:hover {
+  border-color: var(--wb-accent-hi);
+  background: var(--wb-accent-soft);
+  color: var(--wb-accent);
+  box-shadow: none !important;
+}
+
+body.archetype-tree .wb-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: var(--wb-accent);
+  border: 1px solid var(--wb-accent);
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+body.archetype-tree .wb-btn-primary:hover {
+  background: var(--wb-accent-hi);
+  border-color: var(--wb-accent-hi);
+  box-shadow: none !important;
+}
+
+/* Step Trail Breadcrumb */
+body.archetype-tree .wb-tree-crumb {
+  background: var(--wb-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--wb-border) !important;
+  border-left: 3px solid var(--wb-accent-hi) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  margin-bottom: 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body.archetype-tree .wb-crumb-steps {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.82rem;
+}
+
+body.archetype-tree .wb-crumb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--wb-surface-alt);
+  border: 1px solid var(--wb-border);
+  border-radius: 5px;
+  color: var(--wb-ink-2);
+  font-weight: 600;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+body.archetype-tree .wb-crumb-btn:hover {
+  border-color: var(--wb-accent-hi);
+  color: var(--wb-accent);
+  background: var(--wb-accent-soft);
+}
+body.archetype-tree .wb-crumb-btn--active {
+  background: var(--wb-accent-soft);
+  border-color: var(--wb-accent-hi);
+  color: var(--wb-accent);
+}
+
+/* Main Panel */
+body.archetype-tree .wb-main-panel {
+  background: var(--wb-surface) !important;
+  border: 1px solid var(--wb-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  padding: 28px !important;
+}
+
+body.archetype-tree .wb-main-panel h2 {
+  font-family: "Bricolage Grotesque", "IBM Plex Sans", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  color: var(--wb-ink) !important;
+}
+
+/* Decision Option Cards */
+body.archetype-tree button.group {
+  background: var(--wb-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--wb-border) !important;
+  border-left: 3px solid var(--wb-border-strong) !important;
+  border-radius: 8px !important;
+  padding: 18px 20px !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.12s ease !important;
+}
+
+body.archetype-tree button.group:hover {
+  background: var(--wb-surface-alt) !important;
+  border-color: var(--wb-accent-hi) !important;
+  border-left-color: var(--wb-accent-hi) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+  transform: translateY(-1px);
+}
+
+body.archetype-tree button.group:hover h3,
+body.archetype-tree button.group:hover p:first-child {
+  color: var(--wb-accent) !important;
+}
+
+/* Leaf / Content Result Header Bar + Copy Decision Record */
+body.archetype-tree .wb-node-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid var(--wb-border);
+}
+
+body.archetype-tree .wb-copy-adr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background: var(--wb-surface);
+  border: 1px solid var(--wb-border-strong);
+  border-radius: 6px;
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wb-ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+body.archetype-tree .wb-copy-adr-btn:hover {
+  border-color: var(--wb-accent-hi);
+  background: var(--wb-accent-soft);
+  color: var(--wb-accent);
+}
+body.archetype-tree .wb-copy-adr-btn.copied {
+  border-color: var(--wb-emerald);
+  background: var(--wb-emerald-soft);
+  color: var(--wb-emerald);
+}
+
+body.archetype-tree .wb-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--wb-surface-alt);
+  border: 1px solid var(--wb-border);
+  border-radius: 7px;
+  color: var(--wb-ink-2);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+body.archetype-tree .wb-back-btn:hover {
+  border-color: var(--wb-border-strong);
+  background: #e2e8f0;
+  color: var(--wb-ink);
+}
+
+/* Quick Reference Table Header Override */
+body.archetype-tree table thead tr {
+  background: #111e2b !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+/* Callout Info Banner */
+body.archetype-tree .bg-sky-50,
+body.archetype-tree .bg-blue-50,
+body.archetype-tree .bg-rose-50,
+body.archetype-tree .bg-violet-50,
+body.archetype-tree .bg-emerald-50 {
+  background-color: var(--wb-accent-soft) !important;
+  border-color: var(--wb-accent-hi) !important;
+}
+
+/* --------------------------------------------------------------------- *
+ * 2. Strategy Workbenches (10, 11) — Theme Toggle + Architectural Light
+ * --------------------------------------------------------------------- */
+.wb-theme-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 24px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.wb-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 6px;
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.75);
+  color: #e2e8f0;
+}
+.wb-theme-toggle:hover {
+  border-color: #e9cf8c;
+  color: #ffffff;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy {
+  background: var(--wb-bg) !important;
+  color: var(--wb-ink) !important;
+}
+
+html[data-wb-theme="light"] .wb-theme-toggle {
+  background: #ffffff;
+  border-color: var(--wb-border);
+  color: var(--wb-ink);
+}
+html[data-wb-theme="light"] .wb-theme-toggle:hover {
+  border-color: var(--wb-accent-hi);
+  color: var(--wb-accent);
+  background: var(--wb-accent-soft);
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .bg-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px) !important;
+  background-color: var(--wb-bg) !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .bg-radial-glow {
+  background: none !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy #root header {
+  background: #ffffff !important;
+  border-bottom-color: var(--wb-border) !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .card-surface {
+  background: #ffffff !important;
+  border: 1px solid var(--wb-border) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .option-card,
+html[data-wb-theme="light"] body.archetype-strategy .scenario-card {
+  background: #ffffff !important;
+  border: 1px solid var(--wb-border) !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .option-card:hover,
+html[data-wb-theme="light"] body.archetype-strategy .scenario-card:hover {
+  background: #f8fafc !important;
+  border-color: var(--wb-accent-hi) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .option-card.selected {
+  background: var(--wb-accent-soft) !important;
+  border-color: var(--wb-accent-hi) !important;
+  box-shadow: none !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .text-white {
+  color: var(--wb-ink) !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-slate-200,
+html[data-wb-theme="light"] body.archetype-strategy .text-slate-300 {
+  color: var(--wb-ink-2) !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-slate-400,
+html[data-wb-theme="light"] body.archetype-strategy .text-slate-500 {
+  color: var(--wb-muted) !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .bg-slate-800\/20,
+html[data-wb-theme="light"] body.archetype-strategy .bg-slate-800\/30,
+html[data-wb-theme="light"] body.archetype-strategy .bg-slate-800\/40,
+html[data-wb-theme="light"] body.archetype-strategy .bg-slate-800\/80,
+html[data-wb-theme="light"] body.archetype-strategy .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  border-color: var(--wb-border) !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .text-amber-300,
+html[data-wb-theme="light"] body.archetype-strategy .text-amber-400 {
+  color: #b45309 !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-indigo-200,
+html[data-wb-theme="light"] body.archetype-strategy .text-indigo-300,
+html[data-wb-theme="light"] body.archetype-strategy .text-indigo-400 {
+  color: #1e40af !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-purple-300 {
+  color: #6d28d9 !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-emerald-300\/80,
+html[data-wb-theme="light"] body.archetype-strategy .text-emerald-400 {
+  color: #047857 !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy .text-red-400 {
+  color: #b91c1c !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .gradient-text {
+  background: none !important;
+  -webkit-text-fill-color: var(--wb-accent) !important;
+  color: var(--wb-accent) !important;
+}
+
+html[data-wb-theme="light"] body.archetype-strategy .jargon-tooltip::after {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* Light mode SVG path visualization readability */
+html[data-wb-theme="light"] body.archetype-strategy svg rect[fill*="rgba(15,18,32"],
+html[data-wb-theme="light"] body.archetype-strategy svg rect[fill*="rgba(15, 18, 32"] {
+  fill: #f8fafc !important;
+  stroke: #cbd5e1 !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy svg path[stroke="rgba(255,255,255,0.06)"],
+html[data-wb-theme="light"] body.archetype-strategy svg line[stroke="rgba(255,255,255,0.08)"] {
+  stroke: rgba(15, 23, 42, 0.14) !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy svg text[fill="#f3f4f6"],
+html[data-wb-theme="light"] body.archetype-strategy svg text[fill="#d1d5db"] {
+  fill: #0f172a !important;
+}
+html[data-wb-theme="light"] body.archetype-strategy svg text[fill="#4b5563"],
+html[data-wb-theme="light"] body.archetype-strategy svg text[fill="#6b7280"] {
+  fill: #64748b !important;
+}

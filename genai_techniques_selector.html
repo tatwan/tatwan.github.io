@@ -50,9 +50,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-decision.css">
+  <script defer src="/assets/decision-workbench.js"></script>
   <script defer src="/assets/lab.js" data-lab-page="GenAI Technique Selector"></script>
 
   <script type="application/ld+json">
@@ -83,7 +85,7 @@
   <!-- LAB:HEAD:END -->
 </head>
 
-<body>
+<body class="archetype-tree">
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
@@ -129,11 +131,21 @@
     const GenAITechniqueSelector = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
-      // LAB: deep link — /page.html#node_id opens that decision node.
+      const [copiedAdr, setCopiedAdr] = useState(false);
+      // LAB: deep link — /page.html#node_id opens that decision node with full trail reconstruction.
       React.useEffect(() => {
         const jump = () => {
           const h = decodeURIComponent((window.location.hash || '').slice(1));
-          if (h && tree[h]) setCurrentNode(h);
+          if (h && tree[h]) {
+            setCurrentNode(h);
+            if (window.MLDecisionWorkbench) {
+              setPath(window.MLDecisionWorkbench.buildPathToNode(tree, h));
+            }
+          } else if (!h) {
+            setCurrentNode('start');
+            setPath([]);
+          }
+          setCopiedAdr(false);
         };
         jump();
         window.addEventListener('hashchange', jump);
@@ -244,7 +256,34 @@
               when: "Generic embeddings miss domain terminology",
               pros: ["Better domain understanding", "Improved recall"],
               cons: ["Requires training data", "Maintenance overhead"],
-              tools: "Sentence Transformers, OpenAI fine-tuning"
+              tools: "Sentence Transformers v3+, Matryoshka Representation Learning (MRL), OpenAI/Cohere"
+            },
+            {
+              name: "Contextual Retrieval",
+              priority: "High Impact",
+              description: "Prepend a short LLM-generated document-level summary to each chunk before generating embeddings and BM25 index entries, preventing orphaned chunks from losing context.",
+              when: "Chunks lose who/what/when context when split from long reports, filings, or manuals",
+              pros: ["Cuts retrieval failure rate by ~35–49% when combined with BM25 + reranking", "Drop-in upgrade to existing chunking"],
+              cons: ["One-time ingestion LLM cost (mitigated with prompt caching)"],
+              tools: "Anthropic Contextual Embeddings pattern, LlamaIndex, LangChain, BM25 + Reranker"
+            },
+            {
+              name: "GraphRAG",
+              priority: "Multi-Hop & Global Queries",
+              description: "Build an entity-relationship knowledge graph and hierarchical community summaries over your corpus so queries can traverse multi-hop links or synthesize dataset-wide themes.",
+              when: "Global thematic questions ('What are the top risks across 500 contracts?') or multi-hop entity reasoning where vector top-k fails",
+              pros: ["Excels at global summarization and multi-hop relationships", "Reduces missed cross-document connections"],
+              cons: ["Higher indexing cost and latency", "Graph schema maintenance"],
+              tools: "Microsoft GraphRAG, LightRAG, Neo4j GenAI, LlamaIndex PropertyGraphIndex"
+            },
+            {
+              name: "Prompt Caching & Long-Context vs. RAG",
+              priority: "Architecture Decision",
+              description: "For bounded corpora (<200K–1M tokens) like a codebase or policy manual, placing the full corpus in a cached prefix (Cache-Augmented Generation) can beat RAG on accuracy while cutting prefix latency/cost up to 75–90%.",
+              when: "Corpus fits inside context window and changes infrequently vs. large dynamic corpora (>1M tokens) requiring RAG",
+              pros: ["Zero retrieval misses on bounded docs", "Massive prefix cost/latency savings via KV caching"],
+              cons: ["Doesn't scale to millions of documents", "Per-query token overhead for huge inputs"],
+              tools: "Anthropic Prompt Caching, OpenAI Prompt Caching, Gemini Context Caching, vLLM Prefix Caching"
             }
           ]
         },
@@ -373,10 +412,10 @@
             {
               name: "Structured Output",
               priority: "Reliable Parsing",
-              description: "Constrain model to output valid JSON, XML, or other formats.",
-              when: "Need machine-parseable output",
-              methods: ["JSON mode", "Function calling", "Grammar constraints"],
-              tools: "OpenAI JSON mode, Outlines, Guidance, LMQL"
+              description: "Constrain decoding with a strict JSON Schema or CFG grammar so outputs are 100% schema-valid.",
+              when: "Need guaranteed machine-parseable JSON, tool arguments, or typed extractions",
+              methods: ["Strict JSON Schema constrained decoding", "Tool/function schemas", "CFG grammars"],
+              tools: "OpenAI Structured Outputs, Anthropic Tool Use, vLLM Guided Decoding, Outlines, Instructor"
             }
           ],
           continueOptions: [
@@ -540,44 +579,58 @@
           goal: "Fine-tune through provider APIs without managing infrastructure",
           techniques: [
             {
-              name: "OpenAI Fine-Tuning",
+              name: "OpenAI Fine-Tuning (SFT, DPO & RFT)",
               priority: "Easiest",
-              description: "Upload JSONL data, provider handles training. Get custom model endpoint.",
-              when: "Using OpenAI models, want simplicity",
-              models: "GPT-4o, GPT-4o-mini, GPT-3.5-Turbo",
-              pros: ["No infrastructure", "Simple API", "Auto-scaling"],
-              cons: ["Limited control", "Data goes to provider", "Ongoing costs"],
-              dataFormat: "JSONL with messages array"
+              description: "Upload JSONL data for supervised fine-tuning (SFT), preference alignment (DPO), or Reinforcement Fine-Tuning (RFT) with custom graders on GPT-4.1, GPT-4.1-mini, GPT-4.1-nano, and o4-mini.",
+              when: "Using OpenAI models, want managed SFT, DPO, or grader-driven reasoning optimization without GPU ops",
+              models: "GPT-4.1, GPT-4.1-mini, GPT-4.1-nano, GPT-4o, o4-mini (RFT)",
+              pros: ["No infrastructure", "Supports SFT, DPO, and RFT", "Auto-scaling"],
+              cons: ["Limited architectural control", "Data leaves VPC unless ZDR/enterprise", "Ongoing API token costs"],
+              dataFormat: "JSONL with messages array or preference pairs",
+              tools: "OpenAI Fine-Tuning API (SFT / DPO / RFT)"
             },
             {
-              name: "Claude Fine-Tuning",
+              name: "Anthropic Claude & Cloud Managed Fine-Tuning",
               priority: "Enterprise",
-              description: "Available for enterprise customers. Contact Anthropic.",
-              when: "Using Claude at scale, need customization"
+              description: "Managed customization for frontier proprietary models via enterprise cloud platforms (Amazon Bedrock Custom Models and Google Vertex AI Supervised Tuning).",
+              when: "Using Claude or Gemini in enterprise AWS/GCP environments with strict VPC governance",
+              pros: ["Data stays in cloud VPC (Bedrock/Vertex)", "Managed serving & evaluation"],
+              tools: "Amazon Bedrock Custom Models (Claude / Nova), Google Vertex AI (Gemini 2.5)"
             },
             {
-              name: "Together.ai / Anyscale",
+              name: "Together AI / Fireworks AI",
               priority: "Open Models",
-              description: "Fine-tune open-source models through managed APIs.",
-              when: "Want open model flexibility with managed infrastructure",
-              pros: ["More model choices", "Reasonable pricing"],
-              tools: "Together Fine-tuning, Anyscale Endpoints"
+              description: "Serverless and dedicated fine-tuning for open-weight models (Llama 4, Qwen 3, DeepSeek, Mistral) with fast LoRA/SFT pipelines and low-latency FP8 inference.",
+              when: "Want open-weight model ownership and exportable adapters without managing GPU clusters",
+              pros: ["Exportable weights & LoRA adapters", "Competitive serverless pricing", "Fast FP8 deployment"],
+              tools: "Together Fine-Tuning, Fireworks AI, HuggingFace AutoTrain, Modal"
             }
           ]
         },
         alignment: {
           question: "Alignment & Safety Fine-Tuning",
           type: "technique",
-          goal: "Improve helpfulness, harmlessness, and policy compliance",
+          goal: "Improve helpfulness, reasoning accuracy, harmlessness, and policy compliance",
           techniques: [
+            {
+              name: "GRPO / RLVR (Reasoning Post-Training)",
+              priority: "2026 Frontier",
+              description: "Group Relative Policy Optimization (GRPO) combined with Reinforcement Learning from Verifiable Rewards (RLVR) scores groups of sampled completions against deterministic verifiers (unit tests, math solvers, schema checks) without needing a separate critic network.",
+              when: "Training reasoning models on math, code, SQL, tool-use, or any domain with programmatic/verifiable ground truth",
+              stages: ["Sample G completions per prompt", "Score with deterministic verifier", "Compute group-normalized advantage", "Update policy with KL penalty"],
+              pros: ["Eliminates PPO value/critic network (~50% less memory)", "Immune to learned reward-model hacking", "Emergent self-verification & test-time scaling"],
+              cons: ["Requires verifiable tasks or reliable reward functions", "Higher rollout compute during training"],
+              paper: "DeepSeekMath (2024) & DeepSeek-R1: Incentivizing Reasoning Capability via RL (2025)",
+              tools: "HuggingFace TRL (GRPOTrainer), verl, OpenRLHF, Unsloth GRPO"
+            },
             {
               name: "RLHF (RL from Human Feedback)",
               priority: "Gold Standard",
               description: "Train reward model on human preferences, then optimize policy with PPO.",
-              when: "Need high-quality alignment, have resources for full pipeline",
+              when: "Need high-quality subjective alignment (tone, helpfulness), have resources for full pipeline",
               stages: ["Collect comparison data", "Train reward model", "PPO training"],
-              pros: ["Best alignment quality", "Proven at scale"],
-              cons: ["Complex", "Expensive", "Reward hacking"],
+              pros: ["Best subjective alignment quality", "Proven at scale"],
+              cons: ["Complex (4 models in memory)", "Expensive", "Reward hacking"],
               tools: "TRL, OpenRLHF, DeepSpeed-Chat"
             },
             {
@@ -587,43 +640,44 @@
               when: "Want RLHF-like results with simpler pipeline",
               dataNeeded: "(prompt, chosen, rejected) triplets",
               pros: ["Simpler than RLHF", "No reward model needed", "Stable training"],
-              cons: ["May underperform RLHF on some tasks"],
+              cons: ["May underperform online RL on out-of-distribution prompts"],
               paper: "Direct Preference Optimization (2023)",
-              tools: "TRL DPOTrainer, Axolotl"
+              tools: "TRL DPOTrainer, Axolotl, Unsloth"
             },
             {
-              name: "ORPO (Odds Ratio Preference Optimization)",
-              priority: "Latest",
-              description: "Combines SFT and preference alignment in one stage.",
-              when: "Want single-stage alignment training",
-              pros: ["Simpler pipeline", "Efficient"],
-              paper: "ORPO: Monolithic Preference Optimization (2024)"
+              name: "ORPO / KTO (Single-Stage & Unpaired Alignment)",
+              priority: "Data-Efficient",
+              description: "ORPO combines SFT and preference alignment in one stage; KTO optimizes directly from unpaired binary (good/bad) feedback using prospect theory.",
+              when: "Want single-stage training (ORPO) or only have thumbs-up/down signals instead of paired comparisons (KTO)",
+              pros: ["Simpler pipeline", "Works without paired preference datasets (KTO)"],
+              paper: "ORPO (2024) & KTO: Model Alignment as Prospect Theoretic Optimization (2024)",
+              tools: "TRL (ORPOTrainer, KTOTrainer), Axolotl"
             },
             {
               name: "Constitutional AI (RLAIF)",
               priority: "Scalable",
-              description: "Use AI feedback based on principles instead of human labels.",
+              description: "Use AI feedback based on explicit written principles instead of human labels.",
               when: "Need scalable alignment, can't collect enough human feedback",
-              pros: ["More scalable", "Consistent feedback"],
-              cons: ["Depends on principle quality"],
+              pros: ["More scalable", "Consistent feedback", "Auditable principles"],
+              cons: ["Depends on principle and judge quality"],
               paper: "Constitutional AI (Anthropic, 2022)"
             },
             {
               name: "Safety Fine-Tuning",
               priority: "Guardrails",
-              description: "Train on refusal examples and safe completions for harmful prompts.",
-              when: "Need to add safety guardrails to open models",
-              dataNeeded: "Harmful prompt + safe refusal pairs",
-              note: "Combine with system prompts for layered safety"
+              description: "Train on refusal examples, safe completions, and instruction-hierarchy defense against prompt injection.",
+              when: "Need to add safety guardrails and jailbreak resistance to open models",
+              dataNeeded: "Harmful prompt + safe refusal pairs & benign boundary examples",
+              note: "Combine with system prompts, input/output classifiers, and over-refusal testing"
             }
           ],
           additionalInfo: {
             title: "Alignment Method Selection:",
             points: [
-              "Start with DPO - simpler and often sufficient",
-              "Use RLHF for maximum alignment quality at scale",
-              "ORPO for efficient single-stage training",
-              "RLAIF when human feedback is limited"
+              "Use GRPO / RLVR when tasks have deterministic verifiers (math, code, SQL, structured tools)",
+              "Start with DPO (or KTO for unpaired thumbs-up/down data) for general preference alignment",
+              "Use PPO-RLHF for maximum subjective alignment quality at scale",
+              "RLAIF / Constitutional AI when human feedback is limited"
             ]
           }
         },
@@ -635,27 +689,28 @@
             {
               name: "Function Calling Fine-Tuning",
               priority: "Recommended",
-              description: "Fine-tune on examples of when and how to call functions with correct arguments.",
-              when: "Need reliable tool use, custom tools",
-              dataNeeded: "Conversations with function calls and results",
+              description: "Fine-tune on examples of when and how to call functions with correct arguments and abstain when no tool applies.",
+              when: "Need reliable tool use, custom domain schemas, or low-latency small models",
+              dataNeeded: "Conversations with multi-turn function calls, tool errors, and results",
               pros: ["Reliable function calls", "Custom tool support"],
-              tools: "Glaive function calling dataset, custom data"
+              tools: "Berkeley Function Calling / ToolBench datasets, TRL, Unsloth"
             },
             {
-              name: "Tool-Augmented Models",
-              priority: "Pre-built",
-              description: "Use models already trained for tool use (GPT-4, Claude, Llama 3).",
-              when: "Standard tools, don't want to fine-tune",
-              pros: ["Works out of box", "Well-tested"],
-              cons: ["Less customization"]
+              name: "Tool-Augmented Models & MCP",
+              priority: "Pre-built Standard",
+              description: "Use frontier models natively trained for parallel tool use (Claude 4 / 3.7 Sonnet, GPT-4.1 / o4-mini, Gemini 2.5 Pro, Llama 4, Qwen 3) connected via standardized Anthropic MCP (Model Context Protocol) servers.",
+              when: "Standard tools and enterprise integrations without custom weight training",
+              pros: ["Works out of box", "Standardized MCP tool discovery", "Parallel & multi-step execution"],
+              cons: ["Requires schema hygiene and permission boundaries"],
+              tools: "Model Context Protocol (MCP), OpenAI/Anthropic Tool Use, LangGraph"
             },
             {
-              name: "ReAct Pattern",
-              priority: "Prompting Approach",
-              description: "Prompt model to Reason and Act in alternating steps with observations.",
-              when: "Multi-step tool use, need reasoning traces",
-              pattern: "Thought -> Action -> Observation -> Thought -> ...",
-              tools: "LangChain Agents, LlamaIndex"
+              name: "ReAct & Code-Act Pattern",
+              priority: "Agentic Pattern",
+              description: "Interleave reasoning, tool calls (or executable Python snippets in CodeAct), and environment observations in a loop.",
+              when: "Multi-step agentic workflows requiring dynamic planning and error recovery",
+              pattern: "Thought -> Tool/Code Action -> Observation -> Thought -> ...",
+              tools: "LangGraph, CrewAI, PydanticAI, OpenAI Agents SDK"
             }
           ]
         },
@@ -740,10 +795,10 @@
             {
               name: "Synthetic Data Generation",
               priority: "Scalable",
-              description: "Use strong models (GPT-4, Claude) to generate training examples.",
-              when: "Need more data, want to distill capabilities",
-              methods: ["Self-Instruct", "Evol-Instruct", "WizardLM approach"],
-              warning: "Verify quality, watch for model artifacts"
+              description: "Use frontier models (Claude 4, GPT-4.1, DeepSeek-R1, Qwen 3) to generate verified training examples and reasoning traces.",
+              when: "Need more data, want to distill reasoning or domain capabilities",
+              methods: ["Rejection Sampling + Verifiers", "Evol-Instruct", "Reasoning Trace Distillation"],
+              warning: "Deduplicate, filter with deterministic verifiers, and watch for model collapse"
             },
             {
               name: "Data Mixing",
@@ -793,10 +848,10 @@
             {
               name: "Flash Attention",
               priority: "Always Use",
-              description: "Memory-efficient attention implementation. Faster and uses less memory.",
+              description: "IO-aware tiled attention implementation. Faster and uses far less HBM memory.",
               savings: "5-20x memory for long sequences",
-              recommendation: "Enable by default",
-              tools: "Flash Attention 2, xFormers"
+              recommendation: "Enable by default (FA-2 / FA-3 on Hopper GPUs)",
+              tools: "FlashAttention-2 / FlashAttention-3, PyTorch SDPA, Unsloth"
             }
           ]
         },
@@ -805,12 +860,54 @@
         compression: {
           question: "What's your primary optimization goal?",
           type: "decision",
-          info: "Different techniques trade off between compression ratio, quality loss, and implementation complexity.",
+          info: "Different techniques trade off between compression ratio, serving throughput, latency, and implementation complexity.",
           options: [
-            { label: "Reduce Memory/Latency", next: "quantization", desc: "Most common - quantize weights to lower precision" },
+            { label: "Reduce Memory/Latency", next: "quantization", desc: "Quantize weights to lower precision (FP8, AWQ, GPTQ, GGUF)" },
+            { label: "Accelerate Inference & Serving", next: "inference_acceleration", desc: "Speculative decoding, KV-cache quantization, PagedAttention (vLLM / SGLang)" },
             { label: "Reduce Parameters", next: "pruning", desc: "Remove unnecessary weights or structures" },
             { label: "Smaller Model Architecture", next: "distillation", desc: "Train a smaller student model" },
             { label: "Maximum Compression", next: "compression_pipeline", desc: "Combine multiple techniques" }
+          ]
+        },
+        inference_acceleration: {
+          question: "Inference Serving & Decoding Acceleration",
+          type: "technique",
+          goal: "Cut time-to-first-token (TTFT) and inter-token latency while multiplying serving throughput without changing model weights",
+          info: "Modern LLM serving engines combine memory virtualization, KV-cache compression, and draft-verify decoding to unlock 2–5x speedups.",
+          techniques: [
+            {
+              name: "Speculative Decoding (Draft-and-Verify / EAGLE)",
+              priority: "Lossless 2–3x Speedup",
+              description: "Generate K candidate tokens quickly using a small draft model (or lightweight EAGLE head), then verify all K tokens in a single parallel forward pass of the target LLM — guaranteeing the exact same output distribution.",
+              when: "Memory-bandwidth-bound autoregressive decoding (small batch sizes, coding, long reasoning traces)",
+              pros: ["Mathematically lossless output quality", "2–3x lower latency on structured/code tasks"],
+              cons: ["Acceptance rate drops on high-entropy creative text", "Extra draft memory unless using Medusa/EAGLE"],
+              paper: "Fast Inference from Transformers via Speculative Decoding (2023) & EAGLE-2/3 (2024–2025)",
+              tools: "vLLM Speculative Decoding, SGLang EAGLE, TensorRT-LLM"
+            },
+            {
+              name: "KV-Cache Quantization & PagedAttention (vLLM / SGLang)",
+              priority: "Serving Standard",
+              description: "PagedAttention manages KV-cache in non-contiguous fixed-size virtual memory blocks (eliminating fragmentation); RadixAttention (SGLang) reuses shared prefix KV trees; FP8/INT4 KV-cache quantization halves or quarters long-context memory.",
+              when: "High-concurrency serving, multi-turn chat, agentic loops, or 32K–128K+ contexts where KV-cache dominates VRAM",
+              pros: ["Near-zero wasted KV memory", "Automatic prefix cache reuse for system prompts & RAG", "2–4x higher concurrent batch size"],
+              cons: ["INT4 KV quantization needs accuracy validation on needle-in-a-haystack tasks"],
+              paper: "Efficient Memory Management for Large Language Model Serving with PagedAttention (2023)",
+              tools: "vLLM, SGLang (RadixAttention), TensorRT-LLM (FP8 KV cache)"
+            },
+            {
+              name: "Continuous Batching & Prefill-Decode Disaggregation",
+              priority: "Production Scale",
+              description: "Iteration-level scheduling swaps finished requests out immediately, while disaggregated serving separates compute-bound prefill GPUs from memory-bandwidth-bound decode GPUs to eliminate TTFT/TPOT interference.",
+              when: "Production clusters serving mixed short prompts and long-context RAG/agent workloads under strict SLAs",
+              pros: ["Eliminates head-of-line blocking", "Independent SLA tuning for TTFT vs. tokens/sec"],
+              cons: ["Requires fast NVLink / RDMA KV-cache transfer between nodes"],
+              tools: "vLLM, SGLang, NVIDIA Dynamo / TensorRT-LLM, llm-d"
+            }
+          ],
+          continueOptions: [
+            { label: "Pair with weight quantization", next: "quantization" },
+            { label: "Distill to a smaller model", next: "distillation" }
           ]
         },
         quantization: {
@@ -826,7 +923,7 @@
               precision: "4-bit, 8-bit",
               pros: ["Good quality", "Fast inference", "Wide support"],
               cons: ["Requires calibration data", "Static quantization"],
-              tools: "AutoGPTQ, ExLlama, transformers"
+              tools: "GPTQModel, ExLlamaV2, vLLM, transformers"
             },
             {
               name: "AWQ (Activation-Aware)",
@@ -876,6 +973,7 @@
             ]
           },
           continueOptions: [
+            { label: "Accelerate inference (Speculative / PagedAttention)", next: "inference_acceleration" },
             { label: "Need more compression", next: "pruning" },
             { label: "Combine techniques", next: "compression_pipeline" }
           ]
@@ -933,12 +1031,13 @@
             {
               name: "Response-Based Distillation",
               priority: "Most Common",
-              description: "Train student on teacher's output text/logits. Student learns to match teacher responses.",
-              when: "Want smaller model with similar capabilities",
-              dataNeeded: "Large dataset of (input, teacher_output) pairs",
+              description: "Train student on teacher's output text/reasoning traces. Student learns to match teacher responses.",
+              when: "Want smaller model with strong reasoning or domain capabilities",
+              dataNeeded: "Dataset of (input, reasoning_trace + teacher_output) pairs",
               pros: ["Simple to implement", "Flexible student architecture"],
               cons: ["Requires generating teacher outputs", "May miss nuanced behavior"],
-              examples: "Alpaca (from text-davinci-003), Vicuna, Orca"
+              examples: "DeepSeek-R1-Distill (Llama/Qwen), Phi-4, Orca",
+              tools: "TRL, Axolotl, Unsloth"
             },
             {
               name: "Feature-Based Distillation",
@@ -1156,21 +1255,24 @@
       };
 
       const quickReference = [
-        { goal: "Add external knowledge", technique: "RAG", notes: "Dynamic, verifiable, no retraining" },
-        { goal: "Change tone/format", technique: "Prompt Engineering", notes: "Start here, no training" },
+        { goal: "Add external knowledge", technique: "Hybrid / Contextual RAG / GraphRAG", notes: "Use Prompt Caching instead for small static corpora" },
+        { goal: "Change tone/format", technique: "Prompting + Structured Outputs", notes: "Start here; strict JSON schema for parsing" },
         { goal: "Task specialization", technique: "LoRA/QLoRA (PEFT)", notes: "Default for most fine-tuning" },
-        { goal: "Alignment/Safety", technique: "DPO or RLHF", notes: "DPO simpler, RLHF more powerful" },
-        { goal: "Reduce memory/latency", technique: "Quantization (4-bit)", notes: "First compression step" },
-        { goal: "Smaller architecture", technique: "Distillation", notes: "Train student from teacher" },
+        { goal: "Alignment & Reasoning RL", technique: "GRPO / RLVR, DPO, or RLHF", notes: "GRPO for verifiable reasoning; DPO for preferences" },
+        { goal: "Reduce memory/latency", technique: "FP8 / 4-bit Quantization", notes: "Pair with FP8 KV-cache for long contexts" },
+        { goal: "Faster serving throughput", technique: "Speculative Decoding + PagedAttention", notes: "2–3x decoding speedup via vLLM / SGLang" },
+        { goal: "Smaller architecture", technique: "Distillation", notes: "Distill reasoning traces from frontier teacher" },
         { goal: "New domain expertise", technique: "Continued Pre-Training", notes: "Large domain corpus needed" },
-        { goal: "API model customization", technique: "Provider Fine-Tuning", notes: "OpenAI, Together, etc." },
-        { goal: "Tool/function calling", technique: "Function Calling SFT", notes: "Or use capable base model" },
+        { goal: "API model customization", technique: "Provider SFT / DPO / RFT", notes: "OpenAI, Bedrock, Vertex, Together, Fireworks" },
+        { goal: "Tool/function calling", technique: "Native Tool Use + MCP / SFT", notes: "Standardize tools via MCP before fine-tuning" },
         { goal: "Maximum compression", technique: "Prune -> Distill -> Quantize", notes: "Combined pipeline" }
       ];
 
       const handleChoice = (nextNode, label) => {
         setPath([...path, { node: currentNode, choice: label }]);
         setCurrentNode(nextNode);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(nextNode);
       };
 
       const goBack = () => {
@@ -1179,27 +1281,73 @@
           const lastStep = newPath.pop();
           setPath(newPath);
           setCurrentNode(lastStep.node);
+          setCopiedAdr(false);
+          if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(lastStep.node);
         }
+      };
+
+      const jumpToStep = (idx) => {
+        const target = path[idx]?.node || 'start';
+        setPath(path.slice(0, idx));
+        setCurrentNode(target);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(target);
       };
 
       const reset = () => {
         setPath([]);
         setCurrentNode('start');
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash('start');
+      };
+
+      const copyDecisionRecord = () => {
+        if (!window.MLDecisionWorkbench) return;
+        const md = window.MLDecisionWorkbench.buildMarkdownRecord({
+          title: 'GenAI Technique Selector',
+          nodeId: currentNode,
+          nodeData: currentData,
+          path,
+          tree
+        });
+        window.MLDecisionWorkbench.copyText(md).then(() => {
+          setCopiedAdr(true);
+          setTimeout(() => setCopiedAdr(false), 2200);
+        });
       };
 
       const currentData = tree[currentNode];
 
       const PathBreadcrumb = () => (
-        <div className="bg-gradient-to-r from-violet-50 to-fuchsia-50 p-4 rounded-lg mb-6 border border-violet-200">
-          <div className="flex items-center gap-2 flex-wrap text-sm">
-            <Home className="w-4 h-4 text-violet-600" />
+        <div className="wb-tree-crumb">
+          <div className="wb-crumb-steps">
+            <button type="button" onClick={reset} className="wb-crumb-btn" title="Return to start">
+              <Home className="w-3.5 h-3.5" />
+              <span>Start</span>
+            </button>
             {path.map((step, idx) => (
               <React.Fragment key={idx}>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <span className="text-violet-700 font-medium">{step.choice}</span>
+                <button
+                  type="button"
+                  onClick={() => jumpToStep(idx)}
+                  className="wb-crumb-btn"
+                  title={`Jump back to: ${step.choice}`}
+                >
+                  {step.choice}
+                </button>
               </React.Fragment>
             ))}
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="wb-crumb-btn wb-crumb-btn--active">{currentNode}</span>
           </div>
+          <button
+            type="button"
+            onClick={copyDecisionRecord}
+            className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+          >
+            {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+          </button>
         </div>
       );
 
@@ -1389,27 +1537,24 @@
         <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-              <a href="index.html" className="inline-block text-xs tracking-widest uppercase text-violet-600 hover:text-violet-700 font-semibold transition-colors mb-4">&larr; ML_LAB</a>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Sparkles className="w-8 h-8 text-violet-600" />
-                <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">
-                  GenAI Technique Selector
-                </h1>
+            <div className="wb-tree-header">
+              <div>
+                <div className="wb-tree-header__eyebrow">Decision Workbench · LLM Optimization</div>
+                <h1>GenAI Technique Selector</h1>
+                <p>Interactive guide to choosing the right LLM optimization technique</p>
               </div>
-              <p className="text-gray-600">Interactive guide to choosing the right LLM optimization technique</p>
 
-              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+              <div className="wb-tree-actions">
                 <button
                   onClick={reset}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-violet-400 hover:shadow-md transition-all text-gray-700"
+                  className="wb-btn-secondary"
                 >
                   <Home className="w-4 h-4" />
                   Start Over
                 </button>
                 <button
                   onClick={() => setShowQuickRef(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-lg hover:shadow-lg transition-all"
+                  className="wb-btn-primary"
                 >
                   <List className="w-4 h-4" />
                   Quick Reference
@@ -1421,7 +1566,7 @@
             {path.length > 0 && <PathBreadcrumb />}
 
             {/* Main Content */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+            <div className="wb-main-panel">
               {currentData.info && (
                 <div className="mb-6 bg-violet-50 border-l-4 border-violet-500 p-4 rounded-r-lg">
                   <div className="flex items-start gap-2">
@@ -1511,25 +1656,32 @@
                 </div>
               )}
 
-              {/* Back Button */}
-              {path.length > 0 && (
-                <button
-                  onClick={goBack}
-                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                  Go Back
-                </button>
+              {/* Back & ADR Toolbar */}
+              {(path.length > 0 || currentData.type !== 'decision') && (
+                <div className="wb-node-toolbar">
+                  {path.length > 0 ? (
+                    <button onClick={goBack} className="wb-back-btn">
+                      <ChevronLeft className="w-4 h-4" />
+                      Go Back
+                    </button>
+                  ) : <span />}
+                  {currentData.type !== 'decision' && (
+                    <button
+                      type="button"
+                      onClick={copyDecisionRecord}
+                      className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+                    >
+                      {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Footer */}
             <div className="text-center mt-8 text-gray-500 text-sm">
-              <p>GenAI Technique Selector v1.0 | Based on Latest Research (2024)</p>
-              <p className="mt-2 text-xs">
-                Created by Tarek Atwan @ <a href="index.html" className="text-violet-600 hover:text-violet-700 hover:underline font-semibold">ML_LAB</a>
-              </p>
-            </div>
+              <p>GenAI Technique Selector v2.0 | Updated for 2026 Frontier LLM Ecosystem</p>
+</div>
           </div>
 
           {/* Quick Reference Modal */}
@@ -1564,7 +1716,8 @@
         <ul class="lab-about__list">
           <li><a href="/genai_foundations_navigator.html">GenAI Foundations Navigator</a><span>GenAI basics &middot; 10–15 min</span></li>
           <li><a href="/fm_evaluation_metrics.html">FM Evaluation Metrics</a><span>LLM metrics &middot; 20 min</span></li>
-          <li><a href="/rag-academy/">RAG Academy</a><span>RAG &middot; Course</span></li>
+          <li><a href="/rag-academy/">RAG Academy</a><span>RAG &middot; 19 modules</span></li>
+          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 15 weeks</span></li>
         </ul>
         <h3>Who made this</h3>
         <p class="lab-about__by">

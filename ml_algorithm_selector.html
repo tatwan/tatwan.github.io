@@ -87,9 +87,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-decision.css">
+  <script defer src="/assets/decision-workbench.js"></script>
   <script defer src="/assets/lab.js" data-lab-page="Algorithm Selector"></script>
 
   <script type="application/ld+json">
@@ -120,7 +122,7 @@
   <!-- LAB:HEAD:END -->
 </head>
 
-<body>
+<body class="archetype-tree">
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
@@ -172,11 +174,22 @@
     const MLAlgorithmSelector = () => {
       const [path, setPath] = useState([]);
       const [currentNode, setCurrentNode] = useState('start');
-      // LAB: deep link — /page.html#node_id opens that decision node.
+      const [copiedAdr, setCopiedAdr] = useState(false);
+      // LAB: deep link — /page.html#node_id opens that decision node with full trail reconstruction.
       React.useEffect(() => {
         const jump = () => {
           const h = decodeURIComponent((window.location.hash || '').slice(1));
-          if (h && tree[h]) setCurrentNode(h);
+          if (h && tree[h]) {
+            setCurrentNode(h);
+            if (window.MLDecisionWorkbench) {
+              setPath(window.MLDecisionWorkbench.buildPathToNode(tree, h));
+            }
+          } else if (!h) {
+            setCurrentNode('start');
+            setPath([]);
+          }
+          setExpandedAlgo(null);
+          setCopiedAdr(false);
         };
         jump();
         window.addEventListener('hashchange', jump);
@@ -344,6 +357,17 @@
               code: "from catboost import CatBoostClassifier\nmodel = CatBoostClassifier(iterations=100, verbose=False)\nmodel.fit(X_train, y_train, cat_features=cat_cols)",
               pros: ["Best categorical handling", "Robust to overfitting", "Good defaults", "GPU support"],
               cons: ["Slower training", "Larger model size"]
+            },
+            {
+              name: "TabPFN v2 (Tabular Foundation Model)",
+              priority: "Best for Small/Medium Tabular",
+              description: "Pretrained transformer that performs in-context learning over an entire tabular training set in a single forward pass — no gradient training or hyperparameter sweep needed.",
+              complexity: "Sub-second on GPU (<=10K rows, <=500 features)",
+              bestFor: "Small-to-medium tabular classification (<=10K rows), rapid strong baselines",
+              sklearn: "tabpfn.TabPFNClassifier",
+              code: "from tabpfn import TabPFNClassifier\nmodel = TabPFNClassifier()\nmodel.fit(X_train, y_train)\nprobs = model.predict_proba(X_test)",
+              pros: ["Beats tuned GBDTs on many <=10K-row datasets", "Zero hyperparameter tuning", "Native handling of missing values and categoricals"],
+              cons: ["Scales poorly beyond ~10K–50K rows", "Inference slower than small tree models without GPU"]
             },
             {
               name: "Support Vector Machine (SVM)",
@@ -647,6 +671,17 @@
               code: "from xgboost import XGBRegressor\nmodel = XGBRegressor(\n    n_estimators=100,\n    learning_rate=0.1,\n    max_depth=6\n)\nmodel.fit(X_train, y_train)",
               pros: ["State-of-the-art", "Fast", "Regularization", "Missing value handling"],
               cons: ["Hyperparameter sensitive", "Can overfit"]
+            },
+            {
+              name: "TabPFN v2 Regressor",
+              priority: "Best for Small/Medium Tabular",
+              description: "Tabular foundation model for continuous targets using prior-data fitted transformer in-context learning, often matching or beating tuned XGBoost/CatBoost on <=10K rows.",
+              complexity: "Sub-second on GPU (<=10K rows, <=500 features)",
+              bestFor: "Small-to-medium tabular regression, calibrated predictive distributions",
+              sklearn: "tabpfn.TabPFNRegressor",
+              code: "from tabpfn import TabPFNRegressor\nmodel = TabPFNRegressor()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)",
+              pros: ["No hyperparameter tuning required", "Strong accuracy on small/medium tables", "Supports uncertainty/quantiles"],
+              cons: ["Row/column scaling limits (~10K rows)", "Needs GPU for fastest inference"]
             },
             {
               name: "Polynomial Regression",
@@ -1242,6 +1277,16 @@
               cons: ["Slow fitting", "Complex model"]
             },
             {
+              name: "NHITS",
+              priority: "Modern Neural Forecaster",
+              description: "Neural Hierarchical Interpolation for Time Series uses multi-rate data sampling and hierarchical interpolation to capture both short- and long-horizon seasonal patterns.",
+              bestFor: "Long-horizon seasonal forecasting with multi-scale cycles",
+              sklearn: "neuralforecast.models.NHITS",
+              code: "from neuralforecast import NeuralForecast\nfrom neuralforecast.models import NHITS\n\nnf = NeuralForecast(models=[NHITS(h=24, input_size=72)], freq='D')\nnf.fit(df)  # columns: unique_id, ds, y\nforecast = nf.predict()",
+              pros: ["State-of-the-art long-horizon accuracy", "Lower compute than Transformers", "Multi-series training"],
+              cons: ["Needs PyTorch/NeuralForecast", "More data needed than SARIMA"]
+            },
+            {
               name: "STL Decomposition + Forecast",
               priority: "Decomposition Approach",
               description: "Decompose into trend, seasonal, residual. Forecast each component.",
@@ -1330,6 +1375,26 @@
               cons: ["May need manual override"]
             },
             {
+              name: "Chronos / Chronos-Bolt (Zero-Shot TSFM)",
+              priority: "2026 Zero-Shot Foundation Model",
+              description: "Amazon's pretrained time-series foundation models (T5-based Chronos & fast encoder-decoder Chronos-Bolt) deliver zero-shot probabilistic forecasts with quantiles out of the box.",
+              bestFor: "Cold-start forecasting, zero-shot multi-domain baselines, fast probabilistic intervals",
+              sklearn: "chronos.ChronosBoltPipeline",
+              code: "import torch\nfrom chronos import BaseChronosPipeline\n\npipeline = BaseChronosPipeline.from_pretrained('amazon/chronos-bolt-base', device_map='auto')\nquantiles, mean = pipeline.predict_quantiles(context=torch.tensor(y), prediction_length=12)",
+              pros: ["Zero-shot — no per-series training needed", "Calibrated quantile intervals", "Chronos-Bolt is up to 250x faster than original Chronos"],
+              cons: ["Univariate history unless paired with covariates", "Pretrained context limits"]
+            },
+            {
+              name: "TimesFM & Moirai (Foundation Forecasters)",
+              priority: "Foundation Forecaster",
+              description: "Google Research's TimesFM (decoder-only patched time-series model) and Salesforce's Moirai (universal masked encoder supporting arbitrary variates and frequencies).",
+              bestFor: "Cross-frequency zero-shot forecasting (TimesFM) or any-variate/covariate zero-shot forecasting (Moirai)",
+              sklearn: "timesfm.TimesFm / uni2ts.model.moirai",
+              code: "import timesfm\n\ntfm = timesfm.TimesFm(\n    hparams=timesfm.TimesFmHparams(horizon_len=24, context_len=512),\n    checkpoint=timesfm.TimesFmCheckpoint(huggingface_repo_id='google/timesfm-2.0-500m-pytorch')\n)\npoint_forecast, quantile_forecast = tfm.forecast([y], freq=[0])",
+              pros: ["Strong zero-shot accuracy across frequencies", "Moirai natively handles multivariate + covariates"],
+              cons: ["Larger model footprint", "Domain-specific fine-tuning still helps specialized series"]
+            },
+            {
               name: "Prophet",
               priority: "Automatic & Robust",
               description: "Handles most decisions automatically. Good default choice.",
@@ -1375,6 +1440,16 @@
               cons: ["Complex", "Need cointegration testing"]
             },
             {
+              name: "PatchTST",
+              priority: "Modern Transformer Forecaster",
+              description: "Divides each time series into subseries-level patches as Transformer tokens with channel-independence, capturing long-term dependencies across many related series.",
+              bestFor: "Long-horizon multivariate forecasting with hundreds of series or channels",
+              sklearn: "neuralforecast.models.PatchTST",
+              code: "from neuralforecast import NeuralForecast\nfrom neuralforecast.models import PatchTST\n\nnf = NeuralForecast(models=[PatchTST(h=24, input_size=96, patch_len=16)], freq='H')\nnf.fit(df)\nforecast = nf.predict()",
+              pros: ["Captures long lookback windows efficiently", "Strong on high-dimensional multivariate benchmarks", "Channel-independent robustness"],
+              cons: ["Does not model explicit cross-channel exogenous interactions natively", "Requires neural training data"]
+            },
+            {
               name: "Dynamic Factor Model",
               priority: "Latent Factors",
               description: "Assumes observed series driven by small number of latent factors.",
@@ -1409,6 +1484,16 @@
               code: "from prophet import Prophet\n\nmodel = Prophet()\nmodel.add_regressor('promotion')\nmodel.add_regressor('temperature')\nmodel.fit(df)  # df must include regressor columns\n\n# future df must also include regressor values\nforecast = model.predict(future)",
               pros: ["Easy to add regressors", "Handles holidays built-in"],
               cons: ["Need future regressor values"]
+            },
+            {
+              name: "Temporal Fusion Transformer (TFT)",
+              priority: "Interpretable Deep Forecaster",
+              description: "Attention-based multi-horizon architecture combining static metadata, known future inputs (holidays, promotions), and past observed covariates with variable selection networks.",
+              bestFor: "Multi-horizon forecasting with static + known-future + past exogenous covariates and quantile outputs",
+              sklearn: "neuralforecast.models.TFT",
+              code: "from neuralforecast import NeuralForecast\nfrom neuralforecast.models import TFT\n\nnf = NeuralForecast(models=[TFT(h=14, input_size=56, futr_exog_list=['promo'])], freq='D')\nnf.fit(df)\nforecast = nf.predict(futr_df=future_exog_df)",
+              pros: ["Handles static, past, and known-future covariates cleanly", "Built-in feature importance & attention interpretability", "Multi-quantile intervals"],
+              cons: ["Heavier training cost than GBDT lag models", "Needs larger multi-series datasets"]
             },
             {
               name: "ML Regression (with lags)",
@@ -1607,17 +1692,17 @@
 
       // Quick reference data
       const quickReference = [
-        { task: "Classification (General)", algorithms: "Random Forest, XGBoost, LightGBM", key: "Start with RF, tune boosting" },
+        { task: "Classification (General)", algorithms: "Random Forest, XGBoost, LightGBM, TabPFN v2", key: "TabPFN v2 excels on <=10K rows; GBDTs at scale" },
         { task: "Classification (Interpret.)", algorithms: "Logistic Regression, Decision Tree", key: "Explain predictions" },
         { task: "Classification (Large)", algorithms: "SGD, LightGBM, Linear SVM", key: "Millions of samples" },
         { task: "Regression (Linear)", algorithms: "Ridge, Lasso, ElasticNet", key: "Feature selection with Lasso" },
-        { task: "Regression (Non-linear)", algorithms: "Random Forest, XGBoost, SVR", key: "Tree ensembles dominate" },
+        { task: "Regression (Non-linear)", algorithms: "XGBoost, LightGBM, TabPFN v2, RF", key: "GBDTs + TabPFN v2 (<=10K rows) dominate" },
         { task: "Clustering (K known)", algorithms: "K-Means, GMM, K-Medoids", key: "K-Means for speed" },
         { task: "Clustering (K unknown)", algorithms: "DBSCAN, HDBSCAN, Mean Shift", key: "Density-based methods" },
         { task: "Dim. Reduction (Viz)", algorithms: "UMAP, t-SNE, PCA", key: "UMAP best overall" },
-        { task: "Time Series (Seasonal)", algorithms: "SARIMA, Holt-Winters, Prophet", key: "Auto ARIMA to start" },
-        { task: "Time Series (Non-seas.)", algorithms: "ARIMA, Exp. Smoothing, Theta", key: "Simple baselines first" },
-        { task: "Time Series (Multi)", algorithms: "VAR, VARMAX, VECM", key: "Check cointegration" },
+        { task: "Time Series (Zero-Shot/Auto)", algorithms: "Chronos-Bolt, TimesFM, Moirai, Auto ARIMA", key: "TSFMs for instant zero-shot baselines" },
+        { task: "Time Series (Seasonal/Long)", algorithms: "SARIMA, NHITS, PatchTST, Prophet", key: "NHITS/PatchTST for long-horizon multi-series" },
+        { task: "Time Series (Exogenous/Multi)", algorithms: "TFT, VAR, SARIMAX, GBDT + lags", key: "TFT for static + known-future covariates" },
         { task: "Anomaly Detection", algorithms: "Isolation Forest, LOF, One-Class SVM", key: "Isolation Forest default" },
       ];
 
@@ -1625,6 +1710,8 @@
         setPath([...path, { node: currentNode, choice: label }]);
         setCurrentNode(nextNode);
         setExpandedAlgo(null);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(nextNode);
       };
 
       const goBack = () => {
@@ -1634,28 +1721,75 @@
           setPath(newPath);
           setCurrentNode(lastStep.node);
           setExpandedAlgo(null);
+          setCopiedAdr(false);
+          if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(lastStep.node);
         }
+      };
+
+      const jumpToStep = (idx) => {
+        const target = path[idx]?.node || 'start';
+        setPath(path.slice(0, idx));
+        setCurrentNode(target);
+        setExpandedAlgo(null);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash(target);
       };
 
       const reset = () => {
         setPath([]);
         setCurrentNode('start');
         setExpandedAlgo(null);
+        setCopiedAdr(false);
+        if (window.MLDecisionWorkbench) window.MLDecisionWorkbench.syncHash('start');
+      };
+
+      const copyDecisionRecord = () => {
+        if (!window.MLDecisionWorkbench) return;
+        const md = window.MLDecisionWorkbench.buildMarkdownRecord({
+          title: 'ML Algorithm Selector',
+          nodeId: currentNode,
+          nodeData: currentData,
+          path,
+          tree
+        });
+        window.MLDecisionWorkbench.copyText(md).then(() => {
+          setCopiedAdr(true);
+          setTimeout(() => setCopiedAdr(false), 2200);
+        });
       };
 
       const currentData = tree[currentNode];
 
       const PathBreadcrumb = () => (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-6 border border-blue-200">
-          <div className="flex items-center gap-2 flex-wrap text-sm">
-            <Home className="w-4 h-4 text-blue-600" />
+        <div className="wb-tree-crumb">
+          <div className="wb-crumb-steps">
+            <button type="button" onClick={reset} className="wb-crumb-btn" title="Return to start">
+              <Home className="w-3.5 h-3.5" />
+              <span>Start</span>
+            </button>
             {path.map((step, idx) => (
               <React.Fragment key={idx}>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <span className="text-blue-700 font-medium">{step.choice}</span>
+                <button
+                  type="button"
+                  onClick={() => jumpToStep(idx)}
+                  className="wb-crumb-btn"
+                  title={`Jump back to: ${step.choice}`}
+                >
+                  {step.choice}
+                </button>
               </React.Fragment>
             ))}
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="wb-crumb-btn wb-crumb-btn--active">{currentNode}</span>
           </div>
+          <button
+            type="button"
+            onClick={copyDecisionRecord}
+            className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+          >
+            {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+          </button>
         </div>
       );
 
@@ -1788,9 +1922,9 @@
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h3 className="font-bold text-blue-900 mb-3">By Data Size</h3>
                 <ul className="text-sm text-blue-800 space-y-2">
-                  <li><span className="text-blue-600 font-semibold">&lt;1K:</span> KNN, SVM, Gaussian Process</li>
-                  <li><span className="text-blue-600 font-semibold">1K-100K:</span> Random Forest, Gradient Boosting</li>
-                  <li><span className="text-blue-600 font-semibold">100K-1M:</span> XGBoost, LightGBM, SGD</li>
+                  <li><span className="text-blue-600 font-semibold">&lt;1K:</span> TabPFN v2, KNN, SVM, Gaussian Process</li>
+                  <li><span className="text-blue-600 font-semibold">1K-10K:</span> TabPFN v2, CatBoost, LightGBM, Random Forest</li>
+                  <li><span className="text-blue-600 font-semibold">10K-1M:</span> XGBoost, LightGBM, CatBoost, SGD</li>
                   <li><span className="text-blue-600 font-semibold">&gt;1M:</span> LightGBM, SGD, Online methods</li>
                 </ul>
               </div>
@@ -1814,24 +1948,24 @@
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-              <a href="index.html" className="inline-block text-xs tracking-widest uppercase text-blue-600 hover:text-blue-700 font-semibold transition-colors mb-4">&larr; ML_LAB</a>
-              <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
-                ML Algorithm Selector
-              </h1>
-              <p className="text-gray-600">Interactive guide to choosing the right machine learning algorithm</p>
+            <div className="wb-tree-header">
+              <div>
+                <div className="wb-tree-header__eyebrow">Decision Workbench · Modeling &amp; Selection</div>
+                <h1>ML Algorithm Selector</h1>
+                <p>Interactive guide to choosing the right machine learning algorithm</p>
+              </div>
 
-              <div className="flex gap-3 justify-center mt-4 flex-wrap">
+              <div className="wb-tree-actions">
                 <button
                   onClick={reset}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-blue-400 hover:shadow-md transition-all text-gray-700"
+                  className="wb-btn-secondary"
                 >
                   <Home className="w-4 h-4" />
                   Start Over
                 </button>
                 <button
                   onClick={() => setShowQuickRef(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
+                  className="wb-btn-primary"
                 >
                   <Book className="w-4 h-4" />
                   Quick Reference
@@ -1843,7 +1977,7 @@
             {path.length > 0 && <PathBreadcrumb />}
 
             {/* Main Content */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
+            <div className="wb-main-panel">
               {currentData.info && (
                 <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                   <div className="flex items-start gap-2">
@@ -1902,25 +2036,32 @@
                 </div>
               )}
 
-              {/* Back Button */}
-              {path.length > 0 && (
-                <button
-                  onClick={goBack}
-                  className="mt-8 flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all text-gray-700 font-semibold"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                  Go Back
-                </button>
+              {/* Back & ADR Toolbar */}
+              {(path.length > 0 || currentData.type !== 'decision') && (
+                <div className="wb-node-toolbar">
+                  {path.length > 0 ? (
+                    <button onClick={goBack} className="wb-back-btn">
+                      <ChevronLeft className="w-4 h-4" />
+                      Go Back
+                    </button>
+                  ) : <span />}
+                  {currentData.type !== 'decision' && (
+                    <button
+                      type="button"
+                      onClick={copyDecisionRecord}
+                      className={`wb-copy-adr-btn ${copiedAdr ? 'copied' : ''}`}
+                    >
+                      {copiedAdr ? 'Copied Decision Record (MD)' : 'Copy Decision Record (Markdown)'}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Footer */}
             <div className="text-center mt-8 text-gray-500 text-sm">
-              <p>ML Algorithm Selector v1.0 | Covers scikit-learn & statsmodels</p>
-              <p className="mt-2 text-xs">
-                Created by Tarek Atwan @ <a href="index.html" className="text-blue-600 hover:text-blue-700 hover:underline font-semibold">ML_LAB</a>
-              </p>
-            </div>
+              <p>ML Algorithm Selector v2.0 | Covers scikit-learn, GBDTs, TabPFN v2 &amp; Time-Series Foundation Models (2026)</p>
+</div>
           </div>
 
           {/* Quick Reference Modal */}
@@ -1955,7 +2096,7 @@
         <ul class="lab-about__list">
           <li><a href="/feature_engineering_playbook.html">Feature Engineering Playbook</a><span>Features &middot; 20 min</span></li>
           <li><a href="/DataEngineering/index.html">Data Engineering Foundations</a><span>Data platform &middot; 10 modules</span></li>
-          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 7 weeks</span></li>
+          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 15 weeks</span></li>
         </ul>
         <h3>Who made this</h3>
         <p class="lab-about__by">
