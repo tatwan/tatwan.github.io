@@ -159,6 +159,16 @@
   .arch-box.encoder ul li::before { content: '✓'; color: #059669; }
   .arch-box.encdec  ul li::before { content: '✗'; color: #dc2626; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="10"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 10: Sequence Labeling: POS Tagging &amp; NER" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -166,7 +176,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week9.html">← Week 9</a>
     <span class="you-are-here">Week 10 ← HERE</span>
   </div>
@@ -182,7 +192,7 @@
     <span class="chip">POS Tagging</span>
     <span class="chip">Named Entity Recognition</span>
     <span class="chip">IOB/BIO Tagging</span>
-    <span class="chip alert">⚠️ Quiz 9 covers this week's content</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 9 covers this week's content</span>
   </div>
 </div>
 
@@ -193,7 +203,7 @@
   <!-- ═══════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">🏷️</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
       <div>
         <h2>What Is Sequence Labeling?</h2>
         <div class="sub">Assigning a tag to every token in a sequence</div>
@@ -234,16 +244,16 @@
       <div class="concept-body open">
         <div class="two-col">
           <div class="mini-card">
-            <h4>🔤 Part-of-Speech (POS) Tagging</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 20h16"/><path d="M8 16l4-10 4 10"/><path d="M9.5 12h5"/></svg> Part-of-Speech (POS) Tagging</h4>
             <p>Assign each word its grammatical role: noun, verb, adjective, adverb, etc. One tag per word, same number of tags as words.</p>
           </div>
           <div class="mini-card">
-            <h4>🔍 Named Entity Recognition (NER)</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Named Entity Recognition (NER)</h4>
             <p>Identify and categorize <em>named entities</em> — people, places, organizations, dates — which can span multiple words. Uses special IOB tagging to handle multi-word spans.</p>
           </div>
         </div>
         <div class="callout">
-          <strong>🔗 POS tagging feeds NER!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> POS tagging feeds NER!</strong>
           POS tags are commonly used as <em>features</em> for NER models. Knowing "Franklin" is a proper noun (NNP) helps NER decide whether it's a person or a city.
         </div>
       </div>
@@ -255,7 +265,7 @@
   <!-- ═══════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">🔤</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 20h16"/><path d="M8 16l4-10 4 10"/><path d="M9.5 12h5"/></svg></div>
       <div>
         <h2>Part-of-Speech (POS) Tagging</h2>
         <div class="sub">Labeling every word with its grammatical role</div>
@@ -323,7 +333,7 @@
           <tr><td><strong>PRP</strong></td><td>Personal pronoun</td><td>"I", "he", "she", "we"</td></tr>
         </table>
         <div class="callout tip">
-          <strong>💡 Memory trick</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Memory trick</strong>
           NN = Noun, VB = Verb, JJ = adJective (J for jumbled!), RB = adveRB, DT = DeTerminer, IN = INpreposition, CC = Coordinating Conjunction.
         </div>
       </div>
@@ -336,7 +346,7 @@
       </div>
       <div class="concept-body open">
         <div class="algo-card classical">
-          <h4>⚙️ Average Perceptron Tagger (NLTK default)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Average Perceptron Tagger (NLTK default)</h4>
           <ul class="bullet">
             <li><strong>Step 1 — Vectorize:</strong> Represent each word using any encoding method (one-hot, Word2Vec, custom features).</li>
             <li><strong>Step 2 — Initialize weights:</strong> Random weights for each grammatical category (NN, VB, JJ, etc.).</li>
@@ -345,7 +355,7 @@
           </ul>
         </div>
         <div class="algo-card neural">
-          <h4>🤖 BERT (Encoder-based Transformer)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> BERT (Encoder-based Transformer)</h4>
           <ul class="bullet">
             <li>Use a fine-tuned BERT model via HuggingFace pipeline for token classification.</li>
             <li>BERT produces a contextualized embedding per token → feed into a linear classification layer → predict POS tag.</li>
@@ -355,7 +365,7 @@
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Why not Encoder-Decoder for POS?</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Why not Encoder-Decoder for POS?</strong>
           Encoder-decoder (seq2seq) models are designed for tasks where input and output have <em>different lengths</em> (e.g., machine translation). POS tagging has equal-length input/output (one tag per token), so an encoder-decoder would be overkill — adding unnecessary complexity. An encoder-only model like BERT is preferred.
         </div>
 
@@ -379,7 +389,7 @@ result = pos_pipeline(sentence)
 
     <!-- POS Interactive Demo -->
     <div class="interactive-box">
-      <h4>🎮 Interactive POS Tagger</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive POS Tagger</h4>
       <div class="desc">Click a sentence to see token-level POS tags visualized. (Simplified — shows representative tags for illustration.)</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
         <button class="btn-outline active" onclick="showPOS(0, this)">Sentence 1</button>
@@ -396,7 +406,7 @@ result = pos_pipeline(sentence)
   <!-- ═══════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🔍</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <div>
         <h2>Named Entity Recognition (NER)</h2>
         <div class="sub">Finding and categorizing named entities in text</div>
@@ -420,7 +430,7 @@ result = pos_pipeline(sentence)
 
         <div class="two-col" style="margin-top:16px;">
           <div class="mini-card">
-            <h4>📌 Common NER Categories</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Common NER Categories</h4>
             <ul class="bullet">
               <li><strong>PER</strong> — Person names ("Barack Obama")</li>
               <li><strong>LOC</strong> — Locations ("Paris", "the Amazon")</li>
@@ -430,7 +440,7 @@ result = pos_pipeline(sentence)
             </ul>
           </div>
           <div class="mini-card">
-            <h4>⚠️ Two Key Difficulties</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Two Key Difficulties</h4>
             <ul class="bullet">
               <li><strong>Segmentation:</strong> Unlike POS (one tag per word), NER entities can span <em>multiple words</em> ("Bank of America" = one entity).</li>
               <li><strong>Ambiguity:</strong> "Franklin" could be a person (PER) or a city in North Carolina (LOC) — context determines the correct label.</li>
@@ -486,7 +496,7 @@ Professor traveled from Atlanta   to Paris via United  Airlines
       </div>
       <div class="concept-body open">
         <div class="algo-card classical">
-          <h4>⚙️ NLTK ne_chunk (Maximum Entropy Classifier)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> NLTK ne_chunk (Maximum Entropy Classifier)</h4>
           <ul class="bullet">
             <li>NLTK's <code>ne_chunk()</code> uses a classifier trained on annotated data.</li>
             <li>Uses a <strong>Maximum Entropy (MaxEnt)</strong> model — predicts the probability distribution over possible NER labels given features like: POS tags, word shape, surrounding words, capitalization.</li>
@@ -508,7 +518,7 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
         </div>
 
         <div class="algo-card neural">
-          <h4>🤖 BERT for NER (Preferred Approach)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> BERT for NER (Preferred Approach)</h4>
           <ul class="bullet">
             <li>Use a BERT model fine-tuned for NER (e.g., <code>dslim/bert-base-NER</code> on HuggingFace).</li>
             <li>BERT produces one contextualized token embedding per word → a linear classification layer predicts the IOB tag.</li>
@@ -521,7 +531,7 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
         <p style="font-size:13px; font-weight:700; margin: 20px 0 10px; color:var(--muted);">WHY ENCODER-ONLY (BERT) IS PREFERRED OVER ENCODER-DECODER FOR NER:</p>
         <div class="arch-compare">
           <div class="arch-box encoder">
-            <h5>✅ Encoder-only (BERT) — Preferred</h5>
+            <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Encoder-only (BERT) — Preferred</h5>
             <ul>
               <li>One output per input token (matches NER task)</li>
               <li>Token outputs are independent → easy to add classification head</li>
@@ -544,7 +554,7 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
 
     <!-- NER Interactive Demo -->
     <div class="interactive-box">
-      <h4>🎮 Interactive NER Tagger with IOB Labels</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive NER Tagger with IOB Labels</h4>
       <div class="desc">Click a sentence to see IOB-tagged tokens. Hover over colored tokens to see entity details.</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
         <button class="btn-outline active" onclick="showNER(0, this)">Example 1</button>
@@ -561,7 +571,7 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
   <!-- ═══════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">⚖️</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
       <div>
         <h2>POS Tagging vs. NER — Side-by-Side</h2>
         <div class="sub">Key similarities and differences to know for Quiz 8</div>
@@ -618,18 +628,178 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
           </tr>
         </table>
         <div class="callout tip">
-          <strong>💡 Exam insight:</strong> For tasks where <em>input length = output length</em> (POS, NER, token classification), always prefer <strong>encoder-only</strong>. Encoder-decoder is for tasks where lengths differ. Using encoder-decoder for POS/NER is possible but computationally wasteful.
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Exam insight:</strong> For tasks where <em>input length = output length</em> (POS, NER, token classification), always prefer <strong>encoder-only</strong>. Encoder-decoder is for tasks where lengths differ. Using encoder-decoder for POS/NER is possible but computationally wasteful.
         </div>
       </div>
     </div>
   </div>
+
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card10{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card10 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card10 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col10{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col10{grid-template-columns:1fr}}
+.bts-code10{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table10{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table10 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table10 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table10 tr:hover td{background:#fafbff}
+.bts-formula10{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story10{background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);border-left:4px solid #7c3aed;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story10-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6d28d9;margin-bottom:6px}
+.bts-depth10{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.trellis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0;background:#f8fafc;border-radius:10px;padding:16px}
+.trellis-cell{background:white;border:2px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;font-size:12px;font-weight:700}
+.trellis-cell.header{background:#1e293b;color:white;border-color:#1e293b}
+.trellis-cell.best{background:#d1fae5;border-color:#059669;color:#065f46}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>HMM &amp; CRF Deep Dive: Derivations That Actually Explain Sequence Labeling</h2>
+  <p>The slides show you what HMMs and CRFs do. This section shows you <em>why</em> they work — deriving the Forward-Backward algorithm, Viterbi dynamic programming, and the CRF partition function from first principles. These derivations appear in every sequence modeling interview and in classic NLP papers.</p>
+</div>
+
+<div class="bts-card10">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/></svg> HMM Fundamentals — The Three Problems <span class="bts-depth10">Mathematical</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Every HMM application reduces to one of three classic problems, each with a specialized algorithm:</p>
+  <table class="bts-table10">
+    <tr><th>Problem</th><th>Question</th><th>Algorithm</th><th>Complexity</th></tr>
+    <tr><td><strong>Evaluation</strong></td><td>P(observations | model)?</td><td>Forward Algorithm</td><td>O(N²T)</td></tr>
+    <tr><td><strong>Decoding</strong></td><td>Most likely state sequence given observations?</td><td>Viterbi</td><td>O(N²T)</td></tr>
+    <tr><td><strong>Learning</strong></td><td>Estimate HMM parameters from unlabeled data?</td><td>Baum-Welch (EM)</td><td>O(N²T) per iteration</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b">N = number of hidden states, T = sequence length</p>
+</div>
+
+<div class="bts-card10">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg> Forward-Backward Algorithm Derivation <span class="bts-depth10">PhD</span></h3>
+  <div class="bts-2col10">
+    <div>
+      <h4>Forward Variable α</h4>
+      <div class="bts-formula10"><span style="color:#94a3b8"># α_t(j) = P(o₁,...,oₜ, qₜ=j | λ)</span>
+<span style="color:#94a3b8"># Probability of observing o₁..oₜ and</span>
+<span style="color:#94a3b8"># being in state j at time t</span>
+
+<span style="color:#93c5fd">Initialization (t=1):</span>
+  α₁(j) = π_j · b_j(o₁)
+  <span style="color:#94a3b8"># π_j: initial probability of state j</span>
+  <span style="color:#94a3b8"># b_j(o₁): emission prob of obs o₁ in j</span>
+
+<span style="color:#93c5fd">Recursion (t=2..T):</span>
+  α_t(j) = b_j(oₜ) · Σᵢ [α_{t-1}(i) · aᵢⱼ]
+  <span style="color:#94a3b8"># Sum over all previous states i</span>
+  <span style="color:#94a3b8"># aᵢⱼ: transition prob i→j</span>
+
+<span style="color:#93c5fd">Termination:</span>
+  P(O | λ) = Σⱼ α_T(j)</div>
+    </div>
+    <div>
+      <h4>Backward Variable β</h4>
+      <div class="bts-formula10"><span style="color:#94a3b8"># β_t(i) = P(o_{t+1},...,o_T | qₜ=i, λ)</span>
+<span style="color:#94a3b8"># Probability of future observations</span>
+<span style="color:#94a3b8"># given we're in state i at time t</span>
+
+<span style="color:#93c5fd">Initialization (t=T):</span>
+  β_T(i) = 1  for all states i
+
+<span style="color:#93c5fd">Recursion (t=T-1..1):</span>
+  β_t(i) = Σⱼ [aᵢⱼ · b_j(o_{t+1}) · β_{t+1}(j)]
+  <span style="color:#94a3b8"># Sum over all next states j</span>
+
+<span style="color:#93c5fd">State posterior (used in Baum-Welch):</span>
+  γ_t(i) = α_t(i)·β_t(i) / P(O|λ)</div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card10">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Viterbi Algorithm — Finding the Best Path</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Viterbi is Forward algorithm with <code>sum</code> replaced by <code>max</code>. It finds the most probable hidden state sequence (e.g., POS tag sequence), not just the probability of observations.</p>
+  <div class="bts-formula10"><span style="color:#94a3b8"># Viterbi variable δ_t(j) = max probability of reaching state j at t</span>
+
+<span style="color:#93c5fd">Initialization:</span>
+  δ₁(j) = π_j · b_j(o₁)
+  ψ₁(j) = 0  <span style="color:#94a3b8"># backpointer</span>
+
+<span style="color:#93c5fd">Recursion:</span>
+  δ_t(j) = max_i [δ_{t-1}(i) · aᵢⱼ] · b_j(oₜ)
+  ψ_t(j) = argmax_i [δ_{t-1}(i) · aᵢⱼ]  <span style="color:#94a3b8"># store best predecessor</span>
+
+<span style="color:#93c5fd">Termination + Backtrack:</span>
+  q*_T = argmax_j δ_T(j)
+  q*_t = ψ_{t+1}(q*_{t+1})  <span style="color:#94a3b8"># follow backpointers</span></div>
+
+  <h4>Intuition: The Trellis (POS Tagging Example)</h4>
+  <div class="trellis">
+    <div class="trellis-cell header">State \ Time</div>
+    <div class="trellis-cell header">t=1: "Fed"</div>
+    <div class="trellis-cell header">t=2: "raises"</div>
+    <div class="trellis-cell header">t=3: "rates"</div>
+    <div class="trellis-cell header">Best</div>
+    <div class="trellis-cell">NOUN</div>
+    <div class="trellis-cell best">0.32 ←π</div>
+    <div class="trellis-cell">0.05</div>
+    <div class="trellis-cell best">0.18</div>
+    <div class="trellis-cell best">✓</div>
+    <div class="trellis-cell">VERB</div>
+    <div class="trellis-cell">0.08</div>
+    <div class="trellis-cell best">0.41</div>
+    <div class="trellis-cell">0.03</div>
+    <div class="trellis-cell">—</div>
+    <div class="trellis-cell">DET</div>
+    <div class="trellis-cell">0.10</div>
+    <div class="trellis-cell">0.02</div>
+    <div class="trellis-cell">0.01</div>
+    <div class="trellis-cell">—</div>
+  </div>
+  <p style="font-size:12px;color:#64748b">Best path: NOUN → VERB → NOUN (Fed/NNP raises/VBZ rates/NNS) — backtracking from max δ_T across all states.</p>
+</div>
+
+<div class="bts-card10">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> CRF: The Partition Function &amp; Gradient <span class="bts-depth10">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A linear-chain CRF models P(y|x) directly (discriminative), avoiding the independence assumptions of HMMs (generative). The challenge: computing the normalization constant Z(x).</p>
+  <div class="bts-2col10">
+    <div>
+      <div class="bts-formula10"><span style="color:#94a3b8"># CRF probability of label sequence y given x</span>
+P(y|x) = (1/Z(x)) · exp(Σₜ score(yₜ₋₁, yₜ, x, t))
+
+<span style="color:#94a3b8"># Score = feature function dot weights</span>
+score(yₜ₋₁, yₜ, x, t) = w · f(yₜ₋₁, yₜ, x, t)
+
+<span style="color:#94a3b8"># Partition function (normalization)</span>
+Z(x) = Σ_{all y sequences} exp(Σₜ score(yₜ₋₁,yₜ,x,t))
+<span style="color:#94a3b8"># = exponentially many terms!
+# Computed efficiently with Forward algo:
+# Same as HMM forward, but in log space</span></div>
+    </div>
+    <div>
+      <h4>CRF Training</h4>
+      <p style="font-size:13px;line-height:1.7">Log-likelihood gradient requires computing Z(x) for each example — done with the Forward algorithm (O(T·|Y|²)). The Viterbi algorithm decodes the best label sequence at inference time.</p>
+      <h4>BERT + CRF for NER</h4>
+      <p style="font-size:13px;line-height:1.7">A linear-chain CRF on top of BERT's token embeddings captures inter-label dependencies (e.g., I-ORG must follow B-ORG) that a simple softmax cannot. Still used in production NER pipelines in 2026, especially where invalid tag sequences are costly.</p>
+    </div>
+  </div>
+</div>
+
+</div></div>
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- SECTION 5: QUIZ PREP                        -->
   <!-- ═══════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon teal">📝</div>
+      <div class="section-icon teal"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
       <div>
         <h2>Quiz 8 Practice Questions</h2>
         <div class="sub">Modeled after actual Quizzes 1–7 — this material is covered by Quiz 9</div>
@@ -637,7 +807,7 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
     </div>
 
     <div class="quiz-section">
-      <h3>🎯 Week 10 Practice Quiz — POS Tagging &amp; NER <span style="font-size:13px; font-weight:500; color:var(--muted);">(covers Quiz 9 material)</span></h3>
+      <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Week 10 Practice Quiz — POS Tagging &amp; NER <span style="font-size:13px; font-weight:500; color:var(--muted);">(covers Quiz 9 material)</span></h3>
 
       <!-- Q1 -->
       <div class="quiz-q" id="q1">
@@ -707,7 +877,8 @@ iob_tags = tree2conlltags(tree)     <span class="comment"># Step 3: Convert to I
   <!-- PAGE NAV -->
   <div class="page-nav">
     <a href="week9.html">← Week 9: Transformers, BERT &amp; GPT</a>
-    <a href="index.html">🏠 Back to Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Back to Home</a>
+    <a href="week11.html">Week 11: Post-Training Alignment →</a>
   </div>
 
 </div><!-- end container -->
@@ -890,166 +1061,5 @@ function showNER(idx, btn) {
 }
 showNER(0, document.querySelector('#ner-display').closest('.interactive-box').querySelector('.btn-outline.active') || document.querySelectorAll('.interactive-box')[1].querySelector('.btn-outline'));
 </script>
-
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card10{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card10 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card10 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col10{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col10{grid-template-columns:1fr}}
-.bts-code10{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-.bts-table10{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table10 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table10 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table10 tr:hover td{background:#fafbff}
-.bts-formula10{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
-.bts-story10{background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);border-left:4px solid #7c3aed;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story10-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6d28d9;margin-bottom:6px}
-.bts-depth10{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.trellis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0;background:#f8fafc;border-radius:10px;padding:16px}
-.trellis-cell{background:white;border:2px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;font-size:12px;font-weight:700}
-.trellis-cell.header{background:#1e293b;color:white;border-color:#1e293b}
-.trellis-cell.best{background:#d1fae5;border-color:#059669;color:#065f46}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>HMM &amp; CRF Deep Dive: Derivations That Actually Explain Sequence Labeling</h2>
-  <p>The slides show you what HMMs and CRFs do. This section shows you <em>why</em> they work — deriving the Forward-Backward algorithm, Viterbi dynamic programming, and the CRF partition function from first principles. These derivations appear in every sequence modeling interview and in classic NLP papers.</p>
-</div>
-
-<div class="bts-card10">
-  <h3>🎲 HMM Fundamentals — The Three Problems <span class="bts-depth10">Mathematical</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Every HMM application reduces to one of three classic problems, each with a specialized algorithm:</p>
-  <table class="bts-table10">
-    <tr><th>Problem</th><th>Question</th><th>Algorithm</th><th>Complexity</th></tr>
-    <tr><td><strong>Evaluation</strong></td><td>P(observations | model)?</td><td>Forward Algorithm</td><td>O(N²T)</td></tr>
-    <tr><td><strong>Decoding</strong></td><td>Most likely state sequence given observations?</td><td>Viterbi</td><td>O(N²T)</td></tr>
-    <tr><td><strong>Learning</strong></td><td>Estimate HMM parameters from unlabeled data?</td><td>Baum-Welch (EM)</td><td>O(N²T) per iteration</td></tr>
-  </table>
-  <p style="font-size:12px;color:#64748b">N = number of hidden states, T = sequence length</p>
-</div>
-
-<div class="bts-card10">
-  <h3>⏩ Forward-Backward Algorithm Derivation <span class="bts-depth10">PhD</span></h3>
-  <div class="bts-2col10">
-    <div>
-      <h4>Forward Variable α</h4>
-      <div class="bts-formula10"><span style="color:#94a3b8"># α_t(j) = P(o₁,...,oₜ, qₜ=j | λ)</span>
-<span style="color:#94a3b8"># Probability of observing o₁..oₜ and</span>
-<span style="color:#94a3b8"># being in state j at time t</span>
-
-<span style="color:#93c5fd">Initialization (t=1):</span>
-  α₁(j) = π_j · b_j(o₁)
-  <span style="color:#94a3b8"># π_j: initial probability of state j</span>
-  <span style="color:#94a3b8"># b_j(o₁): emission prob of obs o₁ in j</span>
-
-<span style="color:#93c5fd">Recursion (t=2..T):</span>
-  α_t(j) = b_j(oₜ) · Σᵢ [α_{t-1}(i) · aᵢⱼ]
-  <span style="color:#94a3b8"># Sum over all previous states i</span>
-  <span style="color:#94a3b8"># aᵢⱼ: transition prob i→j</span>
-
-<span style="color:#93c5fd">Termination:</span>
-  P(O | λ) = Σⱼ α_T(j)</div>
-    </div>
-    <div>
-      <h4>Backward Variable β</h4>
-      <div class="bts-formula10"><span style="color:#94a3b8"># β_t(i) = P(o_{t+1},...,o_T | qₜ=i, λ)</span>
-<span style="color:#94a3b8"># Probability of future observations</span>
-<span style="color:#94a3b8"># given we're in state i at time t</span>
-
-<span style="color:#93c5fd">Initialization (t=T):</span>
-  β_T(i) = 1  for all states i
-
-<span style="color:#93c5fd">Recursion (t=T-1..1):</span>
-  β_t(i) = Σⱼ [aᵢⱼ · b_j(o_{t+1}) · β_{t+1}(j)]
-  <span style="color:#94a3b8"># Sum over all next states j</span>
-
-<span style="color:#93c5fd">State posterior (used in Baum-Welch):</span>
-  γ_t(i) = α_t(i)·β_t(i) / P(O|λ)</div>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card10">
-  <h3>🏹 Viterbi Algorithm — Finding the Best Path</h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Viterbi is Forward algorithm with <code>sum</code> replaced by <code>max</code>. It finds the most probable hidden state sequence (e.g., POS tag sequence), not just the probability of observations.</p>
-  <div class="bts-formula10"><span style="color:#94a3b8"># Viterbi variable δ_t(j) = max probability of reaching state j at t</span>
-
-<span style="color:#93c5fd">Initialization:</span>
-  δ₁(j) = π_j · b_j(o₁)
-  ψ₁(j) = 0  <span style="color:#94a3b8"># backpointer</span>
-
-<span style="color:#93c5fd">Recursion:</span>
-  δ_t(j) = max_i [δ_{t-1}(i) · aᵢⱼ] · b_j(oₜ)
-  ψ_t(j) = argmax_i [δ_{t-1}(i) · aᵢⱼ]  <span style="color:#94a3b8"># store best predecessor</span>
-
-<span style="color:#93c5fd">Termination + Backtrack:</span>
-  q*_T = argmax_j δ_T(j)
-  q*_t = ψ_{t+1}(q*_{t+1})  <span style="color:#94a3b8"># follow backpointers</span></div>
-
-  <h4>Intuition: The Trellis (POS Tagging Example)</h4>
-  <div class="trellis">
-    <div class="trellis-cell header">State \ Time</div>
-    <div class="trellis-cell header">t=1: "Fed"</div>
-    <div class="trellis-cell header">t=2: "raises"</div>
-    <div class="trellis-cell header">t=3: "rates"</div>
-    <div class="trellis-cell header">Best</div>
-    <div class="trellis-cell">NOUN</div>
-    <div class="trellis-cell best">0.32 ←π</div>
-    <div class="trellis-cell">0.05</div>
-    <div class="trellis-cell best">0.18</div>
-    <div class="trellis-cell best">✓</div>
-    <div class="trellis-cell">VERB</div>
-    <div class="trellis-cell">0.08</div>
-    <div class="trellis-cell best">0.41</div>
-    <div class="trellis-cell">0.03</div>
-    <div class="trellis-cell">—</div>
-    <div class="trellis-cell">DET</div>
-    <div class="trellis-cell">0.10</div>
-    <div class="trellis-cell">0.02</div>
-    <div class="trellis-cell">0.01</div>
-    <div class="trellis-cell">—</div>
-  </div>
-  <p style="font-size:12px;color:#64748b">Best path: NOUN → VERB → NOUN (Fed/NNP raises/VBZ rates/NNS) — backtracking from max δ_T across all states.</p>
-</div>
-
-<div class="bts-card10">
-  <h3>🔗 CRF: The Partition Function &amp; Gradient <span class="bts-depth10">PhD</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A linear-chain CRF models P(y|x) directly (discriminative), avoiding the independence assumptions of HMMs (generative). The challenge: computing the normalization constant Z(x).</p>
-  <div class="bts-2col10">
-    <div>
-      <div class="bts-formula10"><span style="color:#94a3b8"># CRF probability of label sequence y given x</span>
-P(y|x) = (1/Z(x)) · exp(Σₜ score(yₜ₋₁, yₜ, x, t))
-
-<span style="color:#94a3b8"># Score = feature function dot weights</span>
-score(yₜ₋₁, yₜ, x, t) = w · f(yₜ₋₁, yₜ, x, t)
-
-<span style="color:#94a3b8"># Partition function (normalization)</span>
-Z(x) = Σ_{all y sequences} exp(Σₜ score(yₜ₋₁,yₜ,x,t))
-<span style="color:#94a3b8"># = exponentially many terms!
-# Computed efficiently with Forward algo:
-# Same as HMM forward, but in log space</span></div>
-    </div>
-    <div>
-      <h4>CRF Training</h4>
-      <p style="font-size:13px;line-height:1.7">Log-likelihood gradient requires computing Z(x) for each example — done with the Forward algorithm (O(T·|Y|²)). The Viterbi algorithm decodes the best label sequence at inference time.</p>
-      <h4>BERT + CRF for NER</h4>
-      <p style="font-size:13px;line-height:1.7">A linear-chain CRF on top of BERT's token embeddings captures inter-label dependencies (e.g., I-ORG must follow B-ORG) that a simple softmax cannot. Still used in production NER pipelines in 2026, especially where invalid tag sequences are costly.</p>
-    </div>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>

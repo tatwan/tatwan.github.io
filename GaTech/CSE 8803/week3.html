@@ -93,6 +93,16 @@
   input[type=range] { accent-color: var(--primary); }
   canvas { border: 1px solid var(--border); border-radius: 8px; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="3"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 3: Logistic Regression, SVM &amp; Perceptron" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -110,9 +120,9 @@
   <h1>Logistic Regression, SVM &amp; Perceptron</h1>
   <p>Three powerful linear classifiers, each with a different philosophy. Master these and you understand the DNA of modern ML.</p>
   <div class="header-chips">
-    <span class="chip">📦 Module 4</span>
-    <span class="chip">📝 Quiz 3 Material</span>
-    <span class="chip">💻 HW2: regression.py, svm.py, perceptron.py</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Module 4</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Quiz 3 Material</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW2: regression.py, svm.py, perceptron.py</span>
   </div>
 </div>
 
@@ -121,7 +131,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">🗺️</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture</h2><div class="sub">Three linear classifiers, same input — different approaches</div></div>
     </div>
     <div class="callout info">
@@ -139,13 +149,13 @@
   <!-- PART 1: LOGISTIC REGRESSION -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">📉</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
       <div><h2>Part 1: Logistic Regression</h2><div class="sub">The backbone of neural networks</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔗 The Sigmoid Function — Converting Scores to Probabilities</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> The Sigmoid Function — Converting Scores to Probabilities</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -172,7 +182,7 @@ Where  s = θᵀX  (linear combination of features)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Sigmoid Function Explorer</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Sigmoid Function Explorer</h4>
           <div class="desc">Move the slider to change the linear score s = θᵀX and see how the sigmoid converts it to a probability.</div>
           <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Linear score s: <span id="sigS">0.0</span></label>
           <input type="range" min="-6" max="6" value="0" step="0.1" id="sigSlider" oninput="updateSigmoid()" style="width:100%;margin-bottom:12px;">
@@ -184,7 +194,7 @@ Where  s = θᵀX  (linear combination of features)
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⬇️ Training: Gradient Descent + MLE</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg> Training: Gradient Descent + MLE</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -205,7 +215,7 @@ L(θ) = Σᵢ [ yᵢ·log σ(θᵀXᵢ) + (1-yᵢ)·log(1 - σ(θᵀXᵢ)) ]
 <span class="comment"># Repeat until convergence (parameters stop changing much)</span>
         </div>
         <div class="callout tip">
-          <strong>💡 Why no closed-form solution?</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Why no closed-form solution?</strong>
           Linear Regression has an analytical solution (matrix inversion). Logistic Regression's sigmoid makes the objective non-linear, so we must use iterative gradient descent. But the good news: the function is <strong>convex</strong> → guaranteed to find the global optimum!
         </div>
       </div>
@@ -215,13 +225,13 @@ L(θ) = Σᵢ [ yᵢ·log σ(θᵀXᵢ) + (1-yᵢ)·log(1 - σ(θᵀXᵢ)) ]
   <!-- PART 2: SVM -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">📏</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg></div>
       <div><h2>Part 2: Support Vector Machine (SVM)</h2><div class="sub">The maximum-margin classifier</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>↔️ The Margin — Why SVM is Different</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg> The Margin — Why SVM is Different</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -260,7 +270,7 @@ L(θ) = Σᵢ [ yᵢ·log σ(θᵀXᵢ) + (1-yᵢ)·log(1 - σ(θᵀXᵢ)) ]
             <circle cx="70" cy="100" r="8" fill="#2563eb" opacity="0.8"/>
             <polygon points="185,100 177,115 193,115" fill="none" stroke="#d97706" stroke-width="2"/>
             <polygon points="185,100 177,115 193,115" fill="#dc2626" opacity="0.8"/>
-            <text x="10" y="195" font-size="9" fill="#64748b">⭕ = support vectors</text>
+            <text x="10" y="195" font-size="9" fill="#64748b"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg> = support vectors</text>
           </svg>
         </div>
 
@@ -284,7 +294,7 @@ yᵢ(xᵢᵀθ + b) ≥ 1  for all training points
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 3 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 3 Tested This!</strong>
           "The separating hyperplane produced by the SVM and perceptron are both unique" → <strong>FALSE</strong>. SVM gives a unique maximum-margin solution; Perceptron gives a non-unique arbitrary solution.
         </div>
       </div>
@@ -292,7 +302,7 @@ yᵢ(xᵢᵀθ + b) ≥ 1  for all training points
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🌀 The Kernel Trick — Non-Linear SVM</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9 12 2"/></svg> The Kernel Trick — Non-Linear SVM</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body">
@@ -321,13 +331,13 @@ f(x) = Σᵢ αᵢ yᵢ K(xᵢ, x) + b
   <!-- PART 3: PERCEPTRON -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">⚡</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
       <div><h2>Part 3: Perceptron</h2><div class="sub">The simplest learnable classifier — the OG neural unit</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔌 How the Perceptron Works</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg> How the Perceptron Works</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -356,7 +366,7 @@ Repeat until no mistakes (convergence)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Perceptron Update Visualizer</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Perceptron Update Visualizer</h4>
           <div class="desc">See how the perceptron updates its weights when it makes a mistake.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
             <div>
@@ -377,13 +387,13 @@ Repeat until no mistakes (convergence)
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Perceptron Convergence Theorem</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Perceptron Convergence Theorem</strong>
           The perceptron is <strong>guaranteed to converge</strong> IF the data is <strong>linearly separable</strong>. If not linearly separable → it will never converge!
         </div>
 
         <div class="two-col">
           <div class="mini-card">
-            <h4 style="color:#2563eb;">✅ Advantages</h4>
+            <h4 style="color:#2563eb;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Advantages</h4>
             <ul class="bullet">
               <li>Extremely simple and fast</li>
               <li>Online learning (updates one point at a time)</li>
@@ -391,7 +401,7 @@ Repeat until no mistakes (convergence)
             </ul>
           </div>
           <div class="mini-card">
-            <h4 style="color:#dc2626;">❌ Disadvantages</h4>
+            <h4 style="color:#dc2626;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Disadvantages</h4>
             <ul class="bullet">
               <li>Only works for linearly separable data</li>
               <li>No unique solution — depends on initialization</li>
@@ -406,7 +416,7 @@ Repeat until no mistakes (convergence)
   <!-- COMPARISON -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon red">⚖️</div>
+      <div class="section-icon red"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
       <div><h2>Side-by-Side Comparison</h2><div class="sub">All three linear classifiers at a glance</div></div>
     </div>
     <table class="compare-table">
@@ -420,19 +430,171 @@ Repeat until no mistakes (convergence)
       <tr><td>Probabilistic?</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td></tr>
     </table>
     <div class="callout">
-      <strong>🔑 Key Insight: Generative vs. Discriminative</strong>
+      <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Key Insight: Generative vs. Discriminative</strong>
       Naive Bayes = Generative (models P(X|Y) and P(Y)). All three this week = Discriminative (compute P(Y|X) or decision boundary directly). Discriminative models often outperform generative when enough data is available.
     </div>
   </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card3{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card3 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card3 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col3{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col3{grid-template-columns:1fr}}
+.bts-3col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:700px){.bts-3col3{grid-template-columns:1fr}}
+.bts-table3{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table3 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table3 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table3 tr:hover td{background:#fafbff}
+.bts-story3{background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border-left:4px solid #d97706;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story3-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#b45309;margin-bottom:6px}
+.bts-task-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;font-size:13px;line-height:1.7}
+.bts-task-card h5{font-size:13px;font-weight:800;margin-bottom:8px;color:#1e293b}
+.bts-inline-code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;color:#7c3aed}
+.bts-depth3{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.bts-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin:2px}
+.bts-tag.entail{background:#d1fae5;color:#065f46}
+.bts-tag.neutral{background:#fef3c7;color:#92400e}
+.bts-tag.contra{background:#fee2e2;color:#dc2626}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Core NLP Tasks: The Benchmarks Every NLP Researcher Must Know</h2>
+  <p>Classification is the entry point. But NLP research spans a rich ecosystem of structured tasks — NLI, SRL, coreference, MT, QA, relation extraction — that define the benchmarks used to evaluate every frontier model. Understanding them is essential for reading papers and doing research in 2026.</p>
+</div>
+
+<div class="bts-card3">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Natural Language Inference (NLI) <span class="bts-depth3">Core Benchmark</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Task:</strong> Given a premise and a hypothesis, classify the relationship as <span class="bts-tag entail">ENTAILMENT</span> <span class="bts-tag neutral">NEUTRAL</span> or <span class="bts-tag contra">CONTRADICTION</span>.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Example (SNLI dataset)</div>
+    <p style="font-size:13px;line-height:1.8"><strong>Premise:</strong> "A woman is walking her dog in the park."<br>
+    <strong>H1:</strong> "Someone is outside with an animal." → <span class="bts-tag entail">ENTAILMENT</span><br>
+    <strong>H2:</strong> "The woman is a professional dog trainer." → <span class="bts-tag neutral">NEUTRAL</span><br>
+    <strong>H3:</strong> "There are no animals in the park." → <span class="bts-tag contra">CONTRADICTION</span></p>
+  </div>
+  <div class="bts-2col3">
+    <div>
+      <h4>Key Datasets</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>SNLI</strong> (2015): 570K pairs, crowd-sourced</li>
+        <li><strong>MultiNLI</strong> (2018): 433K pairs, 10 genres</li>
+        <li><strong>ANLI</strong> (2020): adversarially collected</li>
+        <li><strong>XNLI</strong>: multilingual extension, 15 languages</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Why NLI Matters in 2026</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Used as reward signal in RLHF (does response contradict context?)</li>
+        <li>Hallucination detection: does output entail source?</li>
+        <li>Fact-checking pipelines</li>
+        <li>GLUE/SuperGLUE include NLI tasks (RTE, MNLI)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card3">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> Semantic Role Labeling (SRL) <span class="bts-depth3">Structure</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">SRL answers the question: <em>"Who did what to whom, where, when, and how?"</em> It identifies the predicate and labels its semantic arguments using PropBank frame schema.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> PropBank Example</div>
+    <p style="font-size:13px;line-height:2;font-family:monospace">Sentence: "<span style="background:#dbeafe;padding:2px 4px;border-radius:3px">The scientist</span> <span style="background:#fef3c7;padding:2px 4px;border-radius:3px;font-weight:800">published</span> <span style="background:#d1fae5;padding:2px 4px;border-radius:3px">a groundbreaking paper</span> <span style="background:#fce7f3;padding:2px 4px;border-radius:3px">in Nature</span>."<br>
+    ARG0 (Agent/Publisher): <em>The scientist</em><br>
+    V (Predicate): <em>published</em><br>
+    ARG1 (Theme/Published): <em>a groundbreaking paper</em><br>
+    ARGM-LOC (Locative): <em>in Nature</em></p>
+  </div>
+  <p style="font-size:13px;color:#475569;line-height:1.7"><strong>Dataset:</strong> OntoNotes 5.0, CoNLL-2009. <strong>Models:</strong> BERT + span-based SRL (Shi &amp; Lin 2019) achieves &gt;85 F1. <strong>Use in 2026:</strong> knowledge extraction pipelines, question answering, event detection, LLM evaluation for factual consistency.</p>
+</div>
+
+<div class="bts-card3">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Coreference Resolution</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Determines which mentions in a text refer to the same real-world entity. Critical for document understanding, summarization, and dialogue.</p>
+  <div class="bts-story3">
+    <div class="bts-story3-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Example</div>
+    <p style="font-size:13px;line-height:1.8">"<strong>Dr. Chen</strong> won the award. <strong>She</strong> had worked on <strong>the project</strong> for 10 years. <strong>It</strong> was finally recognized."<br><em>Clusters:</em> {Dr. Chen, She} · {the project, It}</p>
+  </div>
+  <div class="bts-2col3">
+    <div>
+      <h4>Pipeline Steps</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Mention detection (spans)</li>
+        <li>Mention representation (BERT embeddings)</li>
+        <li>Pairwise scoring (coref likelihood)</li>
+        <li>Clustering (greedy or global)</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Benchmarks &amp; Models</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>OntoNotes 5.0</strong>: gold standard, 1.6M tokens</li>
+        <li><strong>CoNLL-2012</strong>: shared task benchmark</li>
+        <li><strong>SpanBERT</strong>: span-based, state-of-the-art ~82 F1</li>
+        <li>LLMs: GPT-4 can resolve coref zero-shot, ~79 F1</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card3">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Key NLP Tasks at a Glance</h3>
+  <table class="bts-table3">
+    <tr><th>Task</th><th>What It Does</th><th>Gold Dataset</th><th>SOTA Model (2024)</th><th>Metric</th></tr>
+    <tr><td><strong>NLI</strong></td><td>Premise → hypothesis relationship</td><td>MultiNLI, SNLI</td><td>DeBERTa-v3, GPT-4</td><td>Accuracy</td></tr>
+    <tr><td><strong>SRL</strong></td><td>Who did what to whom</td><td>OntoNotes, CoNLL-09</td><td>BERT + span predictor</td><td>F1</td></tr>
+    <tr><td><strong>Coreference</strong></td><td>Which mentions = same entity</td><td>OntoNotes 5.0</td><td>SpanBERT, LingMess</td><td>Avg F1 (MUC/B³/CEAF)</td></tr>
+    <tr><td><strong>RE</strong></td><td>Extract (entity, relation, entity)</td><td>TACRED, DocRED</td><td>REBEL (seq2seq)</td><td>F1</td></tr>
+    <tr><td><strong>MT</strong></td><td>Translate between languages</td><td>WMT, FLORES</td><td>NLLB-200, GPT-4</td><td>BLEU, chrF, COMET</td></tr>
+    <tr><td><strong>QA (Extractive)</strong></td><td>Find answer span in passage</td><td>SQuAD 2.0</td><td>BERT, DeBERTa</td><td>EM / F1</td></tr>
+    <tr><td><strong>QA (Abstractive)</strong></td><td>Generate answer from knowledge</td><td>NaturalQuestions, TriviaQA</td><td>RAG + LLM</td><td>EM / ROUGE</td></tr>
+    <tr><td><strong>Summarization</strong></td><td>Compress document to summary</td><td>CNN/DM, XSum</td><td>PEGASUS, GPT-4</td><td>ROUGE-1/2/L</td></tr>
+  </table>
+</div>
+
+<div class="bts-card3">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg> Relation Extraction: From Rules to LLMs <span class="bts-depth3">Research Frontier</span></h3>
+  <div class="bts-2col3">
+    <div>
+      <h4>Task Definition</h4>
+      <p style="font-size:13px;line-height:1.7">Given: "Elon Musk founded SpaceX in 2002."<br>
+      Extract: (Elon Musk, <em>founder_of</em>, SpaceX) and (SpaceX, <em>founded_in</em>, 2002)<br><br>
+      <strong>Datasets:</strong> TACRED (42 relation types), DocRED (96 types, document-level), Re-TACRED (revised, cleaner labels)</p>
+    </div>
+    <div>
+      <h4>Approaches</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Supervised:</strong> BERT → span classifier</li>
+        <li><strong>Distant supervision:</strong> align KB (Freebase) with text, noisy labels</li>
+        <li><strong>Seq2seq:</strong> REBEL generates (h, r, t) triples directly</li>
+        <li><strong>LLM prompting:</strong> GPT-4 with structured output</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 3 Questions</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 3 Questions</h3>
 
     <div class="quiz-q">
       <p>Q1. Which of the following is NOT a discriminative model?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Naive Bayes is generative — it explicitly models the likelihood P(X|Y) and prior P(Y) to compute the posterior. Discriminative models skip this.')">Naive Bayes ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Naive Bayes is generative — it explicitly models the likelihood P(X|Y) and prior P(Y) to compute the posterior. Discriminative models skip this.')">Naive Bayes</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Perceptron IS discriminative — it directly learns a decision boundary without modeling data generation.')">Perceptron Learning Algorithm</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','LR IS discriminative — it computes P(Y|X) directly via the sigmoid, no P(X|Y) needed.')">Logistic Regression</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','SVM IS discriminative — it learns a max-margin boundary directly.')">Support Vector Machine</button>
@@ -443,7 +605,7 @@ Repeat until no mistakes (convergence)
     <div class="quiz-q">
       <p>Q2. What is the best way to select a threshold for Logistic Regression's sigmoid output?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The ROC curve shows how TPR vs FPR changes across all thresholds. Pick the threshold that best trades off catching positives vs. false alarms for your specific problem.')">Observe the ROC curve to find the best trade-off between TPR and FPR ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The ROC curve shows how TPR vs FPR changes across all thresholds. Pick the threshold that best trades off catching positives vs. false alarms for your specific problem.')">Observe the ROC curve to find the best trade-off between TPR and FPR</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','0.5 is a starting point, but it\'s often not optimal — especially for imbalanced datasets or asymmetric costs.')">Always set threshold to 0.5</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Random selection would give inconsistent results.')">Set threshold uniformly from [0.1, 0.9]</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','There is a principled way — use the ROC curve.')">None of the choices</button>
@@ -455,7 +617,7 @@ Repeat until no mistakes (convergence)
       <p>Q3. The separating hyperplane produced by SVM and Perceptron are both unique — True or False?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is false! The Perceptron produces a non-unique solution depending on initialization and order of examples. Only SVM is unique.')">True — both are unique</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! SVM produces a unique maximum-margin hyperplane. The Perceptron finds any hyperplane that correctly classifies the data — which is not unique.')">False — only SVM is unique ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! SVM produces a unique maximum-margin hyperplane. The Perceptron finds any hyperplane that correctly classifies the data — which is not unique.')">False — only SVM is unique</button>
       </div>
       <div class="quiz-feedback" id="qf2"></div>
     </div>
@@ -463,7 +625,7 @@ Repeat until no mistakes (convergence)
     <div class="quiz-q">
       <p>Q4. For the Perceptron, it is typical to iterate through data one point at a time — True or False?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The Perceptron is an online algorithm — it updates weights after seeing each single data point. This is called Stochastic Gradient Descent when generalized.')">True ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The Perceptron is an online algorithm — it updates weights after seeing each single data point. This is called Stochastic Gradient Descent when generalized.')">True</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False — the Perceptron processes one point at a time (online learning), not mini-batches or all data at once.')">False — it processes all data at once</button>
       </div>
       <div class="quiz-feedback" id="qf3"></div>
@@ -545,7 +707,7 @@ function updatePerceptron() {
   const s = t1 * x[0] + t2 * x[1];
   const pred = s >= 0 ? 1 : -1;
   const correct = pred === y;
-  let out = `θ = [${t1.toFixed(2)}, ${t2.toFixed(2)}]\nx = [${x[0]}, ${x[1]}],  y (true) = ${y}\n\nf(x) = θᵀx = ${t1.toFixed(2)}×${x[0]} + ${t2.toFixed(2)}×${x[1]} = ${s.toFixed(3)}\nŷ = sign(${s.toFixed(3)}) = ${pred}\n\nCorrect? ${correct ? '✅ YES — no update needed' : '❌ NO — updating weights!'}`;
+  let out = `θ = [${t1.toFixed(2)}, ${t2.toFixed(2)}]\nx = [${x[0]}, ${x[1]}],  y (true) = ${y}\n\nf(x) = θᵀx = ${t1.toFixed(2)}×${x[0]} + ${t2.toFixed(2)}×${x[1]} = ${s.toFixed(3)}\nŷ = sign(${s.toFixed(3)}) = ${pred}\n\nCorrect? ${correct ? '[OK] YES — no update needed' : '[X] NO — updating weights!'}`;
   if (!correct) {
     const newT1 = t1 + eta * y * x[0];
     const newT2 = t2 + eta * y * x[1];
@@ -565,157 +727,5 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card3{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card3 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card3 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col3{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col3{grid-template-columns:1fr}}
-.bts-3col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:700px){.bts-3col3{grid-template-columns:1fr}}
-.bts-table3{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table3 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table3 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table3 tr:hover td{background:#fafbff}
-.bts-story3{background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border-left:4px solid #d97706;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story3-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#b45309;margin-bottom:6px}
-.bts-task-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;font-size:13px;line-height:1.7}
-.bts-task-card h5{font-size:13px;font-weight:800;margin-bottom:8px;color:#1e293b}
-.bts-inline-code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;color:#7c3aed}
-.bts-depth3{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.bts-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin:2px}
-.bts-tag.entail{background:#d1fae5;color:#065f46}
-.bts-tag.neutral{background:#fef3c7;color:#92400e}
-.bts-tag.contra{background:#fee2e2;color:#dc2626}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Core NLP Tasks: The Benchmarks Every NLP Researcher Must Know</h2>
-  <p>Classification is the entry point. But NLP research spans a rich ecosystem of structured tasks — NLI, SRL, coreference, MT, QA, relation extraction — that define the benchmarks used to evaluate every frontier model. Understanding them is essential for reading papers and doing research in 2026.</p>
-</div>
-
-<div class="bts-card3">
-  <h3>🔗 Natural Language Inference (NLI) <span class="bts-depth3">Core Benchmark</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Task:</strong> Given a premise and a hypothesis, classify the relationship as <span class="bts-tag entail">ENTAILMENT</span> <span class="bts-tag neutral">NEUTRAL</span> or <span class="bts-tag contra">CONTRADICTION</span>.</p>
-  <div class="bts-story3">
-    <div class="bts-story3-label">📖 Example (SNLI dataset)</div>
-    <p style="font-size:13px;line-height:1.8"><strong>Premise:</strong> "A woman is walking her dog in the park."<br>
-    <strong>H1:</strong> "Someone is outside with an animal." → <span class="bts-tag entail">ENTAILMENT</span><br>
-    <strong>H2:</strong> "The woman is a professional dog trainer." → <span class="bts-tag neutral">NEUTRAL</span><br>
-    <strong>H3:</strong> "There are no animals in the park." → <span class="bts-tag contra">CONTRADICTION</span></p>
-  </div>
-  <div class="bts-2col3">
-    <div>
-      <h4>Key Datasets</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>SNLI</strong> (2015): 570K pairs, crowd-sourced</li>
-        <li><strong>MultiNLI</strong> (2018): 433K pairs, 10 genres</li>
-        <li><strong>ANLI</strong> (2020): adversarially collected</li>
-        <li><strong>XNLI</strong>: multilingual extension, 15 languages</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Why NLI Matters in 2026</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>Used as reward signal in RLHF (does response contradict context?)</li>
-        <li>Hallucination detection: does output entail source?</li>
-        <li>Fact-checking pipelines</li>
-        <li>GLUE/SuperGLUE include NLI tasks (RTE, MNLI)</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card3">
-  <h3>🎭 Semantic Role Labeling (SRL) <span class="bts-depth3">Structure</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">SRL answers the question: <em>"Who did what to whom, where, when, and how?"</em> It identifies the predicate and labels its semantic arguments using PropBank frame schema.</p>
-  <div class="bts-story3">
-    <div class="bts-story3-label">📖 PropBank Example</div>
-    <p style="font-size:13px;line-height:2;font-family:monospace">Sentence: "<span style="background:#dbeafe;padding:2px 4px;border-radius:3px">The scientist</span> <span style="background:#fef3c7;padding:2px 4px;border-radius:3px;font-weight:800">published</span> <span style="background:#d1fae5;padding:2px 4px;border-radius:3px">a groundbreaking paper</span> <span style="background:#fce7f3;padding:2px 4px;border-radius:3px">in Nature</span>."<br>
-    ARG0 (Agent/Publisher): <em>The scientist</em><br>
-    V (Predicate): <em>published</em><br>
-    ARG1 (Theme/Published): <em>a groundbreaking paper</em><br>
-    ARGM-LOC (Locative): <em>in Nature</em></p>
-  </div>
-  <p style="font-size:13px;color:#475569;line-height:1.7"><strong>Dataset:</strong> OntoNotes 5.0, CoNLL-2009. <strong>Models:</strong> BERT + span-based SRL (Shi &amp; Lin 2019) achieves &gt;85 F1. <strong>Use in 2026:</strong> knowledge extraction pipelines, question answering, event detection, LLM evaluation for factual consistency.</p>
-</div>
-
-<div class="bts-card3">
-  <h3>🔄 Coreference Resolution</h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Determines which mentions in a text refer to the same real-world entity. Critical for document understanding, summarization, and dialogue.</p>
-  <div class="bts-story3">
-    <div class="bts-story3-label">📖 Example</div>
-    <p style="font-size:13px;line-height:1.8">"<strong>Dr. Chen</strong> won the award. <strong>She</strong> had worked on <strong>the project</strong> for 10 years. <strong>It</strong> was finally recognized."<br><em>Clusters:</em> {Dr. Chen, She} · {the project, It}</p>
-  </div>
-  <div class="bts-2col3">
-    <div>
-      <h4>Pipeline Steps</h4>
-      <ol style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>Mention detection (spans)</li>
-        <li>Mention representation (BERT embeddings)</li>
-        <li>Pairwise scoring (coref likelihood)</li>
-        <li>Clustering (greedy or global)</li>
-      </ol>
-    </div>
-    <div>
-      <h4>Benchmarks &amp; Models</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>OntoNotes 5.0</strong>: gold standard, 1.6M tokens</li>
-        <li><strong>CoNLL-2012</strong>: shared task benchmark</li>
-        <li><strong>SpanBERT</strong>: span-based, state-of-the-art ~82 F1</li>
-        <li>LLMs: GPT-4 can resolve coref zero-shot, ~79 F1</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card3">
-  <h3>🗂️ Key NLP Tasks at a Glance</h3>
-  <table class="bts-table3">
-    <tr><th>Task</th><th>What It Does</th><th>Gold Dataset</th><th>SOTA Model (2024)</th><th>Metric</th></tr>
-    <tr><td><strong>NLI</strong></td><td>Premise → hypothesis relationship</td><td>MultiNLI, SNLI</td><td>DeBERTa-v3, GPT-4</td><td>Accuracy</td></tr>
-    <tr><td><strong>SRL</strong></td><td>Who did what to whom</td><td>OntoNotes, CoNLL-09</td><td>BERT + span predictor</td><td>F1</td></tr>
-    <tr><td><strong>Coreference</strong></td><td>Which mentions = same entity</td><td>OntoNotes 5.0</td><td>SpanBERT, LingMess</td><td>Avg F1 (MUC/B³/CEAF)</td></tr>
-    <tr><td><strong>RE</strong></td><td>Extract (entity, relation, entity)</td><td>TACRED, DocRED</td><td>REBEL (seq2seq)</td><td>F1</td></tr>
-    <tr><td><strong>MT</strong></td><td>Translate between languages</td><td>WMT, FLORES</td><td>NLLB-200, GPT-4</td><td>BLEU, chrF, COMET</td></tr>
-    <tr><td><strong>QA (Extractive)</strong></td><td>Find answer span in passage</td><td>SQuAD 2.0</td><td>BERT, DeBERTa</td><td>EM / F1</td></tr>
-    <tr><td><strong>QA (Abstractive)</strong></td><td>Generate answer from knowledge</td><td>NaturalQuestions, TriviaQA</td><td>RAG + LLM</td><td>EM / ROUGE</td></tr>
-    <tr><td><strong>Summarization</strong></td><td>Compress document to summary</td><td>CNN/DM, XSum</td><td>PEGASUS, GPT-4</td><td>ROUGE-1/2/L</td></tr>
-  </table>
-</div>
-
-<div class="bts-card3">
-  <h3>🏆 Relation Extraction: From Rules to LLMs <span class="bts-depth3">Research Frontier</span></h3>
-  <div class="bts-2col3">
-    <div>
-      <h4>Task Definition</h4>
-      <p style="font-size:13px;line-height:1.7">Given: "Elon Musk founded SpaceX in 2002."<br>
-      Extract: (Elon Musk, <em>founder_of</em>, SpaceX) and (SpaceX, <em>founded_in</em>, 2002)<br><br>
-      <strong>Datasets:</strong> TACRED (42 relation types), DocRED (96 types, document-level), Re-TACRED (revised, cleaner labels)</p>
-    </div>
-    <div>
-      <h4>Approaches</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>Supervised:</strong> BERT → span classifier</li>
-        <li><strong>Distant supervision:</strong> align KB (Freebase) with text, noisy labels</li>
-        <li><strong>Seq2seq:</strong> REBEL generates (h, r, t) triples directly</li>
-        <li><strong>LLM prompting:</strong> GPT-4 with structured output</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>

@@ -111,6 +111,16 @@
   .vec-arrow { font-size: 18px; color: var(--muted); }
   .result-vec { background: #059669; color: white; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 700; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="4"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 4: SVD, Co-occurrence Matrices &amp; GloVe" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -128,9 +138,9 @@
   <h1>SVD, Co-occurrence Matrices &amp; GloVe</h1>
   <p>The leap from sparse, meaningless word vectors to dense embeddings that actually capture word meaning. This is where NLP gets powerful.</p>
   <div class="header-chips">
-    <span class="chip">📦 Module 5</span>
-    <span class="chip">📝 Quiz 4 Material</span>
-    <span class="chip">💻 HW2: svd.py &amp; glove.py</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Module 5</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Quiz 4 Material</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW2: svd.py &amp; glove.py</span>
   </div>
 </div>
 
@@ -139,7 +149,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">🗺️</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture — The Problem with Sparse Vectors</h2></div>
     </div>
     <div class="callout info">
@@ -157,13 +167,13 @@
   <!-- PART 1: CO-OCCURRENCE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">🔢</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div>
       <div><h2>Part 1: Co-occurrence Matrix</h2><div class="sub">Capturing meaning through context</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🧠 The Distributional Hypothesis — Why Context = Meaning</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> The Distributional Hypothesis — Why Context = Meaning</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -209,11 +219,11 @@ Co-occurrence(it, was) = <span class="eq">2</span>
         <p style="font-size:12px;color:var(--muted);margin-top:6px;">Purple = high co-occurrence. Notice "best" and "worst" have similar rows → they appear in similar contexts!</p>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 4 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 4 Tested This!</strong>
           "The size of the co-occurrence matrix is proportional to the number of words in the corpus" → <strong>FALSE</strong>. It's d×d where d = vocabulary size (unique words), not total corpus size.
         </div>
         <div class="callout warning">
-          <strong>⚠️ Quiz 4: Another Trap!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 4: Another Trap!</strong>
           "For a corpus with n documents and d distinct words, the co-occurrence matrix has size n×n" → <strong>FALSE</strong>. It's d×d.
         </div>
       </div>
@@ -223,13 +233,13 @@ Co-occurrence(it, was) = <span class="eq">2</span>
   <!-- PART 2: SVD -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">📐</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg></div>
       <div><h2>Part 2: Singular Value Decomposition (SVD)</h2><div class="sub">Compressing the co-occurrence matrix into dense embeddings</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🗜️ SVD: From d×d Sparse → k-dimensional Dense</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/></svg> SVD: From d×d Sparse → k-dimensional Dense</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -298,7 +308,7 @@ k = number of dimensions to keep (hyperparameter, typically 50-500)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 SVD Dimensionality Explorer</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> SVD Dimensionality Explorer</h4>
           <div class="desc">Adjust k to see the trade-off between compression and information retention.</div>
           <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Vocab size d: <span id="svdD">1000</span></label>
           <input type="range" min="100" max="5000" value="1000" step="100" id="svdDSlider" oninput="updateSVD()" style="width:100%;margin-bottom:10px;">
@@ -308,7 +318,7 @@ k = number of dimensions to keep (hyperparameter, typically 50-500)
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 4: Range of k</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 4: Range of k</strong>
           "What is the valid range of k for truncated SVD on a d×d co-occurrence matrix?" → <strong>[1, d]</strong>. You can keep anywhere from 1 to all d dimensions. You cannot have k > d.
         </div>
       </div>
@@ -318,13 +328,13 @@ k = number of dimensions to keep (hyperparameter, typically 50-500)
   <!-- PART 3: GLOVE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🧲</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M6 15V9a6 6 0 0 1 12 0v6"/><line x1="6" y1="15" x2="9" y2="15"/><line x1="15" y1="15" x2="18" y2="15"/></svg></div>
       <div><h2>Part 3: GloVe (Global Vectors for Word Representation)</h2><div class="sub">Better word vectors through co-occurrence probabilities</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🌐 GloVe: Beyond Raw Counts</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> GloVe: Beyond Raw Counts</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -359,7 +369,7 @@ f(X) = 1            if X ≥ x_max
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 4: Key GloVe Facts</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 4: Key GloVe Facts</strong>
           "GloVe probabilities have nothing to do with the co-occurrence matrix" → <strong>FALSE</strong>. GloVe is entirely based on co-occurrence statistics.<br><br>
           "GloVe word vectors capture linear structure and semantic meaning" → <strong>TRUE</strong>.
         </div>
@@ -368,7 +378,7 @@ f(X) = 1            if X ≥ x_max
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔮 Word Analogy: The Magic of Dense Embeddings</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg> Word Analogy: The Magic of Dense Embeddings</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -402,7 +412,7 @@ f(X) = 1            if X ≥ x_max
         </div>
 
         <div class="callout tip">
-          <strong>💡 Why this works</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Why this works</strong>
           The semantic concept "gender" lives in the subspace captured by king−man = queen−woman. The model has learned not just word associations but underlying semantic dimensions. This is what sparse vectors (OHE, BoW) can <em>never</em> do.
         </div>
       </div>
@@ -411,13 +421,13 @@ f(X) = 1            if X ≥ x_max
 
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 4 Questions</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 4 Questions</h3>
 
     <div class="quiz-q">
       <p>Q1. The size of the co-occurrence matrix is directly proportional to the number of words in the corpus — True or False?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is FALSE — the matrix size is d×d where d is the VOCABULARY size (unique words), not the total corpus length.')">True</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The co-occurrence matrix is d×d where d = number of UNIQUE words (vocabulary size). Total corpus length doesn\'t determine matrix size.')">False ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The co-occurrence matrix is d×d where d = number of UNIQUE words (vocabulary size). Total corpus length doesn\'t determine matrix size.')">False</button>
       </div>
       <div class="quiz-feedback" id="qf0"></div>
     </div>
@@ -427,7 +437,7 @@ f(X) = 1            if X ≥ x_max
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','n×d is the shape of a BoW document-term matrix, not the co-occurrence matrix.')">n × d (documents × vocabulary)</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','n×n would be a document-document similarity matrix.')">n × n (documents × documents)</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Co-occurrence is word vs. word — both axes are the vocabulary. Shape = d × d (vocabulary × vocabulary).')">d × d (vocabulary × vocabulary) ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Co-occurrence is word vs. word — both axes are the vocabulary. Shape = d × d (vocabulary × vocabulary).')">d × d (vocabulary × vocabulary)</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is the shape of the SVD result U_k after truncation, not the raw co-occurrence matrix.')">d × k (vocabulary × embedding size)</button>
       </div>
       <div class="quiz-feedback" id="qf1"></div>
@@ -438,7 +448,7 @@ f(X) = 1            if X ≥ x_max
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','[1,n] would tie k to document count — but SVD on co-occurrence has nothing to do with n.')">[ 1, n ]</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','k must be at least 1, not starting at d.')">[ d, n ]</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! k can range from 1 (maximum compression) to d (keeping all dimensions = no compression). In practice, k is 50-500.')">[ 1, d ] ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! k can range from 1 (maximum compression) to d (keeping all dimensions = no compression). In practice, k is 50-500.')">[ 1, d ]</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','k cannot exceed d — you cannot create more dimensions than you started with.')">[ 1, ∞ ]</button>
       </div>
       <div class="quiz-feedback" id="qf2"></div>
@@ -447,7 +457,7 @@ f(X) = 1            if X ≥ x_max
     <div class="quiz-q">
       <p>Q4. GloVe uses co-occurrence probabilities — not raw counts — as its primary source of information. True or False?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! GloVe computes P(j|i) = X_ij / X_i (probability of word j in context of i) and trains vectors so that wᵢᵀwⱼ ≈ log(X_ij). Probabilities, not just counts.')">True ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! GloVe computes P(j|i) = X_ij / X_i (probability of word j in context of i) and trains vectors so that wᵢᵀwⱼ ≈ log(X_ij). Probabilities, not just counts.')">True</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','GloVe absolutely uses co-occurrence statistics — that\'s the G in GloVe (Global co-occurrence statistics).')">False — GloVe ignores co-occurrence</button>
       </div>
       <div class="quiz-feedback" id="qf3"></div>
@@ -481,7 +491,7 @@ function updateSVD() {
   const compression = (100 - parseFloat(ratio)).toFixed(1);
   const kValid = k <= d;
   document.getElementById('svdOutput').textContent =
-    `Co-occurrence matrix: ${d} × ${d} = ${originalSize.toLocaleString()} values\nEmbedding matrix (U_k): ${d} × ${k} = ${embeddingSize.toLocaleString()} values\n\nCompression: ${compression}% smaller\nStorage reduction: ${(originalSize/embeddingSize).toFixed(1)}× fewer values\n\nValid k? ${kValid ? '✅ Yes (k ≤ d)' : '❌ No! k cannot exceed d=' + d}\n\nTypical practice: k = 50–500\nEach word gets a dense ${k}-dimensional vector`;
+    `Co-occurrence matrix: ${d} × ${d} = ${originalSize.toLocaleString()} values\nEmbedding matrix (U_k): ${d} × ${k} = ${embeddingSize.toLocaleString()} values\n\nCompression: ${compression}% smaller\nStorage reduction: ${(originalSize/embeddingSize).toFixed(1)}× fewer values\n\nValid k? ${kValid ? '[OK] Yes (k ≤ d)' : '[X] No! k cannot exceed d=' + d}\n\nTypical practice: k = 50–500\nEach word gets a dense ${k}-dimensional vector`;
 }
 updateSVD();
 

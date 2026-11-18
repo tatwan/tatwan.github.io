@@ -153,6 +153,16 @@
   .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
   .page-nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="12"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 12: Topic Modeling: LSI &amp; LDA" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -160,7 +170,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week10.html">← Week 10</a>
     <span class="you-are-here">Week 12 ← HERE</span>
   </div>
@@ -176,7 +186,7 @@
     <span class="chip">Unsupervised Learning</span>
     <span class="chip">LSI / SVD</span>
     <span class="chip">LDA / Dirichlet</span>
-    <span class="chip alert">⚠️ Quiz 10 · Due Apr 10</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 10 · Due Apr 10</span>
   </div>
 </div>
 
@@ -185,7 +195,7 @@
 <!-- SECTION 1: WHAT IS TOPIC MODELING -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon amber">🗂️</div>
+    <div class="section-icon amber"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
     <div>
       <h2>What is Topic Modeling?</h2>
       <div class="sub">Unsupervised learning · No labels needed</div>
@@ -207,19 +217,19 @@
         <p>It enables <strong>semantic querying</strong> — we can retrieve documents that are related to a topic even if they don't contain the exact search keyword. For example, searching for "system" can retrieve a document that only contains "data" and "retrieval" because they share the same underlying database concept.</p>
       </div>
       <div class="callout">
-        <strong>💡 Key Example</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Key Example</strong>
         We may retrieve documents that <em>don't</em> have the term "system", but they contain "data" and "retrieval" — because they share the same database concept. Topic modeling bridges this semantic gap.
       </div>
       <div class="two-col">
         <div class="mini-card">
-          <h4>📊 Outputs</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Outputs</h4>
           <ul class="bullet">
             <li><strong>Document-Concept/Topic matrix</strong> — which documents belong to which topic</li>
             <li><strong>Term/Word-Concept/Topic matrix</strong> — which words define each topic</li>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🔑 Key Property</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Key Property</h4>
           <p>Topics are <em>latent</em> (hidden). We don't know their labels in advance — we label them manually after seeing which words cluster together.</p>
         </div>
       </div>
@@ -243,7 +253,7 @@
 <!-- SECTION 2: LSI -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon amber">🔢</div>
+    <div class="section-icon amber"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div>
     <div>
       <h2>Latent Semantic Indexing (LSI)</h2>
       <div class="sub">SVD-based topic modeling · M11T1L1</div>
@@ -296,7 +306,7 @@
         <div class="svd-block svd-Vt">Vᵀ<div class="sub">Term-Concept Matrix<br/>(k × d)</div></div>
       </div>
       <div class="callout">
-        <strong>📐 Dimensions</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> Dimensions</strong>
         n = number of documents · d = number of terms · k = number of concepts (max k = d). The maximum value for k equals d (the number of unique terms).
       </div>
       <table class="compare-table">
@@ -308,7 +318,7 @@
         </tbody>
       </table>
       <div class="callout tip">
-        <strong>✅ Σ Interpretation</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Σ Interpretation</strong>
         The diagonal values represent concept confidence. If the CS concept has a higher value than the medical concept, it means the corpus has more CS-related documents — which is reflected in the higher singular value.
       </div>
     </div>
@@ -330,7 +340,7 @@
 → find documents in U with similar concept coordinates
 → returns semantically related docs even without exact keyword match</span></div>
       <div class="callout">
-        <strong>🔍 Power of LSI</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Power of LSI</strong>
         Document ("information", "retrieval") is retrieved by query ("data") even though it does NOT contain "data" — because both map to the same CS concept via SVD!
       </div>
     </div>
@@ -353,7 +363,7 @@
 
   <!-- Interactive: SVD Concept Explorer -->
   <div class="interactive-box">
-    <h4>🔬 Interactive: LSI Concept Query</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Interactive: LSI Concept Query</h4>
     <div class="desc">Click a term to see which concept it maps to, and which documents are retrieved.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="btn-outline active" onclick="lsiQuery(this,'data')">data</button>
@@ -372,7 +382,7 @@ Retrieved documents: doc1, doc2
 <!-- SECTION 3: LDA -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">🎲</div>
+    <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/></svg></div>
     <div>
       <h2>Latent Dirichlet Allocation (LDA)</h2>
       <div class="sub">Probabilistic topic modeling · M11T1L2</div>
@@ -390,7 +400,7 @@ Retrieved documents: doc1, doc2
         <p>LDA is an <strong>unsupervised probabilistic model</strong>. You must specify the number of topics <strong>K</strong> in advance. LDA finds groups of words that occur together across documents, discovering the hidden topic structure.</p>
       </div>
       <div class="callout warning">
-        <strong>⚠️ Key Requirement</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Key Requirement</strong>
         Unlike LSI, LDA requires you to specify K (number of topics) before training. The right K depends on your dataset and problem domain.
       </div>
       <div class="explainer">
@@ -399,7 +409,7 @@ Retrieved documents: doc1, doc2
       </div>
       <div class="two-col">
         <div class="mini-card">
-          <h4>📄 Document-Topic Matrix (θ)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Document-Topic Matrix (θ)</h4>
           <ul class="bullet">
             <li>For each document, the <strong>probability of each topic</strong></li>
             <li>e.g., Doc1: {Sports: 0.1, Food: 0.8, Economy: 0.1}</li>
@@ -407,7 +417,7 @@ Retrieved documents: doc1, doc2
           </ul>
         </div>
         <div class="mini-card">
-          <h4>📝 Topic-Word Matrix (φ)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Topic-Word Matrix (φ)</h4>
           <ul class="bullet">
             <li>For each topic, the <strong>probability of each word</strong></li>
             <li>e.g., Sports topic: {football: 0.4, stadium: 0.4, price: 0.01}</li>
@@ -468,7 +478,7 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
         </div>
       </div>
       <div class="callout tip">
-        <strong>✅ Mnemonic</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Mnemonic</strong>
         ① "What topics does this doc like?" → ② "What words does each topic like?" → ③ "Pick a topic for this word" → ④ "Given that topic, pick a word"
       </div>
     </div>
@@ -517,7 +527,7 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
         <li><strong>Convergence:</strong> Stop when topic assignments stabilize</li>
       </ol>
       <div class="callout">
-        <strong>🎯 Goal</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Goal</strong>
         Maximize the probability of generated documents being similar to the original ones → this effectively clusters similar words and similar documents for each topic.
       </div>
     </div>
@@ -525,7 +535,7 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
 
   <!-- Interactive: LDA Topic Explorer -->
   <div class="interactive-box">
-    <h4>🎲 Interactive: LDA Topic Distribution</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/></svg> Interactive: LDA Topic Distribution</h4>
     <div class="desc">Click a document to see its topic distribution and the top words in each topic.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="btn-outline active" onclick="ldaExplore(this,0)">Doc 1: Sports Article</button>
@@ -540,7 +550,7 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
 <!-- SECTION 4: LSI vs LDA COMPARISON -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon green">⚖️</div>
+    <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
     <div>
       <h2>LSI vs LDA: Head-to-Head</h2>
       <div class="sub">When to use which</div>
@@ -566,14 +576,14 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
   </table>
 
   <div class="callout tip">
-    <strong>✅ When to use each</strong>
+    <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> When to use each</strong>
     Use <strong>LSI</strong> when you need fast semantic search/retrieval and want to find similar documents quickly. Use <strong>LDA</strong> when you want interpretable probabilistic topics and want to understand what each topic "means" in terms of word distributions.
   </div>
 </div>
 
 <!-- SECTION 5: QUIZ 10 PREP -->
 <div class="quiz-section">
-  <h3>🎯 Quiz 10 Practice — Topic Modeling</h3>
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Quiz 10 Practice — Topic Modeling</h3>
 
   <div class="quiz-q" id="q1">
     <p>Q1. True or False: Topic modeling with LSI and LDA both require labeled training data (supervised learning).</p>
@@ -631,9 +641,9 @@ p(w, z, <span class="term-theta">θ</span>, <span class="term-phi">φ</span>, <s
 
 <!-- PAGE NAV -->
 <div class="page-nav">
-  <a href="week10.html">← Week 10: Sequence Labeling</a>
-  <a href="index.html">🏠 All Weeks</a>
-  <a href="#">Week 13 →</a>
+  <a href="week11.html">← Week 11: Post-Training Alignment</a>
+  <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> All Weeks</a>
+  <a href="week13.html">Week 13: GenAI &amp; RAG →</a>
 </div>
 
 </div><!-- /container -->

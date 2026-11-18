@@ -65,6 +65,20 @@
   .cmp-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
   .cmp-table tr:hover td { background: #fafbff; }
   .depth-badge { display: inline-block; background: var(--primary); color: white; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .interactive-box h4 { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .dpo-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .dpo-btn { padding: 7px 13px; border: 1px solid #ddd6fe; border-radius: 999px; background: var(--primary-light); color: var(--primary-dark); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .dpo-btn:hover, .dpo-btn.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+  .dpo-sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .dpo-slider label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .dpo-slider input[type="range"] { width: 100%; accent-color: #6d28d9; }
+  .dpo-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .dpo-stat { background: var(--primary-light); border: 1px solid #ddd6fe; border-radius: 10px; padding: 12px; }
+  .dpo-stat .lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--primary-dark); margin-bottom: 4px; }
+  .dpo-stat .val { font-family: monospace; font-size: 18px; font-weight: 800; color: #1e293b; }
+  .dpo-diag { background: #f8fafc; border-left: 4px solid var(--primary); padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 13px; line-height: 1.6; color: var(--text); }
   .quiz-section { background: #1e293b; color: white; border-radius: 16px; padding: 28px; margin-top: 40px; }
   .quiz-section h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
   .quiz-q { margin-bottom: 24px; }
@@ -78,7 +92,20 @@
   .quiz-feedback.show { display: block; }
   .quiz-feedback.correct { background: rgba(5,150,105,0.2); color: #6ee7b7; }
   .quiz-feedback.wrong { background: rgba(220,38,38,0.2); color: #fca5a5; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-dark); font-weight: 600; font-size: 14px; }
+  .page-nav a:hover { color: var(--primary); }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="11"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 11: Post-Training Alignment Pipeline" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -96,10 +123,10 @@
   <h1>Post-Training Alignment Pipeline</h1>
   <p>SFT, RLHF, PPO, Constitutional AI, DPO, KTO — how a pretrained LLM becomes a helpful, harmless, honest assistant. The full pipeline that powers Claude, GPT-4, and LLaMA-chat.</p>
   <div class="header-chips">
-    <span class="chip">🎯 SFT &amp; RLHF</span>
-    <span class="chip">⚖️ Constitutional AI</span>
-    <span class="chip">📐 DPO &amp; KTO Math</span>
-    <span class="chip">🚀 vLLM &amp; Serving</span>
+    <span class="chip">SFT &amp; RLHF</span>
+    <span class="chip">Constitutional AI</span>
+    <span class="chip">DPO &amp; KTO Math</span>
+    <span class="chip">vLLM &amp; Serving</span>
   </div>
 </header>
 
@@ -108,25 +135,25 @@
 <!-- PIPELINE OVERVIEW -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">🗺️</div>
+    <div class="section-icon purple" style="color:#6d28d9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
     <div>
       <h2>The Post-Training Pipeline</h2>
-      <div class="sub">From raw pretraining → helpful assistant</div>
+      <div class="sub">From raw pretraining &rarr; helpful assistant</div>
     </div>
   </div>
 
   <div class="pipeline-flow">
     <div class="pipeline-step"><h5>1. Pretraining</h5><p>Next-token prediction on trillions of tokens. Learns world knowledge, language structure.</p></div>
-    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-arrow">&rarr;</div>
     <div class="pipeline-step"><h5>2. SFT</h5><p>Supervised fine-tuning on (instruction, ideal response) pairs. Teaches instruction-following format.</p></div>
-    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-arrow">&rarr;</div>
     <div class="pipeline-step"><h5>3. Reward Modeling</h5><p>Train a model to score response quality from human preference rankings.</p></div>
-    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-arrow">&rarr;</div>
     <div class="pipeline-step"><h5>4. RL Fine-tuning</h5><p>Use PPO or DPO to optimize the policy toward high-reward, low-KL responses.</p></div>
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Why Pretraining Isn't Enough</div>
+    <div class="story-label">Why Pretraining Isn't Enough</div>
     <p style="font-size:14px;line-height:1.8">A pretrained LLM is a next-token predictor. Ask it "How do I make coffee?" and it might output "How do I make coffee? Let me explain the history of coffee cultivation…" — continuing the document, not answering you. SFT teaches the model the <em>format</em> of helpful conversation. RL fine-tuning teaches it to produce responses that humans actually prefer — truthful, safe, and helpful — not just statistically plausible.</p>
   </div>
 </div>
@@ -134,7 +161,7 @@
 <!-- SFT -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon blue">📚</div>
+    <div class="section-icon blue" style="color:#1d4ed8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
     <div>
       <h2>Supervised Fine-Tuning (SFT)</h2>
       <div class="sub">Teaching instruction-following format</div>
@@ -143,7 +170,7 @@
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>📝 SFT: Mechanics &amp; Data</h3>
+      <h3>SFT: Mechanics &amp; Data</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -181,7 +208,7 @@ L_SFT = -Σᵢ log P_θ(yᵢ | y₁,...,yᵢ₋₁, x)
 <!-- RLHF -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon orange">🎯</div>
+    <div class="section-icon orange" style="color:#b45309;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
     <div>
       <h2>RLHF: Reinforcement Learning from Human Feedback</h2>
       <div class="sub">PPO · Reward Modeling · KL Penalty</div>
@@ -190,7 +217,7 @@ L_SFT = -Σᵢ log P_θ(yᵢ | y₁,...,yᵢ₋₁, x)
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🏆 Reward Model Training</h3>
+      <h3>Reward Model Training</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -212,7 +239,7 @@ L_RM = -log σ(r_φ(x, y_w) - r_φ(x, y_l))
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>⚙️ PPO for RLHF: The Full Objective <span class="depth-badge">PhD</span></h3>
+      <h3>PPO for RLHF: The Full Objective <span class="depth-badge">PhD</span></h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -244,7 +271,7 @@ L_CLIP = E[min(rₜ·Aₜ, clip(rₜ, 1-ε, 1+ε)·Aₜ)]
 <!-- CONSTITUTIONAL AI -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon green">📜</div>
+    <div class="section-icon green" style="color:#047857;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
     <div>
       <h2>Constitutional AI (Anthropic, 2022)</h2>
       <div class="sub">Scaling safety without human labelers</div>
@@ -253,13 +280,13 @@ L_CLIP = E[min(rₜ·Aₜ, clip(rₜ, 1-ε, 1+ε)·Aₜ)]
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>⚖️ Constitutional AI: RLAIF</h3>
+      <h3>Constitutional AI: RLAIF</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
       <div class="pillbox"><span class="pill what">What</span><span class="pill why">Why</span><span class="pill phd">Anthropic</span></div>
       <div class="story-box">
-        <div class="story-label">📖 The Insight</div>
+        <div class="story-label">The Insight</div>
         <p style="font-size:14px;line-height:1.8">Human feedback is expensive and inconsistent. What if we could use an LLM to judge and improve another LLM — guided by explicit principles (a "constitution")? That's Constitutional AI (CAI) — the basis for Claude. It replaces human preference labelers with AI feedback (RLAIF), scaled by a written set of values.</p>
       </div>
       <div class="arch-diagram">Constitutional AI Pipeline:
@@ -291,7 +318,7 @@ Constitution examples (Anthropic's CAI paper):
 <!-- DPO / KTO -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">📐</div>
+    <div class="section-icon purple" style="color:#6d28d9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
     <div>
       <h2>DPO, KTO &amp; Alignment Without RL</h2>
       <div class="sub">Preference optimization as supervised learning</div>
@@ -300,7 +327,7 @@ Constitution examples (Anthropic's CAI paper):
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🎯 DPO: Direct Preference Optimization <span class="depth-badge">PhD</span></h3>
+      <h3>DPO: Direct Preference Optimization <span class="depth-badge">PhD</span></h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -328,7 +355,7 @@ L_DPO(θ) = -E log σ(
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🧠 KTO: Kahneman-Tversky Optimization <span class="depth-badge">2024</span></h3>
+      <h3>KTO: Kahneman-Tversky Optimization <span class="depth-badge">2024</span></h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
@@ -353,26 +380,57 @@ L_KTO = E_{(x,y,z)} [
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>📊 Alignment Methods Comparison</h3>
+      <h3>Alignment Methods Comparison</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
       <table class="cmp-table">
         <tr><th>Method</th><th>Data Needed</th><th>Models in Training</th><th>Stability</th><th>Used By</th></tr>
-        <tr><td><strong>SFT only</strong></td><td>Demonstration pairs</td><td>1</td><td>✅ Very stable</td><td>All models (base)</td></tr>
-        <tr><td><strong>PPO-RLHF</strong></td><td>Preference pairs + RM</td><td>4</td><td>⚠️ Unstable</td><td>GPT-4, Claude (early), InstructGPT</td></tr>
-        <tr><td><strong>DPO</strong></td><td>Paired preferences</td><td>2</td><td>✅ Stable</td><td>LLaMA-2, Zephyr, Mistral</td></tr>
-        <tr><td><strong>KTO</strong></td><td>Binary labels (no pairs needed)</td><td>2</td><td>✅ Stable</td><td>Mistral, newer open models</td></tr>
-        <tr><td><strong>Constitutional AI</strong></td><td>Constitution + AI labels</td><td>3–4</td><td>✅ Scalable</td><td>Claude 2/3</td></tr>
-        <tr><td><strong>RLAIF</strong></td><td>Prompts + AI judge</td><td>3–4</td><td>✅ Cheaper than RLHF</td><td>Gemini, Claude variants</td></tr>
+        <tr><td><strong>SFT only</strong></td><td>Demonstration pairs</td><td>1</td><td><span style="color:#059669;font-weight:700;">Very stable</span></td><td>All models (base)</td></tr>
+        <tr><td><strong>PPO-RLHF</strong></td><td>Preference pairs + RM</td><td>4</td><td><span style="color:#d97706;font-weight:700;">Unstable</span></td><td>GPT-4, Claude (early), InstructGPT</td></tr>
+        <tr><td><strong>DPO</strong></td><td>Paired preferences</td><td>2</td><td><span style="color:#059669;font-weight:700;">Stable</span></td><td>LLaMA-2, Zephyr, Mistral</td></tr>
+        <tr><td><strong>KTO</strong></td><td>Binary labels (no pairs needed)</td><td>2</td><td><span style="color:#059669;font-weight:700;">Stable</span></td><td>Mistral, newer open models</td></tr>
+        <tr><td><strong>Constitutional AI</strong></td><td>Constitution + AI labels</td><td>3–4</td><td><span style="color:#059669;font-weight:700;">Scalable</span></td><td>Claude 2/3</td></tr>
+        <tr><td><strong>RLAIF</strong></td><td>Prompts + AI judge</td><td>3–4</td><td><span style="color:#059669;font-weight:700;">Cheaper than RLHF</span></td><td>Gemini, Claude variants</td></tr>
       </table>
     </div>
   </div>
 </div>
 
+<!-- INTERACTIVE EXPLORER -->
+<div class="interactive-box">
+  <h4 style="display:flex;align-items:center;gap:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive: DPO vs. PPO-RLHF Reward &amp; KL Margin Explorer</h4>
+  <p class="desc">Adjust &beta; (KL penalty strength) and policy-to-reference log-probability ratios to see how DPO converts policy drift into implicit reward margins, preference probability, and loss — and observe phenomena like reward hacking vs. likelihood displacement.</p>
+
+  <div class="dpo-presets">
+    <button class="dpo-btn active" onclick="applyDpoPreset(0.10, 1.4, -1.6, this)">Balanced Alignment (&beta;=0.10)</button>
+    <button class="dpo-btn" onclick="applyDpoPreset(0.02, 3.8, -3.5, this)">Weak KL / Drift Risk (&beta;=0.02)</button>
+    <button class="dpo-btn" onclick="applyDpoPreset(0.50, 0.4, -0.5, this)">Heavy KL Anchor (&beta;=0.50)</button>
+    <button class="dpo-btn" onclick="applyDpoPreset(0.10, -0.8, -3.4, this)">Likelihood Displacement</button>
+  </div>
+
+  <div class="dpo-sliders">
+    <div class="dpo-slider">
+      <label for="dpoBeta"><span>KL Coefficient (&beta;)</span><span id="dpoBetaVal">0.10</span></label>
+      <input type="range" id="dpoBeta" min="0.02" max="0.50" step="0.01" value="0.10" oninput="updateDpoExplorer()">
+    </div>
+    <div class="dpo-slider">
+      <label for="dpoChosen"><span>log &pi;<sub>&theta;</sub>(y<sub>w</sub>|x) &minus; log &pi;<sub>ref</sub>(y<sub>w</sub>|x)</span><span id="dpoChosenVal">+1.4</span></label>
+      <input type="range" id="dpoChosen" min="-3.0" max="4.0" step="0.1" value="1.4" oninput="updateDpoExplorer()">
+    </div>
+    <div class="dpo-slider">
+      <label for="dpoRejected"><span>log &pi;<sub>&theta;</sub>(y<sub>l</sub>|x) &minus; log &pi;<sub>ref</sub>(y<sub>l</sub>|x)</span><span id="dpoRejectedVal">-1.6</span></label>
+      <input type="range" id="dpoRejected" min="-5.0" max="2.0" step="0.1" value="-1.6" oninput="updateDpoExplorer()">
+    </div>
+  </div>
+
+  <div class="dpo-metrics" id="dpoMetrics"></div>
+  <div class="dpo-diag" id="dpoDiagnosis"></div>
+</div>
+
 <!-- QUIZ -->
 <div class="quiz-section">
-  <h3>🧠 Knowledge Check: Post-Training Alignment</h3>
+  <h3>Knowledge Check: Post-Training Alignment</h3>
 
   <div class="quiz-q">
     <p>1. In RLHF with PPO, why is the KL divergence penalty term essential?</p>
@@ -401,7 +459,7 @@ L_KTO = E_{(x,y,z)} [
     <div class="quiz-opts">
       <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CAI does use written principles (a constitution) but does not crowdsource feedback from users. The feedback in stage 2 (RLAIF) comes from an AI model judging pairs according to the constitution.')">Crowdsourced user feedback through the product</button>
       <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Symbolic rule engines can\'t handle the nuance of free-text responses. CAI uses an LLM to judge, guided by explicit constitutional principles — not hard-coded rules.')">Rule-based symbolic AI systems</button>
-      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Constitutional AI (Anthropic 2022) uses RLAIF — Reinforcement Learning from AI Feedback. A critique/revision model (the "feedback model") judges response pairs according to explicit constitutional principles. This scales much cheaper than human labelers: AI preference labels cost ~$0.002 vs $1–10 for human judgments. The written constitution also makes the safety criteria transparent and auditable.')">An AI model judging responses according to explicit written principles (RLAIF)</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Constitutional AI (Anthropic 2022) uses RLAIF — Reinforcement Learning from AI Feedback. A critique/revision model (the &quot;feedback model&quot;) judges response pairs according to explicit constitutional principles. This scales much cheaper than human labelers: AI preference labels cost ~$0.002 vs $1–10 for human judgments. The written constitution also makes the safety criteria transparent and auditable.')">An AI model judging responses according to explicit written principles (RLAIF)</button>
       <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Red-teaming is part of CAI Stage 1 (SL-CAI) — it generates harmful prompts to practice self-critique. But the RL stage (RLAIF) uses AI preference labels, not red-team experts.')">Red-team expert labelers who test edge cases</button>
     </div>
     <div class="quiz-feedback" id="qf3"></div>
@@ -417,6 +475,12 @@ L_KTO = E_{(x,y,z)} [
     </div>
     <div class="quiz-feedback" id="qf4"></div>
   </div>
+</div>
+
+<div class="page-nav">
+  <a href="week10.html">&larr; Week 10: POS Tagging &amp; NER</a>
+  <a href="index.html">All Weeks</a>
+  <a href="week12.html">Week 12: Topic Modeling &rarr;</a>
 </div>
 
 </div><!-- /container -->
@@ -438,6 +502,56 @@ function answerQuiz(btn, result, explanation) {
   feedbackEl.textContent = explanation;
   feedbackEl.className = `quiz-feedback show ${result}`;
 }
+
+function applyDpoPreset(beta, chosen, rejected, btn) {
+  document.querySelectorAll('.dpo-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('dpoBeta').value = beta;
+  document.getElementById('dpoChosen').value = chosen;
+  document.getElementById('dpoRejected').value = rejected;
+  updateDpoExplorer();
+}
+
+function updateDpoExplorer() {
+  const beta = parseFloat(document.getElementById('dpoBeta').value);
+  const logW = parseFloat(document.getElementById('dpoChosen').value);
+  const logL = parseFloat(document.getElementById('dpoRejected').value);
+
+  document.getElementById('dpoBetaVal').textContent = beta.toFixed(2);
+  document.getElementById('dpoChosenVal').textContent = (logW >= 0 ? '+' : '') + logW.toFixed(1);
+  document.getElementById('dpoRejectedVal').textContent = (logL >= 0 ? '+' : '') + logL.toFixed(1);
+
+  const rw = beta * logW;
+  const rl = beta * logL;
+  const margin = rw - rl;
+  const prob = 1 / (1 + Math.exp(-margin));
+  const loss = -Math.log(Math.max(prob, 1e-12));
+  const gradWeight = 1 - prob;
+  const klApprox = (Math.abs(logW) + Math.abs(logL)) / 2;
+
+  document.getElementById('dpoMetrics').innerHTML =
+    '<div class="dpo-stat"><div class="lbl">Implicit r&#770;(y<sub>w</sub>)</div><div class="val">' + (rw >= 0 ? '+' : '') + rw.toFixed(3) + '</div></div>' +
+    '<div class="dpo-stat"><div class="lbl">Implicit r&#770;(y<sub>l</sub>)</div><div class="val">' + (rl >= 0 ? '+' : '') + rl.toFixed(3) + '</div></div>' +
+    '<div class="dpo-stat"><div class="lbl">Reward Margin &Delta;r&#770;</div><div class="val" style="color:' + (margin >= 0 ? '#059669' : '#dc2626') + '">' + (margin >= 0 ? '+' : '') + margin.toFixed(3) + '</div></div>' +
+    '<div class="dpo-stat"><div class="lbl">P(y<sub>w</sub> &#8827; y<sub>l</sub>)</div><div class="val">' + (prob * 100).toFixed(1) + '%</div></div>' +
+    '<div class="dpo-stat"><div class="lbl">DPO Loss &amp; Grad Wt</div><div class="val">' + loss.toFixed(3) + ' <span style="font-size:12px;color:#64748b;">(' + gradWeight.toFixed(2) + ')</span></div></div>';
+
+  let msg = '';
+  if (margin <= 0) {
+    msg = '<strong>Inverted preference (&Delta;r&#770; &le; 0):</strong> The rejected response currently carries higher implicit reward than the chosen one. Gradient weight is large (' + gradWeight.toFixed(2) + '), so DPO will strongly push &pi;<sub>&theta;</sub>(y<sub>w</sub>) up and &pi;<sub>&theta;</sub>(y<sub>l</sub>) down.';
+  } else if (logW < 0 && logL < logW) {
+    msg = '<strong>Likelihood Displacement Warning:</strong> Even though the margin &Delta;r&#770; is positive (+' + margin.toFixed(2) + '), <em>both</em> chosen and rejected log-probabilities dropped below &pi;<sub>ref</sub>. In practice, pairing DPO with a light SFT term (or using CPO/RPO) prevents preferred completions from losing probability mass.';
+  } else if (beta <= 0.04 || klApprox > 2.8) {
+    msg = '<strong>Low &beta; / Large Policy Drift (&approx;' + klApprox.toFixed(1) + ' nats):</strong> Just like PPO-RLHF with too small a KL penalty, weak &beta; lets &pi;<sub>&theta;</sub> move far from &pi;<sub>ref</sub> — risking repetition, verbosity, or gibberish over-optimization.';
+  } else if (beta >= 0.35) {
+    msg = '<strong>Heavy KL Anchor (&beta;=' + beta.toFixed(2) + '):</strong> Strong regularization keeps &pi;<sub>&theta;</sub> tight around &pi;<sub>ref</sub> (safe from reward hacking), but limits how fast the policy can adopt new preferences unless log-ratios change substantially.';
+  } else {
+    msg = '<strong>Healthy DPO Regime:</strong> Preferred probability increased (+' + logW.toFixed(1) + ') while rejected dropped (' + logL.toFixed(1) + '), yielding a positive implicit margin &Delta;r&#770; = +' + margin.toFixed(2) + ' without running PPO&rsquo;s 4-model RL loop.';
+  }
+  document.getElementById('dpoDiagnosis').innerHTML = msg;
+}
+
+updateDpoExplorer();
 </script>
 </body>
 </html>

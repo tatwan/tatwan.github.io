@@ -115,6 +115,16 @@
   .upcoming-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
   .upcoming-item p { font-size: 12px; color: var(--muted); }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="6"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 6: Convolutional &amp; Recurrent Neural Networks" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -131,9 +141,9 @@
   <h1>Convolutional &amp; Recurrent Neural Networks</h1>
   <p>CNNs extract local patterns from text. RNNs process sequences with memory. Together, they unlock understanding of structure and order in language.</p>
   <div class="header-chips">
-    <span class="chip">📦 Module 7</span>
-    <span class="chip alert">🔔 Quiz 5 due TODAY (Feb 20)</span>
-    <span class="chip">💻 HW2 due TODAY · HW3 out today</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Module 7</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Quiz 5 due TODAY (Feb 20)</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW2 due TODAY · HW3 out today</span>
   </div>
 </div>
 
@@ -142,7 +152,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon cyan">🗺️</div>
+      <div class="section-icon cyan"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture</h2><div class="sub">Why do we need CNN and RNN after regular Neural Networks?</div></div>
     </div>
     <div class="callout">
@@ -160,13 +170,13 @@
   <!-- PART 1: CNN -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">🔍</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <div><h2>Part 1: Convolutional Neural Networks (CNN)</h2><div class="sub">Local pattern detectors for text</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔬 Filters and Convolution — The Core Idea</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Filters and Convolution — The Core Idea</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -206,7 +216,7 @@ n_filters scalars → concatenate → classify
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 CNN Convolution Visualizer</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> CNN Convolution Visualizer</h4>
           <div class="desc">See how a filter slides over a document matrix and computes the feature map.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
             <div>
@@ -246,7 +256,7 @@ n_filters scalars → concatenate → classify
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🏊 Max Pooling — Selecting the Strongest Signal</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Max Pooling — Selecting the Strongest Signal</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -291,13 +301,13 @@ Max pool → <span class="eq">0.8</span>  ← "yes, this n-gram pattern appeared
   <!-- PART 2: RNN -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🔁</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
       <div><h2>Part 2: Recurrent Neural Networks (RNN)</h2><div class="sub">Sequential memory for language</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>💾 The Hidden State — RNN's Memory</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg> The Hidden State — RNN's Memory</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -368,7 +378,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🏗️ RNN Architectures — Many-to-Many, Many-to-One, One-to-Many</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> RNN Architectures — Many-to-Many, Many-to-One, One-to-Many</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -384,7 +394,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⚠️ Vanishing &amp; Exploding Gradients</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Vanishing &amp; Exploding Gradients</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -395,24 +405,24 @@ hₜ: m-dimensional hidden state (hyperparameter)
 
         <div class="two-col">
           <div class="mini-card">
-            <h4 style="color:#dc2626;">💥 Exploding Gradients</h4>
+            <h4 style="color:#dc2626;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9 12 2"/></svg> Exploding Gradients</h4>
             <p><strong>Problem:</strong> Gradient grows exponentially → weights update wildly, training diverges.</p>
             <p><strong>Solution:</strong> Gradient clipping — if ‖gradient‖ > threshold, scale it down.</p>
           </div>
           <div class="mini-card">
-            <h4 style="color:#d97706;">🌫️ Vanishing Gradients</h4>
+            <h4 style="color:#d97706;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9 12 2"/></svg> Vanishing Gradients</h4>
             <p><strong>Problem:</strong> Gradient shrinks to near zero → early timesteps get no learning signal → can't learn long-range dependencies.</p>
             <p><strong>Solutions:</strong> ReLU activation, LSTM/GRU (Week 7), better weight initialization.</p>
           </div>
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Why Simple RNNs Struggle with Long Sequences</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Why Simple RNNs Struggle with Long Sequences</strong>
           If the relevant context is 50 words ago, gradients get multiplied 50 times — and they typically vanish. This is why LSTM (Week 7) was invented: it uses gating mechanisms to selectively remember and forget.
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Vanishing Gradient Visualizer</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Vanishing Gradient Visualizer</h4>
           <div class="desc">See how gradient magnitude changes as it propagates back through timesteps.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
             <div>
@@ -434,7 +444,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
   <!-- CNN vs RNN comparison -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">⚖️</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
       <div><h2>CNN vs RNN for NLP — When to Use Which</h2></div>
     </div>
     <table class="compare-table">
@@ -450,7 +460,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
 
   <!-- Coming Up Next -->
   <div class="upcoming-card">
-    <h3>🔭 What's Coming Next (Week 7+)</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg> What's Coming Next (Week 7+)</h3>
     <p style="font-size:14px;color:#374151;margin-bottom:16px;">You've now built all the foundations. Here's how Week 6 connects to the rest of the course:</p>
     <div class="upcoming-grid">
       <div class="upcoming-item">
@@ -478,13 +488,13 @@ hₜ: m-dimensional hidden state (hyperparameter)
 
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 6 / Quiz 6 Preview</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 6 / Quiz 6 Preview</h3>
 
     <div class="quiz-q">
       <p>Q1. What is the primary advantage of using CNN over a fully-connected neural network for text classification?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CNNs don\'t automatically handle missing data.')">Handles missing data better</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CNN uses local connectivity (each neuron sees k words) and weight sharing (same filter reused everywhere), drastically reducing parameters and overfitting risk.')">Reduces the number of parameters through local connectivity and weight sharing ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CNN uses local connectivity (each neuron sees k words) and weight sharing (same filter reused everywhere), drastically reducing parameters and overfitting risk.')">Reduces the number of parameters through local connectivity and weight sharing</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CNNs need zero-padding to ensure all documents have the same size.')">Does not require fixed-size inputs</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','RNNs capture sequential order better. CNNs have limited window sizes.')">Captures sequential order of words better than RNN</button>
       </div>
@@ -495,7 +505,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
       <p>Q2. In a CNN for text, if the document matrix has shape (6 × 12) and we apply a filter of shape (3 × 12) with stride 1, what is the feature map size?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','4 is correct! Formula: n - k + 1 = 6 - 3 + 1 = 4, not 3.')">3</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Feature map size = n - k + 1 = 6 - 3 + 1 = 4. The filter can be placed at row 1, 2, 3, or 4.')">4 ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Feature map size = n - k + 1 = 6 - 3 + 1 = 4. The filter can be placed at row 1, 2, 3, or 4.')">4</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Same as input (6) would mean stride 0 — not standard convolution.')">6</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','12 is the embedding dimension, not the feature map size.')">12</button>
       </div>
@@ -507,7 +517,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The output ŷₜ represents the prediction. hₜ is the internal memory state.')">The final classification label for word t</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','The embedding is xₜ (the input word vector). hₜ is computed from xₜ AND the previous state.')">The word embedding of xₜ</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! hₜ encodes information from ALL previous words x₁...xₜ. It\'s computed as tanh(xₜΘ¹ + hₜ₋₁Θ³) — combining current input with previous memory.')">A summary/memory of all words processed up to step t ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! hₜ encodes information from ALL previous words x₁...xₜ. It\'s computed as tanh(xₜΘ¹ + hₜ₋₁Θ³) — combining current input with previous memory.')">A summary/memory of all words processed up to step t</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Parameter matrices Θ are the weights, not the hidden state.')">The weight matrix of the network</button>
       </div>
       <div class="quiz-feedback" id="qf2"></div>
@@ -517,7 +527,7 @@ hₜ: m-dimensional hidden state (hyperparameter)
       <p>Q4. What is the vanishing gradient problem in RNNs and what is a common solution?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Exploding gradients are the opposite problem (gradients get too large). Clipping is the solution for that.')">Gradients become too large; solved by gradient clipping</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Gradients shrink as they backpropagate through many timesteps, preventing early words from being learned. LSTM/GRU solve this with gating mechanisms that control information flow.')">Gradients shrink to near-zero over many timesteps; solved by LSTM/GRU ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Gradients shrink as they backpropagate through many timesteps, preventing early words from being learned. LSTM/GRU solve this with gating mechanisms that control information flow.')">Gradients shrink to near-zero over many timesteps; solved by LSTM/GRU</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This describes overfitting, not the vanishing gradient problem.')">Model memorizes training data; solved by dropout</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Max pooling reduces dimensions in CNNs, not RNNs.')">Max pooling values become zero; solved by average pooling</button>
       </div>
@@ -526,8 +536,9 @@ hₜ: m-dimensional hidden state (hyperparameter)
   </div>
 
   <div class="page-nav">
-    <a href="week5.html">← Week 5: Neural Networks & Word2Vec</a>
-    <a href="index.html">Back to All Weeks →</a>
+    <a href="week5.html">← Week 5: Neural Networks &amp; Word2Vec</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> All Weeks</a>
+    <a href="week7.html">Week 7: LSTM, GRU &amp; Attention →</a>
   </div>
 
 </div>
@@ -552,7 +563,7 @@ function updateCNN() {
   document.getElementById('cnnD').textContent = d;
   document.getElementById('cnnF').textContent = f;
   const featMapSize = n - k + 1;
-  if (featMapSize <= 0) { document.getElementById('cnnOutput').textContent = '⚠️ Filter size k must be ≤ document length n'; return; }
+  if (featMapSize <= 0) { document.getElementById('cnnOutput').textContent = '[WARN] Filter size k must be ≤ document length n'; return; }
   const filterParams = k * d;
   const totalFilterParams = filterParams * f;
   const fcParams = totalFilterParams; // after global max pool
@@ -603,11 +614,11 @@ function updateVG() {
   ctx.fillText('Gradient', 2, 15);
   ctx.fillText('magnitude', 2, 27);
 
-  const status = g > 1.2 ? '💥 EXPLODING: gradient growing uncontrollably!' :
-    g > 1.0 ? '⚠️ Growing: slight explosion risk' :
-    g > 0.8 ? '✅ Stable gradient flow' :
-    g > 0.5 ? '🟡 Mild vanishing: long sequences may struggle' :
-    '🌫️ VANISHING: early words get near-zero gradient!';
+  const status = g > 1.2 ? '[EXPLODING] EXPLODING: gradient growing uncontrollably!' :
+    g > 1.0 ? '[WARN] Growing: slight explosion risk' :
+    g > 0.8 ? '[OK] Stable gradient flow' :
+    g > 0.5 ? '[LOW] Mild vanishing: long sequences may struggle' :
+    '[VANISHING] VANISHING: early words get near-zero gradient!';
   const earlyGrad = values[0].toExponential(3);
   document.getElementById('vgOutput').textContent =
     `Per-step gradient: ${g.toFixed(2)}\nGradient at earliest timestep (t=1): ${earlyGrad}\n\n${status}`;

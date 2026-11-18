@@ -8,10 +8,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      (function () {
+        try {
+          var saved = sessionStorage.getItem('rag-academy-redirect');
+          if (saved) {
+            sessionStorage.removeItem('rag-academy-redirect');
+            window.history.replaceState(null, '', saved);
+            return;
+          }
+          var params = new URLSearchParams(window.location.search);
+          var route = params.get('route');
+          if (route) {
+            var clean = route.replace(/^\/+/, '');
+            window.history.replaceState(null, '', '/rag-academy/' + clean + window.location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script type="module" crossorigin src="/rag-academy/assets/index-BZdBW4KA.js"></script>
     <link rel="stylesheet" crossorigin href="/rag-academy/assets/index-C0UxQNt9.css">
   <!-- LAB:HEAD:START -->
-  <meta name="description" content="A focused course on Retrieval-Augmented Generation: the concepts, the architectures, and the strategies that survive contact with production.">
+  <meta name="description" content="A 19-module interactive course on Retrieval-Augmented Generation: 12 retrieval architectures (Classic, Hybrid, HyDE, Self-RAG, Corrective, Adaptive, GraphRAG, KAG, Agentic, Modular, Multimodal, Speculative), chunking, indexing, formal math, and a live playground.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/rag-academy/">
@@ -20,16 +38,16 @@
   <meta property="og:url" content="https://tatwan.github.io/rag-academy/">
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="RAG Academy — ML_LAB">
-  <meta property="og:description" content="Interactive course on Retrieval-Augmented Generation concepts, architectures and deployment.">
+  <meta property="og:description" content="19-module interactive course on RAG concepts, 12 retrieval architectures, formal math and deployment.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="RAG Academy — ML_LAB">
-  <meta name="twitter:description" content="Interactive course on Retrieval-Augmented Generation concepts, architectures and deployment.">
+  <meta name="twitter:description" content="19-module interactive course on RAG concepts, 12 retrieval architectures, formal math and deployment.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
   <script defer src="/assets/lab.js" data-lab-page="RAG Academy"></script>
@@ -39,12 +57,12 @@
   "@context": "https://schema.org",
   "@type": "LearningResource",
   "name": "RAG Academy",
-  "description": "A focused course on Retrieval-Augmented Generation: the concepts, the architectures, and the strategies that survive contact with production.",
+  "description": "A 19-module interactive course on Retrieval-Augmented Generation: 12 retrieval architectures (Classic, Hybrid, HyDE, Self-RAG, Corrective, Adaptive, GraphRAG, KAG, Agentic, Modular, Multimodal, Speculative), chunking, indexing, formal math, and a live playground.",
   "url": "https://tatwan.github.io/rag-academy/",
   "learningResourceType": "Course",
   "educationalLevel": "Advanced",
   "about": "RAG",
-  "timeRequired": "Course",
+  "timeRequired": "19 modules",
   "inLanguage": "en",
   "isAccessibleForFree": true,
   "author": {
@@ -62,7 +80,6 @@
   <!-- LAB:HEAD:END -->
 </head>
   <body>
-    <a href="../index.html" style="position:fixed; top:12px; left:12px; z-index:9999; display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:rgba(15,23,42,0.85); color:#f5a623; border:1px solid rgba(245,166,35,0.3); border-radius:6px; font-family:'JetBrains Mono', monospace, sans-serif; font-size:12px; font-weight:600; text-decoration:none; backdrop-filter:blur(8px); transition:all 0.2s;" onmouseover="this.style.borderColor='#f5a623'" onmouseout="this.style.borderColor='rgba(245,166,35,0.3)'">&larr; ML_LAB</a>
     <div id="root"></div>
   <!-- LAB:ABOUT:START -->
   <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
@@ -70,14 +87,14 @@
       <div>
         <div class="lab-about__label">// About this playbook</div>
         <h2 id="lab-about-h">RAG Academy</h2>
-        <p>A focused course on Retrieval-Augmented Generation: the concepts, the architectures, and the strategies that survive contact with production.</p>
-        <p>It covers chunking, embeddings, vector stores, retrieval strategies, reranking, evaluation and the failure modes that only appear in production. It is written for engineers building or debugging a retrieval-augmented system.</p>
+        <p>A 19-module interactive course on Retrieval-Augmented Generation: 12 retrieval architectures (Classic, Hybrid, HyDE, Self-RAG, Corrective, Adaptive, GraphRAG, KAG, Agentic, Modular, Multimodal, Speculative), chunking, indexing, formal math, and a live playground.</p>
+        <p>It covers 12 RAG architectures (Classic, Hybrid, HyDE, Self-RAG, Corrective, Adaptive, GraphRAG, KAG, Agentic, Modular, Multimodal, Speculative), chunking strategies, query understanding, vector indexing, mathematical foundations and an interactive playground. It is written for engineers building or debugging a retrieval-augmented system.</p>
         <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
           attached &mdash; something you can paste into a design note or defend in a review.</p>
         <div class="lab-about__facts">
           <span class="lab-about__fact">Course</span>
           <span class="lab-about__fact">RAG</span>
-          <span class="lab-about__fact">Course</span>
+          <span class="lab-about__fact">19 modules</span>
           <span class="lab-about__fact">Advanced</span>
           <span class="lab-about__fact">Build with LLMs</span>
         </div>
@@ -88,6 +105,7 @@
           <li><a href="/genai_foundations_navigator.html">GenAI Foundations Navigator</a><span>GenAI basics &middot; 10–15 min</span></li>
           <li><a href="/genai_techniques_selector.html">GenAI Technique Selector</a><span>LLM optimization &middot; 25 min</span></li>
           <li><a href="/fm_evaluation_metrics.html">FM Evaluation Metrics</a><span>LLM metrics &middot; 20 min</span></li>
+          <li><a href="/GaTech/CSE%208803/index.html">Applied NLP — CSE 8803</a><span>NLP &middot; 15 weeks</span></li>
         </ul>
         <h3>Who made this</h3>
         <p class="lab-about__by">

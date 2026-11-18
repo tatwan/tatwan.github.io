@@ -169,6 +169,16 @@
   .completion-banner .stat .num { font-size: 28px; font-weight: 800; }
   .completion-banner .stat .label { font-size: 12px; opacity: 0.85; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="15"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 15: Multi-Agent Systems, Real-World NLP &amp; The Road Ahead" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -176,7 +186,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week14.html">← Week 14</a>
     <span class="you-are-here">Week 15 ← HERE</span>
   </div>
@@ -192,8 +202,8 @@
     <span class="chip">Multi-Agent Systems</span>
     <span class="chip">LangGraph · AutoGen · CrewAI</span>
     <span class="chip">Future of NLP</span>
-    <span class="chip hw">🏁 HW5 Due Apr 24</span>
-    <span class="chip alert">⚠️ Quiz 12 · Due Apr 24</span>
+    <span class="chip hw"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> HW5 Due Apr 24</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 12 · Due Apr 24</span>
   </div>
 </div>
 
@@ -202,7 +212,7 @@
 <!-- ═══════════════════════════════════════════ SECTION 1: Multi-Agent -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon green">🤝</div>
+    <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
     <div>
       <h2>Multi-Agent Systems: When One Agent Isn't Enough</h2>
       <div class="sub">M13T1L3 · Collaboration, specialization, and emergence</div>
@@ -210,7 +220,7 @@
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Story: The Consulting Firm Model</div>
+    <div class="story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Story: The Consulting Firm Model</div>
     <p>When McKinsey tackles a complex business problem, they don't send one person. They send a team: a project manager who coordinates, a financial analyst, a market researcher, a strategy consultant, and a technical expert — each contributing their specialty. The project manager ensures they're all working toward the same goal and their outputs fit together. That's exactly how multi-agent systems work. Specialization + coordination = capabilities that no single agent (or person) could achieve alone.</p>
   </div>
 
@@ -241,33 +251,33 @@
     <div class="concept-body open">
       <div class="topo-grid">
         <div class="topo-card topo-star">
-          <h4>⭐ Hub-and-Spoke (Orchestrator)</h4>
-          <div class="diagram">     🧠 Orchestrator
-    ↗️   ↑   ↖️
-🔍Search 📊Data 💻Code
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Hub-and-Spoke (Orchestrator)</h4>
+          <div class="diagram">     <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Orchestrator
+    <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>   ↑   <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="17" y1="17" x2="7" y2="7"/><polyline points="7 17 7 7 17 7"/></svg>
+<svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Data <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Code
   Agent  Agent  Agent</div>
           <p>Central orchestrator delegates to specialist agents. Easiest to implement, easy to debug. Most common production pattern. Risk: orchestrator is a single point of failure.</p>
         </div>
         <div class="topo-card topo-chain">
-          <h4>🔗 Sequential Pipeline (Chain)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Sequential Pipeline (Chain)</h4>
           <div class="diagram">Researcher → Analyst → Writer → Editor
     ↓          ↓         ↓        ↓
   Sources   Summary    Draft   Final</div>
           <p>Output of each agent feeds the next. Like an assembly line. Simple, predictable, good for document pipelines. Bad for tasks where early errors cascade.</p>
         </div>
         <div class="topo-card topo-mesh">
-          <h4>🕸️ Fully Connected (Debate)</h4>
-          <div class="diagram">Agent A ↔️ Agent B
-   ↕️            ↕️
-Agent C ↔️ Agent D</div>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Fully Connected (Debate)</h4>
+          <div class="diagram">Agent A <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Agent B
+   <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="8 6 12 2 16 6"/><polyline points="8 18 12 22 16 18"/><line x1="12" y1="2" x2="12" y2="22"/></svg>            <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="8 6 12 2 16 6"/><polyline points="8 18 12 22 16 18"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+Agent C <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Agent D</div>
           <p>All agents communicate with all others. Used for "society of mind" debates or consensus-building. Expensive (O(n²) messages) but finds blind spots no single agent sees.</p>
         </div>
         <div class="topo-card topo-hier">
-          <h4>📊 Hierarchical (Recursive)</h4>
-          <div class="diagram">      🎯 Manager
-    ↙️         ↘️
-🧠 Sub-Mgr  🧠 Sub-Mgr
-↙️  ↘️      ↙️   ↘️
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Hierarchical (Recursive)</h4>
+          <div class="diagram">      <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Manager
+    <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>         <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></svg>
+<svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Sub-Mgr  <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Sub-Mgr
+<svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>  <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></svg>      <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>   <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></svg>
 Workers    Workers</div>
           <p>Manager spawns sub-managers, who spawn workers. Enables extreme decomposition. Used in AutoGen and MetaGPT for complex software engineering tasks.</p>
         </div>
@@ -277,7 +287,7 @@ Workers    Workers</div>
 
   <!-- Interactive: Multi-Agent Simulation -->
   <div class="interactive-box">
-    <h4>🔬 Interactive: Multi-Agent Pipeline Simulator</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Interactive: Multi-Agent Pipeline Simulator</h4>
     <div class="desc">Select a workflow to see how agents collaborate. Each agent has a specialized role. Watch how their outputs chain together.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="btn-outline active" onclick="showMAS('research', this)">Research Pipeline</button>
@@ -311,7 +321,7 @@ Workers    Workers</div>
   ```</span>
 
 <span class="agent">UserProxy</span> [EXECUTES CODE]: run_code(function)
-<span class="tool">RESULT: Tests pass ✅</span>
+<span class="tool">RESULT: Tests pass <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
 
 <span class="agent">UserProxy</span> → <span class="agent">AssistantAgent</span>:
   <span class="msg">"Now add unit tests"</span>
@@ -319,7 +329,7 @@ Workers    Workers</div>
 <span class="comment"># Conversation continues until task is complete or
 # max_turns is reached</span></div>
       <div class="callout info">
-        <strong>💡 Key Design Decision: When to Terminate?</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Key Design Decision: When to Terminate?</strong>
         Multi-agent loops need explicit termination conditions: max turns, a "TERMINATE" signal in the agent's response, a human-in-the-loop check, or a goal-completion evaluator. Without this, agents can loop indefinitely and rack up API costs.
       </div>
     </div>
@@ -329,7 +339,7 @@ Workers    Workers</div>
 <!-- ═══════════════════════════════════════════ SECTION 2: Frameworks -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon blue">🛠️</div>
+    <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
     <div>
       <h2>Leading Agent Frameworks in 2025–2026</h2>
       <div class="sub">LangGraph, AutoGen, CrewAI — when to use each</div>
@@ -344,7 +354,7 @@ Workers    Workers</div>
     <div class="concept-body open">
       <div class="fw-grid">
         <div class="fw-card fw-lg">
-          <h4>🔷 LangGraph</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 22 12 12 22 2 12 12 2"/></svg> LangGraph</h4>
           <span class="tag">Graph-based · State-machine</span>
           <ul>
             <li><strong>Philosophy:</strong> Agents as nodes in a directed graph; edges define transitions</li>
@@ -355,7 +365,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="fw-card fw-ag">
-          <h4>🔷 AutoGen</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 22 12 12 22 2 12 12 2"/></svg> AutoGen</h4>
           <span class="tag">Conversational · Role-playing</span>
           <ul>
             <li><strong>Philosophy:</strong> Agents as conversation participants with defined roles</li>
@@ -366,7 +376,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="fw-card fw-crew">
-          <h4>🔷 CrewAI</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 22 12 12 22 2 12 12 2"/></svg> CrewAI</h4>
           <span class="tag">Role-based · Hierarchical</span>
           <ul>
             <li><strong>Philosophy:</strong> Agents as employees on a crew, with defined roles and tasks</li>
@@ -378,7 +388,7 @@ Workers    Workers</div>
         </div>
       </div>
       <div class="callout tip">
-        <strong>🎯 Framework Selection Guide (2026)</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Framework Selection Guide (2026)</strong>
         Use <strong>LangGraph</strong> when you need fine-grained control, stateful workflows, and production reliability. Use <strong>AutoGen</strong> when the task naturally looks like a conversation between specialized agents (especially code-heavy tasks). Use <strong>CrewAI</strong> for quickly standing up role-based pipelines with clear agent personas and task flows. For maximum power, many teams use LangGraph as the orchestration layer with AutoGen-style agents as nodes.
       </div>
     </div>
@@ -427,7 +437,7 @@ Workers    Workers</div>
     <div class="concept-body">
       <div class="three-col">
         <div class="mini-card">
-          <h4>🎯 Task-Level Metrics</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Task-Level Metrics</h4>
           <ul class="bullet">
             <li>Task completion rate</li>
             <li>Accuracy vs. ground truth</li>
@@ -435,7 +445,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>⚡ System-Level Metrics</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> System-Level Metrics</h4>
           <ul class="bullet">
             <li>Total latency end-to-end</li>
             <li>Total cost (API tokens × agents)</li>
@@ -443,7 +453,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🔍 Agent-Level Metrics</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Agent-Level Metrics</h4>
           <ul class="bullet">
             <li>Tool call success rate</li>
             <li>Hallucination rate per agent</li>
@@ -452,7 +462,7 @@ Workers    Workers</div>
         </div>
       </div>
       <div class="callout warning">
-        <strong>⚠️ The Evaluation Problem in Agentic Systems</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> The Evaluation Problem in Agentic Systems</strong>
         Traditional NLP evaluation (BLEU, F1, accuracy) doesn't transfer to agents. An agent might reach the correct final answer via a buggy process — or reach the wrong answer due to bad luck despite correct reasoning. You need to evaluate both <em>process</em> (were the steps reasonable?) and <em>outcome</em> (was the final answer correct?). Benchmarks like AgentBench, MINT, and WebArena provide standardized environments for this.
       </div>
     </div>
@@ -462,7 +472,7 @@ Workers    Workers</div>
 <!-- ═══════════════════════════════════════════ SECTION 3: Real-World Applications -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon teal">🌍</div>
+    <div class="section-icon teal"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
     <div>
       <h2>NLP &amp; Agentic AI in the Real World</h2>
       <div class="sub">Where these techniques are being applied right now</div>
@@ -477,42 +487,42 @@ Workers    Workers</div>
     <div class="concept-body open">
       <div class="app-grid">
         <div class="app-card">
-          <div class="icon">⚕️</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 2v20"/><path d="M5 12h14"/></svg></div>
           <h5>Healthcare</h5>
           <p>Clinical note summarization, ICD coding, drug interaction detection, patient Q&A with RAG over medical literature</p>
         </div>
         <div class="app-card">
-          <div class="icon">⚖️</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
           <h5>Legal</h5>
           <p>Contract review agents, legal research (RAG over case law), document summarization, compliance checking</p>
         </div>
         <div class="app-card">
-          <div class="icon">💰</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
           <h5>Finance</h5>
           <p>Earnings call analysis, sentiment on financial news, fraud detection narratives, risk report generation</p>
         </div>
         <div class="app-card">
-          <div class="icon">🛒</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
           <h5>E-Commerce</h5>
           <p>Product description generation, review summarization, personalized recommendation explanations, CS ticket routing</p>
         </div>
         <div class="app-card">
-          <div class="icon">🎓</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
           <h5>Education</h5>
           <p>Personalized tutoring agents (like this study guide!), automated essay feedback, concept explanation generators</p>
         </div>
         <div class="app-card">
-          <div class="icon">💻</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
           <h5>Software Dev</h5>
           <p>Code generation (GitHub Copilot), bug finding agents, code review, documentation writing, test generation</p>
         </div>
         <div class="app-card">
-          <div class="icon">🔬</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg></div>
           <h5>Scientific Research</h5>
           <p>Literature review agents, hypothesis generation, experimental design assistants, paper writing support</p>
         </div>
         <div class="app-card">
-          <div class="icon">🗣️</div>
+          <div class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <h5>Customer Service</h5>
           <p>Ticket triage, response generation, sentiment routing, multi-lingual support, knowledge base Q&A</p>
         </div>
@@ -524,7 +534,7 @@ Workers    Workers</div>
 <!-- ═══════════════════════════════════════════ SECTION 4: NLP Roadmap 2026+ -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">🚀</div>
+    <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
     <div>
       <h2>The Road Ahead: NLP in 2026 and Beyond</h2>
       <div class="sub">Critical research frontiers every NLP practitioner should know</div>
@@ -628,7 +638,7 @@ Workers    Workers</div>
     <div class="concept-body">
       <div class="two-col">
         <div class="mini-card">
-          <h4>📚 Theoretical Foundations</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Theoretical Foundations</h4>
           <ul class="bullet">
             <li>Transformer architecture (attention, positional encoding, layer norms)</li>
             <li>Language modeling objectives (CLM, MLM, instruction tuning)</li>
@@ -638,7 +648,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🛠️ Practical Engineering</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Practical Engineering</h4>
           <ul class="bullet">
             <li>Prompt engineering (all techniques from Week 13)</li>
             <li>RAG pipeline implementation (chunking, embedding, vector search)</li>
@@ -648,7 +658,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🔬 Research Awareness</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Research Awareness</h4>
           <ul class="bullet">
             <li>Read arXiv papers: cs.CL, cs.AI sections</li>
             <li>Know key venues: ACL, EMNLP, NAACL, NeurIPS, ICLR</li>
@@ -657,7 +667,7 @@ Workers    Workers</div>
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🧭 Critical Thinking</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Critical Thinking</h4>
           <ul class="bullet">
             <li>Question benchmark leakage (are models trained on test sets?)</li>
             <li>Understand when RAG is better than fine-tuning (and vice versa)</li>
@@ -670,9 +680,142 @@ Workers    Workers</div>
   </div>
 </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card15{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card15 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card15 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col15{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col15{grid-template-columns:1fr}}
+.bts-table15{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table15 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table15 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table15 tr:hover td{background:#fafbff}
+.bts-formula15{background:#f0fdf4;border-left:4px solid #059669;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story15{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-left:4px solid #059669;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story15-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#15803d;margin-bottom:6px}
+.bts-depth15{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.bts-code15{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Knowledge Graphs, GraphRAG &amp; Structured Knowledge in 2026</h2>
+  <p>Unstructured text retrieval (vector RAG) struggles with global questions, multi-hop reasoning, and relationship-heavy queries. Knowledge Graphs and GraphRAG represent the next frontier — combining symbolic structure with neural generation. This section covers KG fundamentals through Microsoft's GraphRAG system.</p>
+</div>
+
+<div class="bts-card15">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Knowledge Graph Fundamentals <span class="bts-depth15">Foundations</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A Knowledge Graph (KG) represents world knowledge as a directed graph: nodes are entities, edges are relations. The triple (head, relation, tail) is the atomic unit:</p>
+  <div class="bts-2col15">
+    <div>
+      <h4>KG Construction Pipeline</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Entity Recognition:</strong> identify mentions (NER)</li>
+        <li><strong>Entity Linking:</strong> map mentions to canonical KG nodes (e.g., Wikidata QIDs)</li>
+        <li><strong>Relation Extraction:</strong> extract (h, r, t) triples from text</li>
+        <li><strong>Schema Mapping:</strong> align to ontology (RDF, OWL)</li>
+        <li><strong>Conflict Resolution:</strong> handle contradictory facts across sources</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Major Knowledge Bases</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Wikidata:</strong> 100M+ items, community-maintained, SPARQL queryable</li>
+        <li><strong>Freebase:</strong> deprecated (→ Wikidata), used in distant supervision RE</li>
+        <li><strong>NELL:</strong> never-ending learning from web text</li>
+        <li><strong>ConceptNet:</strong> commonsense knowledge (5M+ assertions)</li>
+        <li><strong>UMLS:</strong> biomedical/clinical concepts</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card15">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> TransE: Knowledge Graph Embeddings <span class="bts-depth15">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">TransE (Bordes et al., 2013) embeds KG entities and relations in vector space. Key idea: for a true triple (h, r, t), the relation vector r should approximate the translation from h to t.</p>
+  <div class="bts-2col15">
+    <div>
+      <div class="bts-formula15"><span style="color:#86efac"># TransE scoring function</span>
+score(h, r, t) = -||h + r - t||
+
+<span style="color:#86efac"># Training with margin ranking loss</span>
+L = Σ_{(h,r,t)∈S} Σ_{(h',r,t')∈S'} 
+    max(0, γ + score(h',r,t') - score(h,r,t))
+
+<span style="color:#86efac"># where S' = corrupted (negative) triples
+# γ = margin hyperparameter</span>
+
+<span style="color:#86efac"># Analogy with word2vec:</span>
+Berlin - Germany + France ≈ Paris
+leader(Germany) + France ≈ leader(France)
+= "President_of" relation as vector!</div>
+    </div>
+    <div>
+      <h4>TransE Limitations &amp; Successors</h4>
+      <table class="bts-table15">
+        <tr><th>Model</th><th>Handles</th><th>Key Innovation</th></tr>
+        <tr><td>TransE</td><td>1-to-1 relations</td><td>h + r ≈ t</td></tr>
+        <tr><td>TransR</td><td>1-to-N, N-to-1</td><td>Relation-specific spaces</td></tr>
+        <tr><td>RotatE</td><td>Symmetry, inversion</td><td>Rotation in complex plane</td></tr>
+        <tr><td>ComplEx</td><td>Asymmetric relations</td><td>Complex-valued embeddings</td></tr>
+        <tr><td>DistMult</td><td>Symmetric relations</td><td>Bilinear scoring</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card15">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> GraphRAG (Microsoft, 2024) <span class="bts-depth15">2024 Breakthrough</span></h3>
+  <div class="bts-story15">
+    <div class="bts-story15-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> The Problem with Naive RAG</div>
+    <p style="font-size:14px;line-height:1.8">Standard RAG retrieves semantically similar chunks. But for global questions ("What are the main themes across all our documents?", "Summarize the key risks mentioned in our corpus"), no single chunk contains the answer. GraphRAG builds a knowledge graph from the entire corpus, clusters it, and enables both local and global queries.</p>
+  </div>
+  <div class="bts-2col15">
+    <div>
+      <h4>GraphRAG Indexing Pipeline</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Extract entities &amp; relations from all documents (LLM-based)</li>
+        <li>Build knowledge graph: entities as nodes, relations as edges</li>
+        <li>Run Leiden community detection algorithm</li>
+        <li>Generate hierarchical community summaries (LLM)</li>
+        <li>Index: vector store + graph structure + community reports</li>
+      </ol>
+    </div>
+    <div>
+      <h4>GraphRAG Query Types</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Local search:</strong> entity-centric query → find relevant entities → retrieve neighbors + summaries → LLM answer</li>
+        <li><strong>Global search:</strong> query against community reports at all levels → parallel LLM map step → reduce step → final answer</li>
+        <li><strong>Drift search (2025):</strong> hybrid local+global for exploratory queries</li>
+      </ul>
+    </div>
+  </div>
+  <table class="bts-table15" style="margin-top:14px">
+    <tr><th>Dimension</th><th>Naive RAG</th><th>GraphRAG</th></tr>
+    <tr><td><strong>Retrieval unit</strong></td><td>Text chunks (flat)</td><td>Entities, relationships, community summaries</td></tr>
+    <tr><td><strong>Global queries</strong></td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Poor (no single chunk has answer)</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Strong (community summaries)</td></tr>
+    <tr><td><strong>Multi-hop reasoning</strong></td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Weak (individual chunks)</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Better (graph traversal)</td></tr>
+    <tr><td><strong>Indexing cost</strong></td><td>Low (embed &amp; chunk)</td><td>High (LLM entity extraction × corpus size)</td></tr>
+    <tr><td><strong>Query cost</strong></td><td>Low (single vector search)</td><td>Higher (graph traversal + parallel LLM calls)</td></tr>
+    <tr><td><strong>Best for</strong></td><td>Factoid QA, specific retrieval</td><td>Corpus summarization, theme extraction, relationship queries</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:8px">GraphRAG improves answer comprehensiveness by 50–70% over naive RAG on global questions (Microsoft, 2024). Actively used in enterprise document intelligence, scientific literature analysis, and legal discovery.</p>
+</div>
+
+</div></div>
+
 <!-- ═══════════════════════════════════════════ SECTION 5: QUIZ PREP -->
 <div class="quiz-section">
-  <h3>🧠 Quiz 12 Prep — Multi-Agent Systems &amp; Applications</h3>
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Quiz 12 Prep — Multi-Agent Systems &amp; Applications</h3>
 
   <div class="quiz-q">
     <p>1. In a hub-and-spoke multi-agent system, a central orchestrator decomposes a task and delegates to specialists. What is the PRIMARY advantage over a single-agent approach?</p>
@@ -682,8 +825,8 @@ Workers    Workers</div>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. The orchestrator eliminates the need for RAG</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Hub-and-spoke prevents hallucination entirely</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! Specialization + parallelism are the core benefits. Each agent is prompt-engineered (or fine-tuned) for its specific role and can run simultaneously. The total effective context across all agents far exceeds any single agent's window. The orchestrator coordinates without needing to handle all sub-task details itself.</div>
-    <div class="quiz-feedback wrong">❌ The key benefits are specialization (each agent focused on one role) and the ability to parallelize work. This enables tackling tasks too complex for any single agent.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! Specialization + parallelism are the core benefits. Each agent is prompt-engineered (or fine-tuned) for its specific role and can run simultaneously. The total effective context across all agents far exceeds any single agent's window. The orchestrator coordinates without needing to handle all sub-task details itself.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> The key benefits are specialization (each agent focused on one role) and the ability to parallelize work. This enables tackling tasks too complex for any single agent.</div>
   </div>
 
   <div class="quiz-q">
@@ -694,8 +837,8 @@ Workers    Workers</div>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Add more training data to the model</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Use a larger base model for all queries</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! Human-in-the-Loop (HITL) checkpoints are a critical safety and quality mechanism in production agentic systems. The agent evaluates its own confidence (or a confidence evaluator is inserted), and below a threshold, a human is brought in. LangGraph has native support for breakpoints and human input nodes.</div>
-    <div class="quiz-feedback wrong">❌ Temperature affects diversity, not routing to humans. The right design pattern here is HITL — explicit checkpoints where low-confidence decisions are escalated to human review.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! Human-in-the-Loop (HITL) checkpoints are a critical safety and quality mechanism in production agentic systems. The agent evaluates its own confidence (or a confidence evaluator is inserted), and below a threshold, a human is brought in. LangGraph has native support for breakpoints and human input nodes.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Temperature affects diversity, not routing to humans. The right design pattern here is HITL — explicit checkpoints where low-confidence decisions are escalated to human review.</div>
   </div>
 
   <div class="quiz-q">
@@ -706,8 +849,8 @@ Workers    Workers</div>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. AutoGen is open source; LangGraph is proprietary</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. LangGraph is for single agents; AutoGen is for multi-agent systems</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! This is the core architectural distinction. LangGraph is ideal when you need deterministic state transitions, checkpointing, and complex branching logic — think production workflows. AutoGen is ideal when the task naturally emerges from agents having a conversation, especially for code-heavy tasks where back-and-forth dialogue refines solutions.</div>
-    <div class="quiz-feedback wrong">❌ Both support multi-agent and work with various LLMs. The key difference is the interaction model: graph-based state machine (LangGraph) vs. conversational dialogue (AutoGen).</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! This is the core architectural distinction. LangGraph is ideal when you need deterministic state transitions, checkpointing, and complex branching logic — think production workflows. AutoGen is ideal when the task naturally emerges from agents having a conversation, especially for code-heavy tasks where back-and-forth dialogue refines solutions.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Both support multi-agent and work with various LLMs. The key difference is the interaction model: graph-based state machine (LangGraph) vs. conversational dialogue (AutoGen).</div>
   </div>
 
   <div class="quiz-q">
@@ -718,14 +861,14 @@ Workers    Workers</div>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Because agents are too slow to evaluate</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Because agents always produce the correct answer</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! An agent can reach a correct answer via faulty reasoning (lucky result) or reach a wrong answer despite good reasoning (bad luck). Evaluating only the final answer misses this. Process evaluation requires inspecting the full agent trace: were tool calls appropriate? Were observations correctly interpreted? Did the agent stay on goal? Benchmarks like AgentBench and WebArena were specifically designed for this.</div>
-    <div class="quiz-feedback wrong">❌ The challenge is the need for both process and outcome evaluation. Traditional NLP evaluates output quality; agent evaluation must also assess whether the path taken to reach the output was sound.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! An agent can reach a correct answer via faulty reasoning (lucky result) or reach a wrong answer despite good reasoning (bad luck). Evaluating only the final answer misses this. Process evaluation requires inspecting the full agent trace: were tool calls appropriate? Were observations correctly interpreted? Did the agent stay on goal? Benchmarks like AgentBench and WebArena were specifically designed for this.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> The challenge is the need for both process and outcome evaluation. Traditional NLP evaluates output quality; agent evaluation must also assess whether the path taken to reach the output was sound.</div>
   </div>
 </div>
 
 <!-- Completion Banner -->
 <div class="completion-banner">
-  <h2>🎓 Course Complete!</h2>
+  <h2><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Course Complete!</h2>
   <p>You've journeyed from tokenization and Bag-of-Words all the way to multi-agent AI systems operating at the frontier of what's possible. The field will keep evolving — but you now have the foundations to understand and evaluate whatever comes next.</p>
   <div class="stats">
     <div class="stat"><div class="num">15</div><div class="label">Weeks Covered</div></div>
@@ -737,7 +880,7 @@ Workers    Workers</div>
 
 <div class="page-nav">
   <a href="week14.html">← Week 14: Agentic AI Foundations</a>
-  <a href="index.html">🏠 Back to Home</a>
+  <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Back to Home</a>
 </div>
 
 </div><!-- /container -->
@@ -789,7 +932,7 @@ const masOutputs = {
   → send back to WRITER AGENT for revision
 
 [WRITER AGENT]    → revise(draft, feedback)
-  Output: Final report (862 words) ✅
+  Output: Final report (862 words) [OK]
 
 Total: 4 agents, 8 tool calls, 2m 14s, $0.23 in API costs`,
 
@@ -855,138 +998,5 @@ function showMAS(type, btn) {
 // Initialize
 showMAS('research', document.querySelector('.interactive-box .btn-outline.active'));
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card15{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card15 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card15 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col15{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col15{grid-template-columns:1fr}}
-.bts-table15{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table15 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table15 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table15 tr:hover td{background:#fafbff}
-.bts-formula15{background:#f0fdf4;border-left:4px solid #059669;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
-.bts-story15{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-left:4px solid #059669;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story15-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#15803d;margin-bottom:6px}
-.bts-depth15{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.bts-code15{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Knowledge Graphs, GraphRAG &amp; Structured Knowledge in 2026</h2>
-  <p>Unstructured text retrieval (vector RAG) struggles with global questions, multi-hop reasoning, and relationship-heavy queries. Knowledge Graphs and GraphRAG represent the next frontier — combining symbolic structure with neural generation. This section covers KG fundamentals through Microsoft's GraphRAG system.</p>
-</div>
-
-<div class="bts-card15">
-  <h3>🕸️ Knowledge Graph Fundamentals <span class="bts-depth15">Foundations</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A Knowledge Graph (KG) represents world knowledge as a directed graph: nodes are entities, edges are relations. The triple (head, relation, tail) is the atomic unit:</p>
-  <div class="bts-2col15">
-    <div>
-      <h4>KG Construction Pipeline</h4>
-      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li><strong>Entity Recognition:</strong> identify mentions (NER)</li>
-        <li><strong>Entity Linking:</strong> map mentions to canonical KG nodes (e.g., Wikidata QIDs)</li>
-        <li><strong>Relation Extraction:</strong> extract (h, r, t) triples from text</li>
-        <li><strong>Schema Mapping:</strong> align to ontology (RDF, OWL)</li>
-        <li><strong>Conflict Resolution:</strong> handle contradictory facts across sources</li>
-      </ol>
-    </div>
-    <div>
-      <h4>Major Knowledge Bases</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li><strong>Wikidata:</strong> 100M+ items, community-maintained, SPARQL queryable</li>
-        <li><strong>Freebase:</strong> deprecated (→ Wikidata), used in distant supervision RE</li>
-        <li><strong>NELL:</strong> never-ending learning from web text</li>
-        <li><strong>ConceptNet:</strong> commonsense knowledge (5M+ assertions)</li>
-        <li><strong>UMLS:</strong> biomedical/clinical concepts</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card15">
-  <h3>📐 TransE: Knowledge Graph Embeddings <span class="bts-depth15">PhD</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">TransE (Bordes et al., 2013) embeds KG entities and relations in vector space. Key idea: for a true triple (h, r, t), the relation vector r should approximate the translation from h to t.</p>
-  <div class="bts-2col15">
-    <div>
-      <div class="bts-formula15"><span style="color:#86efac"># TransE scoring function</span>
-score(h, r, t) = -||h + r - t||
-
-<span style="color:#86efac"># Training with margin ranking loss</span>
-L = Σ_{(h,r,t)∈S} Σ_{(h',r,t')∈S'} 
-    max(0, γ + score(h',r,t') - score(h,r,t))
-
-<span style="color:#86efac"># where S' = corrupted (negative) triples
-# γ = margin hyperparameter</span>
-
-<span style="color:#86efac"># Analogy with word2vec:</span>
-Berlin - Germany + France ≈ Paris
-leader(Germany) + France ≈ leader(France)
-= "President_of" relation as vector!</div>
-    </div>
-    <div>
-      <h4>TransE Limitations &amp; Successors</h4>
-      <table class="bts-table15">
-        <tr><th>Model</th><th>Handles</th><th>Key Innovation</th></tr>
-        <tr><td>TransE</td><td>1-to-1 relations</td><td>h + r ≈ t</td></tr>
-        <tr><td>TransR</td><td>1-to-N, N-to-1</td><td>Relation-specific spaces</td></tr>
-        <tr><td>RotatE</td><td>Symmetry, inversion</td><td>Rotation in complex plane</td></tr>
-        <tr><td>ComplEx</td><td>Asymmetric relations</td><td>Complex-valued embeddings</td></tr>
-        <tr><td>DistMult</td><td>Symmetric relations</td><td>Bilinear scoring</td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card15">
-  <h3>🌐 GraphRAG (Microsoft, 2024) <span class="bts-depth15">2024 Breakthrough</span></h3>
-  <div class="bts-story15">
-    <div class="bts-story15-label">📖 The Problem with Naive RAG</div>
-    <p style="font-size:14px;line-height:1.8">Standard RAG retrieves semantically similar chunks. But for global questions ("What are the main themes across all our documents?", "Summarize the key risks mentioned in our corpus"), no single chunk contains the answer. GraphRAG builds a knowledge graph from the entire corpus, clusters it, and enables both local and global queries.</p>
-  </div>
-  <div class="bts-2col15">
-    <div>
-      <h4>GraphRAG Indexing Pipeline</h4>
-      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li>Extract entities &amp; relations from all documents (LLM-based)</li>
-        <li>Build knowledge graph: entities as nodes, relations as edges</li>
-        <li>Run Leiden community detection algorithm</li>
-        <li>Generate hierarchical community summaries (LLM)</li>
-        <li>Index: vector store + graph structure + community reports</li>
-      </ol>
-    </div>
-    <div>
-      <h4>GraphRAG Query Types</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li><strong>Local search:</strong> entity-centric query → find relevant entities → retrieve neighbors + summaries → LLM answer</li>
-        <li><strong>Global search:</strong> query against community reports at all levels → parallel LLM map step → reduce step → final answer</li>
-        <li><strong>Drift search (2025):</strong> hybrid local+global for exploratory queries</li>
-      </ul>
-    </div>
-  </div>
-  <table class="bts-table15" style="margin-top:14px">
-    <tr><th>Dimension</th><th>Naive RAG</th><th>GraphRAG</th></tr>
-    <tr><td><strong>Retrieval unit</strong></td><td>Text chunks (flat)</td><td>Entities, relationships, community summaries</td></tr>
-    <tr><td><strong>Global queries</strong></td><td>❌ Poor (no single chunk has answer)</td><td>✅ Strong (community summaries)</td></tr>
-    <tr><td><strong>Multi-hop reasoning</strong></td><td>❌ Weak (individual chunks)</td><td>✅ Better (graph traversal)</td></tr>
-    <tr><td><strong>Indexing cost</strong></td><td>Low (embed &amp; chunk)</td><td>High (LLM entity extraction × corpus size)</td></tr>
-    <tr><td><strong>Query cost</strong></td><td>Low (single vector search)</td><td>Higher (graph traversal + parallel LLM calls)</td></tr>
-    <tr><td><strong>Best for</strong></td><td>Factoid QA, specific retrieval</td><td>Corpus summarization, theme extraction, relationship queries</td></tr>
-  </table>
-  <p style="font-size:12px;color:#64748b;margin-top:8px">GraphRAG improves answer comprehensiveness by 50–70% over naive RAG on global questions (Microsoft, 2024). Actively used in enterprise document intelligence, scientific literature analysis, and legal discovery.</p>
-</div>
-
-</div></div>
-
 </body>
 </html>

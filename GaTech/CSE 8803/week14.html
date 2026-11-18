@@ -170,6 +170,16 @@
   .cog-card h5 { font-size: 13px; font-weight: 700; color: #0284c7; margin-bottom: 6px; }
   .cog-card p  { font-size: 12px; color: #374151; line-height: 1.5; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="14"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 14: Foundations of Agentic AI &amp; Reasoning" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -177,7 +187,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week13.html">← Week 13</a>
     <span class="you-are-here">Week 14 ← HERE</span>
     <a href="week15.html">Week 15 →</a>
@@ -194,7 +204,7 @@
     <span class="chip">Agent Architecture</span>
     <span class="chip">Reasoning &amp; Planning</span>
     <span class="chip">Tool Use &amp; Memory</span>
-    <span class="chip alert">⚠️ Quiz 11 · Due Apr 17</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 11 · Due Apr 17</span>
   </div>
 </div>
 
@@ -203,7 +213,7 @@
 <!-- ═══════════════════════════════════════════ SECTION 1: What is an Agent -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon blue">🤖</div>
+    <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></div>
     <div>
       <h2>What is an AI Agent? Definitions &amp; The Big Shift</h2>
       <div class="sub">M13T1L1 · From chatbots to autonomous goal-pursuing systems</div>
@@ -211,7 +221,7 @@
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Story: The Difference Between a Tool and an Agent</div>
+    <div class="story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Story: The Difference Between a Tool and an Agent</div>
     <p>A hammer is a tool — it does exactly what you do with it, nothing more. A calculator is a tool too. But imagine an intern you give a task to: "Research our competitors and write a report." They break it down: <em>search Google, take notes, organize findings, write draft, review it, fix errors, deliver the final product</em>. They make decisions, use tools, handle unexpected obstacles, and persist toward a goal across many steps. That's an agent. The key insight: <strong>agents pursue goals autonomously over extended horizons, using tools and environment feedback to adapt</strong>.</p>
   </div>
 
@@ -233,7 +243,7 @@
         </tbody>
       </table>
       <div class="callout">
-        <strong>🔑 Core Definition</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Core Definition</strong>
         An <strong>AI Agent</strong> is a system that: (1) perceives its environment, (2) reasons about its state and goal, (3) plans and takes actions, (4) observes the results, and (5) adapts until the goal is achieved. The LLM is the "brain" — the cognitive engine — but the agent is the whole system including memory, tools, and feedback loop.
       </div>
     </div>
@@ -246,20 +256,20 @@
     </div>
     <div class="concept-body open">
       <div class="agent-loop">
-        <div class="loop-box perception">👁️ PERCEPTION<div style="font-size:12px;font-weight:400;margin-top:4px">User goal + environment state + memory retrieval + tool outputs</div></div>
+        <div class="loop-box perception"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> PERCEPTION<div style="font-size:12px;font-weight:400;margin-top:4px">User goal + environment state + memory retrieval + tool outputs</div></div>
         <div class="loop-arrow">↓</div>
-        <div class="loop-box brain">🧠 BRAIN (LLM)<div style="font-size:12px;font-weight:400;margin-top:4px">Reason, plan, decide: "What should I do next?"</div></div>
+        <div class="loop-box brain"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> BRAIN (LLM)<div style="font-size:12px;font-weight:400;margin-top:4px">Reason, plan, decide: "What should I do next?"</div></div>
         <div class="loop-arrow">↓</div>
-        <div class="loop-box planning">📋 PLANNING<div style="font-size:12px;font-weight:400;margin-top:4px">Decompose goal → sub-tasks → select next action</div></div>
+        <div class="loop-box planning"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> PLANNING<div style="font-size:12px;font-weight:400;margin-top:4px">Decompose goal → sub-tasks → select next action</div></div>
         <div class="loop-arrow">↓</div>
-        <div class="loop-box action">⚡ ACTION<div style="font-size:12px;font-weight:400;margin-top:4px">Execute: call tool / write code / call API / respond</div></div>
+        <div class="loop-box action"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ACTION<div style="font-size:12px;font-weight:400;margin-top:4px">Execute: call tool / write code / call API / respond</div></div>
         <div class="loop-arrow">↓</div>
-        <div class="loop-box env">🌍 ENVIRONMENT (Tool outputs, APIs, files)<div style="font-size:12px;font-weight:400;margin-top:4px">Result: success / error / new information</div></div>
+        <div class="loop-box env"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> ENVIRONMENT (Tool outputs, APIs, files)<div style="font-size:12px;font-weight:400;margin-top:4px">Result: success / error / new information</div></div>
         <div class="loop-arrow">↓</div>
-        <div class="loop-back">🔁 Observation → back to Perception → loop until goal achieved or max steps</div>
+        <div class="loop-back"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Observation → back to Perception → loop until goal achieved or max steps</div>
       </div>
       <div class="callout tip">
-        <strong>✅ Why the Loop Matters</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Why the Loop Matters</strong>
         The loop is what gives agents their power. A single-turn LLM gets one shot. An agent can try, fail, observe the error, reason about why it failed, adjust its approach, try again — exactly like a human solving a complex problem. This enables handling of tasks with unpredictable intermediate states.
       </div>
     </div>
@@ -269,7 +279,7 @@
 <!-- ═══════════════════════════════════════════ SECTION 2: Components -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon cyan">🧩</div>
+    <div class="section-icon cyan"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
     <div>
       <h2>Agent Architecture: The Five Core Components</h2>
       <div class="sub">M13T1L1 · Building blocks of every AI agent</div>
@@ -288,22 +298,22 @@
       </div>
       <div class="memory-grid">
         <div class="mem-card mem-1">
-          <h4>📝 In-Context (Working Memory)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> In-Context (Working Memory)</h4>
           <p>What's currently in the LLM's context window: the prompt, conversation history, recent tool outputs, and partial results.</p>
           <p class="ex">Analogy: RAM — fast, immediately accessible, but limited and lost when the session ends.</p>
         </div>
         <div class="mem-card mem-2">
-          <h4>📖 Episodic Memory</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Episodic Memory</h4>
           <p>Records of past agent runs, interactions, and experiences. Retrieved when relevant to a new task. Enables the agent to learn from past successes and failures.</p>
           <p class="ex">Implementation: vector database of past task logs. Retrieve via semantic similarity.</p>
         </div>
         <div class="mem-card mem-3">
-          <h4>🧠 Semantic Memory</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Semantic Memory</h4>
           <p>General world knowledge, domain facts, product documentation — not tied to a specific episode. Queried via RAG to provide factual grounding.</p>
           <p class="ex">Implementation: vector DB indexed with domain documents (same as RAG knowledge base).</p>
         </div>
         <div class="mem-card mem-4">
-          <h4>⚙️ Procedural Memory</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Procedural Memory</h4>
           <p>Learned skills, workflows, and action sequences that have worked before. Encoded in the agent's system prompt, fine-tuned weights, or tool definitions.</p>
           <p class="ex">Implementation: system prompt with successful workflow patterns, or fine-tuned model weights.</p>
         </div>
@@ -323,16 +333,16 @@
       </div>
       <div style="margin-bottom:12px">
         <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:#374151">Common Tool Categories:</div>
-        <span class="tool-badge">🔍 Web Search</span>
-        <span class="tool-badge">🐍 Code Executor</span>
-        <span class="tool-badge">📂 File Reader/Writer</span>
-        <span class="tool-badge">🗄️ Database Query (SQL)</span>
-        <span class="tool-badge">🌐 HTTP/API calls</span>
-        <span class="tool-badge">📊 Data Visualization</span>
-        <span class="tool-badge">🧮 Calculator</span>
-        <span class="tool-badge">📧 Email/Calendar</span>
-        <span class="tool-badge">🔢 Vector DB Retrieval</span>
-        <span class="tool-badge">🤖 Sub-agent spawning</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web Search</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Executor</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> File Reader/Writer</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> Database Query (SQL)</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> HTTP/API calls</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Data Visualization</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/></svg> Calculator</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg> Email/Calendar</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Vector DB Retrieval</span>
+        <span class="tool-badge"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> Sub-agent spawning</span>
       </div>
       <div class="formula-box"><span class="comment"># How Function/Tool Calling works (OpenAI-style):</span>
 
@@ -378,11 +388,11 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
 # a search returns insufficient info</span></div>
       <div class="two-col">
         <div class="mini-card">
-          <h4>📋 Plan-and-Execute Pattern</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Plan-and-Execute Pattern</h4>
           <p>Generate the full plan upfront, then execute each step. Efficient but brittle — if early steps fail, the plan may be invalid.</p>
         </div>
         <div class="mini-card">
-          <h4>🔄 ReAct Pattern (Reactive Planning)</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> ReAct Pattern (Reactive Planning)</h4>
           <p>Generate only the next action at each step, using current observations. More adaptive — the plan evolves based on what the agent discovers.</p>
         </div>
       </div>
@@ -443,7 +453,7 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
 <!-- ═══════════════════════════════════════════ SECTION 3: Reasoning Frameworks -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon orange">💡</div>
+    <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
     <div>
       <h2>Reasoning Frameworks for Agents <span class="depth-badge">M13T1L2</span></h2>
       <div class="sub">ReAct, Reflexion, Tree-of-Thought, and MCTS</div>
@@ -461,15 +471,15 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
         <p>ReAct (Yao et al., 2022) is the foundational agent reasoning pattern. It interleaves <strong>Thought</strong> (LLM reasoning trace) with <strong>Action</strong> (tool call) with <strong>Observation</strong> (tool output). This tight coupling between reasoning and acting reduces hallucination because every factual claim is immediately grounded by a tool result.</p>
       </div>
       <div class="react-flow">
-        <div class="react-node rn-t">💭 Thought<br/><span style="font-size:10px;font-weight:400">Reason about state</span></div>
+        <div class="react-node rn-t"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Thought<br/><span style="font-size:10px;font-weight:400">Reason about state</span></div>
         <div class="rn-arr">→</div>
-        <div class="react-node rn-a">⚡ Action<br/><span style="font-size:10px;font-weight:400">Call tool/API</span></div>
+        <div class="react-node rn-a"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Action<br/><span style="font-size:10px;font-weight:400">Call tool/API</span></div>
         <div class="rn-arr">→</div>
-        <div class="react-node rn-o">👁️ Observation<br/><span style="font-size:10px;font-weight:400">Tool result</span></div>
+        <div class="react-node rn-o"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Observation<br/><span style="font-size:10px;font-weight:400">Tool result</span></div>
         <div class="rn-arr">→</div>
-        <div class="react-node rn-t">💭 Thought<br/><span style="font-size:10px;font-weight:400">Update reasoning</span></div>
+        <div class="react-node rn-t"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Thought<br/><span style="font-size:10px;font-weight:400">Update reasoning</span></div>
         <div class="rn-arr">→ ...</div>
-        <div class="react-node rn-ans">✅ Final Answer</div>
+        <div class="react-node rn-ans"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Final Answer</div>
       </div>
       <div class="formula-box"><span class="comment"># ReAct trace example for a multi-hop factual question:
 # "Who founded the company that makes the A100 GPU?"</span>
@@ -487,7 +497,7 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
 <span class="highlight">Answer:</span> NVIDIA, which makes the A100 GPU, was founded by
          Jensen Huang, Chris Malachowsky, and Curtis Priem.</div>
       <div class="callout tip">
-        <strong>✅ ReAct vs. Pure CoT</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ReAct vs. Pure CoT</strong>
         CoT reasons entirely in the model's "head" — no external verification. ReAct grounds each reasoning step with a real tool call. For factual tasks, ReAct reduces hallucination significantly because the model can't make up an observation — it comes from an actual tool.
       </div>
     </div>
@@ -495,7 +505,7 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
 
   <!-- Interactive: ReAct Simulator -->
   <div class="interactive-box">
-    <h4>🔬 Interactive: ReAct Agent Trace Simulator</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Interactive: ReAct Agent Trace Simulator</h4>
     <div class="desc">Select a task to see how a ReAct agent breaks it down into thought-action-observation cycles.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="btn-outline active" onclick="showReact('factual', this)">Factual Q&amp;A</button>
@@ -532,7 +542,7 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
         <p>Monte Carlo Tree Search: expand a tree of possible action sequences, simulate outcomes, backpropagate scores, repeat. Enables superhuman performance on hard reasoning tasks. The basis of OpenAI's "thinking" models (o1, o3, o4-mini).</p>
       </div>
       <div class="callout purple">
-        <strong>🔬 Why "Reasoning Models" (o1/o3/DeepSeek-R1) Are Different</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Why "Reasoning Models" (o1/o3/DeepSeek-R1) Are Different</strong>
         Traditional LLMs generate a single response. Reasoning models (using MCTS + RLHF) generate an extended internal "thinking" trace — exploring multiple reasoning paths, backtracking, verifying — before producing an answer. This is why they excel at math olympiad problems, PhD-level science, and complex code. The thinking tokens are a form of test-time compute scaling.
       </div>
     </div>
@@ -550,27 +560,27 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
       </div>
       <div class="cog-grid">
         <div class="cog-card">
-          <h5>🏛️ SOAR (1983)</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-8h6v8"/></svg> SOAR (1983)</h5>
           <p>Symbolic cognitive architecture. Uses production rules, working memory, and "chunking" to learn new rules from problem-solving. Foundation of rule-based AI agents.</p>
         </div>
         <div class="cog-card">
-          <h5>🧠 ACT-R (1993)</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> ACT-R (1993)</h5>
           <p>Hybrid symbolic/neural. Modules for declarative memory, procedural memory, and perceptual/motor. Most empirically grounded cognitive architecture in psychology.</p>
         </div>
         <div class="cog-card">
-          <h5>🤖 BDI Agents</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> BDI Agents</h5>
           <p><strong>Belief-Desire-Intention</strong>. Agents have beliefs (world state), desires (goals), and intentions (committed plans). Still used in multi-agent systems and robotics.</p>
         </div>
         <div class="cog-card">
-          <h5>💬 LLM Agents (2022+)</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> LLM Agents (2022+)</h5>
           <p>The LLM implicitly serves as all cognitive modules. Context window = working memory. Tool calls = perception/motor. System prompt = procedural knowledge. Emergent rather than designed.</p>
         </div>
         <div class="cog-card">
-          <h5>🔗 Hybrid Symbolic-Neural</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Hybrid Symbolic-Neural</h5>
           <p>Combines LLM "intuition" with formal planners, theorem provers, or logic engines. Best for safety-critical domains where the neural component must be verifiably constrained.</p>
         </div>
         <div class="cog-card">
-          <h5>🌐 Embodied Agents</h5>
+          <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Embodied Agents</h5>
           <p>Agents grounded in physical or virtual environments (robotics, game agents). Perception = visual/sensor input. The agent must ground language in physical reality — hardest open problem in agentic AI.</p>
         </div>
       </div>
@@ -581,7 +591,7 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
 <!-- ═══════════════════════════════════════════ SECTION 4: Agent Pitfalls -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">⚠️</div>
+    <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
     <div>
       <h2>Agent Failure Modes &amp; Safety</h2>
       <div class="sub">Why agents fail — and how to make them safer</div>
@@ -607,16 +617,175 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
         </tbody>
       </table>
       <div class="callout warning">
-        <strong>⚠️ The Alignment Challenge in Agentic Systems</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> The Alignment Challenge in Agentic Systems</strong>
         Alignment problems are amplified in agents: a slightly misspecified goal in a single-turn chatbot causes a bad response. The same misspecification in an agent running 100 steps and calling external APIs can cause significant real-world harm before anyone notices. Human-in-the-loop checkpoints and reversibility are critical engineering requirements for production agents.
       </div>
     </div>
   </div>
 </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card14{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card14 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card14 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col14{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col14{grid-template-columns:1fr}}
+.bts-table14{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table14 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table14 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table14 tr:hover td{background:#fafbff}
+.bts-formula14{background:#f0f9ff;border-left:4px solid #0284c7;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story14{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story14-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0369a1;margin-bottom:6px}
+.bts-depth14{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.align-pipeline{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.align-step{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
+.align-step .step-num{background:#0284c7;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px}
+.align-step h5{font-weight:800;font-size:13px;margin-bottom:4px}
+.align-step p{font-size:12px;color:#475569;line-height:1.6;margin:0}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Ethics, Alignment &amp; Responsible AI: The Science Behind Safe LLMs</h2>
+  <p>Deploying an LLM without understanding alignment is like shipping a self-driving car without safety testing. This section covers the technical reality of AI safety — from WEAT bias measurement and DPO alignment math, to EU AI Act compliance and LLM watermarking. Every AI/ML professional in 2026 needs this.</p>
+</div>
+
+<div class="bts-card14">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg> Bias in Embeddings: WEAT &amp; Measurement <span class="bts-depth14">Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">WEAT (Word Embedding Association Test, Caliskan et al. 2017) measures implicit bias in word embeddings by testing whether target concepts associate more strongly with one attribute than another — mirroring the human IAT (Implicit Association Test).</p>
+  <div class="bts-2col14">
+    <div>
+      <div class="bts-formula14"><span style="color:#94a3b8"># WEAT test statistic</span>
+s(w, A, B) = mean_a cos(w,a) - mean_b cos(w,b)
+<span style="color:#94a3b8"># How much more similar is word w to
+# attribute set A vs. attribute set B?</span>
+
+S(X, Y, A, B) = Σ_{x∈X} s(x,A,B)
+              - Σ_{y∈Y} s(y,A,B)
+<span style="color:#94a3b8"># Positive = X associates more with A
+# (e.g., "male" names + "career" words)</span>
+
+Effect size d = S / std_dev(union_X_Y)</div>
+    </div>
+    <div>
+      <h4>Classic WEAT Findings</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>GloVe/Word2Vec: flowers/insects, pleasantness/unpleasantness</li>
+        <li>Male names → career; female names → family (strong effect)</li>
+        <li>European-American names → pleasant; African-American names → unpleasant</li>
+        <li>Science terms → male; arts terms → female</li>
+      </ul>
+      <h4>Debiasing Methods</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Hard debiasing</strong> (Bolukbasi 2016): project out gender subspace</li>
+        <li><strong>Counterfactual augmentation:</strong> swap gendered words in training data</li>
+        <li><strong>Limitation:</strong> debiasing embeddings often reduces downstream accuracy; bias can reappear in fine-tuning</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> DPO: Direct Preference Optimization Deep Dive <span class="bts-depth14">PhD</span></h3>
+  <div class="bts-story14">
+    <div class="bts-story14-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Why DPO Over PPO?</div>
+    <p style="font-size:14px;line-height:1.8">RLHF with PPO requires 4 models simultaneously: reference policy π_ref, current policy π_θ, reward model r_φ, and value function V_φ. It's unstable, slow, and expensive. DPO (Rafailov et al., NeurIPS 2023) realizes that the optimal policy can be derived analytically — no RL needed.</p>
+  </div>
+  <div class="bts-2col14">
+    <div>
+      <div class="bts-formula14"><span style="color:#94a3b8"># RLHF objective (requires reward model)</span>
+max_π E[r(x,y)] - β·KL[π || π_ref]
+
+<span style="color:#94a3b8"># Optimal solution analytically:</span>
+π*(y|x) = π_ref(y|x)·exp(r(x,y)/β) / Z(x)
+
+<span style="color:#94a3b8"># Rearranging: reward can be expressed as:</span>
+r(x,y) = β·log(π*(y|x)/π_ref(y|x)) + β·log Z(x)
+
+<span style="color:#94a3b8"># DPO loss (no reward model needed!):</span>
+L_DPO = -log σ(β·log(π_θ(y_w|x)/π_ref(y_w|x))
+              - β·log(π_θ(y_l|x)/π_ref(y_l|x)))
+<span style="color:#94a3b8"># y_w = preferred, y_l = rejected output</span></div>
+    </div>
+    <div>
+      <h4>DPO vs PPO-RLHF</h4>
+      <table class="bts-table14">
+        <tr><th>Aspect</th><th>PPO-RLHF</th><th>DPO</th></tr>
+        <tr><td>Models needed</td><td>4 (policy, ref, reward, value)</td><td>2 (policy, ref)</td></tr>
+        <tr><td>Stability</td><td>Often unstable</td><td>Stable (SFT-like)</td></tr>
+        <tr><td>Compute cost</td><td>Very high</td><td>Moderate</td></tr>
+        <tr><td>Reward hacking</td><td>Yes (explicit RM)</td><td>Less (implicit)</td></tr>
+        <tr><td>Used by</td><td>GPT-4, Claude</td><td>LLaMA-2, Mistral, Zephyr</td></tr>
+      </table>
+      <p style="font-size:12px;color:#64748b;margin-top:6px">KTO (Kahneman-Tversky Optimization, 2024) extends DPO using prospect theory — doesn't require paired preferences, works with individual (x, y, label) examples.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-8h6v8"/></svg> EU AI Act: What LLM Developers Must Know <span class="bts-depth14">2026 Compliance</span></h3>
+  <div class="align-pipeline">
+    <div class="align-step">
+      <div class="step-num">1</div>
+      <div>
+        <h5>Unacceptable Risk (Prohibited)</h5>
+        <p>Social scoring systems, real-time biometric surveillance in public, manipulation of vulnerable groups, exploitation of unconscious behaviors. Banned outright.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">2</div>
+      <div>
+        <h5>High Risk (Strict Requirements)</h5>
+        <p>LLMs used in hiring, credit scoring, education assessment, critical infrastructure, law enforcement, medical devices. Requires conformity assessment, transparency, human oversight, logging.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">3</div>
+      <div>
+        <h5>General Purpose AI (GPAI) Models</h5>
+        <p>Models like GPT-4, LLaMA, Claude with systemic risk (>10²³ FLOPs training compute) face additional obligations: red-teaming, adversarial testing, cybersecurity measures, incident reporting to EU AI Office.</p>
+      </div>
+    </div>
+    <div class="align-step">
+      <div class="step-num">4</div>
+      <div>
+        <h5>Watermarking Requirements (2026)</h5>
+        <p>AI-generated content must be labeled. Technical approaches: token-level watermarking (Kirchenbauer 2023 — green/red token lists), metadata embedding, provenance certificates. EU Code of Practice requires multi-layered approach since no single method is sufficient.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card14">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/></svg> Fairness Metrics: The Irreconcilable Trio <span class="bts-depth14">Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Three widely-used fairness criteria are mathematically incompatible (Chouldechova 2017, Kleinberg 2017) — satisfying one often violates the others. Understanding this is critical for any responsible AI deployment.</p>
+  <table class="bts-table14">
+    <tr><th>Criterion</th><th>Definition</th><th>Formula</th><th>Tradeoff</th></tr>
+    <tr><td><strong>Demographic Parity</strong></td><td>Equal positive prediction rates across groups</td><td>P(Ŷ=1|A=0) = P(Ŷ=1|A=1)</td><td>Ignores base rate differences</td></tr>
+    <tr><td><strong>Equalized Odds</strong></td><td>Equal TPR and FPR across groups</td><td>P(Ŷ=1|Y=y,A=a) equal for all a,y</td><td>Requires same accuracy per group</td></tr>
+    <tr><td><strong>Calibration</strong></td><td>Predicted probabilities match true frequencies in each group</td><td>P(Y=1|score=s,A=a) = s for all a</td><td>Conflicts with equalized odds when base rates differ</td></tr>
+  </table>
+  <div class="bts-story14">
+    <div class="bts-story14-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> The Impossibility Theorem</div>
+    <p style="font-size:14px;line-height:1.7">Chouldechova (2017) proved: when base rates differ across groups, no classifier can simultaneously achieve demographic parity, equalized odds, AND calibration. This means <strong>choosing a fairness criterion is a policy decision</strong>, not a technical one. NLP researchers must make this explicit when building and deploying models.</p>
+  </div>
+</div>
+
+</div></div>
+
 <!-- ═══════════════════════════════════════════ SECTION 5: QUIZ PREP -->
 <div class="quiz-section">
-  <h3>🧠 Quiz 11 Prep — Foundations of Agentic AI</h3>
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Quiz 11 Prep — Foundations of Agentic AI</h3>
 
   <div class="quiz-q">
     <p>1. What is the fundamental property that distinguishes an AI "agent" from a standard LLM chatbot?</p>
@@ -626,8 +795,8 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
       <button class="quiz-opt" onclick="checkQ(this,'correct')">C. Agents operate in a perceive-reason-act loop, using tools and memory to pursue goals across multiple steps</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Agents are fine-tuned on task-specific data while chatbots are not</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! The agent loop is the defining characteristic. Unlike a chatbot that handles one query at a time, an agent perceives its environment, reasons about its state, takes actions (including tool calls), observes results, and loops — persisting toward a goal across many steps.</div>
-    <div class="quiz-feedback wrong">❌ The distinction is about the architecture and operational paradigm, not model size or training. The key is the perceive-reason-act loop with tool use and goal persistence.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! The agent loop is the defining characteristic. Unlike a chatbot that handles one query at a time, an agent perceives its environment, reasons about its state, takes actions (including tool calls), observes results, and loops — persisting toward a goal across many steps.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> The distinction is about the architecture and operational paradigm, not model size or training. The key is the perceive-reason-act loop with tool use and goal persistence.</div>
   </div>
 
   <div class="quiz-q">
@@ -638,8 +807,8 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Because ReAct processes text faster, leaving less time for errors</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Because ReAct uses fine-tuned weights that reduce confabulation</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! In pure CoT, the model reasons entirely in its own head — it can hallucinate both the reasoning steps and the final answer. In ReAct, the Observation comes from an actual tool call, providing a verified anchor point. The model's subsequent thoughts are conditioned on real information, not confabulated context.</div>
-    <div class="quiz-feedback wrong">❌ The key insight is about grounding. Observations in ReAct are tool outputs — real, verified data from the world. This prevents the model from "making up" facts during its reasoning chain.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! In pure CoT, the model reasons entirely in its own head — it can hallucinate both the reasoning steps and the final answer. In ReAct, the Observation comes from an actual tool call, providing a verified anchor point. The model's subsequent thoughts are conditioned on real information, not confabulated context.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> The key insight is about grounding. Observations in ReAct are tool outputs — real, verified data from the world. This prevents the model from "making up" facts during its reasoning chain.</div>
   </div>
 
   <div class="quiz-q">
@@ -650,8 +819,8 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Hallucination — the agent is generating false information</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Prompt injection — an external source changed the agent's instructions</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! Goal drift is a well-documented agent failure mode. Over many steps, the context window fills up with tool outputs and observations, and the original high-level goal gets "washed out." The mitigation is to include an explicit goal reminder at every step of the prompt.</div>
-    <div class="quiz-feedback wrong">❌ While context overflow and hallucination can contribute, the specific phenomenon of losing the original goal in favor of a sub-goal across many steps is called goal drift.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! Goal drift is a well-documented agent failure mode. Over many steps, the context window fills up with tool outputs and observations, and the original high-level goal gets "washed out." The mitigation is to include an explicit goal reminder at every step of the prompt.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> While context overflow and hallucination can contribute, the specific phenomenon of losing the original goal in favor of a sub-goal across many steps is called goal drift.</div>
   </div>
 
   <div class="quiz-q">
@@ -662,8 +831,8 @@ Step 6: review_and_edit(draft, criteria="accuracy, clarity") → final
       <button class="quiz-opt" onclick="checkQ(this,'correct')">C. Episodic memory — records of specific past experiences, retrievable for future tasks</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Procedural memory</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! Episodic memory records past experiences — what happened, what worked, what failed. The Reflexion framework writes self-critiques (reflections on failed episodes) into episodic memory, which are retrieved when the agent faces a similar task again. This is exactly analogous to a human writing a "lessons learned" document.</div>
-    <div class="quiz-feedback wrong">❌ Semantic memory is general world knowledge. Procedural memory is about learned skills/workflows. Episodic memory is the record of specific events and experiences — the "diary" memory type.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! Episodic memory records past experiences — what happened, what worked, what failed. The Reflexion framework writes self-critiques (reflections on failed episodes) into episodic memory, which are retrieved when the agent faces a similar task again. This is exactly analogous to a human writing a "lessons learned" document.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Semantic memory is general world knowledge. Procedural memory is about learned skills/workflows. Episodic memory is the record of specific events and experiences — the "diary" memory type.</div>
   </div>
 </div>
 
@@ -757,164 +926,5 @@ function showReact(type, btn) {
 // Initialize
 showReact('factual', document.querySelector('.interactive-box .btn-outline.active'));
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card14{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card14 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card14 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col14{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col14{grid-template-columns:1fr}}
-.bts-table14{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table14 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table14 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table14 tr:hover td{background:#fafbff}
-.bts-formula14{background:#f0f9ff;border-left:4px solid #0284c7;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
-.bts-story14{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story14-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0369a1;margin-bottom:6px}
-.bts-depth14{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.align-pipeline{display:flex;flex-direction:column;gap:10px;margin:14px 0}
-.align-step{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
-.align-step .step-num{background:#0284c7;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px}
-.align-step h5{font-weight:800;font-size:13px;margin-bottom:4px}
-.align-step p{font-size:12px;color:#475569;line-height:1.6;margin:0}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Ethics, Alignment &amp; Responsible AI: The Science Behind Safe LLMs</h2>
-  <p>Deploying an LLM without understanding alignment is like shipping a self-driving car without safety testing. This section covers the technical reality of AI safety — from WEAT bias measurement and DPO alignment math, to EU AI Act compliance and LLM watermarking. Every AI/ML professional in 2026 needs this.</p>
-</div>
-
-<div class="bts-card14">
-  <h3>⚖️ Bias in Embeddings: WEAT &amp; Measurement <span class="bts-depth14">Research</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">WEAT (Word Embedding Association Test, Caliskan et al. 2017) measures implicit bias in word embeddings by testing whether target concepts associate more strongly with one attribute than another — mirroring the human IAT (Implicit Association Test).</p>
-  <div class="bts-2col14">
-    <div>
-      <div class="bts-formula14"><span style="color:#94a3b8"># WEAT test statistic</span>
-s(w, A, B) = mean_a cos(w,a) - mean_b cos(w,b)
-<span style="color:#94a3b8"># How much more similar is word w to
-# attribute set A vs. attribute set B?</span>
-
-S(X, Y, A, B) = Σ_{x∈X} s(x,A,B)
-              - Σ_{y∈Y} s(y,A,B)
-<span style="color:#94a3b8"># Positive = X associates more with A
-# (e.g., "male" names + "career" words)</span>
-
-Effect size d = S / std_dev(union_X_Y)</div>
-    </div>
-    <div>
-      <h4>Classic WEAT Findings</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>GloVe/Word2Vec: flowers/insects, pleasantness/unpleasantness</li>
-        <li>Male names → career; female names → family (strong effect)</li>
-        <li>European-American names → pleasant; African-American names → unpleasant</li>
-        <li>Science terms → male; arts terms → female</li>
-      </ul>
-      <h4>Debiasing Methods</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>Hard debiasing</strong> (Bolukbasi 2016): project out gender subspace</li>
-        <li><strong>Counterfactual augmentation:</strong> swap gendered words in training data</li>
-        <li><strong>Limitation:</strong> debiasing embeddings often reduces downstream accuracy; bias can reappear in fine-tuning</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card14">
-  <h3>🎯 DPO: Direct Preference Optimization Deep Dive <span class="bts-depth14">PhD</span></h3>
-  <div class="bts-story14">
-    <div class="bts-story14-label">📖 Why DPO Over PPO?</div>
-    <p style="font-size:14px;line-height:1.8">RLHF with PPO requires 4 models simultaneously: reference policy π_ref, current policy π_θ, reward model r_φ, and value function V_φ. It's unstable, slow, and expensive. DPO (Rafailov et al., NeurIPS 2023) realizes that the optimal policy can be derived analytically — no RL needed.</p>
-  </div>
-  <div class="bts-2col14">
-    <div>
-      <div class="bts-formula14"><span style="color:#94a3b8"># RLHF objective (requires reward model)</span>
-max_π E[r(x,y)] - β·KL[π || π_ref]
-
-<span style="color:#94a3b8"># Optimal solution analytically:</span>
-π*(y|x) = π_ref(y|x)·exp(r(x,y)/β) / Z(x)
-
-<span style="color:#94a3b8"># Rearranging: reward can be expressed as:</span>
-r(x,y) = β·log(π*(y|x)/π_ref(y|x)) + β·log Z(x)
-
-<span style="color:#94a3b8"># DPO loss (no reward model needed!):</span>
-L_DPO = -log σ(β·log(π_θ(y_w|x)/π_ref(y_w|x))
-              - β·log(π_θ(y_l|x)/π_ref(y_l|x)))
-<span style="color:#94a3b8"># y_w = preferred, y_l = rejected output</span></div>
-    </div>
-    <div>
-      <h4>DPO vs PPO-RLHF</h4>
-      <table class="bts-table14">
-        <tr><th>Aspect</th><th>PPO-RLHF</th><th>DPO</th></tr>
-        <tr><td>Models needed</td><td>4 (policy, ref, reward, value)</td><td>2 (policy, ref)</td></tr>
-        <tr><td>Stability</td><td>Often unstable</td><td>Stable (SFT-like)</td></tr>
-        <tr><td>Compute cost</td><td>Very high</td><td>Moderate</td></tr>
-        <tr><td>Reward hacking</td><td>Yes (explicit RM)</td><td>Less (implicit)</td></tr>
-        <tr><td>Used by</td><td>GPT-4, Claude</td><td>LLaMA-2, Mistral, Zephyr</td></tr>
-      </table>
-      <p style="font-size:12px;color:#64748b;margin-top:6px">KTO (Kahneman-Tversky Optimization, 2024) extends DPO using prospect theory — doesn't require paired preferences, works with individual (x, y, label) examples.</p>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card14">
-  <h3>🏛️ EU AI Act: What LLM Developers Must Know <span class="bts-depth14">2026 Compliance</span></h3>
-  <div class="align-pipeline">
-    <div class="align-step">
-      <div class="step-num">1</div>
-      <div>
-        <h5>Unacceptable Risk (Prohibited)</h5>
-        <p>Social scoring systems, real-time biometric surveillance in public, manipulation of vulnerable groups, exploitation of unconscious behaviors. Banned outright.</p>
-      </div>
-    </div>
-    <div class="align-step">
-      <div class="step-num">2</div>
-      <div>
-        <h5>High Risk (Strict Requirements)</h5>
-        <p>LLMs used in hiring, credit scoring, education assessment, critical infrastructure, law enforcement, medical devices. Requires conformity assessment, transparency, human oversight, logging.</p>
-      </div>
-    </div>
-    <div class="align-step">
-      <div class="step-num">3</div>
-      <div>
-        <h5>General Purpose AI (GPAI) Models</h5>
-        <p>Models like GPT-4, LLaMA, Claude with systemic risk (>10²³ FLOPs training compute) face additional obligations: red-teaming, adversarial testing, cybersecurity measures, incident reporting to EU AI Office.</p>
-      </div>
-    </div>
-    <div class="align-step">
-      <div class="step-num">4</div>
-      <div>
-        <h5>Watermarking Requirements (2026)</h5>
-        <p>AI-generated content must be labeled. Technical approaches: token-level watermarking (Kirchenbauer 2023 — green/red token lists), metadata embedding, provenance certificates. EU Code of Practice requires multi-layered approach since no single method is sufficient.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card14">
-  <h3>🧮 Fairness Metrics: The Irreconcilable Trio <span class="bts-depth14">Research</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Three widely-used fairness criteria are mathematically incompatible (Chouldechova 2017, Kleinberg 2017) — satisfying one often violates the others. Understanding this is critical for any responsible AI deployment.</p>
-  <table class="bts-table14">
-    <tr><th>Criterion</th><th>Definition</th><th>Formula</th><th>Tradeoff</th></tr>
-    <tr><td><strong>Demographic Parity</strong></td><td>Equal positive prediction rates across groups</td><td>P(Ŷ=1|A=0) = P(Ŷ=1|A=1)</td><td>Ignores base rate differences</td></tr>
-    <tr><td><strong>Equalized Odds</strong></td><td>Equal TPR and FPR across groups</td><td>P(Ŷ=1|Y=y,A=a) equal for all a,y</td><td>Requires same accuracy per group</td></tr>
-    <tr><td><strong>Calibration</strong></td><td>Predicted probabilities match true frequencies in each group</td><td>P(Y=1|score=s,A=a) = s for all a</td><td>Conflicts with equalized odds when base rates differ</td></tr>
-  </table>
-  <div class="bts-story14">
-    <div class="bts-story14-label">💡 The Impossibility Theorem</div>
-    <p style="font-size:14px;line-height:1.7">Chouldechova (2017) proved: when base rates differ across groups, no classifier can simultaneously achieve demographic parity, equalized odds, AND calibration. This means <strong>choosing a fairness criterion is a policy decision</strong>, not a technical one. NLP researchers must make this explicit when building and deploying models.</p>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>

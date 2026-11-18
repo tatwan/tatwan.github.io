@@ -139,6 +139,16 @@
   .arr { font-size: 22px; color: var(--muted); padding: 0 4px; }
   .context-arrow { font-size: 28px; color: #4f46e5; font-weight: bold; padding: 0 12px; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="7"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 7: LSTM, GRU &amp; Attention" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -146,9 +156,9 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week6.html">← Week 6</a>
-    <a href="week7.html" class="you-are-here">📍 Week 7</a>
+    <a href="week7.html" class="you-are-here"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Week 7</a>
   </div>
 </nav>
 
@@ -158,13 +168,13 @@
   <h1>LSTM, GRU & Attention</h1>
   <p>Solving the vanishing gradient problem with gated memory, then teaching the model to focus on what matters most.</p>
   <div class="header-chips">
-    <span class="chip">🔒 Forget Gate</span>
-    <span class="chip">📥 Input Gate</span>
-    <span class="chip">📤 Output Gate</span>
-    <span class="chip">⚡ GRU</span>
-    <span class="chip">🎯 Attention</span>
-    <span class="chip">🔁 Encoder-Decoder</span>
-    <span class="chip alert">🎯 Quiz 6 Material</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Forget Gate</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Input Gate</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Output Gate</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> GRU</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Attention</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Encoder-Decoder</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Quiz 6 Material</span>
   </div>
 </div>
 
@@ -175,13 +185,13 @@
   ════════════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon indigo">🧠</div>
+      <div class="section-icon indigo"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></div>
       <div><h2>Why LSTM? The RNN Problem</h2><div class="sub">From short-term memory to long-term memory</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>😤 RNN's Fatal Flaw: Short-Term Memory</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/></svg> RNN's Fatal Flaw: Short-Term Memory</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -190,13 +200,13 @@
           <p>RNNs pass information forward through a hidden state h_t. Over long sequences, the gradient shrinks exponentially during backpropagation — so the model effectively <em>forgets</em> words from the beginning of a sentence.</p>
         </div>
         <div class="callout danger">
-          <strong>🔴 Classic Example (from lecture):</strong>
+          <strong><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg> Classic Example (from lecture):</strong>
           "I was born in <strong>Japan</strong> and lived there for 10 years and then moved to the US. My native language is ___."<br><br>
           The word "Japan" is far from the blank. An RNN's gradient for that early word shrinks to near-zero by the time backprop reaches it — so the model ignores it and fails to predict "Japanese."
         </div>
         <div class="two-col">
           <div class="mini-card">
-            <h4>🔴 RNN Behavior</h4>
+            <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg> RNN Behavior</h4>
             <ul class="bullet">
               <li>Hidden state h_t carries memory</li>
               <li>h_t = tanh(x_t·Θ¹ + h_{t-1}·Θ³)</li>
@@ -206,7 +216,7 @@
             </ul>
           </div>
           <div class="mini-card">
-            <h4>🟢 LSTM Solution</h4>
+            <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg> LSTM Solution</h4>
             <ul class="bullet">
               <li>Adds a <strong>Cell State C_t</strong> (long-term memory)</li>
               <li>Gates selectively keep or discard info</li>
@@ -216,7 +226,7 @@
           </div>
         </div>
         <div class="callout">
-          <strong>💡 Key Analogy:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Key Analogy:</strong>
           Think of the RNN hidden state like RAM (fast but small). The LSTM cell state is like a hard drive — slower to update, but can hold far more information over time.
         </div>
       </div>
@@ -228,7 +238,7 @@
   ════════════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon indigo">🔒</div>
+      <div class="section-icon indigo"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       <div><h2>Part 1: The Four LSTM Gates</h2><div class="sub">How LSTM controls what to remember and forget</div></div>
     </div>
 
@@ -258,7 +268,7 @@
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🟠 Forget Gate — "What do I erase?"</h3>
+        <h3><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#f97316"/></svg> Forget Gate — "What do I erase?"</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -277,7 +287,7 @@
 <span class="comment"># Example: When we see "." (end of sentence), the forget gate learns</span>
 <span class="comment"># to clear the subject so the next sentence starts fresh.</span></div>
         <div class="callout warning">
-          <strong>⚠️ Lecture Quote:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Lecture Quote:</strong>
           "Forget gate will help us determine what information we are going to remove or throw away from the cell state."
         </div>
       </div>
@@ -285,7 +295,7 @@
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🟢 Input Gate + Candidate — "What do I write?"</h3>
+        <h3><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg> Input Gate + Candidate — "What do I write?"</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -305,7 +315,7 @@
 <span class="comment"># (used in the cell state update below)</span>
 <span class="gate-i">i_t</span> ⊙ <span class="gate-c">C̃_t</span>  ← point-wise multiplication</div>
         <div class="callout tip">
-          <strong>💡 Analogy:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Analogy:</strong>
           i_t is the highlighter — it marks which information is worth remembering. C̃_t is the raw text — the content itself. Together they decide what actually gets stored.
         </div>
       </div>
@@ -313,7 +323,7 @@
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🩷 Cell State Update — "Updating long-term memory"</h3>
+        <h3><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ec4899"/></svg> Cell State Update — "Updating long-term memory"</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -331,7 +341,7 @@
 <span class="comment"># The gradient through C_t flows via ADDITION (+), not multiplication!</span>
 <span class="comment"># Addition doesn't shrink gradients → long-range learning is possible.</span></div>
         <div class="callout">
-          <strong>🔑 The Key Insight — Why LSTM Works:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> The Key Insight — Why LSTM Works:</strong>
           In a plain RNN, gradients flow through repeated <code>tanh</code> multiplications (each ≤ 1) — they vanish. In LSTM, gradients can flow through the cell state update path where the dominant operation is <strong>addition</strong>. Addition preserves gradient magnitude, enabling learning from hundreds of time steps back.
         </div>
       </div>
@@ -339,7 +349,7 @@
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔵 Output Gate — "What do I expose as hidden state?"</h3>
+        <h3><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg> Output Gate — "What do I expose as hidden state?"</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -355,7 +365,7 @@
 <span class="comment"># o_t masks which dimensions to include in h_t</span>
 <span class="comment"># h_t is used for predictions and passed to the next time step</span></div>
         <div class="callout tip">
-          <strong>✅ Summary — LSTM's two outputs per step:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Summary — LSTM's two outputs per step:</strong>
           <code>C_t</code> = updated long-term memory (carried forward mostly intact)<br>
           <code>h_t</code> = short-term working memory / current output (filtered view of C_t)
         </div>
@@ -364,7 +374,7 @@
 
     <!-- INTERACTIVE: LSTM GATE EXPLORER -->
     <div class="interactive-box">
-      <h4>🎮 LSTM Gate Explorer</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> LSTM Gate Explorer</h4>
       <div class="desc">Simulate how each gate responds to different input values. Adjust the sliders to see how forget/input/output gate activations change.</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -399,13 +409,13 @@
   ════════════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">⚡</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
       <div><h2>Part 2: GRU — Gated Recurrent Unit</h2><div class="sub">A simpler, faster alternative to LSTM</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⚡ GRU: LSTM's Streamlined Sibling</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> GRU: LSTM's Streamlined Sibling</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -430,7 +440,7 @@ h̃_t = tanh(W · [r_t ⊙ h_{t-1}, x_t])
 h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
         <div class="two-col">
           <div class="mini-card">
-            <h4>✅ GRU Advantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> GRU Advantages</h4>
             <ul class="bullet">
               <li>Fewer tensor operations → faster to train</li>
               <li>Fewer parameters → less risk of overfitting on small data</li>
@@ -439,7 +449,7 @@ h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
             </ul>
           </div>
           <div class="mini-card">
-            <h4>🔵 When to Choose LSTM vs GRU</h4>
+            <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg> When to Choose LSTM vs GRU</h4>
             <ul class="bullet">
               <li><strong>LSTM:</strong> very long sequences, large datasets, complex tasks</li>
               <li><strong>GRU:</strong> faster prototyping, smaller datasets, real-time systems</li>
@@ -465,13 +475,13 @@ h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
   ════════════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">🎯</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
       <div><h2>Part 3: Encoder-Decoder + Attention</h2><div class="sub">Teaching the model to focus on what matters</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔁 Encoder-Decoder Architecture</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Encoder-Decoder Architecture</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -498,7 +508,7 @@ h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
           <div class="dec-unit"><div class="lbl">DECODER</div><div class="h">s₃</div><div style="font-size:11px;color:#b45309">masz</div></div>
         </div>
         <div class="callout danger">
-          <strong>🔴 The Big Problem:</strong>
+          <strong><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg> The Big Problem:</strong>
           The entire input "How are you?" must be compressed into a SINGLE context vector C (the final encoder hidden state). For long sentences, this bottleneck loses information — the decoder can't recover what was compressed away.
         </div>
       </div>
@@ -506,7 +516,7 @@ h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🎯 Attention Mechanism — "Look at everything, focus on what matters"</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Attention Mechanism — "Look at everything, focus on what matters"</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -539,7 +549,7 @@ h_t  = (1 - z_t) ⊙ h_{t-1}  +  z_t ⊙ h̃_t</div>
 <span class="comment"># Step 4: Use C_t to compute decoder output normally</span>
 s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
         <div class="callout">
-          <strong>💡 This type is called Additive (Bahdanau) Attention.</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> This type is called Additive (Bahdanau) Attention.</strong>
           It was the first attention mechanism for NLP (2015). The "additive" refers to how h_j and s_{t-1} are <em>added/concatenated</em> before being fed into the FFN. Later, transformers use <strong>scaled dot-product attention</strong> (faster) and <strong>self-attention</strong> — covered in Week 8!
         </div>
       </div>
@@ -547,7 +557,7 @@ s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
 
     <!-- INTERACTIVE: ATTENTION VISUALIZER -->
     <div class="interactive-box">
-      <h4>🎮 Attention Weight Visualizer</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Attention Weight Visualizer</h4>
       <div class="desc">See how attention distributes focus across encoder words when generating each output token. Select a decoder output word to see which input words it "attends to" most.</div>
 
       <p style="font-size:13px;margin-bottom:10px;"><strong>Translating:</strong> "The cat sat on mat" → "Le chat s'assit sur le tapis"</p>
@@ -576,12 +586,12 @@ s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
   ════════════════════════════════════════════════ -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">🗺️</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>Complete Picture: RNN → LSTM → GRU → Attention</h2><div class="sub">How each step solves the previous one's limitations</div></div>
     </div>
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📊 Full Architecture Comparison</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Full Architecture Comparison</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -589,10 +599,10 @@ s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
           <tr><th>Property</th><th>RNN</th><th>LSTM</th><th>GRU</th><th>LSTM + Attention</th></tr>
           <tr>
             <td>Long-range memory</td>
-            <td class="bad">❌ Vanishes</td>
-            <td class="good">✅ Cell state</td>
-            <td class="good">✅ Update gate</td>
-            <td class="good">✅ All encoder states</td>
+            <td class="bad"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Vanishes</td>
+            <td class="good"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Cell state</td>
+            <td class="good"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Update gate</td>
+            <td class="good"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> All encoder states</td>
           </tr>
           <tr>
             <td>Mechanism</td>
@@ -638,18 +648,190 @@ s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
           </tr>
         </table>
         <div class="callout">
-          <strong>🔑 The Progression of Ideas:</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> The Progression of Ideas:</strong>
           RNN → add gates to control memory (LSTM) → simplify the gates (GRU) → add a mechanism to look back at all inputs dynamically (Attention) → replace recurrence entirely with attention (Transformers, Week 8).
         </div>
       </div>
     </div>
   </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card7{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card7 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card7 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col7{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col7{grid-template-columns:1fr}}
+.bts-code7{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table7{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table7 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table7 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table7 tr:hover td{background:#fafbff}
+.bts-formula7{background:#eef2ff;border-left:4px solid #4f46e5;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story7{background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%);border-left:4px solid #4f46e5;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story7-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:6px}
+.bts-depth7{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.attn-spectrum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+.attn-box{border:2px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;text-align:center;flex:1;min-width:100px}
+.attn-box h5{font-weight:800;margin-bottom:6px;font-size:13px}
+.attn-box p{font-size:11px;color:#64748b;line-height:1.5}
+.arrow7{font-size:18px;color:#94a3b8;flex-shrink:0}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Efficient Transformer Architectures: What Powers Every Frontier LLM in 2026</h2>
+  <p>The Transformer you learned in lecture is not the Transformer running GPT-4, LLaMA-3, or Mixtral. Modern LLMs layer a set of architectural innovations — RoPE, GQA, Flash Attention, MoE, quantization — on top of the vanilla design. This section covers the math and intuition behind each.</p>
+</div>
+
+<div class="bts-card7">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> RoPE: Rotary Position Embeddings <span class="bts-depth7">Used in Every Modern LLM</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Absolute position embeddings (learned or sinusoidal) struggle with sequences longer than training length. RoPE (Su et al., 2021) encodes position via <em>rotation</em> in the complex plane — allowing relative position to naturally emerge in the attention dot product.</p>
+  <div class="bts-2col7">
+    <div>
+      <div class="bts-formula7">Query rotation at position m:
+q_m = q · e^{i·m·θ}
+
+Key rotation at position n:
+k_n = k · e^{i·n·θ}
+
+Attention dot product:
+q_m · k_n = q·k · e^{i·(m-n)·θ}
+         ↑ depends only on (m-n)!</div>
+      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.7">The inner product naturally encodes the <em>relative distance</em> m−n, not absolute positions. Long-range decay is built in: large |m−n| → smaller dot products (more rotation mismatch).</p>
+    </div>
+    <div>
+      <h4>Why RoPE Won</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>No extra parameters (unlike learned absolute PE)</li>
+        <li>Extrapolates to longer sequences better than sinusoidal</li>
+        <li>Can be extended with NTK-aware scaling or YaRN</li>
+        <li>LLaMA-3 supports 128K context via RoPE + fine-tuning</li>
+        <li>Used by: <strong>LLaMA, Mistral, Gemma, Qwen, Falcon, GPT-NeoX</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card7">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Grouped Query Attention (GQA) — KV-Cache Economics</h3>
+  <div class="bts-story7">
+    <div class="bts-story7-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> The Problem</div>
+    <p style="font-size:14px;line-height:1.8">During autoregressive generation, the model must store Key and Value matrices for every token generated so far — this is the KV-cache. For multi-head attention with H=32 heads and sequence length N, the KV-cache grows as O(N·H·d_head). At 100K tokens, this can be gigabytes per layer, per request. GQA reduces this dramatically.</p>
+  </div>
+  <div class="attn-spectrum">
+    <div class="attn-box"><h5>MHA</h5><p>H queries<br>H keys<br>H values<br><em>Full KV cache</em></p></div>
+    <div class="arrow7">→</div>
+    <div class="attn-box" style="border-color:#4f46e5;background:#eef2ff"><h5>GQA</h5><p>H queries<br>G key groups<br>G value groups<br><em>G &lt;&lt; H</em></p></div>
+    <div class="arrow7">→</div>
+    <div class="attn-box"><h5>MQA</h5><p>H queries<br>1 key<br>1 value<br><em>Minimal cache</em></p></div>
+  </div>
+  <p style="font-size:13px;color:#475569;line-height:1.7"><strong>LLaMA-2 and Mistral use GQA with G=8 groups, H=32 heads</strong> — reducing KV cache by 4× vs. MHA with minimal quality loss. LLaMA-3 70B uses GQA with 8 KV heads for 8 query head groups. This is why LLaMA-3 can handle much longer contexts than LLaMA-1.</p>
+</div>
+
+<div class="bts-card7">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Flash Attention — Making O(N²) Practical <span class="bts-depth7">Systems</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Standard attention computes the full N×N attention matrix in GPU HBM (high-bandwidth memory), then applies softmax, then multiplies by V. For N=32K, this requires ~4GB just for the attention matrix. Flash Attention (Dao et al., 2022) avoids materializing it.</p>
+  <div class="bts-2col7">
+    <div>
+      <h4>The Tiling Insight</h4>
+      <div class="bts-formula7"><span style="color:#94a3b8"># Standard: materialize full N×N matrix</span>
+S = Q·K^T / √d         <span style="color:#94a3b8"># [N,N] in HBM <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/></svg></span>
+P = softmax(S)         <span style="color:#94a3b8"># [N,N] in HBM</span>
+O = P·V                <span style="color:#94a3b8"># [N,d] in HBM</span>
+
+<span style="color:#94a3b8"># Flash: tile Q,K,V into SRAM blocks</span>
+for Q_block in tiles(Q):
+  for K_block in tiles(K):
+    compute partial S in SRAM  <span style="color:#94a3b8"># fast!</span>
+    accumulate softmax online   <span style="color:#94a3b8"># no HBM!</span>
+    update O incrementally</div>
+    </div>
+    <div>
+      <h4>Results</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Memory: O(N) instead of O(N²)</li>
+        <li>Speed: 2–4× wall-clock faster on A100</li>
+        <li>Exact output — not an approximation</li>
+        <li>Flash Attention 2 (2023): 2× over FA1 via better work partitioning</li>
+        <li>Flash Attention 3 (2024): asynchronous TMA on H100 GPUs</li>
+        <li>Integrated in PyTorch 2.0 as default via SDPA</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card7">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg> Mixture of Experts (MoE) — Scaling Parameters Without Scaling Cost <span class="bts-depth7">Architecture</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Standard transformers activate <em>all</em> parameters for every token. MoE replaces each FFN layer with E expert FFN sub-networks, but only activates top-k experts per token — keeping FLOPs constant while increasing parameter count.</p>
+  <div class="bts-2col7">
+    <div>
+      <div class="bts-formula7"><span style="color:#94a3b8"># MoE Layer forward pass</span>
+gates = softmax(Router(x))     <span style="color:#94a3b8"># [E] scores</span>
+top_k_idx = topk(gates, k=2)   <span style="color:#94a3b8"># pick 2 experts</span>
+
+output = Σᵢ gates[i] · Expert_i(x)
+  for i in top_k_idx
+
+<span style="color:#94a3b8"># Load balancing loss prevents expert collapse</span>
+L_aux = α · Σᵢ (fᵢ · pᵢ)
+  where fᵢ = fraction of tokens → expert i</div>
+    </div>
+    <div>
+      <h4>Mixtral 8×7B (2024) Example</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>8 expert FFNs per layer, top-2 selected per token</li>
+        <li>47B total parameters, 13B active per token</li>
+        <li>Matches Llama-2 70B quality at 5× lower FLOP cost</li>
+        <li>Challenge: all experts must fit in GPU memory</li>
+        <li>Future: expert offloading to CPU/NVMe for larger models</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card7">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/></svg> Quantization &amp; Speculative Decoding</h3>
+  <div class="bts-2col7">
+    <div>
+      <h4>Quantization (INT8, INT4, GPTQ, AWQ)</h4>
+      <p style="font-size:13px;line-height:1.7">Reduce weight precision to decrease memory footprint and improve throughput. Key methods:</p>
+      <table class="bts-table7">
+        <tr><th>Method</th><th>Bits</th><th>Quality Loss</th><th>Used By</th></tr>
+        <tr><td>INT8</td><td>8-bit</td><td>Minimal</td><td>bitsandbytes</td></tr>
+        <tr><td>GPTQ</td><td>4-bit</td><td>~1% on benchmarks</td><td>AutoGPTQ</td></tr>
+        <tr><td>AWQ</td><td>4-bit</td><td>Better than GPTQ</td><td>LLaMA.cpp</td></tr>
+        <tr><td>NF4</td><td>4-bit</td><td>Minimal (QLoRA)</td><td>bitsandbytes</td></tr>
+      </table>
+    </div>
+    <div>
+      <h4>Speculative Decoding</h4>
+      <p style="font-size:13px;line-height:1.7">Autoregressive generation is sequential — one token at a time. Speculative decoding uses a small <em>draft model</em> to generate K tokens quickly, then a <em>verifier</em> (large model) accepts or rejects them in one parallel forward pass:</p>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1;margin-top:8px">
+        <li>Draft: 1.3B model, generates K=4 tokens fast</li>
+        <li>Verify: 70B model checks all 4 in one pass</li>
+        <li>Accept if p_large ≥ p_draft, else resample</li>
+        <li>2–3× throughput improvement in practice</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
   <!-- ═══════════════════════════════════════════════
        QUIZ PREP
   ════════════════════════════════════════════════ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz 6 Practice — LSTM & Attention</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz 6 Practice — LSTM & Attention</h3>
 
     <div class="quiz-q" id="q1">
       <p>Q1. What is the primary reason LSTM outperforms RNN on long sequences?</p>
@@ -718,9 +900,9 @@ s_t = LSTM(s_{t-1}, [y_{t-1}; C_t])</div>
 
   <!-- NAV -->
   <div class="page-nav">
-    <a href="week6.html">← Week 6: CNN & RNN</a>
-    <a href="index.html">🏠 All Weeks</a>
-    <span style="color:var(--muted);font-size:14px;">Week 8: Transformers →</span>
+    <a href="week6.html">← Week 6: CNN &amp; RNN</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> All Weeks</a>
+    <a href="week8.html">Week 8: Multimodal &amp; Multilingual NLP →</a>
   </div>
 
 </div><!-- /container -->
@@ -736,20 +918,20 @@ function toggleConcept(header) {
 
 // ─── Quiz logic ───
 const explanations = {
-  q1: "✅ Correct! LSTM's cell state update uses addition (C_t = f_t⊙C_{t-1} + i_t⊙C̃_t). Gradients flowing through addition don't vanish, unlike the repeated tanh multiplications in a plain RNN.",
-  q2: "✅ Correct! The forget gate uses sigmoid → (0,1). Values near 0 mean 'erase this from cell state'. Values near 1 mean 'keep this'. This is how LSTM selectively removes irrelevant information.",
-  q3: "✅ Correct! C_t = f_t⊙C_{t-1} + i_t⊙C̃_t. The forget gate (f_t) controls how much of the old cell state survives, and the input gate (i_t) controls how much new candidate info (C̃_t) is added.",
-  q4: "✅ Correct! GRU uses only 2 gates (update + reset) vs LSTM's 4, and combines cell state and hidden state into one. Fewer tensor operations means faster training. Performance is often comparable to LSTM.",
-  q5: "✅ Correct! In attention, C_t = Σ α_{t,j}·h_j — a weighted sum where each weight α_{t,j} is learned specifically for the current decoder step t. Different decoder steps attend to different encoder positions.",
-  q6: "✅ Correct — False! Simple encoder-decoder compresses the ENTIRE input into one vector C (the final encoder state). This is the information bottleneck that attention solves by giving the decoder dynamic access to all h_j."
+  q1: "[OK] Correct! LSTM's cell state update uses addition (C_t = f_t⊙C_{t-1} + i_t⊙C̃_t). Gradients flowing through addition don't vanish, unlike the repeated tanh multiplications in a plain RNN.",
+  q2: "[OK] Correct! The forget gate uses sigmoid → (0,1). Values near 0 mean 'erase this from cell state'. Values near 1 mean 'keep this'. This is how LSTM selectively removes irrelevant information.",
+  q3: "[OK] Correct! C_t = f_t⊙C_{t-1} + i_t⊙C̃_t. The forget gate (f_t) controls how much of the old cell state survives, and the input gate (i_t) controls how much new candidate info (C̃_t) is added.",
+  q4: "[OK] Correct! GRU uses only 2 gates (update + reset) vs LSTM's 4, and combines cell state and hidden state into one. Fewer tensor operations means faster training. Performance is often comparable to LSTM.",
+  q5: "[OK] Correct! In attention, C_t = Σ α_{t,j}·h_j — a weighted sum where each weight α_{t,j} is learned specifically for the current decoder step t. Different decoder steps attend to different encoder positions.",
+  q6: "[OK] Correct — False! Simple encoder-decoder compresses the ENTIRE input into one vector C (the final encoder state). This is the information bottleneck that attention solves by giving the decoder dynamic access to all h_j."
 };
 const wrongMsg = {
-  q1: "❌ Not quite. The key advantage is the cell state gradient path — addition preserves gradients, unlike the repeated tanh multiplications in RNN which cause vanishing.",
-  q2: "❌ Not quite. Forget gate values near 0 mean 'erase/forget' from the cell state. sigmoid output of 0 = do not let any information through.",
-  q3: "❌ Not quite. The cell state update is C_t = f_t⊙C_{t-1} + i_t⊙C̃_t — combining filtered old memory with filtered new candidate info.",
-  q4: "❌ Not quite. GRU is SIMPLER than LSTM — fewer gates (2), fewer parameters, faster training. It does NOT use transformers.",
-  q5: "❌ Not quite. The whole point of attention is that C_t is NOT fixed and NOT only the final encoder state. It's a learned weighted sum of ALL encoder states, different at every decoder step.",
-  q6: "❌ Not quite. In simple encoder-decoder, the decoder ONLY sees the single context vector C (last encoder state). Attention was invented specifically to fix this bottleneck."
+  q1: "[X] Not quite. The key advantage is the cell state gradient path — addition preserves gradients, unlike the repeated tanh multiplications in RNN which cause vanishing.",
+  q2: "[X] Not quite. Forget gate values near 0 mean 'erase/forget' from the cell state. sigmoid output of 0 = do not let any information through.",
+  q3: "[X] Not quite. The cell state update is C_t = f_t⊙C_{t-1} + i_t⊙C̃_t — combining filtered old memory with filtered new candidate info.",
+  q4: "[X] Not quite. GRU is SIMPLER than LSTM — fewer gates (2), fewer parameters, faster training. It does NOT use transformers.",
+  q5: "[X] Not quite. The whole point of attention is that C_t is NOT fixed and NOT only the final encoder state. It's a learned weighted sum of ALL encoder states, different at every decoder step.",
+  q6: "[X] Not quite. In simple encoder-decoder, the decoder ONLY sees the single context vector C (last encoder state). Attention was invented specifically to fix this bottleneck."
 };
 function answerQuiz(qid, btn, correct) {
   const container = document.getElementById(qid);
@@ -849,177 +1031,5 @@ function showAttn(decIdx) {
     `Most attention on: "${encWords[weights.indexOf(Math.max(...weights))]}"`;
 }
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card7{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card7 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card7 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col7{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col7{grid-template-columns:1fr}}
-.bts-code7{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-.bts-table7{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table7 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table7 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table7 tr:hover td{background:#fafbff}
-.bts-formula7{background:#eef2ff;border-left:4px solid #4f46e5;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
-.bts-story7{background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%);border-left:4px solid #4f46e5;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story7-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:6px}
-.bts-depth7{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.attn-spectrum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}
-.attn-box{border:2px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;text-align:center;flex:1;min-width:100px}
-.attn-box h5{font-weight:800;margin-bottom:6px;font-size:13px}
-.attn-box p{font-size:11px;color:#64748b;line-height:1.5}
-.arrow7{font-size:18px;color:#94a3b8;flex-shrink:0}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Efficient Transformer Architectures: What Powers Every Frontier LLM in 2026</h2>
-  <p>The Transformer you learned in lecture is not the Transformer running GPT-4, LLaMA-3, or Mixtral. Modern LLMs layer a set of architectural innovations — RoPE, GQA, Flash Attention, MoE, quantization — on top of the vanilla design. This section covers the math and intuition behind each.</p>
-</div>
-
-<div class="bts-card7">
-  <h3>🔄 RoPE: Rotary Position Embeddings <span class="bts-depth7">Used in Every Modern LLM</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Absolute position embeddings (learned or sinusoidal) struggle with sequences longer than training length. RoPE (Su et al., 2021) encodes position via <em>rotation</em> in the complex plane — allowing relative position to naturally emerge in the attention dot product.</p>
-  <div class="bts-2col7">
-    <div>
-      <div class="bts-formula7">Query rotation at position m:
-q_m = q · e^{i·m·θ}
-
-Key rotation at position n:
-k_n = k · e^{i·n·θ}
-
-Attention dot product:
-q_m · k_n = q·k · e^{i·(m-n)·θ}
-         ↑ depends only on (m-n)!</div>
-      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.7">The inner product naturally encodes the <em>relative distance</em> m−n, not absolute positions. Long-range decay is built in: large |m−n| → smaller dot products (more rotation mismatch).</p>
-    </div>
-    <div>
-      <h4>Why RoPE Won</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>No extra parameters (unlike learned absolute PE)</li>
-        <li>Extrapolates to longer sequences better than sinusoidal</li>
-        <li>Can be extended with NTK-aware scaling or YaRN</li>
-        <li>LLaMA-3 supports 128K context via RoPE + fine-tuning</li>
-        <li>Used by: <strong>LLaMA, Mistral, Gemma, Qwen, Falcon, GPT-NeoX</strong></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card7">
-  <h3>👁️ Grouped Query Attention (GQA) — KV-Cache Economics</h3>
-  <div class="bts-story7">
-    <div class="bts-story7-label">📖 The Problem</div>
-    <p style="font-size:14px;line-height:1.8">During autoregressive generation, the model must store Key and Value matrices for every token generated so far — this is the KV-cache. For multi-head attention with H=32 heads and sequence length N, the KV-cache grows as O(N·H·d_head). At 100K tokens, this can be gigabytes per layer, per request. GQA reduces this dramatically.</p>
-  </div>
-  <div class="attn-spectrum">
-    <div class="attn-box"><h5>MHA</h5><p>H queries<br>H keys<br>H values<br><em>Full KV cache</em></p></div>
-    <div class="arrow7">→</div>
-    <div class="attn-box" style="border-color:#4f46e5;background:#eef2ff"><h5>GQA</h5><p>H queries<br>G key groups<br>G value groups<br><em>G &lt;&lt; H</em></p></div>
-    <div class="arrow7">→</div>
-    <div class="attn-box"><h5>MQA</h5><p>H queries<br>1 key<br>1 value<br><em>Minimal cache</em></p></div>
-  </div>
-  <p style="font-size:13px;color:#475569;line-height:1.7"><strong>LLaMA-2 and Mistral use GQA with G=8 groups, H=32 heads</strong> — reducing KV cache by 4× vs. MHA with minimal quality loss. LLaMA-3 70B uses GQA with 8 KV heads for 8 query head groups. This is why LLaMA-3 can handle much longer contexts than LLaMA-1.</p>
-</div>
-
-<div class="bts-card7">
-  <h3>⚡ Flash Attention — Making O(N²) Practical <span class="bts-depth7">Systems</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Standard attention computes the full N×N attention matrix in GPU HBM (high-bandwidth memory), then applies softmax, then multiplies by V. For N=32K, this requires ~4GB just for the attention matrix. Flash Attention (Dao et al., 2022) avoids materializing it.</p>
-  <div class="bts-2col7">
-    <div>
-      <h4>The Tiling Insight</h4>
-      <div class="bts-formula7"><span style="color:#94a3b8"># Standard: materialize full N×N matrix</span>
-S = Q·K^T / √d         <span style="color:#94a3b8"># [N,N] in HBM 😰</span>
-P = softmax(S)         <span style="color:#94a3b8"># [N,N] in HBM</span>
-O = P·V                <span style="color:#94a3b8"># [N,d] in HBM</span>
-
-<span style="color:#94a3b8"># Flash: tile Q,K,V into SRAM blocks</span>
-for Q_block in tiles(Q):
-  for K_block in tiles(K):
-    compute partial S in SRAM  <span style="color:#94a3b8"># fast!</span>
-    accumulate softmax online   <span style="color:#94a3b8"># no HBM!</span>
-    update O incrementally</div>
-    </div>
-    <div>
-      <h4>Results</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>Memory: O(N) instead of O(N²)</li>
-        <li>Speed: 2–4× wall-clock faster on A100</li>
-        <li>Exact output — not an approximation</li>
-        <li>Flash Attention 2 (2023): 2× over FA1 via better work partitioning</li>
-        <li>Flash Attention 3 (2024): asynchronous TMA on H100 GPUs</li>
-        <li>Integrated in PyTorch 2.0 as default via SDPA</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card7">
-  <h3>🔀 Mixture of Experts (MoE) — Scaling Parameters Without Scaling Cost <span class="bts-depth7">Architecture</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">Standard transformers activate <em>all</em> parameters for every token. MoE replaces each FFN layer with E expert FFN sub-networks, but only activates top-k experts per token — keeping FLOPs constant while increasing parameter count.</p>
-  <div class="bts-2col7">
-    <div>
-      <div class="bts-formula7"><span style="color:#94a3b8"># MoE Layer forward pass</span>
-gates = softmax(Router(x))     <span style="color:#94a3b8"># [E] scores</span>
-top_k_idx = topk(gates, k=2)   <span style="color:#94a3b8"># pick 2 experts</span>
-
-output = Σᵢ gates[i] · Expert_i(x)
-  for i in top_k_idx
-
-<span style="color:#94a3b8"># Load balancing loss prevents expert collapse</span>
-L_aux = α · Σᵢ (fᵢ · pᵢ)
-  where fᵢ = fraction of tokens → expert i</div>
-    </div>
-    <div>
-      <h4>Mixtral 8×7B (2024) Example</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>8 expert FFNs per layer, top-2 selected per token</li>
-        <li>47B total parameters, 13B active per token</li>
-        <li>Matches Llama-2 70B quality at 5× lower FLOP cost</li>
-        <li>Challenge: all experts must fit in GPU memory</li>
-        <li>Future: expert offloading to CPU/NVMe for larger models</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card7">
-  <h3>🗜️ Quantization &amp; Speculative Decoding</h3>
-  <div class="bts-2col7">
-    <div>
-      <h4>Quantization (INT8, INT4, GPTQ, AWQ)</h4>
-      <p style="font-size:13px;line-height:1.7">Reduce weight precision to decrease memory footprint and improve throughput. Key methods:</p>
-      <table class="bts-table7">
-        <tr><th>Method</th><th>Bits</th><th>Quality Loss</th><th>Used By</th></tr>
-        <tr><td>INT8</td><td>8-bit</td><td>Minimal</td><td>bitsandbytes</td></tr>
-        <tr><td>GPTQ</td><td>4-bit</td><td>~1% on benchmarks</td><td>AutoGPTQ</td></tr>
-        <tr><td>AWQ</td><td>4-bit</td><td>Better than GPTQ</td><td>LLaMA.cpp</td></tr>
-        <tr><td>NF4</td><td>4-bit</td><td>Minimal (QLoRA)</td><td>bitsandbytes</td></tr>
-      </table>
-    </div>
-    <div>
-      <h4>Speculative Decoding</h4>
-      <p style="font-size:13px;line-height:1.7">Autoregressive generation is sequential — one token at a time. Speculative decoding uses a small <em>draft model</em> to generate K tokens quickly, then a <em>verifier</em> (large model) accepts or rejects them in one parallel forward pass:</p>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1;margin-top:8px">
-        <li>Draft: 1.3B model, generates K=4 tokens fast</li>
-        <li>Verify: 70B model checks all 4 in one pass</li>
-        <li>Accept if p_large ≥ p_draft, else resample</li>
-        <li>2–3× throughput improvement in practice</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>

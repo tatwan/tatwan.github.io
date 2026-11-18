@@ -121,6 +121,16 @@
   /* slider style */
   input[type=range] { accent-color: var(--primary); }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="2"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 2: Naive Bayes &amp; Classification Evaluation" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -138,9 +148,9 @@
   <h1>Naive Bayes &amp; Classification Evaluation</h1>
   <p>Our first real classifier — and the tools to know whether it's actually working. Both are critical foundations for the rest of the course.</p>
   <div class="header-chips">
-    <span class="chip">📦 Module 3</span>
-    <span class="chip">📝 Quiz 2 Material</span>
-    <span class="chip">💻 HW1: classify.py &amp; metrics.py</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Module 3</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Quiz 2 Material</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW1: classify.py &amp; metrics.py</span>
   </div>
 </div>
 
@@ -149,7 +159,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🗺️</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture</h2><div class="sub">Week 2 connects Week 1 representations to predictions</div></div>
     </div>
     <div class="callout">
@@ -168,14 +178,14 @@
   <!-- PART 1: NAIVE BAYES -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🧮</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/></svg></div>
       <div><h2>Part 1: Naive Bayes</h2><div class="sub">A probabilistic text classifier built on Bayes' Rule</div></div>
     </div>
 
     <!-- Bayes Rule -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📐 Bayes' Rule — The Foundation</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> Bayes' Rule — The Foundation</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -206,7 +216,7 @@ Where:
         </div>
 
         <div class="callout tip">
-          <strong>💡 Why we ignore P(X) during prediction</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Why we ignore P(X) during prediction</strong>
           We compare P(spam|X) vs P(not-spam|X). Since P(X) is the same for both, it cancels out! We only need to compare <strong>Likelihood × Prior</strong> for each class.
         </div>
       </div>
@@ -215,7 +225,7 @@ Where:
     <!-- Naive Assumption -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🤔 Why "Naive"? The Independence Assumption</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Why "Naive"? The Independence Assumption</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -236,7 +246,7 @@ P(X | Y) = P(w₁|Y) × P(w₂|Y) × ... × P(wₙ|Y)
          = ∏ P(wᵢ | Y)    ← just a product of individual word probs
         </div>
         <div class="callout warning">
-          <strong>⚠️ Quiz 2 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 2 Tested This!</strong>
           "The position of words in the document is important for Naive Bayes" → <strong>FALSE</strong>. NB uses BoW — order doesn't matter.
         </div>
       </div>
@@ -245,7 +255,7 @@ P(X | Y) = P(w₁|Y) × P(w₂|Y) × ... × P(wₙ|Y)
     <!-- How to calculate -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔢 How to Calculate — Multinomial NB for NLP</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> How to Calculate — Multinomial NB for NLP</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -271,7 +281,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Naive Bayes Spam Classifier Demo</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Naive Bayes Spam Classifier Demo</h4>
           <div class="desc">Enter a sentence and see how the NB classifier scores it as spam vs. not-spam using a small trained vocabulary.</div>
           <div style="margin-bottom:12px;">
             <input type="text" id="nbInput" placeholder="e.g. free money win prize" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;" value="free money win prize now">
@@ -282,7 +292,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
 
         <div class="two-col" style="margin-top:16px;">
           <div class="mini-card">
-            <h4>✅ Advantages of Naive Bayes</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Advantages of Naive Bayes</h4>
             <ul class="bullet">
               <li>Very simple, fast to train (just counting!)</li>
               <li><strong>No optimization loop needed</strong> — just compute counts</li>
@@ -291,7 +301,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
             </ul>
           </div>
           <div class="mini-card">
-            <h4>❌ Disadvantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Disadvantages</h4>
             <ul class="bullet">
               <li>Word position and order ignored</li>
               <li>Independence assumption is unrealistic</li>
@@ -302,7 +312,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
         </div>
 
         <div class="callout">
-          <strong>🔑 Generative vs. Discriminative</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Generative vs. Discriminative</strong>
           Naive Bayes is <strong>generative</strong> — it models both P(X|Y) and P(Y) to reconstruct how data was generated.
           Logistic Regression, SVM, Neural Nets are <strong>discriminative</strong> — they compute P(Y|X) directly without modeling P(X|Y).
         </div>
@@ -313,14 +323,14 @@ P(word_w | Y=c) = count(word_w in class c docs)
   <!-- PART 2: EVALUATION -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">📏</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg></div>
       <div><h2>Part 2: Classification Evaluation</h2><div class="sub">How do we know if our model is actually good?</div></div>
     </div>
 
     <!-- Confusion Matrix -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔲 The Confusion Matrix</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9 12 2"/></svg> The Confusion Matrix</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -375,23 +385,23 @@ P(word_w | Y=c) = count(word_w in class c docs)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Interactive Confusion Matrix Calculator</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive Confusion Matrix Calculator</h4>
           <div class="desc">Adjust TP, FP, FN, TN to see how metrics change. Watch what happens when data is imbalanced!</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
             <div>
-              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">✅ True Positives (TP): <span id="tpVal">45</span></label>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> True Positives (TP): <span id="tpVal">45</span></label>
               <input type="range" min="0" max="100" value="45" id="tpSlider" oninput="updateCM()" style="width:100%">
             </div>
             <div>
-              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">❌ False Positives (FP): <span id="fpVal">10</span></label>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> False Positives (FP): <span id="fpVal">10</span></label>
               <input type="range" min="0" max="100" value="10" id="fpSlider" oninput="updateCM()" style="width:100%">
             </div>
             <div>
-              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">❌ False Negatives (FN): <span id="fnVal">5</span></label>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> False Negatives (FN): <span id="fnVal">5</span></label>
               <input type="range" min="0" max="100" value="5" id="fnSlider" oninput="updateCM()" style="width:100%">
             </div>
             <div>
-              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">✅ True Negatives (TN): <span id="tnVal">40</span></label>
+              <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> True Negatives (TN): <span id="tnVal">40</span></label>
               <input type="range" min="0" max="100" value="40" id="tnSlider" oninput="updateCM()" style="width:100%">
             </div>
           </div>
@@ -399,7 +409,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 2 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 2 Tested This!</strong>
           "Confusion matrix can only be used for binary classification" → <strong>FALSE</strong>. It works for multi-class too (e.g., sports/news/politics).
         </div>
       </div>
@@ -408,7 +418,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
     <!-- ROC & AUC -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📈 ROC Curve &amp; AUC</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> ROC Curve &amp; AUC</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -459,7 +469,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Warning: AUC alone isn't everything!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Warning: AUC alone isn't everything!</strong>
           Two models can have the same AUC but very different behavior. One might have TPR=0 for low thresholds — terrible for medical diagnosis. Always inspect the full curve, not just the summary number.
         </div>
       </div>
@@ -468,12 +478,12 @@ P(word_w | Y=c) = count(word_w in class c docs)
 
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 2 Questions</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 2 Questions</h3>
 
     <div class="quiz-q">
       <p>Q1. In text classification with Naive Bayes, what is P(class | document) called?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! P(Y|X) is the posterior — the probability of the class GIVEN we already observed the document.')">Posterior probability ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! P(Y|X) is the posterior — the probability of the class GIVEN we already observed the document.')">Posterior probability</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Likelihood is P(X|Y) — the probability of observing these words given the class.')">Likelihood</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Prior is P(Y) — the baseline probability of each class before seeing any evidence.')">Prior probability</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Evidence is P(X), which is constant across classes and ignored in NB prediction.')">Evidence</button>
@@ -484,7 +494,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
     <div class="quiz-q">
       <p>Q2. Which statement does NOT hold true for Naive Bayes?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! NB assumes word independence — position doesn\'t matter. It\'s bag-of-words based.')">The position of words in the document is important ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! NB assumes word independence — position doesn\'t matter. It\'s bag-of-words based.')">The position of words in the document is important</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','NB IS a generative model — it models P(X|Y) and P(Y).')">It is a generative model</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This IS true — NB assumes P(w₁,w₂,...|Y) = ∏P(wᵢ|Y).')">Features are assumed to be independent given a label</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This IS true — NB just counts occurrences, no gradient descent needed.')">No actual training is needed in Naïve Bayes</button>
@@ -495,7 +505,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
     <div class="quiz-q">
       <p>Q3. Accuracy may not be informative when evaluating highly imbalanced data — True or False?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! If 99% of data is class A, always predicting A gives 99% accuracy but zero usefulness. Use Precision/Recall/F1/AUC instead.')">True — accuracy is misleading for imbalanced data ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! If 99% of data is class A, always predicting A gives 99% accuracy but zero usefulness. Use Precision/Recall/F1/AUC instead.')">True — accuracy is misleading for imbalanced data</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False — accuracy alone IS problematic for imbalanced datasets.')">False — accuracy always works fine</button>
       </div>
       <div class="quiz-feedback" id="qf2"></div>
@@ -505,7 +515,7 @@ P(word_w | Y=c) = count(word_w in class c docs)
       <p>Q4. Which of these statements about the confusion matrix is CORRECT?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Confusion matrices absolutely work for multi-class — you just get a larger matrix.')">Confusion matrix can only be used for binary classification</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! A True Negative means the model predicted negative AND the actual label is negative — both agree on the negative.')">True Negative: actual class is negative, prediction is negative ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! A True Negative means the model predicted negative AND the actual label is negative — both agree on the negative.')">True Negative: actual class is negative, prediction is negative</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','False Positive is when actual=negative but predicted=positive. You described True Negative.')">False Positive: actual=negative, predicted=negative</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Confusion matrices are specifically for classification, not regression.')">Confusion matrix can be used to evaluate regression models</button>
       </div>
@@ -547,7 +557,7 @@ function runNB() {
     logHam  += Math.log(ph);
     breakdown += `  "${w}": P(spam)=${ps.toFixed(3)}, P(ham)=${ph.toFixed(3)}\n`;
   });
-  const winner = logSpam > logHam ? '🚨 SPAM' : '✅ NOT SPAM';
+  const winner = logSpam > logHam ? '[ALERT] SPAM' : '[OK] NOT SPAM';
   const conf = Math.abs(logSpam - logHam).toFixed(2);
   document.getElementById('nbOutput').textContent =
     `Prior: P(spam)=${pSpam}, P(ham)=${pHam}\n\nWord-by-word likelihoods:\n${breakdown}\nlog P(spam|doc) = ${logSpam.toFixed(3)}\nlog P(ham|doc)  = ${logHam.toFixed(3)}\n\nResult: ${winner}  (margin = ${conf})`;
@@ -571,7 +581,7 @@ function updateCM() {
     ? (2 * (tp/(tp+fp)) * (tp/(tp+fn)) / ((tp/(tp+fp)) + (tp/(tp+fn))) * 100).toFixed(1) : 'N/A';
   const fpr = (fp + tn) > 0 ? (fp / (fp + tn) * 100).toFixed(1) : 'N/A';
   const warning = parseFloat(accuracy) > 90 && parseFloat(recall) < 50
-    ? '\n⚠️ WARNING: High accuracy but low recall — possible imbalanced data issue!' : '';
+    ? '\n[WARN] WARNING: High accuracy but low recall — possible imbalanced data issue!' : '';
   document.getElementById('cmOutput').textContent =
     `Total samples: ${total}\n\nAccuracy  = (${tp}+${tn})/${total} = ${accuracy}%\nPrecision = ${tp}/(${tp}+${fp}) = ${precision}%\nRecall    = ${tp}/(${tp}+${fn}) = ${recall}%\nF1 Score  = ${f1}%\nFalse Positive Rate = ${fpr}%${warning}`;
 }

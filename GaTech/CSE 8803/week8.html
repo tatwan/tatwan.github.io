@@ -60,8 +60,32 @@
   .cmp-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
   .cmp-table tr:hover td { background: #fafbff; }
   .depth-badge { display: inline-block; background: var(--purple); color: white; border-radius: 12px; padding: 2px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
-  .interactive-box { background: var(--primary-light); border: 1px solid #fed7aa; border-radius: 12px; padding: 22px; margin: 16px 0; }
-  .interactive-box h4 { font-weight: 700; margin-bottom: 12px; }
+  .interactive-box { background: var(--card); border: 2px solid var(--primary); border-radius: 14px; padding: 24px; margin: 24px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .interactive-box h4 { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px; }
+  .interactive-box .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .demo-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .demo-tab { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .demo-tab:hover { border-color: var(--primary); color: var(--primary-dark); }
+  .demo-tab.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+  .demo-panel { display: none; }
+  .demo-panel.active { display: block; }
+  .lang-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .lang-btn { padding: 6px 12px; border: 1px solid #fed7aa; border-radius: 999px; background: var(--primary-light); color: var(--primary-dark); font-size: 12px; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .tok-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  @media(max-width:680px){ .tok-compare { grid-template-columns: 1fr; } }
+  .tok-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .tok-card h5 { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .tok-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .tok-chip { font-family: monospace; font-size: 12px; padding: 3px 7px; border-radius: 6px; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; }
+  .tok-stat { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .tok-stat strong { color: var(--primary-dark); }
+  .clip-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; background: #fff7ed; padding: 12px 14px; border-radius: 10px; border: 1px solid #fed7aa; }
+  .clip-controls label { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+  .clip-matrix { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .clip-matrix th, .clip-matrix td { padding: 8px 10px; border: 1px solid var(--border); text-align: center; }
+  .clip-matrix th { background: #f8fafc; font-weight: 700; color: var(--text); }
+  .clip-note { margin-top: 10px; font-size: 13px; background: #f8fafc; border-left: 4px solid var(--primary); padding: 10px 14px; border-radius: 0 8px 8px 0; color: var(--text); }
   .quiz-section { background: #1e293b; color: white; border-radius: 16px; padding: 28px; margin-top: 40px; }
   .quiz-section h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
   .quiz-q { margin-bottom: 24px; }
@@ -75,7 +99,20 @@
   .quiz-feedback.show { display: block; }
   .quiz-feedback.correct { background: rgba(5,150,105,0.2); color: #6ee7b7; }
   .quiz-feedback.wrong { background: rgba(220,38,38,0.2); color: #fca5a5; }
+  .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-dark); font-weight: 600; font-size: 14px; }
+  .page-nav a:hover { color: var(--primary); }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="8"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 8: Multimodal NLP &amp; Multilingual Models" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -93,10 +130,10 @@
   <h1>Multimodal NLP &amp; Multilingual Models</h1>
   <p>CLIP, LLaVA, Flamingo — bridging vision and language. mBERT, XLM-R — enabling NLP across 100+ languages. These are the architectures that extend NLP beyond English text.</p>
   <div class="header-chips">
-    <span class="chip">🖼️ Vision-Language</span>
-    <span class="chip">🌍 Multilingual</span>
-    <span class="chip">🔬 Graduate Depth</span>
-    <span class="chip">📍 Beyond the Syllabus</span>
+    <span class="chip">Vision-Language</span>
+    <span class="chip">Multilingual</span>
+    <span class="chip">Graduate Depth</span>
+    <span class="chip">Beyond the Syllabus</span>
   </div>
 </header>
 
@@ -105,7 +142,7 @@
 <!-- SECTION 1: MULTIMODAL -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon orange">🖼️</div>
+    <div class="section-icon orange" style="color:#c2410c;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
     <div>
       <h2>Multimodal NLP: Vision + Language</h2>
       <div class="sub">CLIP · LLaVA · Flamingo · Contrastive Pretraining</div>
@@ -114,7 +151,7 @@
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🔗 CLIP: Contrastive Language-Image Pretraining</h3>
+      <h3>CLIP: Contrastive Language-Image Pretraining</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -123,7 +160,7 @@
       </div>
       <p style="font-size:14px;line-height:1.8;margin-bottom:14px">CLIP (Radford et al., OpenAI 2021) trained on 400M image-text pairs from the web. The key insight: instead of predicting image labels, train a model to match images with their natural language descriptions using <em>contrastive loss</em>.</p>
       <div class="story-box">
-        <div class="story-label">📖 Why CLIP Changed Everything</div>
+        <div class="story-label">Why CLIP Changed Everything</div>
         <p style="font-size:14px;line-height:1.8">Before CLIP, you needed labeled training data for each vision task. CLIP enables <strong>zero-shot classification</strong>: given a new class "raccoon eating pizza," just encode the text "a photo of a raccoon eating pizza" and find the image whose embedding is closest. No raccoon-pizza training examples needed. This opened the door to general-purpose vision-language models.</p>
       </div>
       <h4>CLIP Architecture</h4>
@@ -162,7 +199,7 @@ Loss: symmetric InfoNCE (cross-entropy on rows AND columns)
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🦙 LLaVA: Visual Instruction Tuning</h3>
+      <h3>LLaVA: Visual Instruction Tuning</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -191,7 +228,7 @@ Training Stage 2: Freeze CLIP, fine-tune W + LLM jointly
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🦩 Flamingo: Cross-Attention Vision-Language Model</h3>
+      <h3>Flamingo: Cross-Attention Vision-Language Model</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
@@ -218,7 +255,7 @@ Key innovations:
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>📊 Multimodal Model Comparison</h3>
+      <h3>Multimodal Model Comparison</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
@@ -237,7 +274,7 @@ Key innovations:
 <!-- SECTION 2: MULTILINGUAL -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon teal">🌍</div>
+    <div class="section-icon teal" style="color:#0f766e;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
     <div>
       <h2>Multilingual NLP: Models for 100+ Languages</h2>
       <div class="sub">mBERT · XLM-R · Cross-lingual Transfer · Low-Resource NLP</div>
@@ -246,7 +283,7 @@ Key innovations:
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🌐 mBERT: Multilingual BERT</h3>
+      <h3>mBERT: Multilingual BERT</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -255,7 +292,7 @@ Key innovations:
       </div>
       <p style="font-size:14px;line-height:1.8;margin-bottom:14px">mBERT (Google 2019) trains BERT on Wikipedia dumps from 104 languages simultaneously, using a shared WordPiece vocabulary of 110K tokens. No cross-lingual objective — just masked language modeling on multilingual text.</p>
       <div class="story-box">
-        <div class="story-label">📖 The Surprising Result: Zero-Shot Cross-Lingual Transfer</div>
+        <div class="story-label">The Surprising Result: Zero-Shot Cross-Lingual Transfer</div>
         <p style="font-size:14px;line-height:1.8">The remarkable finding: fine-tune mBERT on English NER, then test it on German NER <em>with no German labeled data</em>. It works — achieving ~75% of the performance of a German-only model. The shared vocabulary and joint pretraining create a universal representation where analogous entities occupy similar positions across languages. This "cross-lingual transfer" emerged without explicit cross-lingual supervision.</p>
       </div>
       <div class="info-grid">
@@ -277,7 +314,7 @@ Key innovations:
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🚀 XLM-R: Cross-lingual Language Model — RoBERTa Scale</h3>
+      <h3>XLM-R: Cross-lingual Language Model — RoBERTa Scale</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body open">
@@ -300,7 +337,7 @@ Key innovations:
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>🌙 Arabic NLP: A Case Study in Morphological Richness</h3>
+      <h3>Arabic NLP: A Case Study in Morphological Richness</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
@@ -331,7 +368,7 @@ Key innovations:
 
   <div class="concept-card">
     <div class="concept-header" onclick="toggleCard(this)">
-      <h3>📊 Cross-Lingual Transfer Strategies</h3>
+      <h3>Cross-Lingual Transfer Strategies</h3>
       <span class="chevron">▼</span>
     </div>
     <div class="concept-body">
@@ -347,9 +384,47 @@ Key innovations:
   </div>
 </div>
 
+<!-- INTERACTIVE EXPLORER -->
+<div class="interactive-box">
+  <h4 style="display:flex;align-items:center;gap:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive: Multilingual Tokenizer Fertility &amp; CLIP InfoNCE Explorer</h4>
+  <p class="desc">Switch between the two tabs to inspect (1) how subword tokenizers split languages at different fertility rates, and (2) how temperature &tau; sharpens CLIP's contrastive alignment matrix.</p>
+
+  <div class="demo-tabs">
+    <button class="demo-tab active" onclick="switchW8Tab('tok', this)" style="display:inline-flex;align-items:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Tokenizer Fertility (mBERT vs XLM-R)</button>
+    <button class="demo-tab" onclick="switchW8Tab('clip', this)" style="display:inline-flex;align-items:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> CLIP InfoNCE Temperature (&tau;)</button>
+  </div>
+
+  <div class="demo-panel active" id="w8-panel-tok">
+    <div class="lang-btns">
+      <button class="lang-btn active" onclick="selectLang('en', this)">English</button>
+      <button class="lang-btn" onclick="selectLang('es', this)">Spanish</button>
+      <button class="lang-btn" onclick="selectLang('de', this)">German Compound</button>
+      <button class="lang-btn" onclick="selectLang('ar', this)">Arabic (Morphology)</button>
+      <button class="lang-btn" onclick="selectLang('sw', this)">Swahili (Low-Resource)</button>
+    </div>
+    <div id="tokPromptDisplay" style="font-size:13px;background:#fff7ed;border:1px solid #fed7aa;padding:10px 12px;border-radius:8px;margin-bottom:10px;"></div>
+    <div class="tok-compare" id="tokCompareGrid"></div>
+    <div class="clip-note" id="tokTakeaway"></div>
+  </div>
+
+  <div class="demo-panel" id="w8-panel-clip">
+    <div class="clip-controls">
+      <label for="tauSlider">Contrastive Temperature &tau;: <span id="tauVal">0.07</span></label>
+      <input type="range" id="tauSlider" min="0.01" max="0.50" step="0.01" value="0.07" oninput="updateClipMatrix(this.value)" style="flex:1;min-width:160px;accent-color:#c2410c;">
+      <button class="lang-btn" onclick="setTauPreset(0.01)">&tau; = 0.01 (Converged CLIP)</button>
+      <button class="lang-btn" onclick="setTauPreset(0.07)">&tau; = 0.07 (Init)</button>
+      <button class="lang-btn" onclick="setTauPreset(0.40)">&tau; = 0.40 (Soft)</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="clip-matrix" id="clipMatrixTable"></table>
+    </div>
+    <div class="clip-note" id="clipLossBox"></div>
+  </div>
+</div>
+
 <!-- QUIZ -->
 <div class="quiz-section">
-  <h3>🧠 Knowledge Check: Multimodal &amp; Multilingual NLP</h3>
+  <h3>Knowledge Check: Multimodal &amp; Multilingual NLP</h3>
 
   <div class="quiz-q">
     <p>1. CLIP's training objective maximizes similarity between correct image-text pairs. What loss function does it use?</p>
@@ -377,8 +452,8 @@ Key innovations:
     <p>3. In LLaVA's architecture, what is the primary role of the projection layer between the CLIP encoder and the LLM?</p>
     <div class="quiz-opts">
       <button class="quiz-opt" onclick="answerQuiz(this,'wrong','CLIP already performs the visual understanding — the projection layer does not do additional visual feature extraction. Its role is dimensional/semantic alignment.')">Extract visual features from images</button>
-      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Contrastive alignment is what CLIP's training achieves. LLaVA's projection layer maps CLIP output into the LLM token space — no contrastive objective is used at this step.')">Apply contrastive loss between modalities</button>
-      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The projection layer (linear or MLP) maps CLIP visual embeddings from vision feature space into the LLM text token embedding space. This allows the frozen LLM to "read" visual tokens as if they were word tokens. Stage 1 training specifically optimizes this layer while keeping both CLIP and LLM frozen.')">Map visual embeddings into the LLM token embedding space</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Contrastive alignment is what CLIP\'s training achieves. LLaVA\'s projection layer maps CLIP output into the LLM token space — no contrastive objective is used at this step.')">Apply contrastive loss between modalities</button>
+      <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! The projection layer (linear or MLP) maps CLIP visual embeddings from vision feature space into the LLM text token embedding space. This allows the frozen LLM to &quot;read&quot; visual tokens as if they were word tokens. Stage 1 training specifically optimizes this layer while keeping both CLIP and LLM frozen.')">Map visual embeddings into the LLM token embedding space</button>
       <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Compression does happen (CLIP outputs many patch tokens), but the primary purpose is space alignment — making visual embeddings interpretable by the text-trained LLM. The projection changes the dimensionality AND semantic space.')">Compress the image to reduce token count</button>
     </div>
     <div class="quiz-feedback" id="qf3"></div>
@@ -394,6 +469,12 @@ Key innovations:
     </div>
     <div class="quiz-feedback" id="qf4"></div>
   </div>
+</div>
+
+<div class="page-nav">
+  <a href="week7.html">&larr; Week 7: LSTM, GRU &amp; Attention</a>
+  <a href="index.html">All Weeks</a>
+  <a href="week9.html">Week 9: Transformers, BERT &amp; GPT &rarr;</a>
 </div>
 
 </div><!-- /container -->
@@ -415,6 +496,117 @@ function answerQuiz(btn, result, explanation) {
   feedbackEl.textContent = explanation;
   feedbackEl.className = `quiz-feedback show ${result}`;
 }
+
+function switchW8Tab(panel, btn) {
+  document.querySelectorAll('.demo-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('w8-panel-' + panel).classList.add('active');
+}
+
+const tokExamples = {
+  en: {
+    phrase: 'unbelievable transformer architecture',
+    words: 3,
+    mbert: ['un', '##beli', '##eva', '##ble', 'transform', '##er', 'architecture'],
+    xlmr: ['▁un', 'believ', 'able', '▁transform', 'er', '▁architecture'],
+    note: 'English dominates pretraining corpora in both models, yielding low fertility (~2.0–2.3 tokens/word) and minimal context-window waste.'
+  },
+  es: {
+    phrase: 'procesamiento del lenguaje natural',
+    words: 4,
+    mbert: ['procesa', '##miento', 'del', 'lenguaje', 'natural'],
+    xlmr: ['▁proces', 'amiento', '▁del', '▁lenguaje', '▁natural'],
+    note: 'High-resource Latin-script languages share cognates and subwords cleanly; both mBERT and XLM-R achieve ~1.25 tokens/word here.'
+  },
+  de: {
+    phrase: 'Donaudampfschifffahrtsgesellschaft',
+    words: 1,
+    mbert: ['Donau', '##dam', '##pf', '##schiff', '##fahrt', '##s', '##gesell', '##schaft'],
+    xlmr: ['▁Donau', 'dampf', 'schiff', 'fahrt', 's', 'gesellschaft'],
+    note: 'German compound words split into morphological pieces; XLM-R’s 250K SentencePiece vocab keeps larger stems intact (6 vs 8 subwords).'
+  },
+  ar: {
+    phrase: 'الكتب والمكتبات الرقمية',
+    words: 3,
+    mbert: ['ال', '##كت', '##ب', 'و', '##ال', '##م', '##كت', '##بات', 'ال', '##رقم', '##ية'],
+    xlmr: ['▁الكتب', '▁والمكتبات', '▁الرقم', 'ية'],
+    note: 'mBERT’s 110K WordPiece vocabulary severely under-allocates non-Latin scripts (3.67 fertility — fragments root ك-ت-ب into single letters), whereas XLM-R’s 250K SentencePiece cuts fertility nearly 3× (1.33 tokens/word).'
+  },
+  sw: {
+    phrase: 'kujifunza kwa mashine',
+    words: 3,
+    mbert: ['ku', '##ji', '##fun', '##za', 'kw', '##a', 'ma', '##shi', '##ne'],
+    xlmr: ['▁kujifunza', '▁kwa', '▁ma', 'shine'],
+    note: 'The "curse of multilinguality": low-resource languages suffer severe over-segmentation in small shared vocabularies, consuming up to 2–3× more sequence-length budget per sentence.'
+  }
+};
+
+function selectLang(code, btn) {
+  document.querySelectorAll('.lang-btn[onclick^="selectLang"]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const d = tokExamples[code];
+  document.getElementById('tokPromptDisplay').innerHTML = '<strong>Input (' + d.words + ' words):</strong> <span style="font-family:monospace;">' + d.phrase + '</span>';
+  const mFert = (d.mbert.length / d.words).toFixed(2);
+  const xFert = (d.xlmr.length / d.words).toFixed(2);
+  document.getElementById('tokCompareGrid').innerHTML =
+    '<div class="tok-card"><h5>mBERT (110K WordPiece) <span style="color:#c2410c;">' + d.mbert.length + ' tokens</span></h5>' +
+      '<div class="tok-list">' + d.mbert.map(t => '<span class="tok-chip">' + t + '</span>').join('') + '</div>' +
+      '<div class="tok-stat">Fertility: <strong>' + mFert + ' tokens/word</strong> &middot; Tax vs XLM-R: <strong>' + (d.mbert.length / d.xlmr.length).toFixed(2) + '&times;</strong></div></div>' +
+    '<div class="tok-card"><h5>XLM-R (250K SentencePiece) <span style="color:#059669;">' + d.xlmr.length + ' tokens</span></h5>' +
+      '<div class="tok-list">' + d.xlmr.map(t => '<span class="tok-chip">' + t + '</span>').join('') + '</div>' +
+      '<div class="tok-stat">Fertility: <strong>' + xFert + ' tokens/word</strong> &middot; Raw Unicode (no pre-tok)</div></div>';
+  document.getElementById('tokTakeaway').textContent = d.note;
+}
+
+const clipLabels = ['Dog photo', 'Mountain sunset', 'Espresso cup'];
+const clipCosine = [
+  [0.34, 0.08, 0.05],
+  [0.09, 0.31, 0.07],
+  [0.04, 0.06, 0.36]
+];
+
+function setTauPreset(v) {
+  document.getElementById('tauSlider').value = v;
+  updateClipMatrix(v);
+}
+
+function updateClipMatrix(val) {
+  const tau = parseFloat(val);
+  document.getElementById('tauVal').textContent = tau.toFixed(2);
+  let html = '<tr><th>Image \\ Text Prompt</th>' + clipLabels.map(l => '<th>"' + l + '"</th>').join('') + '</tr>';
+  let rowLossSum = 0;
+  let colLossSum = 0;
+  const probs = clipCosine.map(row => {
+    const scaled = row.map(s => s / tau);
+    const maxS = Math.max(...scaled);
+    const exps = scaled.map(s => Math.exp(s - maxS));
+    const sumE = exps.reduce((a, b) => a + b, 0);
+    return exps.map(e => e / sumE);
+  });
+  for (let i = 0; i < 3; i++) {
+    rowLossSum += -Math.log(Math.max(probs[i][i], 1e-12));
+    // column softmax for symmetric InfoNCE
+    const colScaled = [0, 1, 2].map(r => clipCosine[r][i] / tau);
+    const maxC = Math.max(...colScaled);
+    const colExps = colScaled.map(s => Math.exp(s - maxC));
+    const colSum = colExps.reduce((a, b) => a + b, 0);
+    colLossSum += -Math.log(Math.max(colExps[i] / colSum, 1e-12));
+    html += '<tr><th>' + clipLabels[i] + '</th>' + probs[i].map((p, j) => {
+      const bg = i === j ? 'rgba(5,150,105,' + (0.12 + p * 0.35).toFixed(2) + ')' : 'rgba(249,115,22,' + (p * 0.25).toFixed(2) + ')';
+      return '<td style="background:' + bg + ';font-weight:' + (i === j ? '800' : '500') + '">cos=' + clipCosine[i][j].toFixed(2) + '<br>P=' + (p * 100).toFixed(1) + '%</td>';
+    }).join('') + '</tr>';
+  }
+  const symLoss = ((rowLossSum + colLossSum) / 6).toFixed(4);
+  const avgDiag = (((probs[0][0] + probs[1][1] + probs[2][2]) / 3) * 100).toFixed(1);
+  document.getElementById('clipMatrixTable').innerHTML = html;
+  document.getElementById('clipLossBox').innerHTML =
+    '<strong>Mean Diagonal Confidence:</strong> ' + avgDiag + '% &middot; <strong>Symmetric InfoNCE Loss:</strong> ' + symLoss +
+    ' &mdash; Lower &tau; amplifies small cosine differences between true pairs and batch negatives, sharpening gradients until saturation.';
+}
+
+selectLang('en', document.querySelector('.lang-btn'));
+updateClipMatrix(0.07);
 </script>
 </body>
 </html>

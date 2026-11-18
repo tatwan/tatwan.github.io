@@ -20,11 +20,18 @@
   header .badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
   header h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; margin-bottom: 12px; }
   header p { font-size: 18px; opacity: 0.85; max-width: 600px; margin: 0 auto 24px; }
-  .header-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
-  .header-meta span { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 16px; font-size: 14px; }
-  .progress-bar-wrap { background: rgba(255,255,255,0.15); border-radius: 99px; height: 8px; max-width: 400px; margin: 20px auto 0; }
-  .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 62.5%; transition: width 1s ease; }
-  .progress-label { font-size: 13px; opacity: 0.8; margin-top: 6px; }
+  .header-meta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .header-meta span { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 16px; font-size: 14px; display: inline-flex; align-items: center; gap: 7px; }
+  .progress-bar-wrap { background: rgba(255,255,255,0.2); border-radius: 99px; height: 8px; max-width: 420px; margin: 20px auto 0; overflow: hidden; }
+  .progress-bar-fill { background: #34d399; height: 8px; border-radius: 99px; width: 0%; transition: width 0.5s ease; }
+  .progress-label { font-size: 13px; opacity: 0.92; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .reset-progress-btn { background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px; padding: 3px 11px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .reset-progress-btn:hover { background: rgba(255,255,255,0.28); }
+  .week-card.completed { border-color: #10b981; }
+  .week-card.completed .week-card-header { background: linear-gradient(120deg, #ecfdf5, #d1fae5); }
+  .week-status { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; margin-left: auto; margin-right: 10px; }
+  .week-status.pending { background: #f1f5f9; color: #64748b; }
+  .week-status.complete { background: #d1fae5; color: #065f46; }
 
   main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
   .section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
@@ -123,14 +130,14 @@
   /* Tips */
   .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
   .tip-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .tip-icon { font-size: 28px; margin-bottom: 10px; }
+  .tip-icon { width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
   .tip-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
   .tip-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
   footer { text-align: center; padding: 32px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
 </style>
   <!-- LAB:HEAD:START -->
-  <meta name="description" content="Weekly study notes from the Georgia Tech OMSA course: preprocessing, classifiers, word embeddings, neural networks, RNNs, LSTMs and attention, written as what, why and how.">
+  <meta name="description" content="All 15 weeks of graduate study notes from Georgia Tech OMSA Applied NLP: text preprocessing, classical ML, embeddings, RNNs/LSTMs, Transformers, BERT/GPT, sequence labeling, post-training alignment (RLHF/DPO), topic modeling, RAG, Agentic AI, multi-agent systems and GraphRAG — with 24 live interactive visualizers.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/GaTech/CSE%208803/">
@@ -139,16 +146,16 @@
   <meta property="og:url" content="https://tatwan.github.io/GaTech/CSE%208803/">
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="Applied NLP — CSE 8803 — ML_LAB">
-  <meta property="og:description" content="Weekly study notes on NLP fundamentals from Georgia Tech OMSA, with live demos.">
+  <meta property="og:description" content="15 weeks of graduate NLP study notes from Georgia Tech OMSA, from tokenization to Transformers, RAG and Agentic AI, with 24 live demos.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="Applied NLP — CSE 8803 — ML_LAB">
-  <meta name="twitter:description" content="Weekly study notes on NLP fundamentals from Georgia Tech OMSA, with live demos.">
+  <meta name="twitter:description" content="15 weeks of graduate NLP study notes from Georgia Tech OMSA, from tokenization to Transformers, RAG and Agentic AI, with 24 live demos.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
   <script defer src="/assets/lab.js" data-lab-page="Applied NLP — CSE 8803"></script>
@@ -158,12 +165,12 @@
   "@context": "https://schema.org",
   "@type": "LearningResource",
   "name": "Applied NLP — CSE 8803",
-  "description": "Weekly study notes from the Georgia Tech OMSA course: preprocessing, classifiers, word embeddings, neural networks, RNNs, LSTMs and attention, written as what, why and how.",
+  "description": "All 15 weeks of graduate study notes from Georgia Tech OMSA Applied NLP: text preprocessing, classical ML, embeddings, RNNs/LSTMs, Transformers, BERT/GPT, sequence labeling, post-training alignment (RLHF/DPO), topic modeling, RAG, Agentic AI, multi-agent systems and GraphRAG — with 24 live interactive visualizers.",
   "url": "https://tatwan.github.io/GaTech/CSE%208803/",
   "learningResourceType": "Course",
   "educationalLevel": "Graduate",
   "about": "NLP",
-  "timeRequired": "7 weeks",
+  "timeRequired": "15 weeks",
   "inLanguage": "en",
   "isAccessibleForFree": true,
   "author": {
@@ -183,24 +190,26 @@
 <body>
 
 <header>
-  <div style="margin-bottom: 12px;"><a href="../../index.html" style="color: #f5a623; font-weight: 700; text-decoration: none; font-size: 13px; letter-spacing: 1px; text-transform: uppercase;">&larr; ML_LAB</a></div>
-  <div class="badge">CSE 8803 &middot; Spring 2026</div>
+<div class="badge">CSE 8803 &middot; Georgia Tech OMSA</div>
   <h1>Applied NLP Study Guide</h1>
   <p>Your interactive learning companion for all 15 weeks. Built from <strong>slides, transcripts, and real quiz patterns</strong> — with visuals, demos, and quiz prep.</p>
   <div class="header-meta">
-    <span>&#128197; Final: Week 15 (Apr 20&ndash;24)</span>
-    <span>&#128218; 15 Weeks + 2 Bonus Modules</span>
-    <span>&#127919; Quiz 12 due Apr 24 &mdash; HW5 due Apr 24</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 15 Weeks (13 Core + 2 Bonus Modules)</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> 24 Interactive Visualizers &amp; 9 Deep Dives</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 65 Practice Quiz Questions</span>
   </div>
   <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" style="width:93.75%"></div>
+    <div class="progress-bar-fill" id="cseProgressFill" style="width:0%"></div>
   </div>
-  <div class="progress-label">Week 15 of 16 &mdash; Course Complete! 🎓</div>
+  <div class="progress-label">
+    <span><strong id="weeksDone">0</strong> of 15 weeks completed</span>
+    <button type="button" id="resetCseProgress" class="reset-progress-btn" style="display:none;">Reset progress</button>
+  </div>
 </header>
 
 <main>
 
-  <div class="section-title">&#128218; Weekly Study Notes</div>
+  <div class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Weekly Study Notes</div>
   <div class="weeks-grid">
 
     <a href="week1.html" class="week-card w1 has-bts">
@@ -209,7 +218,7 @@
         <h2>Intro &amp; Text Preprocessing</h2>
         <div class="dates">Modules 1 &amp; 2 &mdash; Foundational NLP</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Course overview &amp; NLP problem types</li>
@@ -231,7 +240,7 @@
         <h2>Na&iuml;ve Bayes &amp; Classification Evaluation</h2>
         <div class="dates">Module 3 &mdash; First Classifier</div>
       </div>
-      <div class="content-strip standard">📚 Course Content</div>
+      <div class="content-strip standard"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Bayes&rsquo; Rule: Prior, Likelihood, Posterior</li>
@@ -253,7 +262,7 @@
         <h2>Logistic Regression, SVM &amp; Perceptron</h2>
         <div class="dates">Module 4 &mdash; Linear Classifiers</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Sigmoid function &amp; soft classification</li>
@@ -275,7 +284,7 @@
         <h2>SVD, Co-occurrence &amp; GloVe</h2>
         <div class="dates">Module 5 &mdash; Word Embeddings I</div>
       </div>
-      <div class="content-strip standard">📚 Course Content</div>
+      <div class="content-strip standard"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Why dimensionality reduction?</li>
@@ -297,7 +306,7 @@
         <h2>Neural Networks &amp; Word2Vec</h2>
         <div class="dates">Module 6 &mdash; Deep Learning Intro</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Activation functions: ReLU, Sigmoid, Tanh</li>
@@ -319,7 +328,7 @@
         <h2>Convolutional &amp; Recurrent Neural Networks</h2>
         <div class="dates">Module 7 &mdash; Sequence &amp; Structure</div>
       </div>
-      <div class="content-strip standard">📚 Course Content</div>
+      <div class="content-strip standard"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>CNN: filters, convolution, feature maps</li>
@@ -341,7 +350,7 @@
         <h2>LSTM, GRU &amp; Attention</h2>
         <div class="dates">Module 8 &mdash; Long-Term Memory &amp; Focus</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>LSTM: cell state, forget / input / output gates</li>
@@ -364,7 +373,7 @@
         <h2>Multimodal NLP &amp; Multilingual Models</h2>
         <div class="dates">CLIP &middot; LLaVA &middot; Flamingo &middot; mBERT &middot; XLM-R</div>
       </div>
-      <div class="content-strip new-module">⭐ New Bonus Module — Additional Graduate Content</div>
+      <div class="content-strip new-module"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> New Bonus Module — Additional Graduate Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>CLIP: contrastive image-text pretraining, InfoNCE loss, zero-shot</li>
@@ -386,7 +395,7 @@
         <h2>Transformers, BERT &amp; GPT</h2>
         <div class="dates">Module 9 &mdash; The Architecture That Changed NLP</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Why Transformers? LSTM limitations &amp; pre-training benefits</li>
@@ -408,7 +417,7 @@
         <h2>Sequence Labeling: POS Tagging &amp; NER</h2>
         <div class="dates">Module 10 &mdash; Token-Level Classification</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Sequence labeling: one label per token (input = output length)</li>
@@ -431,7 +440,7 @@
         <h2>Post-Training Alignment Pipeline</h2>
         <div class="dates">SFT &rarr; RLHF &rarr; Constitutional AI &rarr; DPO</div>
       </div>
-      <div class="content-strip new-module">⭐ New Bonus Module — Additional Graduate Content</div>
+      <div class="content-strip new-module"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> New Bonus Module — Additional Graduate Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Supervised Fine-Tuning (SFT): data, format, loss</li>
@@ -455,7 +464,7 @@
         <h2>Topic Modeling: LSI &amp; LDA</h2>
         <div class="dates">Module 11 &mdash; Unsupervised Learning</div>
       </div>
-      <div class="content-strip standard">📚 Course Content</div>
+      <div class="content-strip standard"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Course Content</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Topic modeling: unsupervised extraction of hidden topics</li>
@@ -478,7 +487,7 @@
         <h2>Generative AI, Prompt Engineering &amp; RAG</h2>
         <div class="dates">Module 12 &mdash; Modern LLM Applications</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Generative AI: autoregressive decoding, LLM training pipeline</li>
@@ -502,7 +511,7 @@
         <h2>Foundations of Agentic AI &amp; Reasoning</h2>
         <div class="dates">Module 13 L1&amp;L2 &mdash; Intelligent Agents</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Agent vs. chatbot: perceive &rarr; reason &rarr; act &rarr; observe loop</li>
@@ -526,7 +535,7 @@
         <h2>Multi-Agent Systems &amp; Future of NLP</h2>
         <div class="dates">Module 13 L3 &mdash; Collaboration &amp; Frontiers</div>
       </div>
-      <div class="content-strip depth">🔬 Beyond the Slides — Graduate Depth Content Inside</div>
+      <div class="content-strip depth"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Beyond the Slides — Graduate Depth Content Inside</div>
       <div class="week-card-body">
         <ul class="topic-list">
           <li>Multi-agent topologies: hub-spoke, chain, mesh, hierarchical</li>
@@ -546,7 +555,7 @@
   </div><!-- end weeks-grid -->
 
   <!-- Quiz Schedule -->
-  <div class="section-title">&#128197; Quiz Schedule &amp; Coverage</div>
+  <div class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Quiz Schedule &amp; Coverage</div>
   <div class="quiz-map">
     <h3>All 12 Quizzes &mdash; Week Coverage &amp; Dates</h3>
     <table>
@@ -562,12 +571,12 @@
       <tr><td><strong>Quiz 9</strong></td><td>Week 10</td><td>POS Tagging &amp; NER</td><td>Apr 3</td><td class="done">&#10003; Done</td></tr>
       <tr><td><strong>Quiz 10</strong></td><td>Week 12</td><td>Topic Modeling: LSI &amp; LDA</td><td>Apr 10</td><td class="done">&#10003; Done</td></tr>
       <tr><td><strong>Quiz 11</strong></td><td>Week 13</td><td>GenAI, Prompt Engineering &amp; RAG</td><td>Apr 17</td><td class="done">&#10003; Done</td></tr>
-      <tr><td><strong>Quiz 12</strong></td><td>Weeks 14&amp;15</td><td>Agentic AI &amp; Multi-Agent Systems</td><td>Apr 24</td><td class="upcoming">&#9888; Due Apr 24!</td></tr>
+      <tr><td><strong>Quiz 12</strong></td><td>Weeks 14&amp;15</td><td>Agentic AI &amp; Multi-Agent Systems</td><td>Apr 24</td><td class="done">&#10003; Done</td></tr>
     </table>
   </div>
 
   <!-- Course Roadmap -->
-  <div class="section-title">&#128506;&#65039; Course Learning Roadmap</div>
+  <div class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg> Course Learning Roadmap</div>
   <div class="roadmap">
     <div class="roadmap-title">From raw text &#8594; intelligent models</div>
     <div class="roadmap-flow">
@@ -596,25 +605,25 @@
   </div>
 
   <!-- Study Tips -->
-  <div class="section-title">&#128161; How to Use These Notes</div>
+  <div class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> How to Use These Notes</div>
   <div class="tips-grid">
     <div class="tip-card">
-      <div class="tip-icon">&#129504;</div>
+      <div class="tip-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
       <h4>What &#8594; Why &#8594; How</h4>
       <p>Every concept is explained in three layers: what it is, why we need it, and how it works mechanically. Read all three before moving on.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">&#127918;</div>
+      <div class="tip-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
       <h4>Use the Interactive Demos</h4>
       <p>Each week has live visualizers and clickable demos. Change the inputs and watch outputs update — this is the fastest way to build intuition.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">&#128221;</div>
+      <div class="tip-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
       <h4>Quiz Yourself</h4>
       <p>Each week ends with multiple-choice questions modeled after actual Quizzes 1&ndash;7. Cover the answer, try it yourself, then reveal. Repeat weak spots.</p>
     </div>
     <div class="tip-card">
-      <div class="tip-icon">&#128279;</div>
+      <div class="tip-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
       <h4>Follow the Thread</h4>
       <p>Each week builds on the last. If something in Week 9 is confusing, check Week 7 (LSTMs). The roadmap above shows exactly how concepts connect.</p>
     </div>
@@ -622,7 +631,62 @@
 
 </main>
 
-<footer>CSE 8803 Applied NLP &middot; Spring 2026 &middot; Tarek's Personal Study Guide &middot; All 15 Weeks Complete 🎓 &middot; Updated April 2026</footer>
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'cse8803-weeks-progress-v1';
+  function getDone() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function renderCourseProgress() {
+    const doneList = getDone();
+    const cards = Array.from(document.querySelectorAll('.week-card'));
+    let completedCount = 0;
+    cards.forEach(card => {
+      const href = card.getAttribute('href') || '';
+      const m = href.match(/^(week\d+)\.html$/i);
+      if (!m) return;
+      const id = m[1].toLowerCase();
+      const isDone = doneList.indexOf(id) !== -1;
+      if (isDone) completedCount++;
+      card.classList.toggle('completed', isDone);
+      const footer = card.querySelector('.week-card-footer');
+      if (footer) {
+        let statusEl = footer.querySelector('.week-status');
+        if (!statusEl) {
+          statusEl = document.createElement('span');
+          statusEl.className = 'week-status';
+          const openBtn = footer.querySelector('.open-btn');
+          if (openBtn) footer.insertBefore(statusEl, openBtn);
+          else footer.appendChild(statusEl);
+        }
+        statusEl.className = 'week-status ' + (isDone ? 'complete' : 'pending');
+        statusEl.textContent = isDone ? '✓ Completed' : 'Not started';
+      }
+    });
+    const doneEl = document.getElementById('weeksDone');
+    const fillEl = document.getElementById('cseProgressFill');
+    const resetBtn = document.getElementById('resetCseProgress');
+    if (doneEl) doneEl.textContent = String(completedCount);
+    if (fillEl) fillEl.style.width = Math.round((completedCount / 15) * 100) + '%';
+    if (resetBtn) resetBtn.style.display = completedCount > 0 ? 'inline-block' : 'none';
+  }
+  const resetBtn = document.getElementById('resetCseProgress');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      try { localStorage.setItem(STORAGE_KEY, '[]'); } catch (e) {}
+      renderCourseProgress();
+    });
+  }
+  renderCourseProgress();
+  window.addEventListener('storage', renderCourseProgress);
+})();
+</script>
 
   <!-- LAB:ABOUT:START -->
   <section class="lab-about lab-chrome" id="lab-about" aria-labelledby="lab-about-h">
@@ -630,21 +694,23 @@
       <div>
         <div class="lab-about__label">// About this playbook</div>
         <h2 id="lab-about-h">Applied NLP — CSE 8803</h2>
-        <p>Weekly study notes from the Georgia Tech OMSA course: preprocessing, classifiers, word embeddings, neural networks, RNNs, LSTMs and attention, written as what, why and how.</p>
-        <p>It covers text preprocessing, classical classifiers, word embeddings, neural networks, RNNs, LSTMs and attention mechanisms. It is written for students on the Georgia Tech OMSA programme, and anyone rebuilding NLP fundamentals from the ground up.</p>
+        <p>All 15 weeks of graduate study notes from Georgia Tech OMSA Applied NLP: text preprocessing, classical ML, embeddings, RNNs/LSTMs, Transformers, BERT/GPT, sequence labeling, post-training alignment (RLHF/DPO), topic modeling, RAG, Agentic AI, multi-agent systems and GraphRAG — with 24 live interactive visualizers.</p>
+        <p>It covers all 15 weeks of graduate NLP: text preprocessing, classical classifiers, SVD/GloVe/Word2Vec embeddings, CNNs/RNNs/LSTMs, Transformers (BERT, GPT, T5, RoPE, GQA, MoE), sequence labeling (HMM/CRF), post-training alignment (SFT, RLHF, DPO, KTO), topic modeling, RAG, Agentic AI and multi-agent systems. It is written for students on the Georgia Tech OMSA programme, and anyone rebuilding NLP fundamentals from the ground up.</p>
         <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
           attached &mdash; something you can paste into a design note or defend in a review.</p>
         <div class="lab-about__facts">
           <span class="lab-about__fact">Course</span>
           <span class="lab-about__fact">NLP</span>
-          <span class="lab-about__fact">7 weeks</span>
+          <span class="lab-about__fact">15 weeks</span>
           <span class="lab-about__fact">Graduate</span>
           <span class="lab-about__fact">Pick the model and the method</span>
+          <span class="lab-about__fact">Build with LLMs</span>
         </div>
       </div>
       <div class="lab-about__side">
         <h3>Related playbooks</h3>
         <ul class="lab-about__list">
+          <li><a href="/genai_foundations_navigator.html">GenAI Foundations Navigator</a><span>GenAI basics &middot; 10–15 min</span></li>
           <li><a href="/ml_algorithm_selector.html">Algorithm Selector</a><span>Modeling &middot; 15 min</span></li>
           <li><a href="/feature_engineering_playbook.html">Feature Engineering Playbook</a><span>Features &middot; 20 min</span></li>
           <li><a href="/DataEngineering/index.html">Data Engineering Foundations</a><span>Data platform &middot; 10 modules</span></li>

@@ -146,6 +146,16 @@
   .timeline-item .event { font-size: 14px; font-weight: 600; color: var(--text); }
   .timeline-item p { font-size: 13px; color: #374151; margin-top: 2px; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="9"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 9: Transformers, BERT &amp; GPT" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -153,7 +163,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week7.html">← Week 7</a>
     <span class="you-are-here">Week 9 ← HERE</span>
   </div>
@@ -169,7 +179,7 @@
     <span class="chip">Self-Attention</span>
     <span class="chip">BERT &amp; GPT</span>
     <span class="chip">Transfer Learning</span>
-    <span class="chip alert">⚠️ Quiz 8 Upcoming</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 8 Upcoming</span>
   </div>
 </div>
 
@@ -178,7 +188,7 @@
   <!-- SECTION 1: WHY TRANSFORMERS -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon teal">🚀</div>
+      <div class="section-icon teal"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
       <div>
         <h2>Why Transformers?</h2>
         <div class="sub">History &amp; motivation for moving beyond LSTMs</div>
@@ -249,7 +259,7 @@
       </div>
       <div class="concept-body">
         <div class="callout">
-          <strong>🎯 The Core Idea</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> The Core Idea</strong>
           Train once on massive unlabeled text using self-supervised learning, then fine-tune cheaply on specific tasks.
         </div>
         <ul class="bullet">
@@ -259,7 +269,7 @@
           <li><strong>Domain knowledge:</strong> A pre-trained model already has statistical knowledge of language that transfers to the fine-tuning task.</li>
         </ul>
         <div class="callout tip">
-          <strong>💡 Self-Supervised Learning</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Self-Supervised Learning</strong>
           Labels are automatically created from the raw text (e.g., masking words, predicting next word) — no human labeling needed!
         </div>
       </div>
@@ -273,27 +283,27 @@
       <div class="concept-body">
         <div class="two-col">
           <div class="mini-card">
-            <h4>🌐 Machine Translation (MT)</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Machine Translation (MT)</h4>
             <p>Translate text from one natural language to another (e.g., English → French).</p>
           </div>
           <div class="mini-card">
-            <h4>💬 Sentiment Analysis</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Sentiment Analysis</h4>
             <p>Identify the emotion or opinion in a sentence (positive/negative/neutral).</p>
           </div>
           <div class="mini-card">
-            <h4>📝 Text Summarization</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Text Summarization</h4>
             <p>Condense a long document into a shorter, meaningful version.</p>
           </div>
           <div class="mini-card">
-            <h4>🔲 Fill-in-the-Blank (MLM)</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9 12 2"/></svg> Fill-in-the-Blank (MLM)</h4>
             <p>"This course will teach you all about ___ models." → Transformers</p>
           </div>
           <div class="mini-card">
-            <h4>🏷️ Named Entity Recognition (NER)</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Named Entity Recognition (NER)</h4>
             <p>Detect entities in text: people, places, dates, organizations.</p>
           </div>
           <div class="mini-card">
-            <h4>🔤 Part-of-Speech (POS) Tagging</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 20h16"/><path d="M8 16l4-10 4 10"/><path d="M9.5 12h5"/></svg> Part-of-Speech (POS) Tagging</h4>
             <p>Assign grammatical labels: noun, verb, adjective, etc. to each word.</p>
           </div>
         </div>
@@ -304,7 +314,7 @@
   <!-- SECTION 2: ARCHITECTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">🏗️</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
       <div>
         <h2>Transformer Architecture</h2>
         <div class="sub">Encoder, decoder, and the three model families</div>
@@ -334,7 +344,7 @@
         </div>
         <div class="two-col">
           <div class="mini-card">
-            <h4>🔵 Encoder</h4>
+            <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg> Encoder</h4>
             <ul class="bullet">
               <li>Reads the entire input sequence at once (bidirectional)</li>
               <li>Produces a rich representation for each token</li>
@@ -343,7 +353,7 @@
             </ul>
           </div>
           <div class="mini-card">
-            <h4>🟠 Decoder</h4>
+            <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#f97316"/></svg> Decoder</h4>
             <ul class="bullet">
               <li>Generates tokens one at a time (left-to-right only)</li>
               <li>Attends only to previously generated tokens (masked)</li>
@@ -353,7 +363,7 @@
           </div>
         </div>
         <div class="model-card seq2seq" style="margin-top:12px">
-          <h4>🔵+🟠 Encoder–Decoder (Seq2Seq)</h4>
+          <h4><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg>+<svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#f97316"/></svg> Encoder–Decoder (Seq2Seq)</h4>
           <span class="badge badge-s2s">Seq2Seq</span>
           <p style="font-size:14px">Uses both components for generative tasks that require input (e.g., translation, summarization). Models: <strong>BART, T5</strong>.</p>
         </div>
@@ -418,7 +428,7 @@
 <span class="comment">// d_model = embedding dimension</span>
 <span class="comment">// Final input = Token Embedding + Positional Encoding</span></div>
         <div class="callout tip">
-          <strong>💡 Key Point</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Key Point</strong>
           Sine for <strong>even</strong> indices, cosine for <strong>odd</strong> indices. The resulting vectors are added to (not concatenated with) the word embeddings.
         </div>
       </div>
@@ -451,7 +461,7 @@ MultiHead = Concat(head_1, ..., head_h) · Wᴼ
   <!-- SECTION 3: SELF-ATTENTION DEEP DIVE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon teal">🔍</div>
+      <div class="section-icon teal"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <div>
         <h2>Self-Attention: The Core Mechanism</h2>
         <div class="sub">Query, Key, Value — understanding how attention scores are computed</div>
@@ -470,7 +480,7 @@ MultiHead = Concat(head_1, ..., head_h) · Wᴼ
           In the first sentence "it" = cat; in the second "it" = milk. Self-attention lets each word "look at" every other word to resolve this.</p>
         </div>
         <div class="callout tip">
-          <strong>💡 Self-Attention Purpose</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Self-Attention Purpose</strong>
           For each word in the input, compute a weighted combination of all other words' representations, where the weights represent how relevant each word is to understanding the current word.
         </div>
       </div>
@@ -484,15 +494,15 @@ MultiHead = Concat(head_1, ..., head_h) · Wᴼ
       <div class="concept-body open">
         <div class="kqv-demo">
           <div class="kqv-box k">
-            <h5>🗝️ KEY (K)</h5>
+            <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777z"/></svg> KEY (K)</h5>
             <p>What each word <em>offers</em>.<br>"Here's what I contain."</p>
           </div>
           <div class="kqv-box q">
-            <h5>❓ QUERY (Q)</h5>
+            <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> QUERY (Q)</h5>
             <p>What the current word is <em>looking for</em>.<br>"What am I interested in?"</p>
           </div>
           <div class="kqv-box v">
-            <h5>💰 VALUE (V)</h5>
+            <h5><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> VALUE (V)</h5>
             <p>The <em>content</em> to be retrieved.<br>"Here's the actual information."</p>
           </div>
         </div>
@@ -514,7 +524,7 @@ z_i  = Σⱼ α_ij · <span class="val">v_j</span>
 <span class="comment">// Matrix form (all words at once):</span>
 Attention(Q, K, V) = softmax( Q·Kᵀ / √d_k ) · V</div>
         <div class="callout warning">
-          <strong>⚠️ Why divide by √d_k?</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Why divide by √d_k?</strong>
           With large embedding dimensions, dot products grow very large → softmax becomes extremely peaked → vanishing gradients. Dividing by √d_k stabilizes training.
         </div>
       </div>
@@ -522,7 +532,7 @@ Attention(Q, K, V) = softmax( Q·Kᵀ / √d_k ) · V</div>
 
     <!-- INTERACTIVE: Self-Attention Visualizer -->
     <div class="interactive-box">
-      <h4>🔬 Interactive: Self-Attention Weight Visualizer</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Interactive: Self-Attention Weight Visualizer</h4>
       <div class="desc">Click a query word to see how much attention it pays to each key word in the sentence.</div>
       <div id="attn-sentence" class="attn-sentence"></div>
       <div id="attn-heatmap" style="margin-top:16px"></div>
@@ -533,7 +543,7 @@ Attention(Q, K, V) = softmax( Q·Kᵀ / √d_k ) · V</div>
   <!-- SECTION 4: MODEL FAMILIES -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🤖</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></div>
       <div>
         <h2>Model Families: BERT, GPT, T5</h2>
         <div class="sub">Encoder-only, decoder-only, and encoder–decoder architectures</div>
@@ -670,9 +680,159 @@ results = pipe("Help! I'm a language model", max_length=50, num_return_sequences
     </div>
   </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card9{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card9 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card9 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col9{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col9{grid-template-columns:1fr}}
+.bts-code9{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table9{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table9 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table9 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table9 tr:hover td{background:#fafbff}
+.bts-formula9{background:#f0fdfa;border-left:4px solid #0d9488;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story9{background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);border-left:4px solid #0d9488;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story9-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0f766e;margin-bottom:6px}
+.bts-depth9{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>PEFT &amp; LoRA: Fine-Tuning LLMs Without Breaking the Bank</h2>
+  <p>Full fine-tuning a 70B parameter model requires 280+ GB of GPU memory. In 2026, virtually no research lab does this. LoRA and QLoRA are the dominant paradigm for adapting large models — and every NLP practitioner must understand the math and tradeoffs. This section covers what the slides skip.</p>
+</div>
+
+<div class="bts-card9">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Why Parameter-Efficient Fine-Tuning? <span class="bts-depth9">Critical</span></h3>
+  <div class="bts-story9">
+    <div class="bts-story9-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> The Problem</div>
+    <p style="font-size:14px;line-height:1.8">Full fine-tuning updates all W parameters. For LLaMA-3 70B, that's ~70 billion floats × 4 bytes × 3 (weights + gradients + optimizer states) ≈ 840 GB GPU memory — well beyond any single GPU. PEFT methods update only a <em>tiny adapter</em> while freezing the pretrained weights, achieving near-full-finetune quality with 100–1000× fewer parameters.</p>
+  </div>
+  <div class="bts-2col9">
+    <div>
+      <h4>The PEFT Family</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>Adapter Layers</strong> (Houlsby 2019): bottleneck FFN inserted between transformer sub-layers</li>
+        <li><strong>Prefix Tuning</strong> (Li &amp; Liang 2021): prepend trainable virtual tokens to K/V</li>
+        <li><strong>Prompt Tuning</strong> (Lester 2021): soft prompt at input layer only</li>
+        <li><strong>LoRA</strong> (Hu et al. 2021): low-rank weight decomposition <em>★ Dominant method</em></li>
+        <li><strong>QLoRA</strong> (Dettmers 2023): LoRA on 4-bit quantized base model</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Why LoRA Dominates</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>No inference latency — adapters merge into W at deployment</li>
+        <li>Works on any linear layer (Q, K, V, O, FFN)</li>
+        <li>80%+ of HuggingFace fine-tuning jobs use LoRA/QLoRA</li>
+        <li>Rank r as low as 4 often matches full fine-tune quality</li>
+        <li>Can train 70B model on a single A100 80GB with QLoRA</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> LoRA Mathematics <span class="bts-depth9">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">LoRA's key insight: the <em>weight update</em> ΔW from full fine-tuning has low intrinsic rank. So instead of updating the full d×k matrix W, decompose the update into two small matrices:</p>
+  <div class="bts-formula9">Pretrained weight: W ∈ ℝ^{d×k}  (frozen)
+LoRA update:      ΔW = B·A
+                  B ∈ ℝ^{d×r},  A ∈ ℝ^{r×k}
+                  rank r &lt;&lt; min(d, k)
+
+Forward pass:     h = Wx + BAx · (α/r)
+                  ↑ base   ↑ adapter (scaled)
+
+Parameters saved:  Full: d×k
+                   LoRA: d×r + r×k = r(d+k)
+Example: d=4096, k=4096, r=8
+  Full: 16.7M params
+  LoRA:   65K params  → 256× fewer!</div>
+  <div class="bts-2col9">
+    <div>
+      <h4>Initialization</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>A initialized with Gaussian noise (random)</li>
+        <li>B initialized to zero (so ΔW=0 at start)</li>
+        <li>Training starts from original pretrained behavior</li>
+        <li>Scaling factor α/r normalizes the adapter magnitude</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Hyperparameter Intuition</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>r=4</strong>: minimal, for tasks close to pretraining</li>
+        <li><strong>r=16</strong>: common default, good quality/cost balance</li>
+        <li><strong>r=64+</strong>: approaching full finetune for domain shift</li>
+        <li><strong>α</strong>: usually set to r (ratio α/r = 1.0)</li>
+        <li><strong>Layers</strong>: apply to Q,K,V,O or all linear layers</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> QLoRA: 4-Bit Fine-Tuning <span class="bts-depth9">2023 Breakthrough</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">QLoRA (Dettmers et al., 2023) combines three innovations to fine-tune 65B models on a single 48GB GPU:</p>
+  <div class="bts-2col9">
+    <div>
+      <h4>The Three Innovations</h4>
+      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li><strong>4-bit NormalFloat (NF4):</strong> quantization format derived from Normal distribution — optimal for normally-distributed neural weights</li>
+        <li><strong>Double Quantization:</strong> quantize the quantization constants themselves — saves ~0.37 bits/param</li>
+        <li><strong>Paged Optimizers:</strong> use NVIDIA unified memory to page optimizer states from GPU to CPU RAM when GPU runs out</li>
+      </ol>
+    </div>
+    <div>
+      <h4>QLoRA in Practice</h4>
+      <div class="bts-code9"><span style="color:#94a3b8"># HuggingFace QLoRA setup</span>
+<span style="color:#93c5fd">from</span> transformers <span style="color:#93c5fd">import</span> BitsAndBytesConfig
+<span style="color:#93c5fd">from</span> peft <span style="color:#93c5fd">import</span> get_peft_model, LoraConfig
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type=<span style="color:#86efac">"nf4"</span>,
+    bnb_4bit_use_double_quant=True,
+)
+model = AutoModelForCausalLM.from_pretrained(
+    <span style="color:#86efac">"meta-llama/Llama-3-8b"</span>,
+    quantization_config=bnb_config
+)
+lora_cfg = LoraConfig(r=<span style="color:#fca5a5">16</span>, lora_alpha=<span style="color:#fca5a5">32</span>,
+    target_modules=[<span style="color:#86efac">"q_proj","v_proj"</span>])
+model = get_peft_model(model, lora_cfg)</div>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card9">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> PEFT Methods Comparison</h3>
+  <table class="bts-table9">
+    <tr><th>Method</th><th>Trainable Params</th><th>GPU Memory (7B)</th><th>Quality vs. Full FT</th><th>Inference Overhead</th></tr>
+    <tr><td><strong>Full Fine-tuning</strong></td><td>100% (~7B)</td><td>~80GB (fp16)</td><td>Baseline</td><td>None</td></tr>
+    <tr><td><strong>LoRA (r=16)</strong></td><td>~0.1% (~7M)</td><td>~18GB (fp16)</td><td>95–99%</td><td>None (merge at deploy)</td></tr>
+    <tr><td><strong>QLoRA (r=16, 4-bit)</strong></td><td>~0.1% (~7M)</td><td>~6GB (int4)</td><td>93–97%</td><td>Small (dequantize)</td></tr>
+    <tr><td><strong>Prefix Tuning</strong></td><td>0.1–1%</td><td>~16GB</td><td>85–90%</td><td>Yes (longer KV)</td></tr>
+    <tr><td><strong>Adapter Layers</strong></td><td>0.5–3%</td><td>~20GB</td><td>88–94%</td><td>Yes (sequential)</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:6px">GPU memory figures are approximate for Llama-3 7B with typical batch sizes. Quality percentages relative to full fine-tuning on standard benchmarks.</p>
+</div>
+
+</div></div>
+
   <!-- SECTION 5: QUIZ PREP -->
   <div class="quiz-section">
-    <h3>🎯 Quiz 8 Practice — Transformers, BERT &amp; GPT</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Quiz 8 Practice — Transformers, BERT &amp; GPT</h3>
 
     <div class="quiz-q" id="q1">
       <p>Q1. What is the main reason transformers can be trained faster than LSTMs?</p>
@@ -742,8 +902,9 @@ results = pipe("Help! I'm a language model", max_length=50, num_return_sequences
   </div>
 
   <div class="page-nav">
-    <a href="week7.html">← Week 7: LSTM &amp; Attention</a>
-    <a href="index.html">🏠 All Weeks</a>
+    <a href="week8.html">← Week 8: Multimodal &amp; Multilingual NLP</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> All Weeks</a>
+    <a href="week10.html">Week 10: POS Tagging &amp; NER →</a>
   </div>
 </div>
 
@@ -762,13 +923,13 @@ function answerQuiz(qid, btn, correct) {
   const fb = document.getElementById(qid + '-fb');
   if (correct) {
     btn.classList.add('correct');
-    fb.textContent = '✅ Correct!';
+    fb.textContent = '[OK] Correct!';
     fb.className = 'quiz-feedback show correct';
   } else {
     btn.classList.add('wrong');
     // find and highlight correct
     opts.forEach(o => { if (o.onclick.toString().includes('true')) o.classList.add('correct'); });
-    fb.textContent = '❌ Not quite — the highlighted option is correct.';
+    fb.textContent = '[X] Not quite — the highlighted option is correct.';
     fb.className = 'quiz-feedback show wrong';
   }
 }
@@ -851,155 +1012,5 @@ buildAttnViz();
 // Show first word by default
 showAttn(1);
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card9{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card9 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card9 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col9{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col9{grid-template-columns:1fr}}
-.bts-code9{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-.bts-table9{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table9 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table9 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table9 tr:hover td{background:#fafbff}
-.bts-formula9{background:#f0fdfa;border-left:4px solid #0d9488;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
-.bts-story9{background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);border-left:4px solid #0d9488;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story9-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0f766e;margin-bottom:6px}
-.bts-depth9{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>PEFT &amp; LoRA: Fine-Tuning LLMs Without Breaking the Bank</h2>
-  <p>Full fine-tuning a 70B parameter model requires 280+ GB of GPU memory. In 2026, virtually no research lab does this. LoRA and QLoRA are the dominant paradigm for adapting large models — and every NLP practitioner must understand the math and tradeoffs. This section covers what the slides skip.</p>
-</div>
-
-<div class="bts-card9">
-  <h3>🧠 Why Parameter-Efficient Fine-Tuning? <span class="bts-depth9">Critical</span></h3>
-  <div class="bts-story9">
-    <div class="bts-story9-label">📖 The Problem</div>
-    <p style="font-size:14px;line-height:1.8">Full fine-tuning updates all W parameters. For LLaMA-3 70B, that's ~70 billion floats × 4 bytes × 3 (weights + gradients + optimizer states) ≈ 840 GB GPU memory — well beyond any single GPU. PEFT methods update only a <em>tiny adapter</em> while freezing the pretrained weights, achieving near-full-finetune quality with 100–1000× fewer parameters.</p>
-  </div>
-  <div class="bts-2col9">
-    <div>
-      <h4>The PEFT Family</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li><strong>Adapter Layers</strong> (Houlsby 2019): bottleneck FFN inserted between transformer sub-layers</li>
-        <li><strong>Prefix Tuning</strong> (Li &amp; Liang 2021): prepend trainable virtual tokens to K/V</li>
-        <li><strong>Prompt Tuning</strong> (Lester 2021): soft prompt at input layer only</li>
-        <li><strong>LoRA</strong> (Hu et al. 2021): low-rank weight decomposition <em>★ Dominant method</em></li>
-        <li><strong>QLoRA</strong> (Dettmers 2023): LoRA on 4-bit quantized base model</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Why LoRA Dominates</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li>No inference latency — adapters merge into W at deployment</li>
-        <li>Works on any linear layer (Q, K, V, O, FFN)</li>
-        <li>80%+ of HuggingFace fine-tuning jobs use LoRA/QLoRA</li>
-        <li>Rank r as low as 4 often matches full fine-tune quality</li>
-        <li>Can train 70B model on a single A100 80GB with QLoRA</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card9">
-  <h3>📐 LoRA Mathematics <span class="bts-depth9">PhD</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">LoRA's key insight: the <em>weight update</em> ΔW from full fine-tuning has low intrinsic rank. So instead of updating the full d×k matrix W, decompose the update into two small matrices:</p>
-  <div class="bts-formula9">Pretrained weight: W ∈ ℝ^{d×k}  (frozen)
-LoRA update:      ΔW = B·A
-                  B ∈ ℝ^{d×r},  A ∈ ℝ^{r×k}
-                  rank r &lt;&lt; min(d, k)
-
-Forward pass:     h = Wx + BAx · (α/r)
-                  ↑ base   ↑ adapter (scaled)
-
-Parameters saved:  Full: d×k
-                   LoRA: d×r + r×k = r(d+k)
-Example: d=4096, k=4096, r=8
-  Full: 16.7M params
-  LoRA:   65K params  → 256× fewer!</div>
-  <div class="bts-2col9">
-    <div>
-      <h4>Initialization</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>A initialized with Gaussian noise (random)</li>
-        <li>B initialized to zero (so ΔW=0 at start)</li>
-        <li>Training starts from original pretrained behavior</li>
-        <li>Scaling factor α/r normalizes the adapter magnitude</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Hyperparameter Intuition</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>r=4</strong>: minimal, for tasks close to pretraining</li>
-        <li><strong>r=16</strong>: common default, good quality/cost balance</li>
-        <li><strong>r=64+</strong>: approaching full finetune for domain shift</li>
-        <li><strong>α</strong>: usually set to r (ratio α/r = 1.0)</li>
-        <li><strong>Layers</strong>: apply to Q,K,V,O or all linear layers</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card9">
-  <h3>🔬 QLoRA: 4-Bit Fine-Tuning <span class="bts-depth9">2023 Breakthrough</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">QLoRA (Dettmers et al., 2023) combines three innovations to fine-tune 65B models on a single 48GB GPU:</p>
-  <div class="bts-2col9">
-    <div>
-      <h4>The Three Innovations</h4>
-      <ol style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li><strong>4-bit NormalFloat (NF4):</strong> quantization format derived from Normal distribution — optimal for normally-distributed neural weights</li>
-        <li><strong>Double Quantization:</strong> quantize the quantization constants themselves — saves ~0.37 bits/param</li>
-        <li><strong>Paged Optimizers:</strong> use NVIDIA unified memory to page optimizer states from GPU to CPU RAM when GPU runs out</li>
-      </ol>
-    </div>
-    <div>
-      <h4>QLoRA in Practice</h4>
-      <div class="bts-code9"><span style="color:#94a3b8"># HuggingFace QLoRA setup</span>
-<span style="color:#93c5fd">from</span> transformers <span style="color:#93c5fd">import</span> BitsAndBytesConfig
-<span style="color:#93c5fd">from</span> peft <span style="color:#93c5fd">import</span> get_peft_model, LoraConfig
-
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type=<span style="color:#86efac">"nf4"</span>,
-    bnb_4bit_use_double_quant=True,
-)
-model = AutoModelForCausalLM.from_pretrained(
-    <span style="color:#86efac">"meta-llama/Llama-3-8b"</span>,
-    quantization_config=bnb_config
-)
-lora_cfg = LoraConfig(r=<span style="color:#fca5a5">16</span>, lora_alpha=<span style="color:#fca5a5">32</span>,
-    target_modules=[<span style="color:#86efac">"q_proj","v_proj"</span>])
-model = get_peft_model(model, lora_cfg)</div>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card9">
-  <h3>📊 PEFT Methods Comparison</h3>
-  <table class="bts-table9">
-    <tr><th>Method</th><th>Trainable Params</th><th>GPU Memory (7B)</th><th>Quality vs. Full FT</th><th>Inference Overhead</th></tr>
-    <tr><td><strong>Full Fine-tuning</strong></td><td>100% (~7B)</td><td>~80GB (fp16)</td><td>Baseline</td><td>None</td></tr>
-    <tr><td><strong>LoRA (r=16)</strong></td><td>~0.1% (~7M)</td><td>~18GB (fp16)</td><td>95–99%</td><td>None (merge at deploy)</td></tr>
-    <tr><td><strong>QLoRA (r=16, 4-bit)</strong></td><td>~0.1% (~7M)</td><td>~6GB (int4)</td><td>93–97%</td><td>Small (dequantize)</td></tr>
-    <tr><td><strong>Prefix Tuning</strong></td><td>0.1–1%</td><td>~16GB</td><td>85–90%</td><td>Yes (longer KV)</td></tr>
-    <tr><td><strong>Adapter Layers</strong></td><td>0.5–3%</td><td>~20GB</td><td>88–94%</td><td>Yes (sequential)</td></tr>
-  </table>
-  <p style="font-size:12px;color:#64748b;margin-top:6px">GPU memory figures are approximate for Llama-3 7B with typical batch sizes. Quality percentages relative to full fine-tuning on standard benchmarks.</p>
-</div>
-
-</div></div>
-
 </body>
 </html>

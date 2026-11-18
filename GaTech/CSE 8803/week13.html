@@ -174,6 +174,16 @@
   .depth-badge { display: inline-block; background: #4c1d95; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
   strong { color: #1e293b; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="13"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 13: Generative AI, Prompt Engineering &amp; RAG" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -181,7 +191,7 @@
 <nav class="topnav">
   <span class="week-title">CSE 8803 — Applied NLP</span>
   <div class="nav-links">
-    <a href="index.html">🏠 Home</a>
+    <a href="index.html"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
     <a href="week12.html">← Week 12</a>
     <span class="you-are-here">Week 13 ← HERE</span>
     <a href="week14.html">Week 14 →</a>
@@ -198,8 +208,8 @@
     <span class="chip">Generative AI</span>
     <span class="chip">Prompt Engineering</span>
     <span class="chip">RAG</span>
-    <span class="chip hw">📝 HW5 Starts</span>
-    <span class="chip alert">⚠️ Quiz 10 · Due Apr 10</span>
+    <span class="chip hw"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> HW5 Starts</span>
+    <span class="chip alert"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 10 · Due Apr 10</span>
   </div>
 </div>
 
@@ -208,7 +218,7 @@
 <!-- ═══════════════════════════════════════════ SECTION 1: Generative AI -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon purple">🤖</div>
+    <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></div>
     <div>
       <h2>What is Generative AI?</h2>
       <div class="sub">M12T1L1 · The shift from classification to generation</div>
@@ -216,7 +226,7 @@
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Story: Why Generation is Fundamentally Different</div>
+    <div class="story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Story: Why Generation is Fundamentally Different</div>
     <p>Every model we've seen so far — Naive Bayes, SVM, LSTM, BERT — takes input text and <em>classifies</em> it. They answer yes/no or pick a label. Generative AI does something far more open-ended: given the sentence "The weather today is", it must predict what comes next. And then after outputting "sunny", it must predict the word after that, and so on. This is a completely different game — instead of one decision, the model makes <em>hundreds</em> of decisions sequentially, each one conditioned on everything before it.</p>
   </div>
 
@@ -240,7 +250,7 @@
       </div>
       <div class="two-col">
         <div class="mini-card">
-          <h4>🏭 Proprietary Models</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 20h20"/><path d="M4 20V8l6 4V8l6 4V4h4v16"/></svg> Proprietary Models</h4>
           <ul class="bullet">
             <li><strong>GPT-4o / GPT-4</strong> — OpenAI</li>
             <li><strong>Claude 3/4</strong> — Anthropic</li>
@@ -248,7 +258,7 @@
           </ul>
         </div>
         <div class="mini-card">
-          <h4>🔓 Open Source Models</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Open Source Models</h4>
           <ul class="bullet">
             <li><strong>Llama 3 (8B, 70B, 405B)</strong> — Meta</li>
             <li><strong>Mistral 7B / Mixtral 8×7B</strong> — Mistral AI</li>
@@ -270,27 +280,27 @@
         <p>Generation is an <strong>autoregressive</strong> process — each token is generated one at a time, and each new token is conditioned on all previously generated tokens. The loop runs until a special end-of-sequence token is produced or a maximum length is reached.</p>
       </div>
       <div class="arch-flow">
-        <div class="arch-step input">📝 Input: User Prompt → Tokenized to integer IDs <div class="badge">e.g., "How are you?" → [5299, 389, 345, 30]</div></div>
+        <div class="arch-step input"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Input: User Prompt → Tokenized to integer IDs <div class="badge">e.g., "How are you?" → [5299, 389, 345, 30]</div></div>
         <div class="arch-arrow">↓</div>
-        <div class="arch-step embed">🔢 Token Embedding: Each ID → dense vector (e.g., 4096-dim)</div>
+        <div class="arch-step embed"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Token Embedding: Each ID → dense vector (e.g., 4096-dim)</div>
         <div class="arch-arrow">↓</div>
-        <div class="arch-step embed">📍 + Positional Encoding: RoPE or sinusoidal, encodes token position</div>
+        <div class="arch-step embed"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> + Positional Encoding: RoPE or sinusoidal, encodes token position</div>
         <div class="arch-arrow">↓</div>
-        <div class="arch-step attn">🔀 Masked Self-Attention: Each token attends only to PAST tokens (causal)</div>
+        <div class="arch-step attn"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg> Masked Self-Attention: Each token attends only to PAST tokens (causal)</div>
         <div class="arch-arrow">↓</div>
-        <div class="arch-step ffn">⚙️ Feed-Forward Network: Non-linear transformation per position</div>
+        <div class="arch-step ffn"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Feed-Forward Network: Non-linear transformation per position</div>
         <div class="arch-arrow">↓ (repeat N times = N Transformer blocks)</div>
-        <div class="arch-step out">📊 Output Layer (LM Head): Linear → Softmax → Vocabulary probability distribution</div>
+        <div class="arch-step out"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Output Layer (LM Head): Linear → Softmax → Vocabulary probability distribution</div>
         <div class="arch-arrow">↓</div>
-        <div class="arch-step sel">✅ Token Selection: argmax / sampling / beam search → next token</div>
+        <div class="arch-step sel"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Token Selection: argmax / sampling / beam search → next token</div>
         <div class="arch-arrow">↓ (append token, loop back)</div>
       </div>
       <div class="callout">
-        <strong>🔑 Key Insight: Why "Masked" Attention?</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Key Insight: Why "Masked" Attention?</strong>
         During training, we show the model the whole sentence at once (efficient). But generation must be causal — token 5 cannot see token 6. Masking the future tokens during training makes the model learn to predict based only on context to the LEFT. This is the crucial architectural difference between BERT (sees both directions) and GPT (sees only left).
       </div>
       <div class="callout tip">
-        <strong>✅ Autoregressive vs. Non-Autoregressive Generation</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Autoregressive vs. Non-Autoregressive Generation</strong>
         GPT-style models generate left-to-right, token by token (<em>autoregressive</em>). Research has explored non-autoregressive models that generate all tokens in parallel for speed — but quality is generally lower because each token's generation is independent of the others being generated.
       </div>
     </div>
@@ -313,7 +323,7 @@
         </tbody>
       </table>
       <div class="callout info">
-        <strong>💡 Why RLHF → DPO?</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Why RLHF → DPO?</strong>
         RLHF requires training a separate reward model and then running PPO (a complex RL algorithm) — unstable and resource-intensive. DPO (Rafailov et al., 2023) showed you can directly optimize on preference data using a classification objective, achieving similar or better alignment without the RL training loop. Most open-source models (Llama-3-Instruct, Mistral-Instruct) now use DPO variants.
       </div>
       <div class="formula-box"><span class="comment"># DPO Objective (simplified intuition):
@@ -334,7 +344,7 @@
 
   <!-- Interactive: Temperature & Top-p -->
   <div class="interactive-box">
-    <h4>🎛️ Interactive: Temperature &amp; Top-p Sampling</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg> Interactive: Temperature &amp; Top-p Sampling</h4>
     <div class="desc">Adjust the sliders to understand how temperature and top-p affect text diversity. These are the core decoding hyperparameters you set when calling any LLM API.</div>
     <div class="slider-container">
       <label>Temperature: <strong id="temp-val">0.7</strong> &nbsp;<span style="font-size:12px;color:var(--muted)">(0 = deterministic, 1 = creative)</span></label>
@@ -355,7 +365,7 @@ with a high of 82°F and a slight chance of afternoon showers."</div>
 <!-- ═══════════════════════════════════════════ SECTION 2: Prompt Engineering -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon orange">🧠</div>
+    <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></div>
     <div>
       <h2>Prompt Engineering</h2>
       <div class="sub">M12T1L2 · Communicating with LLMs effectively</div>
@@ -363,7 +373,7 @@ with a high of 82°F and a slight chance of afternoon showers."</div>
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Story: Why Prompting Matters More Than You'd Think</div>
+    <div class="story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Story: Why Prompting Matters More Than You'd Think</div>
     <p>Imagine you hired a brilliant consultant who has read every book ever written. Now, if you ask them "what do you think?", you get a vague answer. But if you say "You are a senior data scientist. Here are 3 examples of similar problems and their solutions. Now, think step-by-step, and tell me how to detect anomalies in sensor data using isolation forests" — you get a masterpiece. That's prompt engineering: not changing the consultant's knowledge, just learning how to talk to them.</p>
   </div>
 
@@ -393,7 +403,7 @@ Text: "The Viterbi algorithm computes the most likely tag sequence."
 Respond ONLY with one of: Helpful | Partially Helpful | Not Helpful
 Then explain your reasoning in one sentence.</div>
       <div class="callout tip">
-        <strong>✅ Best Practices for Prompt Design</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Best Practices for Prompt Design</strong>
         Be specific about the role. Provide examples when possible. Constrain the output format. Use "Think step by step" for reasoning tasks. Separate components with clear delimiters (###, XML tags, etc.).
       </div>
     </div>
@@ -444,7 +454,7 @@ Then explain your reasoning in one sentence.</div>
       </div>
 
       <div class="callout">
-        <strong>📊 When to Use Which Technique (Decision Guide)</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> When to Use Which Technique (Decision Guide)</strong>
         Zero-shot → simple tasks with common formats. Few-shot → custom formats or less common tasks. CoT → math, logic, multi-step reasoning. Self-consistency → high-stakes CoT tasks. ReAct → tasks needing real-world information lookup. Prompt chaining → complex multi-stage workflows. ToT → extremely hard combinatorial reasoning (planning, games).
       </div>
     </div>
@@ -452,7 +462,7 @@ Then explain your reasoning in one sentence.</div>
 
   <!-- Interactive: CoT Demo -->
   <div class="interactive-box">
-    <h4>🔬 Interactive: Standard vs. Chain-of-Thought</h4>
+    <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Interactive: Standard vs. Chain-of-Thought</h4>
     <div class="desc">Click each approach to see how the LLM response changes for an arithmetic reasoning problem.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="btn-outline active" onclick="showCOT('standard', this)">Standard Prompt</button>
@@ -493,7 +503,7 @@ Respond ONLY with valid JSON matching this schema:
   ]
 }</div>
       <div class="callout tip">
-        <strong>✅ Libraries for Structured Output (2025)</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Libraries for Structured Output (2025)</strong>
         Instructor (Python), Outlines, Guidance, Pydantic + OpenAI function calling. These frameworks enforce schema compliance at the token sampling level — making output predictable for downstream code.
       </div>
     </div>
@@ -503,7 +513,7 @@ Respond ONLY with valid JSON matching this schema:
 <!-- ═══════════════════════════════════════════ SECTION 3: RAG -->
 <div class="section">
   <div class="section-header">
-    <div class="section-icon cyan">🔍</div>
+    <div class="section-icon cyan"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
     <div>
       <h2>Retrieval-Augmented Generation (RAG)</h2>
       <div class="sub">M12T1L3 · Giving LLMs real-world, up-to-date knowledge</div>
@@ -511,7 +521,7 @@ Respond ONLY with valid JSON matching this schema:
   </div>
 
   <div class="story-box">
-    <div class="story-label">📖 Story: The Problem RAG Solves</div>
+    <div class="story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Story: The Problem RAG Solves</div>
     <p>Imagine a brilliant professor who graduated in 2023 and has read everything published before then. Ask them about events in 2025 and they'll confidently make things up — this is <strong>hallucination</strong>. Now imagine the same professor, but before answering, they can search the internet, pull 5 relevant articles, and read them first. That's RAG. It gives the frozen LLM access to current, specific, domain-relevant knowledge at inference time — without retraining the model at all.</p>
   </div>
 
@@ -542,30 +552,30 @@ Respond ONLY with valid JSON matching this schema:
     <div class="concept-body open">
       <p style="font-size:14px;margin-bottom:16px;color:#374151">RAG has two distinct phases: <strong>Indexing</strong> (offline, one-time) and <strong>Querying</strong> (online, per request).</p>
 
-      <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:8px">📦 Phase 1: Indexing (Offline)</div>
+      <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:8px"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Phase 1: Indexing (Offline)</div>
       <div class="rag-flow">
-        <div class="rag-node rn-query">📄 Raw Documents</div>
+        <div class="rag-node rn-query"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Raw Documents</div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-embed">✂️ Chunk & Split<br/><span style="font-size:10px;font-weight:400">(e.g., 512 tokens)</span></div>
+        <div class="rag-node rn-embed"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/></svg> Chunk & Split<br/><span style="font-size:10px;font-weight:400">(e.g., 512 tokens)</span></div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-attn" style="background:#f5f3ff;border:2px solid #8b5cf6;color:#5b21b6">🔢 Embedding Model<br/><span style="font-size:10px;font-weight:400">(text → vector)</span></div>
+        <div class="rag-node rn-attn" style="background:#f5f3ff;border:2px solid #8b5cf6;color:#5b21b6"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Embedding Model<br/><span style="font-size:10px;font-weight:400">(text → vector)</span></div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-db">🗄️ Vector Database<br/><span style="font-size:10px;font-weight:400">(Pinecone, Chroma, Weaviate)</span></div>
+        <div class="rag-node rn-db"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> Vector Database<br/><span style="font-size:10px;font-weight:400">(Pinecone, Chroma, Weaviate)</span></div>
       </div>
 
-      <div style="font-weight:700;font-size:13px;color:#0c4a6e;margin:16px 0 8px">🔎 Phase 2: Querying (Online, per user request)</div>
+      <div style="font-weight:700;font-size:13px;color:#0c4a6e;margin:16px 0 8px"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Phase 2: Querying (Online, per user request)</div>
       <div class="rag-flow">
-        <div class="rag-node rn-query">❓ User Query</div>
+        <div class="rag-node rn-query"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> User Query</div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-embed">🔢 Embed Query<br/><span style="font-size:10px;font-weight:400">(same embedding model)</span></div>
+        <div class="rag-node rn-embed"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Embed Query<br/><span style="font-size:10px;font-weight:400">(same embedding model)</span></div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-ret">🔍 Semantic Search<br/><span style="font-size:10px;font-weight:400">(cosine similarity top-k)</span></div>
+        <div class="rag-node rn-ret"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Semantic Search<br/><span style="font-size:10px;font-weight:400">(cosine similarity top-k)</span></div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-aug">📎 Augment Prompt<br/><span style="font-size:10px;font-weight:400">Query + Retrieved chunks</span></div>
+        <div class="rag-node rn-aug"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> Augment Prompt<br/><span style="font-size:10px;font-weight:400">Query + Retrieved chunks</span></div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-llm">🤖 LLM Generation</div>
+        <div class="rag-node rn-llm"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> LLM Generation</div>
         <div class="rag-arrow">→</div>
-        <div class="rag-node rn-out">✅ Grounded Answer</div>
+        <div class="rag-node rn-out"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Grounded Answer</div>
       </div>
 
       <div class="formula-box"><span class="comment"># Augmented prompt structure sent to the LLM:</span>
@@ -615,20 +625,20 @@ If the answer isn't in the context, say "I don't know."
     <div class="concept-body">
       <div class="three-col">
         <div class="mini-card">
-          <h4>🔄 RAG-Fusion</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> RAG-Fusion</h4>
           <p>Generate multiple reformulations of the query → retrieve for each → fuse results via Reciprocal Rank Fusion (RRF). Dramatically improves recall by covering different phrasings of the same intent.</p>
         </div>
         <div class="mini-card">
-          <h4>💡 HyDE</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> HyDE</h4>
           <p><strong>Hypothetical Document Embedding</strong>: Ask the LLM to generate a hypothetical answer first → embed that answer → use it to retrieve real documents. Bridges the gap between short queries and long passages.</p>
         </div>
         <div class="mini-card">
-          <h4>🤖 Agentic RAG</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> Agentic RAG</h4>
           <p>Instead of a single retrieval step, an agent decides <em>when</em> and <em>what</em> to retrieve, can perform multiple retrieval rounds, call APIs, synthesize across sources. State-of-the-art for complex Q&amp;A.</p>
         </div>
       </div>
       <div class="callout info">
-        <strong>🔬 Research: RAG vs. Fine-Tuning vs. Long Context</strong>
+        <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Research: RAG vs. Fine-Tuning vs. Long Context</strong>
         Three ways to give LLMs specific knowledge: (1) RAG — retrieve at inference time; (2) Fine-tuning — bake knowledge into weights; (3) Long context — stuff everything in the prompt. In 2025, the consensus is: RAG for dynamic/large knowledge, fine-tuning for style/format, long-context for small but crucial documents. Many production systems use all three.
       </div>
     </div>
@@ -642,7 +652,7 @@ If the answer isn't in the context, say "I don't know."
     <div class="concept-body">
       <div class="method-compare">
         <div class="mc-card mc-1">
-          <h4>🔍 Retrieval Quality</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Retrieval Quality</h4>
           <ul>
             <li><strong>Precision@k</strong>: fraction of retrieved chunks that are relevant</li>
             <li><strong>Recall@k</strong>: fraction of relevant chunks retrieved</li>
@@ -650,7 +660,7 @@ If the answer isn't in the context, say "I don't know."
           </ul>
         </div>
         <div class="mc-card mc-2">
-          <h4>📝 Generation Quality</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generation Quality</h4>
           <ul>
             <li><strong>Faithfulness</strong>: does the answer only use retrieved context?</li>
             <li><strong>Answer Relevance</strong>: cosine similarity vs. expected answer</li>
@@ -658,7 +668,7 @@ If the answer isn't in the context, say "I don't know."
           </ul>
         </div>
         <div class="mc-card mc-3">
-          <h4>⚡ System Performance</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> System Performance</h4>
           <ul>
             <li><strong>Latency</strong>: end-to-end response time</li>
             <li><strong>Cost per query</strong>: embedding + vector search + LLM tokens</li>
@@ -677,19 +687,19 @@ If the answer isn't in the context, say "I don't know."
     <div class="concept-body">
       <div class="two-col">
         <div class="mini-card">
-          <h4>⚠️ Prompt Injection</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Prompt Injection</h4>
           <p>Malicious content in retrieved documents can override system instructions. Mitigation: input sanitization, sandboxed retrieval, strict system prompt boundaries.</p>
         </div>
         <div class="mini-card">
-          <h4>🔒 PII & Data Privacy</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> PII & Data Privacy</h4>
           <p>If the knowledge base contains personal data, retrieved context may expose it. Mitigation: PII detection/redaction before indexing, access-controlled vector stores.</p>
         </div>
         <div class="mini-card">
-          <h4>🚫 Toxicity & Bias</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Toxicity & Bias</h4>
           <p>Retrieved documents may contain biased or toxic content. Mitigation: content filtering on retrieved chunks before augmentation.</p>
         </div>
         <div class="mini-card">
-          <h4>🎯 Grounding Failures</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Grounding Failures</h4>
           <p>Model ignores retrieved context and falls back to parametric memory. Mitigation: explicit grounding instructions, citation requirements, faithfulness scoring.</p>
         </div>
       </div>
@@ -719,9 +729,179 @@ If the answer isn't in the context, say "I don't know."
   </div>
 </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card13{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card13 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card13 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col13{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col13{grid-template-columns:1fr}}
+.bts-table13{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table13 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table13 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table13 tr:hover td{background:#fafbff}
+.bts-formula13{background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
+.bts-story13{background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);border-left:4px solid #7c3aed;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story13-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6d28d9;margin-bottom:6px}
+.bts-depth13{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+@media(max-width:640px){.metric-grid{grid-template-columns:1fr}}
+.metric-box{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center}
+.metric-box h5{font-weight:800;font-size:14px;margin-bottom:6px}
+.metric-box p{font-size:12px;color:#475569;line-height:1.5}
+.metric-box .score{font-size:22px;font-weight:800;color:#7c3aed;margin:8px 0}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Evaluation Science: BLEU, BERTScore, RAGAS &amp; Beyond</h2>
+  <p>How do you know if your LLM is good? "Vibes" don't scale. This section covers the rigorous evaluation framework that every NLP researcher uses: from classical metrics with known failure modes, to modern reference-free evaluation with RAGAS and LLM-as-judge paradigms that define the frontier in 2026.</p>
+</div>
+
+<div class="bts-card13">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> BLEU: The Classic You Must Know — And Know Its Limits <span class="bts-depth13">Core</span></h3>
+  <div class="bts-2col13">
+    <div>
+      <h4>BLEU Derivation</h4>
+      <div class="bts-formula13"><span style="color:#94a3b8"># Modified n-gram precision</span>
+pₙ = Σ_{cand} Σ_{ngram} min(count(ngram,cand),
+                              max_count_in_refs)
+   / Σ_{cand} count_ngrams(cand)
+
+<span style="color:#94a3b8"># Brevity penalty (penalize short outputs)</span>
+BP = 1           if len(c) &gt; len(r)
+   = exp(1-r/c)  if len(c) ≤ len(r)
+
+<span style="color:#94a3b8"># Final BLEU score</span>
+BLEU = BP · exp(Σₙ wₙ · log pₙ)
+     (typically n=1..4, uniform weights)</div>
+    </div>
+    <div>
+      <h4>Known Failure Modes</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Rewards n-gram overlap, not semantic equivalence</li>
+        <li>"The cat sat." vs "A dog stood." can score 0 BLEU despite semantic similarity</li>
+        <li>Doesn't capture fluency or coherence</li>
+        <li>Poor correlation with human judgment on summarization</li>
+        <li>Language-agnostic (treats all tokens equally)</li>
+        <li><strong>Best for:</strong> MT (still standard), document-level benchmarks</li>
+        <li><strong>Poor for:</strong> open-ended generation, dialogue, summarization</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card13">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> ROUGE, BERTScore &amp; Beyond</h3>
+  <div class="bts-2col13">
+    <div>
+      <h4>ROUGE Family (Summarization)</h4>
+      <div class="bts-formula13">ROUGE-N = (matched n-grams) / (n-grams in reference)
+<span style="color:#94a3b8"># Recall-oriented; standard for summarization</span>
+
+ROUGE-1: unigram overlap
+ROUGE-2: bigram overlap  
+ROUGE-L: Longest Common Subsequence
+ROUGE-Lsum: sentence-level LCS for summaries</div>
+      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.6">Same limitations as BLEU — surface form, not semantics. Still used as baseline in summarization papers. Always report ROUGE-1, ROUGE-2, ROUGE-L together.</p>
+    </div>
+    <div>
+      <h4>BERTScore (2020)</h4>
+      <div class="bts-formula13">For each token in candidate:
+  find max cosine similarity to any token
+  in reference (using BERT embeddings)
+  
+BERTScore_P = Σᵢ max_j cos(ĉᵢ, rⱼ) / |c|
+BERTScore_R = Σⱼ max_i cos(ĉᵢ, rⱼ) / |r|
+BERTScore_F = 2·P·R / (P+R)</div>
+      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.6">Correlates significantly better with human judgment than BLEU/ROUGE. Uses contextual embeddings — semantically equivalent sentences score high. Standard in 2026 papers alongside ROUGE.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card13">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> RAGAS: Reference-Free RAG Evaluation <span class="bts-depth13">2024 Standard</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">RAGAS (Shahul Es et al., EACL 2024) evaluates RAG systems without requiring human-labeled ground truth. It uses an LLM to judge each dimension — enabling scalable, automated evaluation of production RAG pipelines.</p>
+  <div class="metric-grid">
+    <div class="metric-box">
+      <h5>Faithfulness</h5>
+      <div class="score">0–1</div>
+      <p>Are all claims in the answer supported by the retrieved context? LLM breaks answer into statements, checks each against chunks.</p>
+    </div>
+    <div class="metric-box">
+      <h5>Answer Relevancy</h5>
+      <div class="score">0–1</div>
+      <p>Is the answer responsive to the query? LLM generates reverse questions from the answer, measures embedding similarity to original query.</p>
+    </div>
+    <div class="metric-box">
+      <h5>Context Precision</h5>
+      <div class="score">0–1</div>
+      <p>Are the relevant chunks ranked higher in retrieved context? Measures proportion of relevant chunks in top-K, weighted by position.</p>
+    </div>
+    <div class="metric-box">
+      <h5>Context Recall</h5>
+      <div class="score">0–1</div>
+      <p>Does retrieved context contain all info needed for the answer? Requires ground truth answer. Checks which answer sentences are attributable to context.</p>
+    </div>
+    <div class="metric-box">
+      <h5>Answer Correctness</h5>
+      <div class="score">0–1</div>
+      <p>Is the answer factually correct vs. ground truth? Combines semantic similarity + factual overlap (requires reference answer).</p>
+    </div>
+    <div class="metric-box">
+      <h5>Context Entity Recall</h5>
+      <div class="score">0–1</div>
+      <p>What fraction of ground truth entities appear in retrieved context? Entity-level retrieval quality metric.</p>
+    </div>
+  </div>
+  <div class="bts-story13">
+    <div class="bts-story13-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> How to Use RAGAS in Practice</div>
+    <p style="font-size:13px;line-height:1.8">For production RAG debugging: low <strong>Context Precision</strong> → improve chunking strategy or reranker. Low <strong>Faithfulness</strong> → model hallucinating despite good retrieval. Low <strong>Answer Relevancy</strong> → model answering the wrong question. RAGAS can generate synthetic test sets from your documents, enabling continuous evaluation without human labelers.</p>
+  </div>
+</div>
+
+<div class="bts-card13">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg> LLM-as-Judge &amp; Evaluation Benchmarks <span class="bts-depth13">Frontier</span></h3>
+  <div class="bts-2col13">
+    <div>
+      <h4>LLM-as-Judge (MT-Bench, G-Eval)</h4>
+      <p style="font-size:13px;line-height:1.7">Use a strong LLM (GPT-4) to score responses. Correlates well with human judgments at scale. Known biases to correct for:</p>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1;margin-top:8px">
+        <li><strong>Positional bias:</strong> first answer rated higher</li>
+        <li><strong>Verbosity bias:</strong> longer = better perception</li>
+        <li><strong>Self-enhancement:</strong> GPT-4 prefers GPT-4 outputs</li>
+        <li><strong>Mitigation:</strong> swap order, calibrate with human labels</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Benchmark Taxonomy (2026)</h4>
+      <table class="bts-table13">
+        <tr><th>Benchmark</th><th>What It Measures</th></tr>
+        <tr><td>GLUE / SuperGLUE</td><td>Classic NLU tasks (NLI, QA, similarity)</td></tr>
+        <tr><td>MMLU (57 subjects)</td><td>World knowledge, professional-level QA</td></tr>
+        <tr><td>BIG-Bench Hard</td><td>Reasoning tasks where models fail</td></tr>
+        <tr><td>HELM</td><td>Holistic: accuracy + calibration + fairness + efficiency</td></tr>
+        <tr><td>MT-Bench</td><td>Multi-turn instruction following (LLM judge)</td></tr>
+        <tr><td>HumanEval / MBPP</td><td>Code generation</td></tr>
+        <tr><td>MATH / GSM8K</td><td>Mathematical reasoning</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
 <!-- ═══════════════════════════════════════════ SECTION 4: QUIZ PREP -->
 <div class="quiz-section">
-  <h3>🧠 Quiz 10 Prep — Generative AI, Prompting & RAG</h3>
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Quiz 10 Prep — Generative AI, Prompting & RAG</h3>
 
   <div class="quiz-q">
     <p>1. What is the key architectural difference between BERT and GPT that determines whether they can be used for generation?</p>
@@ -731,8 +911,8 @@ If the answer isn't in the context, say "I don't know."
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. GPT was trained on more data than BERT</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. BERT uses an encoder; GPT uses a different type of encoder</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! GPT's causal masking means each token can only attend to previous tokens, enabling autoregressive generation. BERT sees the full context bidirectionally, making it excellent for classification but unable to generate coherently without modification.</div>
-    <div class="quiz-feedback wrong">❌ Review the decoder architecture. The key difference is about masking — GPT masks future tokens during self-attention, enabling left-to-right generation.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! GPT's causal masking means each token can only attend to previous tokens, enabling autoregressive generation. BERT sees the full context bidirectionally, making it excellent for classification but unable to generate coherently without modification.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Review the decoder architecture. The key difference is about masking — GPT masks future tokens during self-attention, enabling left-to-right generation.</div>
   </div>
 
   <div class="quiz-q">
@@ -743,8 +923,8 @@ If the answer isn't in the context, say "I don't know."
       <button class="quiz-opt" onclick="checkQ(this,'correct')">C. It primes the model to generate intermediate reasoning tokens, which then influence the final answer token probabilities</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. It forces the model to search the internet</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! The reasoning tokens generated before the final answer are in the context window and directly influence what the model predicts as the answer. The model uses its own intermediate thoughts as additional context.</div>
-    <div class="quiz-feedback wrong">❌ CoT is all about the tokens in context. By generating intermediate reasoning steps, those steps become part of the context that influences the final answer — no weight changes needed.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! The reasoning tokens generated before the final answer are in the context window and directly influence what the model predicts as the answer. The model uses its own intermediate thoughts as additional context.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> CoT is all about the tokens in context. By generating intermediate reasoning steps, those steps become part of the context that influences the final answer — no weight changes needed.</div>
   </div>
 
   <div class="quiz-q">
@@ -755,8 +935,8 @@ If the answer isn't in the context, say "I don't know."
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">C. Different models would use too much memory</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. The LLM itself is always used as the embedding model</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! Cosine similarity only makes sense if vectors are in the same geometric space. If you indexed with model A and queried with model B, the similarity scores would be meaningless — you'd be comparing vectors from two different coordinate systems.</div>
-    <div class="quiz-feedback wrong">❌ Think about what vector similarity means geometrically. The same embedding model is essential for the vector space to be consistent.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! Cosine similarity only makes sense if vectors are in the same geometric space. If you indexed with model A and queried with model B, the similarity scores would be meaningless — you'd be comparing vectors from two different coordinate systems.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Think about what vector similarity means geometrically. The same embedding model is essential for the vector space to be consistent.</div>
   </div>
 
   <div class="quiz-q">
@@ -767,8 +947,8 @@ If the answer isn't in the context, say "I don't know."
       <button class="quiz-opt" onclick="checkQ(this,'correct')">C. Use RAG — index documents in a vector database and retrieve relevant chunks at query time</button>
       <button class="quiz-opt" onclick="checkQ(this,'wrong')">D. Use zero-shot prompting without any grounding</button>
     </div>
-    <div class="quiz-feedback correct">✅ Correct! RAG is ideal here: documents update quarterly (no retraining cost), the knowledge is too large for a context window, and grounding answers in retrieved docs reduces hallucination. Update the vector DB when policies change.</div>
-    <div class="quiz-feedback wrong">❌ Consider: fine-tuning requires expensive retraining each quarter. Long context has limits and high cost. Zero-shot would hallucinate company-specific policies. RAG is the right tool here.</div>
+    <div class="quiz-feedback correct"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct! RAG is ideal here: documents update quarterly (no retraining cost), the knowledge is too large for a context window, and grounding answers in retrieved docs reduces hallucination. Update the vector DB when policies change.</div>
+    <div class="quiz-feedback wrong"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Consider: fine-tuning requires expensive retraining each quarter. Long context has limits and high cost. Zero-shot would hallucinate company-specific policies. RAG is the right tool here.</div>
   </div>
 </div>
 
@@ -835,192 +1015,22 @@ Model output:
 Step 1: John starts with 3 bags × 5 apples = 15 apples total.
 Step 2: He gives away 7 apples.
 Step 3: 15 - 7 = 8 apples remaining.
-Answer: 8 ✅
+Answer: 8 [OK]
 
 Why it works: The intermediate tokens (15, then 15-7) serve as
 'scratchpad' context that guides the final answer.`,
     'sc': `SELF-CONSISTENCY (run CoT 5 times, majority vote):
-Run 1: 15-7=8 ✅
-Run 2: 3×5=15, 15-7=8 ✅
-Run 3: bags:3, apples/bag:5, total:15, gave:7, left:8 ✅
-Run 4: 15-7=8 ✅
-Run 5: 15-8=7 ❌ (one wrong path)
+Run 1: 15-7=8 [OK]
+Run 2: 3×5=15, 15-7=8 [OK]
+Run 3: bags:3, apples/bag:5, total:15, gave:7, left:8 [OK]
+Run 4: 15-7=8 [OK]
+Run 5: 15-8=7 [X] (one wrong path)
 
-Majority vote: 8 appears 4/5 times → Final answer: 8 ✅
+Majority vote: 8 appears 4/5 times → Final answer: 8 [OK]
 Self-consistency filters out stochastic errors!`
   };
   document.getElementById('cot-output').textContent = outputs[type];
 }
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card13{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card13 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card13 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col13{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col13{grid-template-columns:1fr}}
-.bts-table13{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table13 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table13 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table13 tr:hover td{background:#fafbff}
-.bts-formula13{background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.9}
-.bts-story13{background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);border-left:4px solid #7c3aed;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story13-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6d28d9;margin-bottom:6px}
-.bts-depth13{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
-@media(max-width:640px){.metric-grid{grid-template-columns:1fr}}
-.metric-box{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center}
-.metric-box h5{font-weight:800;font-size:14px;margin-bottom:6px}
-.metric-box p{font-size:12px;color:#475569;line-height:1.5}
-.metric-box .score{font-size:22px;font-weight:800;color:#7c3aed;margin:8px 0}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Evaluation Science: BLEU, BERTScore, RAGAS &amp; Beyond</h2>
-  <p>How do you know if your LLM is good? "Vibes" don't scale. This section covers the rigorous evaluation framework that every NLP researcher uses: from classical metrics with known failure modes, to modern reference-free evaluation with RAGAS and LLM-as-judge paradigms that define the frontier in 2026.</p>
-</div>
-
-<div class="bts-card13">
-  <h3>📏 BLEU: The Classic You Must Know — And Know Its Limits <span class="bts-depth13">Core</span></h3>
-  <div class="bts-2col13">
-    <div>
-      <h4>BLEU Derivation</h4>
-      <div class="bts-formula13"><span style="color:#94a3b8"># Modified n-gram precision</span>
-pₙ = Σ_{cand} Σ_{ngram} min(count(ngram,cand),
-                              max_count_in_refs)
-   / Σ_{cand} count_ngrams(cand)
-
-<span style="color:#94a3b8"># Brevity penalty (penalize short outputs)</span>
-BP = 1           if len(c) &gt; len(r)
-   = exp(1-r/c)  if len(c) ≤ len(r)
-
-<span style="color:#94a3b8"># Final BLEU score</span>
-BLEU = BP · exp(Σₙ wₙ · log pₙ)
-     (typically n=1..4, uniform weights)</div>
-    </div>
-    <div>
-      <h4>Known Failure Modes</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li>Rewards n-gram overlap, not semantic equivalence</li>
-        <li>"The cat sat." vs "A dog stood." can score 0 BLEU despite semantic similarity</li>
-        <li>Doesn't capture fluency or coherence</li>
-        <li>Poor correlation with human judgment on summarization</li>
-        <li>Language-agnostic (treats all tokens equally)</li>
-        <li><strong>Best for:</strong> MT (still standard), document-level benchmarks</li>
-        <li><strong>Poor for:</strong> open-ended generation, dialogue, summarization</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card13">
-  <h3>📊 ROUGE, BERTScore &amp; Beyond</h3>
-  <div class="bts-2col13">
-    <div>
-      <h4>ROUGE Family (Summarization)</h4>
-      <div class="bts-formula13">ROUGE-N = (matched n-grams) / (n-grams in reference)
-<span style="color:#94a3b8"># Recall-oriented; standard for summarization</span>
-
-ROUGE-1: unigram overlap
-ROUGE-2: bigram overlap  
-ROUGE-L: Longest Common Subsequence
-ROUGE-Lsum: sentence-level LCS for summaries</div>
-      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.6">Same limitations as BLEU — surface form, not semantics. Still used as baseline in summarization papers. Always report ROUGE-1, ROUGE-2, ROUGE-L together.</p>
-    </div>
-    <div>
-      <h4>BERTScore (2020)</h4>
-      <div class="bts-formula13">For each token in candidate:
-  find max cosine similarity to any token
-  in reference (using BERT embeddings)
-  
-BERTScore_P = Σᵢ max_j cos(ĉᵢ, rⱼ) / |c|
-BERTScore_R = Σⱼ max_i cos(ĉᵢ, rⱼ) / |r|
-BERTScore_F = 2·P·R / (P+R)</div>
-      <p style="font-size:12px;color:#475569;margin-top:8px;line-height:1.6">Correlates significantly better with human judgment than BLEU/ROUGE. Uses contextual embeddings — semantically equivalent sentences score high. Standard in 2026 papers alongside ROUGE.</p>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card13">
-  <h3>🔍 RAGAS: Reference-Free RAG Evaluation <span class="bts-depth13">2024 Standard</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">RAGAS (Shahul Es et al., EACL 2024) evaluates RAG systems without requiring human-labeled ground truth. It uses an LLM to judge each dimension — enabling scalable, automated evaluation of production RAG pipelines.</p>
-  <div class="metric-grid">
-    <div class="metric-box">
-      <h5>Faithfulness</h5>
-      <div class="score">0–1</div>
-      <p>Are all claims in the answer supported by the retrieved context? LLM breaks answer into statements, checks each against chunks.</p>
-    </div>
-    <div class="metric-box">
-      <h5>Answer Relevancy</h5>
-      <div class="score">0–1</div>
-      <p>Is the answer responsive to the query? LLM generates reverse questions from the answer, measures embedding similarity to original query.</p>
-    </div>
-    <div class="metric-box">
-      <h5>Context Precision</h5>
-      <div class="score">0–1</div>
-      <p>Are the relevant chunks ranked higher in retrieved context? Measures proportion of relevant chunks in top-K, weighted by position.</p>
-    </div>
-    <div class="metric-box">
-      <h5>Context Recall</h5>
-      <div class="score">0–1</div>
-      <p>Does retrieved context contain all info needed for the answer? Requires ground truth answer. Checks which answer sentences are attributable to context.</p>
-    </div>
-    <div class="metric-box">
-      <h5>Answer Correctness</h5>
-      <div class="score">0–1</div>
-      <p>Is the answer factually correct vs. ground truth? Combines semantic similarity + factual overlap (requires reference answer).</p>
-    </div>
-    <div class="metric-box">
-      <h5>Context Entity Recall</h5>
-      <div class="score">0–1</div>
-      <p>What fraction of ground truth entities appear in retrieved context? Entity-level retrieval quality metric.</p>
-    </div>
-  </div>
-  <div class="bts-story13">
-    <div class="bts-story13-label">💡 How to Use RAGAS in Practice</div>
-    <p style="font-size:13px;line-height:1.8">For production RAG debugging: low <strong>Context Precision</strong> → improve chunking strategy or reranker. Low <strong>Faithfulness</strong> → model hallucinating despite good retrieval. Low <strong>Answer Relevancy</strong> → model answering the wrong question. RAGAS can generate synthetic test sets from your documents, enabling continuous evaluation without human labelers.</p>
-  </div>
-</div>
-
-<div class="bts-card13">
-  <h3>⚖️ LLM-as-Judge &amp; Evaluation Benchmarks <span class="bts-depth13">Frontier</span></h3>
-  <div class="bts-2col13">
-    <div>
-      <h4>LLM-as-Judge (MT-Bench, G-Eval)</h4>
-      <p style="font-size:13px;line-height:1.7">Use a strong LLM (GPT-4) to score responses. Correlates well with human judgments at scale. Known biases to correct for:</p>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1;margin-top:8px">
-        <li><strong>Positional bias:</strong> first answer rated higher</li>
-        <li><strong>Verbosity bias:</strong> longer = better perception</li>
-        <li><strong>Self-enhancement:</strong> GPT-4 prefers GPT-4 outputs</li>
-        <li><strong>Mitigation:</strong> swap order, calibrate with human labels</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Benchmark Taxonomy (2026)</h4>
-      <table class="bts-table13">
-        <tr><th>Benchmark</th><th>What It Measures</th></tr>
-        <tr><td>GLUE / SuperGLUE</td><td>Classic NLU tasks (NLI, QA, similarity)</td></tr>
-        <tr><td>MMLU (57 subjects)</td><td>World knowledge, professional-level QA</td></tr>
-        <tr><td>BIG-Bench Hard</td><td>Reasoning tasks where models fail</td></tr>
-        <tr><td>HELM</td><td>Holistic: accuracy + calibration + fairness + efficiency</td></tr>
-        <tr><td>MT-Bench</td><td>Multi-turn instruction following (LLM judge)</td></tr>
-        <tr><td>HumanEval / MBPP</td><td>Code generation</td></tr>
-        <tr><td>MATH / GSM8K</td><td>Mathematical reasoning</td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>

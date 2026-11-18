@@ -145,6 +145,16 @@
   .mini-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
   .mini-card p, .mini-card li { font-size: 13px; color: #374151; line-height: 1.6; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="1"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 1: Text Preprocessing &amp; Text Representations" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -161,9 +171,9 @@
   <h1>Text Preprocessing &amp; Text Representations</h1>
   <p>How do we turn messy, raw text into numbers a machine can learn from? This week lays the entire foundation.</p>
   <div class="header-chips">
-    <span class="chip">📦 Modules 1 &amp; 2</span>
-    <span class="chip">📝 Quiz 1 Material</span>
-    <span class="chip">💻 HW1: preprocess.py &amp; encode.py</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Modules 1 &amp; 2</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Quiz 1 Material</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW1: preprocess.py &amp; encode.py</span>
   </div>
 </div>
 
@@ -172,7 +182,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon blue">🗺️</div>
+      <div class="section-icon blue"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture</h2><div class="sub">Why this week matters</div></div>
     </div>
     <div class="callout">
@@ -182,7 +192,7 @@
     <div class="two-col">
       <div class="mini-card">
         <h4>Raw Text (what we have)</h4>
-        <p>"He is a Programmer! Check out https://abc.com 😊"</p>
+        <p>"He is a Programmer! Check out https://abc.com :)"</p>
       </div>
       <div class="mini-card">
         <h4>Processed Vector (what we need)</h4>
@@ -195,14 +205,14 @@
   <!-- PART 1: PREPROCESSING -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon green">🧹</div>
+      <div class="section-icon green"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M19 7l-7 7"/><path d="M5 21l4-4"/><path d="M12 14l-5 5-2-2 5-5z"/></svg></div>
       <div><h2>Part 1: Text Preprocessing</h2><div class="sub">Cleaning and normalizing text before encoding</div></div>
     </div>
 
     <!-- Tokenization -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📌 NLP Terminology You Must Know</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> NLP Terminology You Must Know</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body">
@@ -223,7 +233,7 @@
     <!-- Stemming vs Lemmatization -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>✂️ Stemming vs. Lemmatization</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/></svg> Stemming vs. Lemmatization</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body open">
@@ -258,7 +268,7 @@ wl.lemmatize("programmer")  <span class="eq">→ "programmer"</span>
 wl.lemmatize("running", pos='v')  <span class="eq">→ "run"</span>
         </div>
         <div class="callout warning">
-          <strong>⚠️ Quiz 1 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 1 Tested This!</strong>
           "What is the output if stemming is applied to <em>programmer</em>?" → Answer: <strong>"programm"</strong> (not a real word — that's the nature of stemming).
         </div>
       </div>
@@ -267,7 +277,7 @@ wl.lemmatize("running", pos='v')  <span class="eq">→ "run"</span>
     <!-- Noise Removal -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🔇 Noise Removal</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg> Noise Removal</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body">
@@ -281,7 +291,7 @@ wl.lemmatize("running", pos='v')  <span class="eq">→ "run"</span>
         </div>
         <div class="formula-box">
 import re
-text = "Check out https://abc.com! Score: 100% 😊"
+text = "Check out https://abc.com! Score: 100% :)"
 clean = re.sub(r'[^a-zA-Z\s]', '', text)
 <span class="eq">→ "Check out  Score  "</span>
         </div>
@@ -290,7 +300,7 @@ clean = re.sub(r'[^a-zA-Z\s]', '', text)
 
     <!-- Interactive Preprocessor -->
     <div class="interactive-box">
-      <h4>🎮 Interactive Preprocessor</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive Preprocessor</h4>
       <div class="desc">Type any sentence below and see how each preprocessing step transforms it.</div>
       <textarea id="preprocInput" placeholder="e.g. The programmers are running! Check out https://abc.com 123">The programmers are running fast!</textarea>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
@@ -304,7 +314,7 @@ clean = re.sub(r'[^a-zA-Z\s]', '', text)
   <!-- PART 2: REPRESENTATIONS -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon orange">📐</div>
+      <div class="section-icon orange"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg></div>
       <div><h2>Part 2: Text Representations</h2><div class="sub">Turning cleaned text into numbers</div></div>
     </div>
 
@@ -332,20 +342,20 @@ clean = re.sub(r'[^a-zA-Z\s]', '', text)
         <div id="oheViz"></div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 1 Tested This!</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 1 Tested This!</strong>
           "In a n×d OHE matrix, how many 1s are there total?" → Answer: <strong>n</strong> (exactly one 1 per row/word).
         </div>
 
         <div class="two-col" style="margin-top:16px;">
           <div class="mini-card">
-            <h4>✅ Advantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Advantages</h4>
             <ul class="bullet">
               <li>Simple and easy to implement</li>
               <li>Works with any vocabulary</li>
             </ul>
           </div>
           <div class="mini-card">
-            <h4>❌ Disadvantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Disadvantages</h4>
             <ul class="bullet">
               <li>Vectors are huge (size = vocab size)</li>
               <li>Very sparse (mostly zeros)</li>
@@ -359,7 +369,7 @@ clean = re.sub(r'[^a-zA-Z\s]', '', text)
     <!-- Bag of Words -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>🛍️ Bag of Words (BoW)</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg> Bag of Words (BoW)</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body open">
@@ -385,19 +395,19 @@ Doc 2: "this was the worst of times"
 <span class="comment"># Note: 'this','was','the','of','times' are SAME → can't distinguish docs!</span>
         </div>
         <div class="callout warning">
-          <strong>⚠️ Quiz 1: Key Limitation</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 1: Key Limitation</strong>
           BoW (and OHE) both <strong>ignore word order and context</strong>. "Dog bites man" and "Man bites dog" produce the same BoW vector!
         </div>
         <div class="two-col">
           <div class="mini-card">
-            <h4>✅ Advantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Advantages</h4>
             <ul class="bullet">
               <li>Captures word frequency (better than OHE)</li>
               <li>Simple to implement (CountVectorizer)</li>
             </ul>
           </div>
           <div class="mini-card">
-            <h4>❌ Disadvantages</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Disadvantages</h4>
             <ul class="bullet">
               <li>Still huge and sparse</li>
               <li>All words equally "important"</li>
@@ -411,7 +421,7 @@ Doc 2: "this was the worst of times"
     <!-- TF-IDF -->
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📊 TF-IDF (Term Frequency – Inverse Document Frequency)</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> TF-IDF (Term Frequency – Inverse Document Frequency)</h3>
         <span class="chevron">▼</span>
       </div>
       <div class="concept-body open">
@@ -440,7 +450,7 @@ Doc 2: "this was the worst of times"
         </div>
 
         <div class="interactive-box" style="margin-top:16px;">
-          <h4>🎮 TF-IDF Live Calculator</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> TF-IDF Live Calculator</h4>
           <div class="desc">See how TF-IDF scores change as word frequency and document frequency change.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
             <div>
@@ -467,12 +477,12 @@ Doc 2: "this was the worst of times"
         <div id="tfidfBarViz"></div>
 
         <div class="callout tip">
-          <strong>✅ When to use TF-IDF</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> When to use TF-IDF</strong>
           Use TF-IDF for document search, finding similar documents, document clustering, and classification tasks where rare distinctive words matter most.
         </div>
 
         <div class="callout warning">
-          <strong>⚠️ Quiz 1: Key Fact</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz 1: Key Fact</strong>
           "TF-IDF can be used to find similar documents" → <strong>TRUE</strong>. "TF-IDF captures context" → <strong>FALSE</strong> (it still has no word order).
         </div>
       </div>
@@ -482,7 +492,7 @@ Doc 2: "this was the worst of times"
   <!-- COMPARISON TABLE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">⚖️</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></div>
       <div><h2>Comparison: OHE vs BoW vs TF-IDF</h2><div class="sub">When to use which?</div></div>
     </div>
     <table class="compare-table">
@@ -495,21 +505,219 @@ Doc 2: "this was the worst of times"
       <tr><td>Matrix shape</td><td>N×d (one-hot per word) or d×d</td><td>N×d</td><td>N×d</td></tr>
     </table>
     <div class="callout">
-      <strong>🔑 Key Insight for All Three</strong>
+      <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Key Insight for All Three</strong>
       All three representations create <strong>sparse, high-dimensional vectors</strong> (size = vocab size d). This is why Week 4 introduces word embeddings — to replace these with small, dense vectors that actually capture meaning.
     </div>
   </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col{grid-template-columns:1fr}}
+.bts-code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table tr:hover td{background:#fafbff}
+.bts-formula{background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0284c7;margin-bottom:6px}
+.bts-interactive{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin:16px 0}
+.bts-input{width:100%;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:15px;font-family:inherit;outline:none;box-sizing:border-box}
+.bts-input:focus{border-color:#6366f1}
+.bts-output{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-family:monospace;font-size:13px;margin-top:10px;min-height:50px;line-height:1.8}
+.tok-chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:13px;font-family:monospace;font-weight:600;margin:2px;border:1px solid transparent}
+.tok-chip.full{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}
+.tok-chip.sub{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.tok-chip.unk{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.bts-depth{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Subword Tokenization: BPE, WordPiece &amp; Unigram LM</h2>
+  <p>Every modern LLM — GPT-4, LLaMA, BERT, Gemini — starts with subword tokenization. This section covers the algorithms that make these models work: why character and word tokenization both fail, how BPE and WordPiece solve the OOV problem, and why tokenizer choice shapes multilingual fairness in 2026.</p>
+</div>
+
+<div class="bts-card">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Why Not Words? Why Not Characters?</h3>
+  <div class="bts-story">
+    <div class="bts-story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> The Core Problem</div>
+    <p style="font-size:14px;line-height:1.8">Imagine training on English news. The word <code>tokenization</code> appears 10× but <code>detokenization</code> appears once. A word-level model marks it <span class="tok-chip unk">[UNK]</span> — the model is blind. A character model sees 16 individual characters with no semantic structure. Subword tokenization splits <code>detokenization</code> → <span class="tok-chip sub">de</span><span class="tok-chip sub">##token</span><span class="tok-chip sub">##ization</span> — meaningful pieces, each seen thousands of times.</p>
+  </div>
+  <div class="bts-2col">
+    <div>
+      <h4>Word-Level Problems</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Vocabulary explosion (millions of forms)</li>
+        <li>OOV for rare, new, or morphological variants</li>
+        <li>No cross-lingual sharing</li>
+        <li>"tokenization" ≠ "tokenize" + "ation" to the model</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Character-Level Problems</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
+        <li>Very long sequences → quadratic attention cost</li>
+        <li>No semantic units — model learns structure from scratch</li>
+        <li>English "play"= 4 tokens; Arabic equiv may be 2+</li>
+        <li>Works better for languages with small alphabets</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#475569;margin-top:4px"><strong>Subword sweet spot:</strong> fixed vocab (~32K–100K), common words stay whole, rare words split into known morphemes. Zero OOV.</p>
+</div>
+
+<div class="bts-card">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Byte Pair Encoding (BPE) <span class="bts-depth">PhD</span></h3>
+  <p style="font-size:14px;color:#475569;margin-bottom:12px">Originally a data compression algorithm (1994), adapted for NLP by Sennrich et al. (2016). Used by: <strong>GPT-2, GPT-3, GPT-4, LLaMA, Mistral, Qwen, Falcon</strong>.</p>
+  <div class="bts-code"><span style="color:#94a3b8"># BPE Training — core loop</span>
+<span style="color:#93c5fd">def</span> train_bpe(corpus, target_vocab_size):
+    <span style="color:#94a3b8"># Step 1: Initialize with character vocabulary</span>
+    vocab = character_vocab(corpus)   <span style="color:#94a3b8"># {a, b, ..., z, &lt;/w&gt;}</span>
+    merge_rules = []
+
+    <span style="color:#93c5fd">while</span> len(vocab) &lt; target_vocab_size:
+        <span style="color:#94a3b8"># Step 2: Count all adjacent symbol pairs</span>
+        pairs = count_adjacent_pairs(corpus)    <span style="color:#94a3b8"># {'e s':9, 'es t':6, ...}</span>
+
+        <span style="color:#94a3b8"># Step 3: Merge the MOST FREQUENT pair</span>
+        best = max(pairs, key=pairs.get)        <span style="color:#94a3b8"># e.g. ('e','s') → count=9</span>
+        new_token = best[0] + best[1]           <span style="color:#94a3b8"># 'es'</span>
+        vocab.add(new_token)
+        merge_rules.append(best)
+        corpus = apply_merge(corpus, best)      <span style="color:#94a3b8"># Replace all 'e s' → 'es'</span>
+
+    <span style="color:#93c5fd">return</span> vocab, merge_rules</div>
+
+  <h4>Worked Example — Vocabulary from Scratch</h4>
+  <p style="font-size:13px;color:#475569;margin-bottom:10px">Corpus: <em>"low low low lower lower newest newest widest"</em></p>
+  <table class="bts-table">
+    <tr><th>Step</th><th>Most Frequent Pair</th><th>Count</th><th>New Token</th><th>Effect</th></tr>
+    <tr><td>Init</td><td>—</td><td>—</td><td>—</td><td>l o w &lt;/w&gt;, n e w e s t &lt;/w&gt;…</td></tr>
+    <tr><td>1</td><td>(e, s)</td><td>9</td><td><code>es</code></td><td>n e w <strong>es</strong> t &lt;/w&gt;</td></tr>
+    <tr><td>2</td><td>(es, t)</td><td>6</td><td><code>est</code></td><td>n e w <strong>est</strong> &lt;/w&gt;</td></tr>
+    <tr><td>3</td><td>(est, &lt;/w&gt;)</td><td>6</td><td><code>est&lt;/w&gt;</code></td><td>n e w <strong>est&lt;/w&gt;</strong></td></tr>
+    <tr><td>4</td><td>(l, o)</td><td>8</td><td><code>lo</code></td><td><strong>lo</strong> w &lt;/w&gt;</td></tr>
+    <tr><td>5</td><td>(lo, w)</td><td>8</td><td><code>low</code></td><td><strong>low</strong> &lt;/w&gt;</td></tr>
+    <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+  </table>
+  <p style="font-size:13px;color:#475569;margin-top:8px">At inference: <code>lower</code> → <span class="tok-chip sub">low</span><span class="tok-chip sub">er</span> | <code>newest</code> → <span class="tok-chip full">newest</span> | <code>unplayed</code> → <span class="tok-chip sub">un</span><span class="tok-chip sub">play</span><span class="tok-chip sub">ed</span></p>
+</div>
+
+<div class="bts-card">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> WordPiece vs. BPE vs. Unigram LM</h3>
+  <div class="bts-2col">
+    <div>
+      <h4>WordPiece (BERT)</h4>
+      <p style="font-size:13px;line-height:1.7">Merges based on <em>likelihood gain</em> rather than frequency:</p>
+      <div class="bts-formula">score(A,B) = freq(AB) / (freq(A) × freq(B))</div>
+      <p style="font-size:13px;line-height:1.7;margin-top:8px">Favors informative combinations. Continuation pieces marked with <code>##</code>: <code>playing</code> → <code>play</code> <code>##ing</code>. Used by: BERT, DistilBERT, MobileBERT.</p>
+    </div>
+    <div>
+      <h4>Unigram Language Model (T5, XLNet)</h4>
+      <p style="font-size:13px;line-height:1.7">Starts with a <em>large</em> vocabulary and prunes by minimizing likelihood loss. Uses EM algorithm — naturally probabilistic, enables multiple segmentations for data augmentation:</p>
+      <div class="bts-formula">L = Σᵢ log P(xᵢ) where P(x) = Σ_{seg} P(seg)</div>
+    </div>
+  </div>
+  <h4>SentencePiece — Language-Agnostic Wrapper</h4>
+  <p style="font-size:13px;line-height:1.7">SentencePiece is a <em>library</em> (not an algorithm) that runs BPE or Unigram LM without any language-specific preprocessing — no whitespace assumptions, works for Japanese/Chinese/Arabic/Thai. Treats the space character as a normal character. Word starts marked with ▁. Used by: <strong>LLaMA, T5, Gemma, mT5, NLLB</strong>.</p>
+
+  <table class="bts-table" style="margin-top:14px">
+    <tr><th>Algorithm</th><th>Criterion</th><th>Direction</th><th>Used By</th><th>Continuation Marker</th></tr>
+    <tr><td><strong>BPE</strong></td><td>Frequency</td><td>Bottom-up merge</td><td>GPT-4, LLaMA, Mistral</td><td>Ġ (space prefix)</td></tr>
+    <tr><td><strong>WordPiece</strong></td><td>Likelihood gain</td><td>Bottom-up merge</td><td>BERT, DistilBERT</td><td>## prefix</td></tr>
+    <tr><td><strong>Unigram LM</strong></td><td>Min likelihood loss</td><td>Top-down prune</td><td>T5, XLNet, mBART</td><td>▁ word start</td></tr>
+    <tr><td><strong>SentencePiece</strong></td><td>BPE or Unigram</td><td>Language-agnostic</td><td>LLaMA, Gemma, mT5</td><td>▁ word start</td></tr>
+  </table>
+</div>
+
+<div class="bts-card">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg> Fertility — Why Tokenizer Choice Is an Equity Issue in 2026</h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Fertility</strong> = average tokens per word. English BPE fertility ≈ 1.3–1.5. Arabic fertility ≈ 2.5–3.5 due to morphological richness. Thai/CJK even higher. This means an Arabic sentence uses 2× more tokens than English — fewer reasoning steps per context window, higher cost per task, lower effective quality.</p>
+  <div class="bts-story">
+    <div class="bts-story-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Real Impact</div>
+    <p style="font-size:14px;line-height:1.7">GPT-3 and early LLaMA used English-dominant BPE vocabularies. A Turkish verb like <em>çevrimiçileştiremeyebileceklerinden</em> (one word meaning "because they may not be able to make [it] online") tokenizes into 20+ BPE tokens — forcing the model to "spend" its context budget on morphological decomposition. Models trained on larger multilingual vocabularies (XLM-R's 250K tokens) show much better parity. This is an active fairness research area in 2026.</p>
+  </div>
+</div>
+
+<div class="bts-card">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Interactive BPE Tokenizer Demo</h3>
+  <div class="bts-interactive">
+    <h4>Try BPE-style Tokenization</h4>
+    <p style="font-size:13px;color:#475569;margin-bottom:12px">Type any English word or phrase to see approximate BPE-style subword splits, token count, and fertility score.</p>
+    <input type="text" class="bts-input" id="btsIn" placeholder="e.g. tokenization, preprocessing, unbelievable" oninput="btsSplit()" />
+    <div id="btsOut" class="bts-output"></div>
+  </div>
+</div>
+
+</div></div>
+
+<script>
+(function(){
+const prefixes=['pre','un','re','dis','over','under','mis','out','sub','super','trans','auto','bio','geo','inter','micro','mid','multi','non','semi','ultra','de','in','im','ir','il'];
+const suffixes=['tion','ization','ising','ized','izing','ness','ment','er','est','ed','ing','ly','ful','less','able','ible','ical','ous','ive','ary','ory','ity','al','ance','ence','ant','ent','ic','ish','ize','ise'];
+const roots=['token','play','work','learn','process','train','fine','tune','model','embed','layer','head','atten','weight','param','optim','gradi','loss','batch','epoch','neural','network','deep','learn','class','label','input','output','hidden','latent','encod','decod','context','query','key','value','beam','search'];
+
+function splitWord(w){
+  w=w.toLowerCase().trim();
+  if(!w||w.length<2) return [w];
+  // Try prefix
+  for(const p of prefixes){
+    if(w.startsWith(p)&&w.length>p.length+2){
+      const rest=w.slice(p.length);
+      return [p,...splitWord(rest)];
+    }
+  }
+  // Try suffix
+  for(const s of suffixes){
+    if(w.endsWith(s)&&w.length>s.length+2){
+      const stem=w.slice(0,w.length-s.length);
+      if(stem.length>=2) return [...splitWord(stem),s];
+    }
+  }
+  return [w];
+}
+
+window.btsSplit=function(){
+  const raw=document.getElementById('btsIn').value.trim();
+  const out=document.getElementById('btsOut');
+  if(!raw){out.innerHTML='';return;}
+  const words=raw.toLowerCase().split(/\s+/).filter(Boolean);
+  let totalTokens=0;
+  const lines=words.map(w=>{
+    const toks=splitWord(w);
+    totalTokens+=toks.length;
+    const chips=toks.map((t,i)=>`<span class="tok-chip ${i===0?'full':'sub'}">${t}</span>`).join(' ');
+    return `<strong>${w}</strong> → ${chips} (${toks.length} token${toks.length>1?'s':''})`;
+  });
+  const fertility=(totalTokens/words.length).toFixed(2);
+  out.innerHTML=lines.join('<br>')+`<br><br><span style="color:#64748b;font-size:12px">Total: ${totalTokens} token(s) for ${words.length} word(s) | Fertility: <strong>${fertility}</strong> | Note: Real BPE uses learned merge rules from billions of tokens — this demo approximates the concept.</span>`;
+};
+})();
+</script>
+
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 1 Questions</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 1 Questions</h3>
 
     <div class="quiz-q">
       <p>Q1. What is a potential limitation of the Bag of Words approach?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW actually works fine with large datasets.')">It cannot handle large datasets</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW gives equal weight to all words — it actually over-weights common words.')">It focuses too much on rare words</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! BoW treats each word independently — \"dog bites man\" and \"man bites dog\" produce the same vector.')">It ignores word order and context ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! BoW treats each word independently — &quot;dog bites man&quot; and &quot;man bites dog&quot; produce the same vector.')">It ignores word order and context</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW is used for text (written language), not spoken.')">It is only applicable to spoken language</button>
       </div>
       <div class="quiz-feedback" id="qf0"></div>
@@ -519,7 +727,7 @@ Doc 2: "this was the worst of times"
       <p>Q2. Which statement about stemming vs lemmatization is TRUE?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Lemmatization uses a dictionary; stemming uses rules.')">Both use dictionary lookups to find root words</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Porter Stemmer chops off the suffix: programmer → programm (not a real word, but faster).')">Stemming may produce non-real words, lemmatization produces valid words ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Porter Stemmer chops off the suffix: programmer → programm (not a real word, but faster).')">Stemming may produce non-real words, lemmatization produces valid words</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Lemmatization is slower but more accurate.')">Stemming is always more accurate than lemmatization</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Both reduce words to base forms — they have the same goal.')">They serve completely different purposes</button>
       </div>
@@ -531,7 +739,7 @@ Doc 2: "this was the worst of times"
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Only one word could have a 1 if we used the matrix differently, but in OHE each word gets its own row.')">1</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','d would be the size of the vocabulary, not the number of 1s.')">d</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Each of the n rows has exactly one 1 (one word = one position), so there are exactly n ones total.')">n ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Each of the n rows has exactly one 1 (one word = one position), so there are exactly n ones total.')">n</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','It is deterministic: exactly one 1 per word.')">Cannot be determined</button>
       </div>
       <div class="quiz-feedback" id="qf2"></div>
@@ -542,7 +750,7 @@ Doc 2: "this was the worst of times"
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','OHE has no similarity notion — all vectors are orthogonal.')">One-Hot Encoding only</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','BoW gives some frequency info but TF-IDF is much better for similarity.')">Bag of Words only</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! TF-IDF produces weighted vectors that emphasize distinctive words, making cosine similarity meaningful for document retrieval.')">TF-IDF ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! TF-IDF produces weighted vectors that emphasize distinctive words, making cosine similarity meaningful for document retrieval.')">TF-IDF</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','None of them are great at this, but TF-IDF is the best of the three.')">None of the above</button>
       </div>
       <div class="quiz-feedback" id="qf3"></div>
@@ -599,9 +807,9 @@ function updateTFIDF() {
   const tf = tf_count / total;
   const idf = Math.log(N / df);
   const tfidf = tf * idf;
-  const interpretation = tfidf < 0 ? '⚠️ Negative/zero: word appears in too many documents to be useful' :
-    tfidf < 0.1 ? '🟡 Low: common word, not very distinctive' :
-    tfidf < 0.5 ? '🟢 Medium: moderately distinctive' : '🔵 High: very distinctive word!';
+  const interpretation = tfidf < 0 ? '[WARN] Negative/zero: word appears in too many documents to be useful' :
+    tfidf < 0.1 ? '[LOW] Low: common word, not very distinctive' :
+    tfidf < 0.5 ? '[MEDIUM] Medium: moderately distinctive' : '[HIGH] High: very distinctive word!';
   document.getElementById('tfidfOutput').textContent =
     `TF = ${tf_count} / ${total} = ${tf.toFixed(4)}\nIDF = log(${N} / ${df}) = ${idf.toFixed(4)}\n\nTF-IDF = ${tf.toFixed(4)} × ${idf.toFixed(4)} = ${tfidf.toFixed(4)}\n\n${interpretation}`;
 }
@@ -667,203 +875,5 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col{grid-template-columns:1fr}}
-.bts-code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-.bts-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table tr:hover td{background:#fafbff}
-.bts-formula{background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
-.bts-story{background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-left:4px solid #0284c7;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0284c7;margin-bottom:6px}
-.bts-interactive{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin:16px 0}
-.bts-input{width:100%;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:15px;font-family:inherit;outline:none;box-sizing:border-box}
-.bts-input:focus{border-color:#6366f1}
-.bts-output{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-family:monospace;font-size:13px;margin-top:10px;min-height:50px;line-height:1.8}
-.tok-chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:13px;font-family:monospace;font-weight:600;margin:2px;border:1px solid transparent}
-.tok-chip.full{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}
-.tok-chip.sub{background:#fef3c7;color:#92400e;border-color:#fde68a}
-.tok-chip.unk{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
-.bts-depth{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Subword Tokenization: BPE, WordPiece &amp; Unigram LM</h2>
-  <p>Every modern LLM — GPT-4, LLaMA, BERT, Gemini — starts with subword tokenization. This section covers the algorithms that make these models work: why character and word tokenization both fail, how BPE and WordPiece solve the OOV problem, and why tokenizer choice shapes multilingual fairness in 2026.</p>
-</div>
-
-<div class="bts-card">
-  <h3>🤔 Why Not Words? Why Not Characters?</h3>
-  <div class="bts-story">
-    <div class="bts-story-label">📖 The Core Problem</div>
-    <p style="font-size:14px;line-height:1.8">Imagine training on English news. The word <code>tokenization</code> appears 10× but <code>detokenization</code> appears once. A word-level model marks it <span class="tok-chip unk">[UNK]</span> — the model is blind. A character model sees 16 individual characters with no semantic structure. Subword tokenization splits <code>detokenization</code> → <span class="tok-chip sub">de</span><span class="tok-chip sub">##token</span><span class="tok-chip sub">##ization</span> — meaningful pieces, each seen thousands of times.</p>
-  </div>
-  <div class="bts-2col">
-    <div>
-      <h4>Word-Level Problems</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li>Vocabulary explosion (millions of forms)</li>
-        <li>OOV for rare, new, or morphological variants</li>
-        <li>No cross-lingual sharing</li>
-        <li>"tokenization" ≠ "tokenize" + "ation" to the model</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Character-Level Problems</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.2">
-        <li>Very long sequences → quadratic attention cost</li>
-        <li>No semantic units — model learns structure from scratch</li>
-        <li>English "play"= 4 tokens; Arabic equiv may be 2+</li>
-        <li>Works better for languages with small alphabets</li>
-      </ul>
-    </div>
-  </div>
-  <p style="font-size:13px;color:#475569;margin-top:4px"><strong>Subword sweet spot:</strong> fixed vocab (~32K–100K), common words stay whole, rare words split into known morphemes. Zero OOV.</p>
-</div>
-
-<div class="bts-card">
-  <h3>⚙️ Byte Pair Encoding (BPE) <span class="bts-depth">PhD</span></h3>
-  <p style="font-size:14px;color:#475569;margin-bottom:12px">Originally a data compression algorithm (1994), adapted for NLP by Sennrich et al. (2016). Used by: <strong>GPT-2, GPT-3, GPT-4, LLaMA, Mistral, Qwen, Falcon</strong>.</p>
-  <div class="bts-code"><span style="color:#94a3b8"># BPE Training — core loop</span>
-<span style="color:#93c5fd">def</span> train_bpe(corpus, target_vocab_size):
-    <span style="color:#94a3b8"># Step 1: Initialize with character vocabulary</span>
-    vocab = character_vocab(corpus)   <span style="color:#94a3b8"># {a, b, ..., z, &lt;/w&gt;}</span>
-    merge_rules = []
-
-    <span style="color:#93c5fd">while</span> len(vocab) &lt; target_vocab_size:
-        <span style="color:#94a3b8"># Step 2: Count all adjacent symbol pairs</span>
-        pairs = count_adjacent_pairs(corpus)    <span style="color:#94a3b8"># {'e s':9, 'es t':6, ...}</span>
-
-        <span style="color:#94a3b8"># Step 3: Merge the MOST FREQUENT pair</span>
-        best = max(pairs, key=pairs.get)        <span style="color:#94a3b8"># e.g. ('e','s') → count=9</span>
-        new_token = best[0] + best[1]           <span style="color:#94a3b8"># 'es'</span>
-        vocab.add(new_token)
-        merge_rules.append(best)
-        corpus = apply_merge(corpus, best)      <span style="color:#94a3b8"># Replace all 'e s' → 'es'</span>
-
-    <span style="color:#93c5fd">return</span> vocab, merge_rules</div>
-
-  <h4>Worked Example — Vocabulary from Scratch</h4>
-  <p style="font-size:13px;color:#475569;margin-bottom:10px">Corpus: <em>"low low low lower lower newest newest widest"</em></p>
-  <table class="bts-table">
-    <tr><th>Step</th><th>Most Frequent Pair</th><th>Count</th><th>New Token</th><th>Effect</th></tr>
-    <tr><td>Init</td><td>—</td><td>—</td><td>—</td><td>l o w &lt;/w&gt;, n e w e s t &lt;/w&gt;…</td></tr>
-    <tr><td>1</td><td>(e, s)</td><td>9</td><td><code>es</code></td><td>n e w <strong>es</strong> t &lt;/w&gt;</td></tr>
-    <tr><td>2</td><td>(es, t)</td><td>6</td><td><code>est</code></td><td>n e w <strong>est</strong> &lt;/w&gt;</td></tr>
-    <tr><td>3</td><td>(est, &lt;/w&gt;)</td><td>6</td><td><code>est&lt;/w&gt;</code></td><td>n e w <strong>est&lt;/w&gt;</strong></td></tr>
-    <tr><td>4</td><td>(l, o)</td><td>8</td><td><code>lo</code></td><td><strong>lo</strong> w &lt;/w&gt;</td></tr>
-    <tr><td>5</td><td>(lo, w)</td><td>8</td><td><code>low</code></td><td><strong>low</strong> &lt;/w&gt;</td></tr>
-    <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
-  </table>
-  <p style="font-size:13px;color:#475569;margin-top:8px">At inference: <code>lower</code> → <span class="tok-chip sub">low</span><span class="tok-chip sub">er</span> | <code>newest</code> → <span class="tok-chip full">newest</span> | <code>unplayed</code> → <span class="tok-chip sub">un</span><span class="tok-chip sub">play</span><span class="tok-chip sub">ed</span></p>
-</div>
-
-<div class="bts-card">
-  <h3>📐 WordPiece vs. BPE vs. Unigram LM</h3>
-  <div class="bts-2col">
-    <div>
-      <h4>WordPiece (BERT)</h4>
-      <p style="font-size:13px;line-height:1.7">Merges based on <em>likelihood gain</em> rather than frequency:</p>
-      <div class="bts-formula">score(A,B) = freq(AB) / (freq(A) × freq(B))</div>
-      <p style="font-size:13px;line-height:1.7;margin-top:8px">Favors informative combinations. Continuation pieces marked with <code>##</code>: <code>playing</code> → <code>play</code> <code>##ing</code>. Used by: BERT, DistilBERT, MobileBERT.</p>
-    </div>
-    <div>
-      <h4>Unigram Language Model (T5, XLNet)</h4>
-      <p style="font-size:13px;line-height:1.7">Starts with a <em>large</em> vocabulary and prunes by minimizing likelihood loss. Uses EM algorithm — naturally probabilistic, enables multiple segmentations for data augmentation:</p>
-      <div class="bts-formula">L = Σᵢ log P(xᵢ) where P(x) = Σ_{seg} P(seg)</div>
-    </div>
-  </div>
-  <h4>SentencePiece — Language-Agnostic Wrapper</h4>
-  <p style="font-size:13px;line-height:1.7">SentencePiece is a <em>library</em> (not an algorithm) that runs BPE or Unigram LM without any language-specific preprocessing — no whitespace assumptions, works for Japanese/Chinese/Arabic/Thai. Treats the space character as a normal character. Word starts marked with ▁. Used by: <strong>LLaMA, T5, Gemma, mT5, NLLB</strong>.</p>
-
-  <table class="bts-table" style="margin-top:14px">
-    <tr><th>Algorithm</th><th>Criterion</th><th>Direction</th><th>Used By</th><th>Continuation Marker</th></tr>
-    <tr><td><strong>BPE</strong></td><td>Frequency</td><td>Bottom-up merge</td><td>GPT-4, LLaMA, Mistral</td><td>Ġ (space prefix)</td></tr>
-    <tr><td><strong>WordPiece</strong></td><td>Likelihood gain</td><td>Bottom-up merge</td><td>BERT, DistilBERT</td><td>## prefix</td></tr>
-    <tr><td><strong>Unigram LM</strong></td><td>Min likelihood loss</td><td>Top-down prune</td><td>T5, XLNet, mBART</td><td>▁ word start</td></tr>
-    <tr><td><strong>SentencePiece</strong></td><td>BPE or Unigram</td><td>Language-agnostic</td><td>LLaMA, Gemma, mT5</td><td>▁ word start</td></tr>
-  </table>
-</div>
-
-<div class="bts-card">
-  <h3>📏 Fertility — Why Tokenizer Choice Is an Equity Issue in 2026</h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px"><strong>Fertility</strong> = average tokens per word. English BPE fertility ≈ 1.3–1.5. Arabic fertility ≈ 2.5–3.5 due to morphological richness. Thai/CJK even higher. This means an Arabic sentence uses 2× more tokens than English — fewer reasoning steps per context window, higher cost per task, lower effective quality.</p>
-  <div class="bts-story">
-    <div class="bts-story-label">🌍 Real Impact</div>
-    <p style="font-size:14px;line-height:1.7">GPT-3 and early LLaMA used English-dominant BPE vocabularies. A Turkish verb like <em>çevrimiçileştiremeyebileceklerinden</em> (one word meaning "because they may not be able to make [it] online") tokenizes into 20+ BPE tokens — forcing the model to "spend" its context budget on morphological decomposition. Models trained on larger multilingual vocabularies (XLM-R's 250K tokens) show much better parity. This is an active fairness research area in 2026.</p>
-  </div>
-</div>
-
-<div class="bts-card">
-  <h3>🔧 Interactive BPE Tokenizer Demo</h3>
-  <div class="bts-interactive">
-    <h4>Try BPE-style Tokenization</h4>
-    <p style="font-size:13px;color:#475569;margin-bottom:12px">Type any English word or phrase to see approximate BPE-style subword splits, token count, and fertility score.</p>
-    <input type="text" class="bts-input" id="btsIn" placeholder="e.g. tokenization, preprocessing, unbelievable" oninput="btsSplit()" />
-    <div id="btsOut" class="bts-output"></div>
-  </div>
-</div>
-
-</div></div>
-
-<script>
-(function(){
-const prefixes=['pre','un','re','dis','over','under','mis','out','sub','super','trans','auto','bio','geo','inter','micro','mid','multi','non','semi','ultra','de','in','im','ir','il'];
-const suffixes=['tion','ization','ising','ized','izing','ness','ment','er','est','ed','ing','ly','ful','less','able','ible','ical','ous','ive','ary','ory','ity','al','ance','ence','ant','ent','ic','ish','ize','ise'];
-const roots=['token','play','work','learn','process','train','fine','tune','model','embed','layer','head','atten','weight','param','optim','gradi','loss','batch','epoch','neural','network','deep','learn','class','label','input','output','hidden','latent','encod','decod','context','query','key','value','beam','search'];
-
-function splitWord(w){
-  w=w.toLowerCase().trim();
-  if(!w||w.length<2) return [w];
-  // Try prefix
-  for(const p of prefixes){
-    if(w.startsWith(p)&&w.length>p.length+2){
-      const rest=w.slice(p.length);
-      return [p,...splitWord(rest)];
-    }
-  }
-  // Try suffix
-  for(const s of suffixes){
-    if(w.endsWith(s)&&w.length>s.length+2){
-      const stem=w.slice(0,w.length-s.length);
-      if(stem.length>=2) return [...splitWord(stem),s];
-    }
-  }
-  return [w];
-}
-
-window.btsSplit=function(){
-  const raw=document.getElementById('btsIn').value.trim();
-  const out=document.getElementById('btsOut');
-  if(!raw){out.innerHTML='';return;}
-  const words=raw.toLowerCase().split(/\s+/).filter(Boolean);
-  let totalTokens=0;
-  const lines=words.map(w=>{
-    const toks=splitWord(w);
-    totalTokens+=toks.length;
-    const chips=toks.map((t,i)=>`<span class="tok-chip ${i===0?'full':'sub'}">${t}</span>`).join(' ');
-    return `<strong>${w}</strong> → ${chips} (${toks.length} token${toks.length>1?'s':''})`;
-  });
-  const fertility=(totalTokens/words.length).toFixed(2);
-  out.innerHTML=lines.join('<br>')+`<br><br><span style="color:#64748b;font-size:12px">📊 Total: ${totalTokens} token(s) for ${words.length} word(s) | Fertility: <strong>${fertility}</strong> | Note: Real BPE uses learned merge rules from billions of tokens — this demo approximates the concept.</span>`;
-};
-})();
-</script>
-
 </body>
 </html>

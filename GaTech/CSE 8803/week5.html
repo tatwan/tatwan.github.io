@@ -110,6 +110,16 @@
   .w2v-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
   .w2v-box { border-radius: 8px; padding: 8px 14px; text-align: center; font-size: 12px; font-weight: 700; border: 2px solid; }
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-course.css">
+  <script defer src="/assets/course-subbar.js" data-course="cse8803" data-index="5"></script>
+  <script defer src="/assets/lab.js" data-lab-page="Week 5: Neural Networks &amp; Word2Vec" data-lab-parent="Applied NLP — CSE 8803" data-lab-parent-href="/GaTech/CSE%208803/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
@@ -127,9 +137,9 @@
   <h1>Neural Networks &amp; Word2Vec</h1>
   <p>The foundation of deep learning. Connect many Logistic Regression "blocks" together, train with backpropagation, and get remarkably powerful models.</p>
   <div class="header-chips">
-    <span class="chip">📦 Module 6</span>
-    <span class="chip">📝 Quiz 5 Material (due today!)</span>
-    <span class="chip">💻 HW3 starts here</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Module 6</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Quiz 5 Material (due today!)</span>
+    <span class="chip"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HW3 starts here</span>
   </div>
 </div>
 
@@ -138,7 +148,7 @@
   <!-- BIG PICTURE -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon red">🗺️</div>
+      <div class="section-icon red"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <div><h2>The Big Picture</h2><div class="sub">How it all connects</div></div>
     </div>
     <div class="callout info">
@@ -156,13 +166,13 @@
   <!-- PART 1: NEURAL NETWORKS -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon red">🧠</div>
+      <div class="section-icon red"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></div>
       <div><h2>Part 1: Neural Networks (Fully Connected)</h2><div class="sub">Stacking learning blocks to capture complexity</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⚡ Activation Functions — The Non-Linearity Secret</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Activation Functions — The Non-Linearity Secret</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -194,7 +204,7 @@
           <div class="act-card" onclick="selectAct(this,'relu')">
             <h4>ReLU</h4>
             <div class="range">[0, +∞)</div>
-            <div class="use">→ Deep learning ⭐</div>
+            <div class="use">→ Deep learning <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
           </div>
           <div class="act-card" onclick="selectAct(this,'tanh')">
             <h4>Tanh</h4>
@@ -209,7 +219,7 @@
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⏩ Forward Pass — Computing the Network's Output</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg> Forward Pass — Computing the Network's Output</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -233,7 +243,7 @@ Layer 2: y = sigmoid(h × W₂ + b₂)  shape: N × 1 (binary classification)
         </div>
 
         <div class="interactive-box">
-          <h4>🎮 Neural Network Forward Pass Calculator</h4>
+          <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Neural Network Forward Pass Calculator</h4>
           <div class="desc">Trace a 1-hidden-layer network with 2 inputs and 2 hidden neurons, step by step.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
             <div>
@@ -252,7 +262,7 @@ Layer 2: y = sigmoid(h × W₂ + b₂)  shape: N × 1 (binary classification)
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⏪ Backpropagation — How the Network Learns</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg> Backpropagation — How the Network Learns</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -276,7 +286,7 @@ Layer 2: y = sigmoid(h × W₂ + b₂)  shape: N × 1 (binary classification)
 
 <span class="comment"># Training modes:</span>
 <span class="highlight">Stochastic GD (SGD)</span>:  1 sample per iteration → noisy but memory-efficient
-<span class="highlight">Mini-Batch GD</span>:         batch_size samples → balance of speed + stability ⭐
+<span class="highlight">Mini-Batch GD</span>:         batch_size samples → balance of speed + stability <svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 <span class="highlight">Batch GD</span>:              all samples per iteration → stable but slow/memory-heavy
 
 Epoch = one complete pass through all training data
@@ -284,7 +294,7 @@ Iteration = one weight update step
         </div>
 
         <div class="callout tip">
-          <strong>💡 SGD vs Batch GD: Quick Rule</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> SGD vs Batch GD: Quick Rule</strong>
           For 1000 documents with batch_size=50 → 20 iterations per epoch. With SGD (batch=1) → 1000 iterations per epoch. Mini-batch is almost always used in practice.
         </div>
       </div>
@@ -294,13 +304,13 @@ Iteration = one weight update step
   <!-- PART 2: WORD2VEC -->
   <div class="section">
     <div class="section-header">
-      <div class="section-icon purple">🔤</div>
+      <div class="section-icon purple"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 20h16"/><path d="M8 16l4-10 4 10"/><path d="M9.5 12h5"/></svg></div>
       <div><h2>Part 2: Word2Vec (CBoW &amp; Skip-Gram)</h2><div class="sub">Self-supervised word embeddings via prediction tasks</div></div>
     </div>
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>💡 The Word2Vec Big Idea — Self-Supervised Learning</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> The Word2Vec Big Idea — Self-Supervised Learning</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -314,7 +324,7 @@ Iteration = one weight update step
         </div>
 
         <div class="callout info">
-          <strong>🔑 Why Word2Vec over One-Hot?</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Why Word2Vec over One-Hot?</strong>
           One-hot: size = vocab (100k+), no similarity. Word2Vec: size = embedding_dim (100-300), cat≈kitten. Fixed size regardless of corpus.
         </div>
       </div>
@@ -322,7 +332,7 @@ Iteration = one weight update step
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>📦 CBoW (Continuous Bag of Words)</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> CBoW (Continuous Bag of Words)</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -354,7 +364,7 @@ W (input weight matrix) = word embeddings  ← we extract this!
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⏭️ Skip-Gram</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg> Skip-Gram</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -385,7 +395,7 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
 
     <div class="concept-card">
       <div class="concept-header" onclick="toggleConcept(this)">
-        <h3>⚖️ CBoW vs. Skip-Gram — Side by Side</h3>
+        <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg> CBoW vs. Skip-Gram — Side by Side</h3>
         <span class="chevron open">▼</span>
       </div>
       <div class="concept-body open">
@@ -399,14 +409,14 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
           <tr><td>Context dependency</td><td>Position-independent (averages all context)</td><td>Position-independent (predicts each)</td></tr>
         </table>
         <div class="callout warning">
-          <strong>⚠️ Both Word2Vec and GloVe are Context-Independent</strong>
+          <strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Both Word2Vec and GloVe are Context-Independent</strong>
           "bank" always gets the same vector whether you mean river bank or financial bank. This is a key limitation fixed by later models (BERT, Week 9).
         </div>
       </div>
     </div>
 
     <div class="interactive-box">
-      <h4>🎮 Word2Vec Window Explorer</h4>
+      <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Word2Vec Window Explorer</h4>
       <div class="desc">See what training examples Word2Vec generates from a sentence.</div>
       <div style="margin-bottom:10px;">
         <input type="text" id="w2vInput" placeholder="Enter a sentence..." value="the cat sat on the mat" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;margin-bottom:8px;">
@@ -420,16 +430,156 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
     </div>
   </div>
 
+<!-- ========== BEYOND THE SLIDES ========== -->
+<style>
+.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;border-radius:0 0 16px 16px;padding:36px 0;margin:40px 0}
+.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
+.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
+.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
+.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
+.bts-card5{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bts-card5 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bts-card5 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
+.bts-2col5{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:640px){.bts-2col5{grid-template-columns:1fr}}
+.bts-code5{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
+.bts-table5{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.bts-table5 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
+.bts-table5 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.bts-table5 tr:hover td{background:#fafbff}
+.bts-formula5{background:#fff1f2;border-left:4px solid #e11d48;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
+.bts-story5{background:linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%);border-left:4px solid #e11d48;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
+.bts-story5-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#be123c;margin-bottom:6px}
+.bts-depth5{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.scaling-viz{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:20px 24px;font-family:monospace;font-size:12px;line-height:1.9;margin:14px 0;overflow-x:auto;white-space:pre}
+</style>
+
+<div class="bts-wrapper"><div class="bts-inner">
+
+<div class="bts-masthead">
+  <div class="bts-eyebrow"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6 21h12"/><path d="M12 17v4"/><path d="M8 13l4-4 4 4a4 4 0 0 1-8 0z"/></svg> Beyond the Slides · Graduate Depth</div>
+  <h2>Scaling Laws, Negative Sampling &amp; The Science of Scale</h2>
+  <p>Why do bigger models perform better? How do you know how much data to train on? What happens when you scale compute vs. parameters? These aren't intuitions — they're empirical laws with mathematical derivations. Every NLP researcher in 2026 must know Kaplan and Chinchilla.</p>
+</div>
+
+<div class="bts-card5">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Kaplan Scaling Laws (2020) <span class="bts-depth5">PhD Foundational</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">OpenAI (Kaplan et al., 2020) showed that LM validation loss follows smooth <em>power laws</em> in model size N, dataset size D, and compute C, with diminishing returns for each dimension:</p>
+  <div class="bts-2col5">
+    <div>
+      <div class="bts-formula5">L(N) ≈ (N_c / N)^α_N   where α_N ≈ 0.076
+L(D) ≈ (D_c / D)^α_D   where α_D ≈ 0.095
+L(C) ≈ (C_c / C)^α_C   where α_C ≈ 0.057</div>
+      <p style="font-size:12px;color:#475569;line-height:1.7">N_c, D_c, C_c are critical threshold constants. Loss decreases as a power law — doubling model size from 1B→2B gives a smaller gain than going from 100M→200M.</p>
+    </div>
+    <div>
+      <h4>Key Findings from Kaplan 2020</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Model size matters <em>more</em> than dataset size (Kaplan's conclusion)</li>
+        <li>Larger models are more sample-efficient</li>
+        <li>Architecture (width vs. depth) matters less than N for fixed C</li>
+        <li>Motivated GPT-3 (175B) with relatively small training data (~300B tokens)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card5">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg> Chinchilla Scaling Laws (2022) — The Correction</h3>
+  <div class="bts-story5">
+    <div class="bts-story5-label"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> The Paradigm Shift</div>
+    <p style="font-size:14px;line-height:1.8">DeepMind (Hoffmann et al., 2022) re-ran Kaplan's experiments more carefully — using proper learning rate schedules and a wider range of model/data combinations. Conclusion: Kaplan was wrong about the ratio. Both model size and dataset size should scale <em>equally</em>. The optimal model for a given compute budget is much smaller and trained on much more data than Kaplan suggested.</p>
+  </div>
+  <div class="bts-2col5">
+    <div>
+      <div class="bts-formula5">Optimal: N* ∝ C^0.50
+         D* ∝ C^0.50
+
+Chinchilla Rule of Thumb:
+  D* ≈ 20 × N*
+
+Example: 70B params → 1.4T tokens
+         7B  params →  140B tokens</div>
+    </div>
+    <div>
+      <h4>Real-World Impact</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>GPT-3 (175B, 300B tokens) was <em>under-trained</em></li>
+        <li>Chinchilla (70B, 1.4T tokens) matched GPT-3 quality</li>
+        <li>LLaMA-2 (7B, 2T tokens) beats GPT-3 on many benchmarks</li>
+        <li>Modern small models (Phi-3, Gemma) exploit this heavily</li>
+        <li><strong>Lesson:</strong> data quantity ≥ model size for fixed compute</li>
+      </ul>
+    </div>
+  </div>
+  <table class="bts-table5">
+    <tr><th>Model</th><th>Params</th><th>Training Tokens</th><th>Tokens/Param</th><th>Chinchilla-Optimal?</th></tr>
+    <tr><td>GPT-3 (2020)</td><td>175B</td><td>300B</td><td>1.7</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Under-trained</td></tr>
+    <tr><td>Chinchilla (2022)</td><td>70B</td><td>1.4T</td><td>20</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Optimal</td></tr>
+    <tr><td>LLaMA-2 (2023)</td><td>7B</td><td>2T</td><td>286</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>+ Over-trained (inference-efficient)</td></tr>
+    <tr><td>Phi-3-Mini (2024)</td><td>3.8B</td><td>3.3T</td><td>868</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>++ Heavily over-trained for deployment</td></tr>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:6px">Note: "over-training" (beyond Chinchilla optimal) is desirable for small models deployed for inference — you spend compute once at training time, but the smaller model is cheaper to run for millions of queries.</p>
+</div>
+
+<div class="bts-card5">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Test-Time Compute Scaling (2024) <span class="bts-depth5">Frontier Research</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A new scaling axis emerged in 2024: spending <em>more compute at inference time</em> can substitute for a larger model. OpenAI o1/o3, Deepseek-R1 exploit this.</p>
+  <div class="bts-2col5">
+    <div>
+      <h4>Mechanisms</h4>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li><strong>Chain-of-Thought (CoT):</strong> more reasoning tokens → better answers</li>
+        <li><strong>Self-consistency:</strong> sample N completions, majority vote</li>
+        <li><strong>Process Reward Models (PRM):</strong> score intermediate steps</li>
+        <li><strong>Tree search (MCTS):</strong> explore reasoning branches</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Emerging Law</h4>
+      <p style="font-size:13px;line-height:1.8">Snell et al. (2024) showed: for math problems, a smaller model with 16× more inference compute matches a 14× larger model at standard inference. <strong>This opens a new efficiency frontier</strong> — train smaller, reason longer.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bts-card5">
+  <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Word2Vec Negative Sampling — The Math <span class="bts-depth5">PhD</span></h3>
+  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">The slides show Word2Vec. Here's why negative sampling works — and the subtle trick in the noise distribution.</p>
+  <div class="bts-2col5">
+    <div>
+      <h4>Why Negative Sampling?</h4>
+      <p style="font-size:13px;line-height:1.7">Naive softmax over |V|~100K words per token is expensive. Negative sampling replaces the full softmax with a binary classification objective: does this (word, context) pair appear in real data?</p>
+      <div class="bts-formula5">J(θ) = log σ(v_c · v_w)
+       + Σₖ E[log σ(-v_n · v_w)]
+
+where k negative samples drawn from
+P_noise(w) ∝ f(w)^(3/4)</div>
+    </div>
+    <div>
+      <h4>The 3/4 Power Trick</h4>
+      <p style="font-size:13px;line-height:1.7">Uniform sampling over-represents common words ("the", "of"). Raw frequency over-represents them even more. The 3/4 power law is a middle ground — empirically found to work best:</p>
+      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
+        <li>Rare words sampled more than their frequency suggests</li>
+        <li>Common words sampled less</li>
+        <li>Empirically beats both uniform and frequency-proportional</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
   <!-- QUIZ -->
   <div class="quiz-section">
-    <h3>🧪 Quiz Prep — Week 5 / Quiz 5 Questions</h3>
+    <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Quiz Prep — Week 5 / Quiz 5 Questions</h3>
 
     <div class="quiz-q">
       <p>Q1. Which activation function is most commonly used in deep learning due to its optimization-friendly properties?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Sigmoid suffers from vanishing gradients in deep networks — its derivatives become near-zero for large |s|.')">Sigmoid</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Tanh also suffers from vanishing gradients, though less severely than sigmoid.')">Tanh</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! ReLU = max(0,s). Its gradient is 0 or 1 — no vanishing gradient problem for positive inputs. Computationally cheap. The default for hidden layers in deep networks.')">ReLU ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! ReLU = max(0,s). Its gradient is 0 or 1 — no vanishing gradient problem for positive inputs. Computationally cheap. The default for hidden layers in deep networks.')">ReLU</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Sign/Step is not differentiable — cannot be used in backpropagation.')">Sign / Step</button>
       </div>
       <div class="quiz-feedback" id="qf0"></div>
@@ -438,7 +588,7 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
     <div class="quiz-q">
       <p>Q2. In CBoW, the model predicts:</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CBoW = Continuous Bag of Words. It takes the context words (neighbors) as input and predicts the center/target word in the middle.')">The center word from surrounding context words ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! CBoW = Continuous Bag of Words. It takes the context words (neighbors) as input and predicts the center/target word in the middle.')">The center word from surrounding context words</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','That is Skip-Gram, not CBoW. CBoW is the reverse — context as input, center as output.')">The surrounding words from a center word</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Neither algorithm classifies sentiment — they are self-supervised word embedding methods.')">The sentiment of a sentence</button>
       </div>
@@ -449,7 +599,7 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
       <p>Q3. 1000 training documents, batch size = 50. How many iterations per epoch?</p>
       <div class="quiz-options">
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','1000 would be the number of iterations for SGD (batch=1), not mini-batch.')">1000 iterations</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Iterations per epoch = total samples / batch size = 1000 / 50 = 20. One epoch = one full pass through all data.')">20 iterations ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Iterations per epoch = total samples / batch size = 1000 / 50 = 20. One epoch = one full pass through all data.')">20 iterations</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','1 iteration per epoch = batch gradient descent (all data at once). 50 ≠ batch_size here, it\'s the answer we\'re computing.')">50 iterations</button>
         <button class="quiz-opt" onclick="answerQuiz(this,'wrong','Epochs and iterations are different. This question asks about iterations.')">1 epoch = 1 iteration always</button>
       </div>
@@ -459,8 +609,8 @@ window=2, 100 words → 400 training pairs (each word with 4 neighbors)
     <div class="quiz-q">
       <p>Q4. Both Word2Vec and GloVe produce context-dependent embeddings (different vectors for the same word in different contexts) — True or False?</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is FALSE. Both Word2Vec and GloVe produce ONE fixed vector per word. \"bank\" gets the same vector whether financial or river context.')">True — they are context-dependent</button>
-        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Both are context-INdependent — one fixed embedding per word. Context-dependent embeddings come later with ELMo, BERT (Week 9).')">False — they are context-independent ✓</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'wrong','This is FALSE. Both Word2Vec and GloVe produce ONE fixed vector per word. &quot;bank&quot; gets the same vector whether financial or river context.')">True — they are context-dependent</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,'correct','Correct! Both are context-INdependent — one fixed embedding per word. Context-dependent embeddings come later with ELMo, BERT (Week 9).')">False — they are context-independent</button>
       </div>
       <div class="quiz-feedback" id="qf3"></div>
     </div>
@@ -598,145 +748,5 @@ function answerQuiz(btn, result, explanation) {
   fb.className = `quiz-feedback show ${result}`;
 }
 </script>
-<!-- ========== BEYOND THE SLIDES ========== -->
-<style>
-.bts-wrapper{background:#f1f5f9;border-top:4px solid #0f172a;padding:48px 0;margin-top:40px}
-.bts-inner{max-width:960px;margin:0 auto;padding:0 24px}
-.bts-masthead{background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);color:white;padding:36px;border-radius:16px;margin-bottom:32px}
-.bts-eyebrow{display:inline-block;background:rgba(99,102,241,0.9);color:white;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
-.bts-masthead h2{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:10px}
-.bts-masthead p{opacity:.82;font-size:15px;max-width:680px;line-height:1.7}
-.bts-card5{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.bts-card5 h3{font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.bts-card5 h4{font-size:14px;font-weight:700;margin:14px 0 8px;color:#334155}
-.bts-2col5{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-@media(max-width:640px){.bts-2col5{grid-template-columns:1fr}}
-.bts-code5{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;margin:14px 0;overflow-x:auto;white-space:pre}
-.bts-table5{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
-.bts-table5 th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:12px}
-.bts-table5 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.5}
-.bts-table5 tr:hover td{background:#fafbff}
-.bts-formula5{background:#fff1f2;border-left:4px solid #e11d48;border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0;font-family:monospace;font-size:14px;line-height:1.8}
-.bts-story5{background:linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%);border-left:4px solid #e11d48;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0}
-.bts-story5-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#be123c;margin-bottom:6px}
-.bts-depth5{display:inline-block;background:#6366f1;color:white;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
-.scaling-viz{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:20px 24px;font-family:monospace;font-size:12px;line-height:1.9;margin:14px 0;overflow-x:auto;white-space:pre}
-</style>
-
-<div class="bts-wrapper"><div class="bts-inner">
-
-<div class="bts-masthead">
-  <div class="bts-eyebrow">🔬 Beyond the Slides · Graduate Depth</div>
-  <h2>Scaling Laws, Negative Sampling &amp; The Science of Scale</h2>
-  <p>Why do bigger models perform better? How do you know how much data to train on? What happens when you scale compute vs. parameters? These aren't intuitions — they're empirical laws with mathematical derivations. Every NLP researcher in 2026 must know Kaplan and Chinchilla.</p>
-</div>
-
-<div class="bts-card5">
-  <h3>📈 Kaplan Scaling Laws (2020) <span class="bts-depth5">PhD Foundational</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">OpenAI (Kaplan et al., 2020) showed that LM validation loss follows smooth <em>power laws</em> in model size N, dataset size D, and compute C, with diminishing returns for each dimension:</p>
-  <div class="bts-2col5">
-    <div>
-      <div class="bts-formula5">L(N) ≈ (N_c / N)^α_N   where α_N ≈ 0.076
-L(D) ≈ (D_c / D)^α_D   where α_D ≈ 0.095
-L(C) ≈ (C_c / C)^α_C   where α_C ≈ 0.057</div>
-      <p style="font-size:12px;color:#475569;line-height:1.7">N_c, D_c, C_c are critical threshold constants. Loss decreases as a power law — doubling model size from 1B→2B gives a smaller gain than going from 100M→200M.</p>
-    </div>
-    <div>
-      <h4>Key Findings from Kaplan 2020</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>Model size matters <em>more</em> than dataset size (Kaplan's conclusion)</li>
-        <li>Larger models are more sample-efficient</li>
-        <li>Architecture (width vs. depth) matters less than N for fixed C</li>
-        <li>Motivated GPT-3 (175B) with relatively small training data (~300B tokens)</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card5">
-  <h3>🦦 Chinchilla Scaling Laws (2022) — The Correction</h3>
-  <div class="bts-story5">
-    <div class="bts-story5-label">📖 The Paradigm Shift</div>
-    <p style="font-size:14px;line-height:1.8">DeepMind (Hoffmann et al., 2022) re-ran Kaplan's experiments more carefully — using proper learning rate schedules and a wider range of model/data combinations. Conclusion: Kaplan was wrong about the ratio. Both model size and dataset size should scale <em>equally</em>. The optimal model for a given compute budget is much smaller and trained on much more data than Kaplan suggested.</p>
-  </div>
-  <div class="bts-2col5">
-    <div>
-      <div class="bts-formula5">Optimal: N* ∝ C^0.50
-         D* ∝ C^0.50
-
-Chinchilla Rule of Thumb:
-  D* ≈ 20 × N*
-
-Example: 70B params → 1.4T tokens
-         7B  params →  140B tokens</div>
-    </div>
-    <div>
-      <h4>Real-World Impact</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>GPT-3 (175B, 300B tokens) was <em>under-trained</em></li>
-        <li>Chinchilla (70B, 1.4T tokens) matched GPT-3 quality</li>
-        <li>LLaMA-2 (7B, 2T tokens) beats GPT-3 on many benchmarks</li>
-        <li>Modern small models (Phi-3, Gemma) exploit this heavily</li>
-        <li><strong>Lesson:</strong> data quantity ≥ model size for fixed compute</li>
-      </ul>
-    </div>
-  </div>
-  <table class="bts-table5">
-    <tr><th>Model</th><th>Params</th><th>Training Tokens</th><th>Tokens/Param</th><th>Chinchilla-Optimal?</th></tr>
-    <tr><td>GPT-3 (2020)</td><td>175B</td><td>300B</td><td>1.7</td><td>❌ Under-trained</td></tr>
-    <tr><td>Chinchilla (2022)</td><td>70B</td><td>1.4T</td><td>20</td><td>✅ Optimal</td></tr>
-    <tr><td>LLaMA-2 (2023)</td><td>7B</td><td>2T</td><td>286</td><td>✅+ Over-trained (inference-efficient)</td></tr>
-    <tr><td>Phi-3-Mini (2024)</td><td>3.8B</td><td>3.3T</td><td>868</td><td>✅++ Heavily over-trained for deployment</td></tr>
-  </table>
-  <p style="font-size:12px;color:#64748b;margin-top:6px">Note: "over-training" (beyond Chinchilla optimal) is desirable for small models deployed for inference — you spend compute once at training time, but the smaller model is cheaper to run for millions of queries.</p>
-</div>
-
-<div class="bts-card5">
-  <h3>⚡ Test-Time Compute Scaling (2024) <span class="bts-depth5">Frontier Research</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">A new scaling axis emerged in 2024: spending <em>more compute at inference time</em> can substitute for a larger model. OpenAI o1/o3, Deepseek-R1 exploit this.</p>
-  <div class="bts-2col5">
-    <div>
-      <h4>Mechanisms</h4>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li><strong>Chain-of-Thought (CoT):</strong> more reasoning tokens → better answers</li>
-        <li><strong>Self-consistency:</strong> sample N completions, majority vote</li>
-        <li><strong>Process Reward Models (PRM):</strong> score intermediate steps</li>
-        <li><strong>Tree search (MCTS):</strong> explore reasoning branches</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Emerging Law</h4>
-      <p style="font-size:13px;line-height:1.8">Snell et al. (2024) showed: for math problems, a smaller model with 16× more inference compute matches a 14× larger model at standard inference. <strong>This opens a new efficiency frontier</strong> — train smaller, reason longer.</p>
-    </div>
-  </div>
-</div>
-
-<div class="bts-card5">
-  <h3>🎯 Word2Vec Negative Sampling — The Math <span class="bts-depth5">PhD</span></h3>
-  <p style="font-size:14px;line-height:1.8;margin-bottom:12px">The slides show Word2Vec. Here's why negative sampling works — and the subtle trick in the noise distribution.</p>
-  <div class="bts-2col5">
-    <div>
-      <h4>Why Negative Sampling?</h4>
-      <p style="font-size:13px;line-height:1.7">Naive softmax over |V|~100K words per token is expensive. Negative sampling replaces the full softmax with a binary classification objective: does this (word, context) pair appear in real data?</p>
-      <div class="bts-formula5">J(θ) = log σ(v_c · v_w)
-       + Σₖ E[log σ(-v_n · v_w)]
-
-where k negative samples drawn from
-P_noise(w) ∝ f(w)^(3/4)</div>
-    </div>
-    <div>
-      <h4>The 3/4 Power Trick</h4>
-      <p style="font-size:13px;line-height:1.7">Uniform sampling over-represents common words ("the", "of"). Raw frequency over-represents them even more. The 3/4 power law is a middle ground — empirically found to work best:</p>
-      <ul style="font-size:13px;padding-left:18px;line-height:2.1">
-        <li>Rare words sampled more than their frequency suggests</li>
-        <li>Common words sampled less</li>
-        <li>Empirically beats both uniform and frequency-proportional</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-</div></div>
-
 </body>
 </html>
