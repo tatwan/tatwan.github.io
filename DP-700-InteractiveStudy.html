@@ -43,7 +43,7 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 code,pre{font-family:var(--mono)}
 table{border-collapse:collapse;width:100%}
 /* ── HEADER ─────────────────────────────────────────────────── */
-#header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:200;backdrop-filter:blur(8px)}
+#header{position:sticky;top:0;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:200;backdrop-filter:blur(8px)}
 .logo{background:linear-gradient(135deg,var(--primary),var(--purple));border-radius:var(--radius);padding:6px 10px;font-weight:800;font-size:13px;color:#fff;letter-spacing:.5px;white-space:nowrap}
 .header-title{font-weight:600;font-size:15px;color:var(--text);white-space:nowrap}
 .header-sep{flex:1}
@@ -65,12 +65,12 @@ table{border-collapse:collapse;width:100%}
 .hbtn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
 .hbtn.primary:hover{opacity:.85}
 /* Progress bar */
-#progress-bar{position:fixed;top:var(--header-h);left:0;right:0;height:3px;background:var(--border);z-index:199}
+#progress-bar{position:sticky;top:var(--header-h);height:3px;background:var(--border);z-index:199}
 #progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--purple));width:0%;transition:width .4s}
 /* ── LAYOUT ─────────────────────────────────────────────────── */
-#app{display:flex;padding-top:var(--header-h);min-height:100vh}
+#app{display:flex;align-items:flex-start;min-height:100vh}
 /* ── SIDEBAR ─────────────────────────────────────────────────── */
-#sidebar{position:fixed;top:var(--header-h);left:0;width:var(--sidebar-w);height:calc(100vh - var(--header-h));overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;z-index:100}
+#sidebar{position:sticky;top:calc(var(--header-h) + 3px);width:var(--sidebar-w);flex-shrink:0;height:calc(100vh - var(--header-h) - 3px);overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;z-index:100}
 #sidebar::-webkit-scrollbar{width:4px}
 #sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 .nav-section{padding:6px 16px 4px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
@@ -81,7 +81,9 @@ table{border-collapse:collapse;width:100%}
 .nav-item .check{font-size:12px;margin-left:auto;opacity:.6}
 .nav-divider{height:1px;background:var(--border);margin:8px 16px}
 /* ── MAIN ────────────────────────────────────────────────────── */
-#main{margin-left:var(--sidebar-w);flex:1;padding:24px 32px 80px;max-width:1100px}
+#main{flex:1;min-width:0;width:100%;padding:24px 32px 80px;max-width:1100px;overflow-x:clip}
+.card{max-width:100%;overflow-x:auto}
+.two-col>*,.three-col>*,.card-grid>*,.stats-row>*{min-width:0}
 /* ── SECTION HEADERS ─────────────────────────────────────────── */
 .section{margin-bottom:40px}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
@@ -149,26 +151,55 @@ pre{padding:14px;font-size:12.5px;line-height:1.6;overflow-x:auto;color:#e6edf3}
 .acc-body{display:none;padding:16px;background:var(--surface2);border-top:1px solid var(--border)}
 .accordion.open .acc-arrow{transform:rotate(90deg)}
 .accordion.open .acc-body{display:block}
-/* ── QUIZ ────────────────────────────────────────────────────── */
-#quiz-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
-#quiz-modal.open{display:flex}
-#quiz-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;max-width:620px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow)}
-.quiz-progress{font-size:12px;color:var(--muted);margin-bottom:8px}
-.quiz-q{font-size:16px;font-weight:600;margin-bottom:20px;line-height:1.5}
-.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;transition:all .2s;text-align:left}
-.quiz-opt:hover{border-color:var(--primary);background:var(--primary-dim)}
+/* ── QUIZ STUDIO VIEW ────────────────────────────────────────── */
+.hbtn.active-mode{background:var(--primary);color:#fff;border-color:var(--primary)}
+#quiz-studio-view{display:none;max-width:960px;margin:0 auto}
+#quiz-studio-view.open{display:block}
+.qz-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.qz-header h2{font-size:22px;font-weight:700;color:var(--text);margin:0 0 4px}
+.qz-header p{margin:0;color:var(--muted);font-size:13px}
+.qz-readiness-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:20px;margin-bottom:18px}
+.qz-readiness-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.qz-kpis{display:flex;gap:20px;flex-wrap:wrap}
+.qz-kpi-val{font-size:24px;font-weight:800;color:var(--primary);line-height:1.1}
+.qz-kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.qz-domain-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:768px){.qz-domain-bars{grid-template-columns:1fr}}
+.qz-dom-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.qz-dom-head{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;gap:8px}
+.qz-dom-track{height:6px;background:var(--border);border-radius:4px;overflow:hidden}
+.qz-dom-fill{height:100%;background:var(--primary);border-radius:4px;transition:width .35s ease}
+.qz-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.qz-filters{display:flex;flex-wrap:wrap;gap:6px}
+.qz-filter-btn{padding:6px 12px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.qz-filter-btn:hover{border-color:var(--primary);color:var(--text)}
+.qz-filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.qz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;margin-bottom:18px;box-shadow:var(--shadow)}
+.qz-meta-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.quiz-progress{font-size:12px;color:var(--muted);font-weight:600}
+.quiz-q{font-size:16px;font-weight:600;margin-bottom:18px;line-height:1.55;color:var(--text)}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;transition:all .15s;text-align:left;background:var(--surface2);color:var(--text)}
+.quiz-opt:hover:not(:disabled){border-color:var(--primary);background:var(--primary-dim)}
 .quiz-opt.correct{border-color:var(--green);background:var(--green-dim);color:var(--green)}
 .quiz-opt.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red)}
 .quiz-opt.reveal{border-color:var(--green);background:var(--green-dim);color:var(--green)}
 .quiz-opt:disabled{cursor:default}
-.quiz-explain{font-size:13px;color:var(--muted);background:var(--surface2);border-radius:var(--radius);padding:12px;margin-bottom:16px;border-left:3px solid var(--primary)}
-.quiz-footer{display:flex;justify-content:space-between;align-items:center}
-.quiz-score{font-size:13px;color:var(--muted)}
-.quiz-next{padding:8px 20px;background:var(--primary);color:#fff;border-radius:var(--radius);font-weight:600}
+.quiz-explain{font-size:13px;color:var(--text);background:var(--surface2);border-radius:var(--radius);padding:14px;margin-bottom:16px;border-left:3px solid var(--primary);line-height:1.6}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.quiz-score{font-size:13px;color:var(--muted);font-weight:600}
+.quiz-next{padding:8px 20px;background:var(--primary);color:#fff;border-radius:var(--radius);font-weight:600;border:none;cursor:pointer}
 .quiz-next:hover{opacity:.85}
-.quiz-close{padding:8px 20px;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted)}
-.quiz-close:hover{background:var(--surface2)}
+.quiz-close{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius);color:var(--text);background:var(--surface2);cursor:pointer;font-weight:600}
+.quiz-close:hover{border-color:var(--primary)}
+.qz-nav-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:18px}
+.qz-nav-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
+.qz-nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(36px,1fr));gap:6px}
+.qz-nav-dot{height:34px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.qz-nav-dot:hover{border-color:var(--primary)}
+.qz-nav-dot.current{border:2px solid var(--primary);box-shadow:0 0 0 2px var(--primary-dim)}
+.qz-nav-dot.dot-correct{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.qz-nav-dot.dot-wrong{background:var(--red-dim);border-color:var(--red);color:var(--red)}
 /* ── HIGHLIGHT (search) ──────────────────────────────────────── */
 mark{background:var(--yellow-dim);color:var(--yellow);border-radius:3px;padding:0 2px}
 /* ── SCROLLBAR ───────────────────────────────────────────────── */
@@ -178,7 +209,7 @@ mark{background:var(--yellow-dim);color:var(--yellow);border-radius:3px;padding:
 /* ── MISC ────────────────────────────────────────────────────── */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media(max-width:768px){.two-col,.three-col{grid-template-columns:1fr}#sidebar{display:none}#main{margin-left:0;padding:16px}}
+@media(max-width:768px){#header{flex-wrap:wrap;height:auto;padding:10px 12px;gap:8px}.header-title{display:none}#search-wrap{order:4;width:100%;flex:1 1 100%}.stats-row{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.card-grid{grid-template-columns:1fr}#sidebar{display:none}#main{margin-left:0;padding:14px 12px 60px}.card{padding:14px}table{display:block;overflow-x:auto;max-width:100%}}
 p{margin-bottom:10px;font-size:13px;color:var(--muted);line-height:1.7}
 ul,ol{padding-left:20px;font-size:13px;color:var(--muted);line-height:1.8}
 li{margin-bottom:2px}
@@ -210,7 +241,7 @@ strong{color:var(--text)}
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
   <script defer src="/assets/lab.js" data-lab-page="DP-700 Study Guide"></script>
@@ -244,46 +275,48 @@ strong{color:var(--text)}
 </head>
 <body>
 <header id="header">
-  <a href="index.html" class="hbtn" style="color:var(--yellow); border-color:var(--yellow); font-weight:700; text-decoration:none;">← ML_LAB</a>
-  <div class="logo">DP-700</div>
+<div class="logo">DP-700</div>
   <div class="header-title">Mission Control — 4-Hour Study Sprint</div>
   <div class="header-sep"></div>
   <div id="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
     <input id="search" type="text" placeholder="Search topics..." autocomplete="off">
   </div>
-  <button class="hbtn" onclick="toggleTheme()">🌓 Theme</button>
-  <button class="hbtn primary" onclick="openQuiz()">🎯 Practice Quiz</button>
+  <button class="hbtn" onclick="toggleTheme()"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/></svg> Theme</button>
+  <button class="hbtn active-mode" id="tab-btn-study" onclick="switchDP700View('study')">Study Guide (15)</button>
+  <button class="hbtn" id="tab-btn-quiz" onclick="switchDP700View('quiz')"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Practice Exam (30 Qs)</button>
 </header>
 <div id="progress-bar"><div id="progress-fill"></div></div>
 <div id="app">
 <nav id="sidebar">
   <div class="nav-section">Overview</div>
-  <div class="nav-item active" onclick="scrollTo('s0')">Exam Overview</div>
+  <div class="nav-item active" onclick="jumpToSection('s0')">Exam Overview</div>
+  <div class="nav-item" id="sidebar-quiz-link" onclick="switchDP700View('quiz')">Practice Exam &amp; Readiness</div>
   <div class="nav-divider"></div>
   <div class="nav-section">Domain 1 · 30–35%</div>
-  <div class="nav-item" onclick="scrollTo('s1')">Architecture &amp; OneLake</div>
-  <div class="nav-item" onclick="scrollTo('s2')">Security &amp; Governance</div>
-  <div class="nav-item" onclick="scrollTo('s3')">Orchestration</div>
-  <div class="nav-item" onclick="scrollTo('s4')">Lifecycle &amp; Deployment</div>
+  <div class="nav-item" onclick="jumpToSection('s1')">Architecture &amp; OneLake</div>
+  <div class="nav-item" onclick="jumpToSection('s2')">Security &amp; Governance</div>
+  <div class="nav-item" onclick="jumpToSection('s3')">Orchestration</div>
+  <div class="nav-item" onclick="jumpToSection('s4')">Lifecycle &amp; Deployment</div>
   <div class="nav-divider"></div>
   <div class="nav-section">Domain 2 · 30–35%</div>
-  <div class="nav-item" onclick="scrollTo('s5')">Decision Matrices</div>
-  <div class="nav-item" onclick="scrollTo('s6')">Batch Ingestion &amp; Transform</div>
-  <div class="nav-item" onclick="scrollTo('s7')">Streaming &amp; Real-Time Intel</div>
-  <div class="nav-item" onclick="scrollTo('s8')">Delta Lake Deep Dive</div>
+  <div class="nav-item" onclick="jumpToSection('s5')">Decision Matrices</div>
+  <div class="nav-item" onclick="jumpToSection('s6')">Batch Ingestion &amp; Transform</div>
+  <div class="nav-item" onclick="jumpToSection('s7')">Streaming &amp; Real-Time Intel</div>
+  <div class="nav-item" onclick="jumpToSection('s8')">Delta Lake Deep Dive</div>
   <div class="nav-divider"></div>
   <div class="nav-section">Domain 3 · 30–35%</div>
-  <div class="nav-item" onclick="scrollTo('s9')">Monitoring &amp; Capacity</div>
-  <div class="nav-item" onclick="scrollTo('s10')">Troubleshooting &amp; Errors</div>
-  <div class="nav-item" onclick="scrollTo('s11')">Performance Optimization</div>
+  <div class="nav-item" onclick="jumpToSection('s9')">Monitoring &amp; Capacity</div>
+  <div class="nav-item" onclick="jumpToSection('s10')">Troubleshooting &amp; Errors</div>
+  <div class="nav-item" onclick="jumpToSection('s11')">Performance Optimization</div>
   <div class="nav-divider"></div>
   <div class="nav-section">Quick Reference</div>
-  <div class="nav-item" onclick="scrollTo('s12')">KQL Syntax Reference</div>
-  <div class="nav-item" onclick="scrollTo('s13')">PySpark &amp; T-SQL Snippets</div>
-  <div class="nav-item" onclick="scrollTo('s14')">Exam Traps &amp; Gotchas</div>
+  <div class="nav-item" onclick="jumpToSection('s12')">KQL Syntax Reference</div>
+  <div class="nav-item" onclick="jumpToSection('s13')">PySpark &amp; T-SQL Snippets</div>
+  <div class="nav-item" onclick="jumpToSection('s14')">Exam Traps &amp; Gotchas</div>
 </nav>
 <main id="main">
+<div id="study-sections-wrap">
 
 <div class="section" id="s0">
   <div class="section-header">
@@ -324,12 +357,12 @@ strong{color:var(--text)}
   </div>
 
   <div class="callout info">
-    <span class="callout-icon">📖</span>
+    <span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
     <div><strong>Open-book strategy:</strong> At exam start, immediately open 3 MS Learn tabs: search <code>arg_max()</code> (KQL reference), <code>DENSE_RANK</code> (T-SQL reference), <code>pyspark.sql</code> (PySpark reference). Use split-screen for at most 5–10 lookups — it eats time fast. Answer all questions first.</div>
   </div>
 
   <div class="callout warn">
-    <span class="callout-icon">🎯</span>
+    <span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
     <div><strong>What this exam really tests:</strong> Pick the RIGHT Fabric item for each scenario. Three pattern types dominate: (1) Lakehouse vs Warehouse vs Eventhouse, (2) Pipeline vs Dataflow vs Notebook, (3) Write/debug code in T-SQL / PySpark / KQL. <strong>Fabric-native ALWAYS beats legacy Azure equivalents.</strong></div>
   </div>
 
@@ -352,7 +385,7 @@ strong{color:var(--text)}
     <button class="mark-done" onclick="markDone(this,'s1')">✓ Done</button>
   </div>
 
-  <div class="callout info"><span class="callout-icon">💡</span>
+  <div class="callout info"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></span>
     <div><strong>OneLake = "OneDrive for data."</strong> One per tenant. Zero provisioning. Built on ADLS Gen2 (same APIs/SDKs) but fully SaaS — no storage accounts, no access keys, no resource groups. Every Fabric item writes <strong>Delta Parquet</strong> to OneLake automatically.</div>
   </div>
 
@@ -381,7 +414,7 @@ strong{color:var(--text)}
     <tr><td>Deleting a shortcut</td><td>Removes pointer ONLY — target data untouched</td></tr>
   </table></div>
 
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>Exam trap:</strong> "S3 data with egress cost concerns" → shortcut with <strong>caching disabled</strong> (no local copy). Know the difference between <strong>accelerated vs. non-accelerated shortcuts</strong> in Real-Time Intelligence (query acceleration adds a cached copy in OneLake).</div>
   </div>
 
@@ -399,7 +432,7 @@ strong{color:var(--text)}
   <p>Every Lakehouse auto-gets a SQL analytics endpoint. Supports: <code>SELECT</code>, <code>CREATE VIEW</code>, <code>CREATE FUNCTION</code>, <code>CREATE SECURITY POLICY</code>. <strong>No INSERT, UPDATE, DELETE, CREATE TABLE, or any DML.</strong> Auto-syncs Delta tables from /Tables within ~1 min. Sync halts after <strong>15 min of inactivity</strong>.</p>
   <p><em>Note: Lakehouses now support custom schemas (e.g., beyond just `dbo`). Tables organized into custom schemas via Spark will successfully sync to the SQL analytics endpoint.</em></p>
 
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>Exam trap:</strong> Unmanaged external tables created via Spark with a custom <code>LOCATION</code> pointing to <code>/Files</code> are <strong>NOT visible</strong> in the SQL analytics endpoint. Only managed Delta tables in <code>/Tables</code> appear. Use OneLake shortcuts to bridge the gap.</div>
   </div>
 
@@ -409,8 +442,8 @@ strong{color:var(--text)}
     <tr><td>Spark manages</td><td>Data + metadata</td><td>Metadata only</td></tr>
     <tr><td>Storage</td><td><code>/Tables</code> (default)</td><td>User-specified (e.g., <code>/Files/bronze/</code>)</td></tr>
     <tr><td>On DROP TABLE</td><td><strong>Data + metadata deleted</strong></td><td><strong>Only metadata removed</strong> — files persist</td></tr>
-    <tr><td>SQL analytics endpoint</td><td><span class="check-y">✅ Visible</span></td><td><span class="check-n">❌ Not visible</span></td></tr>
-    <tr><td>Direct Lake (Power BI)</td><td><span class="check-y">✅ Works</span></td><td><span class="check-n">❌ Does not work</span></td></tr>
+    <tr><td>SQL analytics endpoint</td><td><span class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Visible</span></td><td><span class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Not visible</span></td></tr>
+    <tr><td>Direct Lake (Power BI)</td><td><span class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Works</span></td><td><span class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Does not work</span></td></tr>
   </table></div>
 
   <h3>Fabric Warehouse Key Facts</h3>
@@ -424,7 +457,7 @@ strong{color:var(--text)}
       <ul><li>Triggers, user-created indexes, cursors</li><li>Recursive CTEs, materialized views</li><li><code>@@IDENTITY / SCOPE_IDENTITY()</code>, <code>FOR XML</code></li><li>DBCC commands, <code>CREATE USER</code></li><li>Named procedure parameters</li><li>Spark access (Warehouse is T-SQL only)</li></ul>
     </div>
   </div>
-  <div class="callout warn"><span class="callout-icon">⚠️</span>
+  <div class="callout warn"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
     <div><strong>Data type migration gotchas:</strong> <code>money</code>→<code>decimal(19,4)</code>, <code>nvarchar</code>→<code>varchar</code>, <code>tinyint</code>→<code>smallint</code>, <code>datetimeoffset</code>→<code>datetime2</code> (time zone data lost)</div>
   </div>
 </div><div class="section" id="s2">
@@ -437,14 +470,14 @@ strong{color:var(--text)}
   <h3>Workspace Roles Permission Matrix</h3>
   <div class="tbl-wrap"><table>
     <tr><th>Capability</th><th>Admin</th><th>Member</th><th>Contributor</th><th>Viewer</th></tr>
-    <tr><td>Delete workspace, manage Git integration</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
-    <tr><td>Add/remove users (lower roles)</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
-    <tr><td>Create/modify/execute items (notebooks, pipelines)</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td></tr>
-    <tr><td>Read data via T-SQL / SQL endpoint</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td></tr>
-    <tr><td>Read data via Spark / OneLake APIs</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td></tr>
-    <tr><td>Share items with others</td><td class="check-y">✅</td><td class="check-y">✅</td><td class="check-n">❌</td><td class="check-n">❌</td></tr>
+    <tr><td>Delete workspace, manage Git integration</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td></tr>
+    <tr><td>Add/remove users (lower roles)</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td></tr>
+    <tr><td>Create/modify/execute items (notebooks, pipelines)</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td></tr>
+    <tr><td>Read data via T-SQL / SQL endpoint</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td></tr>
+    <tr><td>Read data via Spark / OneLake APIs</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td></tr>
+    <tr><td>Share items with others</td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-y"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td><td class="check-n"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td></tr>
   </table></div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>Critical:</strong> Admin/Member/Contributor have implicit OneLake Write access that <strong>overrides</strong> OneLake security roles and RLS/CLS. Viewers can query the SQL analytics endpoint but CANNOT access data via Spark, Lakehouse explorer, or OneLake APIs.</div>
   </div>
 
@@ -457,7 +490,7 @@ strong{color:var(--text)}
     <tr><td><span class="badge purple">Write</span></td><td>Full administrative access</td><td></td></tr>
     <tr><td><span class="badge cyan">Share</span></td><td>Manage permissions for others</td><td></td></tr>
   </table></div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>ReadAll bypasses RLS/CLS/DDM.</strong> When implementing SQL security, ensure users have ONLY <code>ReadData</code>, not <code>ReadAll</code>. <code>ReadAll</code> gives access to raw Parquet files in OneLake, bypassing all warehouse-level security.</div>
   </div>
 
@@ -485,7 +518,7 @@ strong{color:var(--text)}
     <tr><td><code>partial(2,"XXX",2)</code></td><td>55XXXXX89</td><td>Phone numbers, IDs</td></tr>
     <tr><td><code>random(1,100)</code></td><td>42 (random number)</td><td>Numeric values</td></tr>
   </table></div>
-  <div class="callout warn"><span class="callout-icon">⚠️</span>
+  <div class="callout warn"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
     <div>Admin/Member/Contributor see <strong>unmasked</strong> data. Use <code>GRANT UNMASK</code> to selectively reveal. DDM alone doesn't protect against inference attacks — pair with RLS/CLS.</div>
   </div>
 
@@ -499,11 +532,11 @@ strong{color:var(--text)}
 
   <h3>Microsoft Purview Integration</h3>
   <div class="three-col">
-    <div class="card"><div class="card-title">📖 Unified Data Catalog</div><div class="card-body">Auto-catalogs all Fabric assets for discovery</div></div>
-    <div class="card"><div class="card-title">🔗 Data Lineage</div><div class="card-body">Traces data flow across items automatically</div></div>
-    <div class="card"><div class="card-title">🏷️ Sensitivity Labels</div><div class="card-body">Propagate downstream — label source, derived items inherit. Requires Power BI Pro + AIP license</div></div>
-    <div class="card"><div class="card-title">🛡️ DLP Policies</div><div class="card-body">Detect sensitive data in OneLake</div></div>
-    <div class="card"><div class="card-title">📋 Audit Logs</div><div class="card-body">Activity logging via Fabric audit log (Admin portal → Audit logs)</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Unified Data Catalog</div><div class="card-body">Auto-catalogs all Fabric assets for discovery</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Data Lineage</div><div class="card-body">Traces data flow across items automatically</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Sensitivity Labels</div><div class="card-body">Propagate downstream — label source, derived items inherit. Requires Power BI Pro + AIP license</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> DLP Policies</div><div class="card-body">Detect sensitive data in OneLake</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Audit Logs</div><div class="card-body">Activity logging via Fabric audit log (Admin portal → Audit logs)</div></div>
   </div>
 </div><div class="section" id="s3">
   <div class="section-header">
@@ -517,7 +550,7 @@ strong{color:var(--text)}
     <tr><td><span class="badge blue">Data Pipelines</span></td><td>Orchestrating end-to-end workflows, scheduling, chaining, conditional logic, error handling</td><td>Transforming data (pipelines have <strong>no native transformation</strong>)</td></tr>
     <tr><td><span class="badge purple">Spark Notebooks</span></td><td>Complex transforms, large-scale data, SCD Type 2 logic, ML, schema inference</td><td>Simple copy operations (overkill — use Copy activity)</td></tr>
   </table></div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>Key rule:</strong> Pipelines are the <em>orchestrator</em> (the "glue"). They call Notebooks, Dataflows, Stored Procedures, and Copy activities. They <strong>never transform data themselves.</strong><br>• "Orchestrate/schedule" → Pipeline &nbsp;• "Transform 50M rows" → Notebook &nbsp;• "Ingest from SharePoint/API with light cleanup" → Dataflow Gen2</div>
   </div>
 
@@ -555,7 +588,7 @@ strong{color:var(--text)}
     <tr><td><strong>Get Metadata</strong></td><td>Retrieves metadata from data sources</td></tr>
     <tr><td><strong>Fail</strong></td><td>Forces pipeline failure with custom error message</td></tr>
   </table></div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>Activities with no dependency arrows run SIMULTANEOUSLY</strong> (not sequentially). Max <strong>120 activities</strong> per pipeline.</div>
   </div>
 </div><div class="section" id="s4">
@@ -584,7 +617,7 @@ strong{color:var(--text)}
       </ul>
     </div>
   </div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>"Deploy an eventhouse to production"</strong> → Use a <strong>Fabric deployment pipeline</strong>, NOT GitHub Actions, NOT Azure DevOps pipeline, NOT ARM templates.</div>
   </div>
   <h3>Workspace Settings (Exam Targets)</h3>
@@ -601,7 +634,7 @@ strong{color:var(--text)}
     <span class="section-title">The Big Decision Matrices</span>
     <button class="mark-done" onclick="markDone(this,'s5')">✓ Done</button>
   </div>
-  <div class="callout purple"><span class="callout-icon">🧠</span>
+  <div class="callout purple"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></span>
     <div><strong>These decision trees appear in nearly every question set. Memorize them cold.</strong></div>
   </div>
 
@@ -651,12 +684,12 @@ strong{color:var(--text)}
 
   <h3>Loading Patterns</h3>
   <div class="two-col">
-    <div class="card"><div class="card-title">🔄 Full Load</div><div class="card-body">Truncate-and-reload. Simple but expensive. Use for small/slowly changing dimensions or when change tracking isn't available.</div></div>
-    <div class="card"><div class="card-title">➕ Incremental Load</div><div class="card-body">Load only new/changed records. Use watermark column (timestamp/ID). More complex but efficient for large tables.</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Full Load</div><div class="card-body">Truncate-and-reload. Simple but expensive. Use for small/slowly changing dimensions or when change tracking isn't available.</div></div>
+    <div class="card"><div class="card-title"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Incremental Load</div><div class="card-body">Load only new/changed records. Use watermark column (timestamp/ID). More complex but efficient for large tables.</div></div>
   </div>
 
   <h3>SCD Type 2 with Hash-Based Change Detection</h3>
-  <div class="callout tip"><span class="callout-icon">✅</span>
+  <div class="callout tip"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
     <div><strong>Exam tip:</strong> "SCD Type 2 with many columns" → use a <strong>hash function on SOURCE TABLE attributes</strong> to detect changes efficiently instead of comparing each column.</div>
   </div>
   <div class="code-block">
@@ -719,7 +752,7 @@ changed = df_source.join(df_target, <span class="str">"id"</span>).filter(
       </ul>
     </div>
   </div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>"Propagate events from Azure SQL to an Eventstream"</strong> → Enable <strong>Change Data Capture (CDC)</strong> on the database. NOT Extended Events, NOT Stream Analytics, NOT a read-only replica.</div>
   </div>
 
@@ -800,8 +833,8 @@ changed = df_source.join(df_target, <span class="str">"id"</span>).filter(
     <tr><th>Feature</th><th>Lakehouse</th><th>Warehouse</th></tr>
     <tr><td>File retention / time travel window</td><td>7 days (default)</td><td>30 days (max)</td></tr>
     <tr><td>VACUUM minimum retention</td><td>7 days (portal enforces this)</td><td>N/A</td></tr>
-    <tr><td>OPTIMIZE ZORDER</td><td>✅</td><td>✅</td></tr>
-    <tr><td>V-Order default</td><td>✅ Enabled</td><td>✅ Enabled</td></tr>
+    <tr><td>OPTIMIZE ZORDER</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></td></tr>
+    <tr><td>V-Order default</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Enabled</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Enabled</td></tr>
   </table></div>
 
   <h3>V-Order vs. OPTIMIZE — Know the Difference</h3>
@@ -812,7 +845,7 @@ changed = df_source.join(df_target, <span class="str">"id"</span>).filter(
     <tr><td>Write penalty</td><td>~15% slower writes</td><td>No write penalty</td></tr>
     <tr><td>Read benefit</td><td>Up to 50% faster reads (especially Direct Lake)</td><td>Fewer file reads, better partition pruning</td></tr>
   </table></div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>V-Order exam traps:</strong><br>
     • Write-intensive staging tables read once then dropped → <strong>Disable V-Order</strong> (write overhead wasted)<br>
     • Read-heavy reporting tables → <strong>Enable V-Order</strong><br>
@@ -831,7 +864,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
 <span class="cmt"># For MERGE with schema evolution:</span>
 <span class="cmt">-- MERGE WITH SCHEMA EVOLUTION INTO target USING source ON ...</span></pre>
   </div>
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div>Avoid setting <code>spark.databricks.delta.schema.autoMerge.enabled = true</code> at session level in production — use per-operation <code>mergeSchema</code> instead for safety.</div>
   </div>
 </div><div class="section" id="s9">
@@ -841,7 +874,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     <button class="mark-done" onclick="markDone(this,'s9')">✓ Done</button>
   </div>
 
-  <div class="callout warn"><span class="callout-icon">⚠️</span>
+  <div class="callout warn"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
     <div><strong>Capacity Constraint:</strong> Dataflows Gen2 and Eventhouses require an active Fabric capacity (F-SKU) or Premium capacity (P-SKU). They cannot run in a standard Power BI Pro workspace.</div>
   </div>
 
@@ -891,7 +924,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     <tr><td><strong>T-SQL</strong></td><td><code>sys.dm_exec_sessions</code>, <code>sys.dm_exec_requests</code>, Query Insights views</td><td>Deadlocks, timeout, unsupported syntax, permission errors</td></tr>
     <tr><td><strong>OneLake Shortcut</strong></td><td>Lakehouse explorer → shortcut → properties; check credential validity</td><td>Invalid credentials, source path changed, ADLS firewall blocking</td></tr>
   </table></div>
-  <div class="callout tip"><span class="callout-icon">✅</span>
+  <div class="callout tip"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
     <div><strong>"Find active running queries in Warehouse"</strong> → Use <code>sys.dm_exec_sessions</code> filtered by session status = 'running'</div>
   </div>
 </div><div class="section" id="s11">
@@ -901,7 +934,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     <button class="mark-done" onclick="markDone(this,'s11')">✓ Done</button>
   </div>
   <div class="accordion" onclick="toggleAcc(this)">
-    <div class="acc-head">Optimize a Lakehouse Table <span class="acc-arrow">▶</span></div>
+    <div class="acc-head">Optimize a Lakehouse Table <span class="acc-arrow"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="acc-body">
       <ul>
         <li>Run <code>OPTIMIZE</code> to compact small files (bin-packing)</li>
@@ -914,7 +947,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     </div>
   </div>
   <div class="accordion" onclick="toggleAcc(this)">
-    <div class="acc-head">Optimize a Data Warehouse <span class="acc-arrow">▶</span></div>
+    <div class="acc-head">Optimize a Data Warehouse <span class="acc-arrow"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="acc-body">
       <ul>
         <li>V-Order enabled by default — benefits Direct Lake and SQL queries</li>
@@ -926,7 +959,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     </div>
   </div>
   <div class="accordion" onclick="toggleAcc(this)">
-    <div class="acc-head">Optimize Spark Performance <span class="acc-arrow">▶</span></div>
+    <div class="acc-head">Optimize Spark Performance <span class="acc-arrow"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="acc-body">
       <ul>
         <li>Cache DataFrames used multiple times: <code>df.cache()</code> or <code>df.persist()</code></li>
@@ -941,7 +974,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     </div>
   </div>
   <div class="accordion" onclick="toggleAcc(this)">
-    <div class="acc-head">Optimize Eventstreams &amp; Eventhouses <span class="acc-arrow">▶</span></div>
+    <div class="acc-head">Optimize Eventstreams &amp; Eventhouses <span class="acc-arrow"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="acc-body">
       <ul>
         <li>Use <strong>batching</strong> in eventstream to reduce ingestion overhead for high-volume streams</li>
@@ -958,7 +991,7 @@ df.write.option(<span class="str">"overwriteSchema"</span>, <span class="str">"t
     <span class="section-title">KQL Syntax Reference</span>
     <button class="mark-done" onclick="markDone(this,'s12')">✓ Done</button>
   </div>
-  <div class="callout info"><span class="callout-icon">📌</span>
+  <div class="callout info"><span class="callout-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
     <div>KQL is <strong>pipe-based</strong> and <strong>read-only</strong>. Pattern: Filter early → transform → aggregate → render. <code>render</code> must ALWAYS be the LAST operator.</div>
   </div>
 
@@ -1009,7 +1042,7 @@ StormEvents | <span class="kql-kw">summarize</span> <span class="kql-fn">count</
     <tr><td><code>semi / leftsemi</code></td><td>Left rows that HAVE a match in right (no right columns returned)</td></tr>
   </table></div>
 
-  <div class="callout trap"><span class="callout-icon">🔴</span>
+  <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <div><strong>KQL exam traps:</strong><br>
     • <code>sort by</code> is valid KQL (<code>order by</code> also works but <code>sort by</code> is preferred KQL style)<br>
     • <code>project</code> is more efficient than <code>extend</code> — use <code>project</code> when you don't need all columns<br>
@@ -1078,57 +1111,108 @@ df.write.option(<span class="str">"mergeSchema"</span>, <span class="str">"true"
   </div>
 </div><div class="section" id="s14">
   <div class="section-header">
-    <span class="section-num">🔴</span>
+    <span class="section-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span>
     <span class="section-title">Exam Traps &amp; Gotchas — Memorize These</span>
     <button class="mark-done" onclick="markDone(this,'s14')">✓ Done</button>
   </div>
   <div id="traps-list">
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>1. Parallel pipeline activities:</strong> Activities with <em>no dependency arrows</em> run <strong>simultaneously</strong>, not sequentially. Max 120 activities per pipeline.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>2. ReadAll bypasses security:</strong> Users with <code>ReadAll</code> permission bypass ALL warehouse-level security (RLS, CLS, DDM) because they access raw Parquet. Give only <code>ReadData</code> for SQL-only access.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>3. External tables invisible to SQL endpoint:</strong> Unmanaged Spark external tables with custom LOCATION (e.g., /Files) are NOT visible in the SQL analytics endpoint. Use managed tables or shortcuts.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>4. SQL analytics endpoint is READ-ONLY:</strong> Only SELECT, CREATE VIEW, CREATE FUNCTION, CREATE SECURITY POLICY are supported. No DML. Sync halts after 15 min of inactivity.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>5. V-Order is the standard:</strong> It is enabled by default across all Fabric compute engines (Warehouses and Lakehouses). Manually disable it only for write-heavy, read-rarely staging tables.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>6. After VACUUM, time travel is lost:</strong> VACUUM removes files older than retention — those versions can no longer be queried. Lakehouse default = 7 days. Warehouse max = 30 days.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>7. Dataflows Gen2 = append or replace only:</strong> No native MERGE/upsert. Staging is enabled by default for all destinations. For SCD Type 2 or upsert logic → use a Spark Notebook with MERGE.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>8. Admin/Member/Contributor bypass RLS:</strong> Row-level security only restricts Viewer-level and item-share users. Workspace contributors can see all data regardless of RLS policies.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>9. Cross-database queries = same workspace only:</strong> Three-part naming (DB.Schema.Table) works only within the same workspace. Cross-workspace and cross-region queries are NOT supported.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>10. Azure SQL → Eventstream requires CDC:</strong> Must enable Change Data Capture on the source database. NOT Extended Events, NOT Stream Analytics, NOT read-only replica.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>11. Git integration with Azure DevOps needs 4 things:</strong> Organization + Project + Git repository + Branch. All four required.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>12. Eventhouse deployment = Fabric deployment pipeline:</strong> NOT GitHub Actions, NOT Azure DevOps pipeline, NOT ARM templates.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>13. Shortcuts in /Tables = top-level only:</strong> Cannot create shortcuts in subdirectories of /Tables. In /Files, any folder level is allowed.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>14. KQL outer join worsens performance:</strong> <code>kind=outer</code> increases dataset size. It is NEVER the answer to "optimize a KQL query" questions.</div></div>
-    <div class="callout trap"><span class="callout-icon">🔴</span><div><strong>15. SCD Type 2 hash tip:</strong> For tables with many columns, use a hash function on source attributes to detect changes efficiently rather than comparing each column individually.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>1. Parallel pipeline activities:</strong> Activities with <em>no dependency arrows</em> run <strong>simultaneously</strong>, not sequentially. Max 120 activities per pipeline.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>2. ReadAll bypasses security:</strong> Users with <code>ReadAll</code> permission bypass ALL warehouse-level security (RLS, CLS, DDM) because they access raw Parquet. Give only <code>ReadData</code> for SQL-only access.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>3. External tables invisible to SQL endpoint:</strong> Unmanaged Spark external tables with custom LOCATION (e.g., /Files) are NOT visible in the SQL analytics endpoint. Use managed tables or shortcuts.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>4. SQL analytics endpoint is READ-ONLY:</strong> Only SELECT, CREATE VIEW, CREATE FUNCTION, CREATE SECURITY POLICY are supported. No DML. Sync halts after 15 min of inactivity.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>5. V-Order is the standard:</strong> It is enabled by default across all Fabric compute engines (Warehouses and Lakehouses). Manually disable it only for write-heavy, read-rarely staging tables.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>6. After VACUUM, time travel is lost:</strong> VACUUM removes files older than retention — those versions can no longer be queried. Lakehouse default = 7 days. Warehouse max = 30 days.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>7. Dataflows Gen2 = append or replace only:</strong> No native MERGE/upsert. Staging is enabled by default for all destinations. For SCD Type 2 or upsert logic → use a Spark Notebook with MERGE.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>8. Admin/Member/Contributor bypass RLS:</strong> Row-level security only restricts Viewer-level and item-share users. Workspace contributors can see all data regardless of RLS policies.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>9. Cross-database queries = same workspace only:</strong> Three-part naming (DB.Schema.Table) works only within the same workspace. Cross-workspace and cross-region queries are NOT supported.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>10. Azure SQL → Eventstream requires CDC:</strong> Must enable Change Data Capture on the source database. NOT Extended Events, NOT Stream Analytics, NOT read-only replica.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>11. Git integration with Azure DevOps needs 4 things:</strong> Organization + Project + Git repository + Branch. All four required.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>12. Eventhouse deployment = Fabric deployment pipeline:</strong> NOT GitHub Actions, NOT Azure DevOps pipeline, NOT ARM templates.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>13. Shortcuts in /Tables = top-level only:</strong> Cannot create shortcuts in subdirectories of /Tables. In /Files, any folder level is allowed.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>14. KQL outer join worsens performance:</strong> <code>kind=outer</code> increases dataset size. It is NEVER the answer to "optimize a KQL query" questions.</div></div>
+    <div class="callout trap"><span class="callout-icon"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></span><div><strong>15. SCD Type 2 hash tip:</strong> For tables with many columns, use a hash function on source attributes to detect changes efficiently rather than comparing each column individually.</div></div>
   </div>
-</div><div id="quiz-modal">
-  <div id="quiz-box">
-    <div class="quiz-progress" id="quiz-progress">Question 1 of 30</div>
+</div>
+</div><!-- /#study-sections-wrap -->
+
+<section id="quiz-studio-view" aria-label="DP-700 Practice Exam & Domain Readiness">
+  <div class="qz-header">
+    <div>
+      <h2>DP-700 Practice Exam &amp; Domain Readiness</h2>
+      <p>30 scenario questions mapped across all three DP-700 domains. Progress is saved locally in your browser.</p>
+    </div>
+    <button type="button" class="quiz-close" onclick="switchDP700View('study')">&larr; Back to Study Sections</button>
+  </div>
+
+  <div class="qz-readiness-card">
+    <div class="qz-readiness-top">
+      <div class="qz-kpis">
+        <div>
+          <div class="qz-kpi-val" id="qz-overall-pct">0%</div>
+          <div class="qz-kpi-lbl">Overall Accuracy</div>
+        </div>
+        <div>
+          <div class="qz-kpi-val" id="qz-answered-cnt">0 / 30</div>
+          <div class="qz-kpi-lbl">Questions Answered</div>
+        </div>
+        <div>
+          <div class="qz-kpi-val" id="qz-correct-cnt">0</div>
+          <div class="qz-kpi-lbl">Correct Answers</div>
+        </div>
+      </div>
+      <button type="button" class="quiz-close" onclick="resetQuizProgress()">Reset Progress</button>
+    </div>
+    <div class="qz-domain-bars" id="qz-domain-bars"></div>
+  </div>
+
+  <div class="qz-controls">
+    <div class="qz-filters" id="qz-filters">
+      <button type="button" class="qz-filter-btn active" data-domain="all" onclick="setQuizFilter('all')">All Domains (30)</button>
+      <button type="button" class="qz-filter-btn" data-domain="Domain 1" onclick="setQuizFilter('Domain 1')">Domain 1: Implement &amp; Manage (12)</button>
+      <button type="button" class="qz-filter-btn" data-domain="Domain 2" onclick="setQuizFilter('Domain 2')">Domain 2: Ingest &amp; Transform (11)</button>
+      <button type="button" class="qz-filter-btn" data-domain="Domain 3" onclick="setQuizFilter('Domain 3')">Domain 3: Monitor &amp; Optimize (7)</button>
+      <button type="button" class="qz-filter-btn" data-domain="unanswered" onclick="setQuizFilter('unanswered')">Unanswered / Missed</button>
+    </div>
+    <button type="button" class="quiz-close" onclick="shuffleActiveQuiz()">Shuffle Order</button>
+  </div>
+
+  <div class="qz-card" id="quiz-box">
+    <div class="qz-meta-row">
+      <div class="quiz-progress" id="quiz-progress">Question 1 of 30</div>
+      <span class="badge blue" id="quiz-domain-badge">Domain 1</span>
+    </div>
     <div class="quiz-q" id="quiz-q"></div>
     <div class="quiz-options" id="quiz-opts"></div>
     <div class="quiz-explain" id="quiz-explain" style="display:none"></div>
     <div class="quiz-footer">
+      <button type="button" class="quiz-close" id="quiz-prev" onclick="prevQuestion()">&larr; Previous</button>
       <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
-      <div style="display:flex;gap:8px">
-        <button class="quiz-close" onclick="closeQuiz()">✕ Close</button>
-        <button class="quiz-next" id="quiz-next" onclick="nextQuestion()" style="display:none">Next →</button>
-      </div>
+      <button type="button" class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next &rarr;</button>
     </div>
   </div>
-</div>
+
+  <div class="qz-nav-card">
+    <div class="qz-nav-title">Question Navigator</div>
+    <div class="qz-nav-grid" id="qz-nav-grid"></div>
+  </div>
+</section>
 
 </main>
 </div><script>
 /* ── TIMER ───────────────────────────────────────────────────── */
 let totalSeconds = 4 * 3600;
 const timerEl = document.getElementById('timer');
-const timerInterval = setInterval(() => {
-  if (totalSeconds <= 0) { clearInterval(timerInterval); timerEl.textContent = 'TIME UP'; return; }
-  totalSeconds--;
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  timerEl.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  timerEl.className = totalSeconds <= 3600 ? (totalSeconds <= 900 ? 'danger' : 'warn') : '';
-}, 1000);
+if (timerEl) {
+  const timerInterval = setInterval(() => {
+    if (totalSeconds <= 0) { clearInterval(timerInterval); timerEl.textContent = 'TIME UP'; return; }
+    totalSeconds--;
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    timerEl.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    timerEl.className = totalSeconds <= 3600 ? (totalSeconds <= 900 ? 'danger' : 'warn') : '';
+  }, 1000);
+}
 
 /* ── THEME ───────────────────────────────────────────────────── */
 function toggleTheme() {
@@ -1137,10 +1221,14 @@ function toggleTheme() {
 }
 
 /* ── NAVIGATION ──────────────────────────────────────────────── */
-function scrollTo(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+function jumpToSection(id) {
+  switchDP700View('study');
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  if (typeof event !== 'undefined' && event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
 }
 
 /* ── MARK DONE ───────────────────────────────────────────────── */
@@ -1148,9 +1236,9 @@ const done = {};
 function markDone(btn, id) {
   done[id] = !done[id];
   btn.classList.toggle('done', done[id]);
-  btn.textContent = done[id] ? '✅ Done' : '✓ Done';
+  btn.textContent = done[id] ? '✓ Done' : '✓ Done';
   const navItem = document.querySelector(`.nav-item[onclick*="${id}"]`);
-  if (navItem) { navItem.classList.toggle('done', done[id]); navItem.querySelector('.check') && (navItem.querySelector('.check').textContent = done[id] ? '✅' : ''); }
+  if (navItem) { navItem.classList.toggle('done', done[id]); navItem.querySelector('.check') && (navItem.querySelector('.check').textContent = done[id] ? '✓' : ''); }
   updateProgress();
 }
 function updateProgress() {
@@ -1200,104 +1288,272 @@ searchEl.addEventListener('input', () => {
 });
 
 /* ── QUIZ DATA ───────────────────────────────────────────────── */
+const DP700_DOMAINS = {
+  'Domain 1': { title: 'Implement & Manage Analytics Solution', weight: '30–35%' },
+  'Domain 2': { title: 'Ingest & Transform Data', weight: '30–35%' },
+  'Domain 3': { title: 'Monitor & Optimize Analytics Solution', weight: '30–35%' }
+};
+
 const quizData = [
-  { q: "A team needs to analyze IoT sensor data with sub-second latency using time-series queries. What Fabric item should they use?", opts: ["Fabric Warehouse", "Spark Lakehouse", "Eventhouse / KQL Database", "Dataflow Gen2"], ans: 2, exp: "Eventhouse / KQL Database is purpose-built for streaming, telemetry, IoT, and time-series data. It auto-indexes by ingestion time and uses KQL for sub-second query performance." },
-  { q: "You need to implement SCD Type 2 logic with complex multi-column joins on 500M rows. Which tool is most appropriate?", opts: ["Dataflow Gen2", "Pipeline Copy activity", "Spark Notebook", "T-SQL Stored Procedure in Warehouse"], ans: 2, exp: "Spark Notebooks handle large-scale transforms, SCD logic, and complex joins. Dataflow Gen2 only supports append/replace (no MERGE). Pipelines don't transform data." },
-  { q: "A Spark external table was created with a custom LOCATION pointing to /Files/raw/. Is it visible in the SQL analytics endpoint?", opts: ["Yes, all Delta tables are visible", "No, only managed Delta tables in /Tables are visible", "Yes, if it's in Delta format", "Only if you run OPTIMIZE first"], ans: 1, exp: "Only managed Delta tables in the /Tables folder are visible in the SQL analytics endpoint. External tables with custom LOCATION are not exposed there." },
-  { q: "Which workspace role can read data via Spark AND the SQL endpoint, but CANNOT share items with others?", opts: ["Admin", "Member", "Contributor", "Viewer"], ans: 2, exp: "Contributor can create/modify items and access data via Spark/SQL, but cannot share items. Only Admin and Member can share." },
-  { q: "After running VACUUM on a Lakehouse Delta table with 24-hour retention, what happens to time travel to earlier versions?", opts: ["Time travel still works for 7 days", "Time travel is impossible for vacuumed file versions", "Only warehouse time travel is affected", "VACUUM only removes the delta_log, not the data"], ans: 1, exp: "VACUUM removes data files no longer referenced and older than the retention period. After VACUUM, time travel to those versions becomes impossible. It does NOT remove the _delta_log." },
-  { q: "V-Order is enabled by default in which Fabric items?", opts: ["Lakehouse only", "Fabric Warehouse only", "All Fabric compute engines (Lakehouse, Warehouse, Pipelines)", "Eventhouse"], ans: 2, exp: "Microsoft updated V-Order to be enabled by default across all Fabric compute engines, including Spark (Lakehouses) and Warehouses." },
-  { q: "A user has ReadAll permission on a Fabric Warehouse. RLS and Column-Level Security are configured. Can the user see all data including RLS-protected rows?", opts: ["No, RLS applies to all users", "Yes, ReadAll bypasses all SQL-level security", "Only if they are also a workspace Admin", "No, only DDM is bypassed"], ans: 1, exp: "ReadAll permission gives direct access to raw Parquet files in OneLake, completely bypassing RLS, CLS, and DDM. To enforce SQL-level security, users should only have ReadData." },
-  { q: "Pipeline activities A and B have NO dependency arrows between them. How do they execute?", opts: ["Sequentially (A then B)", "Simultaneously (in parallel)", "B waits for A to succeed", "Only one runs based on conditions"], ans: 1, exp: "Pipeline activities with no dependency arrows run simultaneously (in parallel). Dependency arrows control the execution order and conditions (success, failure, completion)." },
-  { q: "What is the smoothing window for background operations (e.g., scheduled Spark jobs) in the Fabric CU consumption model?", opts: ["5–64 minutes", "1 hour", "24 hours", "7 days"], ans: 2, exp: "Background operations (scheduled jobs, Spark, most warehouse operations) are smoothed over 24 hours. Interactive operations are smoothed over 5–64 minutes." },
-  { q: "In KQL, what is the difference between 'project' and 'extend'?", opts: ["project adds columns; extend removes columns", "project selects/reduces columns; extend adds computed columns keeping all existing ones", "They are identical operators", "extend is for joins; project is for aggregation"], ans: 1, exp: "'project' selects specific columns (reduces output, more efficient). 'extend' adds new computed columns while KEEPING all existing columns. Use project when you don't need all columns." },
-  { q: "Where can shortcuts be created in /Tables in a Lakehouse?", opts: ["Any folder level", "Top level only", "Only in subdirectories", "Anywhere except root"], ans: 1, exp: "In /Tables, shortcuts can only be created at the TOP LEVEL. If the target contains Delta data, it's automatically recognized as a queryable table. In /Files, any folder level is allowed." },
-  { q: "To deploy a Fabric Eventhouse from Dev to Production, what tool should you use?", opts: ["GitHub Actions", "Azure DevOps pipeline (YAML)", "Fabric Deployment Pipeline", "ARM templates"], ans: 2, exp: "Fabric Deployment Pipeline is the correct Fabric-native CI/CD tool for promoting items (including Eventhouses) across Dev/Test/Prod stages. External CI/CD tools like GitHub Actions are not the answer." },
-  { q: "What does enabling 'One Logical Copy' on an Eventhouse do?", opts: ["Replicates data to a second region", "Makes KQL data available in OneLake as Delta Parquet", "Creates a backup of the KQL database", "Enables cross-workspace queries"], ans: 1, exp: "'One Logical Copy' in an Eventhouse exposes the KQL data in OneLake as Delta Parquet, making it available to Spark, SQL endpoints, and Direct Lake without data duplication." },
-  { q: "Dataflows Gen2 staging is enabled by default for which destinations?", opts: ["Azure SQL Database only", "Fabric Warehouse only", "Lakehouse only", "All destinations (including Lakehouses)"], ans: 3, exp: "By default, staging is enabled for all destinations in Dataflows Gen2, including Lakehouses. It uses a hidden staging lakehouse. You should manually disable it for simple lakehouse loads to avoid double-writes." },
-  { q: "What happens when you DROP a managed Delta table in a Lakehouse?", opts: ["Only metadata is removed; files persist", "Both data files and metadata are deleted", "Files are moved to /Files/archive", "Only the transaction log is removed"], ans: 1, exp: "Dropping a managed table deletes BOTH the data files AND the metadata. External tables only remove metadata (files persist). This is a critical difference to know." },
-  { q: "For Git integration with Azure DevOps, which four elements are required?", opts: ["Tenant, subscription, resource group, storage account", "Organization, project, Git repository, branch", "Workspace, capacity, domain, item", "Client ID, client secret, tenant ID, scope"], ans: 1, exp: "Azure DevOps Git integration in Fabric requires: Organization, Project, Git repository, and Branch — all four are required." },
-  { q: "What is the maximum number of activities in a single Fabric Data Pipeline?", opts: ["50", "80", "120", "Unlimited"], ans: 2, exp: "A Fabric Data Pipeline supports a maximum of 120 activities. This is a specific limit that has appeared on the exam." },
-  { q: "An engineer writes a Spark unmanaged external table using: CREATE TABLE t USING DELTA LOCATION 'Files/bronze/'. Will this appear in the SQL analytics endpoint?", opts: ["Yes, all Delta tables appear", "No, only managed tables in /Tables appear", "Yes, after running OPTIMIZE", "Yes, after a 15-minute sync"], ans: 1, exp: "Unmanaged external tables (created with a custom LOCATION) are NOT visible in the SQL analytics endpoint. Only managed Delta tables stored in the /Tables folder are auto-synced and visible." },
-  { q: "To detect changes efficiently in SCD Type 2 when a source table has 40 tracked columns, the best practice is:", opts: ["Compare each column individually with CASE statements", "Use a hash function on all source attributes and compare the hash", "Always do a full reload", "Use a timestamp column only"], ans: 1, exp: "Using a hash function (e.g., MD5 or SHA) on all tracked source columns generates a single comparison value. This is far more efficient than comparing 40 individual columns." },
-  { q: "A Lakehouse SQL analytics endpoint sync has paused. What most likely caused this?", opts: ["Too many Delta files", "15 minutes of inactivity", "A failed OPTIMIZE command", "Schema evolution was enabled"], ans: 1, exp: "The SQL analytics endpoint sync process halts after 15 minutes of inactivity on the lakehouse. It resumes automatically when the lakehouse is accessed again." },
-  { q: "Which throttling stage adds a 20-second delay to interactive operations but allows them to still complete?", opts: ["Interactive Rejection", "Background Rejection", "Interactive Delay", "Burst Overflow"], ans: 2, exp: "The 'Interactive Delay' stage (stage 2) adds a 20-second delay to interactive requests. They still complete. 'Interactive Rejection' (stage 3) actually rejects them." },
-  { q: "To find currently running queries in a Fabric Warehouse, what should you query?", opts: ["sys.dm_exec_query_stats", "sys.dm_exec_sessions filtered by status", "Monitoring hub job history", "Query Insights semantic model"], ans: 1, exp: "sys.dm_exec_sessions filtered by session status = 'running' shows actively running queries. This is the correct DMV for live query monitoring in Fabric Warehouse." },
-  { q: "In KQL, which join kind increases dataset size and is NEVER the answer to an optimization question?", opts: ["inner", "leftsemi", "fullouter / outer", "anti"], ans: 2, exp: "kind=outer (or fullouter) returns all rows from both tables, significantly increasing dataset size. It worsens performance and is never the 'optimization' answer in exam questions." },
-  { q: "A Dataflow Gen2 needs to perform an upsert (MERGE) into a target table. What is the correct approach?", opts: ["Enable staging and select MERGE output mode", "Use append mode with a primary key", "Dataflow Gen2 does not support MERGE — use a Spark Notebook instead", "Use the Lookup activity in Dataflow Gen2"], ans: 2, exp: "Dataflow Gen2 only supports Append and Replace output modes. There is no native MERGE/upsert. For SCD Type 2 or upsert logic, use a Spark Notebook with the MERGE INTO command." },
-  { q: "What is the write-time performance penalty for enabling V-Order on a Lakehouse table?", opts: ["No performance impact", "~5% slower writes", "~15% slower writes", "~50% slower writes"], ans: 2, exp: "V-Order introduces approximately a 15% write-time penalty due to the additional sorting and encoding within Parquet row groups. The benefit is up to 50% faster reads." },
-  { q: "An Eventstream needs to receive events from Azure SQL Server in near-real-time. What must be configured on the source?", opts: ["Extended Events (XE) sessions", "Azure SQL Read-Only Replica", "Change Data Capture (CDC)", "SQL Server Audit"], ans: 2, exp: "Eventstream's Azure SQL connector uses Change Data Capture (CDC). CDC must be enabled on the source database to capture row-level changes and stream them to Eventstream." },
-  { q: "Which Fabric item serves as the tenant-wide discovery layer for all streaming data in motion?", opts: ["Fabric Activator", "Real-Time Hub", "Eventstream", "Eventhouse"], ans: 1, exp: "Real-Time Hub is the tenant-wide, single logical place for all streaming data in motion (one per tenant, like OneLake). It lists all eventstream outputs and KQL tables you have access to." },
-  { q: "A shortcut pointing to Amazon S3 is created in a Lakehouse. What security model does it use?", opts: ["Passthrough (caller's identity)", "Service principal authentication only", "Delegated credentials (stored in the shortcut)", "Microsoft Entra token pass-through"], ans: 2, exp: "External shortcuts (ADLS Gen2, S3, GCS, etc.) use delegated credentials stored in the shortcut definition. Any user with Lakehouse access can read through using those stored credentials." },
-  { q: "Cross-database queries using three-part naming in Fabric Warehouse work across:", opts: ["Any workspace in the same capacity", "Any workspace in the same tenant", "Items within the same workspace only", "Any workspace with the same domain"], ans: 2, exp: "Three-part naming (DatabaseName.SchemaName.TableName) for cross-database queries works ONLY within the same workspace. Cross-workspace and cross-region queries are not supported." },
-  { q: "A user is a Workspace Viewer. They try to access Lakehouse data via the Lakehouse explorer (OneLake API). What happens?", opts: ["They get read-only access", "They can access if OneLake security roles allow it", "Access is denied — Viewers cannot access via Spark or OneLake APIs", "They need ReadAll permission on the specific item"], ans: 2, exp: "Workspace Viewers can query data via the SQL analytics endpoint (T-SQL), but CANNOT access data via Spark, the Lakehouse explorer, or OneLake APIs. Those require Contributor or higher." }
+  { id: 1, domain: "Domain 2", q: "A team needs to analyze IoT sensor data with sub-second latency using time-series queries. What Fabric item should they use?", opts: ["Fabric Warehouse", "Spark Lakehouse", "Eventhouse / KQL Database", "Dataflow Gen2"], ans: 2, exp: "Eventhouse / KQL Database is purpose-built for streaming, telemetry, IoT, and time-series data. It auto-indexes by ingestion time and uses KQL for sub-second query performance." },
+  { id: 2, domain: "Domain 2", q: "You need to implement SCD Type 2 logic with complex multi-column joins on 500M rows. Which tool is most appropriate?", opts: ["Dataflow Gen2", "Pipeline Copy activity", "Spark Notebook", "T-SQL Stored Procedure in Warehouse"], ans: 2, exp: "Spark Notebooks handle large-scale transforms, SCD logic, and complex joins. Dataflow Gen2 only supports append/replace (no MERGE). Pipelines don't transform data." },
+  { id: 3, domain: "Domain 1", q: "A Spark external table was created with a custom LOCATION pointing to /Files/raw/. Is it visible in the SQL analytics endpoint?", opts: ["Yes, all Delta tables are visible", "No, only managed Delta tables in /Tables are visible", "Yes, if it's in Delta format", "Only if you run OPTIMIZE first"], ans: 1, exp: "Only managed Delta tables in the /Tables folder are visible in the SQL analytics endpoint. External tables with custom LOCATION are not exposed there." },
+  { id: 4, domain: "Domain 1", q: "Which workspace role can read data via Spark AND the SQL endpoint, but CANNOT share items with others?", opts: ["Admin", "Member", "Contributor", "Viewer"], ans: 2, exp: "Contributor can create/modify items and access data via Spark/SQL, but cannot share items. Only Admin and Member can share." },
+  { id: 5, domain: "Domain 2", q: "After running VACUUM on a Lakehouse Delta table with 24-hour retention, what happens to time travel to earlier versions?", opts: ["Time travel still works for 7 days", "Time travel is impossible for vacuumed file versions", "Only warehouse time travel is affected", "VACUUM only removes the delta_log, not the data"], ans: 1, exp: "VACUUM removes data files no longer referenced and older than the retention period. After VACUUM, time travel to those versions becomes impossible. It does NOT remove the _delta_log." },
+  { id: 6, domain: "Domain 3", q: "V-Order is enabled by default in which Fabric items?", opts: ["Lakehouse only", "Fabric Warehouse only", "All Fabric compute engines (Lakehouse, Warehouse, Pipelines)", "Eventhouse"], ans: 2, exp: "Microsoft updated V-Order to be enabled by default across all Fabric compute engines, including Spark (Lakehouses) and Warehouses." },
+  { id: 7, domain: "Domain 1", q: "A user has ReadAll permission on a Fabric Warehouse. RLS and Column-Level Security are configured. Can the user see all data including RLS-protected rows?", opts: ["No, RLS applies to all users", "Yes, ReadAll bypasses all SQL-level security", "Only if they are also a workspace Admin", "No, only DDM is bypassed"], ans: 1, exp: "ReadAll permission gives direct access to raw Parquet files in OneLake, completely bypassing RLS, CLS, and DDM. To enforce SQL-level security, users should only have ReadData." },
+  { id: 8, domain: "Domain 1", q: "Pipeline activities A and B have NO dependency arrows between them. How do they execute?", opts: ["Sequentially (A then B)", "Simultaneously (in parallel)", "B waits for A to succeed", "Only one runs based on conditions"], ans: 1, exp: "Pipeline activities with no dependency arrows run simultaneously (in parallel). Dependency arrows control the execution order and conditions (success, failure, completion)." },
+  { id: 9, domain: "Domain 3", q: "What is the smoothing window for background operations (e.g., scheduled Spark jobs) in the Fabric CU consumption model?", opts: ["5–64 minutes", "1 hour", "24 hours", "7 days"], ans: 2, exp: "Background operations (scheduled jobs, Spark, most warehouse operations) are smoothed over 24 hours. Interactive operations are smoothed over 5–64 minutes." },
+  { id: 10, domain: "Domain 2", q: "In KQL, what is the difference between 'project' and 'extend'?", opts: ["project adds columns; extend removes columns", "project selects/reduces columns; extend adds computed columns keeping all existing ones", "They are identical operators", "extend is for joins; project is for aggregation"], ans: 1, exp: "'project' selects specific columns (reduces output, more efficient). 'extend' adds new computed columns while KEEPING all existing columns. Use project when you don't need all columns." },
+  { id: 11, domain: "Domain 1", q: "Where can shortcuts be created in /Tables in a Lakehouse?", opts: ["Any folder level", "Top level only", "Only in subdirectories", "Anywhere except root"], ans: 1, exp: "In /Tables, shortcuts can only be created at the TOP LEVEL. If the target contains Delta data, it's automatically recognized as a queryable table. In /Files, any folder level is allowed." },
+  { id: 12, domain: "Domain 1", q: "To deploy a Fabric Eventhouse from Dev to Production, what tool should you use?", opts: ["GitHub Actions", "Azure DevOps pipeline (YAML)", "Fabric Deployment Pipeline", "ARM templates"], ans: 2, exp: "Fabric Deployment Pipeline is the correct Fabric-native CI/CD tool for promoting items (including Eventhouses) across Dev/Test/Prod stages. External CI/CD tools like GitHub Actions are not the answer." },
+  { id: 13, domain: "Domain 2", q: "What does enabling 'One Logical Copy' on an Eventhouse do?", opts: ["Replicates data to a second region", "Makes KQL data available in OneLake as Delta Parquet", "Creates a backup of the KQL database", "Enables cross-workspace queries"], ans: 1, exp: "'One Logical Copy' in an Eventhouse exposes the KQL data in OneLake as Delta Parquet, making it available to Spark, SQL endpoints, and Direct Lake without data duplication." },
+  { id: 14, domain: "Domain 2", q: "Dataflows Gen2 staging is enabled by default for which destinations?", opts: ["Azure SQL Database only", "Fabric Warehouse only", "Lakehouse only", "All destinations (including Lakehouses)"], ans: 3, exp: "By default, staging is enabled for all destinations in Dataflows Gen2, including Lakehouses. It uses a hidden staging lakehouse. You should manually disable it for simple lakehouse loads to avoid double-writes." },
+  { id: 15, domain: "Domain 2", q: "What happens when you DROP a managed Delta table in a Lakehouse?", opts: ["Only metadata is removed; files persist", "Both data files and metadata are deleted", "Files are moved to /Files/archive", "Only the transaction log is removed"], ans: 1, exp: "Dropping a managed table deletes BOTH the data files AND the metadata. External tables only remove metadata (files persist). This is a critical difference to know." },
+  { id: 16, domain: "Domain 1", q: "For Git integration with Azure DevOps, which four elements are required?", opts: ["Tenant, subscription, resource group, storage account", "Organization, project, Git repository, branch", "Workspace, capacity, domain, item", "Client ID, client secret, tenant ID, scope"], ans: 1, exp: "Azure DevOps Git integration in Fabric requires: Organization, Project, Git repository, and Branch — all four are required." },
+  { id: 17, domain: "Domain 1", q: "What is the maximum number of activities in a single Fabric Data Pipeline?", opts: ["50", "80", "120", "Unlimited"], ans: 2, exp: "A Fabric Data Pipeline supports a maximum of 120 activities. This is a specific limit that has appeared on the exam." },
+  { id: 18, domain: "Domain 1", q: "An engineer writes a Spark unmanaged external table using: CREATE TABLE t USING DELTA LOCATION 'Files/bronze/'. Will this appear in the SQL analytics endpoint?", opts: ["Yes, all Delta tables appear", "No, only managed tables in /Tables appear", "Yes, after running OPTIMIZE", "Yes, after a 15-minute sync"], ans: 1, exp: "Unmanaged external tables (created with a custom LOCATION) are NOT visible in the SQL analytics endpoint. Only managed Delta tables stored in the /Tables folder are auto-synced and visible." },
+  { id: 19, domain: "Domain 2", q: "To detect changes efficiently in SCD Type 2 when a source table has 40 tracked columns, the best practice is:", opts: ["Compare each column individually with CASE statements", "Use a hash function on all source attributes and compare the hash", "Always do a full reload", "Use a timestamp column only"], ans: 1, exp: "Using a hash function (e.g., MD5 or SHA) on all tracked source columns generates a single comparison value. This is far more efficient than comparing 40 individual columns." },
+  { id: 20, domain: "Domain 3", q: "A Lakehouse SQL analytics endpoint sync has paused. What most likely caused this?", opts: ["Too many Delta files", "15 minutes of inactivity", "A failed OPTIMIZE command", "Schema evolution was enabled"], ans: 1, exp: "The SQL analytics endpoint sync process halts after 15 minutes of inactivity on the lakehouse. It resumes automatically when the lakehouse is accessed again." },
+  { id: 21, domain: "Domain 3", q: "Which throttling stage adds a 20-second delay to interactive operations but allows them to still complete?", opts: ["Interactive Rejection", "Background Rejection", "Interactive Delay", "Burst Overflow"], ans: 2, exp: "The 'Interactive Delay' stage (stage 2) adds a 20-second delay to interactive requests. They still complete. 'Interactive Rejection' (stage 3) actually rejects them." },
+  { id: 22, domain: "Domain 3", q: "To find currently running queries in a Fabric Warehouse, what should you query?", opts: ["sys.dm_exec_query_stats", "sys.dm_exec_sessions filtered by status", "Monitoring hub job history", "Query Insights semantic model"], ans: 1, exp: "sys.dm_exec_sessions filtered by session status = 'running' shows actively running queries. This is the correct DMV for live query monitoring in Fabric Warehouse." },
+  { id: 23, domain: "Domain 3", q: "In KQL, which join kind increases dataset size and is NEVER the answer to an optimization question?", opts: ["inner", "leftsemi", "fullouter / outer", "anti"], ans: 2, exp: "kind=outer (or fullouter) returns all rows from both tables, significantly increasing dataset size. It worsens performance and is never the 'optimization' answer in exam questions." },
+  { id: 24, domain: "Domain 2", q: "A Dataflow Gen2 needs to perform an upsert (MERGE) into a target table. What is the correct approach?", opts: ["Enable staging and select MERGE output mode", "Use append mode with a primary key", "Dataflow Gen2 does not support MERGE — use a Spark Notebook instead", "Use the Lookup activity in Dataflow Gen2"], ans: 2, exp: "Dataflow Gen2 only supports Append and Replace output modes. There is no native MERGE/upsert. For SCD Type 2 or upsert logic, use a Spark Notebook with the MERGE INTO command." },
+  { id: 25, domain: "Domain 3", q: "What is the write-time performance penalty for enabling V-Order on a Lakehouse table?", opts: ["No performance impact", "~5% slower writes", "~15% slower writes", "~50% slower writes"], ans: 2, exp: "V-Order introduces approximately a 15% write-time penalty due to the additional sorting and encoding within Parquet row groups. The benefit is up to 50% faster reads." },
+  { id: 26, domain: "Domain 2", q: "An Eventstream needs to receive events from Azure SQL Server in near-real-time. What must be configured on the source?", opts: ["Extended Events (XE) sessions", "Azure SQL Read-Only Replica", "Change Data Capture (CDC)", "SQL Server Audit"], ans: 2, exp: "Eventstream's Azure SQL connector uses Change Data Capture (CDC). CDC must be enabled on the source database to capture row-level changes and stream them to Eventstream." },
+  { id: 27, domain: "Domain 2", q: "Which Fabric item serves as the tenant-wide discovery layer for all streaming data in motion?", opts: ["Fabric Activator", "Real-Time Hub", "Eventstream", "Eventhouse"], ans: 1, exp: "Real-Time Hub is the tenant-wide, single logical place for all streaming data in motion (one per tenant, like OneLake). It lists all eventstream outputs and KQL tables you have access to." },
+  { id: 28, domain: "Domain 1", q: "A shortcut pointing to Amazon S3 is created in a Lakehouse. What security model does it use?", opts: ["Passthrough (caller's identity)", "Service principal authentication only", "Delegated credentials (stored in the shortcut)", "Microsoft Entra token pass-through"], ans: 2, exp: "External shortcuts (ADLS Gen2, S3, GCS, etc.) use delegated credentials stored in the shortcut definition. Any user with Lakehouse access can read through using those stored credentials." },
+  { id: 29, domain: "Domain 1", q: "Cross-database queries using three-part naming in Fabric Warehouse work across:", opts: ["Any workspace in the same capacity", "Any workspace in the same tenant", "Items within the same workspace only", "Any workspace with the same domain"], ans: 2, exp: "Three-part naming (DatabaseName.SchemaName.TableName) for cross-database queries works ONLY within the same workspace. Cross-workspace and cross-region queries are not supported." },
+  { id: 30, domain: "Domain 1", q: "A user is a Workspace Viewer. They try to access Lakehouse data via the Lakehouse explorer (OneLake API). What happens?", opts: ["They get read-only access", "They can access if OneLake security roles allow it", "Access is denied — Viewers cannot access via Spark or OneLake APIs", "They need ReadAll permission on the specific item"], ans: 2, exp: "Workspace Viewers can query data via the SQL analytics endpoint (T-SQL), but CANNOT access data via Spark, the Lakehouse explorer, or OneLake APIs. Those require Contributor or higher." }
 ];
 
-/* ── QUIZ ENGINE ─────────────────────────────────────────────── */
-let shuffled = [], current = 0, score = 0, answered = 0, answered_q = false;
-function openQuiz() {
-  shuffled = [...quizData].sort(() => Math.random() - 0.5);
-  current = 0; score = 0; answered = 0;
-  document.getElementById('quiz-modal').classList.add('open');
+/* ── QUIZ STUDIO ENGINE ──────────────────────────────────────── */
+const DP700_QUIZ_KEY = 'dp700_quiz_mastery_v1';
+let dp700Answers = {};
+try {
+  const saved = JSON.parse(localStorage.getItem(DP700_QUIZ_KEY) || '{}');
+  if (saved && typeof saved === 'object') dp700Answers = saved;
+} catch (e) {}
+
+let activeFilter = 'all';
+let activeList = [...quizData];
+let current = 0;
+
+function saveDp700Progress() {
+  try { localStorage.setItem(DP700_QUIZ_KEY, JSON.stringify(dp700Answers)); } catch (e) {}
+}
+
+function switchDP700View(mode) {
+  const isQuiz = mode === 'quiz';
+  const studyWrap = document.getElementById('study-sections-wrap');
+  const quizView = document.getElementById('quiz-studio-view');
+  const btnStudy = document.getElementById('tab-btn-study');
+  const btnQuiz = document.getElementById('tab-btn-quiz');
+  if (studyWrap) studyWrap.style.display = isQuiz ? 'none' : 'block';
+  if (quizView) quizView.classList.toggle('open', isQuiz);
+  if (btnStudy) btnStudy.classList.toggle('active-mode', !isQuiz);
+  if (btnQuiz) btnQuiz.classList.toggle('active-mode', isQuiz);
+  if (isQuiz) {
+    renderReadiness();
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function openQuiz() { switchDP700View('quiz'); }
+
+function buildFilteredList() {
+  if (activeFilter === 'all') return [...quizData];
+  if (activeFilter === 'unanswered') {
+    return quizData.filter(q => {
+      const a = dp700Answers[q.id];
+      return a === undefined || a !== q.ans;
+    });
+  }
+  return quizData.filter(q => q.domain === activeFilter);
+}
+
+function setQuizFilter(domain) {
+  activeFilter = domain;
+  document.querySelectorAll('.qz-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-domain') === domain);
+  });
+  activeList = buildFilteredList();
+  current = 0;
   renderQuestion();
 }
-function closeQuiz() { document.getElementById('quiz-modal').classList.remove('open'); }
+
+function shuffleActiveQuiz() {
+  activeList = [...activeList].sort(() => Math.random() - 0.5);
+  current = 0;
+  renderQuestion();
+}
+
+function resetQuizProgress() {
+  dp700Answers = {};
+  saveDp700Progress();
+  activeList = buildFilteredList();
+  current = 0;
+  renderReadiness();
+  renderQuestion();
+}
+
+function renderReadiness() {
+  let answeredCnt = 0;
+  let correctCnt = 0;
+  const domStats = {
+    'Domain 1': { total: 0, answered: 0, correct: 0 },
+    'Domain 2': { total: 0, answered: 0, correct: 0 },
+    'Domain 3': { total: 0, answered: 0, correct: 0 }
+  };
+  quizData.forEach(q => {
+    domStats[q.domain].total++;
+    const sel = dp700Answers[q.id];
+    if (sel !== undefined) {
+      answeredCnt++;
+      domStats[q.domain].answered++;
+      if (sel === q.ans) {
+        correctCnt++;
+        domStats[q.domain].correct++;
+      }
+    }
+  });
+  const pct = answeredCnt > 0 ? Math.round((correctCnt / answeredCnt) * 100) : 0;
+  const pctEl = document.getElementById('qz-overall-pct');
+  const ansEl = document.getElementById('qz-answered-cnt');
+  const corEl = document.getElementById('qz-correct-cnt');
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (ansEl) ansEl.textContent = `${answeredCnt} / ${quizData.length}`;
+  if (corEl) corEl.textContent = String(correctCnt);
+
+  const barsEl = document.getElementById('qz-domain-bars');
+  if (barsEl) {
+    barsEl.innerHTML = Object.entries(DP700_DOMAINS).map(([key, info]) => {
+      const st = domStats[key];
+      const dpct = st.answered > 0 ? Math.round((st.correct / st.answered) * 100) : 0;
+      return `<div class="qz-dom-box">
+        <div class="qz-dom-head">
+          <span>${key}: ${info.title}</span>
+          <span>${st.correct}/${st.total} (${dpct}%)</span>
+        </div>
+        <div class="qz-dom-track"><div class="qz-dom-fill" style="width:${dpct}%"></div></div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function renderNavigator() {
+  const grid = document.getElementById('qz-nav-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  activeList.forEach((q, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    let cls = 'qz-nav-dot';
+    if (idx === current) cls += ' current';
+    const sel = dp700Answers[q.id];
+    if (sel !== undefined) cls += (sel === q.ans ? ' dot-correct' : ' dot-wrong');
+    btn.className = cls;
+    btn.textContent = String(idx + 1);
+    btn.title = `Q${idx + 1} (${q.domain})`;
+    btn.onclick = () => { current = idx; renderQuestion(); };
+    grid.appendChild(btn);
+  });
+}
+
 function renderQuestion() {
-  const q = shuffled[current];
-  document.getElementById('quiz-progress').textContent = `Question ${current + 1} of ${shuffled.length}`;
-  document.getElementById('quiz-q').textContent = q.q;
-  document.getElementById('quiz-explain').style.display = 'none';
-  document.getElementById('quiz-next').style.display = 'none';
-  document.getElementById('quiz-score').textContent = `Score: ${score} / ${answered}`;
-  answered_q = false;
+  renderNavigator();
+  const qEl = document.getElementById('quiz-q');
   const opts = document.getElementById('quiz-opts');
+  const exp = document.getElementById('quiz-explain');
+  const badge = document.getElementById('quiz-domain-badge');
+  const prog = document.getElementById('quiz-progress');
+  const scoreEl = document.getElementById('quiz-score');
+  const prevBtn = document.getElementById('quiz-prev');
+  const nextBtn = document.getElementById('quiz-next');
+
+  if (!activeList.length) {
+    prog.textContent = '0 questions match this filter';
+    badge.textContent = 'Complete';
+    qEl.textContent = 'All filtered questions have been answered correctly. Switch filter to review all 30 questions.';
+    opts.innerHTML = '';
+    exp.style.display = 'none';
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    return;
+  }
+
+  if (current >= activeList.length) current = activeList.length - 1;
+  if (current < 0) current = 0;
+
+  const q = activeList[current];
+  const savedSel = dp700Answers[q.id];
+  const isAnswered = savedSel !== undefined;
+
+  prog.textContent = `Question ${current + 1} of ${activeList.length} (Bank #${q.id})`;
+  badge.textContent = `${q.domain} · ${DP700_DOMAINS[q.domain].title}`;
+  qEl.textContent = q.q;
+
   opts.innerHTML = '';
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'quiz-opt';
-    btn.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
-    btn.onclick = () => selectAnswer(i, q.ans, q.exp);
+    btn.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+    if (isAnswered) {
+      btn.disabled = true;
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === savedSel) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(q, i);
+    }
     opts.appendChild(btn);
   });
-}
-function selectAnswer(selected, correct, explanation) {
-  if (answered_q) return;
-  answered_q = true; answered++;
-  const btns = document.querySelectorAll('.quiz-opt');
-  btns.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === correct) btn.classList.add('correct');
-    else if (i === selected && selected !== correct) btn.classList.add('wrong');
-  });
-  if (selected === correct) score++;
-  const exp = document.getElementById('quiz-explain');
-  exp.textContent = explanation;
-  exp.style.display = 'block';
-  document.getElementById('quiz-score').textContent = `Score: ${score} / ${answered}`;
-  const nextBtn = document.getElementById('quiz-next');
-  nextBtn.style.display = 'inline-block';
-  nextBtn.textContent = current < shuffled.length - 1 ? 'Next →' : 'Finish';
-}
-function nextQuestion() {
-  current++;
-  if (current >= shuffled.length) {
-    document.getElementById('quiz-q').textContent = `🎯 Quiz Complete! Score: ${score} / ${shuffled.length} (${Math.round(score/shuffled.length*100)}%)`;
-    document.getElementById('quiz-opts').innerHTML = '';
-    document.getElementById('quiz-explain').style.display = 'none';
-    document.getElementById('quiz-next').style.display = 'none';
-    document.getElementById('quiz-progress').textContent = 'Complete';
-    const retry = document.createElement('button');
-    retry.className = 'quiz-next'; retry.textContent = '🔄 Restart Quiz';
-    retry.onclick = openQuiz;
-    document.getElementById('quiz-opts').appendChild(retry);
-    return;
+
+  if (isAnswered) {
+    exp.textContent = q.exp;
+    exp.style.display = 'block';
+  } else {
+    exp.style.display = 'none';
   }
+
+  let domAns = 0, domCor = 0;
+  activeList.forEach(item => {
+    const a = dp700Answers[item.id];
+    if (a !== undefined) {
+      domAns++;
+      if (a === item.ans) domCor++;
+    }
+  });
+  scoreEl.textContent = `Filter Score: ${domCor} / ${domAns} answered`;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current >= activeList.length - 1;
+}
+
+function selectAnswer(q, selectedIdx) {
+  if (dp700Answers[q.id] !== undefined) return;
+  dp700Answers[q.id] = selectedIdx;
+  saveDp700Progress();
+  renderReadiness();
   renderQuestion();
 }
-/* Close modal on background click */
-document.getElementById('quiz-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeQuiz();
-});
+
+function nextQuestion() {
+  if (current < activeList.length - 1) {
+    current++;
+    renderQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  }
+}
+
+renderReadiness();
+renderQuestion();
 
 /* ── SCROLL SPY ──────────────────────────────────────────────── */
 const sections = document.querySelectorAll('.section');
@@ -1337,7 +1593,7 @@ window.addEventListener('scroll', () => {
           <li><a href="/aws_ai_practitioner.html">AWS AI Practitioner Guide</a><span>AWS AIF-C01 &middot; 30–45 min</span></li>
           <li><a href="/aws_ai_practitioner_exam.html">AIF-C01 Practice Exam</a><span>AWS AIF-C01 &middot; 30–60 min</span></li>
           <li><a href="/aws_visual_references.html">Visual References</a><span>Diagrams &middot; 10 min</span></li>
-          <li><a href="/aip/index.html">AIP-C01 Prep Hub</a><span>AWS AIP-C01 &middot; 6 tools</span></li>
+          <li><a href="/aip/index.html">AIP-C01 Prep Hub</a><span>AWS AIP-C01 &middot; 13 tools</span></li>
         </ul>
         <h3>Who made this</h3>
         <p class="lab-about__by">

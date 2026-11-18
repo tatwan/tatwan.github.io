@@ -132,25 +132,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .alert.success{background:#eafaf1;border-color:#1d8348;}
 .alert strong{font-weight:700;}
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
+  <script defer src="/assets/lab.js" data-lab-page="Troubleshooting &amp; Evaluation" data-lab-parent="AIP-C01 Prep Hub" data-lab-parent-href="/aip/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 
-<nav class="aip-nav" data-current="troubleshooting-eval">
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="troubleshooting-eval" aria-label="AIP-C01 Studio Navigation">
   <div class="aip-nav-inner">
     <div class="aip-nav-brand">
-      <span class="aip-nav-title">AIP-C01</span>
-      <span class="aip-nav-sep">|</span>
-      <a class="aip-nav-back" href="../index.html">← ML_LAB</a>
+      <span class="aip-nav-title">AIP-C01 Studio</span>
     </div>
     <div class="aip-nav-tabs">
       <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
       <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="visual-guide" href="aip-c01-studyguide.html">Visual Guide</a>
       <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
       <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
       <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="gap-cheatsheet" href="gap-cheatsheet.html">Gap Sheet</a>
       <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
       <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#64748b;font-size:11px;">|</span>
+      <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
+      <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
+      <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
+      <a class="aip-tab" data-tab="study-d45" href="study-d45.html">D4-5</a>
     </div>
   </div>
 </nav>
@@ -338,7 +353,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
             </div>
           </div>
           <div class="trap-box" style="margin-top:.8rem;">
-            <h4>⚠ Exam Trap: OpenSearch + ElastiCache</h4>
+            <h4><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Exam Trap: OpenSearch + ElastiCache</h4>
             <ul>
               <li>Adding ElastiCache in front of OpenSearch = additional service to manage, additional cost, cache invalidation complexity</li>
               <li>The exam question says "least operational overhead" → Auto-Tune wins over ElastiCache every time</li>

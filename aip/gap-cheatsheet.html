@@ -60,11 +60,11 @@
   .ck { background: rgba(39,174,96,0.11); border-left: 3px solid #0a7; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 12px; }
   .ck::before { content: "✓ "; color: #2ecc71; font-weight: 700; }
   .note { background: rgba(41,128,185,0.1); border-left: 3px solid #069; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #8ab; }
-  .note::before { content: "💡 "; }
+  .note::before { content: "TIP · "; font-weight: 800; letter-spacing: .04em; }
   .rule { background: rgba(142,68,173,0.1); border-left: 3px solid #70a; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #baa; }
-  .rule::before { content: "📌 "; }
+  .rule::before { content: "RULE · "; font-weight: 800; letter-spacing: .04em; }
   .warn { background: rgba(214,137,16,0.1); border-left: 3px solid #c70; padding: 5px 9px; border-radius: 0 4px 4px 0; margin-bottom: 5px; font-size: 11px; color: #ca8; }
-  .warn::before { content: "⚠️ "; }
+  .warn::before { content: "TRAP · "; font-weight: 800; letter-spacing: .04em; }
   code, .tag { display: inline; background: #1a1a35; color: #7fc; font-size: 10.5px; padding: 1px 5px; border-radius: 4px; font-family: monospace; }
   .tag.r { background: #2a1010; color: #f88; }
   .tag.g { background: #0d1f0d; color: #8f8; }
@@ -97,43 +97,74 @@
   .topnav a.active{background:#1a0a2a;border-color:#5a1a7a;color:#caf}
   .topnav a:hover{background:#1a1a35}
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
+  <script defer src="/assets/lab.js" data-lab-page="Gap Cheatsheet" data-lab-parent="AIP-C01 Prep Hub" data-lab-parent-href="/aip/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
-<body>
+<body class="aip-unified-light aip-study-sheet">
 
-<nav class="topnav">
-  <span class="brand">AIP-C01</span>
-  <a href="study-d1.html">Domain 1</a>
-  <a href="study-d2.html">Domain 2</a>
-  <a href="study-d3.html">Domain 3</a>
-  <a href="study-d45.html">Domain 4 &amp; 5</a>
-  <a href="gap-cheatsheet.html" class="active">Gap Sheet</a>
-  <a href="index.html">🏠 Home</a>
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="gap-cheatsheet" aria-label="AIP-C01 Studio Navigation">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01 Studio</span>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="visual-guide" href="aip-c01-studyguide.html">Visual Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="gap-cheatsheet" href="gap-cheatsheet.html">Gap Sheet</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#64748b;font-size:11px;">|</span>
+      <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
+      <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
+      <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
+      <a class="aip-tab" data-tab="study-d45" href="study-d45.html">D4-5</a>
+    </div>
+  </div>
 </nav>
+<!-- AIP:ROLE-BANNER:START -->
+<div class="aip-role-banner" role="note">
+  <div class="aip-role-banner__text"><strong>Consolidated Weak-Area & Exam-Trap Cheatsheet:</strong> Cross-domain pitfalls, Guardrails vs. Macie, IAM Identity Center, Inference Profiles, and BDA shortcuts.</div>
+  <div class="aip-role-banner__links"><a href="study-guide.html">Deep Study Guide</a><a href="study-d1.html">D1 Sheet</a><a href="study-d3.html">D3 Security Sheet</a></div>
+</div>
+<!-- AIP:ROLE-BANNER:END -->
 
 <header>
-  <h1>🎯 AIP-C01 Complete Gap Cheat Sheet</h1>
+  <h1><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> AIP-C01 Complete Gap Cheat Sheet</h1>
   <p>Common Mistakes to watch for</p>
 </header>
 
 <div class="toc-wrap">
   <h3>Jump to Section</h3>
   <div class="toc-links">
-    <a class="hot" href="#guardrails">🛡️ Guardrails Deep Dive</a>
-    <a class="hot" href="#evaluation">🧪 Evaluation Systems</a>
-    <a class="hot" href="#iam">🔐 IAM Identity Center &amp; Auth</a>
-    <a class="new" href="#strands">🤖 Strands + MCP Servers</a>
-    <a class="new" href="#inference-profiles">📍 Inference Profiles</a>
-    <a class="new" href="#distillation">🧠 Model Distillation</a>
-    <a class="new" href="#semantic-cache">⚡ Semantic Caching</a>
-    <a class="new" href="#observability">📡 CloudWatch GenAI Observability</a>
-    <a href="#bda">📄 BDA Data Automation</a>
-    <a href="#prompt-mgmt">📝 Prompt Management</a>
-    <a href="#rag">🔍 RAG &amp; Knowledge Bases</a>
-    <a href="#integration">🔗 Integration Patterns</a>
-    <a href="#sagemaker">⚙️ SageMaker Inference</a>
-    <a href="#data">📦 Data Processing</a>
-    <a href="#opensearch">🔎 OpenSearch Hybrid Search</a>
-    <a href="#summary">📊 Domain Summary</a>
+    <a class="hot" href="#guardrails"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Guardrails Deep Dive</a>
+    <a class="hot" href="#evaluation"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg> Evaluation Systems</a>
+    <a class="hot" href="#iam"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> IAM Identity Center &amp; Auth</a>
+    <a class="new" href="#strands"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg> Strands + MCP Servers</a>
+    <a class="new" href="#inference-profiles"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Inference Profiles</a>
+    <a class="new" href="#distillation"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Model Distillation</a>
+    <a class="new" href="#semantic-cache"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Semantic Caching</a>
+    <a class="new" href="#observability"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M5.6 5.6a9 9 0 0 1 12.8 0"/><path d="M8.5 8.5a5 5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><line x1="12" y1="13" x2="12" y2="21"/></svg> CloudWatch GenAI Observability</a>
+    <a href="#bda"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> BDA Data Automation</a>
+    <a href="#prompt-mgmt"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Prompt Management</a>
+    <a href="#rag"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> RAG &amp; Knowledge Bases</a>
+    <a href="#integration"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Integration Patterns</a>
+    <a href="#sagemaker"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> SageMaker Inference</a>
+    <a href="#data"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Data Processing</a>
+    <a href="#opensearch"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> OpenSearch Hybrid Search</a>
+    <a href="#summary"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Domain Summary</a>
   </div>
 </div>
 
@@ -143,7 +174,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="guardrails" class="section sec-red">
   <div class="sec-header">
-    <span class="icon">🛡️</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
     <h2>Bedrock Guardrails — Deep Dive <span class="badge hot">HOT · 4 mistakes</span></h2>
     <span class="dtag">Domain 3.1 · 3.3 · 3.4</span>
   </div>
@@ -220,7 +251,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="evaluation" class="section sec-red">
   <div class="sec-header">
-    <span class="icon">🧪</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg></span>
     <h2>Evaluation Systems <span class="badge hot">CRITICAL · 6 mistakes · 17–20% score</span></h2>
     <span class="dtag">Domain 5.1 — Your Single Weakest Domain</span>
   </div>
@@ -277,7 +308,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="iam" class="section sec-blue">
   <div class="sec-header">
-    <span class="icon">🔐</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
     <h2>IAM Identity Center &amp; Authentication <span class="badge hot">6 mistakes</span></h2>
     <span class="dtag">Domain 3.2</span>
   </div>
@@ -336,7 +367,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="strands" class="section sec-purple">
   <div class="sec-header">
-    <span class="icon">🤖</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></span>
     <h2>Strands SDK + MCP Servers + Agentic Patterns <span class="badge new">NEW · 2 mistakes</span></h2>
     <span class="dtag">Domain 2.1</span>
   </div>
@@ -402,7 +433,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="inference-profiles" class="section sec-teal">
   <div class="sec-header">
-    <span class="icon">📍</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
     <h2>Inference Profiles — Multi-Use <span class="badge new">NEW · 2 mistakes</span></h2>
     <span class="dtag">Domain 1.2 · 4.1</span>
   </div>
@@ -439,7 +470,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="distillation" class="section sec-orange">
   <div class="sec-header">
-    <span class="icon">🧠</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></span>
     <h2>Model Distillation <span class="badge new">NEW · 1 mistake</span></h2>
     <span class="dtag">Domain 1.2</span>
   </div>
@@ -465,7 +496,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="semantic-cache" class="section sec-teal">
   <div class="sec-header">
-    <span class="icon">⚡</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
     <h2>Semantic Caching <span class="badge new">NEW · 1 mistake</span></h2>
     <span class="dtag">Domain 4.2</span>
   </div>
@@ -502,7 +533,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="observability" class="section sec-blue">
   <div class="sec-header">
-    <span class="icon">📡</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M5.6 5.6a9 9 0 0 1 12.8 0"/><path d="M8.5 8.5a5 5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><line x1="12" y1="13" x2="12" y2="21"/></svg></span>
     <h2>Monitoring &amp; Observability <span class="badge new">NEW · 3 mistakes</span></h2>
     <span class="dtag">Domain 4.3 · 5.2</span>
   </div>
@@ -553,7 +584,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="bda" class="section sec-orange">
   <div class="sec-header">
-    <span class="icon">📄</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
     <h2>Bedrock Data Automation (BDA) <span class="badge new">4 mistakes</span></h2>
     <span class="dtag">Domain 1.3</span>
   </div>
@@ -596,7 +627,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="prompt-mgmt" class="section sec-purple">
   <div class="sec-header">
-    <span class="icon">📝</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
     <h2>Bedrock Prompt Management &amp; Governance · 5 mistakes</h2>
     <span class="dtag">Domain 3.3</span>
   </div>
@@ -645,7 +676,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="rag" class="section sec-green">
   <div class="sec-header">
-    <span class="icon">🔍</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
     <h2>RAG &amp; Knowledge Bases — Nuances · 4 mistakes</h2>
     <span class="dtag">Domain 1.4 · 1.5</span>
   </div>
@@ -702,7 +733,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="opensearch" class="section sec-teal">
   <div class="sec-header">
-    <span class="icon">🔎</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
     <h2>OpenSearch: Hybrid Search &amp; Service vs Serverless <span class="badge new">NEW · 1 mistake</span></h2>
     <span class="dtag">Domain 1.4</span>
   </div>
@@ -738,7 +769,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="integration" class="section sec-blue">
   <div class="sec-header">
-    <span class="icon">🔗</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
     <h2>Integration Patterns · 4 mistakes</h2>
     <span class="dtag">Domain 2.3 · 2.4 · 2.5</span>
   </div>
@@ -781,7 +812,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="sagemaker" class="section sec-orange">
   <div class="sec-header">
-    <span class="icon">⚙️</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
     <h2>SageMaker Inference Types · 2 mistakes</h2>
     <span class="dtag">Domain 2.2 · 5.2</span>
   </div>
@@ -809,7 +840,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="data" class="section sec-green">
   <div class="sec-header">
-    <span class="icon">📦</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
     <h2>Data Processing &amp; Storage Patterns · 6 mistakes</h2>
     <span class="dtag">Domain 1.3 · 1.4</span>
   </div>
@@ -873,7 +904,7 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="summary" class="section sec-orange">
   <div class="sec-header">
-    <span class="icon">📊</span>
+    <span class="icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
     <h2>Complete Domain Score Analysis — All 7 Documents</h2>
     <span class="dtag">120 Questions Total</span>
   </div>
@@ -883,29 +914,29 @@
       <h3>Mistakes by Subdomain — Priority Order</h3>
       <table class="t">
         <tr><th>Domain</th><th>Mistakes</th><th>Priority</th><th>Key Gap</th></tr>
-        <tr><td>5.1 Evaluation Systems</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>CreateEvaluationJob API, 1000-prompt limit, Cognito workforce, custom metrics, BOLD dataset</td></tr>
-        <tr><td>3.2 Data Security &amp; Privacy</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>IAM Identity Center vs IAM users, OIDC+Cognito, VPC interface endpoint, Comprehend PII real-time</td></tr>
-        <tr><td>1.3 Data Validation &amp; Pipelines</td><td class="bad">6</td><td>🔥🔥🔥 CRITICAL</td><td>BDA blueprints, Glue ETL vs EMR, BDA multimodal parser, custom chunking, Comprehend entity</td></tr>
-        <tr><td>3.3 AI Governance &amp; Compliance</td><td class="ok">5</td><td>🔥🔥 HIGH</td><td>Prompt Management versioning/review, GuardrailIdentifier IAM key, CloudTrail vs CloudWatch</td></tr>
-        <tr><td>2.3 Enterprise Integration</td><td class="ok">4</td><td>🔥🔥 HIGH</td><td>ReAct vs CoT, S3 presigned+SQS for async, EventBridge+Step Functions, RAG vs streaming</td></tr>
-        <tr><td>3.1 Input/Output Safety</td><td class="ok">4</td><td>🔥🔥 HIGH</td><td>Prompt attack filter vs denied topics, GuardrailPolicyType metrics, contextual grounding for RAG</td></tr>
-        <tr><td>4.3 Monitoring Systems</td><td class="ok">3</td><td>🔥🔥 HIGH</td><td>CloudWatch GenAI observability, KB logging vs invocation logging, max_tokens troubleshooting</td></tr>
-        <tr><td>2.5 App Integration Patterns</td><td class="ok">3</td><td>🔥 MEDIUM</td><td>Q Developer contextual IDE integration, WebSocket IAM permissions</td></tr>
-        <tr><td>5.2 Troubleshooting</td><td class="ok">3</td><td>🔥 MEDIUM</td><td>Shadow test vs A/B test, split docs vs compress, max_tokens for truncation</td></tr>
-        <tr><td>2.1 Agentic AI Solutions</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Strands+MCP vs Bedrock Flows, multi-specialist agents</td></tr>
-        <tr><td>2.2 Model Deployment</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>SageMaker async+GPU for image gen, Bedrock on-demand for Nova</td></tr>
-        <tr><td>1.2 Select &amp; Configure FMs</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Inference profile for HA (primary+secondary), distillation = prompts only</td></tr>
-        <tr><td>1.4 Vector Store Solutions</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>OpenSearch Service+hybrid search vs Serverless, S3 metadata types</td></tr>
-        <tr><td>4.1 Cost Optimization</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Batch inference + inference profiles, inference profiles for cost attribution</td></tr>
-        <tr><td>1.5 Retrieval Mechanisms</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>Reranking, SQS-buffered KB sync</td></tr>
-        <tr><td>3.4 Responsible AI</td><td class="ok">2</td><td>🔥 MEDIUM</td><td>BOLD dataset via Bedrock eval (not SageMaker Clarify)</td></tr>
-        <tr><td>4.2 App Performance</td><td class="ok">1</td><td>✅ LOW</td><td>Semantic caching with OpenSearch k-NN</td></tr>
-        <tr><td>2.4 FM API Integrations</td><td class="ok">1</td><td>✅ LOW</td><td>Single API GW + mapping templates + Secrets Manager</td></tr>
+        <tr><td>5.1 Evaluation Systems</td><td class="bad">6</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> CRITICAL</td><td>CreateEvaluationJob API, 1000-prompt limit, Cognito workforce, custom metrics, BOLD dataset</td></tr>
+        <tr><td>3.2 Data Security &amp; Privacy</td><td class="bad">6</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> CRITICAL</td><td>IAM Identity Center vs IAM users, OIDC+Cognito, VPC interface endpoint, Comprehend PII real-time</td></tr>
+        <tr><td>1.3 Data Validation &amp; Pipelines</td><td class="bad">6</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> CRITICAL</td><td>BDA blueprints, Glue ETL vs EMR, BDA multimodal parser, custom chunking, Comprehend entity</td></tr>
+        <tr><td>3.3 AI Governance &amp; Compliance</td><td class="ok">5</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> HIGH</td><td>Prompt Management versioning/review, GuardrailIdentifier IAM key, CloudTrail vs CloudWatch</td></tr>
+        <tr><td>2.3 Enterprise Integration</td><td class="ok">4</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> HIGH</td><td>ReAct vs CoT, S3 presigned+SQS for async, EventBridge+Step Functions, RAG vs streaming</td></tr>
+        <tr><td>3.1 Input/Output Safety</td><td class="ok">4</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> HIGH</td><td>Prompt attack filter vs denied topics, GuardrailPolicyType metrics, contextual grounding for RAG</td></tr>
+        <tr><td>4.3 Monitoring Systems</td><td class="ok">3</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> HIGH</td><td>CloudWatch GenAI observability, KB logging vs invocation logging, max_tokens troubleshooting</td></tr>
+        <tr><td>2.5 App Integration Patterns</td><td class="ok">3</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Q Developer contextual IDE integration, WebSocket IAM permissions</td></tr>
+        <tr><td>5.2 Troubleshooting</td><td class="ok">3</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Shadow test vs A/B test, split docs vs compress, max_tokens for truncation</td></tr>
+        <tr><td>2.1 Agentic AI Solutions</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Strands+MCP vs Bedrock Flows, multi-specialist agents</td></tr>
+        <tr><td>2.2 Model Deployment</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>SageMaker async+GPU for image gen, Bedrock on-demand for Nova</td></tr>
+        <tr><td>1.2 Select &amp; Configure FMs</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Inference profile for HA (primary+secondary), distillation = prompts only</td></tr>
+        <tr><td>1.4 Vector Store Solutions</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>OpenSearch Service+hybrid search vs Serverless, S3 metadata types</td></tr>
+        <tr><td>4.1 Cost Optimization</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Batch inference + inference profiles, inference profiles for cost attribution</td></tr>
+        <tr><td>1.5 Retrieval Mechanisms</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>Reranking, SQS-buffered KB sync</td></tr>
+        <tr><td>3.4 Responsible AI</td><td class="ok">2</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> MEDIUM</td><td>BOLD dataset via Bedrock eval (not SageMaker Clarify)</td></tr>
+        <tr><td>4.2 App Performance</td><td class="ok">1</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> LOW</td><td>Semantic caching with OpenSearch k-NN</td></tr>
+        <tr><td>2.4 FM API Integrations</td><td class="ok">1</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> LOW</td><td>Single API GW + mapping templates + Secrets Manager</td></tr>
       </table>
     </div>
 
     <div class="card wide">
-      <h3>🧠 Master Recall Card — 25 Rules to Memorize</h3>
+      <h3><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg> Master Recall Card — 25 Rules to Memorize</h3>
       <div class="recall-grid">
         <div class="recall-item"><strong>BDA Structure</strong>1 project, multiple blueprints → BDA auto-selects per document</div>
         <div class="recall-item"><strong>Eval Prompt Limit</strong>Max 1,000 prompts per evaluation job → split into multiple jobs</div>

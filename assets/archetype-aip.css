@@ -1,0 +1,540 @@
+/* =====================================================================
+   ML_LAB — Archetype 2: Certification & Exam Prep Studio Styles
+   ---------------------------------------------------------------------
+   1. Shared AIF-C01 Certification Studio Tab Bar (05, 06, 07)
+   2. Unified AIP-C01 Shared Navigation (.aip-nav) across all 14 pages
+   3. Unified Architectural Light Palette for the 7 dark aip/ pages
+      (practice-exam, quick-drill, gap-cheatsheet, study-d1..d45)
+   4. Role & Track Navigation Banner (.aip-role-banner)
+   ===================================================================== */
+
+/* --------------------------------------------------------------------- *
+ * 1. AWS AIF-C01 Studio Tab Bar (05, 06, 07)
+ * --------------------------------------------------------------------- */
+.aif-studio-nav {
+  background: #172330;
+  border-bottom: 3px solid #f59e0b;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 990;
+}
+
+.aif-studio-nav__inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.aif-studio-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+}
+
+.aif-studio-nav__badge {
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+.aif-studio-nav__mastery {
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.aif-studio-nav__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.aif-studio-nav__tabs::-webkit-scrollbar { display: none; }
+
+.aif-studio-nav__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  white-space: nowrap;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.aif-studio-nav__tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+.aif-studio-nav__tab[aria-current="page"] {
+  color: #fbbf24;
+  border-bottom-color: #fbbf24;
+  background: rgba(245, 158, 11, 0.09);
+}
+
+/* --------------------------------------------------------------------- *
+ * 2. Unified AIP-C01 Shared Navigation (.aip-nav across all 14 pages)
+ * --------------------------------------------------------------------- */
+.aip-nav {
+  background: #232f3e !important;
+  border-bottom: 3px solid #ff9900 !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+.aip-nav-inner {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-wrap: wrap;
+  gap: 0;
+  min-width: 0;
+}
+
+.aip-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px 9px 0;
+}
+
+.aip-nav-title {
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.aip-nav-tabs {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  gap: 0;
+  scrollbar-width: none;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+.aip-nav-tabs::-webkit-scrollbar { display: none; }
+
+.aip-tab {
+  display: flex;
+  align-items: center;
+  padding: 10px 9px;
+  color: #cbd5e1 !important;
+  font-weight: 600;
+  font-size: 11px;
+  text-decoration: none !important;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+@media (max-width: 760px) {
+  .aip-nav-inner {
+    flex-direction: column;
+    padding: 0 12px;
+  }
+  .aip-nav-brand {
+    padding: 8px 0 4px;
+  }
+  .aip-nav-tabs {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-bottom: 4px;
+  }
+}
+.aip-tab:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.aip-nav[data-current="hub"] [data-tab="hub"],
+.aip-nav[data-current="study-guide"] [data-tab="study-guide"],
+.aip-nav[data-current="visual-guide"] [data-tab="visual-guide"],
+.aip-nav[data-current="flashcards"] [data-tab="flashcards"],
+.aip-nav[data-current="practice-exam"] [data-tab="practice-exam"],
+.aip-nav[data-current="quick-drill"] [data-tab="quick-drill"],
+.aip-nav[data-current="final-practice"] [data-tab="final-practice"],
+.aip-nav[data-current="gap-cheatsheet"] [data-tab="gap-cheatsheet"],
+.aip-nav[data-current="advanced-impl"] [data-tab="advanced-impl"],
+.aip-nav[data-current="troubleshooting-eval"] [data-tab="troubleshooting-eval"],
+.aip-nav[data-current="study-d1"] [data-tab="study-d1"],
+.aip-nav[data-current="study-d2"] [data-tab="study-d2"],
+.aip-nav[data-current="study-d3"] [data-tab="study-d3"],
+.aip-nav[data-current="study-d45"] [data-tab="study-d45"] {
+  color: #ff9900 !important;
+  border-bottom-color: #ff9900 !important;
+  background: rgba(255, 153, 0, 0.1) !important;
+}
+
+/* --------------------------------------------------------------------- *
+ * 3. Study Track Role Banner (clarifies Study Guide vs Visual Guide vs Domain Guides)
+ * --------------------------------------------------------------------- */
+.aip-role-banner {
+  background: #ffffff;
+  border: 1px solid #d2d0ce;
+  border-left: 4px solid #ff9900;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin: 14px auto;
+  max-width: 1180px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: #1e293b;
+}
+
+.aip-role-banner__text strong {
+  color: #0f172a;
+}
+
+.aip-role-banner__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aip-role-banner__links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #d2d0ce;
+  background: #f8fafc;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.aip-role-banner__links a:hover {
+  border-color: #0066cc;
+  background: #eff6ff;
+}
+
+/* --------------------------------------------------------------------- *
+ * 4. Architectural Light Palette Unification across dark aip/ pages
+ *    Target pages carry body.aip-unified-light
+ * --------------------------------------------------------------------- */
+body.aip-unified-light {
+  background: #f3f2f1 !important;
+  background-image: none !important;
+  color: #16202a !important;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  padding: 0 !important;
+}
+
+body.aip-unified-light strong {
+  color: #0f172a;
+}
+
+body.aip-unified-light code {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1;
+}
+
+/* Practice Exam Light Unification */
+body.aip-practice-exam {
+  --bg: #f3f2f1;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --border: #d2d0ce;
+  --text: #16202a;
+  --muted: #52606d;
+  --correct: #ecfdf5;
+  --correct-border: #15803d;
+  --wrong: #fef2f2;
+  --wrong-border: #b91c1c;
+  --selected: #eff6ff;
+  --selected-border: #1d4ed8;
+  --aws-orange: #c2410c;
+  --aws-green: #15803d;
+  --aws-red: #b91c1c;
+  --aws-blue: #1d4ed8;
+}
+
+body.aip-practice-exam .header {
+  background: #232f3e !important;
+  color: #ffffff;
+}
+body.aip-practice-exam .header .badge {
+  background: #ff9900;
+  color: #111827;
+}
+body.aip-practice-exam .filter-bar label,
+body.aip-practice-exam .stat-card .num,
+body.aip-practice-exam .q-scenario,
+body.aip-practice-exam .opt-text,
+body.aip-practice-exam .summary-box h2 {
+  color: #16202a !important;
+}
+body.aip-practice-exam .q-scenario strong {
+  color: #1d4ed8 !important;
+}
+body.aip-practice-exam .fbtn {
+  color: #334155 !important;
+  background: #f8fafc !important;
+}
+body.aip-practice-exam .fbtn.active {
+  background: #232f3e !important;
+  border-color: #232f3e !important;
+  color: #ffffff !important;
+}
+body.aip-practice-exam .opt:hover:not(:disabled) {
+  background: #f8fafc !important;
+  border-color: #1d4ed8 !important;
+}
+body.aip-practice-exam .opt-letter {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+body.aip-practice-exam .opt.selected .opt-letter {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+body.aip-practice-exam .opt.correct .opt-letter {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+body.aip-practice-exam .opt.wrong .opt-letter {
+  background: #b91c1c !important;
+  color: #ffffff !important;
+}
+body.aip-practice-exam .explanation {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+body.aip-practice-exam .explanation h4 {
+  color: #1e3a8a !important;
+}
+body.aip-practice-exam .explanation p {
+  color: #1e293b !important;
+}
+body.aip-practice-exam .tag-domain {
+  background: #eff6ff !important;
+  color: #1e3a8a !important;
+  border-color: #bfdbfe !important;
+}
+body.aip-practice-exam .tag-multi {
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border-color: #fde68a !important;
+}
+body.aip-practice-exam .btn-primary {
+  background: #1e3a8a !important;
+  color: #ffffff !important;
+}
+body.aip-practice-exam .btn-primary:hover {
+  background: #1d4ed8 !important;
+}
+
+/* Quick Drill Light Unification */
+body.aip-quick-drill {
+  --bg-dark: #f3f2f1;
+  --bg-panel: #ffffff;
+  --text-main: #16202a;
+  --text-muted: #52606d;
+  --aws-orange: #c2410c;
+  --aws-orange-dim: #fff7ed;
+  --border: #d2d0ce;
+}
+body.aip-quick-drill .container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+body.aip-quick-drill .btn {
+  background: #1e3a8a;
+  color: #ffffff;
+}
+body.aip-quick-drill .btn-outline {
+  background: #ffffff;
+  color: #16202a;
+  border-color: #94a3b8;
+}
+body.aip-quick-drill .domain-tag {
+  background: #eff6ff !important;
+  color: #1e3a8a !important;
+  border: 1px solid #bfdbfe;
+}
+body.aip-quick-drill .option.correct {
+  background: #ecfdf5 !important;
+  border-color: #15803d !important;
+}
+body.aip-quick-drill .option.incorrect {
+  background: #fef2f2 !important;
+  border-color: #b91c1c !important;
+}
+
+/* Study Domain Pages (study-d1..d45) & Gap Cheatsheet Light Unification */
+body.aip-study-sheet {
+  --bg: #f3f2f1;
+  --dark: #f3f2f1;
+  --card: #ffffff;
+  --border: #d2d0ce;
+  --text: #16202a;
+  --muted: #52606d;
+}
+:where(body.aip-study-sheet) a {
+  color: #1d4ed8;
+}
+body.aip-study-sheet .lab-header a,
+body.aip-study-sheet .lab-crumb a,
+body.aip-study-sheet .lab-about a,
+body.aip-study-sheet .lab-footer a {
+  color: inherit;
+}
+body.aip-study-sheet .lab-header a { color: var(--lab-text-2); }
+body.aip-study-sheet .lab-header a:hover,
+body.aip-study-sheet .lab-crumb a:hover,
+body.aip-study-sheet .lab-footer a:hover { color: var(--lab-amber); }
+body.aip-study-sheet .hero,
+body.aip-study-sheet header:not(.lab-header) {
+  background: #232f3e !important;
+  color: #ffffff !important;
+  border-bottom: 3px solid #ff9900 !important;
+}
+body.aip-study-sheet .hero p,
+body.aip-study-sheet header:not(.lab-header) p {
+  color: #cbd5e1 !important;
+}
+body.aip-study-sheet .score-bar,
+body.aip-study-sheet .toc-wrap {
+  background: #ffffff !important;
+  border-bottom: 1px solid #d2d0ce !important;
+}
+body.aip-study-sheet .score-pill,
+body.aip-study-sheet .score-badge {
+  background: #f8fafc !important;
+  border: 1px solid #d2d0ce !important;
+  color: #16202a !important;
+}
+body.aip-study-sheet .toc-links a {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #1e293b !important;
+}
+body.aip-study-sheet .toc-links a.hot {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #991b1b !important;
+}
+body.aip-study-sheet .toc-links a.new {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+}
+body.aip-study-sheet .sec-header {
+  background: #232f3e !important;
+  color: #ffffff !important;
+}
+body.aip-study-sheet .d4header,
+body.aip-study-sheet .d5header {
+  background: #232f3e !important;
+  border-top: 3px solid #ff9900 !important;
+}
+body.aip-study-sheet .d4header h2,
+body.aip-study-sheet .d5header h2 {
+  color: #ffffff !important;
+}
+body.aip-study-sheet .cards,
+body.aip-study-sheet .card {
+  background: #ffffff !important;
+  border-color: #d2d0ce !important;
+  color: #16202a !important;
+}
+body.aip-study-sheet .card h3 {
+  color: #1e3a8a !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+body.aip-study-sheet .sec-title {
+  color: #334155 !important;
+  border-bottom-color: #cbd5e1 !important;
+}
+body.aip-study-sheet .sec-title span {
+  color: #1e3a8a !important;
+}
+body.aip-study-sheet .tip { background: #eff6ff !important; color: #1e3a8a !important; }
+body.aip-study-sheet .gotcha,
+body.aip-study-sheet .x { background: #fef2f2 !important; color: #991b1b !important; }
+body.aip-study-sheet .remember,
+body.aip-study-sheet .rule { background: #f5f3ff !important; color: #5b21b6 !important; }
+body.aip-study-sheet .when,
+body.aip-study-sheet .ck { background: #ecfdf5 !important; color: #065f46 !important; }
+body.aip-study-sheet .avoid,
+body.aip-study-sheet .warn { background: #fffbeb !important; color: #92400e !important; }
+body.aip-study-sheet .note { background: #f8fafc !important; color: #334155 !important; border-left-color: #64748b !important; }
+body.aip-study-sheet table.cmp th,
+body.aip-study-sheet table.t th {
+  background: #232f3e !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+body.aip-study-sheet table.cmp td,
+body.aip-study-sheet table.t td {
+  border-color: #e2e8f0 !important;
+  color: #16202a !important;
+}
+body.aip-study-sheet table.cmp tr:nth-child(even) td,
+body.aip-study-sheet table.t tr:nth-child(even) td {
+  background: #f8fafc !important;
+}
+body.aip-study-sheet .vs-use,
+body.aip-study-sheet .vs-box.use {
+  background: #ecfdf5 !important;
+  border-color: #86efac !important;
+  color: #065f46 !important;
+}
+body.aip-study-sheet .vs-no,
+body.aip-study-sheet .vs-box.no {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #991b1b !important;
+}
+body.aip-study-sheet .recall-item {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+body.aip-study-sheet .recall-item strong {
+  color: #1e3a8a !important;
+}
+body.aip-study-sheet .tag.r { background: #fef2f2 !important; color: #991b1b !important; }
+body.aip-study-sheet .tag.g { background: #ecfdf5 !important; color: #065f46 !important; }
+body.aip-study-sheet footer {
+  background: #ffffff;
+  border-top: 1px solid #d2d0ce;
+  color: #475569;
+}

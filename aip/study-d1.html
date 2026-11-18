@@ -12,31 +12,62 @@
 .sec{margin:14px 16px}.sec-title{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}.sec-title span{color:#88aacc;font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:9px}.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 14px}.card.wide{grid-column:1/-1}.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#8899bb;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
 .tip,.gotcha,.remember,.when,.avoid,.note{border-radius:0 4px 4px 0;padding:5px 9px;margin-bottom:5px;font-size:12.5px;line-height:1.5}
-.tip{background:rgba(41,128,185,.1);border-left:3px solid #2980b9;color:#b0cce8}.tip::before{content:"💡 "}
-.gotcha{background:rgba(192,57,43,.1);border-left:3px solid #c0392b;color:#daa}.gotcha::before{content:"⚠️ "}
-.remember{background:rgba(142,68,173,.1);border-left:3px solid #8e44ad;color:#ccb}.remember::before{content:"🧠 "}
-.when{background:rgba(22,160,133,.1);border-left:3px solid #16a085;color:#adc}.when::before{content:"🎯 "}
-.avoid{background:rgba(243,156,18,.08);border-left:3px solid #f39c12;color:#cba}.avoid::before{content:"🚫 "}
-.note{background:#111128;border-left:3px solid #333;color:#889}.note::before{content:"📎 "}
+.tip{background:rgba(41,128,185,.1);border-left:3px solid #2980b9;color:#b0cce8}.tip::before{content:"TIP · ";font-weight:800;letter-spacing:.04em;}
+.gotcha{background:rgba(192,57,43,.1);border-left:3px solid #c0392b;color:#daa}.gotcha::before{content:"TRAP · ";font-weight:800;letter-spacing:.04em;}
+.remember{background:rgba(142,68,173,.1);border-left:3px solid #8e44ad;color:#ccb}.remember::before{content:"KEY · ";font-weight:800;letter-spacing:.04em;}
+.when{background:rgba(22,160,133,.1);border-left:3px solid #16a085;color:#adc}.when::before{content:"USE · ";font-weight:800;letter-spacing:.04em;}
+.avoid{background:rgba(243,156,18,.08);border-left:3px solid #f39c12;color:#cba}.avoid::before{content:"AVOID · ";font-weight:800;letter-spacing:.04em;}
+.note{background:#111128;border-left:3px solid #333;color:#889}.note::before{content:"NOTE · ";font-weight:800;letter-spacing:.04em;}
 table.cmp{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0}table.cmp th{background:#0d0d22;color:#8899bb;padding:5px 9px;border:1px solid var(--border);text-align:left}table.cmp td{padding:4px 9px;border:1px solid #161630;vertical-align:top}table.cmp tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.vs-use,.vs-no{border-radius:5px;padding:8px 10px;font-size:12px}.vs-use{border:1px solid #1a4a1a;background:rgba(39,174,96,.06)}.vs-no{border:1px solid #4a1a1a;background:rgba(192,57,43,.06)}.vs-use h4{color:#2ecc71;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-no h4{color:#e74c3c;font-size:10px;text-transform:uppercase;margin-bottom:5px}.vs-use li,.vs-no li{list-style:none;padding:1.5px 0;font-size:11.5px}
 code{background:#141430;color:#7fc;font-size:11px;padding:1px 5px;border-radius:3px;font-family:monospace}strong{color:#ddf}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:10px}
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
+  <script defer src="/assets/lab.js" data-lab-page="Domain 1: Foundation Models, Data &amp; RAG" data-lab-parent="AIP-C01 Prep Hub" data-lab-parent-href="/aip/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
-<body>
-<nav class="topnav">
-  <span class="brand">AIP-C01</span>
-  <a href="study-d1.html" class="active">Domain 1</a>
-  <a href="study-d2.html">Domain 2</a>
-  <a href="study-d3.html">Domain 3</a>
-  <a href="study-d45.html">Domain 4 &amp; 5</a>
-  <a href="gap-cheatsheet.html">Gap Sheet</a>
-  <a href="index.html">🏠 Home</a>
+<body class="aip-unified-light aip-study-sheet">
+<!-- AIP-C01 Shared Navigation -->
+<nav class="aip-nav" data-current="study-d1" aria-label="AIP-C01 Studio Navigation">
+  <div class="aip-nav-inner">
+    <div class="aip-nav-brand">
+      <span class="aip-nav-title">AIP-C01 Studio</span>
+    </div>
+    <div class="aip-nav-tabs">
+      <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
+      <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="visual-guide" href="aip-c01-studyguide.html">Visual Guide</a>
+      <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
+      <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
+      <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
+      <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="gap-cheatsheet" href="gap-cheatsheet.html">Gap Sheet</a>
+      <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
+      <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#64748b;font-size:11px;">|</span>
+      <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
+      <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
+      <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
+      <a class="aip-tab" data-tab="study-d45" href="study-d45.html">D4-5</a>
+    </div>
+  </div>
 </nav>
+<!-- AIP:ROLE-BANNER:START -->
+<div class="aip-role-banner" role="note">
+  <div class="aip-role-banner__text"><strong>Domain 1 Rapid Sheet (Foundation Models, Data & RAG):</strong> High-yield traps for Distillation, Inference Profiles, Chunking & OpenSearch. See Deep Study Guide for full Bedrock & SageMaker syntax.</div>
+  <div class="aip-role-banner__links"><a href="study-guide.html">Deep Study Guide</a><a href="gap-cheatsheet.html">Gap Cheatsheet</a><a href="study-d2.html">Next: D2 Sheet →</a></div>
+</div>
+<!-- AIP:ROLE-BANNER:END -->
 
 <div class="hero">
-  <h1>📗 Domain 1 — Foundation Models, Data &amp; RAG</h1>
+  <h1><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Domain 1 — Foundation Models, Data &amp; RAG</h1>
   <p>Subdomains 1.1–1.6 · Your gap areas: 1.3 Data Pipelines · 1.4 Vector Stores · 1.5 Retrieval</p>
 </div>
 
@@ -92,7 +123,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:10px;border-t
 <!-- 1.3 DATA PIPELINES                 -->
 <!-- ═══════════════════════════════════ -->
 <div class="sec">
-<div class="sec-title"><span>1.3</span> — Data Validation &amp; Processing Pipelines <span style="color:#e74c3c">⚠️ Your weakest subdomain (33%)</span></div>
+<div class="sec-title"><span>1.3</span> — Data Validation &amp; Processing Pipelines <span style="color:#e74c3c"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Your weakest subdomain (33%)</span></div>
 <div class="grid">
 
   <div class="card">

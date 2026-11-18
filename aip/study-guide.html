@@ -217,28 +217,48 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 .aip-nav[data-current="final-practice"] [data-tab="final-practice"]{color:#ff9900;border-bottom-color:#ff9900;background:rgba(255,153,0,.07);}
 @media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
 </style>
+  <!-- LAB:HEAD:START -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
+  <script defer src="/assets/lab.js" data-lab-page="Deep Study Guide" data-lab-parent="AIP-C01 Prep Hub" data-lab-parent-href="/aip/index.html"></script>
+  <!-- LAB:HEAD:END -->
 </head>
 <body>
 <!-- AIP-C01 Shared Navigation -->
-<nav class="aip-nav" data-current="study-guide">
+<nav class="aip-nav" data-current="study-guide" aria-label="AIP-C01 Studio Navigation">
   <div class="aip-nav-inner">
     <div class="aip-nav-brand">
-      <span class="aip-nav-title">AIP-C01</span>
-      <span class="aip-nav-sep">|</span>
-      <a class="aip-nav-back" href="../index.html">← ML_LAB</a>
+      <span class="aip-nav-title">AIP-C01 Studio</span>
     </div>
     <div class="aip-nav-tabs">
       <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
       <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="visual-guide" href="aip-c01-studyguide.html">Visual Guide</a>
       <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
       <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
       <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="gap-cheatsheet" href="gap-cheatsheet.html">Gap Sheet</a>
       <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
       <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#64748b;font-size:11px;">|</span>
+      <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
+      <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
+      <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
+      <a class="aip-tab" data-tab="study-d45" href="study-d45.html">D4-5</a>
     </div>
   </div>
 </nav>
+<!-- AIP:ROLE-BANNER:START -->
+<div class="aip-role-banner" role="note">
+  <div class="aip-role-banner__text"><strong>Comprehensive Blueprint Reference (All 5 Domains):</strong> Start here for the complete AWS exam syllabus and service deep-dives. Pair with the Visual Study Guide for diagrams or Domain Sheets (D1–D5) for rapid exam traps.</div>
+  <div class="aip-role-banner__links"><a href="aip-c01-studyguide.html">Visual Guide</a><a href="gap-cheatsheet.html">Gap Cheatsheet</a><a href="study-d1.html">D1–D5 Rapid Sheets</a></div>
+</div>
+<!-- AIP:ROLE-BANNER:END -->
 
 <div class="hdr">
   <div>
@@ -254,7 +274,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 
 <div class="search-bar">
   <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle navigation menu">☰ Topics</button>
-  <input type="text" id="searchInput" placeholder="🔍  Search topics, services, concepts..." oninput="handleSearch(this.value)">
+  <input type="text" id="searchInput" placeholder="Search topics, services, concepts..." oninput="handleSearch(this.value)">
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
@@ -263,7 +283,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 <div class="sidebar" id="sidebar">
   <div class="sidebar-section">
     <div class="sidebar-section-title">Domains</div>
-    <button class="sidebar-btn" onclick="switchView('overview',null,this)">📊 Overview & Exam Map</button>
+    <button class="sidebar-btn" onclick="switchView('overview',null,this)"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Overview & Exam Map</button>
     <button class="sidebar-btn" onclick="switchView('domain1',null,this)">Domain 1: FM Integration <span class="pill">~30%</span></button>
     <button class="sidebar-btn" onclick="switchView('domain2',null,this)">Domain 2: Implementation <span class="pill">~25%</span></button>
     <button class="sidebar-btn" onclick="switchView('domain3',null,this)">Domain 3: Security <span class="pill">~20%</span></button>
@@ -283,8 +303,8 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
   </div>
   <div class="sidebar-section">
     <div class="sidebar-section-title">Quick Access</div>
-    <button class="sidebar-btn" onclick="switchView('quickref',null,this)">⚡ Cheat Sheet</button>
-    <button class="sidebar-btn" onclick="switchView('quickref',null,this);setTimeout(()=>document.getElementById('decision-trees').scrollIntoView(),100)">🌳 Decision Trees</button>
+    <button class="sidebar-btn" onclick="switchView('quickref',null,this)"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Cheat Sheet</button>
+    <button class="sidebar-btn" onclick="switchView('quickref',null,this);setTimeout(()=>document.getElementById('decision-trees').scrollIntoView(),100)"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 4 14 20 14 12 2"/><line x1="12" y1="14" x2="12" y2="22"/></svg> Decision Trees</button>
   </div>
 </div>
 
@@ -308,9 +328,9 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 
   <div class="task-section">
     <div class="task-header open" onclick="toggleTask(this)">
-      <div class="task-num">📋</div>
+      <div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
       <h3>Domain Weight Distribution & Key Focus Areas</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body open">
       <table class="compare-table">
@@ -323,20 +343,20 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           <tr><td><strong>5. Testing, Validation & Troubleshooting</strong></td><td><span class="tag tag-purple">~10%</span></td><td>Model evaluation, QA frameworks, Debugging, Regression testing</td><td>Bedrock Model Eval, SageMaker Experiments, CloudWatch Logs</td></tr>
         </tbody>
       </table>
-      <div class="exam-tip"><strong>🎯 Exam Strategy (given your AIF-C01 background)</strong>Focus deep on: (1) <strong>Agentic AI patterns</strong> — Bedrock Agents, Strands, MCP, multi-agent orchestration; (2) <strong>Advanced RAG</strong> — chunking strategies, hybrid search, re-ranking; (3) <strong>Nova model family</strong> — Pro/Lite/Sonic/Forge use cases; (4) <strong>Deployment decision trees</strong> — when Lambda vs Provisioned Throughput vs SageMaker endpoints; (5) <strong>Guardrails deep config</strong>.</div>
+      <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Exam Strategy (given your AIF-C01 background)</strong>Focus deep on: (1) <strong>Agentic AI patterns</strong> — Bedrock Agents, Strands, MCP, multi-agent orchestration; (2) <strong>Advanced RAG</strong> — chunking strategies, hybrid search, re-ranking; (3) <strong>Nova model family</strong> — Pro/Lite/Sonic/Forge use cases; (4) <strong>Deployment decision trees</strong> — when Lambda vs Provisioned Throughput vs SageMaker endpoints; (5) <strong>Guardrails deep config</strong>.</div>
     </div>
   </div>
 
   <div class="task-section">
     <div class="task-header" onclick="toggleTask(this)">
-      <div class="task-num">🗺️</div>
+      <div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
       <h3>Services You Must Know Cold</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="concept-grid">
         <div class="concept-card" style="border-top:3px solid #FF9900">
-          <h5>🟠 Amazon Bedrock Core</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#f97316"/></svg> Amazon Bedrock Core</h5>
           <ul>
             <li>InvokeModel / InvokeModelWithResponseStream</li>
             <li>Converse API (unified multi-model)</li>
@@ -352,7 +372,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           </ul>
         </div>
         <div class="concept-card" style="border-top:3px solid #0073BB">
-          <h5>🔵 Amazon Nova Family</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg> Amazon Nova Family</h5>
           <ul>
             <li><strong>Nova 2 Pro</strong> — complex multi-step reasoning</li>
             <li><strong>Nova 2 Lite</strong> — cost-effective, high-volume</li>
@@ -364,7 +384,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           </ul>
         </div>
         <div class="concept-card" style="border-top:3px solid #1D8348">
-          <h5>🟢 Agentic Stack</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg> Agentic Stack</h5>
           <ul>
             <li>Bedrock Agents (managed)</li>
             <li>Bedrock AgentCore (composable services)</li>
@@ -377,7 +397,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           </ul>
         </div>
         <div class="concept-card" style="border-top:3px solid #7D3C98">
-          <h5>🟣 Vector & RAG Stack</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#a855f7"/></svg> Vector & RAG Stack</h5>
           <ul>
             <li>Amazon OpenSearch (neural plugin, HNSW)</li>
             <li>Aurora PostgreSQL + pgvector</li>
@@ -389,7 +409,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           </ul>
         </div>
         <div class="concept-card" style="border-top:3px solid #C0392B">
-          <h5>🔴 Security & Governance</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg> Security & Governance</h5>
           <ul>
             <li>Bedrock Guardrails (content filter, PII, topic)</li>
             <li>IAM + resource-based policies</li>
@@ -402,7 +422,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           </ul>
         </div>
         <div class="concept-card" style="border-top:3px solid #148F77">
-          <h5>🩵 Deployment & Ops</h5>
+          <h5><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#06b6d4"/></svg> Deployment & Ops</h5>
           <ul>
             <li>SageMaker Real-time, Serverless, Async endpoints</li>
             <li>SageMaker Multi-model / Multi-container endpoints</li>
@@ -420,9 +440,9 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
 
   <div class="task-section">
     <div class="task-header" onclick="toggleTask(this)">
-      <div class="task-num">⚡</div>
+      <div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
       <h3>Critical "Know the Difference" Decision Points</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <table class="compare-table">
@@ -455,11 +475,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.1</div>
       <h3>Analyze Requirements &amp; Design GenAI Solutions</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🏗️</span> Architectural Patterns for GenAI Solutions</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span> Architectural Patterns for GenAI Solutions</div>
         <div class="sub-acc-body">
           <p>Three primary integration approaches based on control/expertise trade-offs:</p>
           <div class="concept-grid">
@@ -467,7 +487,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
             <div class="concept-card"><h5>SageMaker (Custom/Control)</h5><ul><li>Bring your own model/container</li><li>Fine-grained instance control</li><li>Supports open-source models</li><li>GPU selection (g5, p4d families)</li><li>Best for: custom models, complex inference</li></ul></div>
             <div class="concept-card"><h5>AWS AI Factories (On-Prem)</h5><ul><li>AWS-managed infra in your DC</li><li>Cloud-like AI in own environment</li><li>For data sovereignty requirements</li><li>Also: AWS Outposts for hybrid</li></ul></div>
           </div>
-          <div class="exam-tip"><strong>🎯 Exam Tip</strong> Questions about "which service to use" almost always hinge on: (1) level of control needed, (2) data residency requirements, (3) traffic pattern (steady vs. spiky), and (4) team ML expertise. Memorize these trade-offs.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Exam Tip</strong> Questions about "which service to use" almost always hinge on: (1) level of control needed, (2) data residency requirements, (3) traffic pattern (steady vs. spiky), and (4) team ML expertise. Memorize these trade-offs.</div>
 
           <h5 style="margin-top:1rem">AWS Well-Architected for GenAI (6 Pillars applied)</h5>
           <table class="compare-table">
@@ -495,13 +515,13 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧩</span> Enterprise Adoption Strategy</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span> Enterprise Adoption Strategy</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div class="highlight-box"><h5>AI Center of Excellence (CoE)</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li>Central governance and best practices</li><li>Pattern library and code templates</li><li>Model governance committee</li><li>Standardized onboarding process</li><li>Cross-functional team structure</li></ul></div>
             <div class="highlight-box"><h5>Production Monitoring Framework</h5><ul style="padding-left:1.2rem;font-size:0.82rem"><li><strong>Technical:</strong> inference latency (p50/p95/p99), throughput, error rates</li><li><strong>Business:</strong> cost per inference, user satisfaction, task completion</li><li><strong>Quality:</strong> accuracy, consistency, hallucination rate</li><li>CloudWatch dashboards + automated alerts</li></ul></div>
           </div>
-          <div class="key-concept"><strong>💡 Nova Forge — Cost Optimization for Custom Models</strong>Nova Forge allows continued pre-training from checkpoints (pre/mid/post-training phases), blending proprietary data with Nova-curated data. This significantly reduces cost vs. full retraining and preserves foundational skills. Uses RL with your own reward functions and orchestrator for multi-turn rollouts. Accessed via Amazon SageMaker AI.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Nova Forge — Cost Optimization for Custom Models</strong>Nova Forge allows continued pre-training from checkpoints (pre/mid/post-training phases), blending proprietary data with Nova-curated data. This significantly reduces cost vs. full retraining and preserves foundational skills. Uses RL with your own reward functions and orchestrator for multi-turn rollouts. Accessed via Amazon SageMaker AI.</div>
         </div>
       </div>
     </div>
@@ -512,23 +532,23 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.2</div>
       <h3>Select &amp; Configure Foundation Models</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📊</span> FM Evaluation Frameworks &amp; Benchmarks</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> FM Evaluation Frameworks &amp; Benchmarks</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>General Benchmarks</h5><ul><li><strong>MMLU</strong> — 57 subjects, knowledge breadth</li><li><strong>HELM</strong> — 42+ models, multidimensional (fairness, bias, toxicity)</li><li><strong>BigBench</strong> — 204+ diverse tasks, capability boundaries</li><li><strong>BIG-Bench Hard</strong> — complex multi-step reasoning</li><li><strong>GLUE/SuperGLUE</strong> — language understanding</li></ul></div>
             <div class="concept-card"><h5>Task-Specific</h5><ul><li><strong>HumanEval+ / MBPP+</strong> — code generation</li><li><strong>GSM8K / MATH</strong> — mathematical reasoning</li><li><strong>MT-Bench</strong> — multi-turn conversation (GPT-4 as judge)</li><li><strong>MedPaLM</strong> — medical domain</li><li><strong>FinanceBench</strong> — financial analysis + compliance</li></ul></div>
             <div class="concept-card"><h5>Multimodal</h5><ul><li><strong>MMMLU</strong> — text/image/audio/video</li><li><strong>MME</strong> — fine-grained perception vs. reasoning</li><li><strong>MMMU</strong> — professional multimodal tasks</li><li><strong>LMSys Chatbot Arena</strong> — human preference (Elo ratings)</li></ul></div>
           </div>
-          <div class="exam-tip"><strong>🎯 Key Insight</strong> Benchmark scores don't always translate to real-world performance. Always supplement with <strong>custom benchmarks</strong> built from your actual use case data. The Bedrock Model Evaluation feature lets you run your own evals (automatic + human review).</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Key Insight</strong> Benchmark scores don't always translate to real-world performance. Always supplement with <strong>custom benchmarks</strong> built from your actual use case data. The Bedrock Model Evaluation feature lets you run your own evals (automatic + human review).</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔀</span> Model Routing Strategies (Critical Topic)</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></span> Model Routing Strategies (Critical Topic)</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Strategy</th><th>How It Works</th><th>Best For</th><th>AWS Implementation</th></tr></thead>
@@ -548,7 +568,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
             <div class="concept-card" style="border-top:3px solid #1D8348"><h5>Nova 2 Sonic</h5><p>Real-time conversational AI with lowest latency. Optimized for voice applications and streaming dialogue.</p></div>
           </div>
 
-          <div class="key-concept"><strong>💡 Bedrock Intelligent Prompt Routing — Key Facts</strong>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Bedrock Intelligent Prompt Routing — Key Facts</strong>
             <ul style="padding-left:1.2rem">
               <li>Analyzes: prompt length, complexity, content type, performance requirements</li>
               <li>Evaluates: latency requirements, cost limits, quality thresholds</li>
@@ -562,14 +582,14 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Resilient AI System Design</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Resilient AI System Design</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Circuit Breaker Pattern</h5><ul><li>Monitor error rate over N requests</li><li>Threshold: ~50% failures → open circuit</li><li>Recovery timeout: 30-60 seconds</li><li>Half-open: test 10-20% traffic</li><li>Implement with: Step Functions + CloudWatch alarms</li></ul></div>
             <div class="concept-card"><h5>Fallback Hierarchy</h5><ul><li>Primary model → Smaller model</li><li>Smaller model → Cached response</li><li>Cached → Static response</li><li>Each level has quality threshold check</li><li>Log all fallback events for analysis</li></ul></div>
             <div class="concept-card"><h5>Cross-Region HA</h5><ul><li>Active-active or active-passive</li><li>Route 53 health checks (30s interval, 3 failures)</li><li>Cross-region inference profiles in Bedrock</li><li>DynamoDB Global Tables for state sync</li><li>S3 Cross-Region Replication for assets</li></ul></div>
           </div>
-          <div class="watch-out"><strong>⚠️ Watch Out</strong> "Graceful degradation" is a key exam theme. Know how to design systems that degrade gracefully: return a cached/simplified response rather than fail completely. AWS AppConfig for dynamic config updates without redeployment.</div>
+          <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Watch Out</strong> "Graceful degradation" is a key exam theme. Know how to design systems that degrade gracefully: return a cached/simplified response rather than fail completely. AWS AppConfig for dynamic config updates without redeployment.</div>
         </div>
       </div>
     </div>
@@ -580,11 +600,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.3</div>
       <h3>Implement Data Validation &amp; Processing Pipelines</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Data Quality &amp; Validation Architecture</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Data Quality &amp; Validation Architecture</div>
         <div class="sub-acc-body">
           <p>Data quality impacts FMs through three channels: <strong>prompts</strong>, <strong>retrieved information</strong> (RAG), and <strong>fine-tuning datasets</strong>.</p>
           <table class="compare-table">
@@ -604,7 +624,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📦</span> JSON Formatting for Bedrock APIs (Must Know)</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span> JSON Formatting for Bedrock APIs (Must Know)</div>
         <div class="sub-acc-body">
           <p>Each FM has a specific JSON schema. The <strong>Converse API</strong> provides a unified interface.</p>
           <div class="two-col">
@@ -652,7 +672,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
               </ul>
             </div>
           </div>
-          <div class="exam-tip"><strong>🎯 Retry Strategy</strong>: Exponential backoff starting at 100ms, factor of 2, max 3-5 attempts, add ±100ms jitter. SDK does this automatically if configured.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Retry Strategy</strong>: Exponential backoff starting at 100ms, factor of 2, max 3-5 attempts, add ±100ms jitter. SDK does this automatically if configured.</div>
 
           <h5 style="margin-top:1rem">Multimodal Input (image in messages):</h5>
           <div class="code-block">{
@@ -672,14 +692,14 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🎭</span> Multimodal Data Processing</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span> Multimodal Data Processing</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Text Processing</h5><ul><li>Amazon Comprehend: entities, sentiment, PII</li><li>AWS Glue: ETL, normalization</li><li>Lambda: custom cleaning, tokenization</li><li>Bedrock Data Automation: AI-powered prep</li></ul></div>
             <div class="concept-card"><h5>Image Processing</h5><ul><li>Amazon Rekognition: object detection, labels</li><li>Bedrock Nova Canvas/Titan Image</li><li>Base64 encoding for Bedrock API</li><li>S3 + Lambda trigger pipeline</li></ul></div>
             <div class="concept-card"><h5>Audio/Video</h5><ul><li>Amazon Transcribe: speech-to-text</li><li>Cross-modal alignment (sync audio/video)</li><li>Nova Reel: video generation</li><li>Nova Sonic: real-time audio conversation</li></ul></div>
           </div>
-          <div class="key-concept"><strong>💡 S3 Vectors (New Feature)</strong>Amazon S3 Vectors is a new capability for storing and querying vector embeddings natively in S3. Supports billions of vectors with sub-second query latency. Key advantages: 40-60% cost reduction with Intelligent-Tiering, metadata pre-filtering reduces search space 50-70%, multi-region replication with &lt;15 min sync, ABAC for fine-grained access.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> S3 Vectors (New Feature)</strong>Amazon S3 Vectors is a new capability for storing and querying vector embeddings natively in S3. Supports billions of vectors with sub-second query latency. Key advantages: 40-60% cost reduction with Intelligent-Tiering, metadata pre-filtering reduces search space 50-70%, multi-region replication with &lt;15 min sync, ABAC for fine-grained access.</div>
         </div>
       </div>
     </div>
@@ -690,11 +710,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.4</div>
       <h3>Design &amp; Implement Vector Store Solutions</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📐</span> Vector Database Deep Dive</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0z"/></svg></span> Vector Database Deep Dive</div>
         <div class="sub-acc-body">
           <h5>Distance Metrics — Know All Three:</h5>
           <table class="compare-table">
@@ -710,18 +730,18 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
           <table class="compare-table">
             <thead><tr><th>Service</th><th>Index Type</th><th>Hybrid Search</th><th>Scale</th><th>Best Use Case</th></tr></thead>
             <tbody>
-              <tr><td><strong>OpenSearch Neural</strong></td><td>HNSW or IVF</td><td>✅ Keyword + Vector</td><td>Large to very large</td><td>Full-text + semantic search, enterprise search</td></tr>
-              <tr><td><strong>Aurora pgvector</strong></td><td>IVFFlat, HNSW</td><td>✅ SQL + Vector</td><td>Medium</td><td>Need relational queries + similarity (e.g., filter by user_id then similarity)</td></tr>
-              <tr><td><strong>S3 Vectors</strong></td><td>Native S3 distributed</td><td>❌ Vector only</td><td>Billions of vectors</td><td>Cost-optimized large-scale vector storage</td></tr>
-              <tr><td><strong>Bedrock Knowledge Bases</strong></td><td>Managed (OSS backend)</td><td>✅ Managed hybrid</td><td>Enterprise</td><td>Managed RAG — no infra management</td></tr>
-              <tr><td><strong>Amazon MemoryDB</strong></td><td>Redis-compatible</td><td>❌</td><td>Medium</td><td>Ultra-low latency vector + key-value</td></tr>
+              <tr><td><strong>OpenSearch Neural</strong></td><td>HNSW or IVF</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Keyword + Vector</td><td>Large to very large</td><td>Full-text + semantic search, enterprise search</td></tr>
+              <tr><td><strong>Aurora pgvector</strong></td><td>IVFFlat, HNSW</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> SQL + Vector</td><td>Medium</td><td>Need relational queries + similarity (e.g., filter by user_id then similarity)</td></tr>
+              <tr><td><strong>S3 Vectors</strong></td><td>Native S3 distributed</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Vector only</td><td>Billions of vectors</td><td>Cost-optimized large-scale vector storage</td></tr>
+              <tr><td><strong>Bedrock Knowledge Bases</strong></td><td>Managed (OSS backend)</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Managed hybrid</td><td>Enterprise</td><td>Managed RAG — no infra management</td></tr>
+              <tr><td><strong>Amazon MemoryDB</strong></td><td>Redis-compatible</td><td><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></td><td>Medium</td><td>Ultra-low latency vector + key-value</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> OpenSearch HNSW Configuration (Deep Detail)</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> OpenSearch HNSW Configuration (Deep Detail)</div>
         <div class="sub-acc-body">
           <p>Hierarchical Navigable Small World (HNSW) is the primary index type for vector search in OpenSearch:</p>
           <div class="two-col">
@@ -750,12 +770,12 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
             <li><strong>Fine-grained ranking</strong>: Precise cosine scores, business logic weighting, diversity algorithms</li>
             <li><strong>Result assembly</strong>: Retrieve full content + metadata, final formatting, relevance explanations</li>
           </ol>
-          <div class="exam-tip"><strong>🎯 S3 Vectors Performance</strong>: Pre-filter metadata BEFORE vector calculations to reduce search space 50-70%. Use prefix-based hierarchical organization for efficient filtering. Configure Intelligent-Tiering for 40-60% cost reduction on infrequently accessed vectors.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> S3 Vectors Performance</strong>: Pre-filter metadata BEFORE vector calculations to reduce search space 50-70%. Use prefix-based hierarchical organization for efficient filtering. Configure Intelligent-Tiering for 40-60% cost reduction on infrequently accessed vectors.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Vector Store Data Maintenance Systems</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Vector Store Data Maintenance Systems</div>
         <div class="sub-acc-body">
           <div class="three-col">
             <div class="concept-card"><h5>Event-Driven Updates</h5><ul><li>S3 event → Lambda → re-embed → upsert</li><li>DynamoDB Streams → update pipeline</li><li>Near real-time freshness</li><li>Best for: frequently changing docs</li></ul></div>
@@ -777,11 +797,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.5</div>
       <h3>Design Retrieval Mechanisms for FM Augmentation (RAG)</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✂️</span> Chunking Strategies — Critical Deep Dive</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/></svg></span> Chunking Strategies — Critical Deep Dive</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Strategy</th><th>How It Works</th><th>Pros</th><th>Cons</th><th>Use When</th></tr></thead>
@@ -793,7 +813,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
               <tr><td><strong>Document-Structure</strong></td><td>Use headers, sections, paragraphs as boundaries</td><td>Preserves logical document structure</td><td>Requires structured input</td><td>PDFs, Word docs, HTML with clear structure</td></tr>
             </tbody>
           </table>
-          <div class="key-concept"><strong>💡 Chunking Best Practices</strong>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Chunking Best Practices</strong>
             <ul style="padding-left:1.2rem">
               <li>Overlap: 10-20% of chunk size to preserve cross-boundary context</li>
               <li>Include metadata in chunk (source, page, section) for better retrieval context</li>
@@ -806,19 +826,19 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧲</span> Embedding Models — Amazon Titan Embeddings</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M6 15V9a6 6 0 0 1 12 0v6"/><line x1="6" y1="15" x2="9" y2="15"/><line x1="15" y1="15" x2="18" y2="15"/></svg></span> Embedding Models — Amazon Titan Embeddings</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Titan Text Embeddings V2</h5><ul><li>Dimensions: 256, 512, or 1024 (configurable)</li><li>Supports normalization (for cosine)</li><li>English + multilingual support</li><li>Best for: text-only semantic search</li></ul></div>
             <div class="concept-card"><h5>Titan Multimodal Embeddings G1</h5><ul><li>Embeds both text AND images in same space</li><li>Cross-modal similarity search</li><li>Dimension: 1024</li><li>Best for: product search, media retrieval</li></ul></div>
             <div class="concept-card"><h5>Embedding Selection Criteria</h5><ul><li>Match dimensionality to quality/cost need</li><li>Use SAME model for indexing AND querying</li><li>Consider: throughput, cost per 1K tokens</li><li>Cohere Embed for multilingual enterprise</li></ul></div>
           </div>
-          <div class="exam-tip"><strong>🎯 Critical Rule</strong>: Always use the exact same embedding model for both creating the vector index AND for embedding queries at search time. Mixing models produces meaningless similarity scores.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Critical Rule</strong>: Always use the exact same embedding model for both creating the vector index AND for embedding queries at search time. Mixing models produces meaningless similarity scores.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔎</span> Advanced Query Engineering</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Advanced Query Engineering</div>
         <div class="sub-acc-body">
           <h5>Query Enhancement Techniques:</h5>
           <div class="concept-grid">
@@ -844,11 +864,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">1.6</div>
       <h3>Implement Prompt Engineering Strategies &amp; Governance</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✍️</span> Advanced Prompt Engineering Techniques</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span> Advanced Prompt Engineering Techniques</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Technique</th><th>Description</th><th>AWS Implementation</th><th>Best For</th></tr></thead>
@@ -862,12 +882,12 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
             </tbody>
           </table>
 
-          <div class="key-concept"><strong>💡 Bedrock Flows</strong>: Visual, node-based builder for prompt chains. Nodes include: FM inference nodes, Lambda nodes, Condition nodes, Iterator nodes, Collector nodes, Knowledge Base retrieval nodes. Use for: RAG + generation pipelines, multi-step reasoning, conditional branching without custom code.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Bedrock Flows</strong>: Visual, node-based builder for prompt chains. Nodes include: FM inference nodes, Lambda nodes, Condition nodes, Iterator nodes, Collector nodes, Knowledge Base retrieval nodes. Use for: RAG + generation pipelines, multi-step reasoning, conditional branching without custom code.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Bedrock Guardrails — Deep Configuration</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Bedrock Guardrails — Deep Configuration</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Content Filters</h5><ul><li>Categories: Hate, Insults, Sexual, Violence, Misconduct, Prompt Attack</li><li>Severity levels: LOW, MEDIUM, HIGH</li><li>Applies to: INPUT and/or OUTPUT</li><li>Custom threshold per category</li></ul></div>
@@ -877,12 +897,12 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
             <div class="concept-card"><h5>Word Filters</h5><ul><li>Custom blocked word lists</li><li>Managed lists (profanity)</li><li>Applied post-generation</li></ul></div>
             <div class="concept-card"><h5>Prompt Injection Defense</h5><ul><li>PROMPT_ATTACK filter category in content filter</li><li>Detects jailbreak attempts, role-play attacks</li><li>System prompt separation (protected)</li><li>Input validation in Lambda pre-Bedrock call</li></ul></div>
           </div>
-          <div class="watch-out"><strong>⚠️ Guardrails Gotcha</strong>: Guardrails must be explicitly associated with a model invocation (via guardrailIdentifier + guardrailVersion in the API call). They do NOT auto-apply to all Bedrock calls. Also: Guardrails can be applied at both REQUEST and RESPONSE level independently.</div>
+          <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Guardrails Gotcha</strong>: Guardrails must be explicitly associated with a model invocation (via guardrailIdentifier + guardrailVersion in the API call). They do NOT auto-apply to all Bedrock calls. Also: Guardrails can be applied at both REQUEST and RESPONSE level independently.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📋</span> Prompt Management &amp; Governance (Enterprise)</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></span> Prompt Management &amp; Governance (Enterprise)</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div>
@@ -907,7 +927,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
               </ul>
             </div>
           </div>
-          <div class="exam-tip"><strong>🎯 QA for Probabilistic Outputs</strong>: FM outputs are probabilistic — same input can produce different outputs. Design validation around: semantic similarity scoring (not exact match), threshold-based acceptance, statistical validation over N runs. Use SageMaker AI serverless RL-based customization (new feature) to reduce fine-tuning time from months to days.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> QA for Probabilistic Outputs</strong>: FM outputs are probabilistic — same input can produce different outputs. Design validation around: semantic similarity scoring (not exact match), threshold-based acceptance, statistical validation over N runs. Use SageMaker AI serverless RL-based customization (new feature) to reduce fine-tuning time from months to days.</div>
         </div>
       </div>
     </div>
@@ -927,11 +947,11 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">2.1</div>
       <h3>Implement Agentic AI Solutions &amp; Tool Integrations</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤖</span> Agentic AI Architecture Overview</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></span> Agentic AI Architecture Overview</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Technology</th><th>Type</th><th>Key Characteristics</th><th>When to Use</th></tr></thead>
@@ -947,7 +967,7 @@ hr.divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔗</span> Model Context Protocol (MCP) — Deep Dive</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> Model Context Protocol (MCP) — Deep Dive</div>
         <div class="sub-acc-body">
           <p>MCP is a standardized protocol for agent-tool interactions. Agents discover tools, invoke them, and get results via MCP servers.</p>
           <div class="two-col">
@@ -995,7 +1015,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔒</span> Safeguarded AI Workflows</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Safeguarded AI Workflows</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Stopping Conditions</h5><ul><li>Step Functions: max iteration count in Choice state</li><li>Lambda: timeout settings (predictable execution)</li><li>CloudWatch alarms: auto-halt on error rate threshold</li><li>Circuit breaker: 50% failure → open circuit 30-60s</li></ul></div>
@@ -1003,12 +1023,12 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <div class="concept-card"><h5>Human-in-the-Loop</h5><ul><li>Step Functions Human Task state (wait for token)</li><li>API Gateway: collect human feedback</li><li>DynamoDB: store review decisions with TTL</li><li>Escalation criteria based on confidence scores</li></ul></div>
             <div class="concept-card"><h5>Input Validation</h5><ul><li>Schema validation before agent processing</li><li>Lambda pre-processing for malformed inputs</li><li>Bedrock Guardrails: prompt injection detection</li><li>Rate limiting via API Gateway usage plans</li></ul></div>
           </div>
-          <div class="exam-tip"><strong>🎯 ReAct Pattern in Step Functions</strong>: State machine alternates: <code>Reason</code> state (invoke LLM) → <code>Parse Action</code> state (Lambda extracts tool call) → <code>Execute Action</code> state (call tool) → <code>Observe</code> state (feed result back to LLM) → repeat until final answer or max steps reached.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> ReAct Pattern in Step Functions</strong>: State machine alternates: <code>Reason</code> state (invoke LLM) → <code>Parse Action</code> state (Lambda extracts tool call) → <code>Execute Action</code> state (call tool) → <code>Observe</code> state (feed result back to LLM) → repeat until final answer or max steps reached.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤝</span> Multi-Agent Coordination Patterns</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span> Multi-Agent Coordination Patterns</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Ensemble / Aggregation</h5><ul><li>Multiple agents/models on same task</li><li>Majority voting for classification</li><li>Weighted averaging for numeric outputs</li><li>Ranked fusion for retrieval</li><li>Lambda aggregation logic</li></ul></div>
@@ -1025,11 +1045,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">2.2</div>
       <h3>Implement Model Deployment Strategies</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🚀</span> Deployment Strategy Decision Framework</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span> Deployment Strategy Decision Framework</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Strategy</th><th>Service</th><th>Traffic Pattern</th><th>Latency</th><th>Cost Model</th><th>Key Config</th></tr></thead>
@@ -1047,7 +1067,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🖥️</span> Large Language Model Deployment Challenges</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span> Large Language Model Deployment Challenges</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Memory Management</h5><ul><li>LLMs can be 10s-100s of GB</li><li>SageMaker: up to 500GB model size</li><li>GPU instances: ml.g5, ml.p4d.24xlarge (for large models)</li><li>CPU for small NER/classification: ml.c5.9xlarge</li><li>Container health check timeout: up to 60 min</li></ul></div>
@@ -1079,13 +1099,13 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             </div>
           </div>
 
-          <div class="key-concept"><strong>💡 Nova Forge via SageMaker</strong>: Custom model training starting from Nova checkpoints. Mix proprietary data with Nova-curated data across all training phases (pre/mid/post-training). Supports RL with custom reward functions and custom orchestrator for multi-turn rollouts. Prevents catastrophic forgetting better than pure custom training.</div>
-          <div class="key-concept"><strong>💡 Bedrock Custom Model Import</strong>: Import models trained/fine-tuned in SageMaker into Bedrock. Get on-demand API access without managing endpoints. More cost-effective than provisioned throughput for variable traffic.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Nova Forge via SageMaker</strong>: Custom model training starting from Nova checkpoints. Mix proprietary data with Nova-curated data across all training phases (pre/mid/post-training). Supports RL with custom reward functions and custom orchestrator for multi-turn rollouts. Prevents catastrophic forgetting better than pure custom training.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Bedrock Custom Model Import</strong>: Import models trained/fine-tuned in SageMaker into Bedrock. Get on-demand API access without managing endpoints. More cost-effective than provisioned throughput for variable traffic.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚖️</span> Optimized Deployment Approaches</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></span> Optimized Deployment Approaches</div>
         <div class="sub-acc-body">
           <h5>Model Cascading Architecture:</h5>
           <ol class="step-list">
@@ -1127,11 +1147,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">2.3</div>
       <h3>Design &amp; Implement Enterprise Integration Architectures</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🏢</span> Enterprise Connectivity Patterns</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/></svg></span> Enterprise Connectivity Patterns</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>API-Based Integration</h5><ul><li>API Gateway: REST/HTTP/WebSocket APIs</li><li>Custom domain mappings for branding</li><li>Regional (low-latency) vs Edge-optimized (global)</li><li>Lambda integration for custom logic</li><li>Usage plans + throttling per API key</li></ul></div>
@@ -1142,7 +1162,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔐</span> Secure Access Framework for GenAI</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Secure Access Framework for GenAI</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Security Layer</th><th>Service/Pattern</th><th>Implementation Detail</th></tr></thead>
@@ -1159,7 +1179,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔧</span> CI/CD for GenAI + GenAI Gateway Architecture</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span> CI/CD for GenAI + GenAI Gateway Architecture</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div class="highlight-box">
@@ -1198,11 +1218,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">2.4</div>
       <h3>Implement FM API Integrations</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🌊</span> Streaming &amp; Real-Time AI</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg></span> Streaming &amp; Real-Time AI</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div class="highlight-box">
@@ -1230,7 +1250,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔄</span> Resilience Patterns — Key Numbers to Know</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Resilience Patterns — Key Numbers to Know</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Retry Configuration</h5><ul><li>Initial backoff: 100ms</li><li>Backoff factor: 2x (exponential)</li><li>Max backoff: 20 seconds</li><li>Max attempts: 3-5</li><li>Jitter: ±100ms or factor 0.1-0.3</li><li>Retriable: 429, 500, 503</li><li>Non-retriable: 400, 401, 403</li></ul></div>
@@ -1238,7 +1258,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <div class="concept-card"><h5>Throttling Config</h5><ul><li>Account-level: 10,000 RPS</li><li>Stage-level: 1,000-5,000 RPS</li><li>Route-level: 50-500 RPS (complex models)</li><li>SQS for request buffering under throttle</li><li>SQS visibility timeout: 5-15 min for LLMs</li></ul></div>
             <div class="concept-card"><h5>Connection Pooling</h5><ul><li>Pool size: 10-20 connections per instance</li><li>Connection TTL: 60-300 seconds</li><li>Reduce SDK client instantiation (reuse across Lambda invocations)</li><li>Use global variables for SDK clients in Lambda</li></ul></div>
           </div>
-          <div class="exam-tip"><strong>🎯 X-Ray Tracing Pattern</strong>: Add custom subsegments for: (1) input preprocessing, (2) model invocation, (3) response postprocessing. Annotate with: model_name, input_complexity_score, output_quality_score, cost_estimate. This enables performance analysis by model and query type.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> X-Ray Tracing Pattern</strong>: Add custom subsegments for: (1) input preprocessing, (2) model invocation, (3) response postprocessing. Annotate with: model_name, input_complexity_score, output_quality_score, cost_estimate. This enables performance analysis by model and query type.</div>
         </div>
       </div>
     </div>
@@ -1257,11 +1277,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">3.1</div>
       <h3>Implement AI Safety Controls &amp; Responsible AI</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🛡️</span> Bedrock Guardrails — Complete Configuration</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Bedrock Guardrails — Complete Configuration</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Guardrail Feature</th><th>Configuration Detail</th><th>Applied At</th><th>Use Case</th></tr></thead>
@@ -1274,13 +1294,13 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               <tr><td><strong>Sensitive Info Filters</strong></td><td>Regex patterns for custom sensitive data (e.g., employee IDs, internal codes)</td><td>INPUT and OUTPUT</td><td>Organization-specific PII beyond standard types</td></tr>
             </tbody>
           </table>
-          <div class="watch-out"><strong>⚠️ Guardrails Must Be Explicitly Invoked</strong>: Pass guardrailIdentifier + guardrailVersion in InvokeModel/Converse API call. They don't auto-apply. Can test guardrails independently with ApplyGuardrail API before deploying.</div>
-          <div class="exam-tip"><strong>🎯 Prompt Injection Defense</strong>: Use PROMPT_ATTACK content filter + keep system prompt in system parameter (separate from user messages, protected by Bedrock). Also: validate/sanitize user input in Lambda before sending to Bedrock. Input validation + Guardrails = defense in depth.</div>
+          <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Guardrails Must Be Explicitly Invoked</strong>: Pass guardrailIdentifier + guardrailVersion in InvokeModel/Converse API call. They don't auto-apply. Can test guardrails independently with ApplyGuardrail API before deploying.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Prompt Injection Defense</strong>: Use PROMPT_ATTACK content filter + keep system prompt in system parameter (separate from user messages, protected by Bedrock). Also: validate/sanitize user input in Lambda before sending to Bedrock. Input validation + Guardrails = defense in depth.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚖️</span> Responsible AI Principles on AWS</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0z"/></svg></span> Responsible AI Principles on AWS</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Bias Detection &amp; Mitigation</h5><ul><li>SageMaker Clarify: bias metrics (class imbalance, DPPL, KL divergence)</li><li>SageMaker Data Wrangler: data quality reports</li><li>Model Cards (SageMaker): document model limitations, bias findings</li><li>HELM benchmark: includes fairness + toxicity metrics</li></ul></div>
@@ -1292,7 +1312,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔑</span> IAM &amp; Security for GenAI</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></span> IAM &amp; Security for GenAI</div>
         <div class="sub-acc-body">
           <div class="highlight-box">
             <h5>Key IAM Actions for Bedrock (Know These)</h5>
@@ -1327,7 +1347,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               </ul>
             </div>
           </div>
-          <div class="key-concept"><strong>💡 AWS Security Hub for GenAI</strong>: New enhanced capabilities — near-real-time risk analytics, improved prioritization for FM-related findings. Integrates with CloudTrail for prompt management audit events. Correlates findings across sources. Configure custom security standards for FM-specific risks (prompt injection attempts, unusual API usage patterns).</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> AWS Security Hub for GenAI</strong>: New enhanced capabilities — near-real-time risk analytics, improved prioritization for FM-related findings. Integrates with CloudTrail for prompt management audit events. Correlates findings across sources. Configure custom security standards for FM-specific risks (prompt injection attempts, unusual API usage patterns).</div>
         </div>
       </div>
     </div>
@@ -1337,11 +1357,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">3.2</div>
       <h3>Compliance, Governance &amp; Data Privacy</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📜</span> Compliance Frameworks &amp; Controls</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg></span> Compliance Frameworks &amp; Controls</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Regulation</th><th>Key Requirement</th><th>AWS Controls</th></tr></thead>
@@ -1352,7 +1372,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               <tr><td><strong>SOC 2</strong></td><td>Security, availability, confidentiality</td><td>CloudTrail audit, Security Hub, GuardDuty, Access Analyzer</td></tr>
             </tbody>
           </table>
-          <div class="exam-tip"><strong>🎯 Data Residency</strong>: For regulatory requirements, use: (1) VPC Endpoints to keep data within AWS network, (2) AWS Outposts for on-premises data that can't leave DC, (3) Specific region selection (e.g., eu-west-1 for EU data), (4) S3 Object Lock for retention compliance, (5) Local Zones for specific geographic requirements.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Data Residency</strong>: For regulatory requirements, use: (1) VPC Endpoints to keep data within AWS network, (2) AWS Outposts for on-premises data that can't leave DC, (3) Specific region selection (e.g., eu-west-1 for EU data), (4) S3 Object Lock for retention compliance, (5) Local Zones for specific geographic requirements.</div>
         </div>
       </div>
     </div>
@@ -1371,11 +1391,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">4.1</div>
       <h3>Cost Optimization for GenAI</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">💰</span> Cost Optimization Strategies</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span> Cost Optimization Strategies</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Model Selection</h5><ul><li>Use smaller models for simple tasks (cascading)</li><li>Nova Lite for high-volume → Pro only when needed</li><li>Measure: cost per task completion (not per token)</li><li>A/B test model quality vs. cost</li></ul></div>
@@ -1383,8 +1403,8 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <div class="concept-card"><h5>Caching</h5><ul><li>Semantic cache: return cached if cosine similarity &gt; 0.95</li><li>Response cache: ElastiCache for exact-match queries</li><li>Embedding cache: avoid re-embedding same documents</li><li>Up to 90% cost reduction for repetitive queries</li></ul></div>
             <div class="concept-card"><h5>Provisioned Throughput</h5><ul><li>1-month or 6-month commitment</li><li>Break-even: typically ~70% utilization</li><li>Use CloudWatch to track PT utilization</li><li>Only for truly steady, predictable workloads</li></ul></div>
           </div>
-          <div class="key-concept"><strong>💡 Nova Forge Cost Optimization</strong>: Continued pre-training from checkpoints is dramatically cheaper than full retraining. Blending approach reduces catastrophic forgetting, meaning you don't need to retrain as often when adding new domain knowledge. RL with custom reward functions enables efficient post-training.</div>
-          <div class="key-concept"><strong>💡 S3 Vectors + Intelligent-Tiering</strong>: Automatically moves infrequently accessed vectors to lower-cost tiers. 40-60% storage cost reduction for large vector collections. No performance impact for frequently queried vectors (cached in high-performance tier).</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Nova Forge Cost Optimization</strong>: Continued pre-training from checkpoints is dramatically cheaper than full retraining. Blending approach reduces catastrophic forgetting, meaning you don't need to retrain as often when adding new domain knowledge. RL with custom reward functions enables efficient post-training.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> S3 Vectors + Intelligent-Tiering</strong>: Automatically moves infrequently accessed vectors to lower-cost tiers. 40-60% storage cost reduction for large vector collections. No performance impact for frequently queried vectors (cached in high-performance tier).</div>
         </div>
       </div>
     </div>
@@ -1394,11 +1414,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">4.2</div>
       <h3>Performance Optimization &amp; Monitoring</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📊</span> Key Metrics &amp; Monitoring Architecture</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Key Metrics &amp; Monitoring Architecture</div>
         <div class="sub-acc-body">
           <div class="three-col">
             <div class="concept-card"><h5>Technical Metrics</h5><ul><li>Inference latency: p50, p90, p95, p99</li><li>Throughput (tokens/s, requests/s)</li><li>Error rate by error type</li><li>Token utilization (input vs. output)</li><li>Cache hit rate</li><li>Model invocation count</li></ul></div>
@@ -1413,12 +1433,12 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <li>Composite alarms: trigger only when multiple conditions met simultaneously</li>
             <li>Anomaly detection: ML-based baseline for adaptive alerting</li>
           </ul>
-          <div class="exam-tip"><strong>🎯 Bedrock Model Invocation Logging</strong>: Enable to capture: full request/response to S3 or CloudWatch Logs. Use for: quality auditing, debugging, fine-tuning data collection, compliance. Configure at account level or per model. Important: logging adds slight latency — consider async delivery to S3 via Firehose for high-volume production.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Bedrock Model Invocation Logging</strong>: Enable to capture: full request/response to S3 or CloudWatch Logs. Use for: quality auditing, debugging, fine-tuning data collection, compliance. Configure at account level or per model. Important: logging adds slight latency — consider async delivery to S3 via Firehose for high-volume production.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📈</span> Auto-Scaling Strategies</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> Auto-Scaling Strategies</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Service</th><th>Scaling Trigger</th><th>Scaling Type</th><th>Notes</th></tr></thead>
@@ -1448,11 +1468,11 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <div class="task-header" onclick="toggleTask(this)">
       <div class="task-num">5.1</div>
       <h3>Model Evaluation &amp; Validation Frameworks</h3>
-      <span class="chevron">▶</span>
+      <span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
     <div class="task-body">
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🧪</span> Bedrock Model Evaluation</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-4.5 8.5A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.7-2.5L14 9V3"/></svg></span> Bedrock Model Evaluation</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div class="highlight-box">
@@ -1476,12 +1496,12 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               </ul>
             </div>
           </div>
-          <div class="key-concept"><strong>💡 Probabilistic Validation Approach</strong>: For deterministic outputs (JSON schemas, specific formats) → use exact match / schema validation. For generative outputs (summaries, answers) → use semantic similarity scoring (cosine similarity &gt; threshold), not exact match. Run N samples, validate distribution of quality scores.</div>
+          <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Probabilistic Validation Approach</strong>: For deterministic outputs (JSON schemas, specific formats) → use exact match / schema validation. For generative outputs (summaries, answers) → use semantic similarity scoring (cosine similarity &gt; threshold), not exact match. Run N samples, validate distribution of quality scores.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> Testing Frameworks &amp; Strategies</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Testing Frameworks &amp; Strategies</div>
         <div class="sub-acc-body">
           <table class="compare-table">
             <thead><tr><th>Test Type</th><th>What It Tests</th><th>Implementation</th></tr></thead>
@@ -1495,12 +1515,12 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               <tr><td><strong>Bias Testing</strong></td><td>Consistent quality across demographic groups</td><td>SageMaker Clarify, HELM fairness metrics</td></tr>
             </tbody>
           </table>
-          <div class="exam-tip"><strong>🎯 SageMaker AI RL-based Customization</strong>: Serverless RL-based fine-tuning (new feature) reduces fine-tuning time from months to days. Enables rapid testing of new prompt architectures and domain-specific model behaviors. Used in QA workflows to quickly validate if a model variant improves target metrics.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> SageMaker AI RL-based Customization</strong>: Serverless RL-based fine-tuning (new feature) reduces fine-tuning time from months to days. Enables rapid testing of new prompt architectures and domain-specific model behaviors. Used in QA workflows to quickly validate if a model variant improves target metrics.</div>
         </div>
       </div>
 
       <div class="sub-acc">
-        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🐛</span> Troubleshooting GenAI Applications</div>
+        <div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="8" y="6" width="8" height="14" rx="4"/><path d="M19 10h2"/><path d="M3 10h2"/><path d="M19 14h2"/><path d="M3 14h2"/></svg></span> Troubleshooting GenAI Applications</div>
         <div class="sub-acc-body">
           <div class="concept-grid">
             <div class="concept-card"><h5>Poor RAG Quality</h5><ul><li>Check: chunk size vs. query complexity</li><li>Verify: same embedding model for index + query</li><li>Inspect: similarity scores (too low = bad embeddings)</li><li>Review: metadata filters (over-filtering?)</li><li>Embedding drift: re-embed if model updated</li></ul></div>
@@ -1508,7 +1528,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <div class="concept-card"><h5>Hallucinations</h5><ul><li>Enable Bedrock Grounding Check guardrail</li><li>Increase retrieved context (more chunks)</li><li>Add citation requirement to prompt</li><li>Reduce temperature (0.1-0.3 for factual tasks)</li><li>Use CoT to expose reasoning</li></ul></div>
             <div class="concept-card"><h5>Throttling (429 errors)</h5><ul><li>Check: Bedrock quota limits in Service Quotas</li><li>Request quota increase via support ticket</li><li>Implement exponential backoff + jitter</li><li>Add SQS buffer for burst absorption</li><li>Use Cross-Region inference for capacity</li></ul></div>
           </div>
-          <div class="watch-out"><strong>⚠️ CloudWatch Logs Insights for GenAI Debugging</strong>: Query patterns: filter @message like "throttle" | stats count() by @logStream — find throttled Lambda functions. Also query for guardrail trigger patterns, slow invocations (filter @duration &gt; 5000), and error message patterns to identify systemic issues.</div>
+          <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> CloudWatch Logs Insights for GenAI Debugging</strong>: Query patterns: filter @message like "throttle" | stats count() by @logStream — find throttled Lambda functions. Also query for guardrail trigger patterns, slow invocations (filter @duration &gt; 5000), and error message patterns to identify systemic issues.</div>
         </div>
       </div>
     </div>
@@ -1536,9 +1556,9 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- BEDROCK -->
   <div id="svc-bedrock" class="svc-panel">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟠</div><h3>Amazon Bedrock — Complete Service Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#f97316"/></svg></div><h3>Amazon Bedrock — Complete Service Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
-        <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon">📡</span> Bedrock APIs — Know Every One</div>
+        <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M5.6 5.6a9 9 0 0 1 12.8 0"/><path d="M8.5 8.5a5 5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><line x1="12" y1="13" x2="12" y2="21"/></svg></span> Bedrock APIs — Know Every One</div>
         <div class="sub-acc-body open">
           <table class="compare-table">
             <thead><tr><th>API</th><th>Purpose</th><th>Key Parameters</th><th>Response Type</th></tr></thead>
@@ -1553,10 +1573,10 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
               <tr><td><strong>CreateModelEvaluationJob</strong></td><td>Automated model evaluation</td><td>evaluationConfig, inferenceConfig, outputDataConfig</td><td>Job ARN</td></tr>
             </tbody>
           </table>
-          <div class="exam-tip"><strong>🎯 Converse API Advantage</strong>: Unified format works across all Bedrock models (Claude, Nova, Titan, Llama, Mistral). One code path for all models. Handles system prompts, multi-turn conversation, tool use, document understanding. Preferred over InvokeModel for new development.</div>
+          <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Converse API Advantage</strong>: Unified format works across all Bedrock models (Claude, Nova, Titan, Llama, Mistral). One code path for all models. Handles system prompts, multi-turn conversation, tool use, document understanding. Preferred over InvokeModel for new development.</div>
         </div></div>
 
-        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">⚡</span> Provisioned Throughput — Detailed Config</div>
+        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Provisioned Throughput — Detailed Config</div>
         <div class="sub-acc-body">
           <div class="two-col">
             <div class="highlight-box">
@@ -1588,7 +1608,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- NOVA MODELS -->
   <div id="svc-nova" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟡</div><h3>Amazon Nova Model Family — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#eab308"/></svg></div><h3>Amazon Nova Model Family — Complete Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <table class="compare-table">
           <thead><tr><th>Model</th><th>Input Types</th><th>Best For</th><th>Key Feature</th><th>Use in Routing</th></tr></thead>
@@ -1601,7 +1621,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <tr><td><strong>Nova Forge</strong></td><td>Training pipeline</td><td>Custom model creation</td><td>Training from checkpoints (pre/mid/post-training), RL support</td><td>N/A (training, not inference)</td></tr>
           </tbody>
         </table>
-        <div class="key-concept"><strong>💡 Nova Forge Key Details for Exam</strong>
+        <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Nova Forge Key Details for Exam</strong>
           <ul style="padding-left:1.2rem">
             <li>Access via: Amazon SageMaker AI (not directly in Bedrock console)</li>
             <li>Training phases: pre-training, mid-training (domain adaptation), post-training (instruction following)</li>
@@ -1612,7 +1632,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <li>Cost: dramatically cheaper than full model training from scratch</li>
           </ul>
         </div>
-        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">📝</span> Nova JSON Format (Exam Must-Know)</div>
+        <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> Nova JSON Format (Exam Must-Know)</div>
         <div class="sub-acc-body">
           <div class="code-block"><span class="c-cm">// Nova 2 Pro inference request format</span>
 {
@@ -1640,7 +1660,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- SAGEMAKER -->
   <div id="svc-sagemaker" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟣</div><h3>Amazon SageMaker AI — GenAI Developer Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#a855f7"/></svg></div><h3>Amazon SageMaker AI — GenAI Developer Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <table class="compare-table">
           <thead><tr><th>SageMaker Feature</th><th>Purpose for GenAI</th><th>Key Config</th></tr></thead>
@@ -1658,7 +1678,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <tr><td><strong>Experiments</strong></td><td>Track prompt/model A/B test results</td><td>Runs, metrics, artifacts, comparison views</td></tr>
           </tbody>
         </table>
-        <div class="exam-tip"><strong>🎯 Instance Selection for LLMs</strong>: ml.g5 family — excellent for inference (A10G GPUs), good price/performance. ml.p4d.24xlarge — for very large models (8x A100). ml.p3 — older, still valid for medium models. ml.c5 — for NLP/NER on CPU (no GPU needed, cheaper). UltraServers: multi-node with NVLink for models &gt;1TB.</div>
+        <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Instance Selection for LLMs</strong>: ml.g5 family — excellent for inference (A10G GPUs), good price/performance. ml.p4d.24xlarge — for very large models (8x A100). ml.p3 — older, still valid for medium models. ml.c5 — for NLP/NER on CPU (no GPU needed, cheaper). UltraServers: multi-node with NVLink for models &gt;1TB.</div>
       </div>
     </div>
   </div>
@@ -1666,7 +1686,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- OPENSEARCH + pgvector -->
   <div id="svc-opensearch" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🩵</div><h3>OpenSearch + Aurora pgvector — Vector Search Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#06b6d4"/></svg></div><h3>OpenSearch + Aurora pgvector — Vector Search Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <div class="two-col">
           <div class="highlight-box">
@@ -1696,7 +1716,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             </ul>
           </div>
         </div>
-        <div class="watch-out"><strong>⚠️ pgvector Scaling Limit</strong>: pgvector is suitable for millions of vectors, not billions. For billion-scale vector search, use OpenSearch or S3 Vectors. pgvector's main advantage is when you need to combine vector similarity with complex SQL queries (joins, aggregations, filters).</div>
+        <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> pgvector Scaling Limit</strong>: pgvector is suitable for millions of vectors, not billions. For billion-scale vector search, use OpenSearch or S3 Vectors. pgvector's main advantage is when you need to combine vector similarity with complex SQL queries (joins, aggregations, filters).</div>
       </div>
     </div>
   </div>
@@ -1704,7 +1724,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- STEP FUNCTIONS -->
   <div id="svc-stepfunctions" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔵</div><h3>AWS Step Functions — GenAI Orchestration Patterns</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg></div><h3>AWS Step Functions — GenAI Orchestration Patterns</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <div class="concept-grid">
           <div class="concept-card"><h5>ReAct Pattern States</h5><ul><li><strong>Reason</strong>: Task state → invoke LLM, get reasoning + proposed action</li><li><strong>ParseAction</strong>: Lambda state → extract tool name + params from LLM output</li><li><strong>ExecuteAction</strong>: Task/Lambda state → call the tool</li><li><strong>Observe</strong>: Pass state → combine tool result with conversation history</li><li><strong>MaxIterations</strong>: Choice state → check loop count, break if max reached</li></ul></div>
@@ -1712,7 +1732,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
           <div class="concept-card"><h5>Parallel Processing</h5><ul><li>Parallel state: run N branches simultaneously</li><li>All branches must complete before next state</li><li>Use for: multi-query expansion, ensemble inference</li><li>Error handling: Catch on each branch, ResultPath</li></ul></div>
           <div class="concept-card"><h5>Error Handling for GenAI</h5><ul><li>Retry: MaxAttempts 3, BackoffRate 2.0, IntervalSeconds 1</li><li>Catch States.TaskFailed → fallback path</li><li>Catch Bedrock.ThrottlingException → SQS queue state</li><li>TimeoutSeconds per state for LLM latency SLA</li></ul></div>
         </div>
-        <div class="exam-tip"><strong>🎯 Bedrock + Step Functions</strong>: Step Functions has native optimized integration with Bedrock (no Lambda needed). Use <code>arn:aws:states:::bedrock:invokeModel</code> resource. Supports: InvokeModel and RetrieveAndGenerate directly. Pass model parameters in Parameters block. ResponseBody automatically available as output.</div>
+        <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Bedrock + Step Functions</strong>: Step Functions has native optimized integration with Bedrock (no Lambda needed). Use <code>arn:aws:states:::bedrock:invokeModel</code> resource. Supports: InvokeModel and RetrieveAndGenerate directly. Pass model parameters in Parameters block. ResponseBody automatically available as output.</div>
       </div>
     </div>
   </div>
@@ -1720,7 +1740,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- KNOWLEDGE BASES -->
   <div id="svc-kb" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🟢</div><h3>Bedrock Knowledge Bases — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg></div><h3>Bedrock Knowledge Bases — Complete Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <table class="compare-table">
           <thead><tr><th>Feature</th><th>Details</th></tr></thead>
@@ -1736,8 +1756,8 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
             <tr><td><strong>Citations</strong></td><td>RetrieveAndGenerate returns source documents + page numbers + S3 URI</td></tr>
           </tbody>
         </table>
-        <div class="key-concept"><strong>💡 Hierarchical Chunking in Knowledge Bases</strong>: Creates two levels — large parent chunks (context) and small child chunks (precision). At retrieval time, finds matching child chunks but returns the parent chunk as context. Best of both worlds: precise matching + sufficient context for generation.</div>
-        <div class="exam-tip"><strong>🎯 Bedrock Knowledge Bases vs. Custom RAG</strong>: KB = fully managed (no infra, auto-embed, auto-sync). Custom RAG = Lambda + OpenSearch/pgvector = full control, more complex. Choose KB for: rapid deployment, standard use cases, managed vector store. Choose Custom RAG for: complex pre-processing, custom chunking logic, specific index configurations.</div>
+        <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Hierarchical Chunking in Knowledge Bases</strong>: Creates two levels — large parent chunks (context) and small child chunks (precision). At retrieval time, finds matching child chunks but returns the parent chunk as context. Best of both worlds: precise matching + sufficient context for generation.</div>
+        <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Bedrock Knowledge Bases vs. Custom RAG</strong>: KB = fully managed (no infra, auto-embed, auto-sync). Custom RAG = Lambda + OpenSearch/pgvector = full control, more complex. Choose KB for: rapid deployment, standard use cases, managed vector store. Choose Custom RAG for: complex pre-processing, custom chunking logic, specific index configurations.</div>
       </div>
     </div>
   </div>
@@ -1745,7 +1765,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- AGENTS -->
   <div id="svc-agents" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔵</div><h3>Amazon Bedrock Agents — Complete Reference</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#3b82f6"/></svg></div><h3>Amazon Bedrock Agents — Complete Reference</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <div class="concept-grid">
           <div class="concept-card"><h5>Core Components</h5><ul><li><strong>Agent</strong>: FM + orchestration logic + memory</li><li><strong>Action Groups</strong>: APIs the agent can call (OpenAPI schema)</li><li><strong>Knowledge Bases</strong>: RAG data sources (auto-query)</li><li><strong>Guardrails</strong>: Safety controls on agent I/O</li><li><strong>Memory</strong>: Session context persistence</li><li><strong>Agent Alias</strong>: Version pointer for deployment</li></ul></div>
@@ -1753,7 +1773,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
           <div class="concept-card"><h5>Multi-Agent (Agent Squad)</h5><ul><li>Supervisor agent routes to sub-agents</li><li>Sub-agents are specialized (billing, support, search)</li><li>Communication via InvokeAgent API calls</li><li>Each agent has own action groups + KB</li><li>Shared session context across agents</li></ul></div>
           <div class="concept-card"><h5>AgentCore Features</h5><ul><li>AgentCore Policy: governance controls</li><li>AgentCore Evaluations: quality assessment</li><li>Episodic Memory: recall past interactions</li><li>Framework-agnostic (works with Strands, LangChain, etc.)</li><li>Works with any Bedrock model</li></ul></div>
         </div>
-        <div class="watch-out"><strong>⚠️ Bedrock Agents vs. Strands vs. Step Functions</strong>: Agents = managed LLM-driven orchestration (agent decides flow). Step Functions = deterministic developer-defined flow (no LLM makes routing decisions). Strands = open-source LLM-driven (full control). Mixed approach: use Step Functions for compliance-critical steps, Agents for flexible LLM-driven reasoning within those steps.</div>
+        <div class="watch-out"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Bedrock Agents vs. Strands vs. Step Functions</strong>: Agents = managed LLM-driven orchestration (agent decides flow). Step Functions = deterministic developer-defined flow (no LLM makes routing decisions). Strands = open-source LLM-driven (full control). Mixed approach: use Step Functions for compliance-critical steps, Agents for flexible LLM-driven reasoning within those steps.</div>
       </div>
     </div>
   </div>
@@ -1761,7 +1781,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   <!-- GUARDRAILS -->
   <div id="svc-guardrails" class="svc-panel" style="display:none">
     <div class="task-section">
-      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔴</div><h3>Amazon Bedrock Guardrails — Detailed Configuration</h3><span class="chevron">▶</span></div>
+      <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg></div><h3>Amazon Bedrock Guardrails — Detailed Configuration</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
       <div class="task-body open">
         <div class="code-block"><span class="c-cm"># CreateGuardrail API structure</span>
 {
@@ -1788,7 +1808,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     <span class="c-str">"filtersConfig"</span>: [{<span class="c-str">"type"</span>: <span class="c-str">"GROUNDING"</span>, <span class="c-str">"threshold"</span>: <span class="c-num">0.7</span>}]
   }
 }</div>
-        <div class="exam-tip"><strong>🎯 Guardrail Invocation</strong>: Include in InvokeModel or Converse calls: <code>"guardrailConfig": {"guardrailIdentifier": "abc123", "guardrailVersion": "1", "trace": "enabled"}</code>. Enable trace to see which guardrail triggered and why. Use ApplyGuardrail API to test guardrail in isolation before deployment.</div>
+        <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Guardrail Invocation</strong>: Include in InvokeModel or Converse calls: <code>"guardrailConfig": {"guardrailIdentifier": "abc123", "guardrailVersion": "1", "trace": "enabled"}</code>. Enable trace to see which guardrail triggered and why. Use ApplyGuardrail API to test guardrail in isolation before deployment.</div>
       </div>
     </div>
   </div>
@@ -1797,37 +1817,37 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
 <!-- ============================================================ QUICK REFERENCE VIEW ============================================================ -->
 <div id="view-quickref" class="view">
   <div class="domain-hdr" style="background:linear-gradient(135deg,#2a2a2a,#4a4a4a)">
-    <h2>⚡ Quick Reference Cheat Sheet</h2>
+    <h2><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Quick Reference Cheat Sheet</h2>
     <p>Critical numbers, decision trees, and patterns for exam day</p>
   </div>
 
   <div class="task-section">
-    <div class="task-header open" onclick="toggleTask(this)"><div class="task-num">🔢</div><h3>Critical Numbers &amp; Thresholds to Memorize</h3><span class="chevron">▶</span></div>
+    <div class="task-header open" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div><h3>Critical Numbers &amp; Thresholds to Memorize</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="task-body open">
       <div class="qr-grid">
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD">⚡ Retry &amp; Resilience</div><div class="qr-card-body"><dl><dt>Initial backoff</dt><dd>100ms</dd><dt>Backoff factor</dt><dd>2x (exponential)</dd><dt>Max backoff</dt><dd>20 seconds</dd><dt>Max attempts</dt><dd>3-5</dd><dt>Jitter</dt><dd>±100ms or 0.1-0.3 factor</dd><dt>Circuit open at</dt><dd>50% fail over 10 requests</dd><dt>Recovery timeout</dt><dd>30-60 seconds</dd><dt>Half-open traffic</dt><dd>10-20%</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Retry &amp; Resilience</div><div class="qr-card-body"><dl><dt>Initial backoff</dt><dd>100ms</dd><dt>Backoff factor</dt><dd>2x (exponential)</dd><dt>Max backoff</dt><dd>20 seconds</dd><dt>Max attempts</dt><dd>3-5</dd><dt>Jitter</dt><dd>±100ms or 0.1-0.3 factor</dd><dt>Circuit open at</dt><dd>50% fail over 10 requests</dd><dt>Recovery timeout</dt><dd>30-60 seconds</dd><dt>Half-open traffic</dt><dd>10-20%</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f4fd">🔄 SQS for LLMs</div><div class="qr-card-body"><dl><dt>Visibility timeout</dt><dd>5-15 minutes (LLM tasks)</dd><dt>DLQ after</dt><dd>3-5 failed attempts</dd><dt>Max message size</dt><dd>256KB (use S3 pointer for large)</dd><dt>Retention</dt><dd>Up to 14 days</dd><dt>FIFO vs Standard</dt><dd>FIFO for ordered processing</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f4fd"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> SQS for LLMs</div><div class="qr-card-body"><dl><dt>Visibility timeout</dt><dd>5-15 minutes (LLM tasks)</dd><dt>DLQ after</dt><dd>3-5 failed attempts</dd><dt>Max message size</dt><dd>256KB (use S3 pointer for large)</dd><dt>Retention</dt><dd>Up to 14 days</dd><dt>FIFO vs Standard</dt><dd>FIFO for ordered processing</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9">🔌 API Gateway</div><div class="qr-card-body"><dl><dt>Request timeout max</dt><dd>29 seconds (REST API)</dd><dt>Account-level throttle</dt><dd>10,000 RPS default</dd><dt>Stage-level</dt><dd>1,000-5,000 RPS</dd><dt>Route-level</dt><dd>50-500 RPS (complex models)</dd><dt>Burst limit</dt><dd>2-3x steady-state rate</dd><dt>Cache TTL</dt><dd>300s default</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg> API Gateway</div><div class="qr-card-body"><dl><dt>Request timeout max</dt><dd>29 seconds (REST API)</dd><dt>Account-level throttle</dt><dd>10,000 RPS default</dd><dt>Stage-level</dt><dd>1,000-5,000 RPS</dd><dt>Route-level</dt><dd>50-500 RPS (complex models)</dd><dt>Burst limit</dt><dd>2-3x steady-state rate</dd><dt>Cache TTL</dt><dd>300s default</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#fdecea">🔴 Bedrock Throttling</div><div class="qr-card-body"><dl><dt>429 error</dt><dd>Throttled (retriable)</dd><dt>400 error</dt><dd>Bad request (NOT retriable)</dd><dt>401/403</dt><dd>Auth (NOT retriable)</dd><dt>500/503</dt><dd>Service error (retriable)</dd><dt>Bedrock timeout</dt><dd>Up to 120s complex models</dd><dt>Simple models</dt><dd>15-30s timeout OK</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#fdecea"><svg class="inline-icon" width="10" height="10" viewBox="0 0 10 10" style="display:inline-block;vertical-align:0.05em;flex-shrink:0;" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#ef4444"/></svg> Bedrock Throttling</div><div class="qr-card-body"><dl><dt>429 error</dt><dd>Throttled (retriable)</dd><dt>400 error</dt><dd>Bad request (NOT retriable)</dd><dt>401/403</dt><dd>Auth (NOT retriable)</dd><dt>500/503</dt><dd>Service error (retriable)</dd><dt>Bedrock timeout</dt><dd>Up to 120s complex models</dd><dt>Simple models</dt><dd>15-30s timeout OK</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#f3e5f5">📊 Vector Search</div><div class="qr-card-body"><dl><dt>HNSW M param</dt><dd>16-64 (connections/node)</dd><dt>ef_construction</dt><dd>100-512 (build quality)</dd><dt>ef_search</dt><dd>100-512 (query quality)</dd><dt>Cosine range</dt><dd>-1 to 1 (1 = identical)</dd><dt>Semantic cache threshold</dt><dd>Cosine &gt; 0.95</dd><dt>S3 Vectors pre-filter saves</dt><dd>50-70% search space</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#f3e5f5"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Vector Search</div><div class="qr-card-body"><dl><dt>HNSW M param</dt><dd>16-64 (connections/node)</dd><dt>ef_construction</dt><dd>100-512 (build quality)</dd><dt>ef_search</dt><dd>100-512 (query quality)</dd><dt>Cosine range</dt><dd>-1 to 1 (1 = identical)</dd><dt>Semantic cache threshold</dt><dd>Cosine &gt; 0.95</dd><dt>S3 Vectors pre-filter saves</dt><dd>50-70% search space</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#e0f2f1">🔗 Lambda + GenAI</div><div class="qr-card-body"><dl><dt>Connection pool size</dt><dd>10-20 connections/instance</dd><dt>Connection TTL</dt><dd>60-300 seconds</dd><dt>Provisioned concurrency</dt><dd>Eliminate cold starts</dd><dt>Global SDK client</dt><dd>Initialize OUTSIDE handler</dd><dt>LLM task timeout</dt><dd>5-15 minutes (async)</dd><dt>Max Lambda timeout</dt><dd>15 minutes</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e0f2f1"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Lambda + GenAI</div><div class="qr-card-body"><dl><dt>Connection pool size</dt><dd>10-20 connections/instance</dd><dt>Connection TTL</dt><dd>60-300 seconds</dd><dt>Provisioned concurrency</dt><dd>Eliminate cold starts</dd><dt>Global SDK client</dt><dd>Initialize OUTSIDE handler</dd><dt>LLM task timeout</dt><dd>5-15 minutes (async)</dd><dt>Max Lambda timeout</dt><dd>15 minutes</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD">💰 Cost Thresholds</div><div class="qr-card-body"><dl><dt>Provisioned break-even</dt><dd>~70% utilization</dd><dt>S3 Vectors Intelligent-Tiering</dt><dd>40-60% cost reduction</dd><dt>Semantic cache savings</dt><dd>Up to 90% for repetitive queries</dd><dt>Model cascade target</dt><dd>Start with Nova Lite, escalate only if quality &lt; threshold</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#FFF3CD"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Cost Thresholds</div><div class="qr-card-body"><dl><dt>Provisioned break-even</dt><dd>~70% utilization</dd><dt>S3 Vectors Intelligent-Tiering</dt><dd>40-60% cost reduction</dd><dt>Semantic cache savings</dt><dd>Up to 90% for repetitive queries</dd><dt>Model cascade target</dt><dd>Start with Nova Lite, escalate only if quality &lt; threshold</dd></dl></div></div>
 
-        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9">📡 Streaming</div><div class="qr-card-body"><dl><dt>Buffer size</dt><dd>5-20 chunks</dd><dt>Flush trigger</dt><dd>Sentence completion or 100-500ms</dd><dt>WebSocket keep-alive</dt><dd>Ping every 30-60s</dd><dt>WebSocket idle timeout</dt><dd>~10 minutes</dd><dt>SSE reconnect</dt><dd>1s → backoff → max 30-60s</dd></dl></div></div>
+        <div class="qr-card"><div class="qr-card-hdr" style="background:#e8f5e9"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M5.6 5.6a9 9 0 0 1 12.8 0"/><path d="M8.5 8.5a5 5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><line x1="12" y1="13" x2="12" y2="21"/></svg> Streaming</div><div class="qr-card-body"><dl><dt>Buffer size</dt><dd>5-20 chunks</dd><dt>Flush trigger</dt><dd>Sentence completion or 100-500ms</dd><dt>WebSocket keep-alive</dt><dd>Ping every 30-60s</dd><dt>WebSocket idle timeout</dt><dd>~10 minutes</dd><dt>SSE reconnect</dt><dd>1s → backoff → max 30-60s</dd></dl></div></div>
       </div>
     </div>
   </div>
 
   <div class="task-section">
-    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🧠</div><h3>Last-Mile Exam Traps</h3><span class="chevron">▶</span></div>
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg></div><h3>Last-Mile Exam Traps</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="task-body">
-      <div class="exam-tip"><strong>🎯 Why this matters</strong>The official-style practice questions are less about broad GenAI knowledge and more about picking the precise AWS-native answer when multiple options feel plausible. Use this section as your final decision matrix.</div>
+      <div class="exam-tip"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Why this matters</strong>The official-style practice questions are less about broad GenAI knowledge and more about picking the precise AWS-native answer when multiple options feel plausible. Use this section as your final decision matrix.</div>
       <table class="compare-table">
         <thead><tr><th>Common Trap</th><th>Correct Lean</th><th>What AWS Is Testing</th></tr></thead>
         <tbody>
@@ -1843,14 +1863,14 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
           <tr><td><strong>Persistent MCP tool servers</strong></td><td>ECS/Fargate</td><td>Lambda is attractive, but poor for persistent SSE-style connections.</td></tr>
         </tbody>
       </table>
-      <div class="key-concept"><strong>💡 Final Heuristic</strong>If two answers both work, the exam usually wants the option with the least custom infrastructure, the clearest AWS-native fit, and the most direct match to the exact constraint in the question stem.</div>
+      <div class="key-concept"><strong><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Final Heuristic</strong>If two answers both work, the exam usually wants the option with the least custom infrastructure, the clearest AWS-native fit, and the most direct match to the exact constraint in the question stem.</div>
     </div>
   </div>
 
   <div class="task-section" id="decision-trees">
-    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🌳</div><h3>Decision Trees — What to Use When</h3><span class="chevron">▶</span></div>
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polygon points="12 2 4 14 20 14 12 2"/><line x1="12" y1="14" x2="12" y2="22"/></svg></div><h3>Decision Trees — What to Use When</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="task-body">
-      <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon">🚀</span> Deployment Strategy Decision Tree</div>
+      <div class="sub-acc"><div class="sub-acc-hdr open" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span> Deployment Strategy Decision Tree</div>
       <div class="sub-acc-body open">
         <div class="code-block">Q: What type of traffic pattern?
 ├── Spiky / unpredictable, low volume
@@ -1868,7 +1888,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     └── → AWS Outposts OR AWS Wavelength (edge)</div>
       </div></div>
 
-      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔍</span> Vector Store Selection Decision Tree</div>
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Vector Store Selection Decision Tree</div>
       <div class="sub-acc-body">
         <div class="code-block">Q: What are your requirements?
 ├── Billions of vectors, lowest cost
@@ -1885,7 +1905,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     └── → Amazon Kendra (semantic + keyword, pre-built connectors)</div>
       </div></div>
 
-      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🤖</span> Agentic Architecture Decision Tree</div>
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></span> Agentic Architecture Decision Tree</div>
       <div class="sub-acc-body">
         <div class="code-block">Q: What type of agentic workflow?
 ├── Simple autonomous agent (managed)
@@ -1905,7 +1925,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     └── → Step Functions waitForTaskToken (human-in-the-loop)</div>
       </div></div>
 
-      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">🔒</span> Guardrails Decision Tree</div>
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Guardrails Decision Tree</div>
       <div class="sub-acc-body">
         <div class="code-block">Q: What safety requirement do you have?
 ├── Block harmful content (hate, violence, sexual)
@@ -1924,7 +1944,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
     └── → Use ApplyGuardrail API independently</div>
       </div></div>
 
-      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon">✂️</span> Chunking Strategy Decision Tree</div>
+      <div class="sub-acc"><div class="sub-acc-hdr" onclick="toggleSub(this)"><span class="sub-icon"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/></svg></span> Chunking Strategy Decision Tree</div>
       <div class="sub-acc-body">
         <div class="code-block">Q: What type of document and use case?
 ├── Uniform, structured content (FAQs, product descriptions)
@@ -1944,7 +1964,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   </div>
 
   <div class="task-section">
-    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">🎯</div><h3>Top 20 Exam-Day Tips (High-Yield)</h3><span class="chevron">▶</span></div>
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><h3>Top 20 Exam-Day Tips (High-Yield)</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="task-body">
       <ol class="step-list">
         <li><strong>Converse API = unified multi-model</strong>: Single code path for Claude, Nova, Titan, Llama. Preferred for new development over InvokeModel.</li>
@@ -1972,7 +1992,7 @@ mcp_client = MCPClient(<span class="c-kw">lambda</span>: stdio_client(
   </div>
 
   <div class="task-section">
-    <div class="task-header" onclick="toggleTask(this)"><div class="task-num">📚</div><h3>Services Not to Forget (Often Overlooked)</h3><span class="chevron">▶</span></div>
+    <div class="task-header" onclick="toggleTask(this)"><div class="task-num"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h3>Services Not to Forget (Often Overlooked)</h3><span class="chevron"><svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="task-body">
       <div class="concept-grid">
         <div class="concept-card"><h5>Amazon Kendra</h5><p>Enterprise search combining keyword (BM25) + semantic. Pre-built connectors (S3, SharePoint, Confluence, Salesforce). FAQ extraction. Relevance tuning. Use when: existing enterprise docs, need zero-config search quality.</p></div>

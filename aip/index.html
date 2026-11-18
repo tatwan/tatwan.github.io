@@ -226,6 +226,7 @@ body {
   .hero, .panel-head, .panel-body { padding-left: 16px; padding-right: 16px; }
   .hero h1 { font-size: 1.65rem; }
 }
+</style>
 <style>
 /* AIP-C01 Shared Navigation */
 .aip-nav{background:#232f3e;border-bottom:3px solid #ff9900;position:sticky;top:0;z-index:1000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
@@ -248,7 +249,7 @@ body {
 @media(max-width:640px){.aip-nav-inner{flex-direction:column;}.aip-nav-brand{padding:8px 0 4px;}.aip-nav-tabs{padding-bottom:4px;}}
 </style>
   <!-- LAB:HEAD:START -->
-  <meta name="description" content="Six interactive tools for the AWS Certified AI Practitioner (Generative AI) exam: study guide, flashcards, gap cheatsheet, practice exams and a timed simulator.">
+  <meta name="description" content="Thirteen interactive study tools and domain guides for the AWS Certified Generative AI Developer – Professional (AIP-C01) exam: deep study guides, 65 flashcards, gap cheatsheet, and 242 practice questions across timed simulators.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/aip/">
@@ -257,18 +258,19 @@ body {
   <meta property="og:url" content="https://tatwan.github.io/aip/">
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="AIP-C01 Prep Hub — ML_LAB">
-  <meta property="og:description" content="6 interactive tools for the AWS AI Practitioner (Generative AI) exam.">
+  <meta property="og:description" content="13 study tools and 242 practice questions for the AWS Certified Generative AI Developer (AIP-C01) exam.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="AIP-C01 Prep Hub — ML_LAB">
-  <meta name="twitter:description" content="6 interactive tools for the AWS AI Practitioner (Generative AI) exam.">
+  <meta name="twitter:description" content="13 study tools and 242 practice questions for the AWS Certified Generative AI Developer (AIP-C01) exam.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
   <script defer src="/assets/lab.js" data-lab-page="AIP-C01 Prep Hub"></script>
 
   <script type="application/ld+json">
@@ -276,12 +278,12 @@ body {
   "@context": "https://schema.org",
   "@type": "LearningResource",
   "name": "AIP-C01 Prep Hub",
-  "description": "Six interactive tools for the AWS Certified AI Practitioner (Generative AI) exam: study guide, flashcards, gap cheatsheet, practice exams and a timed simulator.",
+  "description": "Thirteen interactive study tools and domain guides for the AWS Certified Generative AI Developer – Professional (AIP-C01) exam: deep study guides, 65 flashcards, gap cheatsheet, and 242 practice questions across timed simulators.",
   "url": "https://tatwan.github.io/aip/",
   "learningResourceType": "Exam prep",
   "educationalLevel": "Certification",
   "about": "AWS AIP-C01",
-  "timeRequired": "6 tools",
+  "timeRequired": "13 tools",
   "inLanguage": "en",
   "isAccessibleForFree": true,
   "author": {
@@ -300,23 +302,23 @@ body {
 </head>
 <body>
 <!-- AIP-C01 Shared Navigation -->
-<nav class="aip-nav" data-current="hub">
+<nav class="aip-nav" data-current="hub" aria-label="AIP-C01 Studio Navigation">
   <div class="aip-nav-inner">
     <div class="aip-nav-brand">
-      <span class="aip-nav-title">AIP-C01</span>
-      <span class="aip-nav-sep">|</span>
-      <a class="aip-nav-back" href="../index.html">← ML_LAB</a>
+      <span class="aip-nav-title">AIP-C01 Studio</span>
     </div>
     <div class="aip-nav-tabs">
       <a class="aip-tab" data-tab="hub" href="index.html">Hub</a>
       <a class="aip-tab" data-tab="study-guide" href="study-guide.html">Study Guide</a>
+      <a class="aip-tab" data-tab="visual-guide" href="aip-c01-studyguide.html">Visual Guide</a>
       <a class="aip-tab" data-tab="flashcards" href="flashcards.html">Flashcards</a>
       <a class="aip-tab" data-tab="practice-exam" href="practice-exam.html">Practice Exam</a>
       <a class="aip-tab" data-tab="quick-drill" href="quick-drill.html">Quick Drill</a>
       <a class="aip-tab" data-tab="final-practice" href="final-practice.html">Final Practice</a>
+      <a class="aip-tab" data-tab="gap-cheatsheet" href="gap-cheatsheet.html">Gap Sheet</a>
       <a class="aip-tab" data-tab="advanced-impl" href="advanced-impl.html">Implementation</a>
       <a class="aip-tab" data-tab="troubleshooting-eval" href="troubleshooting-eval.html">Troubleshoot &amp; Eval</a>
-      <span style="display:flex;align-items:center;padding:0 6px;color:#445;font-size:11px;">|</span>
+      <span style="display:flex;align-items:center;padding:0 6px;color:#64748b;font-size:11px;">|</span>
       <a class="aip-tab" data-tab="study-d1" href="study-d1.html">D1</a>
       <a class="aip-tab" data-tab="study-d2" href="study-d2.html">D2</a>
       <a class="aip-tab" data-tab="study-d3" href="study-d3.html">D3</a>
@@ -484,7 +486,7 @@ body {
               <span>Monitoring, RAGAS, troubleshooting framework, A/B testing, security, governance. Covers Domain 5 gap.</span>
             </a>
             <div style="border-top:1px solid #e5edf5;margin:6px 0;padding-top:10px;">
-              <div style="font-size:0.75rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">🎯 Gap-Targeted Domain Guides</div>
+              <div style="font-size:0.75rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Gap-Targeted Domain Guides</div>
             </div>
             <a href="study-d1.html">
               <strong>Domain 1 — Data &amp; FM Selection</strong>
@@ -522,7 +524,7 @@ body {
     <section style="margin-top:22px;">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
         <div style="flex:1;height:1px;background:linear-gradient(90deg,#e5edf5 0%,transparent 100%);"></div>
-        <span style="font-size:0.8rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">🎯 Gap-Targeted Domain Study Guides</span>
+        <span style="font-size:0.8rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Gap-Targeted Domain Study Guides</span>
         <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent 0%,#e5edf5 100%);"></div>
       </div>
       <p style="margin:0 0 14px;color:#5f6b7a;font-size:0.9rem;line-height:1.6;">These four guides are driven by your specific weak spots from 120 practice questions. Each one covers tips, gotchas, mental traps, and service decision rules — not wrong/right answer lists.</p>
@@ -530,7 +532,7 @@ body {
 
         <a href="study-d1.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🗄️</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.15rem;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
             <div>
               <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 1</div>
               <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Data &amp; FM Selection</div>
@@ -546,7 +548,7 @@ body {
 
         <a href="study-d2.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🤖</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.15rem;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="1" y1="9" x2="4" y2="9"/></svg></div>
             <div>
               <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 2</div>
               <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Agentic &amp; Deployment</div>
@@ -562,7 +564,7 @@ body {
 
         <a href="study-d3.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#15803d,#4ade80);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">🛡️</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#15803d,#4ade80);display:flex;align-items:center;justify-content:center;font-size:1.15rem;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <div>
               <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 3</div>
               <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Responsible AI &amp; Security</div>
@@ -578,7 +580,7 @@ body {
 
         <a href="study-d45.html" style="display:block;text-decoration:none;background:#fff;border:1px solid #d9e1ec;border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(15,23,42,.05);transition:box-shadow .15s;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#c2410c,#fb923c);display:flex;align-items:center;justify-content:center;font-size:1.15rem;">📊</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#c2410c,#fb923c);display:flex;align-items:center;justify-content:center;font-size:1.15rem;"><svg class="inline-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-0.15em;flex-shrink:0;" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
             <div>
               <div style="font-size:0.7rem;font-weight:800;color:#ff9900;text-transform:uppercase;letter-spacing:.06em;">Domain 4 &amp; 5</div>
               <div style="font-weight:800;color:#16202a;font-size:1rem;line-height:1.2;">Ops, Evaluation &amp; Troubleshoot</div>
@@ -602,14 +604,14 @@ body {
       <div>
         <div class="lab-about__label">// About this playbook</div>
         <h2 id="lab-about-h">AIP-C01 Prep Hub</h2>
-        <p>Six interactive tools for the AWS Certified AI Practitioner (Generative AI) exam: study guide, flashcards, gap cheatsheet, practice exams and a timed simulator.</p>
-        <p>It covers a study guide, flashcards, a gap cheatsheet, domain drills, a full practice exam and a timed simulator for the generative AI practitioner exam. It is written for candidates who want a complete preparation track rather than a single resource.</p>
+        <p>Thirteen interactive study tools and domain guides for the AWS Certified Generative AI Developer – Professional (AIP-C01) exam: deep study guides, 65 flashcards, gap cheatsheet, and 242 practice questions across timed simulators.</p>
+        <p>It covers deep and visual study guides, 65 flashcards, a gap cheatsheet, 4 domain deep-dives, implementation and troubleshooting guides, and 242 practice questions across three exam simulators for the AWS Certified Generative AI Developer – Professional (AIP-C01) exam. It is written for candidates who want a complete preparation track rather than a single resource.</p>
         <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
           attached &mdash; something you can paste into a design note or defend in a review.</p>
         <div class="lab-about__facts">
           <span class="lab-about__fact">Exam prep</span>
           <span class="lab-about__fact">AWS AIP-C01</span>
-          <span class="lab-about__fact">6 tools</span>
+          <span class="lab-about__fact">13 tools</span>
           <span class="lab-about__fact">Certification</span>
           <span class="lab-about__fact">Pass a certification</span>
         </div>

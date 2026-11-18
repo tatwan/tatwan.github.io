@@ -44,7 +44,7 @@
     }
   </style>
   <!-- LAB:HEAD:START -->
-  <meta name="description" content="Timed practice exams with 114 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.">
+  <meta name="description" content="Timed practice exams with 189 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.">
   <meta name="author" content="Tarek Atwan">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://tatwan.github.io/aws_ai_practitioner_exam.html">
@@ -53,18 +53,20 @@
   <meta property="og:url" content="https://tatwan.github.io/aws_ai_practitioner_exam.html">
   <meta property="og:site_name" content="ML_LAB">
   <meta property="og:title" content="AIF-C01 Practice Exam — ML_LAB">
-  <meta property="og:description" content="Timed practice exams, 114 questions across all 5 AIF-C01 domains.">
+  <meta property="og:description" content="Timed practice exams, 189 questions across all 5 AIF-C01 domains.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@tarekatwan">
   <meta name="twitter:title" content="AIF-C01 Practice Exam — ML_LAB">
-  <meta name="twitter:description" content="Timed practice exams, 114 questions across all 5 AIF-C01 domains.">
+  <meta name="twitter:description" content="Timed practice exams, 189 questions across all 5 AIF-C01 domains.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/lab.css">
+  <link rel="stylesheet" href="/assets/archetype-aip.css">
+  <script defer src="/assets/aif-studio.js"></script>
   <script defer src="/assets/lab.js" data-lab-page="AIF-C01 Practice Exam"></script>
 
   <script type="application/ld+json">
@@ -72,7 +74,7 @@
   "@context": "https://schema.org",
   "@type": "LearningResource",
   "name": "AIF-C01 Practice Exam",
-  "description": "Timed practice exams with 114 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.",
+  "description": "Timed practice exams with 189 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.",
   "url": "https://tatwan.github.io/aws_ai_practitioner_exam.html",
   "learningResourceType": "Exam prep",
   "educationalLevel": "Certification",
@@ -984,10 +986,10 @@
       },
       {
         id: 118, domain: 1,
-        question: "A retail company needs to predict future product demand based on historical weekly sales data. Which AWS service is purpose-built for this use case?",
-        options: ["Amazon Personalize", "Amazon Comprehend", "Amazon Forecast", "Amazon Rekognition"],
+        question: "A retail company's business analysts need to predict future weekly product demand from historical sales spreadsheets without writing code. Which AWS service is purpose-built for this use case?",
+        options: ["Amazon Personalize", "Amazon Comprehend", "Amazon SageMaker Canvas", "Amazon Rekognition"],
         correct: 2,
-        explanation: "Amazon Forecast is a fully managed service that uses ML to generate highly accurate time-series forecasts, ideal for demand planning, inventory management, and resource allocation based on historical data."
+        explanation: "Amazon SageMaker Canvas is a visual, no-code ML interface that enables business analysts to build and deploy accurate tabular and time-series forecasting models (such as demand planning and inventory forecasting) directly from historical data."
       },
       {
         id: 119, domain: 1,
@@ -1194,7 +1196,7 @@
       {
         id: 147, domain: 3,
         question: "A company has a large archive of scanned documents containing both text and images. They want to build a system that can search these documents by visual content (e.g., 'find documents with pie charts'). Which combination of AWS services should they use?",
-        options: ["Amazon Comprehend and Amazon Translate", "Amazon Textract and Amazon Rekognition", "Amazon Polly and Amazon Lex", "Amazon Personalize and Amazon Forecast"],
+        options: ["Amazon Comprehend and Amazon Translate", "Amazon Textract and Amazon Rekognition", "Amazon Polly and Amazon Lex", "Amazon Personalize and Amazon SageMaker Canvas"],
         correct: 1,
         explanation: "Amazon Textract extracts text and structured data from scanned documents, while Amazon Rekognition analyzes images and can identify objects, scenes, and visual elements. Together, they enable both text-based and visual content search across document archives."
       },
@@ -1677,10 +1679,56 @@
       Home: ({c="w-5 h-5"}) => <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>,
     };
 
+    const MASTERY_STORAGE_KEY = 'aif_c01_mastery_v1';
+
+    const readAifMastery = () => {
+      try {
+        const raw = localStorage.getItem(MASTERY_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { domains: {}, totalAnswered: 0, totalCorrect: 0, attempts: 0 };
+    };
+
+    const recordAifMastery = (questions, answers) => {
+      const data = readAifMastery();
+      if (!data.domains) data.domains = {};
+      questions.forEach(q => {
+        const ans = answers[q.id];
+        if (ans === undefined) return;
+        let isRight = false;
+        if (q.multiSelect) {
+          const sel = Array.isArray(ans) ? ans : [];
+          isRight = sel.length === q.correct.length && q.correct.every(c => sel.includes(c));
+        } else {
+          isRight = ans === q.correct;
+        }
+        const dKey = String(q.domain);
+        if (!data.domains[dKey]) data.domains[dKey] = { correct: 0, total: 0 };
+        data.domains[dKey].total += 1;
+        if (isRight) {
+          data.domains[dKey].correct += 1;
+          data.totalCorrect = (data.totalCorrect || 0) + 1;
+        }
+        data.totalAnswered = (data.totalAnswered || 0) + 1;
+      });
+      data.attempts = (data.attempts || 0) + 1;
+      try { localStorage.setItem(MASTERY_STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+      window.dispatchEvent(new CustomEvent('aif-mastery-updated'));
+      return data;
+    };
+
+    const resetAifMastery = () => {
+      const fresh = { domains: {}, totalAnswered: 0, totalCorrect: 0, attempts: 0 };
+      try { localStorage.setItem(MASTERY_STORAGE_KEY, JSON.stringify(fresh)); } catch (e) {}
+      window.dispatchEvent(new CustomEvent('aif-mastery-updated'));
+      return fresh;
+    };
+
     // ── Setup Screen ──
     const SetupScreen = ({ onStart }) => {
       const [count, setCount] = useState(20);
       const [showTips, setShowTips] = useState(false);
+      const [mastery, setMastery] = useState(() => readAifMastery());
       const sizes = [10, 15, 20, 30, 50, 65];
 
       const domainCounts = DISTRIBUTION[count];
@@ -1693,8 +1741,7 @@
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-12 fade-up">
-              <a href="index.html" className="inline-block text-xs tracking-widest uppercase text-amber-400 hover:text-amber-300 font-semibold transition-colors mb-6 fade-up">&larr; ML_LAB</a>
-              <div className="inline-block mb-6">
+<div className="inline-block mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto shadow-lg shadow-orange-500/20">
                   <span className="text-2xl font-bold text-white" style={{fontFamily:'Instrument Serif'}}>AI</span>
                 </div>
@@ -1747,6 +1794,48 @@
                 })}
               </div>
 
+              {/* ── Cumulative Domain Mastery ── */}
+              <div className="mb-8 p-4 rounded-xl bg-slate-800/40 border border-slate-700/70">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div>
+                    <p className="text-xs text-slate-300 uppercase tracking-wider font-semibold">Cumulative Domain Mastery (Saved in Browser)</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      {mastery.totalAnswered > 0
+                        ? `${Math.round((mastery.totalCorrect / mastery.totalAnswered) * 100)}% overall accuracy across ${mastery.totalAnswered} answered Qs (${mastery.attempts} session${mastery.attempts === 1 ? '' : 's'})`
+                        : 'Complete a practice exam to track your domain readiness across sessions.'}
+                    </p>
+                  </div>
+                  {mastery.totalAnswered > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setMastery(resetAifMastery())}
+                      className="text-[11px] font-semibold text-slate-400 hover:text-amber-400 border border-slate-700 hover:border-amber-500/40 rounded px-2.5 py-1 transition-colors"
+                    >
+                      Reset Mastery
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  {Object.entries(DOMAINS).map(([num, d]) => {
+                    const stat = (mastery.domains && mastery.domains[num]) || { correct: 0, total: 0 };
+                    const pct = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
+                    return (
+                      <div key={num}>
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="text-slate-300 truncate pr-2">D{num}: {d.short}</span>
+                          <span className="text-slate-400 font-mono flex-shrink-0">
+                            {stat.total > 0 ? `${stat.correct}/${stat.total} (${pct}%)` : '—'}
+                          </span>
+                        </div>
+                        <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: d.color }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* ── Exam Day Tips ── */}
               <div className="mb-6 border border-slate-700 rounded-xl overflow-hidden">
                 <button
@@ -1754,7 +1843,7 @@
                   className="w-full flex items-center justify-between px-5 py-4 bg-slate-800/60 hover:bg-slate-800 transition-colors text-left"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg select-none">📋</span>
+                    <svg className="w-5 h-5 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     <div>
                       <div className="text-white font-semibold text-sm" style={{fontFamily:'Instrument Serif'}}>
                         Before the Real Exam — What to Expect
@@ -1774,19 +1863,19 @@
                   <div className="px-5 py-4 bg-slate-900/60 border-t border-slate-700/50">
                     <ul className="space-y-3">
                       {[
-                        { icon: "⏰", text: "Arrive (or log into the proctoring platform) at least 20–30 minutes early. The check-in and room-scan process can take up to 15 minutes." },
-                        { icon: "🪪", text: "Have a valid government-issued photo ID ready — a passport works best." },
-                        { icon: "📸", text: "You may be asked to use your phone to photograph your room and desk. Make sure your workspace is completely clear of any objects (notebooks, papers, devices)." },
-                        { icon: "⌚", text: "Do not wear a watch. Smartwatches and regular watches may be flagged during the proctored check-in." },
-                        { icon: "📶", text: "Ensure a stable, fast WiFi connection. The check-in includes a speed test — run a speed check in advance and sit close to your router." },
-                        { icon: "🤫", text: "Be in a quiet, private room with the door closed. Background noise or other people entering can interrupt a proctored session." },
-                        { icon: "🚩", text: "During the exam you can flag questions, add notes to yourself, skip, and come back freely. Before submitting, you can review all questions or filter by flagged ones only." },
-                        { icon: "⏱️", text: "The exam is 90 minutes. Many people finish in 30–40 minutes — you have plenty of time to review. Don't rush." },
-                        { icon: "🎯", text: "Use the flag feature strategically: mark any uncertain question immediately, then do a focused final pass through flagged questions before submitting." },
-                        { icon: "✅", text: "It is normal for multiple questions to share the same correct answer. This is not a trick — it reflects real-world scenarios where one AWS service is the right tool for several different use cases." }
+                        { icon: "T-30", text: "Arrive (or log into the proctoring platform) at least 20–30 minutes early. The check-in and room-scan process can take up to 15 minutes." },
+                        { icon: "ID", text: "Have a valid government-issued photo ID ready — a passport works best." },
+                        { icon: "DESK", text: "You may be asked to use your phone to photograph your room and desk. Make sure your workspace is completely clear of any objects (notebooks, papers, devices)." },
+                        { icon: "WATCH", text: "Do not wear a watch. Smartwatches and regular watches may be flagged during the proctored check-in." },
+                        { icon: "WIFI", text: "Ensure a stable, fast WiFi connection. The check-in includes a speed test — run a speed check in advance and sit close to your router." },
+                        { icon: "ROOM", text: "Be in a quiet, private room with the door closed. Background noise or other people entering can interrupt a proctored session." },
+                        { icon: "FLAG", text: "During the exam you can flag questions, add notes to yourself, skip, and come back freely. Before submitting, you can review all questions or filter by flagged ones only." },
+                        { icon: "90M", text: "The exam is 90 minutes. Many people finish in 30–40 minutes — you have plenty of time to review. Don't rush." },
+                        { icon: "PASS", text: "Use the flag feature strategically: mark any uncertain question immediately, then do a focused final pass through flagged questions before submitting." },
+                        { icon: "NOTE", text: "It is normal for multiple questions to share the same correct answer. This is not a trick — it reflects real-world scenarios where one AWS service is the right tool for several different use cases." }
                       ].map(({ icon, text }, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <span className="text-base leading-relaxed flex-shrink-0 mt-0.5 select-none">{icon}</span>
+                          <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono font-bold text-amber-400 flex-shrink-0 mt-0.5 min-w-[44px]">{icon}</span>
                           <span className="text-slate-300 text-sm leading-relaxed">{text}</span>
                         </li>
                       ))}
@@ -1808,10 +1897,7 @@
               <p className="text-slate-600 text-xs">
                 {QUESTIONS.length} questions in bank &middot; Randomized each attempt
               </p>
-              <p className="text-slate-600 text-xs mt-2">
-                Created by Tarek Atwan @ <a href="index.html" className="text-orange-400 hover:text-orange-300 hover:underline font-semibold">ML_LAB</a>
-              </p>
-            </div>
+</div>
           </div>
         </div>
       );
@@ -2264,10 +2350,7 @@
             {/* Footer */}
             <div className="text-center mt-8 text-slate-600 text-xs">
               <p>AWS AI Practitioner (AIF-C01) Practice Exam</p>
-              <p className="mt-1">
-                Created by Tarek Atwan @ <a href="index.html" className="text-orange-400 hover:text-orange-300 hover:underline font-semibold">ML_LAB</a>
-              </p>
-            </div>
+</div>
           </div>
         </div>
       );
@@ -2286,6 +2369,7 @@
       };
 
       const handleFinish = (ans, time) => {
+        recordAifMastery(questions, ans);
         setAnswers(ans);
         setElapsed(time);
         setScreen('results');
@@ -2312,8 +2396,8 @@
       <div>
         <div class="lab-about__label">// About this playbook</div>
         <h2 id="lab-about-h">AIF-C01 Practice Exam</h2>
-        <p>Timed practice exams with 114 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.</p>
-        <p>It covers 114 questions distributed across the five exam domains in the same proportions as the real paper, each with a written explanation. It is written for candidates who have studied and now need to find out what they actually retained.</p>
+        <p>Timed practice exams with 189 questions across all five domains, matching the real AIF-C01 distribution, with an explanation behind every answer.</p>
+        <p>It covers 189 questions distributed across the five exam domains in the same proportions as the real paper, each with a written explanation. It is written for candidates who have studied and now need to find out what they actually retained.</p>
         <p>Every branch states the trade-off that decided it, so the recommendation you end on comes with the reasoning
           attached &mdash; something you can paste into a design note or defend in a review.</p>
         <div class="lab-about__facts">
@@ -2329,7 +2413,7 @@
         <ul class="lab-about__list">
           <li><a href="/aws_ai_practitioner.html">AWS AI Practitioner Guide</a><span>AWS AIF-C01 &middot; 30–45 min</span></li>
           <li><a href="/aws_visual_references.html">Visual References</a><span>Diagrams &middot; 10 min</span></li>
-          <li><a href="/aip/index.html">AIP-C01 Prep Hub</a><span>AWS AIP-C01 &middot; 6 tools</span></li>
+          <li><a href="/aip/index.html">AIP-C01 Prep Hub</a><span>AWS AIP-C01 &middot; 13 tools</span></li>
           <li><a href="/DP-700-InteractiveStudy.html">DP-700 Study Guide</a><span>Microsoft Fabric &middot; 45 min</span></li>
         </ul>
         <h3>Who made this</h3>
